@@ -602,6 +602,11 @@
   resolved "https://registry.npmjs.org/@vue/tsconfig/-/tsconfig-0.3.2.tgz"
   integrity sha512-jWzZbGyrZAEbHYGn0kPzJ+MMtIkIxb0+hL5+RghBowyOxMRs9jMdp5XvpXz3wgCzjRZiUucy29042HBe9cxoYA==
 
+"@vueform/slider@^2.1.7":
+  version "2.1.7"
+  resolved "https://registry.npmjs.org/@vueform/slider/-/slider-2.1.7.tgz"
+  integrity sha512-wKyiVVN03RKTV2vp7r50PDq5hcM4kVVzUO2ex+BAAtrn5oX08iU5NzWTWCuH7dCkiLMDRUVravDu3B0NwaxZMQ==
+
 abab@^2.0.6:
   version "2.0.6"
   resolved "https://registry.npmjs.org/abab/-/abab-2.0.6.tgz"
