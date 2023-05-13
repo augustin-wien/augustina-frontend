@@ -1,3 +1,4 @@
+
 <template>
     <div class="about">
       <h1>Choose a color</h1>
@@ -13,7 +14,7 @@
   
   <style>
   @media (min-width: 1024px) {
-
+    
     .about {
       min-height: 100vh;
       display: flex;
