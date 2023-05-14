@@ -16,7 +16,8 @@ export const useColorStore = defineStore('color', {
   
   state: () =>{
     return{
-      rgb: [0, 0, 0]
+      rgb: [0, 0, 0],
+      color: "red"
     }
   },
   
@@ -27,11 +28,13 @@ export const useColorStore = defineStore('color', {
       }
     },
 
-    decrement(i: number){
+    decrement(i: number) {
       if(this.rgb[i] > 0){
         this.rgb[i]--
       }
-    }
+    },
+
+
   }
 
 }
