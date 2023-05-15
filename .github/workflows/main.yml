@@ -1,0 +1,37 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "!**"
+jobs:
+  build:
+    name: Build frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Download dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint application
+        run: yarn lint
+
+      - name: Build
+        run: yarn build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: collectivo-ux-build
+          path: dist/
+          retention-days: 1
