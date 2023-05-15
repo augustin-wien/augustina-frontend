@@ -2,7 +2,7 @@
 <template>
     <div class="colormenu">
       <h1>Choose a color</h1>
-      <div class="setvalues">
+      <div class="setvalues" >
           <p class="elements">Red  </p>
           <button class="elements" @click="increment(0)">+</button>
           <p class="elements">{{ rgb[0] }}</p>
@@ -25,6 +25,9 @@
   </template>
   
   <style>
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
   @media (min-width: 1024px) {
     
     .colormenu {
