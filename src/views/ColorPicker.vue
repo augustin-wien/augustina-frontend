@@ -8,7 +8,7 @@
           <p class="elements">{{ rgb[0] }}</p>
           <button class="elements" @click="decrement(0)">-</button>
       </div>
-      <div class="setvalues">
+      <div class="setvalues text-lg">
           <p class="elements">Green</p>
           <button class="elements" @click="increment(1)">+</button>
           <p class="elements">{{ rgb[1] }}</p>
@@ -25,9 +25,6 @@
   </template>
   
   <style>
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
   @media (min-width: 1024px) {
     
     .colormenu {

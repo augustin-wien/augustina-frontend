@@ -22,6 +22,12 @@ const router = createRouter({
       name: 'color',
       
       component: () => import('../views/ColorPicker.vue')
+    },
+    {
+      path: '/landingpage',
+      name: 'landingpage',
+      
+      component: () => import('../views/LandingPage.vue')
     }
   ]
 })
