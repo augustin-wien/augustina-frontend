@@ -589,6 +589,13 @@
   dependencies:
     "@vue/shared" "3.2.47"
 
+"@vue/reactivity@^3.3.0-beta.3":
+  version "3.3.0-beta.5"
+  resolved "https://registry.npmjs.org/@vue/reactivity/-/reactivity-3.3.0-beta.5.tgz"
+  integrity sha512-YrikWho94hX4lYoTKr1TtMtzzC8hSXVFw9sXlw2Fl6dyXDztu/djI2vNT4FbbcH1Hbm1+yKM09zrJYvkN/tlYA==
+  dependencies:
+    "@vue/shared" "3.3.0-beta.5"
+
 "@vue/runtime-core@3.2.47":
   "integrity" "sha512-RZxbLQIRB/K0ev0K9FXhNbBzT32H9iRtYbaXb0ZIz2usLms/D55dJR2t6cIEUn6vyhS3ALNvNthI+Q95C+NOpA=="
   "resolved" "https://registry.npmjs.org/@vue/runtime-core/-/runtime-core-3.2.47.tgz"
