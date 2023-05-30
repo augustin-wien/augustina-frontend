@@ -1,8 +1,7 @@
 <script setup lang="ts">
     import { usePriceStore } from '@/stores/price'
-    import { RouterLink, RouterView } from 'vue-router'
+    import { RouterLink} from 'vue-router'
     const priceStore = usePriceStore()
-    const value = priceStore.$state.value
     const increment = priceStore.increment
     const decrement = priceStore.decrement
 </script>
