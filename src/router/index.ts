@@ -7,6 +7,11 @@ const router = createRouter({
       path: '/',
       name: 'Landingpage',
       component: () => import('../views/LandingPage.vue')
+    },
+    {
+      path: '/paymentconfirmation',
+      name: 'Payment Confirmation',
+      component: () => import('../views/PaymentConfirmation.vue')
     }
   ]
 })
