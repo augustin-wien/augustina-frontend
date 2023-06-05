@@ -7,6 +7,16 @@ const router = createRouter({
       path: '/',
       name: 'Landingpage',
       component: () => import('../views/LandingPage.vue')
+    },
+    {
+      path: '/vendor/overview',
+      name: 'VendorOverview',
+      component: () => import('../views/VendorOverview.vue')
+    },
+    {
+      path: '/vendor/qrcode',
+      name: 'VendorQRCode',
+      component: () => import('../views/QRView.vue')
     }
   ]
 })
