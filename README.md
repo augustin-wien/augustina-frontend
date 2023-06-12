@@ -66,3 +66,10 @@ npm run test:e2e
 ```sh
 npm run lint
 ```
+
+### Disable CORS for local testing (Google Chrome / Windows)
+
+```sh
+cd c:\'Program Files'\Google\Chrome\Application
+.\chrome.exe --user-data-dir="C://chrome-dev-disabled-security" --disable-web-security --disable-site-isolation-trials
+```
