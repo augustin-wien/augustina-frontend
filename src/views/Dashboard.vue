@@ -21,7 +21,7 @@ instance.interceptors.request.use(
 );
 
 function get(){
-    instance.get('http://localhost:3000/hello')
+    instance.get('http://localhost:3000/api/auth/hello/')
     .then(response => {
         console.log(response);
     })
