@@ -1,6 +1,4 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { storeToRefs } from 'pinia'
 
 export const usePriceStore = defineStore('price', {
   
