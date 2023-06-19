@@ -7,6 +7,11 @@ const router = createRouter({
       path: '/',
       name: 'Landingpage',
       component: () => import('../views/LandingPage.vue')
+    },
+    {
+      path: '/print-digital',
+      name: 'Version choice',
+      component: () => import('../views/PrintDigital.vue')
     }
   ]
 })
