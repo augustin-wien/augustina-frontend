@@ -7,7 +7,7 @@
                 </slot>
         </header>
         <main class="main-container">
-            <slot>
+            <slot name="main">
                 <h1>Default Content</h1>
             </slot>
         </main>
