@@ -21,7 +21,7 @@
     </div>
     <div className="grid grid-cols-5 py-10 row-span-2 w-full">
         <button @click="increment">+</button>
-        <p className="text-center text-9xl font-semibold col-span-3">{{ priceStore.euro }}€</p>
+        <p className="text-center text-9xl font-semibold col-span-3">{{ priceStore.price }}€</p>
         <button @click="decrement">-</button>
     </div>
     <div className="flex place-items-center row-span-2 w-full">
