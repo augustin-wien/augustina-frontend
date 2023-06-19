@@ -19,7 +19,7 @@ keycloak.init({
 
     app.mount('#app')
 }).catch((error) => {
-    console.log(error)
+    console.log("init keycloak failed", error)
     const app = createApp(App)
     app.use(createPinia())
     app.use(router)

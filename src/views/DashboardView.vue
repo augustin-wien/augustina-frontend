@@ -1,45 +1,28 @@
 <script setup lang="ts">
+import { getAuthHello } from '@/api/api';
 import keycloak from '@/keycloak/keycloak';
-import axios from 'axios';
+import { ref } from 'vue';
+
 
 function logout() {
     keycloak.logout();
 }
-const instance = axios.create({
-  withCredentials: true
-})
-console.log(keycloak);
+let message = ref("Press the button to call the backend");
 
-instance.interceptors.request.use(
-    config => {
-        config.headers.Authorization = `Bearer ${keycloak.token}`;
-        return config;
-    },
-    error => {
-        return Promise.reject(error);
-    }
-);
-
-function get(){
-    instance.get('http://localhost:3000/api/auth/hello/')
-    .then(response => {
+function get() {
+    getAuthHello().then((response:any) => {
+        message.value = response.data;
         console.log(response);
-    })
-    .catch(error => {
-        console.log(error);
     });
-
 }
-
-
 </script>
 <template>
     <header>
         <img alt="Augustin logo" className="logo mx-auto my-5" src="@/assets/logo.svg" width="270" height="150"/>
     </header>
-    <main class="text-center font-semibold text-4xl">
+    <main class="text-center text-4xl">
         <h1>Dashboard</h1>
-        <p>Coming soon...</p>
+        <p>{{ message }}</p>
         <button class="px-4 py-2 font-semibold text-sm bg-cyan-500 text-white rounded-full shadow-sm" @click="get()">Call backend</button>
         <button class="px-4 py-2 font-semibold text-sm bg-cyan-500 text-white rounded-full shadow-sm" @click="logout()">Logout</button>
     </main>

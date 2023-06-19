@@ -10,9 +10,9 @@ const router = createRouter({
       component: () => import('../views/LandingPage.vue')
     },
     {
-      path: '/login',
-      name: 'Login',
-      component: () => import('../views/Login.vue')
+      path: '/404',
+      name: '404',
+      component: () => import('../views/404View.vue')
     },
     {
       path: '/dashboard',
@@ -20,7 +20,7 @@ const router = createRouter({
       meta: {
         requiresAuth: true
       },
-      component: () => import('../views/Dashboard.vue')
+      component: () => import('../views/DashboardView.vue')
     }
 
   ]
@@ -28,15 +28,15 @@ const router = createRouter({
 
 
 // Check if the user is authenticated
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
   if (
     to.meta.requiresAuth &&
     !isAuthenticated() &&
     // ❗️ Avoid an infinite redirect
-    to.name !== 'Login'
+    to.name !== '404'
   ) {
     // redirect the user to the login page
-    return { name: 'Login' }
+    return { name: '404' }
   }
 })
 
