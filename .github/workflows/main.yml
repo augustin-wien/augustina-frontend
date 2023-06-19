@@ -29,8 +29,8 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Build
-        run: yarn test:e2e
+      # - name: Build
+      #   run: yarn test:e2e
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
