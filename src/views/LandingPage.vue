@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { usePriceStore } from '@/stores/price'
-    import { settingsStore } from '@/stores/axios_test';
+    import { settingsStore } from '@/stores/settings';
     import { RouterLink} from 'vue-router'
     import { onMounted } from 'vue'
     const priceStore = usePriceStore()

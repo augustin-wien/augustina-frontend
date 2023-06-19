@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { defineStore } from 'pinia'
 
+//define interface to store data from backend properly
 interface Setting {
     color: string;
     logo: string;
@@ -15,7 +16,7 @@ export const settingsStore = defineStore('settings',{
     },
 
     getters: {
-        getUsers(state){
+        getSettings(state){
             return state.settings
           }
       },
