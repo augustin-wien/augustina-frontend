@@ -1,37 +1,34 @@
-import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { storeToRefs } from 'pinia'
 
 export const usePriceStore = defineStore('price', {
   
     state: () =>{
       return{
-        euro: 3,
-        cent: 0
+        price: 3,
       }
     },
     
     actions: {
       increment() {
-        this.euro++
+        this.price++
       },
 
       // increment with custom values for euro (e) and cent (c)
-      incrementec(e: number, c: number) {
-        this.euro = this.euro + e
-        this.cent = this.cent + c
+      incrementec(e: number) {
+        this.price = this.price + e
       },
   
       decrement() {
-        if(this.euro > 3){
-            this.euro--
+        if(this.price-1 >= 3){
+            this.price--
         }
       },
 
       // decrement with custom values for euro (e) and cent (c)
-      decrementec(e: number, c: number) {
-        this.euro = this.euro - e
-        this.cent = this.cent - c
+      decrementec(e: number) {
+        if(this.price-e >= 3){
+          this.price = this.price - e
+        }
       }
     }
   }
