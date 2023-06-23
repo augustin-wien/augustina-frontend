@@ -1,12 +1,14 @@
 <template>
-  <div class="vendor-overview flex flex-col items-center space-y-5 mt-6">
+  <div
+    class="vendor-overview container mx-auto mb-4 p-24 space-y-8 pb-3 flex flex-col items-center"
+  >
     <img class="" alt="Augustin logo" src="../assets/logo.svg" />
     <h2 class="text-3xl font-bold">Symbol zeigen</h2>
     <div class="vendor-credit text-6xl font-bold">
       <span class="amount-bought">1x</span
       ><span><img class="" alt="Titelblatt" src="../assets/logo.svg" /></span>
     </div>
-    <div class="text-3xl font-oold">So erhalten Sie die Printversion:</div>
+    <div class="text-3xl font-bold">So erhalten Sie die Printversion:</div>
     <div class="vendor-number">Ausweisnummer: 123456789</div>
     <div>
       <span class="date">{{ currentDate() }} </span><span class="time"> um {{ time }}</span>
@@ -38,3 +40,13 @@ function UpdateTime() {
 }
 UpdateTime()
 </script>
+
+<style>
+.vendor-overview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+</style>
