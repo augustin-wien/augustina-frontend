@@ -21,6 +21,11 @@ const router = createRouter({
         requiresAuth: true
       },
       component: () => import('../views/DashboardView.vue')
+    },
+    {
+      path: '/tipping',
+      name: 'Tippingpage',
+      component: () => import('../views/TippingPage.vue')
     }
 
   ]
