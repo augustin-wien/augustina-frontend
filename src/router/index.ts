@@ -1,3 +1,4 @@
+import keycloak from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -9,11 +10,49 @@ const router = createRouter({
       component: () => import('../views/LandingPage.vue')
     },
     {
+      path: '/404',
+      name: '404',
+      component: () => import('../views/404View.vue')
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      meta: {
+        requiresAuth: true
+      },
+      component: () => import('../views/DashboardView.vue')
+    },
+    {
       path: '/tipping',
       name: 'Tippingpage',
       component: () => import('../views/TippingPage.vue')
     }
+
   ]
 })
+
+
+// Check if the user is authenticated
+router.beforeEach(async (to) => {
+  if (
+    to.meta.requiresAuth &&
+    !isAuthenticated() &&
+    // ❗️ Avoid an infinite redirect
+    to.name !== '404'
+  ) {
+    // redirect the user to the login page
+    return { name: '404' }
+  }
+})
+
+// Check if the user is authenticated
+function isAuthenticated() {
+  console.log("isAuthenticated", keycloak.authenticated)
+  if (!keycloak.authenticated) {
+    keycloak.login();
+  }
+  return keycloak.authenticated
+}
+
 
 export default router
