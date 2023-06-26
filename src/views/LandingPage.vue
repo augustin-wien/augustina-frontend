@@ -27,7 +27,7 @@
     </div>
     <div className="flex place-items-center row-span-2 w-full">
         <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/tipping">Weiter</RouterLink>
+            <RouterLink to="/print-digital">Weiter</RouterLink>
         </button>
     </div>
   </main>
