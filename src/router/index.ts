@@ -10,6 +10,11 @@ const router = createRouter({
       component: () => import('../views/LandingPage.vue')
     },
     {
+      path: '/print-digital',
+      name: 'Version choice',
+      component: () => import('../views/PrintDigital.vue')
+    },
+    {
       path: '/404',
       name: '404',
       component: () => import('../views/404View.vue')

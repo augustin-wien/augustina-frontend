@@ -5,6 +5,7 @@ export const usePriceStore = defineStore('price', {
     state: () =>{
       return{
         price: 3,
+        digital: {digital: true}
       }
     },
     
@@ -24,6 +25,13 @@ export const usePriceStore = defineStore('price', {
         }
       },
 
+      epaper() {
+        this.digital.digital = true
+      },
+
+      print() {
+        this.digital.digital = false
+      },
       // decrement with custom values for euro (e) and cent (c)
       decrementec(e: number) {
         if(this.price-e >= 3){
