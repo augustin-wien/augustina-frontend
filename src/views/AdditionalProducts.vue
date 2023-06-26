@@ -8,7 +8,7 @@
         <img alt="Augustin logo" className="logo mx-auto my-5" src="@/assets/logo.svg" width="270" height="150"/>
     </header>
     <div className="text-center font-semibold text-4xl row-span-2">
-        Möchtest Du weitere Artikel wählen?
+        Möchtest Du noch weitere Produkte kaufen?
     </div>
     <div className="flex place-items-center w-full">
         <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
