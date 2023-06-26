@@ -4,8 +4,8 @@
     import { RouterLink} from 'vue-router'
     import { onMounted } from 'vue'
     const priceStore = usePriceStore()
-    const increment = priceStore.increment
-    const decrement = priceStore.decrement
+    const digital = priceStore.epaper
+    const print = priceStore.print
     const settStore = settingsStore()
     onMounted(() => {settStore.fetchSettings()})
 
@@ -20,12 +20,12 @@
         Ausgabe wählen
     </div>
     <div className="flex place-items-center w-full">
-        <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
+        <button @click="digital" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
             <RouterLink to="/">ePaper</RouterLink>
         </button>
     </div>
     <div className="flex place-items-center w-full">
-        <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
+        <button @click="print" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
             <RouterLink to="/">Print</RouterLink>
         </button>
     </div>

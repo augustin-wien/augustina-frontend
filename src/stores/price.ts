@@ -4,7 +4,8 @@ export const usePriceStore = defineStore('price', {
   
     state: () =>{
       return{
-        value: 3
+        value: 3,
+        digital: {digital: true}
       }
     },
     
@@ -18,6 +19,14 @@ export const usePriceStore = defineStore('price', {
             this.value--
         }
       },
+
+      epaper() {
+        this.digital.digital = true
+      },
+
+      print() {
+        this.digital.digital = false
+      }
     }
   }
   )
