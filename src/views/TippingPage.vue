@@ -16,27 +16,27 @@
     </div>
     <div className="flex place-items-center w-full">
         <button @click="incrementec(0.25)" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/">0,25 €</RouterLink>
+            <RouterLink to="/print-digital">0,25 €</RouterLink>
         </button>
     </div>
     <div className="flex place-items-center w-full">
         <button @click="incrementec(0.50)" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/">0,50 €</RouterLink>
+            <RouterLink to="/print-digital">0,50 €</RouterLink>
         </button>
     </div>
     <div className="flex place-items-center w-full">
         <button @click="increment" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/">1,00 €</RouterLink>
+            <RouterLink to="/print-digital">1,00 €</RouterLink>
         </button>
     </div>
     <div className="flex place-items-center w-full">
         <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/">Eigener Betrag</RouterLink>
+            <RouterLink to="/print-digital">Eigener Betrag</RouterLink>
         </button>
     </div>
     <div className="flex place-items-center w-full">
         <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/">Heute nicht</RouterLink>
+            <RouterLink to="/print-digital">Heute nicht</RouterLink>
         </button>
     </div>
   </main>

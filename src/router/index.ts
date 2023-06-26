@@ -10,6 +10,11 @@ const router = createRouter({
       component: () => import('../views/LandingPage.vue')
     },
     {
+      path: '/additionalproducts',
+      name: 'Additional Products',
+      component: () => import('../views/AdditionalProducts.vue')
+    },
+    {
       path: '/print-digital',
       name: 'Version choice',
       component: () => import('../views/PrintDigital.vue')
