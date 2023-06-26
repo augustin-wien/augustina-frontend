@@ -21,12 +21,12 @@
     </div>
     <div className="flex place-items-center w-full">
         <button @click="digital" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/">ePaper</RouterLink>
+            <RouterLink to="/additionalproducts">ePaper</RouterLink>
         </button>
     </div>
     <div className="flex place-items-center w-full">
         <button @click="print" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/">Print</RouterLink>
+            <RouterLink to="/additionalproducts">Print</RouterLink>
         </button>
     </div>
     <div className="flex place-items-center row-span-2 w-full">
