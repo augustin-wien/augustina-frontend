@@ -4,10 +4,7 @@
     import { RouterLink} from 'vue-router'
     import { onMounted } from 'vue'
     const priceStore = usePriceStore()
-    const increment = priceStore.increment
-    const decrement = priceStore.decrement
     const settStore = settingsStore()
-    const settings = settStore.settings
     onMounted(() => {settStore.fetchSettings()})
 
 </script>
@@ -20,14 +17,16 @@
     <div className="text-center font-semibold text-4xl">
         Kauf bestätigen
     </div>
-    <div className="grid grid-cols-5 py-10 row-span-2 w-full">
-        <button @click="increment">+</button>
+    <div className="grid grid-cols-3 py-10 row-span-2 w-full">
         <p className="text-center text-9xl font-semibold col-span-3">{{ priceStore.price }}€</p>
-        <button @click="decrement">-</button>
+    </div>
+    <div>
+        <input type="checkbox" id="checkbox"/>
+        <label for="checkbox">Mit Kauf aktzeptiere ich die AGBs</label>
     </div>
     <div className="flex place-items-center row-span-2 w-full">
         <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/tipping">Weiter</RouterLink>
+            <RouterLink to="/">Weiter</RouterLink>
         </button>
     </div>
   </main>

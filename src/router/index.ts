@@ -31,6 +31,11 @@ const router = createRouter({
       path: '/tipping',
       name: 'Tippingpage',
       component: () => import('../views/TippingPage.vue')
+    },
+    {
+      path: '/confirmation',
+      name: 'Confirmation',
+      component: () => import('../views/FinalPurchaseConfirmation.vue')
     }
 
   ]
