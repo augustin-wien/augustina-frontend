@@ -3,18 +3,47 @@
     <div class="flex flex-col items-center space-y-8">
       <img class="w-30 inset-12" alt="Augustin logo" src="../assets/logo.svg" />
       <h2 class="text-3xl font-bold">Dein QR-Code</h2>
-      <img class="w-30 inset-12" alt="Augustin logo" src="../assets/frame.png" />
+      <img class="w-30 inset-12" alt="vendor qr code" :src="qrcode" />
     </div>
     <br />
     <div class="my-16 container mt-8 pt-8 space-y-4">
       <h2 class="text-3xl font-bold">Dein Guthaben</h2>
-      <div class="vendor-credit text-6xl font-bold">2€</div>
-      <div class="vendor-number">Ausweisnummer: 123456789</div>
+      <div class="vendor-credit text-6xl font-bold">{{ credit }}€</div>
+      <div class="vendor-number">Ausweisnummer: {{ idNumber }}</div>
       <div class="vendor-name">Name: Doris</div>
       <button class="bg-green-500 rounded-full py-3 px-6 text-white font-bold">Logout</button>
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import axios from 'axios'
+
+export default {
+  data() {
+    return {
+      credit: '',
+      idNumber: '',
+      qrcode: ''
+    }
+  },
+  mounted() {
+    axios
+      .get('http://localhost:3000/api/vendor/')
+      .then((response) => {
+        const { credit, idnumber, qrcode } = response.data
+
+        this.credit = credit
+        this.idNumber = idnumber
+        this.qrcode = 'http://localhost:3000' + qrcode
+      })
+
+      .catch((error) => {
+        console.error('Fehler beim API-Aufruf:', error)
+      })
+  }
+}
+</script>
 
 <style>
 .vendor-overview {
