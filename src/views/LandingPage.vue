@@ -13,7 +13,7 @@ onMounted(() => { settStore.fetchSettings() })
 
 <template>
     <component :is="$route.meta.layout || 'div'">
-        <template v-slot:main>
+        <template #main>
             <main className="h-screen px-10 py-16 grid grid-rows-6 place-items-center">
                 <div className="text-center font-semibold text-4xl">
                     Zeitung kaufen
