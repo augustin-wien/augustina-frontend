@@ -1,12 +1,15 @@
-# frontend
+# Augustin-bargeldlos-frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+This repository contains the frontend for the Augustin bargeldlos project. It is based on [Vite](https://vitejs.dev/) and [Vue 3](https://v3.vuejs.org/).
+See the [backend repository](https://github.com/augustin-wien/augustin-backend/) on how-to get started.
 
-## Recommended IDE Setup
+## Development Setup
+
+### Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-## Type Support for `.vue` Imports in TS
+#### Type Support for `.vue` Imports in TS
 
 TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
 
@@ -17,38 +20,36 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
     2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
 2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
+Install [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/) and run the following commands:
 
 ```sh
-npm install
+yarn install
 ```
 
 ### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
+yarn dev
 ```
 
 ### Type-Check, Compile and Minify for Production
 
 ```sh
-npm run build
+yarn build
 ```
 
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test:unit
+yarn test:unit
 ```
 
 ### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
 
 ```sh
-npm run test:e2e:dev
+yarn test:e2e:dev
 ```
 
 This runs the end-to-end tests against the Vite development server.
@@ -57,12 +58,22 @@ It is much faster than the production build.
 But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
 
 ```sh
-npm run build
-npm run test:e2e
+yarn build
+yarn test:e2e
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
-npm run lint
+yarn lint
 ```
+
+### Disable CORS for local testing (Google Chrome / Windows)
+
+```sh
+cd c:\'Program Files'\Google\Chrome\Application
+.\chrome.exe --user-data-dir="C://chrome-dev-disabled-security" --disable-web-security --disable-site-isolation-trials
+```
+
+## Keycloak Setup
+please use the [Keycloak Setup provided by the backend](https://github.com/augustin-wien/augustin-backend/#keycloak)
