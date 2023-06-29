@@ -10,6 +10,16 @@ const router = createRouter({
       component: () => import('../views/LandingPage.vue')
     },
     {
+      path: '/vendor/overview',
+      name: 'VendorOverview',
+      component: () => import('../views/VendorOverview.vue')
+    },
+    {
+      path: '/vendor/qrcode',
+      name: 'VendorQRCode',
+      component: () => import('../views/QRView.vue')
+    },
+    {
       path: '/additionalproducts',
       name: 'Additional Products',
       component: () => import('../views/AdditionalProducts.vue')
