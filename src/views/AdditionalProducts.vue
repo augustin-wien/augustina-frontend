@@ -11,10 +11,10 @@
         Möchtest Du noch weitere Produkte kaufen?
     </div>
     <div className="flex place-items-center w-full">
-        <RouterLink class="bg-green-600 rounded-full text-center p-7 text-white text-4xl font font-semibold w-full" to="/" tag="button">Ja</RouterLink>
+        <RouterLink class="bg-green-600 rounded-full text-center p-7 text-white text-4xl font font-semibold w-full" to="/">Ja</RouterLink>
     </div>
     <div className="flex place-items-center row-span-2 w-full">
-        <RouterLink class="bg-green-600 rounded-full text-center p-7 text-white text-4xl font font-semibold w-full" to="/tipping" tag="button">Nein</RouterLink>
+        <RouterLink class="bg-green-600 rounded-full text-center p-7 text-white text-4xl font font-semibold w-full" to="/tipping">Nein</RouterLink>
     </div>
   </main>
 </template>
