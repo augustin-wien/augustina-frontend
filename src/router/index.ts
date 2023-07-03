@@ -7,22 +7,26 @@ const router = createRouter({
     {
       path: '/',
       name: 'Landingpage',
-      component: () => import('../views/LandingPage.vue')
+      component: () => import('../views/LandingPage.vue'),
+      meta: { transition: 'slide-left' }
     },
     {
       path: '/additionalproducts',
       name: 'Additional Products',
-      component: () => import('../views/AdditionalProducts.vue')
+      component: () => import('../views/AdditionalProducts.vue'),
+      meta: { transition: 'slide-left' }
     },
     {
       path: '/print-digital',
       name: 'Version choice',
-      component: () => import('../views/PrintDigital.vue')
+      component: () => import('../views/PrintDigital.vue'),
+      meta: { transition: 'slide-left' }
     },
     {
       path: '/404',
       name: '404',
-      component: () => import('../views/404View.vue')
+      component: () => import('../views/404View.vue'),
+      meta: { transition: 'slide-left' }
     },
     {
       path: '/dashboard',
@@ -35,12 +39,14 @@ const router = createRouter({
     {
       path: '/tipping',
       name: 'Tippingpage',
-      component: () => import('../views/TippingPage.vue')
+      component: () => import('../views/TippingPage.vue'),
+      meta: { transition: 'slide-left' }
     },
     {
       path: '/confirmation',
       name: 'Confirmation',
-      component: () => import('../views/FinalPurchaseConfirmation.vue')
+      component: () => import('../views/FinalPurchaseConfirmation.vue'),
+      meta: { transition: 'slide-left' }
     }
 
   ]
