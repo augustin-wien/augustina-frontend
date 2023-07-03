@@ -26,7 +26,7 @@
         <button @click="decrement">-</button>
     </div>
     <div className="flex place-items-center row-span-2 w-full">
-        <RouterLink class="bg-green-600 rounded-full text-center p-7 text-white text-4xl font font-semibold w-full" to="/print-digital" tag="button">Weiter</RouterLink>
+        <RouterLink class="bg-green-600 rounded-full text-center p-7 text-white text-4xl font font-semibold w-full" to="/print-digital">Weiter</RouterLink>
     </div>
   </main>
 </template>@/stores/settingsStore@/stores/settingsStore
