@@ -1,5 +1,6 @@
 import keycloak from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
+import { AGBStore } from '@/stores/AGBStore'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,6 +48,12 @@ const router = createRouter({
       name: 'Confirmation',
       component: () => import('../views/FinalPurchaseConfirmation.vue'),
       meta: { transition: 'slide-left' }
+    },
+    {
+      path: '/payment',
+      name: 'Payment',
+      component: () => import('../views/Payment.vue'),
+      meta: { transition: 'slide-left' }
     }
 
   ]
@@ -63,6 +70,15 @@ router.beforeEach(async (to) => {
   ) {
     // redirect the user to the login page
     return { name: '404' }
+  }
+})
+
+//Check if AGBs are accepted
+router.beforeEach(async (next) => {
+  if(
+    next.name == 'Payment' &&
+    !AGBStore().checked){
+    return {}
   }
 })
 
