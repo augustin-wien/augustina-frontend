@@ -18,11 +18,6 @@
       <div className="text-center font-semibold text-4xl">
           Payment
       </div>
-      <div className="grid grid-cols-5 py-10 row-span-2 w-full">
-          <button>+</button>
-          <p className="text-center text-9xl font-semibold col-span-3">69€</p>
-          <button>-</button>
-      </div>
       <div className="flex place-items-center row-span-2 w-full">
           <RouterLink class="bg-green-600 rounded-full text-center p-7 text-white text-4xl font font-semibold w-full" to="/print-digital">Weiter</RouterLink>
       </div>
