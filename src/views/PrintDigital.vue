@@ -31,7 +31,7 @@
     </div>
     <div className="flex place-items-center row-span-2 w-full">
         <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold mx-auto w-20">
-            <RouterLink to="/">?</RouterLink>
+            <RouterLink to="/information">?</RouterLink>
         </button>
     </div>
   </main>

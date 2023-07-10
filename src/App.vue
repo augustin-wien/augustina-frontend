@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+  import { RouterView } from 'vue-router'
+  import { onMounted } from 'vue'
+  import { settingsStore } from '@/stores/settings';
+  const settStore = settingsStore()
+  onMounted(() => { settStore.fetchSettings() })
 </script>
 
 <template>
