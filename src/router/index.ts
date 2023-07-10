@@ -15,16 +15,6 @@ const router = createRouter({
       component: () => import('../views/LandingPage.vue')
     },
     {
-      path: '/vendor/overview',
-      name: 'VendorOverview',
-      component: () => import('../views/VendorOverview.vue')
-    },
-    {
-      path: '/vendor/qrcode',
-      name: 'VendorQRCode',
-      component: () => import('../views/QRView.vue')
-    },
-    {
       path: '/additionalproducts',
       name: 'Additional Products',
       component: () => import('../views/AdditionalProducts.vue'),
@@ -67,11 +57,19 @@ const router = createRouter({
       name: 'Payment',
       component: () => import('../views/PaymentStripe.vue'),
       meta: { transition: 'slide-left' }
+    },
+    {
+      path: '/paymentconfirmation',
+      name: 'Payment Confirmation',
+      component: () => import('../views/PaymentConfirmation.vue')
+    },
+    {
+      path: '/vendoroverview',
+      name: 'Vendor Overview',
+      component: () => import('../views/VendorOverview.vue')
     }
-
   ]
 })
-
 
 // Check if the user is authenticated
 router.beforeEach(async (to) => {
@@ -97,12 +95,11 @@ router.beforeEach(async (next) => {
 
 // Check if the user is authenticated
 function isAuthenticated() {
-  console.log("isAuthenticated", keycloak.authenticated)
+  console.log('isAuthenticated', keycloak.authenticated)
   if (!keycloak.authenticated) {
-    keycloak.login();
+    keycloak.login()
   }
   return keycloak.authenticated
 }
-
 
 export default router
