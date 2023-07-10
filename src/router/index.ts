@@ -1,5 +1,6 @@
 import keycloak from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
+import { Payment } from '@/stores/PaymentStore'
 import Default from '@/layouts/DefaultLayout.vue'
 
 const router = createRouter({
@@ -14,29 +15,22 @@ const router = createRouter({
       component: () => import('../views/LandingPage.vue')
     },
     {
-      path: '/vendor/overview',
-      name: 'VendorOverview',
-      component: () => import('../views/VendorOverview.vue')
-    },
-    {
-      path: '/vendor/qrcode',
-      name: 'VendorQRCode',
-      component: () => import('../views/QRView.vue')
-    },
-    {
       path: '/additionalproducts',
       name: 'Additional Products',
-      component: () => import('../views/AdditionalProducts.vue')
+      component: () => import('../views/AdditionalProducts.vue'),
+      meta: { transition: 'slide-left' }
     },
     {
       path: '/print-digital',
       name: 'Version choice',
-      component: () => import('../views/PrintDigital.vue')
+      component: () => import('../views/PrintDigital.vue'),
+      meta: { transition: 'slide-left' }
     },
     {
       path: '/404',
       name: '404',
-      component: () => import('../views/404View.vue')
+      component: () => import('../views/404View.vue'),
+      meta: { transition: 'slide-left' }
     },
     {
       path: '/dashboard',
@@ -55,11 +49,31 @@ const router = createRouter({
       path: '/information',
       name: 'InformationPrintEpaper',
       component: () => import('../views/InformationPrintEpaper.vue')
+    },
+    {
+      path: '/confirmation',
+      name: 'Confirmation',
+      component: () => import('../views/FinalPurchaseConfirmation.vue'),
+      meta: { transition: 'slide-left' }
+    },
+    {
+      path: '/payment',
+      name: 'Payment',
+      component: () => import('../views/PaymentStripe.vue'),
+      meta: { transition: 'slide-left' }
+    },
+    {
+      path: '/paymentconfirmation',
+      name: 'Payment Confirmation',
+      component: () => import('../views/PaymentConfirmation.vue')
+    },
+    {
+      path: '/vendoroverview',
+      name: 'Vendor Overview',
+      component: () => import('../views/VendorOverview.vue')
     }
-
   ]
 })
-
 
 // Check if the user is authenticated
 router.beforeEach(async (to) => {
@@ -74,14 +88,22 @@ router.beforeEach(async (to) => {
   }
 })
 
+//Check if AGBs are accepted
+router.beforeEach(async (next) => {
+  if(
+    next.name == 'Payment' &&
+    !Payment().agbChecked){
+    return {}
+  }
+})
+
 // Check if the user is authenticated
 function isAuthenticated() {
-  console.log("isAuthenticated", keycloak.authenticated)
+  console.log('isAuthenticated', keycloak.authenticated)
   if (!keycloak.authenticated) {
-    keycloak.login();
+    keycloak.login()
   }
   return keycloak.authenticated
 }
-
 
 export default router

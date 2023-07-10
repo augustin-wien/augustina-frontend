@@ -4,7 +4,7 @@ export const usePriceStore = defineStore('price', {
   
     state: () =>{
       return{
-        price: 3,
+        price: 3, 
         digital: {digital: true}
       }
     },
