@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { usePriceStore } from '@/stores/price'
-    import { AGBStore } from '@/stores/AGBStore'
+    import { Payment } from '@/stores/PaymentStore'
     import { RouterLink} from 'vue-router'
     const priceStore = usePriceStore()
-    const agbStore = AGBStore()
+    const paymentStore = Payment()
 </script>
 
 <template>
@@ -18,13 +18,13 @@
         <p className="text-center text-9xl font-semibold col-span-3">{{ priceStore.price }}€</p>
     </div>
     <div>
-        <input type="checkbox" id="checkbox" v-model="agbStore.checked"/>
+        <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked"/>
         <label for="checkbox"> Mit Kauf aktzeptiere ich die <RouterLink to="/" class="text-blue-600">AGBs</RouterLink></label>
     </div>
     <div className="flex place-items-center w-full">
-        <RouterLink class="bg-gray-600 rounded-full text-center p-7 text-white text-4xl font font-semibold w-full" :class="{'bg-green-600': agbStore.checked}" to="/Payment">
+        <RouterLink class="bg-gray-600 rounded-full text-center p-7 text-white text-4xl font font-semibold w-full" :class="{'bg-green-600': paymentStore.agbChecked}" to="/Payment">
             Weiter
         </RouterLink>
     </div>
   </main>
-</template>@/stores/settingsStore
+</template>@/stores/settingsStore@/stores/PaymentStore@/stores/PaymentStore@/stores/PaymentStore

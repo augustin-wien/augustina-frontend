@@ -1,6 +1,6 @@
 import keycloak from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
-import { AGBStore } from '@/stores/AGBStore'
+import { Payment } from '@/stores/PaymentStore'
 import Default from '@/layouts/DefaultLayout.vue'
 
 const router = createRouter({
@@ -90,7 +90,7 @@ router.beforeEach(async (to) => {
 router.beforeEach(async (next) => {
   if(
     next.name == 'Payment' &&
-    !AGBStore().checked){
+    !Payment().agbChecked){
     return {}
   }
 })

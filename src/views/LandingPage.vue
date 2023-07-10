@@ -7,7 +7,6 @@
     const increment = priceStore.increment
     const decrement = priceStore.decrement
     const settStore = settingsStore()
-    const settings = settStore.settings
     onMounted(() => {settStore.fetchSettings()})
 
 </script>

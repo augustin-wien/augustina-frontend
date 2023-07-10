@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 
-export const AGBStore = defineStore('agb',{
+export const Payment = defineStore('payment',{
     state: () =>{
         return{
-            checked: false
+            agbChecked: false
         }
     }
 })
