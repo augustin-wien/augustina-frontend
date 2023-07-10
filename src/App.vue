@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+
+console.log(import.meta.env.VITE_SETTINGS_API_URL)
 </script>
 
 <template>

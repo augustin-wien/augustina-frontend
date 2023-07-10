@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { usePriceStore } from '@/stores/price'
-import { settingsStore } from '@/stores/settings';
-import { RouterLink } from 'vue-router'
-import { onMounted } from 'vue'
-const priceStore = usePriceStore()
-const increment = priceStore.increment
-const decrement = priceStore.decrement
-const settStore = settingsStore()
-onMounted(() => { settStore.fetchSettings() })
+    import { usePriceStore } from '@/stores/price'
+    import { settingsStore } from '@/stores/settingsStore';
+    import { RouterLink} from 'vue-router'
+    import { onMounted } from 'vue'
+    const priceStore = usePriceStore()
+    const increment = priceStore.increment
+    const decrement = priceStore.decrement
+    const settStore = settingsStore()
+    onMounted(() => {settStore.fetchSettings()})
 
 </script>
 

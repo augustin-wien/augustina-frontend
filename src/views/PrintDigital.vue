@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { usePriceStore } from '@/stores/price'
-    import { settingsStore } from '@/stores/settings';
+    import { settingsStore } from '@/stores/settingsStore';
     import { RouterLink} from 'vue-router'
     import { onMounted } from 'vue'
     const priceStore = usePriceStore()
@@ -35,4 +35,4 @@
         </button>
     </div>
   </main>
-</template>
+</template>@/stores/settingsStore
