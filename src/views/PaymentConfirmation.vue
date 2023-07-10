@@ -33,7 +33,6 @@ function currentTime() {
 
 function UpdateTime() {
   setTimeout(() => {
-    console.log('hello')
     currentTime()
     UpdateTime()
   }, 1000)

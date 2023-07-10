@@ -1,2 +1,9 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+
+export const vendorStore = defineStore('vendor', {
+  state: () => {
+    return {
+      vendor: [] as Vendor[]
+    }
+  }
+})
