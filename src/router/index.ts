@@ -1,6 +1,7 @@
 import keycloak from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
 import { AGBStore } from '@/stores/AGBStore'
+import Default from '@/layouts/DefaultLayout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,8 +9,20 @@ const router = createRouter({
     {
       path: '/',
       name: 'Landingpage',
-      component: () => import('../views/LandingPage.vue'),
-      meta: { transition: 'slide-left' }
+      meta: {
+        layout: Default,
+      },
+      component: () => import('../views/LandingPage.vue')
+    },
+    {
+      path: '/vendor/overview',
+      name: 'VendorOverview',
+      component: () => import('../views/VendorOverview.vue')
+    },
+    {
+      path: '/vendor/qrcode',
+      name: 'VendorQRCode',
+      component: () => import('../views/QRView.vue')
     },
     {
       path: '/additionalproducts',
