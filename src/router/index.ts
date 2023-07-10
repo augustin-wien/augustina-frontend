@@ -52,7 +52,7 @@ const router = createRouter({
     {
       path: '/payment',
       name: 'Payment',
-      component: () => import('../views/Payment.vue'),
+      component: () => import('../views/PaymentStripe.vue'),
       meta: { transition: 'slide-left' }
     }
 
