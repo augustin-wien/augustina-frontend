@@ -1,6 +1,5 @@
 import type { Settings } from '@/models/settings'
 import axios, { type AxiosResponse } from 'axios'
-import { resolve } from 'path'
 
 const responseBody = (response: AxiosResponse) => response.data
 

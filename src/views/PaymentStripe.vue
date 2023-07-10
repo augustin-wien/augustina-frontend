@@ -1,11 +1,9 @@
 <script setup lang="ts">
-    import { usePriceStore } from '@/stores/price'
     import { settingsStore } from '@/stores/settingsStore';
     import { RouterLink} from 'vue-router'
     import { onMounted } from 'vue'
 
     const settStore = settingsStore()
-    const settings = settStore.settings
     onMounted(() => {settStore.fetchSettings()})
 
 </script>
