@@ -24,14 +24,5 @@ export const useStripeStore = defineStore('stripe',{
                 console.log(error);
             }
         },
-
-        setUpStripe() {
-            if (window.Stripe === undefined) {
-              alert('Stripe V3 library not loaded!');
-            } else {
-              const stripe = window.Stripe('tc2yNFPJ9DYSmhNnf04vCUmbM3f MS94WK2w1YuhiTcxMIti8p3etufbrsr1oJpG2OUaLUmNUTU00cxAmOXLZ');
-              this.stripe = stripe.elements()
-            }
-        }
     }
 })
