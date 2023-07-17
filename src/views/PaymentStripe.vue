@@ -49,22 +49,14 @@
 </template>
 
 <script lang="ts">
-  import { ref, onMounted } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { StripeElementCard } from '@vue-stripe/vue-stripe';
-  import {stripeStore} from '@/stores/stripe'
-  import { usePriceStore } from '@/stores/price';
+    import { settingsStore } from '@/stores/settingsStore';
+    import { RouterLink} from 'vue-router'
+    import { onMounted } from 'vue'
+    import { loadStripe } from '@stripe/stripe-js';
+    import { useStripeStore } from '@/stores/stripe'
 
-  const priceStore = usePriceStore()
-  const price = priceStore.price
-  const useStripeStore = stripeStore()
-  const router = useRouter()
-
-  const disabled = ref(false)
-  const card = ref(null)
-  const elements = useStripeStore.elements
-
-  const style = {
+    const stripeStore = useStripeStore()
+    const style = {
     base: {
       color: '#32325d',
       fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
@@ -78,12 +70,12 @@
       color: '#fa755a',
       iconColor: '#fa755a'
     }
-  }
+    }
 
-  export default {
-  components: {
-    StripeElementCard,
-  },
-};
-  
+    const stripe = null
+    loadStripe('tc2yNFPJ9DYSmhNnf04vCUmbM3f MS94WK2w1YuhiTcxMIti8p3etufbrsr1oJpG2OUaLUmNUTU00cxAmOXLZ').then((val:any) =>
+      stripeStore.stripe = val
+    )
+    const settStore = settingsStore()
+    onMounted(() => {settStore.fetchSettings()})
 </script>

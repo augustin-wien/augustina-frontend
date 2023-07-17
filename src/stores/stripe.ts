@@ -3,10 +3,10 @@ import { StripeElementCard } from '@vue-stripe/vue-stripe'
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import agent from '@/api/agent'
 
-export const stripeStore = defineStore('stripe',{
+export const useStripeStore = defineStore('stripe',{
     state: () =>{
         return{
-            elements: null,
+            stripe: null,
             token: null,
             cardNumber: null,
             cardExpiry: null,
@@ -30,7 +30,7 @@ export const stripeStore = defineStore('stripe',{
               alert('Stripe V3 library not loaded!');
             } else {
               const stripe = window.Stripe('tc2yNFPJ9DYSmhNnf04vCUmbM3f MS94WK2w1YuhiTcxMIti8p3etufbrsr1oJpG2OUaLUmNUTU00cxAmOXLZ');
-              this.elements = stripe.elements()
+              this.stripe = stripe.elements()
             }
         }
     }
