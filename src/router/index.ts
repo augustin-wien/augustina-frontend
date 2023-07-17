@@ -1,6 +1,7 @@
 import keycloak from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
 import Default from '@/layouts/DefaultLayout.vue'
+import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,7 +10,7 @@ const router = createRouter({
       path: '/',
       name: 'Landingpage',
       meta: {
-        layout: Default,
+        layout: Default
       },
       component: () => import('../views/LandingPage.vue')
     },
@@ -50,6 +51,14 @@ const router = createRouter({
       path: '/vendoroverview',
       name: 'Vendor Overview',
       component: () => import('../views/VendorOverview.vue')
+    },
+    {
+      path: '/backoffice/credits',
+      name: 'Backoffice Credit',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeCredits.vue')
     }
   ]
 })
