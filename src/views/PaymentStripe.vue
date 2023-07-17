@@ -43,7 +43,7 @@
 
     const settStore = settingsStore()
     onMounted(() => {settStore.fetchSettings()})
-</script>
+</script> 
 
 <template>
   <form id="payment-form">
