@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { StripeElementCard } from '@vue-stripe/vue-stripe'
 import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import agent from '@/api/agent'
 
@@ -11,6 +10,7 @@ export const useStripeStore = defineStore('stripe',{
             cardNumber: null,
             cardExpiry: null,
             cardCvc: null,
+            loaded: false,
         }
     },
     actions: {
