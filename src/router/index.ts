@@ -59,6 +59,47 @@ const router = createRouter({
         layout: BackofficeDefault
       },
       component: () => import('../views/BackofficeCredits.vue')
+    },
+    {
+      path: '/backoffice/credits/payout',
+      name: 'Credit Payout',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeCreditPayout.vue')
+    },
+    {
+      path: '/backoffice/accounting',
+      name: 'Backoffice Accounting',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeAccounting.vue')
+    },
+    {
+      path: '/backoffice/logs',
+      name: 'Backoffice Logs',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeLogs.vue')
+    },
+    {
+      path: '/backoffice/inbox',
+      name: 'Backoffice Inbox',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeInbox.vue')
+    },
+
+    {
+      path: '/backoffice/logout',
+      name: 'Backoffice Logout',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeLogout.vue')
     }
   ]
 })
