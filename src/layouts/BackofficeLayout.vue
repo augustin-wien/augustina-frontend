@@ -41,21 +41,39 @@
         </div>
         <hr />
         <div className="sidemenu-item">
-          <RouterLink to="/backoffice/logout" className="sidemenu-link">
-            <span className="sidemenu-text">Abmelden</span>
+          <RouterLink to="/backoffice/vendorsummary" className="sidemenu-link">
+            <span className="sidemenu-text">VerkäuferInnen Übersicht</span>
           </RouterLink>
         </div>
         <hr />
-        <p>Claudia ist eingeloggt</p>
+        <div className="sidemenu-item">
+          <RouterLink to="/backoffice/settings" className="sidemenu-link">
+            <span className="sidemenu-text">Einstellungen</span>
+          </RouterLink>
+          <hr />
+          <div className="sidemenu-item">
+            <RouterLink to="/backoffice/product" className="sidemenu-link">
+              <span className="sidemenu-text">Produktbearbeitung</span>
+            </RouterLink>
+          </div>
+          <hr />
+          <div className="sidemenu-item">
+            <RouterLink to="/backoffice/logout" className="sidemenu-link">
+              <span className="sidemenu-text">Abmelden</span>
+            </RouterLink>
+          </div>
+          <hr />
+          <p>Claudia ist eingeloggt</p>
+        </div>
       </div>
-    </div>
 
-    <main className="main-container top-2">
-      <slot name="main"> </slot>
-    </main>
-    <footer>
-      <slot name="footer" />
-    </footer>
+      <main className="main-container flex items-center justify-center top-2">
+        <slot name="main"> </slot>
+      </main>
+      <footer>
+        <slot name="footer" />
+      </footer>
+    </div>
   </div>
 </template>
 

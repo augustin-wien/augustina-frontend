@@ -92,6 +92,22 @@ const router = createRouter({
       },
       component: () => import('../views/BackofficeInbox.vue')
     },
+    {
+      path: '/backoffice/vendorsummary',
+      name: 'Vendor Summary',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeVendorSummary.vue')
+    },
+    {
+      path: '/backoffice/vendorsummary/newvendor',
+      name: 'New Vendor',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeNewVendor.vue')
+    },
 
     {
       path: '/backoffice/logout',
