@@ -1,14 +1,9 @@
 <script setup lang="ts">
     import { usePaymentStore } from '@/stores/PaymentStore'
-    import { settingsStore } from '@/stores/settingsStore';
     import { RouterLink} from 'vue-router'
-    import { onMounted } from 'vue'
     const paymentStore = usePaymentStore()
     const increment = paymentStore.increment
     const decrement = paymentStore.decrement
-    const price = paymentStore.price
-    const settStore = settingsStore()
-    onMounted(() => {settStore.fetchSettings()})
 
 </script>
 

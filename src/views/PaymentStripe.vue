@@ -18,10 +18,10 @@
     const appearance = {/*...*/ }
 
     // Set up Stripe.js and Elements to use in checkout form
-    const elements = stripe.elements({appearance: appearance});
+    const elements = stripe.elements({clientSecret: secret});
 
     // Create and mount the Payment Element
-    const paymentElement = elements.create('payment', options);
+    const paymentElement = elements.create('payment');
     paymentElement.mount('#payment-element');
 
   })

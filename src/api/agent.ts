@@ -1,5 +1,4 @@
 import type { Settings } from '@/models/settings'
-import { loadStripe, type Stripe } from '@stripe/stripe-js'
 import axios, { type AxiosResponse } from 'axios'
 
 const responseBody = (response: AxiosResponse) => response.data
