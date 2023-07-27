@@ -1,9 +1,7 @@
 <script setup lang="ts">
-    import { usePriceStore } from '@/stores/price'
-    import { Payment } from '@/stores/PaymentStore'
+    import { usePaymentStore } from '@/stores/PaymentStore'
     import { RouterLink} from 'vue-router'
-    const priceStore = usePriceStore()
-    const paymentStore = Payment()
+    const paymentStore = usePaymentStore()
 </script>
 
 <template>
@@ -15,7 +13,7 @@
         Bezahlung bestätigen:
     </div>
     <div className="grid grid-cols-3 py-10 row-span-2 w-full">
-        <p className="text-center text-9xl font-semibold col-span-3">{{ priceStore.price }}€</p>
+        <p className="text-center text-9xl font-semibold col-span-3">{{ paymentStore.priceInEuros() }}€</p>
     </div>
     <div>
         <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked"/>

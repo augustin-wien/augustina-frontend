@@ -1,14 +1,12 @@
 <script setup lang="ts">
-    import { usePriceStore } from '@/stores/price'
+    import { usePaymentStore } from '@/stores/PaymentStore'
     import { settingsStore } from '@/stores/settingsStore';
     import { RouterLink} from 'vue-router'
     import { onMounted } from 'vue'
-    const priceStore = usePriceStore()
-    const digital = priceStore.epaper
-    const print = priceStore.print
+    const paymentStore = usePaymentStore()
+    const digital = paymentStore.epaper
+    const print = paymentStore.print
     const settStore = settingsStore()
-    onMounted(() => {settStore.fetchSettings()})
-
 </script>
 
 <template>

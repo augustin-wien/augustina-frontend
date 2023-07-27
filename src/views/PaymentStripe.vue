@@ -1,33 +1,31 @@
 <script setup lang="ts">
-  import { settingsStore } from '@/stores/settingsStore';
-  import { onMounted } from 'vue'
+  import { onMounted } from 'vue';
+  import { usePaymentStore } from '@/stores/PaymentStore'
 
-  const settStore = settingsStore()
+  const paymentStore = usePaymentStore()
+
   onMounted(() => {
-    settStore.fetchSettings()
     //@ts-ignore
     //Will become env variable
-    const stripe = Stripe('pk_test_51NPjKHElvUd6Cd58X0mtD30StUI2ugja89BsBuFmmBFAX4vswuAIy0w56rgd6VQwVz2aC42AQm3SvSeSuuZFqUug00QL7BuzzK')
-
+    const stripe = Stripe('pk_test_51NTszUJEpEVZWKtc2yNFPJ9DYSmhNnf04vCUmbM3fMS94WK2w1YuhiTcxMIti8p3etufbrsr1oJpG2OUaLUmNUTU00cxAmOXLZ')
+    const secret = 'sk_test_51NTszUJEpEVZWKtcNKGjwB0VnXMpO6AXsmQeYGShsJjFnxMtfTmWVyiibgskvQFVetnFv9Wy4N3sLso8fPjLWX39006RxlTTYX'
     const options = {
       mode: 'payment',
-      amount: 1099,
+      amount: paymentStore.price + paymentStore.tip,
       currency: 'eur',
       // Fully customizable with appearance API.
-      appearance: {/*...*/ },
     };
+    const appearance = {/*...*/ }
 
     // Set up Stripe.js and Elements to use in checkout form
-    const elements = stripe.elements(options);
+    const elements = stripe.elements({appearance: appearance});
 
     // Create and mount the Payment Element
-    const paymentElement = elements.create('payment');
+    const paymentElement = elements.create('payment', options);
     paymentElement.mount('#payment-element');
 
   })
 
-  const form = document.getElementById('payment-form');
-  const submitBtn = document.getElementById('submit');
 </script> 
 
 <template>
@@ -44,7 +42,7 @@
       </div>
       <div className="grid grid-cols-2 grid-rows-1 items-center">
         <button className="bg-red-600 hover:bg-red-700 text-white font-bold my-3 mr-4 py-2 px-2 rounded-full text-lg">Abbrechen</button>
-        <button @click="" id="submit" className="bg-green-600 hover:bg-green-700 text-white font-bold my-3 ml-4 py-2 px-2 rounded-full text-lg">Bestätigen</button>
+        <button id="submit" className="bg-green-600 hover:bg-green-700 text-white font-bold my-3 ml-4 py-2 px-2 rounded-full text-lg">Bestätigen</button>
       </div>
       <div id="error-message">
         <!-- Display error message to your customers here -->

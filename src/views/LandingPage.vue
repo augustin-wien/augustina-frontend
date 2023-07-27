@@ -1,11 +1,12 @@
 <script setup lang="ts">
-    import { usePriceStore } from '@/stores/price'
+    import { usePaymentStore } from '@/stores/PaymentStore'
     import { settingsStore } from '@/stores/settingsStore';
     import { RouterLink} from 'vue-router'
     import { onMounted } from 'vue'
-    const priceStore = usePriceStore()
-    const increment = priceStore.increment
-    const decrement = priceStore.decrement
+    const paymentStore = usePaymentStore()
+    const increment = paymentStore.increment
+    const decrement = paymentStore.decrement
+    const price = paymentStore.price
     const settStore = settingsStore()
     onMounted(() => {settStore.fetchSettings()})
 
@@ -20,7 +21,7 @@
                 </div>
                 <div className="grid grid-cols-5 py-10 row-span-2 w-full">
                     <button @click="increment">+</button>
-                    <p className="text-center text-9xl font-semibold col-span-3">{{ priceStore.price }}€</p>
+                    <p className="text-center text-9xl font-semibold col-span-3">{{ paymentStore.priceInEuros() }}€</p>
                     <button @click="decrement">-</button>
                 </div>
                 <div className="flex place-items-center row-span-2 w-full">

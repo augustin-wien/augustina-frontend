@@ -7,7 +7,7 @@ const responseBody = (response: AxiosResponse) => response.data
 const sleep = (ms: number) => (response: AxiosResponse) => new Promise<AxiosResponse>(resolve => setTimeout(() => resolve(response), ms))
 
 const SettingsConfiguration = {
-    current: (): Promise<Settings> => axios.get('http://localhost:3000/api/settings/').then(sleep(1000)).then(responseBody)
+    current: (): Promise<Settings> => axios.get(import.meta.env.VITE_SETTINGS_API_URL).then(sleep(1000)).then(responseBody)
 }
 
 export default{

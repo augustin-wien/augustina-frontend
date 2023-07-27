@@ -1,9 +1,9 @@
 <script setup lang="ts">
-    import { usePriceStore } from '@/stores/price'
+    import { usePaymentStore } from '@/stores/PaymentStore'
     import { RouterLink} from 'vue-router'
-    const priceStore = usePriceStore()
-    const increment = priceStore.increment
-    const incrementec = priceStore.incrementec
+    const paymentStore = usePaymentStore()
+    const increment = paymentStore.increment
+    const incrementec = paymentStore.incrementec
 </script>
 
 <template>
@@ -15,7 +15,7 @@
         Trinkgeld geben
     </div>
     <div className="flex place-items-center w-full">
-        <button @click="incrementec(0.50)" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
+        <button @click="incrementec(50)" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
             <RouterLink to="/confirmation">0,50 €</RouterLink>
         </button>
     </div>
