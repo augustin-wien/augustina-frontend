@@ -12,21 +12,6 @@ export const usePaymentStore = defineStore('payment',{
         }
     },
     actions: {
-      confirm(stripe:Stripe, elements) {
-          stripe.confirmPayment({
-              elements,
-              confirmParams: {
-                // Return URL where the customer should be redirected after the PaymentIntent is confirmed.
-                return_url: 'https://example.com',
-              },
-            })
-            .then(function(result) {
-              if (result.error) {
-                // Inform the customer that there was an error.
-              }
-            });
-      },
-
       priceInEuros() {
         return (this.price + this.tip)/100
       },
