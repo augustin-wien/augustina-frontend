@@ -101,12 +101,29 @@ const router = createRouter({
       component: () => import('../views/BackofficeVendorSummary.vue')
     },
     {
-      path: '/backoffice/vendorsummary/newvendor',
+      path: '/backoffice/newvendor',
       name: 'New Vendor',
       meta: {
         layout: BackofficeDefault
       },
       component: () => import('../views/BackofficeNewVendor.vue')
+    },
+    {
+      path: '/backoffice/userprofile',
+      name: 'Vendor Profile',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeUserProfile.vue')
+    },
+
+    {
+      path: '/backoffice/newproduct',
+      name: 'New Product',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeNewProduct.vue')
     },
 
     {
@@ -116,6 +133,24 @@ const router = createRouter({
         layout: BackofficeDefault
       },
       component: () => import('../views/BackofficeLogout.vue')
+    },
+
+    {
+      path: '/backoffice/settings',
+      name: 'Backoffice Settings',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeSettings.vue')
+    },
+
+    {
+      path: '/backoffice/productsettings',
+      name: 'Backoffice Product Settings',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeProductSettings.vue')
     }
   ]
 })
