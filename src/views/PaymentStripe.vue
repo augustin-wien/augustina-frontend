@@ -7,7 +7,7 @@
   onMounted(() => {
     //@ts-ignore
     //Will become env variable
-    const stripe = Stripe('pk_test_51NTszUJEpEVZWKtc2yNFPJ9DYSmhNnf04vCUmbM3fMS94WK2w1YuhiTcxMIti8p3etufbrsr1oJpG2OUaLUmNUTU00cxAmOXLZ')
+    const stripe = Stripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
     const secret = 'sk_test_51NTszUJEpEVZWKtcNKGjwB0VnXMpO6AXsmQeYGShsJjFnxMtfTmWVyiibgskvQFVetnFv9Wy4N3sLso8fPjLWX39006RxlTTYX'
     const options = {
       mode: 'payment',

@@ -5,6 +5,8 @@ export const usePaymentStore = defineStore('payment',{
     state: () =>{
         return{
             agbChecked: false,
+            amount: 1,
+            pricePerPaper: 300,
             //the unit for price is cents (smallest unit)
             price: 300,
             tip: 0,
@@ -20,9 +22,9 @@ export const usePaymentStore = defineStore('payment',{
           this.tip = this.tip + 100
         },
   
-      // increment with custom values for euro (e) and cent (c)
-      incrementec(e: number) {
-        this.tip = this.tip + e
+      // increment with custom values for cent (c)
+      incrementec(c: number) {
+        this.tip = this.tip + c
       },
   
       decrement() {
@@ -38,11 +40,15 @@ export const usePaymentStore = defineStore('payment',{
       print() {
         this.digital.digital = false
       },
-      // decrement with custom values for euro (e) and cent (c)
-      decrementec(e: number) {
-        if(this.tip-e >= 0){
-          this.tip = this.tip - e
+      // decrement with custom values for cent (c)
+      decrementec(c: number) {
+        if(this.tip-c >= 0){
+          this.tip = this.tip - c
         }
+      },
+      addN(n: number) {
+        this.amount++
+        this.price = this.price + (this.pricePerPaper * n)
       }
       }
     }
