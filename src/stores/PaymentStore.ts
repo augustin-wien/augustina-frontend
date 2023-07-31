@@ -1,21 +1,27 @@
-import type { Stripe } from "@stripe/stripe-js";
+import axios from "axios";
 import { defineStore } from "pinia";
+import { type AxiosResponse } from "axios";
+import { type VivaWalletResponse } from "@/models/vivawalletresponse";
 
 export const usePaymentStore = defineStore('payment',{
     state: () =>{
         return{
             agbChecked: false,
-            amount: 1,
+            testamount: 1,
             pricePerPaper: 300,
+            digital: {digital: true},
             //the unit for price is cents (smallest unit)
-            price: 300,
+            testprice: 300,
             tip: 0,
-            digital: {digital: true}
+
+            //vivawallet 
+            response: [] as AxiosResponse[],
+            url: ""
         }
     },
     actions: {
       priceInEuros() {
-        return (this.price + this.tip)/100
+        return (this.testprice + this.tip)/100
       },
 
       increment() {
@@ -47,9 +53,17 @@ export const usePaymentStore = defineStore('payment',{
         }
       },
       addN(n: number) {
-        this.amount++
-        this.price = this.price + (this.pricePerPaper * n)
-      }
+        this.testamount++
+        this.testprice = this.testprice + (this.pricePerPaper * n)
+      },
+
+      //vivawallet methodes
+      async postPrice(price: number) {
+        const sleep = (ms: number) => (response: AxiosResponse) => new Promise<AxiosResponse>(resolve => setTimeout(() => resolve(response), ms))
+        this.response.push(await axios.post('http://localhost:3000/api/transaction/', {amount: price}, {headers: {'Content-Type': 'application/json'}}).then(sleep(50)))
+        const data = this.response[0].data
+        this.url = data.SmartCheckoutURL
+      },
       }
     }
 )
