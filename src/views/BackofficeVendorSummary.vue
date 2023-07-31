@@ -17,9 +17,9 @@
             </thead>
             <tbody className="text-sm  p-3">
               <tr>
-                <td className="border-t-2 p-3">BE-202</td>
-                <td className="border-t-2 p-3">Alena</td>
-                <td className="border-t-2 p-3">Mohsenyar</td>
+                <td className="border-t-2 p-3">{{ vendor.licenseID }}</td>
+                <td className="border-t-2 p-3">{{ vendor.firstName }}</td>
+                <td className="border-t-2 p-3">{{ vendor.lastName }}</td>
 
                 <router-link to="/backoffice/pdf">
                   <div class="flex">
@@ -108,3 +108,27 @@ td {
   padding: 10px;
 }
 </style>
+
+<script lang="ts">
+import { vendorsStore } from '../stores/vendor'
+import { computed } from 'vue'
+export default {
+  setup() {
+    const store = vendorsStore()
+
+    // Fetch the vendors' data when the component is mounted
+    store.fetchVendors()
+    const vendors = computed(() => store.vendors)
+
+    // Define the vendor object based on a specific condition or index
+    // For example, if you want to access the first vendor in the list, you can do this:
+    const vendor = computed(() => vendors.value[0]) // Change the index as per your requirement
+
+    // Return the data and methods as part of the setup
+    return {
+      vendors,
+      vendor
+    }
+  }
+}
+</script>

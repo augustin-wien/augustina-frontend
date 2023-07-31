@@ -2,14 +2,13 @@
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <main>
-        <div className="page-content space-x-2 mt-5"></div>
-        <div className="text-center text-2xl space-y-3 space-x-3">
+        <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
           <h1>Ausweisnummer eingeben</h1>
           <input
             id="searchInput"
             type="text"
             v-model="searchQuery"
-            @input="performSearch"
+            @input="confirmSearch"
             placeholder="Suche Ausweisnummer"
             class="border-2 border-gray-400 rounded-md p-2 ml-2"
           />
@@ -32,19 +31,19 @@
               </tr>
             </thead>
             <tbody className="text-sm  p-3">
-              <tr>
+              <tr v-for="vendor in filteredVendors" :key="vendor.id">
                 <td className="border-t-2 p-3">
-                  <router-link to="/backoffice/userprofile">BE-202</router-link>
+                  <router-link to="/backoffice/userprofile">{{ vendor.licenseID }}</router-link>
                 </td>
-                <td className="border-t-2 p-3">20 €</td>
-                <td className="border-t-2 p-3">20.01.2023</td>
+                <td className="border-t-2 p-3">20 Euro</td>
+                <td className="border-t-2 p-3">{{ vendor.lastPayout.time }}</td>
                 <router-link to="/backoffice/credits/payout">
                   <button className="p-3 rounded-full bg-lime-600 text-white">Auszahlen</button>
                 </router-link>
               </tr>
               <tr>
                 <td className="border-t-2 p-3">
-                  <router-link to="/backoffice/userprofile"> MU-5592</router-link>
+                  <router-link to="/backoffice/userprofile">abcd</router-link>
                 </td>
                 <td className="border-t-2 p-3">5 €</td>
                 <td className="border-t-2 p-3">23.03.2023</td>
@@ -90,32 +89,41 @@
   </component>
 </template>
 
-<script>
+<script lang="ts">
+import { vendorsStore } from '../stores/vendor'
+import { ref, computed } from 'vue'
+
 export default {
-  data() {
-    return {
-      searchQuery: '' // Initialize the search query
+  setup() {
+    const store = vendorsStore()
+
+    // Fetch the vendors' data when the component is mounted
+    store.fetchVendors()
+    const vendors = computed(() => store.vendors)
+
+    const searchQuery = ref('')
+
+    // Filter users based on the search query
+    const filteredVendors = computed(() => {
+      const searchTerm = searchQuery.value.toLowerCase()
+      return vendors.value.filter((vendor) => vendor.licenseID.toLowerCase().includes(searchTerm))
+    })
+
+    // Function to handle the search
+    const performSearch = () => {
+      // The filtering is handled through computed property "filteredUsers"
     }
-  },
-  methods: {
-    performSearch() {
-      // Function to handle the search
-      // You can use this.searchQuery to access the search query and filter the data accordingly
-      // For simplicity, let's assume that the first column (Ausweisnummer) is the search criteria
-      const searchTerm = this.searchQuery.toLowerCase()
-      const rows = document.querySelectorAll('tbody tr')
-      rows.forEach((row) => {
-        const ausweisnummer = row.querySelector('td:first-child').textContent.toLowerCase()
-        if (ausweisnummer.includes(searchTerm)) {
-          row.style.display = 'table-row'
-        } else {
-          row.style.display = 'none'
-        }
-      })
-    },
-    confirmSearch() {
-      // Function to be called when the "Suchen" button is clicked
-      this.performSearch() // Call the search function
+
+    // Function to be called when the "Suchen" button is clicked
+    const confirmSearch = () => {
+      performSearch() // Call the search function
+    }
+
+    // Return the data and methods as part of the setup
+    return {
+      searchQuery,
+      filteredVendors,
+      confirmSearch
     }
   }
 }
