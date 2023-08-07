@@ -16,14 +16,14 @@
 </script>
 
 <template>
-    <div class="countdown">
-        <svg viewBox="-50 -50 100 100" stroke-width="10">
-            <circle r="35"></circle>
-            <circle r="35" pathLength="1"></circle>
-        </svg>
-    </div>
+  <main className="h-screen px-10 py-16 grid grid-rows-6 place-items-center">
+    <header>
+        <img alt="Augustin logo" className="logo mx-auto my-5" src="@/assets/logo.svg" width="270" height="150"/>
+    </header>
+    <div class="lds-ellipsis row-span-4"><div></div><div></div><div></div><div></div></div>
+  </main>
 </template>
 
 <style scoped>
-    @import "../assets/countdown.css"
+    @import "../assets/loadingwheel.css"
 </style>
