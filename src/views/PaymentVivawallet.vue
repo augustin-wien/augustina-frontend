@@ -6,7 +6,7 @@
   const paymentStore = usePaymentStore()
 
   onMounted(() => {
-    paymentStore.postPrice(paymentStore.pricePerPaper*paymentStore.testamount+paymentStore.tip)
+    paymentStore.postPrice(300)
   })
 
 </script> 
@@ -24,7 +24,7 @@
       {{ paymentStore.transactionID }}
     </div>
     <div>
-      <RouterLink to="/verifying"> Weiter </RouterLink>
+      <RouterLink to="/external"> Weiter </RouterLink>
     </div>
   </main>
 </template>

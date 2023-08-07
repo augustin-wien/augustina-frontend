@@ -1,7 +1,6 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 import { type AxiosResponse } from "axios";
-import router from "@/router";
 
 export const usePaymentStore = defineStore('payment',{
     state: () =>{
@@ -65,17 +64,17 @@ export const usePaymentStore = defineStore('payment',{
 
       //vivawallet methodes
       async postPrice(price: number) {
-        const sleep = (ms: number) => (response: AxiosResponse) => new Promise<AxiosResponse>(resolve => setTimeout(() => resolve(response), ms))
-        this.response.push(await axios.post('http://localhost:3000/api/transaction/', {amount: price}, {headers: {'Content-Type': 'application/json'}}))
+        this.response.push(await axios.post('http://localhost:3000/api/vivawallet/transaction_order/', {amount: price}, {headers: {'Content-Type': 'application/json'}}))
         const data = this.response[0].data
         this.url = data.SmartCheckoutURL
+        window.location.href = this.url
       },
-      async verifyPayment(){
+      async verifyPayment(t: string){
         if(this.transactionID === ""){
           console.log('id undefined')
         }
         else {
-          this.verification.push(await axios.post('http://localhost:3000/api/verification/', {transactionID: this.transactionID}, {headers: {'Content-Type': 'application/json'}}))
+          this.verification.push(await axios.post('http://localhost:3000/api/vivawallet/transaction_verification/', {transactionID: t}, {headers: {'Content-Type': 'application/json'}}))
           const data = this.verification[0].data
           this.verified = data.Verification
         }

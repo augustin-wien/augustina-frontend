@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { usePaymentStore } from '@/stores/PaymentStore'
 import Default from '@/layouts/DefaultLayout.vue'
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -69,8 +70,8 @@ const router = createRouter({
       component: () => import('../views/VendorOverview.vue')
     },
     {
-      path: '/verifying',
-      name: 'Verifying',
+      path: '/success',
+      name: 'Success',
       component: () => import('../views/WaitingCountdown.vue')
     }
   ]
@@ -92,9 +93,6 @@ router.beforeEach(async (to) => {
 //Check if AGBs are accepted
 router.beforeEach(async (next) => {
   if(next.name == 'Payment' && !usePaymentStore().agbChecked){
-    if(usePaymentStore().paymentservice == 1) {
-      router.push('https://demo.vivapayments.com/web2?ref=7742006857401941')
-    }
     return {}
   }
   //Redirect to vivawallet

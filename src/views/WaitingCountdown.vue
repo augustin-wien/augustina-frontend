@@ -5,7 +5,12 @@
     const paymentStore = usePaymentStore()
 
     onMounted(() => {
-        paymentStore.verifyPayment()
+        const url = window.location.href
+        const params = url.split('?')
+        const vars = params[1].split('&')
+        const t = vars[0].split('=')
+        paymentStore.transactionID = t[1]
+        paymentStore.verifyPayment(t[1])
     }
     )
 </script>
