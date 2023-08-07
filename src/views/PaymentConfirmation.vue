@@ -13,7 +13,7 @@
     <div>
       <span class="date">{{ currentDate() }} </span><span class="time"> um {{ time }}</span>
     </div>
-    <button class="bg-green-500 rounded-full py-3 px-6 text-white font-bold">Logout</button>
+    <button class="bg-green-600 rounded-full py-3 px-6 text-white font-bold">Logout</button>
   </div>
 </template>
 

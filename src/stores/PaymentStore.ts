@@ -1,6 +1,7 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 import { type AxiosResponse } from "axios";
+import router from "@/router";
 
 export const usePaymentStore = defineStore('payment',{
     state: () =>{
@@ -77,6 +78,7 @@ export const usePaymentStore = defineStore('payment',{
           this.verification.push(await axios.post('http://localhost:3000/api/vivawallet/transaction_verification/', {transactionID: t}, {headers: {'Content-Type': 'application/json'}}))
           const data = this.verification[0].data
           this.verified = data.Verification
+          router.push('/paymentconfirmation')
         }
       }
     }
