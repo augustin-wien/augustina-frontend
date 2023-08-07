@@ -44,8 +44,12 @@ const router = createRouter({
     {
       path: '/tipping',
       name: 'Tippingpage',
-      component: () => import('../views/TippingPage.vue'),
-      meta: { transition: 'slide-left' }
+      component: () => import('../views/TippingPage.vue')
+    },
+    {
+      path: '/information',
+      name: 'InformationPrintEpaper',
+      component: () => import('../views/InformationPrintEpaper.vue')
     },
     {
       path: '/confirmation',

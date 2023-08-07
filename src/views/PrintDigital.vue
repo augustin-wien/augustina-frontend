@@ -10,14 +10,14 @@
 <template>
   <main  className="h-screen px-10 py-16 grid grid-rows-6 place-items-center">
     <header >
-        <img alt="Augustin logo" className="logo mx-auto my-5" src="@/assets/logo.svg" width="270" height="150"/>
+        <img alt="Augustin logo" className="logo mx-auto my-2" src="@/assets/logo.svg" width="270" height="150"/>
     </header>
     <div className="text-center font-semibold text-4xl">
         Ausgabe wählen
     </div>
     <div className="flex place-items-center w-full">
         <button @click="digital" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/additionalproducts">ePaper</RouterLink>
+            <RouterLink to="/additionalproducts">E-Paper</RouterLink>
         </button>
     </div>
     <div className="flex place-items-center w-full">
@@ -27,7 +27,7 @@
     </div>
     <div className="flex place-items-center row-span-2 w-full">
         <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold mx-auto w-20">
-            <RouterLink to="/">?</RouterLink>
+            <RouterLink to="/information">?</RouterLink>
         </button>
     </div>
   </main>
