@@ -1,11 +1,14 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 import { type AxiosResponse } from "axios";
-import { type VivaWalletResponse } from "@/models/vivawalletresponse";
+import router from "@/router";
 
 export const usePaymentStore = defineStore('payment',{
     state: () =>{
         return{
+            //Payment service (0: Stripe, 1: vivawallet)
+            paymentservice: 1,
+
             agbChecked: false,
             testamount: 1,
             pricePerPaper: 300,
@@ -16,6 +19,9 @@ export const usePaymentStore = defineStore('payment',{
 
             //vivawallet 
             response: [] as AxiosResponse[],
+            transactionID: "",
+            verification: [] as AxiosResponse[],
+            verified: false,
             url: ""
         }
     },
@@ -60,10 +66,20 @@ export const usePaymentStore = defineStore('payment',{
       //vivawallet methodes
       async postPrice(price: number) {
         const sleep = (ms: number) => (response: AxiosResponse) => new Promise<AxiosResponse>(resolve => setTimeout(() => resolve(response), ms))
-        this.response.push(await axios.post('http://localhost:3000/api/transaction/', {amount: price}, {headers: {'Content-Type': 'application/json'}}).then(sleep(50)))
+        this.response.push(await axios.post('http://localhost:3000/api/transaction/', {amount: price}, {headers: {'Content-Type': 'application/json'}}))
         const data = this.response[0].data
         this.url = data.SmartCheckoutURL
       },
+      async verifyPayment(){
+        if(this.transactionID === ""){
+          console.log('id undefined')
+        }
+        else {
+          this.verification.push(await axios.post('http://localhost:3000/api/verification/', {transactionID: this.transactionID}, {headers: {'Content-Type': 'application/json'}}))
+          const data = this.verification[0].data
+          this.verified = data.Verification
+        }
       }
     }
+  }
 )

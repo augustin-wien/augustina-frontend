@@ -67,6 +67,11 @@ const router = createRouter({
       path: '/vendoroverview',
       name: 'Vendor Overview',
       component: () => import('../views/VendorOverview.vue')
+    },
+    {
+      path: '/verifying',
+      name: 'Verifying',
+      component: () => import('../views/WaitingCountdown.vue')
     }
   ]
 })
@@ -86,10 +91,15 @@ router.beforeEach(async (to) => {
 
 //Check if AGBs are accepted
 router.beforeEach(async (next) => {
-  if(
-    next.name == 'Payment' &&
-    !usePaymentStore().agbChecked){
+  if(next.name == 'Payment' && !usePaymentStore().agbChecked){
+    if(usePaymentStore().paymentservice == 1) {
+      router.push('https://demo.vivapayments.com/web2?ref=7742006857401941')
+    }
     return {}
+  }
+  //Redirect to vivawallet
+  else if(usePaymentStore().paymentservice == 1){
+    //router.push(usePaymentStore().url) 
   }
 })
 

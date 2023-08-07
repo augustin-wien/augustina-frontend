@@ -5,6 +5,7 @@
 
   const settStore = settingsStore()
   onMounted(settStore.fetchSettings)
+  console.log(import.meta.env.BASE_URL)
 </script>
 
 <template>

@@ -6,7 +6,7 @@
   const paymentStore = usePaymentStore()
 
   onMounted(() => {
-    paymentStore.postPrice(161)
+    paymentStore.postPrice(paymentStore.pricePerPaper*paymentStore.testamount+paymentStore.tip)
   })
 
 </script> 
@@ -18,6 +18,13 @@
     </header>
     <div className="row-span-2 grid grid-rows-2 grid-cols-2">
       {{ paymentStore.url }}
+    </div>
+    <input v-model="paymentStore.transactionID" class="bg-green-300" type="text">
+    <div>
+      {{ paymentStore.transactionID }}
+    </div>
+    <div>
+      <RouterLink to="/verifying"> Weiter </RouterLink>
     </div>
   </main>
 </template>
