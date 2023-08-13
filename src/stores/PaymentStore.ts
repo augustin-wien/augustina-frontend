@@ -1,7 +1,10 @@
 import axios from "axios";
 import { defineStore } from "pinia";
-import { type AxiosResponse } from "axios";
+import type { VivaWalletResponse } from '@/models/responseVivaWallet'
+import type { VivaWalletVerification } from "@/models/verificationVivaWallet";
 import router from "@/router";
+import agent from '@/api/agent'
+
 
 export const usePaymentStore = defineStore('payment',{
     state: () =>{
@@ -18,9 +21,9 @@ export const usePaymentStore = defineStore('payment',{
             tip: 0,
 
             //vivawallet 
-            response: [] as AxiosResponse[],
+            response: [] as VivaWalletResponse[],
             transactionID: "",
-            verification: [] as AxiosResponse[],
+            verification: [] as VivaWalletVerification[],
             verified: false,
             url: ""
         }
@@ -65,9 +68,8 @@ export const usePaymentStore = defineStore('payment',{
 
       //vivawallet methodes
       async postPrice(price: number) {
-        this.response.push(await axios.post('http://localhost:3000/api/vivawallet/transaction_order/', {amount: price}, {headers: {'Content-Type': 'application/json'}}))
-        const data = this.response[0].data
-        this.url = data.SmartCheckoutURL
+        this.response[0] = await agent.VivaWallet.postPrice(price)
+        this.url = this.response[0].SmartCheckoutURL
         window.location.href = this.url
       },
       async verifyPayment(t: string){
@@ -75,9 +77,8 @@ export const usePaymentStore = defineStore('payment',{
           console.log('id undefined')
         }
         else {
-          this.verification.push(await axios.post('http://localhost:3000/api/vivawallet/transaction_verification/', {transactionID: t}, {headers: {'Content-Type': 'application/json'}}))
-          const data = this.verification[0].data
-          this.verified = data.Verification
+          this.verification[0] = await agent.VivaWallet.verifyPayment(this.transactionID)
+          this.verified = this.verification[0].verification
           router.push('/paymentconfirmation')
         }
       }
