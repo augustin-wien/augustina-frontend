@@ -26,7 +26,7 @@
     </div>
     <div className="flex place-items-center w-full">
         <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/confirmation">Eigener Betrag</RouterLink>
+            <RouterLink to="/custom-tip">Eigener Betrag</RouterLink>
         </button>
     </div>
     <div className="flex place-items-center w-full">

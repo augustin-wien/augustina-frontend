@@ -16,7 +16,7 @@ export const usePaymentStore = defineStore('payment',{
             pricePerPaper: 300,
             digital: {digital: true},
             //the unit for price is cents (smallest unit)
-            testprice: 300,
+            price: 300,
             tip: 0,
 
             //vivawallet 
@@ -29,7 +29,11 @@ export const usePaymentStore = defineStore('payment',{
     },
     actions: {
       priceInEuros() {
-        return (this.testprice + this.tip)/100
+        return (this.price + this.tip)/100
+      },
+
+      tipInEuros() {
+        return (this.tip/100)
       },
 
       increment() {
@@ -62,7 +66,7 @@ export const usePaymentStore = defineStore('payment',{
       },
       addN(n: number) {
         this.testamount++
-        this.testprice = this.testprice + (this.pricePerPaper * n)
+        this.price = this.price + (this.pricePerPaper * n)
       },
 
       //vivawallet methodes
