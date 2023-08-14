@@ -22,7 +22,7 @@ export const settingsStore = defineStore('settings',{
         async fetchSettings() {
             try{ 
                 const data = await agent.SettingsConfiguration.current()
-                this.settings.pop
+                this.settings = []
                 this.settings.push(data)
                 console.log(this.settings)
                 console.log('Settings fetched from database')
