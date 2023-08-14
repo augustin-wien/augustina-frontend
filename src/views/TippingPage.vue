@@ -3,7 +3,7 @@
     import { RouterLink} from 'vue-router'
     const paymentStore = usePaymentStore()
     const increment = paymentStore.increment
-    const incrementec = paymentStore.incrementec
+    const incrementec = paymentStore.incrementPriceC
 </script>
 
 <template>

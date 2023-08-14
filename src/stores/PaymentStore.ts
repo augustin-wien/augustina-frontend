@@ -41,10 +41,20 @@ export const usePaymentStore = defineStore('payment',{
         },
   
       // increment with custom values for cent (c)
-      incrementec(c: number) {
+      incrementPriceC(c: number) {
+        this.tip = this.tip + c
+      },
+
+      incrementTipC(c: number) {
         this.tip = this.tip + c
       },
   
+      decrementTipC(c: number) {
+        if(this.tip - c >= 0) {
+          this.tip = this.tip - c
+        }
+      },
+
       decrement() {
         if(this.tip-100 >= 0){
             this.tip = this.tip - 100
