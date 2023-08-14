@@ -1,10 +1,9 @@
 import type { Settings } from '@/models/settings'
 import type { VivaWalletResponse } from '@/models/responseVivaWallet'
-import axios, { type AxiosResponse } from 'axios'
 import type { VivaWalletVerification } from '@/models/verificationVivaWallet'
+import axios, { type AxiosResponse } from 'axios'
 
 const responseBody = (response: AxiosResponse) => response.data
-const verified = (body: VivaWalletVerification) => body.verification
 
 const sleep = (ms: number) => (response: AxiosResponse) => new Promise<AxiosResponse>(resolve => setTimeout(() => resolve(response), ms))
 

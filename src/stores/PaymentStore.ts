@@ -1,4 +1,3 @@
-import axios from "axios";
 import { defineStore } from "pinia";
 import type { VivaWalletResponse } from '@/models/responseVivaWallet'
 import type { VivaWalletVerification } from "@/models/verificationVivaWallet";
@@ -72,7 +71,7 @@ export const usePaymentStore = defineStore('payment',{
         this.url = this.response[0].SmartCheckoutURL
         window.location.href = this.url
       },
-      async verifyPayment(t: string){
+      async verifyPayment(){
         if(this.transactionID === ""){
           console.log('id undefined')
         }
