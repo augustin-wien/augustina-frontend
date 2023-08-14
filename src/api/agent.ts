@@ -12,7 +12,7 @@ const SettingsConfiguration = {
 }
 
 const VivaWallet = {
-    postPrice: (price: number): Promise<VivaWalletResponse> => axios.post(import.meta.env.VITE_VIVA_WALLET_TRANSACTION_ORDER, {amount: price}, {headers: {'Content-Type': 'application/json'}}).then(sleep(100)).then(responseBody),
+    postPrice: (price: number): Promise<VivaWalletResponse> => axios.post(import.meta.env.VITE_VIVAWALLET_TRANSACTION_ORDER, {amount: price}, {headers: {'Content-Type': 'application/json'}}).then(sleep(100)).then(responseBody),
     verifyPayment: (vivaTransactionID: string): Promise<VivaWalletVerification> => axios.post(import.meta.env.VITE_VIVAWALLET_TRANSACTION_VERIFICATION, {transactionID: vivaTransactionID}, {headers: {'Content-Type': 'application/json'}}).then(sleep(100)).then(responseBody)
 }
 
