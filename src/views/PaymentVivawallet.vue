@@ -6,7 +6,7 @@
   const paymentStore = usePaymentStore()
 
   onMounted(() => {
-    paymentStore.postPrice(paymentStore.price + paymentStore.tip)
+    paymentStore.postPrice(paymentStore.price + paymentStore.tipInCents())
   })
 </script> 
 

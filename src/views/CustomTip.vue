@@ -17,10 +17,13 @@
         <div className="text-center font-semibold text-4xl row-span-2">
             Trinkgeld eingeben:
         </div>
-        <div className="grid grid-cols-5 py-10 w-full">
-            <button @click="increment(50)">+</button>
-            <p className="text-center text-7xl font-semibold col-span-3">{{ paymentStore.tipInEuros() }}€</p>
-            <button @click="decrement(50)">-</button>
+        <div className="grid grid-cols-5 w-full h-full">
+            <button @click="increment(0.5)">+</button>
+            <div class="col-span-3 grid grid-cols-3 bg-green-200 rounded-3xl border-spacing-7 place-items-center border-4 border-green-600">
+                <input v-model="paymentStore.tip" className="bg-green-300 col-span-2 text-center text-7xl font-semibold rounded-3xl w-full h-full">
+                <p className="text-7xl font-semibold text-left">€</p>
+            </div>
+            <button @click="decrement(0.5)">-</button>
         </div>
         <div>
 
