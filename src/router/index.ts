@@ -1,7 +1,8 @@
 import keycloak from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
-import { Payment } from '@/stores/PaymentStore'
+import { usePaymentStore } from '@/stores/PaymentStore'
 import Default from '@/layouts/DefaultLayout.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,7 +60,7 @@ const router = createRouter({
     {
       path: '/payment',
       name: 'Payment',
-      component: () => import('../views/PaymentStripe.vue'),
+      component: () => import('../views/PaymentVivawallet.vue'),
       meta: { transition: 'slide-left' }
     },
     {
@@ -71,6 +72,11 @@ const router = createRouter({
       path: '/vendoroverview',
       name: 'Vendor Overview',
       component: () => import('../views/VendorOverview.vue')
+    },
+    {
+      path: '/success',
+      name: 'Success',
+      component: () => import('../views/WaitingCountdown.vue')
     }
   ]
 })
@@ -90,10 +96,12 @@ router.beforeEach(async (to) => {
 
 //Check if AGBs are accepted
 router.beforeEach(async (next) => {
-  if(
-    next.name == 'Payment' &&
-    !Payment().agbChecked){
+  if(next.name == 'Payment' && !usePaymentStore().agbChecked){
     return {}
+  }
+  //Redirect to vivawallet
+  else if(usePaymentStore().paymentservice == 1){
+    //router.push(usePaymentStore().url) 
   }
 })
 

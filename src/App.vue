@@ -1,11 +1,10 @@
 <script setup lang="ts">
   import { RouterView } from 'vue-router'
-  import { onMounted } from 'vue'
+  import { onMounted } from 'vue';
   import { settingsStore } from '@/stores/settingsStore';
-  const settStore = settingsStore()
-  onMounted(() => { settStore.fetchSettings() })
 
- console.log(import.meta.env.VITE_SETTINGS_API_URL)
+  const settStore = settingsStore()
+  onMounted(settStore.fetchSettings)
 </script>
 
 <template>
