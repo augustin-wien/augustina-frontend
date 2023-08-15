@@ -25,7 +25,7 @@
                     <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
                       QR-Code erstellen
                     </button>
-                    <button className="p-2 rounded-full bg-lime-600 text-white">
+                    <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
                       Din-A4 Download
                     </button>
                   </div>
@@ -41,7 +41,7 @@
                     <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
                       QR-Code erstellen
                     </button>
-                    <button className="p-2 rounded-full bg-lime-600 text-white">
+                    <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
                       Din-A4 Download
                     </button>
                   </div>

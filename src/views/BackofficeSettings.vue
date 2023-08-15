@@ -11,7 +11,6 @@
               <tr>
                 <th className="p-3">Thema</th>
                 <th className="p-3">Aktuell</th>
-                <th className="p-3">Aktion</th>
               </tr>
             </thead>
             <tbody className="text-sm  p-3">
@@ -26,9 +25,6 @@
                     height="20"
                   />
                 </td>
-                <router-link to="#">
-                  <button className="p-2 rounded-full bg-lime-600 text-white mr-2">Ändern</button>
-                </router-link>
               </tr>
               <tr>
                 <td className="border-t-2 p-3 font-bold">Cover</td>
@@ -41,39 +37,29 @@
                     height="20"
                   />
                 </td>
-                <router-link to="#">
-                  <button className="p-2 rounded-full bg-lime-600 text-white mr-2">Ändern</button>
-                </router-link>
               </tr>
               <tr>
                 <td className="border-t-2 p-3 font-bold">Name</td>
                 <td className="border-t-2 p-3">Augustin</td>
-                <router-link to="#">
-                  <button className="p-2 rounded-full bg-lime-600 text-white mr-2">Ändern</button>
-                </router-link>
               </tr>
               <tr>
                 <td className="border-t-2 p-3 font-bold">Preis</td>
                 <td className="border-t-2 p-3">3 Euro</td>
-                <router-link to="#">
-                  <button className="p-2 rounded-full bg-lime-600 text-white mr-2">Ändern</button>
-                </router-link>
               </tr>
               <tr>
                 <td className="border-t-2 p-3 font-bold">Beschreibungstext</td>
                 <td className="border-t-2 p-3">Hakuna Matata</td>
-                <router-link to="#">
-                  <button className="p-2 rounded-full bg-lime-600 text-white mr-2">Ändern</button>
-                </router-link>
               </tr>
               <tr>
                 <td className="border-t-2 p-3 font-bold">Übernahme Transaktionskosten</td>
                 <td className="border-t-2 p-3">Augustin</td>
-                <router-link to="#">
-                  <button className="p-2 rounded-full bg-lime-600 text-white mr-2">Ändern</button>
-                </router-link>
               </tr>
             </tbody>
+            <div>
+              <router-link to="/backoffice/settings/update">
+                <button className="p-2 rounded-full bg-lime-600 text-white mr-2">Ändern</button>
+              </router-link>
+            </div>
           </div>
         </div>
       </main>
