@@ -60,12 +60,14 @@ const router = createRouter({
       },
       component: () => import('../views/BackofficeCredits.vue')
     },
+
     {
-      path: '/backoffice/credits/payout',
+      path: '/backoffice/credits/payout/:ID',
       name: 'Credit Payout',
       meta: {
         layout: BackofficeDefault
       },
+      props: true,
       component: () => import('../views/BackofficeCreditPayout.vue')
     },
     {
@@ -109,7 +111,7 @@ const router = createRouter({
       component: () => import('../views/BackofficeNewVendor.vue')
     },
     {
-      path: '/backoffice/userprofile',
+      path: '/backoffice/userprofile/:ID',
       name: 'Vendor Profile',
       meta: {
         layout: BackofficeDefault

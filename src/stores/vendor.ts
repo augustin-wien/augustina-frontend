@@ -2,20 +2,21 @@ import axios from 'axios'
 import { defineStore } from 'pinia'
 
 //define interface to store data from backend properly
-interface Vendor {
-  account: number
-  email: string
-  firstName: string
-  id: number
-  keycloakID: string
-  lastName: string
-  lastPayout: {
+export interface Vendor {
+  Account: number
+  Email: string
+  FirstName: string
+  ID: number
+  KeycloakID: string
+  LastName: string
+  LastPayout: {
     infinityModifier: number
     time: string
     valid: true
   }
-  licenseID: string
-  urlID: string
+  LicenseID: string
+  UrlID: string
+  Balance: number
 }
 
 export const vendorsStore = defineStore('vendors', {
@@ -41,6 +42,24 @@ export const vendorsStore = defineStore('vendors', {
       } catch (error) {
         alert(error)
         console.log(error)
+      }
+    },
+    async createVendor(newVendor: Vendor) {
+      try {
+        const response = await axios.post('http://localhost:3000/api/vendors/', newVendor, {
+          headers: {
+            accept: 'application/json',
+            'Content-Type': 'application/json'
+          }
+        })
+
+        console.log('Vendor created:', response.data)
+
+        // If you want to update the vendor list after creating, you can call fetchVendors
+        this.fetchVendors()
+      } catch (error) {
+        alert(error)
+        console.error('Error creating vendor:', error)
       }
     }
   }

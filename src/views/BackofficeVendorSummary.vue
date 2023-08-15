@@ -16,71 +16,26 @@
               </tr>
             </thead>
             <tbody className="text-sm  p-3">
-              <tr>
-                <td className="border-t-2 p-3">{{ vendor.licenseID }}</td>
-                <td className="border-t-2 p-3">{{ vendor.firstName }}</td>
-                <td className="border-t-2 p-3">{{ vendor.lastName }}</td>
+              <tr v-for="vendor in vendors" :key="vendor.ID">
+                <td className="border-t-2 p-3">{{ vendor.LicenseID }}</td>
+                <td className="border-t-2 p-3">{{ vendor.FirstName }}</td>
+                <td className="border-t-2 p-3">{{ vendor.LastName }}</td>
+                <router-link to="/backoffice/pdf">
+                  <div class="flex">
+                    <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
+                      QR-Code erstellen
+                    </button>
+                    <button className="p-2 rounded-full bg-lime-600 text-white">
+                      Din-A4 Download
+                    </button>
+                  </div>
+                </router-link>
+              </tr>
 
-                <router-link to="/backoffice/pdf">
-                  <div class="flex">
-                    <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
-                      QR-Code erstellen
-                    </button>
-                    <button className="p-2 rounded-full bg-lime-600 text-white">
-                      Din-A4 Download
-                    </button>
-                  </div>
-                </router-link>
-              </tr>
-              <tr>
-                <td className="border-t-2 p-3">MU-5592</td>
-                <td className="border-t-2 p-3">Max</td>
-                <td className="border-t-2 p-3">Mustermann</td>
-                <router-link to="/backoffice/pdf">
-                  <div class="flex">
-                    <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
-                      QR-Code erstellen
-                    </button>
-                    <button className="p-2 rounded-full bg-lime-600 text-white">
-                      Din-A4 Download
-                    </button>
-                  </div>
-                </router-link>
-              </tr>
               <tr>
                 <td className="border-t-2 p-3">LK-373</td>
                 <td className="border-t-2 p-3">Leonie</td>
                 <td className="border-t-2 p-3">Löwenherz</td>
-                <router-link to="/backoffice/pdf">
-                  <div class="flex">
-                    <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
-                      QR-Code erstellen
-                    </button>
-                    <button className="p-2 rounded-full bg-lime-600 text-white">
-                      Din-A4 Download
-                    </button>
-                  </div>
-                </router-link>
-              </tr>
-              <tr>
-                <td className="border-t-2 p-3">BK-902</td>
-                <td className="border-t-2 p-3">Otto</td>
-                <td className="border-t-2 p-3">Normalverbraucher</td>
-                <router-link to="/backoffice/pdf">
-                  <div class="flex">
-                    <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
-                      QR-Code erstellen
-                    </button>
-                    <button className="p-2 rounded-full bg-lime-600 text-white">
-                      Din-A4 Download
-                    </button>
-                  </div>
-                </router-link>
-              </tr>
-              <tr>
-                <td className="border-t-2 p-3">AE-760</td>
-                <td className="border-t-2 p-3">Sam</td>
-                <td className="border-t-2 p-3">Sample</td>
                 <router-link to="/backoffice/pdf">
                   <div class="flex">
                     <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
@@ -111,23 +66,17 @@ td {
 
 <script lang="ts">
 import { vendorsStore } from '../stores/vendor'
-import { computed } from 'vue'
 export default {
   setup() {
     const store = vendorsStore()
 
     // Fetch the vendors' data when the component is mounted
-    store.fetchVendors()
-    const vendors = computed(() => store.vendors)
 
-    // Define the vendor object based on a specific condition or index
-    // For example, if you want to access the first vendor in the list, you can do this:
-    const vendor = computed(() => vendors.value[0]) // Change the index as per your requirement
+    const vendors = store.vendors
 
     // Return the data and methods as part of the setup
     return {
-      vendors,
-      vendor
+      vendors
     }
   }
 }
