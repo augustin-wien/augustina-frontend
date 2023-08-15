@@ -30,9 +30,9 @@
                 </tr>
               </tbody>
             </div>
-            <div class="flex self-center">
-              <router-link to="#">
-                <button class="p-2 rounded-full bg-lime-600 text-white">Ändern</button>
+            <div v-if="vendor">
+              <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
+                <button class="p-2 rounded-full bg-lime-600 text-white mr-2">Ändern</button>
               </router-link>
             </div>
           </div>

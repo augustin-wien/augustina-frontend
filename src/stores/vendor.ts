@@ -54,12 +54,41 @@ export const vendorsStore = defineStore('vendors', {
         })
 
         console.log('Vendor created:', response.data)
-
-        // If you want to update the vendor list after creating, you can call fetchVendors
         this.fetchVendors()
       } catch (error) {
         alert(error)
         console.error('Error creating vendor:', error)
+      }
+    },
+    async updateVendor(updatedVendor: Vendor) {
+      try {
+        const response = await axios.put(
+          `http://localhost:3000/api/vendors/${updatedVendor.ID}`,
+          updatedVendor,
+          {
+            headers: {
+              accept: 'application/json',
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+
+        console.log('Vendor updated:', response.data)
+        this.fetchVendors()
+      } catch (error) {
+        alert(error)
+        console.error('Error updating vendor:', error)
+      }
+    },
+    async deleteVendor(vendorId: number) {
+      try {
+        const response = await axios.delete(`http://localhost:3000/api/vendors/${vendorId}`)
+
+        console.log('Vendor deleted:', response.data)
+        this.fetchVendors()
+      } catch (error) {
+        alert(error)
+        console.error('Error deleting vendor:', error)
       }
     }
   }

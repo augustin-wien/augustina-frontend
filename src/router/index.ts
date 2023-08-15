@@ -118,6 +118,14 @@ const router = createRouter({
       },
       component: () => import('../views/BackofficeUserProfile.vue')
     },
+    {
+      path: '/backoffice/userprofile/:ID/update',
+      name: 'Update Vendor Profile',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeUpdateVendor.vue')
+    },
 
     {
       path: '/backoffice/newproduct',
@@ -144,6 +152,14 @@ const router = createRouter({
         layout: BackofficeDefault
       },
       component: () => import('../views/BackofficeSettings.vue')
+    },
+    {
+      path: '/backoffice/settings/update',
+      name: 'Update Backoffice Settings',
+      meta: {
+        layout: BackofficeDefault
+      },
+      component: () => import('../views/BackofficeUpdateAugustin.vue')
     },
 
     {
