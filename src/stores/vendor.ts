@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { defineStore } from 'pinia'
+import { fetchVendors, postVendors, patchVendor, removeVendor } from '@/api/api'
 
 //define interface to store data from backend properly
 export interface Vendor {
@@ -13,7 +13,7 @@ export interface Vendor {
     infinityModifier: number
     time: string
     valid: true
-  }
+  } | null
   LicenseID: string
   UrlID: string
   Balance: number
@@ -27,15 +27,15 @@ export const vendorsStore = defineStore('vendors', {
   },
 
   getters: {
-    getVendors(state) {
+    getvendors(state) {
       return state.vendors
     }
   },
 
   actions: {
-    async fetchVendors() {
+    async getVendors() {
       try {
-        const data = await axios.get<Vendor[]>('http://localhost:3000/api/vendors/')
+        const data = await fetchVendors()
         this.vendors = data.data
         console.log(this.vendors)
         console.log('Vendors fetched from database')
@@ -44,52 +44,45 @@ export const vendorsStore = defineStore('vendors', {
         console.log(error)
       }
     },
+
     async createVendor(newVendor: Vendor) {
-      try {
-        const response = await axios.post('http://localhost:3000/api/vendors/', newVendor, {
-          headers: {
-            accept: 'application/json',
-            'Content-Type': 'application/json'
-          }
+      console.log(JSON.stringify(newVendor))
+
+      postVendors(newVendor)
+        .then((data) => {
+          console.log('Vendor created:', data.data)
+          this.getVendors()
+          console.log(data)
+        })
+        .catch((error) => {
+          console.log('Error creating vendor:', error)
         })
 
-        console.log('Vendor created:', response.data)
-        this.fetchVendors()
-      } catch (error) {
-        alert(error)
-        console.error('Error creating vendor:', error)
-      }
+      //if no error: toast mit success message, if error: toast mit error message?
     },
-    async updateVendor(updatedVendor: Vendor) {
-      try {
-        const response = await axios.put(
-          `http://localhost:3000/api/vendors/${updatedVendor.ID}`,
-          updatedVendor,
-          {
-            headers: {
-              accept: 'application/json',
-              'Content-Type': 'application/json'
-            }
-          }
-        )
 
-        console.log('Vendor updated:', response.data)
-        this.fetchVendors()
-      } catch (error) {
-        alert(error)
-        console.error('Error updating vendor:', error)
-      }
+    async updateVendor(updatedVendor: Vendor) {
+      console.log(JSON.stringify(updatedVendor))
+      patchVendor(updatedVendor)
+        .then((data) => {
+          console.log('Vendor updated:', data.data)
+          this.getVendors()
+        })
+        .catch((error) => {
+          console.log('Error updating vendor:', error)
+        })
+      //if no error: toast mit success message, if error: toast mit error message?
     },
     async deleteVendor(vendorId: number) {
-      try {
-        const response = await axios.delete(`http://localhost:3000/api/vendors/${vendorId}`)
-
-        console.log('Vendor deleted:', response.data)
-        this.fetchVendors()
-      } catch (error) {
-        alert(error)
-        console.error('Error deleting vendor:', error)
-      }
+      removeVendor(vendorId)
+        .then(() => {
+          console.log('Vendor deleted:', vendorId)
+          this.getVendors()
+        })
+        .catch((error) => {
+          console.log('Error deleting vendor:', error)
+        })
+      //if no error: toast mit success message, if error: toast mit error message?
     }
   }
 })
