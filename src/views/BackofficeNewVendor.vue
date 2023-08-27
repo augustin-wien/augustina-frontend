@@ -29,6 +29,7 @@
                 id="lastName"
                 required
               />
+
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
                 >Email:</label
               >
@@ -56,52 +57,54 @@
               <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">Anlegen</button>
             </div>
           </form>
+          <Toast v-if="toast" :toast="toast" />
         </div>
       </main>
     </template>
   </component>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script lang="ts" setup>
+import { ref } from 'vue'
 import { vendorsStore } from '../stores/vendor'
 import type { Vendor } from '@/stores/vendor'
+import Toast from '@/components/ToastMessage.vue'
 
-export default defineComponent({
-  setup() {
-    const store = vendorsStore()
+const store = vendorsStore()
 
-    const newVendor = ref({
-      Account: 0,
-      Email: 'new@example.com',
-      FirstName: 'Leonie',
-      ID: 0,
-      KeycloakID: 'new-keycloak-id',
-      LastName: 'Löwenherz',
-      LastPayout: {
-        infinityModifier: 0,
-        time: '',
-        valid: true
-      },
-      LicenseID: 'new-license-id',
-      UrlID: 'new-url-id',
-      Balance: 0
-    })
-
-    const submitVendor = async () => {
-      try {
-        await store.createVendor(newVendor.value as Vendor)
-      } catch (error) {
-        console.error('Error creating vendor:', error)
-      }
-    }
-
-    return {
-      newVendor,
-      submitVendor
-    }
-  }
+const newVendor = ref({
+  Account: 0,
+  Email: 'new@example.com',
+  FirstName: 'Leonie',
+  ID: 0,
+  KeycloakID: 'new-keycloak-id',
+  LastName: 'Löwenherz',
+  LastPayout: null,
+  LicenseID: 'new-license-id',
+  UrlID: 'new-url-id',
+  Balance: 0
 })
+
+const toast = ref<{ type: string; message: string } | null>(null)
+
+const submitVendor = async () => {
+  try {
+    await store.createVendor(newVendor.value as Vendor)
+    showToast('success', 'VerkäuferIn erfolgreich angelegt')
+  } catch (err) {
+    console.error('Error creating vendor:', err)
+    showToast('error', 'VerkäuferIn konnte nicht angelegt werden')
+  }
+}
+
+const showToast = (type: string, message: string) => {
+  // Set the toast message
+  toast.value = { type, message }
+  // Clear the toast after a delay (e.g., 5 seconds)
+  setTimeout(() => {
+    toast.value = null
+  }, 5000)
+}
 </script>
 
 <style>
