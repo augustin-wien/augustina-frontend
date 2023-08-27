@@ -64,20 +64,15 @@ td {
 }
 </style>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { vendorsStore } from '../stores/vendor'
-export default {
-  setup() {
-    const store = vendorsStore()
+import { computed, onMounted } from 'vue'
 
-    // Fetch the vendors' data when the component is mounted
+const store = vendorsStore()
 
-    const vendors = store.vendors
-
-    // Return the data and methods as part of the setup
-    return {
-      vendors
-    }
-  }
-}
+// Fetch the vendors' data when the component is mounted
+onMounted(() => {
+  store.getVendors()
+})
+const vendors = computed(() => store.vendors)
 </script>

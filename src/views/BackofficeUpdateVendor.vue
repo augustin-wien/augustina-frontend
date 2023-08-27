@@ -66,10 +66,11 @@
               </div>
             </div>
 
-            <div class="flex place-content-center">
+            <div class="flex place-content-center justify-between">
               <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">
                 Bestätigen
               </button>
+              <button type="submit" class="p-3 rounded-full bg-red-600 text-white">Löschen</button>
             </div>
           </form>
         </div>
@@ -78,62 +79,48 @@
   </component>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+<script lang="ts" setup>
+import { ref, computed } from 'vue'
 import { vendorsStore } from '../stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { useRoute } from 'vue-router'
 
-export default defineComponent({
-  setup() {
-    const store = vendorsStore()
+const store = vendorsStore()
 
-    const updatedVendor = ref({
-      Account: 0,
-      Email: 'new@example.com',
-      FirstName: 'Leonie',
-      ID: 0,
-      KeycloakID: 'new-keycloak-id',
-      LastName: 'Löwenherz',
-      LastPayout: {
-        infinityModifier: 0,
-        time: '',
-        valid: true
-      },
-      LicenseID: 'new-license-id',
-      UrlID: 'new-url-id',
-      Balance: 0
-    })
+const updatedVendor = ref({
+  Account: 0,
+  Email: 'new@example.com',
+  FirstName: 'Leonie',
+  ID: 0,
+  KeycloakID: 'new-keycloak-id',
+  LastName: 'Löwenherz',
+  LastPayout: null,
+  LicenseID: 'new-license-id',
+  UrlID: 'new-url-id',
+  Balance: 0
+})
 
-    store.fetchVendors()
-    const vendors = computed(() => store.vendors)
+store.getVendors()
+const vendors = computed(() => store.vendors)
 
-    const route = useRoute()
-    const idparams = route.params.ID
+const route = useRoute()
+const idparams = route.params.ID
 
-    const vendor = computed(() => {
-      const numericIdParams = Number(idparams) // Convert the string to a number or NaN
-      if (!isNaN(numericIdParams)) {
-        return vendors.value.find((vendor) => vendor.ID === numericIdParams)
-      } else {
-        return null
-      }
-    })
-    const updateVendor = async () => {
-      try {
-        await store.updateVendor(updatedVendor.value as Vendor)
-      } catch (error) {
-        console.error('Error updating vendor:', error)
-      }
-    }
-
-    return {
-      updatedVendor,
-      updateVendor,
-      vendor
-    }
+const vendor = computed(() => {
+  const numericIdParams = Number(idparams) // Convert the string to a number or NaN
+  if (!isNaN(numericIdParams)) {
+    return vendors.value.find((vendor) => vendor.ID === numericIdParams)
+  } else {
+    return null
   }
 })
+const updateVendor = async () => {
+  try {
+    await store.updateVendor(updatedVendor.value as Vendor)
+  } catch (error) {
+    console.error('Error updating vendor:', error)
+  }
+}
 </script>
 
 <style>

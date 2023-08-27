@@ -51,44 +51,25 @@ td {
 }
 </style>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { vendorsStore } from '../stores/vendor'
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-export default {
-  setup() {
-    const store = vendorsStore()
-    store.fetchVendors()
-    const vendors = computed(() => store.vendors)
+const store = vendorsStore()
+store.getVendors()
+const vendors = computed(() => store.vendors)
 
-    const route = useRoute()
-    const idparams = route.params.ID
+const route = useRoute()
+const idparams = route.params.ID
 
-    const vendor = computed(() => {
-      const numericIdParams = Number(idparams) // Convert the string to a number or NaN
-      if (!isNaN(numericIdParams)) {
-        return vendors.value.find((vendor) => vendor.ID === numericIdParams)
-      } else {
-        return null
-      }
-    })
-    console.log(idparams)
-    const searchQuery = ref('')
-    const amount = ref('')
-
-    // Filter users based on the search query
-    const filteredVendors = computed(() => {
-      const searchTerm = searchQuery.value.toLowerCase()
-      return vendors.value.filter((vendor) => vendor.LicenseID?.includes(searchTerm))
-    })
-
-    return {
-      searchQuery,
-      filteredVendors,
-      vendor,
-      amount
-    }
+const vendor = computed(() => {
+  const numericIdParams = Number(idparams) // Convert the string to a number or NaN
+  if (!isNaN(numericIdParams)) {
+    return vendors.value.find((vendor) => vendor.ID === numericIdParams)
+  } else {
+    return null
   }
-}
+})
+console.log(idparams)
 </script>
