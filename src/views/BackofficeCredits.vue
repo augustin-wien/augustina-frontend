@@ -1,13 +1,12 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <main>
+      <main v-if="vendors">
         <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
           <h1>Ausweisnummer eingeben</h1>
           <input
             id="searchInput"
             type="text"
-            v-model="searchQuery"
             placeholder="Suche Ausweisnummer"
             class="border-2 border-gray-400 rounded-md p-2 ml-2"
           />
@@ -28,25 +27,15 @@
               </tr>
             </thead>
             <tbody className="text-sm  p-3">
-              <tr v-for="vendor in filteredVendors" :key="vendor.ID">
+              <tr v-for="(vendor, id) in vendors" :key="id">
                 <td className="border-t-2 p-3">
                   <router-link :to="`/backoffice/userprofile/${vendor.ID}`">{{
-                    vendor.LicenseID
+                    vendor?.LicenseID
                   }}</router-link>
                 </td>
                 <td className="border-t-2 p-3">{{ vendor.Balance }} €</td>
                 <td className="border-t-2 p-3">{{ vendor.LastPayout }}</td>
-                <router-link :to="`/backoffice/credits/payout/${vendor.ID}`">
-                  <button className="p-3 rounded-full bg-lime-600 text-white">Auszahlen</button>
-                </router-link>
-              </tr>
-              <tr>
-                <td className="border-t-2 p-3">
-                  <router-link to="/backoffice/userprofile"> LK-373</router-link>
-                </td>
-                <td className="border-t-2 p-3">3 €</td>
-                <td className="border-t-2 p-3">17.05.2022</td>
-                <router-link to="/backoffice/credits/payout">
+                <router-link :to="`/backoffice/credits/payout/${vendor.ID}`" v-if="vendor?.ID">
                   <button className="p-3 rounded-full bg-lime-600 text-white">Auszahlen</button>
                 </router-link>
               </tr>
@@ -58,33 +47,17 @@
   </component>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { vendorsStore } from '../stores/vendor'
-import { ref, computed } from 'vue'
+import { computed, onMounted } from 'vue'
 
-export default {
-  setup() {
-    const store = vendorsStore()
+const store = vendorsStore()
 
-    // Fetch the vendors' data when the component is mounted
-    store.fetchVendors()
-    const vendors = computed(() => store.vendors)
-
-    const searchQuery = ref('')
-
-    // Filter users based on the search query
-    const filteredVendors = computed(() => {
-      const searchTerm = searchQuery.value.toLowerCase()
-      return vendors.value.filter((vendor) => vendor.LicenseID?.includes(searchTerm))
-    })
-    console.log(filteredVendors)
-    // Return the data and methods as part of the setup
-    return {
-      searchQuery,
-      filteredVendors
-    }
-  }
-}
+// Fetch the vendors' data when the component is mounted
+onMounted(() => {
+  store.getVendors()
+})
+const vendors = computed(() => store.vendors)
 </script>
 
 <style>

@@ -6,14 +6,6 @@
         <div className="text-center text-2xl space-y-3 space-x-3" v-if="vendor">
           <h1>Auszahlung</h1>
 
-          <input
-            id="searchInput"
-            type="text"
-            v-model="searchQuery"
-            placeholder="Suche Ausweisnummer"
-            class="border-2 border-gray-400 rounded-md p-2 ml-2"
-          />
-          <button class="p-3 rounded-full bg-lime-600 text-white">Suchen</button>
           <div>
             Für <strong>{{ vendor.LicenseID }}</strong
             >, <strong>{{ vendor.FirstName }}</strong> <strong>{{ vendor.LastName }}</strong
@@ -56,44 +48,26 @@ td {
 }
 </style>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { vendorsStore } from '../stores/vendor'
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-export default {
-  setup() {
-    const store = vendorsStore()
-    store.fetchVendors()
-    const vendors = computed(() => store.vendors)
+const store = vendorsStore()
+store.getVendors()
+const vendors = computed(() => store.vendors)
 
-    const route = useRoute()
-    const idparams = route.params.ID
+const route = useRoute()
+const idparams = route.params.ID
 
-    const vendor = computed(() => {
-      const numericIdParams = Number(idparams) // Convert the string to a number or NaN
-      if (!isNaN(numericIdParams)) {
-        return vendors.value.find((vendor) => vendor.ID === numericIdParams)
-      } else {
-        return null
-      }
-    })
-    console.log(idparams)
-    const searchQuery = ref('')
-    const amount = ref('')
-
-    // Filter users based on the search query
-    const filteredVendors = computed(() => {
-      const searchTerm = searchQuery.value.toLowerCase()
-      return vendors.value.filter((vendor) => vendor.LicenseID?.includes(searchTerm))
-    })
-
-    return {
-      searchQuery,
-      filteredVendors,
-      vendor,
-      amount
-    }
+const vendor = computed(() => {
+  const numericIdParams = Number(idparams) // Convert the string to a number or NaN
+  if (!isNaN(numericIdParams)) {
+    return vendors.value.find((vendor) => vendor.ID === numericIdParams)
+  } else {
+    return null
   }
-}
+})
+console.log(idparams)
+const amount = ref('')
 </script>
