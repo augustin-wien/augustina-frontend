@@ -2,8 +2,6 @@
     import { usePaymentStore } from '@/stores/PaymentStore'
     import { RouterLink} from 'vue-router'
     const paymentStore = usePaymentStore()
-    const increment = paymentStore.increment
-    const decrement = paymentStore.decrement
 
 </script>
 
