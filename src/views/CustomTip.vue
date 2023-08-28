@@ -23,7 +23,7 @@
             </button>
             <div class="col-span-3 grid grid-cols-3 bg-green-500 text-white rounded-3xl border-spacing-7 place-items-center">
                 <input type="number" v-model.number="paymentStore.tip" className="bg-green-600 col-span-2 text-white text-center text-6xl font-semibold border-2 border-green-600 rounded-3xl w-full h-full">
-                <p className="text-6xl font-semibold text-left">€</p>
+                <p className="text-6xl font-semibold text-left">€ </p>
             </div>
             <button @click="increment">
                 <div class="button-up bg-green-600 ml-3"></div>
