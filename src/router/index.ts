@@ -77,6 +77,11 @@ const router = createRouter({
       path: '/success',
       name: 'Success',
       component: () => import('../views/WaitingCountdown.vue')
+    },
+    {
+      path: '/custom-tip',
+      name: 'Custom Tip',
+      component: () => import('../views/CustomTip.vue')
     }
   ]
 })
