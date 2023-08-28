@@ -10,9 +10,7 @@
 <template>
     <component :is="$route.meta.layout || 'div'">
         <template #main>
-            <div className="grid grid-rows-6 h-full place-items-center">
-                <div>
-                </div>
+            <div className="grid grid-rows-5 h-full place-items-center">
                 <div className="text-center font-semibold text-4xl">
                     Zeitung kaufen
                 </div>
