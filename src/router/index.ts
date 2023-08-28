@@ -143,27 +143,6 @@ const router = createRouter({
       },
       component: () => import('../views/BackofficeUpdateVendor.vue')
     },
-
-    {
-      path: '/backoffice/newproduct',
-      name: 'New Product',
-      meta: {
-        layout: BackofficeDefault,
-        requiresAuth: true
-      },
-      component: () => import('../views/BackofficeNewProduct.vue')
-    },
-
-    {
-      path: '/backoffice/logout',
-      name: 'Backoffice Logout',
-      meta: {
-        layout: BackofficeDefault,
-        requiresAuth: true
-      },
-      component: () => import('../views/BackofficeLogout.vue')
-    },
-
     {
       path: '/backoffice/settings',
       name: 'Backoffice Settings',
@@ -191,6 +170,33 @@ const router = createRouter({
         requiresAuth: true
       },
       component: () => import('../views/BackofficeProductSettings.vue')
+    },
+    {
+      path: '/backoffice/newproduct',
+      name: 'New Product',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeNewProduct.vue')
+    },
+    {
+      path: '/backoffice/productsettings/update/:id',
+      name: 'Update Product',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeProductUpdate.vue')
+    },
+    {
+      path: '/backoffice/logout',
+      name: 'Backoffice Logout',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeLogout.vue')
     }
   ]
 })
