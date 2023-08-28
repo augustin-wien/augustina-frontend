@@ -67,12 +67,23 @@
             </div>
 
             <div class="flex place-content-center justify-between">
-              <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">
+              <button
+                type="submit"
+                class="p-3 rounded-full bg-lime-600 text-white"
+                @click="updateVendor"
+              >
                 Bestätigen
               </button>
-              <button type="submit" class="p-3 rounded-full bg-red-600 text-white">Löschen</button>
+              <button
+                type="submit"
+                class="p-3 rounded-full bg-red-600 text-white"
+                @click="deleteVendor"
+              >
+                Löschen
+              </button>
             </div>
           </form>
+          <Toast v-if="toast" :toast="toast" />
         </div>
       </main>
     </template>
@@ -80,10 +91,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { vendorsStore } from '../stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { useRoute } from 'vue-router'
+import Toast from '@/components/ToastMessage.vue'
 
 const store = vendorsStore()
 
@@ -109,17 +121,45 @@ const idparams = route.params.ID
 const vendor = computed(() => {
   const numericIdParams = Number(idparams) // Convert the string to a number or NaN
   if (!isNaN(numericIdParams)) {
-    return vendors.value.find((vendor) => vendor.ID === numericIdParams)
+    let v = vendors.value.find((vendor) => vendor.ID === numericIdParams)
+    //@ts-ignore
+    updatedVendor.value = v
+    return v
   } else {
     return null
   }
 })
+onMounted(() => {})
+const toast = ref<{ type: string; message: string } | null>(null)
+
 const updateVendor = async () => {
   try {
     await store.updateVendor(updatedVendor.value as Vendor)
+    showToast('success', 'VerkäuferIn erfolgreich aktualisiert')
   } catch (error) {
-    console.error('Error updating vendor:', error)
+    console.error('Error creating vendor:', error)
+    showToast('error', 'VerkäuferIn konnte nicht angelegt werden')
   }
+}
+const deleteVendor = async () => {
+  try {
+    if (vendor.value) {
+      await store.deleteVendor(vendor.value.ID)
+      showToast('success', 'VerkäuferIn erfolgreich gelöscht')
+    }
+  } catch (error) {
+    console.error('Error deleting vendor:', error)
+    showToast('error', 'VerkäuferIn konnte nicht gelöscht werden')
+  }
+}
+
+const showToast = (type: string, message: string) => {
+  // Set the toast message
+  toast.value = { type, message }
+  // Clear the toast after a delay (e.g., 5 seconds)
+  setTimeout(() => {
+    toast.value = null
+  }, 5000)
 }
 </script>
 

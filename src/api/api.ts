@@ -35,8 +35,8 @@ export async function postVendors(newVendor: Vendor) {
 }
 
 export async function patchVendor(updatedVendor: Vendor) {
-  return instance.patch(
-    `http://localhost:3000/api/vendors/${updatedVendor.ID}`,
+  return instance.put(
+    `http://localhost:3000/api/vendors/${updatedVendor.ID}/`,
     JSON.stringify(updatedVendor),
     {
       headers: {
@@ -48,5 +48,5 @@ export async function patchVendor(updatedVendor: Vendor) {
 }
 
 export async function removeVendor(vendorId: number) {
-  return instance.delete(`http://localhost:3000/api/vendors/${vendorId}`)
+  return instance.delete(`http://localhost:3000/api/vendors/${vendorId}/`)
 }
