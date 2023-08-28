@@ -65,7 +65,8 @@
           </RouterLink>
         </div>
         <hr />
-        <p>Claudia ist eingeloggt</p>
+        <p v-if="loggedInUser">{{ loggedInUser }} ist eingeloggt</p>
+        <p v-else>Not logged in</p>
       </div>
     </div>
 
@@ -77,6 +78,34 @@
     </footer>
   </div>
 </template>
+
+<script setup lang="ts">
+import keycloak from '@/keycloak/keycloak'
+import { onMounted } from 'vue'
+let loggedInUser: string | null = null
+onMounted(() => {
+  console.log('User is authenticated', keycloak.tokenParsed, keycloak.authenticated)
+  // display the preferred_username of the logged-in user in the variable loggedInUser
+  if (keycloak.tokenParsed && keycloak.tokenParsed.preferred_username) {
+    loggedInUser = keycloak.tokenParsed.preferred_username
+  }
+  // keycloak.init(
+  //   // Options
+  //
+
+  //  let loggedInUser: string | null = null
+  //   // Wait for Keycloak to be ready
+  //   { onLoad: 'login-required' }
+  // ).then((authenticated: any) => {
+  //   if (authenticated) {
+  //     // If the user is authenticated, set the logged-in user
+  //     if (keycloak.tokenParsed && keycloak.tokenParsed.preferred_username) {
+  //       loggedInUser = keycloak.tokenParsed.preferred_username
+  //     }
+  //   }
+  // })
+})
+</script>
 
 <style lang="scss">
 .container {
