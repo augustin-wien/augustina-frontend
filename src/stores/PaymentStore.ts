@@ -38,13 +38,22 @@ export const usePaymentStore = defineStore('payment',{
       },
 
       increment() {
-          this.tip = this.tip + 100
+          if(this.tip < 10){
+            this.tip = this.tip + 0.5
+          }
+          else {
+            this.tip = this.tip + 1
+          }
         },
-  
-      // increment with custom values for cent (c)
-      incrementPriceC(c: number) {
-        this.tip = this.tip + c
-      },
+      
+        decrement() {
+          if(this.tip > 10 ){
+              this.tip = this.tip - 1
+          }
+          else if(this.tip - 0.5 >= 0){
+            this.tip = this.tip - 0.5
+          }
+        },
 
       incrementTipC(c: number) {
         this.tip = this.tip + c
@@ -53,12 +62,6 @@ export const usePaymentStore = defineStore('payment',{
       decrementTipC(c: number) {
         if(this.tip - c >= 0) {
           this.tip = this.tip - c
-        }
-      },
-
-      decrement() {
-        if(this.tip-100 >= 0){
-            this.tip = this.tip - 100
         }
       },
 

@@ -4,8 +4,8 @@
 
     const paymentStore = usePaymentStore()
     
-    const increment = paymentStore.incrementTipC
-    const decrement = paymentStore.decrementTipC
+    const increment = paymentStore.increment
+    const decrement = paymentStore.decrement
 
 </script>
 
@@ -18,12 +18,16 @@
             Trinkgeld eingeben:
         </div>
         <div className="grid grid-cols-5 w-full h-full">
-            <button @click="increment(0.5)">+</button>
-            <div class="col-span-3 grid grid-cols-3 bg-green-200 rounded-3xl border-spacing-7 place-items-center border-4 border-green-600">
-                <input v-model="paymentStore.tip" className="bg-green-300 col-span-2 text-center text-7xl font-semibold rounded-3xl w-full h-full">
-                <p className="text-7xl font-semibold text-left">€</p>
+            <button @click="decrement()">
+                <div class="button-down bg-green-600"></div>
+            </button>
+            <div class="col-span-3 grid grid-cols-3 bg-green-500 text-white rounded-3xl border-spacing-7 place-items-center">
+                <input type="number" v-model.number="paymentStore.tip" className="bg-green-600 col-span-2 text-white text-center text-6xl font-semibold border-2 border-green-600 rounded-3xl w-full h-full">
+                <p className="text-6xl font-semibold text-left">€</p>
             </div>
-            <button @click="decrement(0.5)">-</button>
+            <button @click="increment">
+                <div class="button-up bg-green-600 ml-3"></div>
+            </button>
         </div>
         <div>
 
@@ -35,3 +39,7 @@
         </div>
     </main>
 </template>
+
+<style scoped>
+  @import "../assets/arrows.css"
+</style>
