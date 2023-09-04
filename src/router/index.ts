@@ -97,6 +97,9 @@ router.beforeEach(async (to) => {
     // redirect the user to the login page
     return { name: '404' }
   }
+  else if(import.meta.env.VITE_TOGGLE === 'true' && to.name === 'Version choice') {
+    return { name: 'Tippingpage'}
+  }
 })
 
 //Check if AGBs are accepted
