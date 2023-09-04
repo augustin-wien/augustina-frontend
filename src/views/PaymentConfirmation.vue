@@ -5,9 +5,8 @@
               <div className="text-center font-semibold text-4xl">
                   Symbol zeigen
               </div>
-              <div class="vendor-credit row-span-2 text-6xl font-bold">
-                <span class="amount-bought">1x</span> 
-                <span><img class="" alt="Titelblatt" src="../assets/logo.svg" /></span>
+              <div class="row-span-2 text-6xl font-bold">
+                <img class="rounded-full object-cover h-60 w-60" alt="Titelblatt" src="https://augustin.or.at/wp-content/uploads/2023/08/Augustin_580_Cover_web.jpg" />
               </div>
               <div>
                 <span class="date text-3xl">{{ currentDate() }} </span><span class="time text-3xl"> um {{ time }}</span>
@@ -18,12 +17,9 @@
                   </button>
               </div>
           </div>
-      </template>
+      </template> 
   </component>
 </template>
-
-
-
 
 <script setup lang="ts">
 import { ref } from 'vue'
