@@ -4,7 +4,7 @@ import { fetchItems, postItems, patchItem, removeItem } from '@/api/api'
 //define interface to store data from backend properly
 export interface Item {
   Description: 'string'
-  Id: 0
+  ID: 0
   Image: 'string'
   Name: 'string'
   Price: 0

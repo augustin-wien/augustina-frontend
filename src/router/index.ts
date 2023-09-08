@@ -181,7 +181,7 @@ const router = createRouter({
       component: () => import('../views/BackofficeNewProduct.vue')
     },
     {
-      path: '/backoffice/productsettings/update/:id',
+      path: '/backoffice/productsettings/update/:ID',
       name: 'Update Product',
       meta: {
         layout: BackofficeDefault,
