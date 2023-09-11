@@ -13,10 +13,10 @@ onMounted(settStore.fetchSettings)
     <component :is="$route.meta.layout || 'div'">
         <template #main>
             <div className="grid grid-rows-5 h-full place-items-center">
-                <div className="text-center font-semibold text-4xl">
+                <div className="text-center row-span-2 font-semibold text-4xl">
                     Zeitung kaufen
                 </div>
-                <div className="py-9 row-span-2 w-full">
+                <div className="py-9 w-full">
                     <p className="text-center text-9xl font-semibold">{{ paymentStore.priceInEuros() }}€</p>
                 </div>
                 <div className="flex place-items-center row-span-2 w-full">

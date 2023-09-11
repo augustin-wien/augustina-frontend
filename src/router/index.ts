@@ -19,19 +19,25 @@ const router = createRouter({
       path: '/additionalproducts',
       name: 'Additional Products',
       component: () => import('../views/AdditionalProducts.vue'),
-      meta: { transition: 'slide-left' }
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/print-digital',
       name: 'Version choice',
       component: () => import('../views/PrintDigital.vue'),
-      meta: { transition: 'slide-left' }
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/404',
       name: '404',
       component: () => import('../views/404View.vue'),
-      meta: { transition: 'slide-left' }
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/dashboard',
@@ -44,29 +50,42 @@ const router = createRouter({
     {
       path: '/tipping',
       name: 'Tippingpage',
-      component: () => import('../views/TippingPage.vue')
+      component: () => import('../views/TippingPage.vue'),
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/information',
       name: 'InformationPrintEpaper',
-      component: () => import('../views/InformationPrintEpaper.vue')
+      component: () => import('../views/InformationPrintEpaper.vue'),
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/confirmation',
       name: 'Confirmation',
       component: () => import('../views/FinalPurchaseConfirmation.vue'),
-      meta: { transition: 'slide-left' }
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/payment',
       name: 'Payment',
       component: () => import('../views/PaymentVivawallet.vue'),
-      meta: { transition: 'slide-left' }
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/paymentconfirmation',
       name: 'Payment Confirmation',
-      component: () => import('../views/PaymentConfirmation.vue')
+      component: () => import('../views/PaymentConfirmation.vue'),
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/vendoroverview',
@@ -76,12 +95,18 @@ const router = createRouter({
     {
       path: '/success',
       name: 'Success',
-      component: () => import('../views/WaitingCountdown.vue')
+      component: () => import('../views/WaitingCountdown.vue'),
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/custom-tip',
       name: 'Custom Tip',
-      component: () => import('../views/CustomTip.vue')
+      component: () => import('../views/CustomTip.vue'),
+      meta: {
+        layout: Default,
+      },
     }
   ]
 })
