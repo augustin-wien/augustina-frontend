@@ -1,7 +1,11 @@
 <script setup lang="ts">
-    import { usePaymentStore } from '@/stores/PaymentStore'
-    import { RouterLink} from 'vue-router'
-    const paymentStore = usePaymentStore()
+import { usePaymentStore } from '@/stores/PaymentStore'
+import { settingsStore } from '@/stores/settingsStore';
+import { RouterLink } from 'vue-router'
+import { onMounted } from 'vue';
+const paymentStore = usePaymentStore()
+const settStore = settingsStore()
+onMounted(settStore.fetchSettings)
 
 </script>
 
@@ -15,12 +19,12 @@
                 <div className="py-9 w-full">
                     <p className="text-center text-9xl font-semibold">{{ paymentStore.priceInEuros() }}€</p>
                 </div>
-                <div>
-                </div>
-                <div className="flex place-items-center w-full">
-                    <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-                        <RouterLink to="/print-digital">Weiter</RouterLink>
-                    </button>
+                <div className="flex place-items-center row-span-2 w-full">
+                    <RouterLink class="text-center w-full" to="/print-digital">
+                        <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold">
+                            Weiter
+                        </button>
+                    </RouterLink>
                 </div>
             </div>
         </template>

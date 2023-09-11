@@ -5,7 +5,7 @@ import { ref } from 'vue';
 
 
 function logout() {
-    keycloak.logout();
+    keycloak.keycloak.logout();
 }
 let message = ref("Press the button to call the backend");
 
