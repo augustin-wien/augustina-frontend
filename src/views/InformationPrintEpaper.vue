@@ -14,7 +14,7 @@ import { RouterLink } from 'vue-router'
                     E-Paper
                 </div>
                 <div className="flex text-center w-full place-content-center text-xl">
-                    E-Paper ist einen digitale Zeitung, diese wird dir nach deinem Kauf in unserem online Store angezeigt.
+                    E-Paper ist eine Option zur digitalen Zeitung. Diese wird dir nach deinem Kauf in unserem Online-Magazin angezeigt.
                 </div>
                 <div className="flex items-center font-semibold text-4xl place-content-center">
                     Print-Version

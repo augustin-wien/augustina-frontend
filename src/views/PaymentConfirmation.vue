@@ -6,7 +6,7 @@
                   Symbol zeigen
               </div>
               <div class="row-span-2 text-6xl font-bold">
-                <img class="rounded-full object-cover h-60 w-60" alt="Titelblatt" src="https://augustin.or.at/wp-content/uploads/2023/08/Augustin_580_Cover_web.jpg" />
+                <img class="rounded-full object-cover h-60 w-60" alt="Titelblatt" :src="link" />
               </div>
               <div>
                 <span class="date text-3xl">{{ currentDate() }} </span><span class="time text-3xl"> um {{ time }}</span>
@@ -23,6 +23,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+let link = import.meta.env.VITE_AUGUSTIN_COVER
 
 function currentDate() {
   const current = new Date()
