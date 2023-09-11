@@ -20,9 +20,11 @@ onMounted(settStore.fetchSettings)
                     <p className="text-center text-9xl font-semibold">{{ paymentStore.priceInEuros() }}€</p>
                 </div>
                 <div className="flex place-items-center row-span-2 w-full">
-                    <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-                        <RouterLink to="/print-digital">Weiter</RouterLink>
-                    </button>
+                    <RouterLink class="text-center w-full" to="/print-digital">
+                        <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold">
+                            Weiter
+                        </button>
+                    </RouterLink>
                 </div>
             </div>
         </template>
