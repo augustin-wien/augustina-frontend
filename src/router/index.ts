@@ -116,11 +116,31 @@ router.beforeEach(async (next) => {
 
 // Check if the user is authenticated
 function isAuthenticated() {
-  console.log('isAuthenticated', keycloak.authenticated)
-  if (!keycloak.authenticated) {
-    keycloak.login()
+  if (!keycloak.initailizedKeycloak) {
+    keycloak.keycloak.init({
+      onLoad: 'check-sso',
+      flow: 'implicit'
+    }).then(() => {
+      console.log("keycloak init")
+      keycloak.initailizedKeycloak = true
+      if (!keycloak.keycloak.authenticated) {
+        keycloak.keycloak.login()
+      }
+      return keycloak.keycloak.authenticated
+    }
+    ).catch((error) => {
+      console.log("init keycloak failed", error)
+      console.log(keycloak)
+    }
+    )
+  } else {
+    console.log('isAuthenticated', keycloak.keycloak.authenticated)
+    if (!keycloak.keycloak.authenticated) {
+      keycloak.keycloak.login()
+    }
+    return keycloak.keycloak.authenticated
   }
-  return keycloak.authenticated
+
 }
 
 export default router
