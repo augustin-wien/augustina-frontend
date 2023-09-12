@@ -1,9 +1,9 @@
 <template>
     <div class="base-layout">
-        <main class="h-screen px-10 py-16 place-items-center base-layout">
+        <main class="h-screen px-8 py-8 place-items-center base-layout">
             <header class="place-items-center h-1/6">
             <slot name="header">
-                <img alt="Augustin logo" className="logo mx-auto my-2" src="@/assets/logo.svg" width="270" height="150" />
+                <img alt="Augustin logo" className="logo mx-auto my-2" src="@/assets/logo.svg" width="243" height="135" />
 
                 </slot>
             </header>

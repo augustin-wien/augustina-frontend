@@ -11,26 +11,33 @@ const print = paymentStore.print
     <component :is="$route.meta.layout || 'div'">
         <template #main>
             <div className="h-full grid grid-rows-5 place-items-center">
-                <div className="text-center font-semibold text-4xl">
+                <div className="text-center font-semibold text-3xl">
                     Ausgabe wählen
                 </div>
                 <div className="flex place-items-center w-full">
-                    <button @click="digital"
-                        class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-                        <RouterLink to="/additionalproducts">E-Paper</RouterLink>
-                    </button>
+                    <RouterLink class="w-full" to="/tipping">
+                        <button @click="digital"
+                            class="bg-green-600 rounded-full p-5 text-white text-4xl font font-semibold w-full">
+                            E-Paper
+                        </button>
+                    </RouterLink>
                 </div>
                 <div className="flex place-items-center w-full">
+                    <RouterLink class="w-full" to="/tipping">
                     <button @click="print"
-                        class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-                        <RouterLink to="/additionalproducts">Print</RouterLink>
+                        class="bg-green-600 rounded-full p-5 text-white text-4xl font font-semibold w-full">
+                        Print
                     </button>
+                    </RouterLink>
                 </div>
-                <div className="flex place-items-center row-span-2 w-full">
-                    <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold mx-auto w-20">
-                        <RouterLink to="/information">?</RouterLink>
+                <div className="grid place-items-center row-span-2 w-full">
+                    <RouterLink class="grid place-items-center " to="/information">
+                    <button class="bg-green-600 rounded-full w-[80px] h-[80px] text-white text-4xl font font-semibold mx-auto">
+                        ?
                     </button>
+                </RouterLink>   
                 </div>
             </div>
         </template>
-</component></template>@/stores/settingsStore
+    </component>
+</template>@/stores/settingsStore
