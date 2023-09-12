@@ -17,7 +17,7 @@ const print = paymentStore.print
                 <div className="flex place-items-center w-full">
                     <RouterLink class="w-full" to="/tipping">
                         <button @click="digital"
-                            class="bg-green-600 rounded-full p-5 text-white text-4xl font font-semibold w-full">
+                            class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
                             E-Paper
                         </button>
                     </RouterLink>
@@ -25,14 +25,14 @@ const print = paymentStore.print
                 <div className="flex place-items-center w-full">
                     <RouterLink class="w-full" to="/tipping">
                     <button @click="print"
-                        class="bg-green-600 rounded-full p-5 text-white text-4xl font font-semibold w-full">
+                        class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
                         Print
                     </button>
                     </RouterLink>
                 </div>
                 <div className="grid place-items-center row-span-2 w-full">
                     <RouterLink class="grid place-items-center " to="/information">
-                    <button class="bg-green-600 rounded-full w-[80px] h-[80px] text-white text-4xl font font-semibold mx-auto">
+                    <button class="bg-green-600 rounded-full w-[76px] h-[76px] text-white text-4xl font font-semibold mx-auto">
                         ?
                     </button>
                 </RouterLink>   

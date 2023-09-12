@@ -17,7 +17,7 @@ const increment = paymentStore.incrementTipC
                 <div className="flex place-items-center w-full">
                     <RouterLink class="w-full" to="/confirmation">
                         <button @click="increment(1)"
-                            class="bg-green-600 rounded-full p-5 text-white text-4xl font font-semibold w-full">
+                            class="bg-green-600 rounded-full p-[18px] text-white text-4xl font font-semibold w-full">
                             1,00 €
                         </button>
                     </RouterLink>
@@ -25,14 +25,14 @@ const increment = paymentStore.incrementTipC
                 <div className="flex place-items-center w-full">
                     <RouterLink class="w-full" to="/confirmation">
                         <button @click="increment(0.5)"
-                            class="bg-green-600 rounded-full p-5 text-white text-4xl font font-semibold w-full">
+                            class="bg-green-600 rounded-full p-[18px] text-white text-4xl font font-semibold w-full">
                             0,50 €
                         </button>
                     </RouterLink>
                 </div>
                 <div className="flex place-items-center w-full">
                     <button class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
-                        <RouterLink to="/custom-tip">Eigener Betrag</RouterLink>
+                        <RouterLink to="/custom-tip">Eingabe</RouterLink>
                     </button>
                 </div>
                 <div className="flex place-items-center w-full">
