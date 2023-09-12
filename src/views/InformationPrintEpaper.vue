@@ -20,7 +20,7 @@ import { RouterLink } from 'vue-router'
                     Abschluss des Kaufes aushändigen.
                 </div>
                 <div className="flex place-items-center w-full">
-                    <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
+                    <button class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
                         <RouterLink to="/print-digital">Zurück</RouterLink>
                     </button>
                 </div>
