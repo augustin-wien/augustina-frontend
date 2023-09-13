@@ -48,9 +48,6 @@ function generateCode() {
             },
         });
         qrcode.value.append(el);
-        qrcode.value.applyExtension((svg: any, options: any) => {
-            console.log(svg, options)
-        })
     }
 
 }
