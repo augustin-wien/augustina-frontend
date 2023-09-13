@@ -7,7 +7,7 @@
 
                 </slot>
             </header>
-            <div class="h-5/6">
+            <div class="h-5/6 main-container">
                 <slot name="main">
                 <h1>Default Content</h1>
                 </slot>
@@ -23,8 +23,7 @@
 .main-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    margin-top: 10px;
 }
-
 </style>

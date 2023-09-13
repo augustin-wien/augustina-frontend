@@ -107,6 +107,14 @@ const router = createRouter({
       meta: {
         layout: Default,
       },
+    },
+    {
+      path: '/qr-code',
+      name: 'QR Code',
+      component: () => import('../views/QRCode.vue'),
+      meta: {
+        layout: Default,
+      },
     }
   ]
 })
