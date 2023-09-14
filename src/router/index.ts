@@ -115,6 +115,14 @@ const router = createRouter({
       meta: {
         layout: Default,
       },
+    },
+    {
+      path: '/shop',
+      name: 'Shop',
+      component: () => import('../views/ShopPage.vue'),
+      meta: {
+        layout: Default,
+      },
     }
   ]
 })
