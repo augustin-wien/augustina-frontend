@@ -6,7 +6,7 @@ const value = ref('qrcode')
 const valueAppended = ref('qrcode')
 
 watch(value, () => {
-    valueAppended.value = `https://shop.augustin.co.at/v/${value.value}`
+    valueAppended.value = `https://shop.augustin.or.at/v/${value.value}`
     generateCode()
 })
 onMounted(() => {
