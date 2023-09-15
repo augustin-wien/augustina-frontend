@@ -16,7 +16,6 @@ export interface Vendor {
   LicenseID: string
   UrlID: string
   Balance: number
-  QRCode: string
 }
 
 export const vendorsStore = defineStore('vendors', {

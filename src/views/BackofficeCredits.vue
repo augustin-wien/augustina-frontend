@@ -3,7 +3,9 @@
     <template #main>
       <main v-if="vendors">
         <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
-          <h1>Ausweisnummer eingeben</h1>
+          <!-- 
+            TODO: Implement search:
+            <h1>Ausweisnummer eingeben</h1>
           <input
             id="searchInput"
             type="text"
@@ -11,6 +13,7 @@
             class="border-2 border-gray-400 rounded-md p-2 ml-2"
           />
           <button class="p-3 rounded-full bg-lime-600 text-white">Suchen</button>
+          -->
           <router-link to="/backoffice/vendorsummary">
             <button className="p-3 mt-2 rounded-full bg-lime-600 text-white">
               Übersicht aller VerkäuferInnen

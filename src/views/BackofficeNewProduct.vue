@@ -43,10 +43,8 @@
               >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newItem.Image"
-                type="text"
+                type="file"
                 id="image"
-                required
               />
             </div>
 
@@ -71,7 +69,7 @@ const store = itemStore()
 
 const newItem = ref({
   Description: 'string',
-  Id: 0,
+  ID: 0,
   Image: 'string',
   Name: 'string',
   Price: 0

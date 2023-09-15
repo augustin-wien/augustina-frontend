@@ -57,23 +57,24 @@ export async function removeVendor(vendorId: number) {
 export async function fetchItems() {
   return instance.get<Item[]>('http://localhost:3000/api/items/')
 }
+
 export async function postItems(newItem: Item) {
   return instance.post('http://localhost:3000/api/items/', JSON.stringify(newItem), {
     headers: {
       accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'multipart/form-data'
     }
   })
 }
 
 export async function patchItem(updatedItem: Item) {
   return instance.put(
-    `http://localhost:3000/api/items/${updatedItem.Id}/`,
+    `http://localhost:3000/api/items/${updatedItem.ID}/`,
     JSON.stringify(updatedItem),
     {
       headers: {
         accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'multipart/form-data'
       }
     }
   )
