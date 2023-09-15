@@ -84,10 +84,14 @@ import keycloak from '@/keycloak/keycloak'
 import { onMounted } from 'vue'
 let loggedInUser: string | null = null
 onMounted(() => {
-  console.log('User is authenticated', keycloak.tokenParsed, keycloak.authenticated)
+  console.log(
+    'User is authenticated',
+    keycloak.keycloak.tokenParsed,
+    keycloak.keycloak.authenticated
+  )
   // display the preferred_username of the logged-in user in the variable loggedInUser
-  if (keycloak.tokenParsed && keycloak.tokenParsed.preferred_username) {
-    loggedInUser = keycloak.tokenParsed.preferred_username
+  if (keycloak.keycloak.tokenParsed && keycloak.keycloak.tokenParsed.preferred_username) {
+    loggedInUser = keycloak.keycloak.tokenParsed.preferred_username
   }
   // keycloak.init(
   //   // Options
