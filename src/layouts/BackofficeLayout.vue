@@ -60,9 +60,9 @@
 
         <hr />
         <div className="sidemenu-item">
-          <RouterLink to="/backoffice/logout" className="sidemenu-link">
+          <button className="sidemenu-link btn" @click="keycloak.keycloak.logout">
             <span className="sidemenu-text">Abmelden</span>
-          </RouterLink>
+          </button>
         </div>
         <hr />
         <p v-if="loggedInUser">{{ loggedInUser }} ist eingeloggt</p>

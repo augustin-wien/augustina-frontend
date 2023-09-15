@@ -270,8 +270,10 @@ router.beforeEach(async (to: any) => {
     // ❗️ Avoid an infinite redirect
     to.name !== '404'
   ) {
+    // Redirect happens before the first page load, 
+    //so we need to wait for the router to be ready
     // redirect the user to the login page
-    return { name: '404' }
+    // return { name: '404' }
   }
   // Condition to toggle Lite-Mode
   else if (import.meta.env.VITE_TOGGLE === 'true' && to.name === 'Version choice') {
@@ -311,7 +313,6 @@ function isAuthenticated() {
         console.log(keycloak)
       })
   } else {
-    console.log('isAuthenticated', keycloak.keycloak.authenticated)
     if (!keycloak.keycloak.authenticated) {
       keycloak.keycloak.login()
     }
