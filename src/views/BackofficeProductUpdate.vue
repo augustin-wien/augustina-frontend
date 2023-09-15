@@ -84,7 +84,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { itemStore } from '../stores/items'
 import type { Item } from '@/stores/items'
 import { useRoute } from 'vue-router'
@@ -111,10 +111,14 @@ const item = computed(() => {
   if (!isNaN(numericIdParams)) {
     let i = items.value.find((item) => item.ID === numericIdParams)
     //@ts-ignore
-    updatedItem.value = i
     return i
   } else {
     return null
+  }
+})
+watch(item, (newVal) => {
+  if (newVal) {
+    updatedItem.value = newVal
   }
 })
 onMounted(() => {})

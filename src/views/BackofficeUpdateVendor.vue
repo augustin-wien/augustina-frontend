@@ -91,7 +91,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { vendorsStore } from '../stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { useRoute } from 'vue-router'
@@ -121,12 +121,17 @@ const idparams = route.params.ID
 const vendor = computed(() => {
   const numericIdParams = Number(idparams) // Convert the string to a number or NaN
   if (!isNaN(numericIdParams)) {
-    let v = vendors.value.find((vendor) => vendor.ID === numericIdParams)
+    let v = vendors.value.find((vendor: Vendor) => vendor.ID === numericIdParams)
     //@ts-ignore
-    updatedVendor.value = v
     return v
   } else {
     return null
+  }
+})
+
+watch(vendor, (newVal) => {
+  if (newVal) {
+    updatedVendor.value = newVal
   }
 })
 onMounted(() => {})

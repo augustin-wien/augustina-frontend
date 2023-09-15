@@ -26,7 +26,7 @@ export const vendorsStore = defineStore('vendors', {
   },
 
   getters: {
-    getvendors(state) {
+    getvendors(state: any) {
       return state.vendors
     }
   },
@@ -35,7 +35,10 @@ export const vendorsStore = defineStore('vendors', {
     async getVendors() {
       try {
         const data = await fetchVendors()
+        //@ts-ignore
         this.vendors = data.data
+        //@ts-ignore
+
         console.log(this.vendors)
         console.log('Vendors fetched from database')
       } catch (error) {
