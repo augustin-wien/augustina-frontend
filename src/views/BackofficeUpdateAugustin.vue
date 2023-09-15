@@ -1,4 +1,4 @@
-TODO: APi und konkrete Bezeichnungen fehlen
+<template>TODO: APi und konkrete Bezeichnungen fehlen</template>
 <!--
 <template>
   <component :is="$route.meta.layout || 'div'">
