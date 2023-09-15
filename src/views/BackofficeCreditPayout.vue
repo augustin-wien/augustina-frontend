@@ -63,7 +63,7 @@ td {
 </style>
 
 <script lang="ts" setup>
-import { vendorsStore } from '../stores/vendor'
+import { vendorsStore, type Vendor } from '../stores/vendor'
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -83,7 +83,7 @@ const vendor = computed(() => {
   const numericIdParams = Number(idparams) // Convert the string to a number or NaN
   if (!isNaN(numericIdParams)) {
     // Find the vendor in the 'vendors' array that matches the 'ID' parameter
-    return vendors.value.find((vendor) => vendor.ID === numericIdParams)
+    return vendors.value.find((vendor: Vendor) => vendor.ID === numericIdParams)
   } else {
     // Return null if the 'ID' parameter is not a valid number
     return null
