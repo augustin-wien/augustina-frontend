@@ -92,7 +92,4 @@ const vendor = computed(() => {
 
 // Initialize a reactive property 'amount' for input data
 const amount = ref('')
-
-// Log the 'idparams' for debugging purposes
-console.log(idparams)
 </script>

@@ -71,5 +71,4 @@ const vendor = computed(() => {
     return null
   }
 })
-console.log(idparams)
 </script>

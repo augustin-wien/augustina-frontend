@@ -1,5 +1,4 @@
-<template>Hallelujah hier fehlt mir noch die api und die korrekten bezeichnungen etc</template>
-
+TODO: APi und konkrete Bezeichnungen fehlen
 <!--
 <template>
   <component :is="$route.meta.layout || 'div'">

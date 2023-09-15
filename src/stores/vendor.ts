@@ -38,23 +38,15 @@ export const vendorsStore = defineStore('vendors', {
         //@ts-ignore
         this.vendors = data.data
         //@ts-ignore
-
-        console.log(this.vendors)
-        console.log('Vendors fetched from database')
       } catch (error) {
-        alert(error)
         console.log(error)
       }
     },
 
     async createVendor(newVendor: Vendor) {
-      console.log(JSON.stringify(newVendor))
-
       postVendors(newVendor)
         .then((data) => {
-          console.log('Vendor created:', data.data)
           this.getVendors()
-          console.log(data)
         })
         .catch((error) => {
           console.log('Error creating vendor:', error)
@@ -62,10 +54,8 @@ export const vendorsStore = defineStore('vendors', {
     },
 
     async updateVendor(updatedVendor: Vendor) {
-      console.log(JSON.stringify(updatedVendor))
       patchVendor(updatedVendor)
         .then((data) => {
-          console.log('Vendor updated:', data.data)
           this.getVendors()
         })
         .catch((error) => {
@@ -75,7 +65,6 @@ export const vendorsStore = defineStore('vendors', {
     async deleteVendor(vendorId: number) {
       removeVendor(vendorId)
         .then(() => {
-          console.log('Vendor deleted:', vendorId)
           this.getVendors()
         })
         .catch((error) => {
