@@ -4,7 +4,8 @@ export const usePriceStore = defineStore('price', {
   
     state: () =>{
       return{
-        price: 3,
+        //the unit for price is cents (smallest unit)
+        price: 300, 
         digital: {digital: true}
       }
     },

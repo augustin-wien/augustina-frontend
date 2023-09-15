@@ -1,17 +1,14 @@
-import axios from 'axios'
 import { defineStore } from 'pinia'
+import type { Settings } from '@/models/settings'
+import agent from '@/api/agent'
 
-//define interface to store data from backend properly
-interface Setting {
-    color: string;
-    logo: string;
-    price: number;
-}
+
 
 export const settingsStore = defineStore('settings',{
     state: () =>{
         return{
-            settings: [] as Setting[]
+            settings: [] as Settings[],
+            loaded: false
         }
     },
 
@@ -24,10 +21,12 @@ export const settingsStore = defineStore('settings',{
     actions: {
         async fetchSettings() {
             try{ 
-                const data = await axios.get<Setting[]>('http://localhost:3000/api/settings/')
-                this.settings = data.data
+                const data = await agent.SettingsConfiguration.current()
+                this.settings = []
+                this.settings.push(data)
                 console.log(this.settings)
                 console.log('Settings fetched from database')
+                this.loaded = true
             }
             catch (error) {
                 alert(error);

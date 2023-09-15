@@ -15,6 +15,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^1.54.1",
     "@vue-stripe/vue-stripe": "^4.5.0",
     "@vue/server-renderer": "^3.3.4",
     "@vueform/slider": "^2.1.7",
@@ -22,12 +23,8 @@
     "file-saver": "^2.0.5",
     "jspdf": "^2.5.1",
     "keycloak-js": "^21.1.2",
-    "pdf-lib": "^1.17.1",
     "pinia": "^2.1.6",
     "qr-code-styling": "^1.6.0-rc.1",
-    "qrcode": "^1.5.3",
-    "qrcode-generator": "^1.4.4",
-    "qrcode.vue": "^3.4.1",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2"
   },

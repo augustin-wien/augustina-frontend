@@ -1,38 +1,43 @@
 <script setup lang="ts">
-    import { usePriceStore } from '@/stores/price'
-    import { settingsStore } from '@/stores/settings';
-    import { RouterLink} from 'vue-router'
-    import { onMounted } from 'vue'
-    const priceStore = usePriceStore()
-    const digital = priceStore.epaper
-    const print = priceStore.print
-    const settStore = settingsStore()
-    onMounted(() => {settStore.fetchSettings()})
+import { usePaymentStore } from '@/stores/PaymentStore'
+import { RouterLink } from 'vue-router'
+const paymentStore = usePaymentStore()
+const digital = paymentStore.epaper
+const print = paymentStore.print
 
 </script>
 
 <template>
-  <main  className="h-screen px-10 py-16 grid grid-rows-6 place-items-center">
-    <header >
-        <img alt="Augustin logo" className="logo mx-auto my-5" src="@/assets/logo.svg" width="270" height="150"/>
-    </header>
-    <div className="text-center font-semibold text-4xl">
-        Ausgabe wählen
-    </div>
-    <div className="flex place-items-center w-full">
-        <button @click="digital" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/additionalproducts">ePaper</RouterLink>
-        </button>
-    </div>
-    <div className="flex place-items-center w-full">
-        <button @click="print" class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold w-full">
-            <RouterLink to="/additionalproducts">Print</RouterLink>
-        </button>
-    </div>
-    <div className="flex place-items-center row-span-2 w-full">
-        <button class="bg-green-600 rounded-full p-7 text-white text-4xl font font-semibold mx-auto w-20">
-            <RouterLink to="/">?</RouterLink>
-        </button>
-    </div>
-  </main>
-</template>
+    <component :is="$route.meta.layout || 'div'">
+        <template #main>
+            <div className="h-full grid grid-rows-5 place-items-center">
+                <div className="text-center font-semibold text-3xl">
+                    Ausgabe wählen
+                </div>
+                <div className="flex place-items-center w-full">
+                    <RouterLink class="w-full" to="/tipping">
+                        <button @click="digital"
+                            class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
+                            E-Paper
+                        </button>
+                    </RouterLink>
+                </div>
+                <div className="flex place-items-center w-full">
+                    <RouterLink class="w-full" to="/tipping">
+                    <button @click="print"
+                        class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
+                        Print
+                    </button>
+                    </RouterLink>
+                </div>
+                <div className="grid place-items-center row-span-2 w-full">
+                    <RouterLink class="grid place-items-center " to="/information">
+                    <button class="bg-green-600 rounded-full w-[76px] h-[76px] text-white text-4xl font font-semibold mx-auto">
+                        ?
+                    </button>
+                </RouterLink>   
+                </div>
+            </div>
+        </template>
+    </component>
+</template>@/stores/settingsStore

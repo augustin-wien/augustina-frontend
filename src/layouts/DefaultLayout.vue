@@ -1,15 +1,17 @@
 <template>
     <div class="base-layout">
-        <header>
+        <main class="h-screen px-8 py-8 place-items-center base-layout">
+            <header class="place-items-center h-1/6">
             <slot name="header">
-                <img alt="Augustin logo" className="logo mx-auto my-5" src="@/assets/logo.svg" width="270" height="150" />
+                <img alt="Augustin logo" className="logo mx-auto my-2" src="@/assets/logo.svg" width="243" height="135" />
 
                 </slot>
-        </header>
-        <main class="main-container">
-            <slot name="main">
+            </header>
+            <div class="h-5/6 main-container">
+                <slot name="main">
                 <h1>Default Content</h1>
-            </slot>
+                </slot>
+            </div>
         </main>
         <footer>
             <slot name="footer" />
@@ -21,8 +23,7 @@
 .main-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    margin-top: 10px;
 }
-
 </style>
