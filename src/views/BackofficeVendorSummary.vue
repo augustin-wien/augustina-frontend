@@ -2,7 +2,7 @@
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <main>
-        <div className="page-content space-x-2 mt-5"></div>
+        <div className="page-content space-x-2 mt-5 row"></div>
         <div className="text-center text-2xl space-y-3 space-x-3">
           <h1 className="font-bold text-3xl mt-3 pt-3">VerkäuferInnen</h1>
           <div className="table-auto border-spacing-4 border-collapse">
@@ -14,10 +14,6 @@
                 class="border-2 border-gray-400 rounded-md p-2 ml-2"
               />
               <button class="p-3 rounded-full bg-lime-600 text-white">Suchen</button>
-
-              <router-link to="/backoffice/newvendor">
-                <button className="p-3 rounded-full bg-lime-600 text-white">Neu</button>
-              </router-link>
             </div>
             <thead>
               <tr>
@@ -51,6 +47,16 @@
           </div>
         </div>
       </main>
+
+      <footer>
+        <router-link to="/backoffice/newvendor">
+          <button
+            className="p-3 rounded-full bg-lime-600 text-white absolute bottom-10 right-10 h-16 w-16"
+          >
+            Neu
+          </button>
+        </router-link>
+      </footer>
     </template>
   </component>
 </template>

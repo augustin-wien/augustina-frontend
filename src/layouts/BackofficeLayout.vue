@@ -1,10 +1,8 @@
 <template>
-  <div className="backoffice-layout container">
-    <header></header>
-
-    <div className="justify-start flex flex-row">
+  <div className="backoffice-layout container h-screen">
+    <div className="justify-start flex flex-row align-center">
       <div
-        className="sidemenu grid grid-cols-1 max-w-sm text-lg justify-start align-middle text-center bg-lime-600 text-white space-y-3 p-3"
+        className="sidemenu h-screen grid grid-cols-1 text-lg text-center bg-lime-600 text-white space-y-3 p-3"
       >
         <div className="sidemenu-item object-center">
           <img
@@ -70,7 +68,7 @@
       </div>
     </div>
 
-    <main className="main-container flex items-center justify-center top-2">
+    <main className="main-container flex items-center content-center top-2">
       <slot name="main"> </slot>
     </main>
     <footer>
@@ -99,7 +97,6 @@ onMounted(() => {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 p {
