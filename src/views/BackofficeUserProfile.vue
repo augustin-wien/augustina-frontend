@@ -7,25 +7,25 @@
             <h1 className="font-bold text-3xl mt-3 pt-3">VerkäuferInnen Profil</h1>
 
             <div className="table-auto border-spacing-4 border-collapse">
-              <tbody className="text-sm" v-if="vendor">
+              <tbody className="text-sm text-left" v-if="vendor">
                 <tr>
-                  <th className="p-3">Vorname</th>
+                  <th className="p-3">Vorname:</th>
                   <td className="p-3">{{ vendor.FirstName }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Nachname</th>
+                  <th className="p-3">Nachname:</th>
                   <td className="p-3">{{ vendor.LastName }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Lizenznummer</th>
+                  <th className="p-3">Lizenznummer:</th>
                   <td className="p-3">{{ vendor.LicenseID }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Letzte Auszahlung</th>
+                  <th className="p-3">Letzte Auszahlung:</th>
                   <td className="p-3">{{ vendor.LastPayout }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Aktuelles Guthaben</th>
+                  <th className="p-3">Aktuelles Guthaben:</th>
                   <td className="p-3">{{ vendor.Balance }} €</td>
                 </tr>
               </tbody>
