@@ -4,7 +4,7 @@
       <main>
         <div className="page-content space-x-2 mt-5"></div>
         <div className="text-center text-2xl space-y-3 space-x-3">
-          <h2 className="font-bold underline mt-3 pt-3">Eingang</h2>
+          <h1 className="font-bold text-3xl mt-3 pt-3">Eingang</h1>
           <div className="table-auto border-spacing-4 border-collapse">
             <thead>
               <tr>

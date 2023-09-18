@@ -2,7 +2,7 @@
   <div className="backoffice-layout container">
     <header></header>
 
-    <div className=" justify-start flex flex-row">
+    <div className="justify-start flex flex-row">
       <div
         className="sidemenu grid grid-cols-1 max-w-sm text-lg justify-start align-middle text-center bg-lime-600 text-white space-y-3 p-3"
       >
@@ -17,28 +17,17 @@
         </div>
         <hr />
         <div className="sidemenu-item">
+          <RouterLink to="/backoffice/vendorsummary" className="sidemenu-link">
+            <span className="sidemenu-text">VerkäuferInnen</span>
+          </RouterLink>
+        </div>
+        <hr />
+        <div className="sidemenu-item">
           <RouterLink to="/backoffice/credits" className="sidemenu-link">
-            <span className="sidemenu-text">Usermenü</span>
+            <span className="sidemenu-text">Auszahlungen</span>
           </RouterLink>
         </div>
-        <hr />
-        <div className="sidemenu-item">
-          <RouterLink to="/backoffice/newvendor" className="sidemenu-link">
-            <span className="sidemenu-text">Neuen User anlegen</span>
-          </RouterLink>
-        </div>
-        <hr />
-        <div className="sidemenu-item">
-          <RouterLink to="/backoffice/settings" className="sidemenu-link">
-            <span className="sidemenu-text">Einstellungen Augustin</span>
-          </RouterLink>
-        </div>
-        <hr />
-        <div className="sidemenu-item">
-          <RouterLink to="/backoffice/productsettings" className="sidemenu-link">
-            <span className="sidemenu-text">Produktbearbeitung</span>
-          </RouterLink>
-        </div>
+
         <hr />
         <div className="sidemenu-item">
           <RouterLink to="/backoffice/accounting" className="sidemenu-link">
@@ -57,7 +46,18 @@
             <span className="sidemenu-text">Eingang</span>
           </RouterLink>
         </div>
-
+        <hr />
+        <div className="sidemenu-item">
+          <RouterLink to="/backoffice/settings" className="sidemenu-link">
+            <span className="sidemenu-text">Einstellungen</span>
+          </RouterLink>
+        </div>
+        <hr />
+        <div className="sidemenu-item">
+          <RouterLink to="/backoffice/productsettings" className="sidemenu-link">
+            <span className="sidemenu-text">Produkte</span>
+          </RouterLink>
+        </div>
         <hr />
         <div className="sidemenu-item">
           <button className="sidemenu-link btn" @click="keycloak.keycloak.logout">
