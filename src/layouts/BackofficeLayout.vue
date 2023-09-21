@@ -5,13 +5,7 @@
         className="sidemenu h-screen grid grid-cols-1 text-lg text-center bg-lime-600 text-white space-y-3 p-3"
       >
         <div className="sidemenu-item object-center">
-          <img
-            src="../assets/logo.svg"
-            alt="Augustin logo"
-            className="logo mx-auto my-5"
-            width="270"
-            height="150"
-          />
+          <img src="../assets/logo.svg" alt="Augustin logo" className="logo mx-auto my-5" width="270" height="150" />
         </div>
         <hr />
         <div className="sidemenu-item">
@@ -80,11 +74,13 @@
 <script setup lang="ts">
 import keycloak from '@/keycloak/keycloak'
 import { onMounted } from 'vue'
-let loggedInUser: string | null = null
+import { ref } from 'vue'
+
+const loggedInUser = ref<string | null>(null)
 onMounted(() => {
   // display the preferred_username of the logged-in user in the variable loggedInUser
   if (keycloak.keycloak.tokenParsed && keycloak.keycloak.tokenParsed.preferred_username) {
-    loggedInUser = keycloak.keycloak.tokenParsed.preferred_username
+    loggedInUser.value = keycloak.keycloak.tokenParsed.preferred_username
   }
 })
 </script>
@@ -93,12 +89,14 @@ onMounted(() => {
 .container {
   display: flex;
 }
+
 .main-container {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 p {
   font-size: 10px;
 }
