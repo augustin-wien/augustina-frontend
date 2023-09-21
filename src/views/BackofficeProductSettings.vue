@@ -4,12 +4,8 @@
       <main>
         <div className="page-content space-x-2 mt-5"></div>
         <div className="text-center text-2xl space-y-3 space-x-3">
-          <h1 className="font-bold underline mt-3 pt-3">Übersicht andere Produkte</h1>
-          <router-link to="/backoffice/newproduct">
-            <button className="p-3 mt-2 rounded-full bg-lime-600 text-white">
-              Neues Produkt anlegen
-            </button>
-          </router-link>
+          <h1 className="font-bold text-3xl mt-3 pt-3">Produkte</h1>
+
           <div class="overflow-x-auto">
             <table class="table-auto border-spacing-4 border-collapse">
               <thead>
@@ -45,6 +41,15 @@
           </div>
         </div>
       </main>
+      <footer>
+        <router-link to="/backoffice/newproduct">
+          <button
+            className="p-3 rounded-full bg-lime-600 text-white absolute bottom-10 right-10 h-16 w-16"
+          >
+            Neu
+          </button>
+        </router-link>
+      </footer>
     </template>
   </component>
 </template>

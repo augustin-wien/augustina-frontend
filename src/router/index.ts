@@ -226,15 +226,7 @@ const router = createRouter({
       },
       component: () => import('../views/BackofficeProductUpdate.vue')
     },
-    {
-      path: '/backoffice/logout',
-      name: 'Backoffice Logout',
-      meta: {
-        layout: BackofficeDefault,
-        requiresAuth: true
-      },
-      component: () => import('../views/BackofficeLogout.vue')
-    },
+
     {
       path: '/success',
       name: 'Success',
@@ -270,7 +262,7 @@ router.beforeEach(async (to: any) => {
     // ❗️ Avoid an infinite redirect
     to.name !== '404'
   ) {
-    // Redirect happens before the first page load, 
+    // Redirect happens before the first page load,
     //so we need to wait for the router to be ready
     // redirect the user to the login page
     // return { name: '404' }
