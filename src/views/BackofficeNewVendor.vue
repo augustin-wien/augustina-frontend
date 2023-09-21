@@ -60,6 +60,12 @@
           <Toast v-if="toast" :toast="toast" />
         </div>
       </main>
+      <footer>
+        <button @click="importCSV"
+          className="p-3 rounded-full bg-lime-600 text-white absolute bottom-10 right-10 h-20 w-20">
+          CSV import
+        </button>
+      </footer>
     </template>
   </component>
 </template>
@@ -104,12 +110,48 @@ const showToast = (type: string, message: string) => {
     toast.value = null
   }, 5000)
 }
+
+const importCSV = async () => {
+  //  create file dialog
+  const input = document.createElement('input')
+  input.type = 'file'
+  input.accept = '.csv'
+  input.onchange = async (event: any) => {
+    const file = event.target.files[0]
+    const text = await file.text()
+    const lines = text.split('\n')
+    const vendors: Array<Vendor> = lines.map((line: any, i: number) => {
+      if (i === 0) return null
+      //@ts-ignore
+      const [PLZ, location, address, workingTime, number, LicenseID, FirstName, LastName, language] = line.split(',')
+      const Email = `${LicenseID}@augustin.or.at`
+      return {
+        Email, LicenseID,
+        FirstName,
+        LastName,
+        LastPayout: null,
+        UrlID: 'new-url-id',
+        IsDisabled: false,
+        Latitude: 0, Longitude: 0
+      }
+    })
+    try {
+      await store.createVendors(vendors)
+      showToast('success', 'VerkäuferInnen erfolgreich angelegt')
+    } catch (err) {
+      console.error('Error creating vendors:', err)
+      showToast('error', 'VerkäuferInnen konnten nicht angelegt werden')
+    }
+  }
+  input.click()
+}
 </script>
 
 <style>
 tr {
   padding: 10px;
 }
+
 td {
   padding: 10px;
 }

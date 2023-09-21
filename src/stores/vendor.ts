@@ -16,6 +16,10 @@ export interface Vendor {
   LicenseID: string
   UrlID: string
   Balance: number
+  IsDisabled: boolean
+  Longitude: number
+  Latitude: number
+  Address: string
 }
 
 export const vendorsStore = defineStore('vendors', {
@@ -53,6 +57,15 @@ export const vendorsStore = defineStore('vendors', {
         })
     },
 
+    async createVendors(vendors: Array<Vendor>) {
+      vendors.forEach((vendor: Vendor) => {
+        if (vendor !== null) {
+          postVendors(vendor)
+        }
+      });
+
+    },
+
     async updateVendor(updatedVendor: Vendor) {
       patchVendor(updatedVendor)
         .then((data) => {
@@ -71,5 +84,6 @@ export const vendorsStore = defineStore('vendors', {
           console.log('Error deleting vendor:', error)
         })
     }
+
   }
 })
