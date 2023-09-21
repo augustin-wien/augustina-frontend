@@ -3,11 +3,11 @@
     <template #main>
       <main>
         <div className="page-content space-x-2 mt-5"></div>
-        <div className="text-center text-2xl space-y-3 space-x-3">
-          <h1>Zeitraum eingeben</h1>
+        <div className="text-center  space-y-3 space-x-3">
+          <h1 className="font-bold mt-3 pt-3 text-2xl">Umsätze</h1>
+          <p className="text-lg">Zeitraum eingeben:</p>
           <p className="border-solid border-2 italic text-sm">01.02.2023 - 28.02.2023</p>
           <button className="p-2 rounded-full bg-lime-600 text-white text-sm">Download.csv</button>
-          <h2 className="font-bold underline mt-3 pt-3">Umsätze</h2>
           <div className="table-auto border-spacing-4 border-collapse">
             <thead>
               <tr>
