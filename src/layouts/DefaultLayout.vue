@@ -1,6 +1,6 @@
 <template>
     <div class="base-layout">
-        <main class="h-screen px-8 pt-4 pb-16 place-items-center base-layout">
+        <main class="absolute inset-0 px-8 pt-4 pb-16 place-items-center base-layout">
             <header class="place-items-center h-1/6">
             <slot name="header">
                 <img alt="Augustin logo" className="logo mx-auto my-1" src="@/assets/logo.svg" width="213" height="105" />
