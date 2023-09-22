@@ -101,10 +101,13 @@ const router = createRouter({
       },
     },
     {
-      path: 'failure',
+      path: '/failure',
       name: 'Failure',
-      component: () => import('../views/Failure')
-    }
+      component: () => import('../views/FailureVivawallet.vue'),
+      meta: {
+        layout: Default,
+      },
+    },
     {
       path: '/custom-tip',
       name: 'Custom Tip',
