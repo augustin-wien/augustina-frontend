@@ -80,14 +80,6 @@ const router = createRouter({
       },
     },
     {
-      path: '/paymentconfirmation',
-      name: 'Payment Confirmation',
-      component: () => import('../views/PaymentConfirmation.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
       path: '/vendoroverview',
       name: 'Vendor Overview',
       component: () => import('../views/VendorOverview.vue')
@@ -95,7 +87,7 @@ const router = createRouter({
     {
       path: '/success',
       name: 'Success',
-      component: () => import('../views/WaitingCountdown.vue'),
+      component: () => import('../views/PaymentConfirmation.vue'),
       meta: {
         layout: Default,
       },

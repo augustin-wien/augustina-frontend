@@ -13,8 +13,11 @@ onMounted(settStore.fetchSettings)
     <component :is="$route.meta.layout || 'div'">
         <template #main>
             <div className="grid grid-rows-5 h-full place-items-center w-full">
-                <div className="text-center font-semibold text-3xl">
-                    Zeitung kaufen
+                <div className="text-center font-semibold text-xl">
+                    Zeitung kaufen bei:
+                    <div>
+                        Theodor
+                    </div>
                 </div>
                 <div class="place-items-center w-full flex">
                     <div class="text-xl grow h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full">
