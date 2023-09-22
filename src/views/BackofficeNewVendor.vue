@@ -2,55 +2,28 @@
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <main>
-        <div class="w-full max-w-md mx-auto mt-4">
-          <form
-            @submit.prevent="submitVendor"
-            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-          >
+        <div class="w-full max-w-md mx-auto mt-4" v-if="!importing">
+          <form @submit.prevent="submitVendor" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
-                >Vorname:</label
-              >
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName">Vorname:</label>
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.FirstName"
-                type="text"
-                id="firstName"
-                required
-              />
+                v-model="newVendor.FirstName" type="text" id="firstName" required />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
-                >Nachname:</label
-              >
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName">Nachname:</label>
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.LastName"
-                type="text"
-                id="lastName"
-                required
-              />
+                v-model="newVendor.LastName" type="text" id="lastName" required />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
-                >Email:</label
-              >
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email">Email:</label>
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Email"
-                type="email"
-                id="email"
-                required
-              />
+                v-model="newVendor.Email" type="email" id="email" required />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
-                >Lizenznummer:</label
-              >
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID">Lizenznummer:</label>
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.LicenseID"
-                type="text"
-                id="licenseID"
-                required
-              />
+                v-model="newVendor.LicenseID" type="text" id="licenseID" required />
             </div>
 
             <div class="flex place-content-center">
@@ -58,6 +31,10 @@
             </div>
           </form>
           <Toast v-if="toast" :toast="toast" />
+        </div>
+        <div v-else>
+          importiere {{ store.vendorsImportedCount }}/{{ importingVendorsCount }} VerkäuferInnen
+
         </div>
       </main>
       <footer>
@@ -91,6 +68,8 @@ const newVendor = ref({
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)
+const importing = ref(false)
+const importingVendorsCount = ref(0)
 
 const submitVendor = async () => {
   try {
@@ -123,7 +102,7 @@ const importCSV = async () => {
     const vendors: Array<Vendor> = lines.map((line: any, i: number) => {
       if (i === 0) return null
       //@ts-ignore
-      const [PLZ, location, address, workingTime, number, LicenseID, FirstName, LastName, language] = line.split(',')
+      const [PLZ, location, address, workingTime, number, LicenseID, FirstName, LastName, language] = line.split(';')
       const Email = `${LicenseID}@augustin.or.at`
       return {
         Email, LicenseID,
@@ -136,11 +115,15 @@ const importCSV = async () => {
       }
     })
     try {
+      importing.value = true
+      importingVendorsCount.value = vendors.length
       await store.createVendors(vendors)
       showToast('success', 'VerkäuferInnen erfolgreich angelegt')
+      importing.value = false
     } catch (err) {
       console.error('Error creating vendors:', err)
       showToast('error', 'VerkäuferInnen konnten nicht angelegt werden')
+      importing.value = false
     }
   }
   input.click()
