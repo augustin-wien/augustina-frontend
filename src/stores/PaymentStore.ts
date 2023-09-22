@@ -84,20 +84,10 @@ export const usePaymentStore = defineStore('payment',{
       },
 
       //vivawallet methodes
-      async postPrice(price: number) {
-        this.response[0] = await agent.VivaWallet.postPrice(price)
+      async postOrder(item: number, quantity: number, vendor: number) {
+        this.response[0] = await agent.VivaWallet.postOrder(item, quantity, vendor)
         this.url = this.response[0].SmartCheckoutURL
         window.location.href = this.url
-      },
-      async verifyPayment(){
-        if(this.transactionID === ""){
-          console.log('id undefined')
-        }
-        else {
-          this.verification[0] = await agent.VivaWallet.verifyPayment(this.transactionID)
-          this.verified = this.verification[0].verification
-          router.push('/paymentconfirmation')
-        }
       }
     }
   }

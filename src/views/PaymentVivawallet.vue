@@ -6,7 +6,7 @@ import { usePaymentStore } from '@/stores/PaymentStore'
 const paymentStore = usePaymentStore()
 
 onMounted(() => {
-  paymentStore.postPrice(paymentStore.price + paymentStore.tipInCents())
+  paymentStore.postOrder(1, 1, 1)
 })
 </script> 
 
