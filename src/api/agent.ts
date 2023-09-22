@@ -1,8 +1,9 @@
 import type { Settings } from '@/models/settings'
 import type { VivaWalletResponse } from '@/models/responseVivaWallet'
 import type { VivaWalletVerification } from '@/models/verificationVivaWallet'
+import type { Name } from '@/models/vendorName'
 import { type AxiosResponse } from 'axios'
-import { VIVAWALLET_TRANSACTION_ORDER, SETTINGS_API_URL, VIVAWALLET_TRANSACTION_VERIFICATION } from '@/api/endpoints'
+import { VIVAWALLET_TRANSACTION_ORDER, SETTINGS_API_URL, VIVAWALLET_TRANSACTION_VERIFICATION, VENDOR_CHECK_ID } from '@/api/endpoints'
 import { apiInstance } from './api'
 
 const responseBody = (response: AxiosResponse) => response.data
@@ -28,7 +29,12 @@ const VivaWallet = {
             .then(sleep(100)).then(responseBody)
 }
 
+const Vendor = {
+    checkID: (): Promise<Name> => apiInstance.get(VENDOR_CHECK_ID + 'fl-123/').then(responseBody)
+}
+
 export default {
     SettingsConfiguration,
     VivaWallet,
+    Vendor,
 }
