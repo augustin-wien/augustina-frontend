@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { usePaymentStore } from '@/stores/PaymentStore'
+import { usePaymentStore } from '@/stores/PaymentStore';
 import { settingsStore } from '@/stores/settingsStore';
-import { RouterLink } from 'vue-router'
 import { onMounted } from 'vue';
+import { RouterLink } from 'vue-router';
 const paymentStore = usePaymentStore()
 const settStore = settingsStore()
 onMounted(settStore.fetchSettings)
@@ -14,11 +14,11 @@ onMounted(settStore.fetchSettings)
         <template #main>
             <div className="grid grid-rows-5 h-full place-items-center w-full">
                 <div class="row-span-2 grid grid-rows-3 h-full w-full">
-                    <div className="text-center font-semibold text-xl pt-5">
-                        Zeitung kaufen bei:
+                    <div className="text-center font-semibold text-2xl pt-5">
+                        Zeitung kaufen bei
                     </div>
                     <div class="flex place-content-center">
-                        <div class="text-center min-w-fit h-4/5 text-2xl rounded-full text-black font-bold">
+                        <div class="text-center min-w-fit h-4/5 text-4xl rounded-full text-black font-bold">
                             Doris
                         </div>
                     </div>
