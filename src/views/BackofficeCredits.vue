@@ -24,9 +24,7 @@
             <tbody className="text-sm  p-3">
               <tr v-for="(vendor, id) in vendors" :key="id">
                 <td className="border-t-2 p-3">
-                  <router-link :to="`/backoffice/userprofile/${vendor.ID}`">{{
-                    vendor?.LicenseID
-                  }}</router-link>
+                  {{ vendor?.LicenseID }}
                 </td>
                 <td className="border-t-2 p-3">{{ vendor.Balance }} €</td>
                 <td className="border-t-2 p-3">{{ vendor.LastPayout }}</td>
