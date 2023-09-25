@@ -8,3 +8,4 @@ export const VIVAWALLET_TRANSACTION_VERIFICATION = `${
 export const VENDORS_API_URL = `${import.meta.env.VITE_API_URL}api/vendors/`
 export const ITEMS_API_URL = `${import.meta.env.VITE_API_URL}api/items/`
 export const AUTH_API_URL = `${import.meta.env.VITE_API_URL}api/auth/hello/`
+
