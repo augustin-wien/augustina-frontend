@@ -2,9 +2,12 @@ import axios from 'axios'
 import keycloak from '@/keycloak/keycloak'
 import { type Vendor } from '@/stores/vendor'
 import { type Item } from '@/stores/items'
+import { type Settings } from '@/stores/settings'
 import { VENDORS_API_URL } from './endpoints'
 import { ITEMS_API_URL } from './endpoints'
 import { AUTH_API_URL } from './endpoints'
+import { SETTINGS_API_URL } from './endpoints'
+import { PAYMENT_API_URL } from './endpoints'
 
 export const apiInstance = axios.create({
   withCredentials: true
@@ -77,4 +80,28 @@ export async function patchItem(updatedItem: Item) {
 
 export async function removeItem(itemId: number) {
   return apiInstance.delete(`${VENDORS_API_URL}${itemId}/`)
+}
+
+//settings
+export async function fetchSettings() {
+  return apiInstance.get(SETTINGS_API_URL)
+}
+
+export async function patchSettings(updatedSettings: Settings) {
+  return apiInstance.put(
+    `${SETTINGS_API_URL}${updatedSettings}/`,
+    JSON.stringify(updatedSettings),
+    {
+      headers: {
+        accept: 'application/json',
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  )
+}
+
+//payments list
+//sind rfc dates strings?
+export async function fetchPayments(startDate: string, endDate: string) {
+  return apiInstance.get(`${PAYMENT_API_URL}?from=${startDate}&to=${endDate}`)
 }
