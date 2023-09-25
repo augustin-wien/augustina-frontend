@@ -83,14 +83,19 @@ export const usePaymentStore = defineStore('payment',{
         this.price = this.price + (this.pricePerPaper * n)
       },
 
-      //check AGB
+      //AGB
       checkAgb() {
         if(this.agbChecked) {
-          router.push('/payment')
+          router.push({ name: 'Payment' })
         }
         else {
           console.log('pls check AGB')
         }
+      },
+
+      toAGB() {
+        console.log(import.meta.env.VITE_AGB_URL)
+        window.location.href = import.meta.env.VITE_AGB_URL
       },
 
       //vivawallet methodes

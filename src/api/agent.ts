@@ -30,7 +30,7 @@ const VivaWallet = {
 }
 
 const Vendor = {
-    checkID: (): Promise<Name> => apiInstance.get(VENDOR_CHECK_ID + 'fl-123/').then(responseBody)
+    checkID: (vendorId: string): Promise<Name> => apiInstance.get(VENDOR_CHECK_ID + vendorId + '/').then(sleep(100)).then(responseBody)
 }
 
 export default {

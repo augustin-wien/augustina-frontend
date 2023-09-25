@@ -3,6 +3,7 @@ import { usePaymentStore } from '@/stores/PaymentStore';
 import { settingsStore } from '@/stores/settingsStore';
 import { onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
+import TippingPage from './TippingPage.vue';
 const paymentStore = usePaymentStore()
 const settStore = settingsStore()
 onMounted(settStore.fetchSettings)
@@ -32,7 +33,7 @@ onMounted(settStore.fetchSettings)
                     <p className="text-center text-8xl font-semibold">{{ paymentStore.priceInEuros() }}€</p>
                 </div>
                 <div className="place-items-center w-full flex">
-                    <RouterLink class="text-center h-[76px] grow" to="/tipping">
+                    <RouterLink class="text-center h-[76px] grow" :to="{ name: 'Tippingpage' }">
                         <button class="bg-green-600 rounded-full p-5 text-white text-3xl w-full font-semibold">
                             Weiter
                         </button>

@@ -8,28 +8,74 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'Landingpage',
+      path: '/:id',
+      name: 'Parent',
       meta: {
         layout: Default,
       },
-      component: () => import('../views/LandingPage.vue')
-    },
-    {
-      path: '/additionalproducts',
-      name: 'Additional Products',
-      component: () => import('../views/AdditionalProducts.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/print-digital',
-      name: 'Version choice',
-      component: () => import('../views/PrintDigital.vue'),
-      meta: {
-        layout: Default,
-      },
+      component: () => import('../views/Parent.vue'),
+      children: [
+        {
+          path: '/:id/landing-page',
+          name: 'LandingPage',
+          component: () => import('../views/LandingPage.vue'),
+        },
+        {
+          path: '/:id/additionalproducts',
+          name: 'Additional Products',
+          component: () => import('../views/AdditionalProducts.vue'),
+        },
+        {
+          path: '/:id/print-digital',
+          name: 'Version choice',
+          component: () => import('../views/PrintDigital.vue'),
+        },
+        {
+          path: '/:id/tipping',
+          name: 'Tippingpage',
+          component: () => import('../views/TippingPage.vue'),
+        },
+        {
+          path: '/:id/information',
+          name: 'InformationPrintEpaper',
+          component: () => import('../views/InformationPrintEpaper.vue'),
+        },
+        {
+          path: '/:id/confirmation',
+          name: 'Confirmation',
+          component: () => import('../views/FinalPurchaseConfirmation.vue'),
+        },
+        {
+          path: '/:id/payment',
+          name: 'Payment',
+          component: () => import('../views/PaymentVivawallet.vue'),
+        },
+        {
+          path: '/:id/paymentconfirmation',
+          name: 'Payment Confirmation',
+          component: () => import('../views/PaymentConfirmation.vue'),
+        },
+        {
+          path: '/:id/success',
+          name: 'Success',
+          component: () => import('../views/WaitingCountdown.vue'),
+        },
+        {
+          path: '/:id/failure',
+          name: 'Failure',
+          component: () => import('../views/FailureVivawallet.vue'),
+        },
+        {
+          path: '/:id/custom-tip',
+          name: 'Custom Tip',
+          component: () => import('../views/CustomTip.vue'),
+        },
+        {
+          path: '/:id/shop',
+          name: 'Shop',
+          component: () => import('../views/ShopPage.vue'),
+        }
+      ]
     },
     {
       path: '/404',
@@ -48,86 +94,14 @@ const router = createRouter({
       component: () => import('../views/DashboardView.vue')
     },
     {
-      path: '/tipping',
-      name: 'Tippingpage',
-      component: () => import('../views/TippingPage.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/information',
-      name: 'InformationPrintEpaper',
-      component: () => import('../views/InformationPrintEpaper.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/confirmation',
-      name: 'Confirmation',
-      component: () => import('../views/FinalPurchaseConfirmation.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/payment',
-      name: 'payment',
-      component: () => import('../views/PaymentVivawallet.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/paymentconfirmation',
-      name: 'Payment Confirmation',
-      component: () => import('../views/PaymentConfirmation.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
       path: '/vendoroverview',
       name: 'Vendor Overview',
       component: () => import('../views/VendorOverview.vue')
     },
     {
-      path: '/success',
-      name: 'Success',
-      component: () => import('../views/WaitingCountdown.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/failure',
-      name: 'Failure',
-      component: () => import('../views/FailureVivawallet.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/custom-tip',
-      name: 'Custom Tip',
-      component: () => import('../views/CustomTip.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
       path: '/qr-code',
       name: 'QR Code',
       component: () => import('../views/QRCode.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/shop',
-      name: 'Shop',
-      component: () => import('../views/ShopPage.vue'),
       meta: {
         layout: Default,
       },
