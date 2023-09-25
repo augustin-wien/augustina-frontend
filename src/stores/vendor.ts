@@ -55,7 +55,7 @@ export const vendorsStore = defineStore('vendors', {
 
     async createVendor(newVendor: Vendor) {
       postVendors(newVendor)
-        .then((data) => {
+        .then(() => {
           this.getVendors()
         })
         .catch((error) => {
@@ -67,7 +67,6 @@ export const vendorsStore = defineStore('vendors', {
     },
 
     async createVendors(vendors: Array<Vendor>) {
-      const vendorsArray: Array<Promise<AxiosResponse>> = []
       for (let i = 0; i < vendors.length; i++) {
         if (vendors[i] !== null) {
           if (vendors[i].LicenseID === '' || vendors[i].LicenseID === null || vendors[i].LicenseID === undefined) {
@@ -76,7 +75,7 @@ export const vendorsStore = defineStore('vendors', {
           this.vendorsImportedCount = (i+1)
           const vendorCheck = await checkVendorId(vendors[i].LicenseID)
           if (vendorCheck === null) {
-            const response = await this.createVendorPromise(vendors[i])
+            await this.createVendorPromise(vendors[i])
           }
 
         };
@@ -85,7 +84,7 @@ export const vendorsStore = defineStore('vendors', {
 
     async updateVendor(updatedVendor: Vendor) {
         patchVendor(updatedVendor)
-          .then((data) => {
+          .then(() => {
             this.getVendors()
           })
           .catch((error) => {
