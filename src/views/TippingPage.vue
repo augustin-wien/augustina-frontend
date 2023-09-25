@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { usePaymentStore } from '@/stores/PaymentStore'
-import { RouterLink } from 'vue-router'
+import { usePaymentStore } from '@/stores/PaymentStore';
+import { RouterLink } from 'vue-router';
 const paymentStore = usePaymentStore()
 
 const increment = paymentStore.incrementTipC
@@ -12,7 +12,7 @@ const increment = paymentStore.incrementTipC
         <template #main>
             <div className="h-full w-full grid grid-rows-5 place-items-center">
                 <div className="text-center font-semibold text-3xl">
-                    Trinkgeld geben
+                    Spende geben
                 </div>
                 <div className="flex place-items-center w-full">
                     <RouterLink class="w-full" to="/confirmation">
