@@ -9,3 +9,4 @@ export const VENDORS_API_URL = `${import.meta.env.VITE_API_URL}api/vendors/`
 export const ITEMS_API_URL = `${import.meta.env.VITE_API_URL}api/items/`
 export const AUTH_API_URL = `${import.meta.env.VITE_API_URL}api/auth/hello/`
 export const PAYMENT_API_URL = `${import.meta.env.VITE_API_URL}api/payments/`
+export const PAYOUT_API_URL = `${import.meta.env.VITE_API_URL}api/payments/payout/`

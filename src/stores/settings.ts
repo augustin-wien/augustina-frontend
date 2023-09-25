@@ -3,17 +3,17 @@ import { fetchSettings, patchSettings } from '@/api/api'
 
 //define interface to store data from backend properly
 export interface Settings {
-  color: string
-  id: number
-  logo: string
-  mainItem: number
-  refundFees: boolean
+  Color: string
+  ID: number
+  Logo: string
+  MainItem: number
+  RefundFees: boolean
 }
 
 export const settingsStore = defineStore('settings', {
   state: () => {
     return {
-      settings: [] as Settings[]
+      settings: {} as Settings
     }
   },
 
@@ -24,7 +24,7 @@ export const settingsStore = defineStore('settings', {
   },
 
   actions: {
-    async getSettings() {
+    async getSettingsFromApi() {
       try {
         const data = await fetchSettings()
         this.settings = data.data
@@ -36,7 +36,7 @@ export const settingsStore = defineStore('settings', {
     async updateSettings(updatedSettings: Settings) {
       try {
         await patchSettings(updatedSettings)
-        await this.getSettings()
+        await this.getSettingsFromApi()
       } catch (error) {
         console.log('Error updating settings:', error)
       }

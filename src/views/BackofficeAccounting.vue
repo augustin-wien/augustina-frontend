@@ -43,6 +43,8 @@ import { ref, onMounted, computed } from 'vue'
 import { paymentlist } from '../stores/paymentdata'
 
 const date = ref()
+const startDate = ref('')
+const endDate = ref('')
 
 // For demo purposes assign range from the current date
 onMounted(() => {
@@ -53,20 +55,17 @@ onMounted(() => {
 
 const store = paymentlist()
 //fetch paymentlist data once component is mounted
-// convert the value from onRangeStart to the variable startDate
 
 const onRangeStart = (value: any) => {
-  alert(`Selected date in range is: ${value}`)
+  startDate.value = value.toISOString() // Update the startDate variable
+  store.getPayments(startDate.value, endDate.value)
 }
-const startDate = '2022-01-01'
-const endDate = '2022-01-31'
 
 const onRangeEnd = (value: any) => {
-  alert(`Range selected with the second date: ${value}`)
+  endDate.value = value.toISOString() // Update the endDate variable
+  store.getPayments(startDate.value, endDate.value)
 }
-onMounted(() => {
-  store.getPayments(startDate, endDate)
-})
+
 const payments = computed(() => store.paymentlist)
 </script>
 
