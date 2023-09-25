@@ -152,17 +152,6 @@ router.beforeEach(async (to) => {
   }
 })
 
-//Check if AGBs are accepted
-router.beforeEach(async (next) => {
-  if(next.name == 'Payment' && !usePaymentStore().agbChecked){
-    return {}
-  }
-  //Redirect to vivawallet
-  else if(usePaymentStore().paymentservice == 1){
-    //router.push(usePaymentStore().url) 
-  }
-})
-
 // Check if the user is authenticated
 function isAuthenticated() {
   if (!keycloak.initailizedKeycloak) {

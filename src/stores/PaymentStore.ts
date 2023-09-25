@@ -83,6 +83,16 @@ export const usePaymentStore = defineStore('payment',{
         this.price = this.price + (this.pricePerPaper * n)
       },
 
+      //check AGB
+      checkAgb() {
+        if(this.agbChecked) {
+          router.push('/payment')
+        }
+        else {
+          console.log('pls check AGB')
+        }
+      },
+
       //vivawallet methodes
       async postOrder(item: number, quantity: number, vendor: number) {
         this.response[0] = await agent.VivaWallet.postOrder(item, quantity, vendor)

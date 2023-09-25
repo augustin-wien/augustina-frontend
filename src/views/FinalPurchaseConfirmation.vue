@@ -19,9 +19,9 @@
                     <label for="checkbox"> Mit Kauf aktzeptiere ich die <RouterLink to="/" class="text-blue-600">AGBs</RouterLink></label>
                 </div>
                 <div className="flex place-items-center w-full">
-                    <RouterLink class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full" :class="{'bg-green-600': paymentStore.agbChecked}" to="/Payment">
+                    <button @click="paymentStore.checkAgb()" class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full" :class="{'bg-green-600': paymentStore.agbChecked}" to="/payment">
                         Weiter
-                    </RouterLink>
+                    </button>
                 </div>
             </div>
         </template>
