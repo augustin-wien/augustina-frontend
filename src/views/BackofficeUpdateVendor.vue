@@ -109,7 +109,12 @@ const updatedVendor = ref({
   LastPayout: null,
   LicenseID: 'new-license-id',
   UrlID: 'new-url-id',
-  Balance: 0
+  Balance: 0,
+  IsDisabled: false,
+  Longitude: 0,
+  Latitude: 0,
+  Address: '',
+  
 })
 
 store.getVendors()

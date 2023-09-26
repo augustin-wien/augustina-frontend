@@ -1,12 +1,12 @@
-<template>TODO: APi und konkrete Bezeichnungen fehlen</template>
-<!--
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <main>
-        <div class="w-full max-w-md mx-auto mt-4" v-if="augustin">
+        <div class="w-full max-w-md mx-auto mt-4" v-if="settings">
+          <h1 className="font-bold text-3xl mt-3 p-3">Einstellungen</h1>
+
           <form
-            @submit.prevent="updateAugustin"
+            @submit.prevent="updateSettings"
             class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           >
             <div class="mb-4">
@@ -14,90 +14,83 @@
                 >Logo:</label
               >
               <div class="flex flex-row">
-                <span class="p-2">{{ augustin.logo }} </span>
+                <img
+                  :src="url + settings.Logo"
+                  alt="Augustin logo"
+                  class="logo mx-auto my-5"
+                  width="50"
+                  height="20"
+                />
                 <input
                   class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedAugustin.logo"
-                  type="text"
+                  @change="updateLogo"
+                  type="file"
                   id="logo"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="cover"
-                >Cover:</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">{{ augustin.cover }} </span>
-
-                <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="augustin.cover"
-                  type="text"
-                  id="cover"
-                  required
-                />
-              </div>
-
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="name"
-                >Name:</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">{{ augustin.name }} </span>
-
-                <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedaugustin.name"
-                  type="text"
-                  id="name"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price"
-                >Preis:</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">{{ augustin.preis }} </span>
-
-                <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedAugustin.preis"
-                  type="number"
-                  id="price"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description"
-                >Beschreibungstext:</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">{{ augustin.description }} </span>
-
-                <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedAugustin.description"
-                  type="text"
-                  id="description"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="transactioncosts"
-                >Übernahme Transaktionskosten:</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">{{ augustin.transactioncosts }} </span>
-
-                <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedAugustin.transactioncosts"
-                  type="text"
-                  id="transactioncosts"
-                  required
+                  accept="image/*"
                 />
               </div>
             </div>
-
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="color"
+              >Farbe:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ settings.Color }}</span>
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedSettings.Color"
+                type="text"
+                id="color"
+                required
+              />
+            </div>
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="mainItem"
+              >Hauptprodukt:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ settings.MainItem }}</span>
+              <select
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedSettings.MainItem"
+                id="mainItem"
+                required
+              >
+                <option v-for="item in items" :key="item.ID" :value="item.ID">
+                  {{ item.Name }}
+                </option>
+              </select>
+            </div>
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+              >Übernahme Transaktionskosten:</label
+            >
+            <div class="flex flex-row justify-evenly">
+              <span>
+                <label for="RefundFees">Ja</label>
+                <input
+                  type="radio"
+                  checked
+                  id="RefundFees"
+                  name="RefundFees"
+                  value="true"
+                  v-model="updatedSettings.RefundFees"
+                />
+              </span>
+              <span>
+                <label for="RefundFees">Nein</label>
+                <input
+                  type="radio"
+                  id="RefundFees"
+                  name="RefundFees"
+                  value="false"
+                  v-model="updatedSettings.RefundFees"
+                />
+              </span>
+            </div>
             <div class="flex place-content-center">
-              <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">
+              <button
+                onsubmit="updateSettings()"
+                type="submit"
+                class="p-3 rounded-full bg-lime-600 text-white"
+              >
                 Bestätigen
               </button>
             </div>
@@ -108,62 +101,60 @@
   </component>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
-import { vendorsStore } from '../stores/vendor'
-import type { Vendor } from '@/stores/vendor'
-import { useRoute } from 'vue-router'
+<script lang="ts" setup>
+import { ref, computed, onMounted } from 'vue'
+import { settingsStore, type Settings } from '../stores/settings'
+import { itemStore } from '@/stores/items'
+import toast from '../components/ToastMessage.vue'
 
-export default defineComponent({
-  setup() {
-    const store = vendorsStore()
+const store = settingsStore()
+const storeItems = itemStore()
 
-    const updatedVendor = ref({
-      Account: 0,
-      Email: 'new@example.com',
-      FirstName: 'Leonie',
-      ID: 0,
-      KeycloakID: 'new-keycloak-id',
-      LastName: 'Löwenherz',
-      LastPayout: {
-        infinityModifier: 0,
-        time: '',
-        valid: true
-      },
-      LicenseID: 'new-license-id',
-      UrlID: 'new-url-id',
-      Balance: 0
-    })
-
-    store.fetchVendors()
-    const vendors = computed(() => store.vendors)
-
-    const route = useRoute()
-    const idparams = route.params.ID
-
-    const vendor = computed(() => {
-      const numericIdParams = Number(idparams) // Convert the string to a number or NaN
-      if (!isNaN(numericIdParams)) {
-        return vendors.value.find((vendor) => vendor.ID === numericIdParams)
-      } else {
-        return null
-      }
-    })
-    const updateVendor = async () => {
-      try {
-        await store.updateVendor(updatedVendor.value as Vendor)
-      } catch (error) {
-        console.error('Error updating vendor:', error)
-      }
-    }
-
-    return {
-      updatedVendor,
-      updateVendor,
-      vendor
-    }
-  }
+onMounted(() => {
+  store.getSettingsFromApi()
+  storeItems.getItems()
 })
+
+const settings = computed(() => store.settings)
+const items = computed(() => storeItems.items)
+
+const updatedSettings = ref<Settings>({
+  Logo: '',
+  Color: '',
+  MainItem: 1,
+  RefundFees: false,
+  ID: 0
+})
+
+const updateSettings = async () => {
+  try {
+    // This logic will execute when the "Bestätigen" button is clicked
+    await store.updateSettings(updatedSettings.value)
+    showToast('success', 'Einstellungen erfolgreich aktualisiert')
+  } catch (error) {
+    console.error('Error updating settings:', error)
+    showToast('error', 'Einstellungen konnten nicht aktualisiert werden')
+  }
+}
+
+const showToast = (type: string, message: string) => {
+  toast.value = { type, message }
+  setTimeout(() => {
+    toast.value = null
+  }, 5000)
+}
+
+const updateLogo = (event: any) => {
+  // This logic will execute when a file is selected in the file input
+  const file = event.target.files[0]
+  const reader = new FileReader()
+  reader.readAsDataURL(file)
+  reader.onload = () => {
+    updatedSettings.value.Logo = reader.result as string
+  }
+}
+
+const url = import.meta.env.VITE_API_URL
 </script>
 
 <style>
@@ -174,4 +165,3 @@ td {
   padding: 10px;
 }
 </style>
--->
