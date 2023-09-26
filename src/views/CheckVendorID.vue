@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { usePaymentStore } from '@/stores/PaymentStore'
 import { onMounted } from 'vue'
 
-const paymentStore = usePaymentStore()
+//const paymentStore = usePaymentStore()
 
 onMounted(() => {
-  const url = window.location.href
+  //const url = window.location.href
 
 }
 )

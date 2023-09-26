@@ -1,6 +1,5 @@
 import keycloak from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
-import { usePaymentStore } from '@/stores/PaymentStore'
 import Default from '@/layouts/DefaultLayout.vue'
 
 
@@ -13,7 +12,7 @@ const router = createRouter({
       meta: {
         layout: Default,
       },
-      component: () => import('../views/Parent.vue'),
+      component: () => import('../views/ParentPaymentProcess.vue'),
       children: [
         {
           path: '/:id/landing-page',

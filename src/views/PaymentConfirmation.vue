@@ -11,7 +11,7 @@
         <div>
           <span class="date text-xl">{{ currentDate() }} </span><span class="time text-xl"> um {{ time }}</span>
         </div>
-        <RouterLink class="w-full" to="/">
+        <RouterLink class="w-full" :to="{ name: 'LandingPage' }">
           <button class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
             Start
           </button>
