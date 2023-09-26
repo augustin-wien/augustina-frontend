@@ -1,3 +1,3 @@
 export interface Name{
-    name: string
+    FirstName: string
 }

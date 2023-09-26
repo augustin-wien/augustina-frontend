@@ -9,9 +9,10 @@ export const useVendorStore = defineStore('vendor', {
     }
   },
   actions: {
-    async checkID(vendorId: string) {
+    async checkID(vendorId: string | string[]) {
       const response = await agent.Vendor.checkID(vendorId)
-      this.vendorName = response.name
+      console.log(response.FirstName)
+      this.vendorName = response.FirstName
       if(this.vendorName !== ""){
         
       }
