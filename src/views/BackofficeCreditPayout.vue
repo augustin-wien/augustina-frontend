@@ -23,6 +23,7 @@
                 type="submit"
                 value="Bestätigen"
                 className="p-3 m-3 rounded-full bg-lime-600 text-white"
+                :onClick="payoutVendor"
               />
             </div>
             <div className="row mx-3">
@@ -38,6 +39,7 @@
                   type="number"
                   placeholder="5"
                   :max="vendor ? vendor.Balance : ''"
+                  :onClick="payoutVendor"
                 />
                 <input
                   type="submit"
@@ -66,8 +68,10 @@ td {
 import { vendorsStore, type Vendor } from '../stores/vendor'
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { payoutStore } from '../stores/payout'
 
 const store = vendorsStore()
+const storePayout = payoutStore()
 
 store.getVendors()
 
@@ -89,7 +93,16 @@ const vendor = computed(() => {
     return null
   }
 })
-
 // Initialize a reactive property 'amount' for input data
-const amount = ref('')
+const amount = ref<number>(0)
+
+// post the amount with the licenseID to the payout store
+const payoutVendor = () => {
+  const data = {
+    VendorLicenseID: vendor.value.LicenseID,
+    Amount: amount.value
+  }
+  storePayout.postPayout(data)
+  store.getVendors()
+}
 </script>
