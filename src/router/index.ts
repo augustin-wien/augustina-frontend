@@ -1,7 +1,7 @@
 import keycloak from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
 import Default from '@/layouts/DefaultLayout.vue'
-
+import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -81,8 +81,8 @@ const router = createRouter({
       name: '404',
       component: () => import('../views/404View.vue'),
       meta: {
-        layout: Default,
-      },
+        layout: Default
+      }
     },
     {
       path: '/dashboard',
@@ -95,6 +95,10 @@ const router = createRouter({
     {
       path: '/vendoroverview',
       name: 'Vendor Overview',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
       component: () => import('../views/VendorOverview.vue')
     },
     {
@@ -102,56 +106,71 @@ const router = createRouter({
       name: 'QR Code',
       component: () => import('../views/QRCode.vue'),
       meta: {
-        layout: Default,
-      },
+        layout: Default
+      }
     }
   ]
 })
 
 // Check if the user is authenticated
-router.beforeEach(async (to) => {
+router.beforeEach(async (to: any) => {
   if (
     to.meta.requiresAuth &&
     !isAuthenticated() &&
     // ❗️ Avoid an infinite redirect
     to.name !== '404'
   ) {
+    // Redirect happens before the first page load,
+    //so we need to wait for the router to be ready
     // redirect the user to the login page
-    return { name: '404' }
+    // return { name: '404' }
   }
   // Condition to toggle Lite-Mode
-  else if(import.meta.env.VITE_TOGGLE === 'true' && to.name === 'Version choice') {
-    return { name: 'Tippingpage'}
+  else if (import.meta.env.VITE_TOGGLE === 'true' && to.name === 'Version choice') {
+    return { name: 'Tippingpage' }
   }
 })
 
+<<<<<<< HEAD
+=======
+//Check if AGBs are accepted
+router.beforeEach(async (next: any) => {
+  if (next.name == 'Payment' && !usePaymentStore().agbChecked) {
+    return {}
+  }
+  //Redirect to vivawallet
+  else if (usePaymentStore().paymentservice == 1) {
+    //router.push(usePaymentStore().url)
+  }
+})
+
+>>>>>>> 7e42382fb96d147bcec40bfb95c17f3a4f0dfa6f
 // Check if the user is authenticated
 function isAuthenticated() {
   if (!keycloak.initailizedKeycloak) {
-    keycloak.keycloak.init({
-      onLoad: 'check-sso',
-      flow: 'implicit'
-    }).then(() => {
-      console.log("keycloak init")
-      keycloak.initailizedKeycloak = true
-      if (!keycloak.keycloak.authenticated) {
-        keycloak.keycloak.login()
-      }
-      return keycloak.keycloak.authenticated
-    }
-    ).catch((error) => {
-      console.log("init keycloak failed", error)
-      console.log(keycloak)
-    }
-    )
+    keycloak.keycloak
+      .init({
+        onLoad: 'check-sso',
+        flow: 'implicit'
+      })
+      .then(() => {
+        console.log('keycloak init')
+        keycloak.initailizedKeycloak = true
+        if (!keycloak.keycloak.authenticated) {
+          keycloak.keycloak.login()
+        }
+        return keycloak.keycloak.authenticated
+      })
+      .catch((error: any) => {
+        console.log('init keycloak failed', error)
+        console.log(keycloak)
+      })
   } else {
-    console.log('isAuthenticated', keycloak.keycloak.authenticated)
     if (!keycloak.keycloak.authenticated) {
       keycloak.keycloak.login()
     }
     return keycloak.keycloak.authenticated
   }
-
 }
 
 export default router
