@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { fetchVendors, postVendors, patchVendor, removeVendor } from '@/api/api'
+import { fetchVendors, postVendors, patchVendor, removeVendor, checkVendorId } from '@/api/api'
+import type { AxiosResponse } from 'axios'
 
 //define interface to store data from backend properly
 export interface Vendor {
@@ -16,12 +17,21 @@ export interface Vendor {
   LicenseID: string
   UrlID: string
   Balance: number
+  IsDisabled: boolean
+  Longitude: number
+  Latitude: number
+  Address: string
+}
+
+export interface VendorCheckResponse {
+  name: string
 }
 
 export const vendorsStore = defineStore('vendors', {
   state: () => {
     return {
-      vendors: [] as Vendor[]
+      vendors: [] as Vendor[],
+      vendorsImportedCount: Number
     }
   },
 
@@ -45,31 +55,51 @@ export const vendorsStore = defineStore('vendors', {
 
     async createVendor(newVendor: Vendor) {
       postVendors(newVendor)
-        .then((data) => {
+        .then(() => {
           this.getVendors()
         })
         .catch((error) => {
           console.log('Error creating vendor:', error)
         })
     },
+    async createVendorPromise(newVendor: Vendor) {
+      return postVendors(newVendor)
+    },
+
+    async createVendors(vendors: Array<Vendor>) {
+      for (let i = 0; i < vendors.length; i++) {
+        if (vendors[i] !== null) {
+          if (vendors[i].LicenseID === '' || vendors[i].LicenseID === null || vendors[i].LicenseID === undefined) {
+            return null
+          }
+          this.vendorsImportedCount = (i+1)
+          const vendorCheck = await checkVendorId(vendors[i].LicenseID)
+          if (vendorCheck === null) {
+            await this.createVendorPromise(vendors[i])
+          }
+
+        };
+      }
+    },
 
     async updateVendor(updatedVendor: Vendor) {
-      patchVendor(updatedVendor)
-        .then((data) => {
-          this.getVendors()
-        })
-        .catch((error) => {
-          console.log('Error updating vendor:', error)
-        })
-    },
+        patchVendor(updatedVendor)
+          .then(() => {
+            this.getVendors()
+          })
+          .catch((error) => {
+            console.log('Error updating vendor:', error)
+          })
+      },
     async deleteVendor(vendorId: number) {
-      removeVendor(vendorId)
-        .then(() => {
-          this.getVendors()
-        })
-        .catch((error) => {
-          console.log('Error deleting vendor:', error)
-        })
+        removeVendor(vendorId)
+          .then(() => {
+            this.getVendors()
+          })
+          .catch((error) => {
+            console.log('Error deleting vendor:', error)
+          })
+      }
+
     }
-  }
-})
+  })
