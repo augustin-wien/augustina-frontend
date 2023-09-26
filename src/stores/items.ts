@@ -4,10 +4,10 @@ import { fetchItems, postItems, patchItem, removeItem } from '@/api/api'
 //define interface to store data from backend properly
 export interface Item {
   Description: 'string'
-  ID: 0
+  ID: number
   Image: 'string'
   Name: 'string'
-  Price: 0
+  Price: number
 }
 
 export const itemStore = defineStore('items', {
@@ -34,23 +34,12 @@ export const itemStore = defineStore('items', {
     },
 
     async createItem(newItem: Item) {
-      postItems(newItem)
-        .then((data) => {
-          this.getItems()
-        })
-        .catch((error) => {
-          console.log('Error creating item:', error)
-        })
+      return postItems(newItem)
+
     },
 
     async updateItem(updatedItem: Item) {
-      patchItem(updatedItem)
-        .then((data) => {
-          this.getItems()
-        })
-        .catch((error) => {
-          console.log('Error updating item:', error)
-        })
+      return patchItem(updatedItem)
     },
     async deleteItem(itemId: number) {
       removeItem(itemId)

@@ -1,5 +1,5 @@
 <template>
-  <div className="backoffice-layout container h-screen">
+  <div className="backoffice-layout container h-screen" v-if="authenticated">
     <div className="justify-start flex flex-row align-center">
       <div
         className="sidemenu h-screen grid grid-cols-1 text-lg text-center bg-lime-600 text-white space-y-3 p-3"
@@ -73,16 +73,16 @@
 
 <script setup lang="ts">
 import keycloak from '@/keycloak/keycloak'
-import { onMounted } from 'vue'
 import { ref } from 'vue'
 
 const loggedInUser = ref<string | null>(null)
-onMounted(() => {
-  // display the preferred_username of the logged-in user in the variable loggedInUser
+const authenticated = ref<boolean>(keycloak.keycloak.authenticated? true : false)
+keycloak.keycloak.onAuthSuccess = () => {
   if (keycloak.keycloak.tokenParsed && keycloak.keycloak.tokenParsed.preferred_username) {
     loggedInUser.value = keycloak.keycloak.tokenParsed.preferred_username
+    authenticated.value = true
   }
-})
+}
 </script>
 
 <style lang="scss">
