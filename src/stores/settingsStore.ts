@@ -24,8 +24,6 @@ export const settingsStore = defineStore('settings',{
                 const data = await agent.SettingsConfiguration.current()
                 this.settings = []
                 this.settings.push(data)
-                console.log(this.settings)
-                console.log('Settings fetched from database')
                 this.loaded = true
             }
             catch (error) {

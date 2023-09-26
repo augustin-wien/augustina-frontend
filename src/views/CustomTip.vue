@@ -34,7 +34,7 @@ const decrement = paymentStore.decrement
 
                 </div>
                 <div className="flex place-items-center w-full">
-                    <RouterLink class="w-full" to="/confirmation">
+                    <RouterLink class="w-full" :to="{ name: 'Confirmation'}">
                         <button class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
                             Weiter
                         </button>

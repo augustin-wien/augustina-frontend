@@ -3,7 +3,8 @@ import { usePaymentStore } from '@/stores/PaymentStore';
 import { settingsStore } from '@/stores/settingsStore';
 import { onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
-import TippingPage from './TippingPage.vue';
+import { useVendorStore } from '@/stores/vendor';
+const vendorStore = useVendorStore()
 const paymentStore = usePaymentStore()
 const settStore = settingsStore()
 onMounted(settStore.fetchSettings)
@@ -20,7 +21,7 @@ onMounted(settStore.fetchSettings)
                     </div>
                     <div class="flex place-content-center">
                         <div class="text-center min-w-fit h-4/5 text-4xl rounded-full text-black font-bold">
-                            Doris
+                            {{ vendorStore.vendorName }}
                         </div>
                     </div>
                     <div class="place-items-center w-full flex">

@@ -1,4 +1,5 @@
 import agent from '@/api/agent'
+import router from '@/router'
 import { defineStore } from 'pinia'
 
 export const useVendorStore = defineStore('vendor', {
@@ -11,10 +12,11 @@ export const useVendorStore = defineStore('vendor', {
   actions: {
     async checkID(vendorId: string | string[]) {
       const response = await agent.Vendor.checkID(vendorId)
-      console.log(response.FirstName)
       this.vendorName = response.FirstName
       if(this.vendorName !== ""){
-        
+        router.push({name: "LandingPage"})
+      }
+      else{
       }
     }
   }

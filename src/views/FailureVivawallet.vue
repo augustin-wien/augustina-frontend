@@ -15,7 +15,7 @@ import { RouterLink } from 'vue-router'
                 <div class="text-center pt-8">
                     Erneut versuchen
                 </div>
-                <RouterLink class="w-full" to="/">
+                <RouterLink class="w-full" to="{ name: 'LandingPage' }">
                     <button class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
                         Start
                     </button>
