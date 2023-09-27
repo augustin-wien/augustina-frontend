@@ -83,9 +83,24 @@ export const usePaymentStore = defineStore('payment',{
         this.price = this.price + (this.pricePerPaper * n)
       },
 
+      //AGB
+      checkAgb() {
+        if(this.agbChecked) {
+          router.push({ name: 'Payment' })
+        }
+        else {
+          console.log('pls check AGB')
+        }
+      },
+
+      toAGB() {
+        console.log(import.meta.env.VITE_AGB_URL)
+        window.location.href = import.meta.env.VITE_AGB_URL
+      },
+
       //vivawallet methodes
-      async postPrice(price: number) {
-        this.response[0] = await agent.VivaWallet.postPrice(price)
+      async postOrder(item: number, quantity: number, vendorLicenseID: string) {
+        this.response[0] = await agent.VivaWallet.postOrder(item, quantity, vendorLicenseID)
         this.url = this.response[0].SmartCheckoutURL
         window.location.href = this.url
       },
@@ -96,7 +111,12 @@ export const usePaymentStore = defineStore('payment',{
         else {
           this.verification[0] = await agent.VivaWallet.verifyPayment(this.transactionID)
           this.verified = this.verification[0].verification
+        }
+        if(this.verified === true){
           router.push('/paymentconfirmation')
+        }
+        else{
+          router.push('/failure')
         }
       }
     }

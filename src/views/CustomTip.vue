@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { usePaymentStore } from '@/stores/PaymentStore'
-import { RouterLink } from 'vue-router'
+import { usePaymentStore } from '@/stores/PaymentStore';
+import { RouterLink } from 'vue-router';
 
 const paymentStore = usePaymentStore()
 
@@ -14,7 +14,7 @@ const decrement = paymentStore.decrement
         <template #main>
             <div className="h-full grid grid-rows-5 place-items-center">
                 <div className="text-center font-semibold text-3xl row-span-2">
-                    Trinkgeld eingeben:
+                    Spende eingeben:
                 </div>
                 <div className="grid grid-cols-5 w-full h-full">
                     <button @click="decrement()">
@@ -34,7 +34,7 @@ const decrement = paymentStore.decrement
 
                 </div>
                 <div className="flex place-items-center w-full">
-                    <RouterLink class="w-full" to="/confirmation">
+                    <RouterLink class="w-full" :to="{ name: 'Confirmation'}">
                         <button class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
                             Weiter
                         </button>
@@ -45,4 +45,6 @@ const decrement = paymentStore.decrement
     </component>
 </template>
 
-<style scoped>@import "../assets/arrows.css"</style>
+<style scoped>
+@import "../assets/arrows.css"
+</style>

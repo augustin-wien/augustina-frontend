@@ -1,6 +1,5 @@
 <script setup lang="ts">
     import { usePaymentStore } from '@/stores/PaymentStore'
-    import { RouterLink} from 'vue-router'
     const paymentStore = usePaymentStore()
 </script>
 
@@ -16,12 +15,12 @@
                 </div>
                 <div>
                     <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked"/>
-                    <label for="checkbox"> Mit Kauf aktzeptiere ich die <RouterLink to="/" class="text-blue-600">AGBs</RouterLink></label>
+                    <label for="checkbox"> Mit Kauf aktzeptiere ich die <button @click="paymentStore.toAGB()" class="text-blue-600">AGBs</button></label>
                 </div>
                 <div className="flex place-items-center w-full">
-                    <RouterLink class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full" :class="{'bg-green-600': paymentStore.agbChecked}" to="/Payment">
+                    <button @click="paymentStore.checkAgb()" class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full" :class="{'bg-green-600': paymentStore.agbChecked}" to="/payment">
                         Weiter
-                    </RouterLink>
+                    </button>
                 </div>
             </div>
         </template>
