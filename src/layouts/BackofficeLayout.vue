@@ -5,7 +5,7 @@
         className="sidemenu h-screen grid grid-cols-1 text-lg text-center bg-lime-600 text-white space-y-3 p-3"
       >
         <div className="sidemenu-item object-center">
-          <img src="../assets/logo.svg" alt="Augustin logo" className="logo mx-auto my-5" width="270" height="150" />
+          <img :src="apiUrl+'img/logo.png'" alt="Augustin logo" className="logo mx-auto my-5" width="270" height="150" />
         </div>
         <hr />
         <div className="sidemenu-item">
@@ -83,6 +83,7 @@ keycloak.keycloak.onAuthSuccess = () => {
     authenticated.value = true
   }
 }
+const apiUrl = import.meta.env.VITE_API_URL
 </script>
 
 <style lang="scss">

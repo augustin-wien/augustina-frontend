@@ -16,7 +16,7 @@
           <div class="products">
             <div class="grid grid-cols-5 gap-4" v-for="(item, ID) in items" :key="ID">
               <div class="p-3">
-                <img :src="apiUrl + item.Image" alt="Kein Bild" class="logo mx-auto my-5" width="80" height="auto" />
+                <img :src="item.Image?apiUrl + item.Image:''" alt="Kein Bild" class="logo mx-auto my-5" width="80" height="auto" />
               </div>
               <div class="p-3 font-bold">{{ item.Name }}</div>
               <div class="p-3 font-light">{{ item.Description }}</div>
