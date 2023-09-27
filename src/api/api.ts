@@ -107,9 +107,16 @@ export async function fetchSettings() {
 }
 
 export async function patchSettings(updatedSettings: Settings) {
+
+  const formData = new FormData();
+  formData.append('Color', updatedSettings.Color);
+  formData.append('Logo', updatedSettings.Logo);
+  formData.append('MainItem', updatedSettings.MainItem.toString());
+  formData.append('RefundFees', updatedSettings.RefundFees.toString());
+
   return apiInstance.put(
-    `${SETTINGS_API_URL}${updatedSettings}/`,
-    JSON.stringify(updatedSettings),
+    `${SETTINGS_API_URL}`,
+    formData,
     {
       headers: {
         accept: 'application/json',

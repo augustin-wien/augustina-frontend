@@ -21,7 +21,7 @@
               <div class="p-3 font-bold">{{ item.Name }}</div>
               <div class="p-3 font-light">{{ item.Description }}</div>
 
-              <div class="p-3 font-light">{{ item.Price.toFixed(2) / 100 }} Euro</div>
+              <div class="p-3 font-light">{{ price(item.Price) }} Euro</div>
               <div class="p-3">
                 <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
                   <button class="p-2 rounded-full bg-lime-600 text-white mr-2">Ändern</button>
@@ -54,6 +54,9 @@ onMounted(() => {
 })
 const items = computed(() => store.items)
 const apiUrl = import.meta.env.VITE_API_URL
+const price = (price: number) => {
+  return (price / 100).toFixed(2)
+}
 </script>
 
 <style scoped>

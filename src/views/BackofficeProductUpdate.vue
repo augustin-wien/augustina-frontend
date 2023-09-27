@@ -38,7 +38,8 @@
                 <input
                   class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   accept="image/png, image/jpeg"
-                  @change="updateImage" type="file" id="image" />
+                  @change="updateImage"
+                  type="file" id="image" />
               </div>
             </div>
 
@@ -185,12 +186,7 @@ const showToast = (type: string, message: string) => {
 }
 
 const updateImage = (event: any) => {
-  const file = event.target.files[0]
-  const reader = new FileReader()
-  reader.readAsDataURL(file)
-  reader.onload = () => {
-    updatedItem.value.Image = reader.result as string
-  }
+  updatedItem.value.Image = event.target.files[0]
 }
 
 const apiUrl = import.meta.env.VITE_API_URL
