@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { usePaymentStore } from '@/stores/PaymentStore'
+import { settingsStore } from '@/stores/settings'
+import { useVendorStore } from '@/stores/vendor'
 
 
 const paymentStore = usePaymentStore()
+const settings = settingsStore()
+const vendorStore = useVendorStore()
 
 onMounted(() => {
-  paymentStore.postOrder(1, 1, 1)
+  // todo add multiple items
+  paymentStore.postOrder(settings.settings.MainItem, 1, vendorStore.vendorid)
 })
 </script> 
 

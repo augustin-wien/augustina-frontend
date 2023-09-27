@@ -15,10 +15,10 @@ const SettingsConfiguration = {
 }
 
 const VivaWallet = {
-    postOrder: (item: number, quantity: number, vendor: number): 
+    postOrder: (item: number, quantity: number, vendorLicenseID: string): 
         Promise<VivaWalletResponse> => apiInstance
             .post(VIVAWALLET_TRANSACTION_ORDER, 
-                { entries: [{item: item, quantity: quantity}], user: "user", vendor: vendor }, 
+                { entries: [{item: item, quantity: quantity}], user: "user", vendorLicenseID: vendorLicenseID }, 
                 { headers: { 'Content-Type': 'application/json' } })
                 .then(sleep(100)).then(responseBody),
     verifyPayment: (vivaTransactionID: string):

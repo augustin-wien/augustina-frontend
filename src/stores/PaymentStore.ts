@@ -99,8 +99,8 @@ export const usePaymentStore = defineStore('payment',{
       },
 
       //vivawallet methodes
-      async postOrder(item: number, quantity: number, vendor: number) {
-        this.response[0] = await agent.VivaWallet.postOrder(item, quantity, vendor)
+      async postOrder(item: number, quantity: number, vendorLicenseID: string) {
+        this.response[0] = await agent.VivaWallet.postOrder(item, quantity, vendorLicenseID)
         this.url = this.response[0].SmartCheckoutURL
         window.location.href = this.url
       },
