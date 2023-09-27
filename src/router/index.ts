@@ -287,6 +287,7 @@ router.beforeEach(async (next: any) => {
 // Check if the user is authenticated
 function isAuthenticated() {
   if (!keycloak.initailizedKeycloak) {
+
     keycloak.keycloak
       .init({
         onLoad: 'check-sso',
@@ -297,7 +298,33 @@ function isAuthenticated() {
         keycloak.initailizedKeycloak = true
         if (!keycloak.keycloak.authenticated) {
           keycloak.keycloak.login()
-        }
+        } 
+        keycloak.keycloak.onAuthError = () => {
+          console.log("onAuthError");
+        };
+        keycloak.keycloak.onAuthRefreshSuccess = () => {
+          console.log("onAuthRefreshSuccess");
+        };
+        keycloak.keycloak.onAuthRefreshError = () => {
+          console.log("onAuthRefreshError");
+        };
+        keycloak.keycloak.onAuthLogout = () => {
+          console.log("onAuthLogout");
+          keycloak.keycloak.logout();
+        };
+        keycloak.keycloak.onTokenExpired = () => {
+          console.log("onTokenExpired");
+          keycloak.keycloak.updateToken(30)
+        };
+        keycloak.keycloak.onReady = (authenticated) => {
+          console.log("onReady", authenticated);
+          if (!authenticated) {
+            keycloak.keycloak.login({
+              locale: "de",
+              redirectUri: window.location.origin + window.location.pathname + "/",
+            });
+          }
+        };
         return keycloak.keycloak.authenticated
       })
       .catch((error: any) => {

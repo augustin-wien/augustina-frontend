@@ -70,7 +70,12 @@ export async function fetchItems() {
 }
 
 export async function postItems(newItem: Item) {
-  return apiInstance.post(VENDORS_API_URL, JSON.stringify(newItem), {
+  const formData = new FormData();
+  formData.append('Image', newItem.Image);
+  formData.append('Name', newItem.Name);
+  formData.append('Price', newItem.Price.toString());
+  formData.append('Description', newItem.Description);
+  return apiInstance.post(ITEMS_API_URL, formData, {
     headers: {
       accept: 'application/json',
       'Content-Type': 'multipart/form-data'
@@ -79,7 +84,12 @@ export async function postItems(newItem: Item) {
 }
 
 export async function patchItem(updatedItem: Item) {
-  return apiInstance.put(`${VENDORS_API_URL}${updatedItem.ID}/`, JSON.stringify(updatedItem), {
+  const formData = new FormData();
+  formData.append('Image', updatedItem.Image);
+  formData.append('Name', updatedItem.Name);
+  formData.append('Price', updatedItem.Price.toString());
+  formData.append('Description', updatedItem.Description);
+  return apiInstance.put(`${ITEMS_API_URL}${updatedItem.ID}/`, formData, {
     headers: {
       accept: 'application/json',
       'Content-Type': 'multipart/form-data'
@@ -88,7 +98,7 @@ export async function patchItem(updatedItem: Item) {
 }
 
 export async function removeItem(itemId: number) {
-  return apiInstance.delete(`${VENDORS_API_URL}${itemId}/`)
+  return apiInstance.delete(`${ITEMS_API_URL}${itemId}/`)
 }
 
 //settings
@@ -97,9 +107,16 @@ export async function fetchSettings() {
 }
 
 export async function patchSettings(updatedSettings: Settings) {
+
+  const formData = new FormData();
+  formData.append('Color', updatedSettings.Color);
+  formData.append('Logo', updatedSettings.Logo);
+  formData.append('MainItem', updatedSettings.MainItem.toString());
+  formData.append('RefundFees', updatedSettings.RefundFees.toString());
+
   return apiInstance.put(
-    `${SETTINGS_API_URL}${updatedSettings}/`,
-    JSON.stringify(updatedSettings),
+    `${SETTINGS_API_URL}`,
+    formData,
     {
       headers: {
         accept: 'application/json',
