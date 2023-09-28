@@ -4,7 +4,7 @@ ROOT_DIR=/usr/share/nginx/html
 
 # Replace env vars in JavaScript files
 api_url=$(echo "$VITE_API_URL" | sed 's/\//\\\//g') 
-for file in $ROOT_DIR/assets/index*.js* $ROOT_DIR/index.html;
+for file in $ROOT_DIR/assets/*.js* $ROOT_DIR/index.html;
 do
   echo "Processing $file ...";
 
