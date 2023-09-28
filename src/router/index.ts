@@ -85,6 +85,135 @@ const router = createRouter({
       ]
     },
     {
+      path: '/backoffice/credits',
+      name: 'Backoffice Credit',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeCredits.vue')
+    },
+
+    {
+      path: '/backoffice/credits/payout/:ID',
+      name: 'Credit Payout',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      props: true,
+      component: () => import('../views/BackofficeCreditPayout.vue')
+    },
+    {
+      path: '/backoffice/accounting',
+      name: 'Backoffice Accounting',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeAccounting.vue')
+    },
+    {
+      path: '/backoffice/logs',
+      name: 'Backoffice Logs',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeLogs.vue')
+    },
+    {
+      path: '/backoffice/inbox',
+      name: 'Backoffice Inbox',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeInbox.vue')
+    },
+    {
+      path: '/backoffice/vendorsummary',
+      name: 'Vendor Summary',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeVendorSummary.vue')
+    },
+    {
+      path: '/backoffice/newvendor',
+      name: 'New Vendor',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeNewVendor.vue')
+    },
+    {
+      path: '/backoffice/userprofile/:ID',
+      name: 'Vendor Profile',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeUserProfile.vue')
+    },
+    {
+      path: '/backoffice/userprofile/:ID/update',
+      name: 'Update Vendor Profile',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeUpdateVendor.vue')
+    },
+    {
+      path: '/backoffice/settings',
+      name: 'Backoffice Settings',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeSettings.vue')
+    },
+    {
+      path: '/backoffice/settings/update',
+      name: 'Update Backoffice Settings',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeUpdateAugustin.vue')
+    },
+
+    {
+      path: '/backoffice/productsettings',
+      name: 'Backoffice Product Settings',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeProductSettings.vue')
+    },
+    {
+      path: '/backoffice/newproduct',
+      name: 'New Product',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeNewProduct.vue')
+    },
+    {
+      path: '/backoffice/productsettings/update/:ID',
+      name: 'Update Product',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/BackofficeProductUpdate.vue')
+    },
+    {
       path: '/404',
       name: '404',
       component: () => import('../views/404View.vue'),
