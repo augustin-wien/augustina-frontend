@@ -79,7 +79,7 @@ td {
 
 <script lang="ts" setup>
 // Import necessary dependencies and types
-import { vendorsStore } from '../stores/vendor'
+import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { ref, computed, onMounted } from 'vue'
 import QRCodeStyling from 'qr-code-styling'

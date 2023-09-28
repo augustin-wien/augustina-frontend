@@ -26,7 +26,7 @@
                 </tr>
                 <tr>
                   <th className="p-3">Aktuelles Guthaben:</th>
-                  <td className="p-3">{{ vendor.Balance }} €</td>
+                  <td className="p-3">{{ formatCredit(vendor.Balance) }} €</td>
                 </tr>
               </tbody>
             </div>
@@ -42,7 +42,7 @@
   </component>
 </template>
 
-<style>
+<style scoped>
 tr {
   padding: 10px;
 }
@@ -52,7 +52,7 @@ td {
 </style>
 
 <script lang="ts" setup>
-import { vendorsStore, type Vendor } from '../stores/vendor'
+import { vendorsStore, type Vendor } from '@/stores/vendor'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -71,4 +71,8 @@ const vendor = computed(() => {
     return null
   }
 })
+
+const formatCredit = (credit: number) => {
+  return (credit / 100).toFixed(2)
+}
 </script>

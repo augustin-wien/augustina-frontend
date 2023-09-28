@@ -18,8 +18,6 @@ export const payoutStore = defineStore('payout', {
     async postPayout(payout: Payout) {
       try {
         // Send a request to post the payout data to the API
-        console.log(payout)
-
         const data = await postPayout(payout)
         // Update the 'payout' state with the response data
         //@ts-ignore

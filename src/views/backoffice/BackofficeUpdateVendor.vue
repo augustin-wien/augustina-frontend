@@ -92,7 +92,7 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { vendorsStore } from '../stores/vendor'
+import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'

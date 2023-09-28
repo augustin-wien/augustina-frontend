@@ -55,6 +55,9 @@ export async function patchVendor(updatedVendor: Vendor) {
 export async function removeVendor(vendorId: number) {
   return apiInstance.delete(`${VENDORS_API_URL}${vendorId}/`)
 }
+export async function getVendor(vendorId: number) {
+  return apiInstance.get(`${VENDORS_API_URL}${vendorId}/`)
+}
 
 export async function checkVendorId(vendorId: string) {
   return apiInstance.get(`${VENDORS_API_URL}check/${vendorId}/`).then((response) => {

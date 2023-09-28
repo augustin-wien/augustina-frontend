@@ -1,4 +1,4 @@
-import keycloak from '@/keycloak/keycloak'
+import keycloak, {initKeycloak} from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
 import Default from '@/layouts/DefaultLayout.vue'
 import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
@@ -92,7 +92,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeCredits.vue')
+      component: () => import('../views/backoffice/BackofficeCredits.vue')
     },
 
     {
@@ -103,7 +103,7 @@ const router = createRouter({
         requiresAuth: true
       },
       props: true,
-      component: () => import('../views/BackofficeCreditPayout.vue')
+      component: () => import('../views/backoffice/BackofficeCreditPayout.vue')
     },
     {
       path: '/backoffice/accounting',
@@ -112,7 +112,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeAccounting.vue')
+      component: () => import('../views/backoffice/BackofficeAccounting.vue')
     },
     {
       path: '/backoffice/logs',
@@ -121,7 +121,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeLogs.vue')
+      component: () => import('../views/backoffice/BackofficeLogs.vue')
     },
     {
       path: '/backoffice/inbox',
@@ -130,7 +130,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeInbox.vue')
+      component: () => import('../views/backoffice/BackofficeInbox.vue')
     },
     {
       path: '/backoffice/vendorsummary',
@@ -139,7 +139,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeVendorSummary.vue')
+      component: () => import('../views/backoffice/BackofficeVendorSummary.vue')
     },
     {
       path: '/backoffice/newvendor',
@@ -148,7 +148,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeNewVendor.vue')
+      component: () => import('../views/backoffice/BackofficeNewVendor.vue')
     },
     {
       path: '/backoffice/userprofile/:ID',
@@ -157,7 +157,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeUserProfile.vue')
+      component: () => import('../views/backoffice/BackofficeUserProfile.vue')
     },
     {
       path: '/backoffice/userprofile/:ID/update',
@@ -166,7 +166,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeUpdateVendor.vue')
+      component: () => import('../views/backoffice/BackofficeUpdateVendor.vue')
     },
     {
       path: '/backoffice/settings',
@@ -175,7 +175,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeSettings.vue')
+      component: () => import('../views/backoffice/BackofficeSettings.vue')
     },
     {
       path: '/backoffice/settings/update',
@@ -184,7 +184,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeUpdateAugustin.vue')
+      component: () => import('../views/backoffice/BackofficeUpdateAugustin.vue')
     },
 
     {
@@ -194,7 +194,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeProductSettings.vue')
+      component: () => import('../views/backoffice/BackofficeProductSettings.vue')
     },
     {
       path: '/backoffice/newproduct',
@@ -203,7 +203,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeNewProduct.vue')
+      component: () => import('../views/backoffice/BackofficeNewProduct.vue')
     },
     {
       path: '/backoffice/productsettings/update/:ID',
@@ -212,7 +212,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/BackofficeProductUpdate.vue')
+      component: () => import('../views/backoffice/BackofficeProductUpdate.vue')
     },
     {
       path: '/404',
@@ -271,47 +271,9 @@ router.beforeEach(async (to: any) => {
 
 // Check if the user is authenticated
 async function isAuthenticated() {
-  console.log('isAuthenticated')
   if (!keycloak.initailizedKeycloak) {
-    console.log('isAuthenticated1')
     try {
-      const resp = await keycloak.keycloak
-        .init({
-          onLoad: 'check-sso',
-          flow: 'implicit'
-        })
-      console.log('keycloak init')
-
-      keycloak.initailizedKeycloak = true
-      if (!keycloak.keycloak.authenticated) {
-        keycloak.keycloak.login()
-      }
-      keycloak.keycloak.onAuthError = () => {
-        console.log("onAuthError");
-      };
-      keycloak.keycloak.onAuthRefreshSuccess = () => {
-        console.log("onAuthRefreshSuccess");
-      };
-      keycloak.keycloak.onAuthRefreshError = () => {
-        console.log("onAuthRefreshError");
-      };
-      keycloak.keycloak.onAuthLogout = () => {
-        console.log("onAuthLogout");
-        keycloak.keycloak.logout();
-      };
-      keycloak.keycloak.onTokenExpired = () => {
-        console.log("onTokenExpired");
-        keycloak.keycloak.updateToken(30)
-      };
-      keycloak.keycloak.onReady = (authenticated) => {
-        console.log("onReady", authenticated);
-        if (!authenticated) {
-          keycloak.keycloak.login({
-            locale: "de",
-            redirectUri: window.location.origin + window.location.pathname + "/",
-          });
-        }
-      }
+      const resp = await initKeycloak()
     } catch (error) {
       console.log('init keycloak failed', error)
     }
@@ -322,9 +284,6 @@ async function isAuthenticated() {
     }
     return keycloak.keycloak.authenticated
   } else {
-    if (!keycloak.keycloak.authenticated) {
-      keycloak.keycloak.login()
-    }
     return keycloak.keycloak.authenticated
   }
 }
