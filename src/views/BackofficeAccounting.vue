@@ -6,27 +6,21 @@
         <div className="text-center  space-y-3 space-x-3">
           <h1 className="font-bold mt-3 pt-3 text-2xl">Umsätze</h1>
           <p className="text-lg">Zeitraum eingeben:</p>
-          <VueDatePicker
-            v-model="date"
-            range
-            :enable-time-picker="false"
-            placeholder="Zeitraum wählen"
-            @range-start="onRangeStart"
-            @range-end="onRangeEnd"
-          />
+          <VueDatePicker v-model="date" range :enable-time-picker="false" placeholder="Zeitraum wählen"
+            @range-start="onRangeStart" @range-end="onRangeEnd" />
           <div className="table-auto border-spacing-4 border-collapse">
             <thead>
               <tr>
                 <th className="p-3">Datum</th>
                 <th className="p-3">Betrag</th>
-                <th className="p-3">Nummer</th>
+                <th className="p-3">Betreff</th>
               </tr>
             </thead>
             <tbody className="text-sm">
               <tr v-for="(payment, id) in payments" :key="id">
-                <td className="border-t-2 p-3">{{ payment.orderEntry }}</td>
-                <td className="border-t-2 p-3">{{ payment.amount }} €</td>
-                <td className="border-t-2 p-3">{{ payment.receiver }}</td>
+                <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
+                <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
+                <td className="border-t-2 p-3">von {{ payment.Sender }} an {{ payment.Receiver }}{{ payment.AuthorizedBy?' durch '+payment.AuthorizedBy:'' }}</td>
               </tr>
             </tbody>
           </div>
@@ -39,21 +33,28 @@
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { ref, onMounted, computed } from 'vue'
-import { paymentlist } from '../stores/paymentdata'
+import { ref, onMounted, computed, watch } from 'vue'
+import { usePaymentStore } from '@/stores/paymentdata'
+import { useKeycloakStore } from '@/stores/keycloak';
 
-const date = ref()
-const startDate = ref('')
-const endDate = ref('')
 
-// For demo purposes assign range from the current date
-onMounted(() => {
-  const startDate = new Date()
-  const endDate = new Date(new Date().setDate(startDate.getDate() + 7))
-  date.value = [startDate, endDate]
-})
+const startDate = ref<Date>(new Date(new Date().setDate(new Date().getDate() - 1)))
+const endDate = ref(new Date(new Date().setDate(startDate.value.getDate() + 1)))
+const date = ref([startDate.value, endDate.value])
 
-const store = paymentlist()
+const keycloakStore = useKeycloakStore()
+const store = usePaymentStore()
+
+
+if (keycloakStore.authenticated) {
+  store.getPayments(startDate.value.toISOString(), endDate.value.toISOString())
+} else {
+  watch(keycloakStore.authenticated, (newVal) => {
+    store.getPayments(startDate.value.toISOString(), endDate.value.toISOString())
+  })
+}
+
+
 //fetch paymentlist data once component is mounted
 
 const onRangeStart = (value: any) => {
@@ -66,13 +67,26 @@ const onRangeEnd = (value: any) => {
   store.getPayments(startDate.value, endDate.value)
 }
 
-const payments = computed(() => store.paymentlist)
+const formatAmount = (amount: number) => {
+  return (amount / 100).toFixed(2)
+}
+
+const formatTime = (time: string) => {
+  const date = new Date(time)
+  return date.toLocaleDateString('de-DE', {
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+const payments = computed(() => store.payments)
 </script>
 
 <style>
 tr {
   padding: 10px;
 }
+
 td {
   padding: 10px;
 }
