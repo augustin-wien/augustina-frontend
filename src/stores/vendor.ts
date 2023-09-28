@@ -16,7 +16,7 @@ export const useVendorStore = defineStore('vendor', {
         this.vendorName = response.FirstName
         this.vendorid = typeof vendorId == "string"? vendorId : vendorId[0]
         if (this.vendorName !== "") {
-          router.push(`/${vendorId}/landing-page`)
+          router.push(`/v/${vendorId}/landing-page`)
         }
       }).catch(() => {
         router.push({ name: "Home" })
