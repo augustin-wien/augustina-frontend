@@ -103,9 +103,9 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { settingsStore, type Settings } from '../stores/settings'
+import { settingsStore, type Settings } from '@/stores/settings'
 import { itemStore } from '@/stores/items'
-import toast from '../components/ToastMessage.vue'
+import toast from '@/components/ToastMessage.vue'
 
 const store = settingsStore()
 const storeItems = itemStore()
