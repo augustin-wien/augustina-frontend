@@ -26,6 +26,18 @@ apiInstance.interceptors.request.use(
   }
 )
 
+apiInstance.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    if (error.response.status === 401) {
+      keycloak.keycloak.logout()
+    }
+    return Promise.reject(error)
+  }
+)
+
 export function getAuthHello() {
   return apiInstance.get(AUTH_API_URL)
 }
