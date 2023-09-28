@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div className="backoffice-layout container h-screen" v-if="authenticated">
+    <div className="backoffice-layout container h-screen" v-if="keycloakStore.authenticated">
       <div className="justify-start flex flex-row align-center">
         <div className="sidemenu h-screen grid grid-cols-1 text-lg text-center bg-lime-600 text-white space-y-3 p-3">
           <div className="sidemenu-item object-center">
@@ -57,7 +57,7 @@
             </button>
           </div>
           <hr />
-          <p v-if="loggedInUser">{{ loggedInUser }} ist eingeloggt</p>
+          <p v-if="keycloakStore.username">{{ keycloakStore.username }} ist eingeloggt</p>
           <p v-else>Not logged in</p>
         </div>
       </div>
@@ -77,16 +77,17 @@
 
 <script setup lang="ts">
 import keycloak from '@/keycloak/keycloak'
-import { ref } from 'vue'
+import { useKeycloakStore } from '@/stores/keycloak';
+import  { storeToRefs } from 'pinia';
+import { ref, watch } from 'vue'
 
-const loggedInUser = ref<string | null>(null)
-const authenticated = ref<boolean>(keycloak.keycloak.authenticated ? true : false)
-keycloak.keycloak.onAuthSuccess = () => {
-  if (keycloak.keycloak.tokenParsed && keycloak.keycloak.tokenParsed.preferred_username) {
-    loggedInUser.value = keycloak.keycloak.tokenParsed.preferred_username
-    authenticated.value = true
-  }
-}
+
+const keycloakStore = storeToRefs(useKeycloakStore())
+
+const authenticated = watch(keycloakStore.isAuthenticated, (newVal) => {
+  return newVal
+})
+
 const apiUrl = import.meta.env.VITE_API_URL
 </script>
 

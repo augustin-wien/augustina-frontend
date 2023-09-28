@@ -2,6 +2,7 @@ import keycloak from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
 import Default from '@/layouts/DefaultLayout.vue'
 import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
+import { useKeycloakStore } from '@/stores/keycloak'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -269,52 +270,57 @@ router.beforeEach(async (to: any) => {
 })
 
 // Check if the user is authenticated
-function isAuthenticated() {
+async function isAuthenticated() {
+  console.log('isAuthenticated')
   if (!keycloak.initailizedKeycloak) {
+    console.log('isAuthenticated1')
+    try {
+      const resp = await keycloak.keycloak
+        .init({
+          onLoad: 'check-sso',
+          flow: 'implicit'
+        })
+      console.log('keycloak init')
 
-    keycloak.keycloak
-      .init({
-        onLoad: 'check-sso',
-        flow: 'implicit'
-      })
-      .then(() => {
-        console.log('keycloak init')
-        keycloak.initailizedKeycloak = true
-        if (!keycloak.keycloak.authenticated) {
-          keycloak.keycloak.login()
-        } 
-        keycloak.keycloak.onAuthError = () => {
-          console.log("onAuthError");
-        };
-        keycloak.keycloak.onAuthRefreshSuccess = () => {
-          console.log("onAuthRefreshSuccess");
-        };
-        keycloak.keycloak.onAuthRefreshError = () => {
-          console.log("onAuthRefreshError");
-        };
-        keycloak.keycloak.onAuthLogout = () => {
-          console.log("onAuthLogout");
-          keycloak.keycloak.logout();
-        };
-        keycloak.keycloak.onTokenExpired = () => {
-          console.log("onTokenExpired");
-          keycloak.keycloak.updateToken(30)
-        };
-        keycloak.keycloak.onReady = (authenticated) => {
-          console.log("onReady", authenticated);
-          if (!authenticated) {
-            keycloak.keycloak.login({
-              locale: "de",
-              redirectUri: window.location.origin + window.location.pathname + "/",
-            });
-          }
-        };
-        return keycloak.keycloak.authenticated
-      })
-      .catch((error: any) => {
-        console.log('init keycloak failed', error)
-        console.log(keycloak)
-      })
+      keycloak.initailizedKeycloak = true
+      if (!keycloak.keycloak.authenticated) {
+        keycloak.keycloak.login()
+      }
+      keycloak.keycloak.onAuthError = () => {
+        console.log("onAuthError");
+      };
+      keycloak.keycloak.onAuthRefreshSuccess = () => {
+        console.log("onAuthRefreshSuccess");
+      };
+      keycloak.keycloak.onAuthRefreshError = () => {
+        console.log("onAuthRefreshError");
+      };
+      keycloak.keycloak.onAuthLogout = () => {
+        console.log("onAuthLogout");
+        keycloak.keycloak.logout();
+      };
+      keycloak.keycloak.onTokenExpired = () => {
+        console.log("onTokenExpired");
+        keycloak.keycloak.updateToken(30)
+      };
+      keycloak.keycloak.onReady = (authenticated) => {
+        console.log("onReady", authenticated);
+        if (!authenticated) {
+          keycloak.keycloak.login({
+            locale: "de",
+            redirectUri: window.location.origin + window.location.pathname + "/",
+          });
+        }
+      }
+    } catch (error) {
+      console.log('init keycloak failed', error)
+    }
+    const keycloakStore = useKeycloakStore()
+    keycloakStore.setAuthenticated(keycloak.keycloak.authenticated)
+    if (keycloak.keycloak.tokenParsed){
+      keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
+    }
+    return keycloak.keycloak.authenticated
   } else {
     if (!keycloak.keycloak.authenticated) {
       keycloak.keycloak.login()
