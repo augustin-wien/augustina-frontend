@@ -15,6 +15,9 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/vue-fontawesome": "^3.0.3",
     "@stripe/stripe-js": "^1.54.1",
     "@vue-stripe/vue-stripe": "^4.5.0",
     "@vue/server-renderer": "^3.3.4",
