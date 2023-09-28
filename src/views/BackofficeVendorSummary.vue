@@ -146,7 +146,7 @@ const generateQRCode = async (vendor: Vendor) => {
   const canvas = document.getElementById('canvas')
   if (canvas !== null) {
     qrCode.append(canvas)
-    qrCode.download({ name: 'qr', extension: 'svg' })
+    qrCode.download({ name: 'qr', extension: 'png' })
     canvas.innerHTML = ''
   }
 }
