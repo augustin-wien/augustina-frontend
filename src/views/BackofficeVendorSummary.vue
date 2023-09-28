@@ -87,6 +87,7 @@ import QRCodeStyling from 'qr-code-styling'
 // Initialize the vendor store
 const store = vendorsStore()
 
+
 // Fetch the vendors' data when the component is mounted
 onMounted(() => {
   store.getVendors()
