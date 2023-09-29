@@ -1,5 +1,8 @@
 <script setup lang="ts">
-    import { usePaymentStore } from '@/stores/PaymentStore'
+    import { usePaymentStore } from '@/stores/PaymentStore';
+    import { settingsStore } from '@/stores/settings';
+
+    const settStore = settingsStore()
     const paymentStore = usePaymentStore()
 </script>
 
@@ -18,7 +21,7 @@
                     <label for="checkbox"> Mit Kauf aktzeptiere ich die <button @click="paymentStore.toAGB()" class="text-blue-600">AGBs</button></label>
                 </div>
                 <div className="flex place-items-center w-full">
-                    <button @click="paymentStore.checkAgb()" class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full" :class="{'bg-green-600': paymentStore.agbChecked}" to="/payment">
+                    <button @click="paymentStore.checkAgb()" class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full" :class="{'customcolor': paymentStore.agbChecked}" to="/payment">
                         Weiter
                     </button>
                 </div>
@@ -26,3 +29,9 @@
         </template>
     </component>
 </template>@/stores/settingsStore@/stores/PaymentStore@/stores/PaymentStore@/stores/PaymentStore
+
+<style>
+.customcolor{
+    background-color: v-bind(settStore.settings.Color);
+}
+</style>

@@ -12,7 +12,7 @@ const router = createRouter({
       meta: {
         layout: Default
       },
-      component: () => import('../views/HomeView.vue')
+      component: () => import('../views/ParentPaymentProcess.vue')
     },
     {
       path: '/:id',
@@ -86,6 +86,11 @@ const router = createRouter({
           path: '/:id/shop',
           name: 'Shop',
           component: () => import('../views/ShopPage.vue'),
+        },
+        {
+          path: '/:id/go-to-vendor',
+          name: 'Go to Vendor',
+          component: () => import('../views/GoToVendor.vue')
         }
       ]
     },

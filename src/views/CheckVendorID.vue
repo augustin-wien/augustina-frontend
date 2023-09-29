@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useVendorStore } from '@/stores/vendor';
 import { useRoute } from 'vue-router';
 import { settingsStore } from '@/stores/settings';
+import { checkVendorId } from '@/api/api';
 
-const vendorStore = useVendorStore()
 const settStore = settingsStore()
-const checkid = vendorStore.checkID
-const fetch = settStore.fetchSettings
+const fetch = settStore.getSettingsFromApi
 const route = useRoute()
 const id = route.params.id
 
-onMounted(()=>checkid(id).then(settStore.fetchSettings()))
+onMounted(()=>fetch().then(() => checkVendorId(id)))
 </script>
 
 <template>
