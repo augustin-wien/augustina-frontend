@@ -7,8 +7,9 @@ import { useVendorStore } from '@/stores/vendor';
 const vendorStore = useVendorStore()
 const paymentStore = usePaymentStore()
 const settStore = settingsStore()
-onMounted(settStore.getSettingsFromApi)
+const fetch = settStore.getSettingsFromApi
 
+onMounted(()=>fetch())
 </script>
 
 <template>

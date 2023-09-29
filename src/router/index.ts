@@ -29,7 +29,7 @@ const router = createRouter({
           component: () => import('../views/CheckVendorID.vue')
         },
         {
-          path: '/:id/landing-page',
+          path: '/v/:id/landing-page',
           name: 'LandingPage',
           component: () => import('../views/LandingPage.vue'),
         },

@@ -19,7 +19,7 @@ export const useVendorStore = defineStore('vendor', {
           router.push(`/v/${vendorId}/landing-page`)
         }
       }).catch(() => {
-        router.push({ name: "Home" })
+        router.push({ name: "Go to Vendor" })
       })
     }
   }
