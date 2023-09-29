@@ -43,7 +43,7 @@
 
 <script lang="ts" setup>
 import { vendorsStore } from '@/stores/vendor'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 const store = vendorsStore()
 
