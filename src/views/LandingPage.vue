@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { usePaymentStore } from '@/stores/PaymentStore';
-import { settingsStore } from '@/stores/settingsStore';
+import { settingsStore } from '../stores/settings'
 import { onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 import { useVendorStore } from '@/stores/vendor';
 const vendorStore = useVendorStore()
 const paymentStore = usePaymentStore()
 const settStore = settingsStore()
-onMounted(settStore.fetchSettings)
+onMounted(settStore.getSettingsFromApi)
 
 </script>
 
