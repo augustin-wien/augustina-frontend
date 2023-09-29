@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-import { settingsStore } from '../stores/settings'
+import { settingsStore } from '@/stores/settings'
 import { itemStore } from '@/stores/items'
 import { computed, onMounted } from 'vue'
 

@@ -102,10 +102,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
-import { settingsStore, type Settings } from '../stores/settings'
+import { ref, computed, onMounted, watch } from 'vue'
+import { settingsStore, type Settings } from '@/stores/settings'
 import { itemStore } from '@/stores/items'
-import toast from '../components/ToastMessage.vue'
+import toast from '@/components/ToastMessage.vue'
 
 const store = settingsStore()
 const storeItems = itemStore()
@@ -117,6 +117,12 @@ onMounted(() => {
 
 const settings = computed(() => store.settings)
 const items = computed(() => storeItems.items)
+
+watch(settings, (newVal) => {
+  if (newVal) {
+    updatedSettings.value = newVal
+  }
+})
 
 const updatedSettings = ref<Settings>({
   Logo: '',
@@ -146,12 +152,7 @@ const showToast = (type: string, message: string) => {
 
 const updateLogo = (event: any) => {
   // This logic will execute when a file is selected in the file input
-  const file = event.target.files[0]
-  const reader = new FileReader()
-  reader.readAsDataURL(file)
-  reader.onload = () => {
-    updatedSettings.value.Logo = reader.result as string
-  }
+  updatedSettings.value.Logo= event.target.files[0]
 }
 
 const url = import.meta.env.VITE_API_URL

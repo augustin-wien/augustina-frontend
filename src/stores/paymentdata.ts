@@ -2,17 +2,17 @@ import { defineStore } from 'pinia'
 import { fetchPayments } from '@/api/api'
 
 export interface Payments {
-  amount: number
-  authorizedBy: string
-  id: number
-  order: number
-  orderEntry: number
-  receiver: number
-  sender: number
-  timestamp: '00:00:00'
+  Amount: number
+  AuthorizedBy: string
+  Id: number
+  Order: number
+  OrderEntry: number
+  Receiver: number
+  Sender: number
+  Timestamp: '00:00:00'
 }
 
-export const paymentlist = defineStore('payments', {
+export const usePaymentStore = defineStore('payments', {
   state: () => {
     return {
       payments: [] as Payments[]

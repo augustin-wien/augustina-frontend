@@ -1,7 +1,6 @@
 import agent from '@/api/agent'
 import { defineStore } from 'pinia'
-import { fetchVendors, postVendors, patchVendor, removeVendor, checkVendorId } from '@/api/api'
-import type { AxiosResponse } from 'axios'
+import { getVendor, fetchVendors, postVendors, patchVendor, removeVendor, checkVendorId } from '@/api/api'
 import router from '@/router'
 
 export const useVendorStore = defineStore('vendor', {
@@ -17,7 +16,7 @@ export const useVendorStore = defineStore('vendor', {
         this.vendorName = response.FirstName
         this.vendorid = typeof vendorId == "string"? vendorId : vendorId[0]
         if (this.vendorName !== "") {
-          router.push(`/${vendorId}/landing-page`)
+          router.push(`/v/${vendorId}/landing-page`)
         }
       }).catch(() => {
         router.push({ name: "Home" })
@@ -54,7 +53,8 @@ export const vendorsStore = defineStore('vendors', {
   state: () => {
     return {
       vendors: [] as Vendor[],
-      vendorsImportedCount: Number
+      vendorsImportedCount: Number,
+      filteredVendors: [] as Vendor[],
     }
   },
 
@@ -75,6 +75,7 @@ export const vendorsStore = defineStore('vendors', {
         console.log(error)
       }
     },
+
 
     async createVendor(newVendor: Vendor) {
       postVendors(newVendor)
@@ -104,6 +105,17 @@ export const vendorsStore = defineStore('vendors', {
         };
       }
     },
+    async searchVendors(searchTerm: string) {
+      console.log(searchTerm)
+      if (searchTerm === '') {
+        this.filteredVendors = this.vendors
+      } else {
+        this.filteredVendors = this.vendors.filter((vendor:Vendor) => {
+          return vendor.FirstName.toLowerCase().includes(searchTerm.toLowerCase()) || vendor.LastName.toLowerCase().includes(searchTerm.toLowerCase()) 
+          || vendor.Email.toLowerCase().includes(searchTerm.toLowerCase()) || vendor.LicenseID.toLowerCase().includes(searchTerm.toLowerCase())
+        })
+      }
+    },
 
     async updateVendor(updatedVendor: Vendor) {
       patchVendor(updatedVendor)
@@ -122,6 +134,14 @@ export const vendorsStore = defineStore('vendors', {
         .catch((error) => {
           console.log('Error deleting vendor:', error)
         })
+    },
+    async getVendor(vendorId: number) {
+      try {
+        const data = await getVendor(vendorId)
+        return data.data
+      } catch (error) {
+        console.log(error)
+      }
     }
 
   }

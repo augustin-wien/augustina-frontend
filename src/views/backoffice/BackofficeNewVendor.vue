@@ -49,7 +49,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { vendorsStore } from '../stores/vendor'
+import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import Toast from '@/components/ToastMessage.vue'
 

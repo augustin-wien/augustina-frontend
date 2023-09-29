@@ -1,7 +1,8 @@
-import keycloak from '@/keycloak/keycloak'
+import keycloak, {initKeycloak} from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
 import Default from '@/layouts/DefaultLayout.vue'
 import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
+import { useKeycloakStore } from '@/stores/keycloak'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +16,7 @@ const router = createRouter({
       component: () => import('../views/ParentPaymentProcess.vue')
     },
     {
-      path: '/:id',
+      path: '/v/:id',
       name: 'Parent',
       meta: {
         layout: Default,
@@ -23,7 +24,7 @@ const router = createRouter({
       component: () => import('../views/ParentPaymentProcess.vue'),
       children: [
         {
-          path: '/:id/check-id',
+          path: '/v/:id/check-id',
           name: 'Check ID',
           component: () => import('../views/CheckVendorID.vue')
         },
@@ -33,66 +34,195 @@ const router = createRouter({
           component: () => import('../views/LandingPage.vue'),
         },
         {
-          path: '/:id/additionalproducts',
+          path: '/v/:id/additionalproducts',
           name: 'Additional Products',
           component: () => import('../views/AdditionalProducts.vue'),
         },
         {
-          path: '/:id/print-digital',
+          path: '/v/:id/print-digital',
           name: 'Version choice',
           component: () => import('../views/PrintDigital.vue'),
         },
         {
-          path: '/:id/tipping',
+          path: '/v/:id/tipping',
           name: 'Tippingpage',
           component: () => import('../views/TippingPage.vue'),
         },
         {
-          path: '/:id/information',
+          path: '/v/:id/information',
           name: 'InformationPrintEpaper',
           component: () => import('../views/InformationPrintEpaper.vue'),
         },
         {
-          path: '/:id/confirmation',
+          path: '/v/:id/confirmation',
           name: 'Confirmation',
           component: () => import('../views/FinalPurchaseConfirmation.vue'),
         },
         {
-          path: '/:id/payment',
+          path: '/v/:id/payment',
           name: 'Payment',
           component: () => import('../views/PaymentVivawallet.vue'),
         },
         {
-          path: '/:id/paymentconfirmation',
+          path: '/v/:id/paymentconfirmation',
           name: 'Payment Confirmation',
           component: () => import('../views/PaymentConfirmation.vue'),
         },
         {
-          path: '/:id/success',
+          path: '/v/:id/success',
           name: 'Success',
           component: () => import('../views/WaitingCountdown.vue'),
         },
         {
-          path: '/:id/failure',
+          path: '/v/:id/failure',
           name: 'Failure',
           component: () => import('../views/FailureVivawallet.vue'),
         },
         {
-          path: '/:id/custom-tip',
+          path: '/v/:id/custom-tip',
           name: 'Custom Tip',
           component: () => import('../views/CustomTip.vue'),
         },
         {
-          path: '/:id/shop',
+          path: '/v/:id/shop',
           name: 'Shop',
           component: () => import('../views/ShopPage.vue'),
         },
         {
-          path: '/:id/go-to-vendor',
+          path: '/v/:id/go-to-vendor',
           name: 'Go to Vendor',
           component: () => import('../views/GoToVendor.vue')
         }
       ]
+    },
+    {
+      path: '/backoffice/credits',
+      name: 'Backoffice Credit',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeCredits.vue')
+    },
+
+    {
+      path: '/backoffice/credits/payout/:ID',
+      name: 'Credit Payout',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      props: true,
+      component: () => import('../views/backoffice/BackofficeCreditPayout.vue')
+    },
+    {
+      path: '/backoffice/accounting',
+      name: 'Backoffice Accounting',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeAccounting.vue')
+    },
+    {
+      path: '/backoffice/logs',
+      name: 'Backoffice Logs',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeLogs.vue')
+    },
+    {
+      path: '/backoffice/inbox',
+      name: 'Backoffice Inbox',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeInbox.vue')
+    },
+    {
+      path: '/backoffice/vendorsummary',
+      name: 'Vendor Summary',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeVendorSummary.vue')
+    },
+    {
+      path: '/backoffice/newvendor',
+      name: 'New Vendor',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeNewVendor.vue')
+    },
+    {
+      path: '/backoffice/userprofile/:ID',
+      name: 'Vendor Profile',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeUserProfile.vue')
+    },
+    {
+      path: '/backoffice/userprofile/:ID/update',
+      name: 'Update Vendor Profile',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeUpdateVendor.vue')
+    },
+    {
+      path: '/backoffice/settings',
+      name: 'Backoffice Settings',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeSettings.vue')
+    },
+    {
+      path: '/backoffice/settings/update',
+      name: 'Update Backoffice Settings',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeUpdateAugustin.vue')
+    },
+
+    {
+      path: '/backoffice/productsettings',
+      name: 'Backoffice Product Settings',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeProductSettings.vue')
+    },
+    {
+      path: '/backoffice/newproduct',
+      name: 'New Product',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeNewProduct.vue')
+    },
+    {
+      path: '/backoffice/productsettings/update/:ID',
+      name: 'Update Product',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeProductUpdate.vue')
     },
     {
       path: '/404',
@@ -150,29 +280,20 @@ router.beforeEach(async (to: any) => {
 })
 
 // Check if the user is authenticated
-function isAuthenticated() {
+async function isAuthenticated() {
   if (!keycloak.initailizedKeycloak) {
-    keycloak.keycloak
-      .init({
-        onLoad: 'check-sso',
-        flow: 'implicit'
-      })
-      .then(() => {
-        console.log('keycloak init')
-        keycloak.initailizedKeycloak = true
-        if (!keycloak.keycloak.authenticated) {
-          keycloak.keycloak.login()
-        }
-        return keycloak.keycloak.authenticated
-      })
-      .catch((error: any) => {
-        console.log('init keycloak failed', error)
-        console.log(keycloak)
-      })
-  } else {
-    if (!keycloak.keycloak.authenticated) {
-      keycloak.keycloak.login()
+    try {
+      const resp = await initKeycloak()
+    } catch (error) {
+      console.log('init keycloak failed', error)
     }
+    const keycloakStore = useKeycloakStore()
+    keycloakStore.setAuthenticated(keycloak.keycloak.authenticated)
+    if (keycloak.keycloak.tokenParsed){
+      keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
+    }
+    return keycloak.keycloak.authenticated
+  } else {
     return keycloak.keycloak.authenticated
   }
 }

@@ -79,23 +79,32 @@ td {
 
 <script lang="ts" setup>
 // Import necessary dependencies and types
-import { vendorsStore } from '../stores/vendor'
+import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import QRCodeStyling from 'qr-code-styling'
+import keycloak from '@/keycloak/keycloak';
 
 // Initialize the vendor store
 const store = vendorsStore()
+keycloak.keycloak.onAuthSuccess = () => {
+  store.getVendors()
+}
 
 // Fetch the vendors' data when the component is mounted
 onMounted(() => {
-  store.getVendors()
+  if (keycloak.keycloak.authenticated) {
+    store.getVendors()
+  }
 })
 // Create a computed property for vendors data
 const vendors = computed(() => store.vendors)
 
 // create a search function for the search input
 const searchQuery = ref('')
+watch (searchQuery, () => {
+  search()
+})
 const search = () => {
   if (searchQuery.value) {
     store.searchVendors(searchQuery.value)
@@ -146,7 +155,7 @@ const generateQRCode = async (vendor: Vendor) => {
   const canvas = document.getElementById('canvas')
   if (canvas !== null) {
     qrCode.append(canvas)
-    qrCode.download({ name: 'qr', extension: 'svg' })
+    qrCode.download({ name: vendor.LicenseID, extension: 'png' })
     canvas.innerHTML = ''
   }
 }
