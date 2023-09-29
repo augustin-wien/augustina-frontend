@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { itemStore } from '../stores/items'
+import { itemStore } from '@/stores/items'
 import { computed, onMounted } from 'vue'
 
 const store = itemStore()

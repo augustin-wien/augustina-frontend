@@ -106,7 +106,7 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { itemStore } from '../stores/items'
+import { itemStore } from '@/stores/items'
 import type { Item } from '@/stores/items'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'

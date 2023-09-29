@@ -79,18 +79,23 @@ td {
 
 <script lang="ts" setup>
 // Import necessary dependencies and types
-import { vendorsStore } from '../stores/vendor'
+import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { ref, computed, onMounted, watch } from 'vue'
 import QRCodeStyling from 'qr-code-styling'
+import keycloak from '@/keycloak/keycloak';
 
 // Initialize the vendor store
 const store = vendorsStore()
-
+keycloak.keycloak.onAuthSuccess = () => {
+  store.getVendors()
+}
 
 // Fetch the vendors' data when the component is mounted
 onMounted(() => {
-  store.getVendors()
+  if (keycloak.keycloak.authenticated) {
+    store.getVendors()
+  }
 })
 // Create a computed property for vendors data
 const vendors = computed(() => store.vendors)

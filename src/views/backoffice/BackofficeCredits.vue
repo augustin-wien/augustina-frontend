@@ -27,7 +27,7 @@
                 <td className="border-t-2 p-3">
                   {{ vendor?.LicenseID }}
                 </td>
-                <td className="border-t-2 p-3">{{ vendor.Balance }} €</td>
+                <td className="border-t-2 p-3">{{ formatCredit(vendor.Balance) }} €</td>
                 <td className="border-t-2 p-3">{{ vendor.LastPayout }}</td>
                 <router-link :to="`/backoffice/credits/payout/${vendor.ID}`" v-if="vendor?.ID">
                   <button className="p-3 rounded-full bg-lime-600 text-white">Auszahlen</button>
@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts" setup>
-import { vendorsStore } from '../stores/vendor'
+import { vendorsStore } from '@/stores/vendor'
 import { computed, onMounted, ref, watch } from 'vue'
 
 const store = vendorsStore()
@@ -51,6 +51,9 @@ const store = vendorsStore()
 onMounted(() => {
   store.getVendors()
 })
+function formatCredit(credit: number) {
+  return (credit / 100).toFixed(2)
+}
 const vendors = computed(() => store.vendors)
 // create a search function for the search input
 const searchQuery = ref('')

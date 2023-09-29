@@ -26,6 +26,18 @@ apiInstance.interceptors.request.use(
   }
 )
 
+apiInstance.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    if (error.response.status === 401) {
+      keycloak.keycloak.logout()
+    }
+    return Promise.reject(error)
+  }
+)
+
 export function getAuthHello() {
   return apiInstance.get(AUTH_API_URL)
 }
@@ -54,6 +66,9 @@ export async function patchVendor(updatedVendor: Vendor) {
 
 export async function removeVendor(vendorId: number) {
   return apiInstance.delete(`${VENDORS_API_URL}${vendorId}/`)
+}
+export async function getVendor(vendorId: number) {
+  return apiInstance.get(`${VENDORS_API_URL}${vendorId}/`)
 }
 
 export async function checkVendorId(vendorId: string) {

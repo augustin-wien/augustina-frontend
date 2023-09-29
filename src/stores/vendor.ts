@@ -1,6 +1,6 @@
 import agent from '@/api/agent'
 import { defineStore } from 'pinia'
-import { fetchVendors, postVendors, patchVendor, removeVendor, checkVendorId } from '@/api/api'
+import { getVendor, fetchVendors, postVendors, patchVendor, removeVendor, checkVendorId } from '@/api/api'
 import router from '@/router'
 
 export const useVendorStore = defineStore('vendor', {
@@ -134,6 +134,14 @@ export const vendorsStore = defineStore('vendors', {
         .catch((error) => {
           console.log('Error deleting vendor:', error)
         })
+    },
+    async getVendor(vendorId: number) {
+      try {
+        const data = await getVendor(vendorId)
+        return data.data
+      } catch (error) {
+        console.log(error)
+      }
     }
 
   }
