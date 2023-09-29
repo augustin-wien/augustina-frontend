@@ -81,7 +81,7 @@ td {
 // Import necessary dependencies and types
 import { vendorsStore } from '../stores/vendor'
 import type { Vendor } from '@/stores/vendor'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import QRCodeStyling from 'qr-code-styling'
 
 // Initialize the vendor store
@@ -97,6 +97,9 @@ const vendors = computed(() => store.vendors)
 
 // create a search function for the search input
 const searchQuery = ref('')
+watch (searchQuery, () => {
+  search()
+})
 const search = () => {
   if (searchQuery.value) {
     store.searchVendors(searchQuery.value)

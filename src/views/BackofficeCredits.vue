@@ -8,6 +8,7 @@
             id="searchInput"
             type="text"
             placeholder="Suche Ausweisnummer"
+            v-model="searchQuery"
             class="border-2 border-gray-400 rounded-md p-2 ml-2"
           />
           <button class="p-3 rounded-full bg-lime-600 text-white">Suchen</button>
@@ -22,7 +23,7 @@
               </tr>
             </thead>
             <tbody className="text-sm  p-3">
-              <tr v-for="(vendor, id) in vendors" :key="id">
+              <tr v-for="(vendor, id) in displayVendors" :key="id">
                 <td className="border-t-2 p-3">
                   {{ vendor?.LicenseID }}
                 </td>
@@ -42,7 +43,7 @@
 
 <script lang="ts" setup>
 import { vendorsStore } from '../stores/vendor'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 const store = vendorsStore()
 
@@ -51,6 +52,22 @@ onMounted(() => {
   store.getVendors()
 })
 const vendors = computed(() => store.vendors)
+// create a search function for the search input
+const searchQuery = ref('')
+watch (searchQuery, () => {
+  search()
+})
+const search = () => {
+  if (searchQuery.value) {
+    store.searchVendors(searchQuery.value)
+  } else {
+    store.getVendors()
+  }
+}
+const displayVendors = computed(() => {
+  return searchQuery.value ? store.filteredVendors : vendors.value
+})
+
 </script>
 
 <style>
