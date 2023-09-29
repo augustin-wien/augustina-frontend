@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { useVendorStore } from '@/stores/vendor';
+import { useRoute } from 'vue-router';
+import { settingsStore } from '@/stores/settings';
 
-//const paymentStore = usePaymentStore()
+const vendorStore = useVendorStore()
+const settStore = settingsStore()
+const checkid = vendorStore.checkID
+const fetch = settStore.fetchSettings
+const route = useRoute()
+const id = route.params.id
 
-onMounted(() => {
-  //const url = window.location.href
-
-}
-)
+onMounted(()=>checkid(id).then(settStore.fetchSettings()))
 </script>
 
 <template>

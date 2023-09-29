@@ -11,19 +11,13 @@ export const settingsStore = defineStore('settings',{
             loaded: false
         }
     },
-
-    getters: {
-        getSettings(state){
-            return state.settings
-          }
-      },
-
     actions: {
         async fetchSettings() {
             try{ 
                 const data = await agent.SettingsConfiguration.current()
                 this.settings = []
                 this.settings.push(data)
+                console.log(this.settings[0])
                 this.loaded = true
             }
             catch (error) {

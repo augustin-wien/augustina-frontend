@@ -2,6 +2,7 @@ import agent from '@/api/agent'
 import { defineStore } from 'pinia'
 import { fetchVendors, postVendors, patchVendor, removeVendor, checkVendorId } from '@/api/api'
 import type { AxiosResponse } from 'axios'
+import router from '@/router'
 
 export const useVendorStore = defineStore('vendor', {
   state: () => {
@@ -15,7 +16,7 @@ export const useVendorStore = defineStore('vendor', {
       const response = await agent.Vendor.checkID(vendorId)
       this.vendorName = response.FirstName
       if(this.vendorName !== ""){
-        //router.push({name: "LandingPage"})
+        router.push({name: "LandingPage"})
       }
     }
   }

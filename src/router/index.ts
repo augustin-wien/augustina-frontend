@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/ParentPaymentProcess.vue'),
       children: [
         {
+          path: '/:id/check-id',
+          name: 'Check ID',
+          component: () => import('../views/CheckVendorID.vue')
+        },
+        {
           path: '/:id/landing-page',
           name: 'LandingPage',
           component: () => import('../views/LandingPage.vue'),
