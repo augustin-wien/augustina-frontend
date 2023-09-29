@@ -102,6 +102,9 @@ const vendors = computed(() => store.vendors)
 
 // create a search function for the search input
 const searchQuery = ref('')
+watch (searchQuery, () => {
+  search()
+})
 const search = () => {
   if (searchQuery.value) {
     store.searchVendors(searchQuery.value)

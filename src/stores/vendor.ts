@@ -53,7 +53,8 @@ export const vendorsStore = defineStore('vendors', {
   state: () => {
     return {
       vendors: [] as Vendor[],
-      vendorsImportedCount: Number
+      vendorsImportedCount: Number,
+      filteredVendors: [] as Vendor[],
     }
   },
 
@@ -74,6 +75,7 @@ export const vendorsStore = defineStore('vendors', {
         console.log(error)
       }
     },
+
 
     async createVendor(newVendor: Vendor) {
       postVendors(newVendor)
@@ -101,6 +103,17 @@ export const vendorsStore = defineStore('vendors', {
           }
 
         };
+      }
+    },
+    async searchVendors(searchTerm: string) {
+      console.log(searchTerm)
+      if (searchTerm === '') {
+        this.filteredVendors = this.vendors
+      } else {
+        this.filteredVendors = this.vendors.filter((vendor:Vendor) => {
+          return vendor.FirstName.toLowerCase().includes(searchTerm.toLowerCase()) || vendor.LastName.toLowerCase().includes(searchTerm.toLowerCase()) 
+          || vendor.Email.toLowerCase().includes(searchTerm.toLowerCase()) || vendor.LicenseID.toLowerCase().includes(searchTerm.toLowerCase())
+        })
       }
     },
 
