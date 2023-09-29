@@ -1,7 +1,7 @@
 <template>
   <div class="vendor-overview container mx-auto mb-8 p-24 space-y-40 pb-3">
     <div class="flex flex-col items-center space-y-8">
-      <img class="w-30 inset-12" alt="Augustin logo" src="../assets/logo.svg" />
+      <img class="w-30 inset-12" alt="Augustin logo" :src="apiUrl + 'img/logo.png'" />
       <h2 class="text-3xl font-bold">Dein QR-Code</h2>
       <img class="w-30 inset-12" alt="vendor qr code" :src="qrcode" />
     </div>
@@ -16,33 +16,31 @@
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import axios from 'axios'
+import { onMounted, ref } from 'vue';
 
-export default {
-  data() {
-    return {
-      credit: '',
-      idNumber: '',
-      qrcode: ''
-    }
-  },
-  mounted() {
-    axios
+const credit = ref("")
+const idNumber = ref("")
+const qrcode = ref("")
+const apiUrl = import.meta.env.VITE_API_URL
+
+onMounted(()=>{
+  axios
       .get('http://localhost:3000/api/vendor/')
       .then((response) => {
-        const { credit, idnumber, qrcode } = response.data
+        const { rCredit, rIdNumber, rQrcode } = response.data
 
-        this.credit = credit
-        this.idNumber = idnumber
-        this.qrcode = 'http://localhost:3000' + qrcode
+        credit.value = rCredit
+        idNumber.value = rIdNumber
+        qrcode.value = 'http://localhost:3000' + rQrcode
       })
 
       .catch((error) => {
         console.error('Fehler beim API-Aufruf:', error)
       })
-  }
-}
+})
+
 </script>
 
 <style>

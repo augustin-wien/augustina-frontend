@@ -9,15 +9,11 @@ const checkid = vendorStore.checkID
 const route = useRoute()
 const id = route.params.id
 
-onMounted(()=>checkid(id))
+onMounted(() => checkid(id))
 </script>
 
 <template>
-    <component :is="$route.meta.layout || 'div'">
-        <template #main>
-            <div class="h-full w-full">
-                <RouterView />
-            </div>
-        </template>
-    </component>
+    <div>
+        <RouterView />
+    </div>
 </template>
