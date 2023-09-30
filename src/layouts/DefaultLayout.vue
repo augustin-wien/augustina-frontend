@@ -2,6 +2,7 @@
 import { settingsStore } from '@/stores/settings';
 
 const settStore = settingsStore()
+settStore.getSettingsFromApi()
 </script>
 
 <template>

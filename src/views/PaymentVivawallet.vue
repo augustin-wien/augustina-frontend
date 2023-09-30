@@ -11,7 +11,7 @@ const vendorStore = useVendorStore()
 
 onMounted(() => {
   // todo add multiple items
-  paymentStore.postOrder(settings.settings.MainItem, 1, vendorStore.vendorid)
+  //paymentStore.postOrder(settings.settings.MainItem, 1, vendorStore.vendorid)
 })
 </script> 
 
@@ -30,4 +30,10 @@ onMounted(() => {
   </component>
 </template>
 
-<style scoped>@import "../assets/loadingwheel.css"</style>
+<style scoped>@import "../assets/loadingwheel.css"
+.customcolor{
+    background-color: v-bind(settings.settings.Color);
+}
+
+
+</style>
