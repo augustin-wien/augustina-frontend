@@ -13,13 +13,13 @@
               </path>
             </svg>
           </div>
-          <img class="rounded-full h-full w-[179px] object-cover border-green-600 border-4" alt="Titelblatt"
+          <img class="rounded-full h-56 w-56 object-cover border-green-600 border-4" alt="Titelblatt"
             src="../assets/Titelseite.jpg">
         </div>
         <div>
           <span class="date text-xl">{{ currentDate() }} </span><span class="time text-xl"> um {{ time }}</span>
         </div>
-        <RouterLink class="w-full" :to="{ name: 'LandingPage' }">
+        <RouterLink class="w-full" to="/">
           <button class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
             Start
           </button>

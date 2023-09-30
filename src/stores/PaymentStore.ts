@@ -23,8 +23,8 @@ export const usePaymentStore = defineStore('payment',{
             //vivawallet 
             response: [] as VivaWalletResponse[],
             transactionID: "",
-            verification: [] as VivaWalletVerification[],
-            verified: false,
+            verification: {} as VivaWalletVerification,
+            timeStamp: "",
             url: ""
         }
     },
@@ -109,10 +109,14 @@ export const usePaymentStore = defineStore('payment',{
           console.log('id undefined')
         }
         else {
-          this.verification[0] = await agent.VivaWallet.verifyPayment(this.transactionID)
-          this.verified = this.verification[0].verification
+          try{
+            this.verification = await agent.VivaWallet.verifyPayment(this.transactionID)
+            this.timeStamp = this.verification.TimeStamp
+          }catch (error){
+            router.push('/failure')
+          }
         }
-        if(this.verified === true){
+        if(this.timeStamp != ""){
           router.push('/paymentconfirmation')
         }
         else{

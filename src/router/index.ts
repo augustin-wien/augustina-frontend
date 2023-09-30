@@ -64,21 +64,6 @@ const router = createRouter({
           component: () => import('../views/PaymentVivawallet.vue'),
         },
         {
-          path: '/v/:id/paymentconfirmation',
-          name: 'Payment Confirmation',
-          component: () => import('../views/PaymentConfirmation.vue'),
-        },
-        {
-          path: '/v/:id/success',
-          name: 'Success',
-          component: () => import('../views/WaitingCountdown.vue'),
-        },
-        {
-          path: '/v/:id/failure',
-          name: 'Failure',
-          component: () => import('../views/FailureVivawallet.vue'),
-        },
-        {
           path: '/v/:id/custom-tip',
           name: 'Custom Tip',
           component: () => import('../views/CustomTip.vue'),
@@ -94,6 +79,30 @@ const router = createRouter({
           component: () => import('../views/GoToVendor.vue')
         }
       ]
+    },
+    {
+      path: '/paymentconfirmation',
+      name: 'Payment Confirmation',
+      component: () => import('../views/PaymentConfirmation.vue'),
+      meta: {
+        layout: Default,
+      },
+    },
+    {
+      path: '/success',
+      name: 'Success',
+      component: () => import('../views/WaitingCountdown.vue'),
+      meta: {
+        layout: Default,
+      },
+    },
+    {
+      path: '/failure',
+      name: 'Failure',
+      component: () => import('../views/FailureVivawallet.vue'),
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/backoffice/credits',
