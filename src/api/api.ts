@@ -32,7 +32,7 @@ apiInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response.status === 401) {
-      keycloak.keycloak.logout()
+      keycloak.keycloak.login()
     }
     return Promise.reject(error)
   }
