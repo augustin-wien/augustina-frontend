@@ -46,5 +46,9 @@ const decrement = paymentStore.decrement
 </template>
 
 <style scoped>
-@import "../assets/arrows.css"
+@import "../assets/arrows.css";
+input[type=number]{
+    -moz-appearance:textfield;
+    appearance: textfield;
+}
 </style>
