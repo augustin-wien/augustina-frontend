@@ -4,6 +4,10 @@ import type { VivaWalletVerification } from "@/models/verificationVivaWallet";
 import router from "@/router";
 import agent from '@/api/agent'
 
+export interface orderItem {
+  item: number,
+  quantity: number
+}
 
 export const usePaymentStore = defineStore('payment',{
     state: () =>{
@@ -19,6 +23,7 @@ export const usePaymentStore = defineStore('payment',{
             price: 300,
             //the unit for tip is euros
             tip: 0,
+            tipItem: 2,
 
             //vivawallet 
             response: [] as VivaWalletResponse[],
@@ -92,15 +97,20 @@ export const usePaymentStore = defineStore('payment',{
           console.log('pls check AGB')
         }
       },
-
+      setPrice(price: number) {
+        this.price = price
+      },
+      setPricePerPaper(price: number) {
+        this.pricePerPaper = price
+      },
       toAGB() {
         console.log(import.meta.env.VITE_AGB_URL)
-        window.location.href = import.meta.env.VITE_AGB_URL
+        window.open(import.meta.env.VITE_AGB_URL, "_blank");
       },
 
       //vivawallet methodes
-      async postOrder(item: number, quantity: number, vendorLicenseID: string) {
-        this.response[0] = await agent.VivaWallet.postOrder(item, quantity, vendorLicenseID)
+      async postOrder(items: Array<orderItem>, quantity: number, vendorLicenseID: string) {
+        this.response[0] = await agent.VivaWallet.postOrder(items, vendorLicenseID)
         this.url = this.response[0].SmartCheckoutURL
         window.location.href = this.url
       },

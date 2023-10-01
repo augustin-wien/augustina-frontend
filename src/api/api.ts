@@ -125,9 +125,11 @@ export async function patchSettings(updatedSettings: Settings) {
 
   const formData = new FormData();
   formData.append('Color', updatedSettings.Color);
+  formData.append('FontColor', updatedSettings.FontColor);
   formData.append('Logo', updatedSettings.Logo);
   formData.append('MainItem', updatedSettings.MainItem.toString());
-  formData.append('RefundFees', updatedSettings.RefundFees.toString());
+  formData.append('OrgaCoversTransactionCosts', updatedSettings.OrgaCoversTransactionCosts.toString());
+  formData.append('MaxOrderAmount', updatedSettings.MaxOrderAmount.toString());
 
   return apiInstance.put(
     `${SETTINGS_API_URL}`,
@@ -143,8 +145,8 @@ export async function patchSettings(updatedSettings: Settings) {
 
 //payments list
 //sind rfc dates strings?
-export async function fetchPayments(startDate: string, endDate: string) {
-  return apiInstance.get(`${PAYMENT_API_URL}?from=${startDate}&to=${endDate}`)
+export async function fetchPayments(startDate: string, endDate: string, filter: string) {
+  return apiInstance.get(`${PAYMENT_API_URL}?from=${startDate}&to=${endDate}${filter?'&'+filter:''}`)
 }
 
 //payout

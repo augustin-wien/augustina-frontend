@@ -5,6 +5,7 @@ import type { Name } from '@/models/vendorName'
 import { type AxiosResponse } from 'axios'
 import { VIVAWALLET_TRANSACTION_ORDER, SETTINGS_API_URL, VIVAWALLET_TRANSACTION_VERIFICATION, VENDOR_CHECK_ID } from '@/api/endpoints'
 import { apiInstance } from './api'
+import type { orderItem } from '@/stores/PaymentStore'
 
 const responseBody = (response: AxiosResponse) => response.data
 
@@ -15,10 +16,10 @@ const SettingsConfiguration = {
 }
 
 const VivaWallet = {
-    postOrder: (item: number, quantity: number, vendorLicenseID: string): 
+    postOrder: (items:Array<orderItem>, vendorLicenseID: string): 
         Promise<VivaWalletResponse> => apiInstance
             .post(VIVAWALLET_TRANSACTION_ORDER, 
-                { entries: [{item: item, quantity: quantity}], user: "user", vendorLicenseID: vendorLicenseID }, 
+                { entries: items, user: "user", vendorLicenseID: vendorLicenseID }, 
                 { headers: { 'Content-Type': 'application/json' } })
                 .then(sleep(100)).then(responseBody),
     verifyPayment: (vivaTransactionID: string):

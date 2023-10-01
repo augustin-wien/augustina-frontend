@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { usePaymentStore } from '@/stores/PaymentStore'
+import { usePaymentStore, type orderItem } from '@/stores/PaymentStore'
 import { settingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
 
@@ -11,7 +11,17 @@ const vendorStore = useVendorStore()
 
 onMounted(() => {
   // todo add multiple items
-  paymentStore.postOrder(settings.settings.MainItem, 1, vendorStore.vendorid)
+  const items:Array<orderItem> = [{
+    item: settings.settings.MainItem,
+    quantity: 1
+  }]
+  if (paymentStore.tip>0){
+    items.push({
+      item: paymentStore.tipItem,
+      quantity: paymentStore.tip*100
+    })
+  }
+  paymentStore.postOrder(items, 1, vendorStore.vendorid)
 })
 </script> 
 
@@ -30,7 +40,8 @@ onMounted(() => {
   </component>
 </template>
 
-<style scoped>@import "../assets/loadingwheel.css"
+<style scoped>
+@import "../assets/loadingwheel.css";
 .customcolor{
     background-color: v-bind(settings.settings.Color);
 }
