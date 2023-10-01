@@ -11,7 +11,7 @@ const vendorStore = useVendorStore()
 
 onMounted(() => {
   // todo add multiple items
-  //paymentStore.postOrder(settings.settings.MainItem, 1, vendorStore.vendorid)
+  paymentStore.postOrder(settings.settings.MainItem, 1, vendorStore.vendorid)
 })
 </script> 
 
