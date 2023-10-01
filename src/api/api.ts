@@ -71,7 +71,7 @@ export async function getVendor(vendorId: number) {
   return apiInstance.get(`${VENDORS_API_URL}${vendorId}/`)
 }
 
-export async function checkVendorId(vendorId: string) {
+export async function checkVendorId(vendorId: string | string[]) {
   return apiInstance.get(`${VENDORS_API_URL}check/${vendorId}/`).then((response) => {
     return response.data
   }).catch(() => {

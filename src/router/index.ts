@@ -1,4 +1,4 @@
-import keycloak, {initKeycloak} from '@/keycloak/keycloak'
+import keycloak, { initKeycloak } from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
 import Default from '@/layouts/DefaultLayout.vue'
 import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
@@ -13,7 +13,7 @@ const router = createRouter({
       meta: {
         layout: Default
       },
-      component: () => import('../views/HomeView.vue')
+      component: () => import('../views/ParentPaymentProcess.vue')
     },
     {
       path: '/v/:id',
@@ -23,6 +23,11 @@ const router = createRouter({
       },
       component: () => import('../views/ParentPaymentProcess.vue'),
       children: [
+        {
+          path: '/v/:id/check-id',
+          name: 'Check ID',
+          component: () => import('../views/CheckVendorID.vue')
+        },
         {
           path: '/v/:id/landing-page',
           name: 'LandingPage',
@@ -59,21 +64,6 @@ const router = createRouter({
           component: () => import('../views/PaymentVivawallet.vue'),
         },
         {
-          path: '/v/:id/paymentconfirmation',
-          name: 'Payment Confirmation',
-          component: () => import('../views/PaymentConfirmation.vue'),
-        },
-        {
-          path: '/v/:id/success',
-          name: 'Success',
-          component: () => import('../views/WaitingCountdown.vue'),
-        },
-        {
-          path: '/v/:id/failure',
-          name: 'Failure',
-          component: () => import('../views/FailureVivawallet.vue'),
-        },
-        {
           path: '/v/:id/custom-tip',
           name: 'Custom Tip',
           component: () => import('../views/CustomTip.vue'),
@@ -82,8 +72,40 @@ const router = createRouter({
           path: '/v/:id/shop',
           name: 'Shop',
           component: () => import('../views/ShopPage.vue'),
-        }
+        },
       ]
+    },
+    {
+      path: '/go-to-vendor',
+      name: 'Go to Vendor',
+      component: () => import('../views/GoToVendor.vue'),
+      meta: {
+        layout: Default,
+      },
+    },
+    {
+      path: '/paymentconfirmation',
+      name: 'Payment Confirmation',
+      component: () => import('../views/PaymentConfirmation.vue'),
+      meta: {
+        layout: Default,
+      },
+    },
+    {
+      path: '/success',
+      name: 'Success',
+      component: () => import('../views/WaitingCountdown.vue'),
+      meta: {
+        layout: Default,
+      },
+    },
+    {
+      path: '/failure',
+      name: 'Failure',
+      component: () => import('../views/FailureVivawallet.vue'),
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/backoffice/credits',
@@ -279,7 +301,7 @@ async function isAuthenticated() {
     }
     const keycloakStore = useKeycloakStore()
     keycloakStore.setAuthenticated(keycloak.keycloak.authenticated)
-    if (keycloak.keycloak.tokenParsed){
+    if (keycloak.keycloak.tokenParsed) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
     return keycloak.keycloak.authenticated

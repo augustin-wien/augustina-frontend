@@ -13,7 +13,8 @@ export interface Settings {
 export const settingsStore = defineStore('settings', {
   state: () => {
     return {
-      settings: {} as Settings
+      settings: {} as Settings,
+      imgUrl: ""
     }
   },
 
@@ -28,6 +29,7 @@ export const settingsStore = defineStore('settings', {
       try {
         const data = await fetchSettings()
         this.settings = data.data
+        this.imgUrl = import.meta.env.VITE_API_URL + this.settings.Logo
       } catch (error) {
         console.log(error)
       }

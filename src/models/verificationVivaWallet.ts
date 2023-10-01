@@ -1,3 +1,3 @@
 export interface VivaWalletVerification {
-    verification: boolean;
+    TimeStamp: string;
 }
