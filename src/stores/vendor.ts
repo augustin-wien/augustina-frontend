@@ -11,7 +11,11 @@ export const useVendorStore = defineStore('vendor', {
     }
   },
   actions: {
-    async checkID(vendorId: string | string[]) {
+    async checkID(vendorId: string | string[] | undefined) {
+      if (!vendorId ) {
+        router.push({ name: "Go to Vendor" })
+        return
+      }
       agent.Vendor.checkID(vendorId).then((response) => {
         this.vendorName = response.FirstName
         this.vendorid = typeof vendorId == "string"? vendorId : vendorId[0]

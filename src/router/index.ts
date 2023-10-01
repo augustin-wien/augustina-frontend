@@ -1,4 +1,4 @@
-import keycloak, {initKeycloak} from '@/keycloak/keycloak'
+import keycloak, { initKeycloak } from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
 import Default from '@/layouts/DefaultLayout.vue'
 import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
@@ -73,12 +73,15 @@ const router = createRouter({
           name: 'Shop',
           component: () => import('../views/ShopPage.vue'),
         },
-        {
-          path: '/v/:id/go-to-vendor',
-          name: 'Go to Vendor',
-          component: () => import('../views/GoToVendor.vue')
-        }
       ]
+    },
+    {
+      path: '/go-to-vendor',
+      name: 'Go to Vendor',
+      component: () => import('../views/GoToVendor.vue'),
+      meta: {
+        layout: Default,
+      },
     },
     {
       path: '/paymentconfirmation',
@@ -298,7 +301,7 @@ async function isAuthenticated() {
     }
     const keycloakStore = useKeycloakStore()
     keycloakStore.setAuthenticated(keycloak.keycloak.authenticated)
-    if (keycloak.keycloak.tokenParsed){
+    if (keycloak.keycloak.tokenParsed) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
     return keycloak.keycloak.authenticated

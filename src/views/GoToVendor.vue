@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
 </script>
 
 <template>
@@ -15,11 +14,11 @@ import { RouterLink } from 'vue-router'
                 <div class="text-center pt-8">
                     Gehen sie zu einer/m Verkäufer/in
                 </div>
-                <RouterLink class="w-full" to="{ name: 'LandingPage' }">
+                <a class="w-full" href="https://www.augustin.or.at">
                     <button class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
-                        Start
+                        Zum Augustin
                     </button>
-                </RouterLink>
+                </a>
             </div>
         </template>
     </component>
