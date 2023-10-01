@@ -43,6 +43,19 @@
                 required
               />
             </div>
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="color"
+              >Schriftfarbe:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ settings.FontColor}}</span>
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedSettings.FontColor"
+                type="text"
+                id="color"
+                required
+              />
+            </div>
             <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="mainItem"
               >Hauptprodukt:</label
             >
@@ -71,7 +84,7 @@
                   id="RefundFees"
                   name="RefundFees"
                   value="true"
-                  v-model="updatedSettings.RefundFees"
+                  v-model="updatedSettings.OrgaCoversTransactionCosts"
                 />
               </span>
               <span>
@@ -81,7 +94,7 @@
                   id="RefundFees"
                   name="RefundFees"
                   value="false"
-                  v-model="updatedSettings.RefundFees"
+                  v-model="updatedSettings.OrgaCoversTransactionCosts"
                 />
               </span>
             </div>
@@ -111,7 +124,7 @@ const store = settingsStore()
 const storeItems = itemStore()
 
 onMounted(() => {
-  store.getSettingsFromApi()
+  updatedSettings.value = store.settings
   storeItems.getItems()
 })
 
@@ -126,10 +139,16 @@ watch(settings, (newVal) => {
 
 const updatedSettings = ref<Settings>({
   Logo: '',
+  FontColor: '',
   Color: '',
   MainItem: 1,
-  RefundFees: false,
-  ID: 0
+  OrgaCoversTransactionCosts: false,
+  ID: 0,
+  MainItemDescription: '',
+  MainItemName: '',
+  MainItemPrice: 0,
+  MainItemImage: '',
+  MaxOrderAmount: 0,
 })
 
 const updateSettings = async () => {

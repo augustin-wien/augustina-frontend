@@ -21,6 +21,7 @@
                       class="logo mx-auto my-5"
                       width="50"
                       height="20"
+                      v-if="settings.Logo"
                     />
                   </td>
                 </tr>
@@ -33,13 +34,25 @@
                 <tr>
                   <th className="p-3">Transaktionskosten:</th>
                   <td className="p-3">
-                    {{ settings.RefundFees }}
+                    {{ settings.OrgaCoversTransactionCosts }}
                   </td>
                 </tr>
                 <tr>
                   <th className="p-3">Farbe:</th>
                   <td className="p-3">
                     {{ settings.Color }}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="p-3">Schriftfarbe:</th>
+                  <td className="p-3">
+                    {{ settings.FontColor }}
+                  </td>
+                </tr>
+                <tr>
+                  <th className="p-3">Maximale Bestellsumme</th>
+                  <td className="p-3">
+                    {{ settings.MaxOrderAmount }}
                   </td>
                 </tr>
               </tbody>

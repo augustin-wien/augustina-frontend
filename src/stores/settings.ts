@@ -4,10 +4,16 @@ import { fetchSettings, patchSettings } from '@/api/api'
 //define interface to store data from backend properly
 export interface Settings {
   Color: string
+  FontColor: string
   ID: number
   Logo: string
   MainItem: number
-  RefundFees: boolean
+  MainItemDescription: string
+  MainItemImage: string
+  MainItemName: string
+  MainItemPrice: number
+  MaxOrderAmount: number
+  OrgaCoversTransactionCosts: boolean
 }
 
 export const settingsStore = defineStore('settings', {

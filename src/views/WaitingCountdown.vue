@@ -32,7 +32,8 @@ onMounted(() => {
   </component>
 </template>
 
-<style scoped>@import "../assets/loadingwheel.css"
+<style scoped>
+@import "../assets/loadingwheel.css";
 .customcolor{
     background-color: v-bind(settStore.settings.Color);
 }
