@@ -7,14 +7,17 @@ settStore.getSettingsFromApi()
 
 <template>
     <div class="base-layout">
-        <main class="absolute inset-0 px-8 pt-4 pb-16 place-items-center base-layout">
-            <header class="place-items-center h-1/6">
+        <main class="absolute inset-0 pt-4 pb-16 place-items-center base-layout">
+            <header class="relative place-items-center h-1/6">
+                <select class="h-[55px] w-[55px] absolute font-semibold border-2 top-0 right-0 border-gray-300 rounded-full text-gray-300 text-center mt-4 mr-4 pl-2 text-sm" v-model="$i18n.locale">
+                        <option value="en">EN</option>
+                        <option value="de">DE</option>
+                    </select>
             <slot name="header">
                 <img alt="Augustin logo" className="logo mx-auto my-1" :src="settStore.imgUrl" width="213" height="105" />
-
                 </slot>
             </header>
-            <div class="h-5/6 main-container">
+            <div class="h-5/6 main-container px-8">
                 <slot name="main">
                     <h1>Default Content</h1>
                 </slot>
@@ -30,7 +33,6 @@ settStore.getSettingsFromApi()
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10px;
 }
 
 .logo {
