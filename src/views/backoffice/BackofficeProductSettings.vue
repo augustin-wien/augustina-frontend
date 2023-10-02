@@ -72,14 +72,4 @@ const price = (price: number) => {
 }
 </script>
 
-<style scoped>
-/*
-.products {
-   overflow: hidden;
-  overflow-y: hidden;
-  max-height: 80vh;
-  overflow-y: scroll;
-  
-}
-*/
-</style>
+<style scoped></style>
