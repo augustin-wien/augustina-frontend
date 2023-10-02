@@ -75,6 +75,158 @@
                 required
               />
             </div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
+              >Adresse:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.Address }} </span>
+
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.Address"
+                type="text"
+                id="adress"
+                required
+              />
+            </div>
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
+              >Postleitzahl:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.PLZ }} </span>
+
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.PLZ"
+                type="text"
+                id="plz"
+              />
+            </div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+              >Ort:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.Location }} </span>
+
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.Location"
+                type="text"
+                id="location"
+              />
+            </div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
+              >Telefonnummer:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.Telephone }} </span>
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.Telephone"
+                type="text"
+                id="telephone"
+              />
+            </div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
+              >Smartphone:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2"> {{ vendor.HasSmartphone }} </span>
+              <select
+                class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.HasSmartphone"
+                id="hasSmartphone"
+                required
+              >
+                <option value="true">Ja</option>
+                <option value="false">Nein</option>
+              </select>
+            </div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
+              >Arbeitszeit:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.WorkingTime }} </span>
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.WorkingTime"
+                type="text"
+                id="workingTime"
+              />
+            </div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
+              >Sprache:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.Language }} </span>
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.Language"
+                type="text"
+                id="language"
+                required
+              />
+            </div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
+              >Online Karte:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2"> {{ vendor.OnlineMap }} </span>
+              <select
+                class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.OnlineMap"
+                id="onlineMap"
+                required
+              >
+                <option value="true">Ja</option>
+                <option value="false">Nein</option>
+              </select>
+            </div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="registrationDate"
+              >Registriert am:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.RegistrationDate }} </span>
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.RegistrationDate"
+                type="date"
+                id="registrationDate"
+              />
+            </div>
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
+              >Verkauft seit:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.VendorSince }} </span>
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.VendorSince"
+                type="date"
+                id="vendorSince"
+              />
+            </div>
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
+              >Kommentar:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.Comment }} </span>
+              <textarea
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                rows="5"
+                v-model="updatedVendor.Comment"
+                type="text"
+                id="comment"
+              ></textarea>
+            </div>
           </div>
 
           <div class="flex place-content-center justify-between">
@@ -124,7 +276,17 @@ const updatedVendor = ref({
   IsDisabled: false,
   Longitude: 0,
   Latitude: 0,
-  Address: ''
+  Address: '',
+  PLZ: 'new-plz',
+  Location: 'new-location',
+  WorkingTime: 'new-working-time',
+  Language: 'deutsch',
+  Comment: 'Kommentare',
+  Telephone: 'new-phone-number',
+  RegistrationDate: '2023-10-05',
+  VendorSince: '2023-10-05',
+  OnlineMap: false,
+  HasSmartphone: false
 })
 
 store.getVendors()

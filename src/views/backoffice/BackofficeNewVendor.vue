@@ -64,6 +64,124 @@
                 id="licenseID"
                 required
               />
+
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
+                >Sprache:</label
+              >
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="newVendor.Language"
+                type="text"
+                id="language"
+              />
+
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
+                >Telefonnummer:</label
+              >
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="newVendor.Telephone"
+                type="text"
+                id="telephone"
+              />
+
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="address"
+                >Adresse:</label
+              >
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="newVendor.Address"
+                type="text"
+                id="address"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
+                >Postleitzahl:</label
+              >
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="newVendor.PLZ"
+                type="text"
+                id="plz"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+                >Ort:</label
+              >
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="newVendor.Location"
+                type="text"
+                id="location"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
+                >Arbeitszeit:</label
+              >
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
+                v-model="newVendor.WorkingTime"
+                id="workingTime"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="registrationDate"
+                >Registriert seit:</label
+              >
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="date"
+                v-model="newVendor.RegistrationDate"
+                id="registrationDate"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
+                >VerkäuferIn seit:</label
+              >
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="date"
+                v-model="newVendor.VendorSince"
+                id="vendorSince"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
+                >Kommentar:</label
+              >
+              <textarea
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
+                v-model="newVendor.Comment"
+                id="comment"
+              ></textarea>
+
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
+                >Online Map:</label
+              >
+              <div class="flex flex-row">
+                <span class="p-2">
+                  <select
+                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.OnlineMap"
+                    id="onlineMap"
+                    required
+                  >
+                    <option value="true">Ja</option>
+                    <option value="false">Nein</option>
+                  </select>
+                </span>
+              </div>
+
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
+                >Smartphone:</label
+              >
+              <div class="flex flex-row">
+                <span class="p-2">
+                  <select
+                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.HasSmartphone"
+                    id="hasSmartphone"
+                    required
+                  >
+                    <option value="true">Ja</option>
+                    <option value="false">Nein</option>
+                  </select>
+                </span>
+              </div>
             </div>
 
             <div class="flex place-content-center">
@@ -106,7 +224,21 @@ const newVendor = ref({
   LastPayout: null,
   LicenseID: 'new-license-id',
   UrlID: 'new-url-id',
-  Balance: 0
+  Balance: 0,
+  IsDisabled: false,
+  Longitude: 0,
+  Latitude: 0,
+  Address: 'new-address',
+  PLZ: 'new-plz',
+  Location: 'new-location',
+  WorkingTime: 'new-working-time',
+  Language: 'deutsch',
+  Comment: 'Kommentare',
+  Telephone: 'new-phone-number',
+  RegistrationDate: '2023-10-05',
+  VendorSince: '2023-10-05',
+  OnlineMap: false,
+  HasSmartphone: false
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)
