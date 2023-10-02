@@ -18,7 +18,7 @@
         </div>
         <div class="grid grid-rows-2 place-items-center">
           <div><span class="date text-xl">{{ currentDate() }} </span><span class="time text-xl"> {{ $t("at") }} {{ time }}</span></div>
-          <span class="date text-xl">{{ $t("bought") }} {{ paymentStore.timeStamp }}</span>
+          <span class="date text-xl">{{ $t("bought") }} {{ formatTime(paymentStore.timeStamp) }}</span>
         </div>
       </div>
     </template>
@@ -44,6 +44,11 @@ function currentTime() {
   time.value = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
 }
 
+const formatTime = (date: string) =>{
+  const d = new Date(date)
+  return d.toLocaleString()
+}
+
 function UpdateTime() {
   setTimeout(() => {
     currentTime()
@@ -51,6 +56,7 @@ function UpdateTime() {
   }, 1000)
 }
 UpdateTime()
+
 </script>
 
 <style>
