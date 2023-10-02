@@ -1,33 +1,37 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Logbuch</h1>
+      <p className="text-lg">Zeitraum eingeben:</p>
+      <VueDatePicker v-model="date" range :enable-time-picker="false" placeholder="Zeitraum wählen"
+        @range-start="onRangeStart" @range-end="onRangeEnd" />
+    </template>
+
     <template #main>
-      <main>
-        <div className="page-content space-x-2 mt-5"></div>
-        <div className="text-center  space-y-3 space-x-3">
-          <h1 className="font-bold mt-3 pt-3 text-2xl">Auszahlungs Logbuch</h1>
-          <p className="text-lg">Zeitraum eingeben:</p>
-          <VueDatePicker v-model="date" range :enable-time-picker="false" placeholder="Zeitraum wählen"
-            @range-start="onRangeStart" @range-end="onRangeEnd" />
-          <div className="table-auto border-spacing-4 border-collapse">
-            <thead>
-              <tr>
-                <th className="p-3">Datum</th>
-                <th className="p-3">An</th>
-                <th className="p-3">Durch</th>
-                <th className="p-3">Betrag</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm">
-              <tr v-for="(payment, id) in payments" :key="id">
-                <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
-                <td className="border-t-2 p-3">{{ translateSender(payment.SenderName) }}</td>
-                <td className="border-t-2 p-3">{{ payment.AuthorizedBy}}</td>
-                <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
-              </tr>
-            </tbody>
+      <div class="main">
+        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-center text-2xl space-y-3 space-x-3">
+            <div className="table-auto border-spacing-4 border-collapse">
+              <thead>
+                <tr>
+                  <th className="p-3">Datum</th>
+                  <th className="p-3">An</th>
+                  <th className="p-3">Durch</th>
+                  <th className="p-3">Betrag</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm">
+                <tr v-for="(payment, id) in payments" :key="id">
+                  <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
+                  <td className="border-t-2 p-3">{{ translateSender(payment.SenderName) }}</td>
+                  <td className="border-t-2 p-3">{{ payment.AuthorizedBy }}</td>
+                  <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
+                </tr>
+              </tbody>
+            </div>
           </div>
         </div>
-      </main>
+      </div>
     </template>
   </component>
 </template>

@@ -1,33 +1,40 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Umsätze</h1>
+      <span>
+        <VueDatePicker v-model="date" range :enable-time-picker="false" placeholder="Zeitraum wählen"
+          @range-start="onRangeStart" @range-end="onRangeEnd" class="max-w-md" />
+      </span>
+    </template>
     <template #main>
-      <main>
-        <div className="page-content space-x-2 mt-5"></div>
-        <div className="text-center  space-y-3 space-x-3">
-          <h1 className="font-bold mt-3 pt-3 text-2xl">Umsätze</h1>
-          <p className="text-lg">Zeitraum eingeben:</p>
-          <VueDatePicker v-model="date" range :enable-time-picker="false" placeholder="Zeitraum wählen"
-            @range-start="onRangeStart" @range-end="onRangeEnd" />
-          <div className="table-auto border-spacing-4 border-collapse">
-            <thead>
-              <tr>
-                <th className="p-3">Datum</th>
-                <th className="p-3">Von</th>
-                <th className="p-3">An</th>
-                <th className="p-3">Betrag</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm">
-              <tr v-for="(payment, id) in payments" :key="id">
-                <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
-                <td className="border-t-2 p-3">{{ translateSender(payment.SenderName) }}</td>
-                <td className="border-t-2 p-3">{{ translateReceiver(payment.ReceiverName) }}{{ payment.AuthorizedBy ? 'durch '+payment.AuthorizedBy:'' }}</td>
-                <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
-              </tr>
-            </tbody>
+      <div class="main">
+        <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className=" space-y-3 space-x-3">
+            <h1 class="text-2xl font-bold">Umsätze im gewählten Zeitraum</h1>
+
+            <div className="table-auto border-spacing-4 border-collapse">
+              <thead>
+                <tr>
+                  <th className="p-3">Datum</th>
+                  <th className="p-3">Von</th>
+                  <th className="p-3">An</th>
+                  <th className="p-3">Betrag</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm">
+                <tr v-for="(payment, id) in payments" :key="id">
+                  <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
+                  <td className="border-t-2 p-3">{{ translateSender(payment.SenderName) }}</td>
+                  <td className="border-t-2 p-3">{{ translateReceiver(payment.ReceiverName) }}{{ payment.AuthorizedBy ?
+                    'durch ' + payment.AuthorizedBy : '' }}</td>
+                  <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
+                </tr>
+              </tbody>
+            </div>
           </div>
         </div>
-      </main>
+      </div>
     </template>
   </component>
 </template>
@@ -49,21 +56,7 @@ const tomorrow = startOfDay(new Date(new Date().setDate(new Date().getDate() + 1
 const startDate = ref<Date>(yesterday)
 const endDate = ref(tomorrow)
 const date = ref([startDate.value, endDate.value])
-const keycloakStore = useKeycloakStore()
 const store = usePaymentStore()
-
-onMounted(() => {
-  if (keycloakStore.authenticated) {
-    store.getPayments(startDate.value.toISOString(), endDate.value.toISOString())
-  } else {
-    watch(keycloakStore.authenticated, (newVal) => {
-      store.getPayments(startDate.value.toISOString(), endDate.value.toISOString())
-    })
-  }
-})
-
-
-
 
 //fetch paymentlist data once component is mounted
 

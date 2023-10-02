@@ -1,13 +1,23 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferInnen Profil</h1></template
+    >
     <template #main>
-      <main>
-        <div className="container page-content space-x-2 mt-5">
+      <div class="main" v-if="vendor">
+        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3">
-            <h1 className="font-bold text-3xl mt-3 pt-3">VerkäuferInnen Profil</h1>
-
+            <div class="flex place-content-center justify-between">
+              <h1 class="text-2xl font-bold">{{ vendor.LicenseID }}</h1>
+              <button
+                @click="router.push('/backoffice/vendorsummary')"
+                class="px-2 rounded-full bg-red-600 text-white font-bold"
+              >
+                X
+              </button>
+            </div>
             <div className="table-auto border-spacing-4 border-collapse">
-              <tbody className="text-sm text-left" v-if="vendor">
+              <tbody className="text-sm text-left">
                 <tr>
                   <th className="p-3">Vorname:</th>
                   <td className="p-3">{{ vendor.FirstName }}</td>
@@ -37,7 +47,7 @@
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </template>
   </component>
 </template>
@@ -53,11 +63,20 @@ td {
 
 <script lang="ts" setup>
 import { vendorsStore, type Vendor } from '@/stores/vendor'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useKeycloakStore } from '@/stores/keycloak'
+import router from '@/router'
+
+const keycloakStore = useKeycloakStore()
 
 const store = vendorsStore()
-store.getVendors()
+
+onMounted(() => {
+  if (keycloakStore.authenticated) {
+    store.getVendors()
+  }
+})
 const vendors = computed(() => store.vendors)
 
 const route = useRoute()

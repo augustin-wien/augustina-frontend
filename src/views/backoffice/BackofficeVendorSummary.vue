@@ -1,64 +1,68 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <template #main>
-      <main>
-        <div className="page-content space-x-2 mt-5 row"></div>
-        <div className="text-center text-2xl space-y-3 space-x-3">
-          <h1 className="font-bold text-3xl mt-3 pt-3">VerkäuferInnen</h1>
-          <div className="table-auto border-spacing-4 border-collapse">
-            <div class="flex justify-evenly">
-              <input
-                id="searchInput"
-                type="text"
-                placeholder="Suche Ausweisnummer"
-                class="border-2 border-gray-400 rounded-md p-2 ml-2"
-                v-model="searchQuery"
-                @keyup.enter="search"
-              />
-              <button @click="search" class="p-3 rounded-full bg-lime-600 text-white">
-                Suchen
-              </button>
-            </div>
-            <thead>
-              <tr>
-                <th className="p-3">Ausweisnummer</th>
-                <th className="p-3">Vorname</th>
-                <th className="p-3">Name</th>
-                <th className="p-3">Aktion</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm  p-3">
-              <tr v-for="vendor in displayVendors" :key="vendor.ID">
-                <td className="border-t-2 p-3">
-                  <router-link :to="`/backoffice/userprofile/${vendor.ID}`">{{
-                    vendor?.LicenseID
-                  }}</router-link>
-                </td>
-                <td className="border-t-2 p-3">{{ vendor.FirstName }}</td>
-                <td className="border-t-2 p-3">{{ vendor.LastName }}</td>
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferInnen</h1>
+      <span>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Suche Ausweisnummer"
+          class="border-2 border-gray-400 rounded-md p-2 ml-2"
+          v-model="searchQuery"
+          @keyup.enter="search"
+        />
+        <button @click="search" class="p-3 rounded-full bg-lime-600 text-white">Suchen</button>
+      </span>
+    </template>
 
-                <div class="flex">
-                  <button
-                    @click="generateQRCode(vendor)"
-                    className="p-2 rounded-full bg-lime-600 text-white mr-2"
-                  >
-                    QR-Code erstellen
-                  </button>
-                  <span id="canvas"></span>
-                  <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
-                    <router-link :to="`/backoffice/userprofile/${vendor.ID}`"> Ändern</router-link>
-                  </button>
-                </div>
-              </tr>
-            </tbody>
+    <template #main>
+      <div class="main">
+        <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
+            <div className="table-auto border-spacing-4 border-collapse">
+              <thead>
+                <tr>
+                  <th className="p-3">Ausweisnummer</th>
+                  <th className="p-3">Vorname</th>
+                  <th className="p-3">Name</th>
+                  <th className="p-3">Aktion</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm p-3">
+                <tr v-for="vendor in displayVendors" :key="vendor.ID">
+                  <td className="border-t-2 p-3">
+                    <router-link :to="`/backoffice/userprofile/${vendor.ID}`">{{
+                      vendor?.LicenseID
+                    }}</router-link>
+                  </td>
+                  <td className="border-t-2 p-3">{{ vendor.FirstName }}</td>
+                  <td className="border-t-2 p-3">{{ vendor.LastName }}</td>
+
+                  <div class="flex">
+                    <button
+                      @click="generateQRCode(vendor)"
+                      className="p-2 rounded-full bg-lime-600 text-white mr-2"
+                    >
+                      QR-Code erstellen
+                    </button>
+                    <span id="canvas"></span>
+                    <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
+                      <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
+                        Ändern</router-link
+                      >
+                    </button>
+                  </div>
+                </tr>
+              </tbody>
+            </div>
           </div>
         </div>
-      </main>
+      </div>
 
       <footer>
         <router-link to="/backoffice/newvendor">
           <button
-            className="p-3 rounded-full bg-lime-600 text-white absolute bottom-10 right-10 h-16 w-16"
+            className="p-3 rounded-full bg-lime-600 text-white absolute fixed bottom-10 right-10 h-16 w-16"
           >
             Neu
           </button>
@@ -83,7 +87,7 @@ import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { ref, computed, onMounted, watch } from 'vue'
 import QRCodeStyling from 'qr-code-styling'
-import keycloak from '@/keycloak/keycloak';
+import keycloak from '@/keycloak/keycloak'
 
 // Initialize the vendor store
 const store = vendorsStore()
@@ -102,7 +106,7 @@ const vendors = computed(() => store.vendors)
 
 // create a search function for the search input
 const searchQuery = ref('')
-watch (searchQuery, () => {
+watch(searchQuery, () => {
   search()
 })
 const search = () => {

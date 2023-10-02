@@ -1,37 +1,58 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
+    <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Auszahlung</h1></template>
+
     <template #main>
-      <main>
-        <div className="page-content space-x-2 mt-5"></div>
-        <div className="text-center text-2xl space-y-3 space-x-3" v-if="vendor">
-          <h1>
-            <strong><u>Auszahlung</u></strong>
-          </h1>
-
-          <div>
-            Für <strong>{{ vendor.LicenseID }}</strong>, <strong>{{ vendor.FirstName }}</strong> <strong>{{
-              vendor.LastName }}</strong>:
-          </div>
-
-          <div className="container">
-            <div className="mx-3">
-              <div className="col text-lg underline">Guthaben</div>
-              <div className="col text-md">{{ formatCredit(vendor.Balance) }} Euro</div>
+      <div class="main">
+        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-center text-2xl space-y-3 space-x-3" v-if="vendor">
+            <div class="flex place-content-center justify-between">
+              <h1 class="text-2xl font-bold"></h1>
+              <button
+                @click="router.push('/backoffice/credits')"
+                class="px-2 rounded-full bg-red-600 text-white font-bold"
+              >
+                X
+              </button>
             </div>
-            <div className="mx-3">
-              <div className="col">
-                <p className="text-lg">
-                  Auszuzahlender Betrag: <strong> {{ formatCredit(amount * 100) }} Euro</strong>
-                </p>
-                <input className="text-center border w-20" v-model="amount" type="number" steps="0.10" placeholder="5"
-                  :max="vendor ? vendor.Balance / 100 : ''" />
-                <button type="submit" value="Bestätigen" className="p-3 m-3 rounded-full bg-lime-600 text-white"
-                  :onClick="payoutVendor">Bestätigen</button>
+            <div>
+              Für <strong>{{ vendor.LicenseID }}</strong
+              >, <strong>{{ vendor.FirstName }}</strong> <strong>{{ vendor.LastName }}</strong
+              >:
+            </div>
+
+            <div className="container">
+              <div className="mx-3">
+                <div className="col text-lg underline">Guthaben</div>
+                <div className="col text-md">{{ formatCredit(vendor.Balance) }} Euro</div>
+              </div>
+              <div className="mx-3">
+                <div className="col">
+                  <p className="text-lg">
+                    Auszuzahlender Betrag: <strong> {{ formatCredit(amount * 100) }} Euro</strong>
+                  </p>
+                  <input
+                    className="text-center border w-20"
+                    v-model="amount"
+                    type="number"
+                    steps="0.10"
+                    placeholder="5"
+                    :max="vendor ? vendor.Balance / 100 : ''"
+                  />
+                  <button
+                    type="submit"
+                    value="Bestätigen"
+                    className="p-3 m-3 rounded-full bg-lime-600 text-white"
+                    :onClick="payoutVendor"
+                  >
+                    Bestätigen
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </template>
   </component>
 </template>
@@ -47,6 +68,7 @@ import { vendorsStore, type Vendor } from '@/stores/vendor'
 import { ref, computed, onMounted, type ComputedRef } from 'vue'
 import { useRoute } from 'vue-router'
 import { payoutStore } from '@/stores/payout'
+import router from '@/router'
 
 const store = vendorsStore()
 const storePayout = payoutStore()
@@ -73,7 +95,7 @@ const vendor: ComputedRef<Vendor> = computed(() => {
 })
 
 // Initialize a reactive property 'amount' for input data
-const amount = ref<number>(0.00)
+const amount = ref<number>(0.0)
 onMounted(() => {
   if (vendor.value) {
     amount.value = vendor.value.Balance / 100
@@ -89,7 +111,6 @@ const payoutVendor = async () => {
   store.getVendor(vendor.value.ID).then((v: Vendor) => {
     console.log(v)
     amount.value = v.Balance / 100
-
   })
 }
 function formatCredit(credit: number) {

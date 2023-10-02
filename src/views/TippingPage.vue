@@ -14,7 +14,7 @@ const increment = paymentStore.setTip
         <template #main>
             <div className="h-full w-full grid grid-rows-5 place-items-center">
                 <div className="text-center font-semibold text-3xl">
-                    Spende geben
+                    {{ $t("donation") }}
                 </div>
                 <div className="flex place-items-center w-full">
                     <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
@@ -34,14 +34,14 @@ const increment = paymentStore.setTip
                 </div>
                 <div className="flex place-items-center w-full">
                     <button class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full">
-                        <RouterLink :to="{ name: 'Custom Tip' }">Eingabe</RouterLink>
+                        <RouterLink :to="{ name: 'Custom Tip' }">{{ $t("edit") }}</RouterLink>
                     </button>
                 </div>
                 <div className="flex place-items-center w-full">
                     <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
                         <button @click="increment(0)"
                             class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full">
-                            Heute nicht
+                            {{  $t("notToday") }}
                         </button>
                     </RouterLink>
                 </div>

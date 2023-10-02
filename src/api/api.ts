@@ -72,11 +72,14 @@ export async function getVendor(vendorId: number) {
 }
 
 export async function checkVendorId(vendorId: string | string[]) {
-  return apiInstance.get(`${VENDORS_API_URL}check/${vendorId}/`).then((response) => {
-    return response.data
-  }).catch(() => {
-    return null
-  })
+  return apiInstance
+    .get(`${VENDORS_API_URL}check/${vendorId}/`)
+    .then((response) => {
+      return response.data
+    })
+    .catch(() => {
+      return null
+    })
 }
 
 // items
@@ -85,11 +88,11 @@ export async function fetchItems() {
 }
 
 export async function postItems(newItem: Item) {
-  const formData = new FormData();
-  formData.append('Image', newItem.Image);
-  formData.append('Name', newItem.Name);
-  formData.append('Price', newItem.Price.toString());
-  formData.append('Description', newItem.Description);
+  const formData = new FormData()
+  formData.append('Image', newItem.Image)
+  formData.append('Name', newItem.Name)
+  formData.append('Price', newItem.Price.toString())
+  formData.append('Description', newItem.Description)
   return apiInstance.post(ITEMS_API_URL, formData, {
     headers: {
       accept: 'application/json',
@@ -99,11 +102,11 @@ export async function postItems(newItem: Item) {
 }
 
 export async function patchItem(updatedItem: Item) {
-  const formData = new FormData();
-  formData.append('Image', updatedItem.Image);
-  formData.append('Name', updatedItem.Name);
-  formData.append('Price', updatedItem.Price.toString());
-  formData.append('Description', updatedItem.Description);
+  const formData = new FormData()
+  formData.append('Image', updatedItem.Image)
+  formData.append('Name', updatedItem.Name)
+  formData.append('Price', updatedItem.Price.toString())
+  formData.append('Description', updatedItem.Description)
   return apiInstance.put(`${ITEMS_API_URL}${updatedItem.ID}/`, formData, {
     headers: {
       accept: 'application/json',
@@ -122,12 +125,11 @@ export async function fetchSettings() {
 }
 
 export async function patchSettings(updatedSettings: Settings) {
-
-  const formData = new FormData();
-  formData.append('Color', updatedSettings.Color);
+  const formData = new FormData()
+  formData.append('Color', updatedSettings.Color)
   formData.append('FontColor', updatedSettings.FontColor);
-  formData.append('Logo', updatedSettings.Logo);
-  formData.append('MainItem', updatedSettings.MainItem.toString());
+  formData.append('Logo', updatedSettings.Logo)
+  formData.append('MainItem', updatedSettings.MainItem.toString())
   formData.append('OrgaCoversTransactionCosts', updatedSettings.OrgaCoversTransactionCosts.toString());
   formData.append('MaxOrderAmount', updatedSettings.MaxOrderAmount.toString());
 
@@ -146,7 +148,7 @@ export async function patchSettings(updatedSettings: Settings) {
 //payments list
 //sind rfc dates strings?
 export async function fetchPayments(startDate: string, endDate: string, filter: string) {
-  return apiInstance.get(`${PAYMENT_API_URL}?from=${startDate}&to=${endDate}${filter?'&'+filter:''}`)
+  return apiInstance.get(`${PAYMENT_API_URL}?from=${startDate}&to=${endDate}${filter ? '&' + filter : ''}`)
 }
 
 //payout
