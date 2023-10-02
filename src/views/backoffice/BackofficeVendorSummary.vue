@@ -1,24 +1,24 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferInnen</h1>
+      <span>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Suche Ausweisnummer"
+          class="border-2 border-gray-400 rounded-md p-2 ml-2"
+          v-model="searchQuery"
+          @keyup.enter="search"
+        />
+        <button @click="search" class="p-3 rounded-full bg-lime-600 text-white">Suchen</button>
+      </span>
+    </template>
+
     <template #main>
       <main>
-        <div className="page-content space-x-2 mt-5 row"></div>
-        <div className="text-center text-2xl space-y-3 space-x-3">
-          <h1 className="font-bold text-3xl mt-3 pt-3">VerkäuferInnen</h1>
+        <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
           <div className="table-auto border-spacing-4 border-collapse">
-            <div class="flex justify-evenly">
-              <input
-                id="searchInput"
-                type="text"
-                placeholder="Suche Ausweisnummer"
-                class="border-2 border-gray-400 rounded-md p-2 ml-2"
-                v-model="searchQuery"
-                @keyup.enter="search"
-              />
-              <button @click="search" class="p-3 rounded-full bg-lime-600 text-white">
-                Suchen
-              </button>
-            </div>
             <thead>
               <tr>
                 <th className="p-3">Ausweisnummer</th>
@@ -27,7 +27,7 @@
                 <th className="p-3">Aktion</th>
               </tr>
             </thead>
-            <tbody className="text-sm  p-3">
+            <tbody className="text-sm p-3">
               <tr v-for="vendor in displayVendors" :key="vendor.ID">
                 <td className="border-t-2 p-3">
                   <router-link :to="`/backoffice/userprofile/${vendor.ID}`">{{
@@ -58,7 +58,7 @@
       <footer>
         <router-link to="/backoffice/newvendor">
           <button
-            className="p-3 rounded-full bg-lime-600 text-white absolute bottom-10 right-10 h-16 w-16"
+            className="p-3 rounded-full bg-lime-600 text-white absolute fixed bottom-10 right-10 h-16 w-16"
           >
             Neu
           </button>
@@ -83,7 +83,7 @@ import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { ref, computed, onMounted, watch } from 'vue'
 import QRCodeStyling from 'qr-code-styling'
-import keycloak from '@/keycloak/keycloak';
+import keycloak from '@/keycloak/keycloak'
 
 // Initialize the vendor store
 const store = vendorsStore()
@@ -102,7 +102,7 @@ const vendors = computed(() => store.vendors)
 
 // create a search function for the search input
 const searchQuery = ref('')
-watch (searchQuery, () => {
+watch(searchQuery, () => {
   search()
 })
 const search = () => {

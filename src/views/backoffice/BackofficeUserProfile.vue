@@ -1,11 +1,12 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferInnen Profil</h1></template
+    >
     <template #main>
       <main>
         <div className="container page-content space-x-2 mt-5">
           <div className="text-center text-2xl space-y-3 space-x-3">
-            <h1 className="font-bold text-3xl mt-3 pt-3">VerkäuferInnen Profil</h1>
-
             <div className="table-auto border-spacing-4 border-collapse">
               <tbody className="text-sm text-left" v-if="vendor">
                 <tr>

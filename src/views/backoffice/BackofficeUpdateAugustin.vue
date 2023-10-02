@@ -1,10 +1,11 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Einstellungen ändern</h1></template
+    >
     <template #main>
       <main>
         <div class="w-full max-w-md mx-auto mt-4" v-if="settings">
-          <h1 className="font-bold text-3xl mt-3 p-3">Einstellungen</h1>
-
           <form
             @submit.prevent="updateSettings"
             class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -152,7 +153,7 @@ const showToast = (type: string, message: string) => {
 
 const updateLogo = (event: any) => {
   // This logic will execute when a file is selected in the file input
-  updatedSettings.value.Logo= event.target.files[0]
+  updatedSettings.value.Logo = event.target.files[0]
 }
 
 const url = import.meta.env.VITE_API_URL

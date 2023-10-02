@@ -1,18 +1,22 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Offene Beträge</h1>
+      <span>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Suche Ausweisnummer"
+          v-model="searchQuery"
+          class="border-2 border-gray-400 rounded-md p-2 ml-2"
+        />
+        <button class="p-3 rounded-full bg-lime-600 text-white">Suchen</button>
+      </span>
+    </template>
+
     <template #main>
       <main v-if="vendors">
         <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
-          <h1 className="font-bold text-3xl mt-3 pt-3">Offene Beträge</h1>
-          <input
-            id="searchInput"
-            type="text"
-            placeholder="Suche Ausweisnummer"
-            v-model="searchQuery"
-            class="border-2 border-gray-400 rounded-md p-2 ml-2"
-          />
-          <button class="p-3 rounded-full bg-lime-600 text-white">Suchen</button>
-
           <div className="table-auto border-spacing-4 border-collapse">
             <thead>
               <tr>
@@ -57,7 +61,7 @@ function formatCredit(credit: number) {
 const vendors = computed(() => store.vendors)
 // create a search function for the search input
 const searchQuery = ref('')
-watch (searchQuery, () => {
+watch(searchQuery, () => {
   search()
 })
 const search = () => {
@@ -70,7 +74,6 @@ const search = () => {
 const displayVendors = computed(() => {
   return searchQuery.value ? store.filteredVendors : vendors.value
 })
-
 </script>
 
 <style>

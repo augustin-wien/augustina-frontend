@@ -1,5 +1,8 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">VwerkäuferIn bearbeiten</h1></template
+    >
     <template #main>
       <main>
         <div class="w-full max-w-md mx-auto mt-4" v-if="vendor">
@@ -113,8 +116,7 @@ const updatedVendor = ref({
   IsDisabled: false,
   Longitude: 0,
   Latitude: 0,
-  Address: '',
-  
+  Address: ''
 })
 
 store.getVendors()

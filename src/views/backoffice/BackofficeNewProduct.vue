@@ -1,9 +1,10 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <template #header>back</template>
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Neues Produkt anlegen</h1></template
+    >
     <template #main>
       <main>
-        <h1>Neues Produkt anlegen</h1>
         <div class="w-full max-w-md mx-auto mt-4">
           <form @submit.prevent="submitItem" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
@@ -54,12 +55,13 @@
             </div>
 
             <div class="flex justify-between">
-              <button class="p-3 rounded-full mr-3 bg-red-600 bg-lime-600 text-white" 
-              @click="cancel">
+              <button
+                class="p-3 rounded-full mr-3 bg-red-600 bg-lime-600 text-white"
+                @click="cancel"
+              >
                 Abbrechen
               </button>
               <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">Anlegen</button>
-
             </div>
           </form>
           <Toast v-if="toast" :toast="toast" />
@@ -74,7 +76,7 @@ import { ref } from 'vue'
 import { itemStore } from '@/stores/items'
 import type { Item } from '@/stores/items'
 import Toast from '@/components/ToastMessage.vue'
-import router from '@/router';
+import router from '@/router'
 
 const store = itemStore()
 
@@ -90,19 +92,25 @@ const toast = ref<{ type: string; message: string } | null>(null)
 
 const submitItem = async () => {
   try {
-    store.createItem(newItem.value as Item).then(() => {
-      console.log('Item created')
-      router.push({ name: 'Backoffice Product Settings' })
-    }).catch((err) => {
-      showToast('error', 'Produkt konnte nicht angelegt werden. '+  err.response.data.error.message)
-    })
-  } catch (err:any) {
-    showToast('error', 'Produkt konnte nicht angelegt werden'+  err)
+    store
+      .createItem(newItem.value as Item)
+      .then(() => {
+        console.log('Item created')
+        router.push({ name: 'Backoffice Product Settings' })
+      })
+      .catch((err) => {
+        showToast(
+          'error',
+          'Produkt konnte nicht angelegt werden. ' + err.response.data.error.message
+        )
+      })
+  } catch (err: any) {
+    showToast('error', 'Produkt konnte nicht angelegt werden' + err)
     console.error('Error creating item:', err)
   }
 }
 
-const cancel = (e:Event) => {
+const cancel = (e: Event) => {
   e.preventDefault()
   router.go(-1)
 }
