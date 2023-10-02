@@ -57,7 +57,7 @@ onMounted(() => {
   if (keycloakStore.authenticated) {
     store.getSales(startDate.value.toISOString(), endDate.value.toISOString())
   } else {
-    watch(keycloakStore.authenticated, (newVal) => {
+    watch(keycloakStore.authenticated, () => {
       store.getSales(startDate.value.toISOString(), endDate.value.toISOString())
     })
   }
@@ -91,9 +91,6 @@ const formatTime = (time: string) => {
 }
 
 const payments = computed(() => store.payments)
-const translateReceiver = (receiver: string) => {
-  return receiver == "Cash" ? "Barkasse" : receiver
-}
 const translateSender = (receiver: string) => {
   return receiver == "Orga" ? "Augustin" : receiver
 } 

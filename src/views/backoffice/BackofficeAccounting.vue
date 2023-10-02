@@ -42,9 +42,8 @@
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed} from 'vue'
 import { usePaymentStore } from '@/stores/paymentdata'
-import { useKeycloakStore } from '@/stores/keycloak';
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
