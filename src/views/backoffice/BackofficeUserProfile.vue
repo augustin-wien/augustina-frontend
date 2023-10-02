@@ -63,7 +63,7 @@ td {
 
 <script lang="ts" setup>
 import { vendorsStore, type Vendor } from '@/stores/vendor'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useKeycloakStore } from '@/stores/keycloak'
 import router from '@/router'
@@ -71,9 +71,12 @@ import router from '@/router'
 const keycloakStore = useKeycloakStore()
 
 const store = vendorsStore()
-if (keycloakStore.authenticated) {
-  store.getVendors()
-}
+
+onMounted(() => {
+  if (keycloakStore.authenticated) {
+    store.getVendors()
+  }
+})
 const vendors = computed(() => store.vendors)
 
 const route = useRoute()

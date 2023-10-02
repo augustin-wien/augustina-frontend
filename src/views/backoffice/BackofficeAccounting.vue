@@ -49,7 +49,7 @@
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { usePaymentStore } from '@/stores/paymentdata'
 import { useKeycloakStore } from '@/stores/keycloak'
 
