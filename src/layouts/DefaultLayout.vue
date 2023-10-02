@@ -14,7 +14,7 @@ settStore.getSettingsFromApi()
                         <option value="de">DE</option>
                     </select>
             <slot name="header">
-                <img alt="Augustin logo" className="logo mx-auto my-1" :src="settStore.imgUrl" width="213" height="105" />
+                <img alt="Augustin logo" className="logo mx-auto my-1 scale-75" :src="settStore.imgUrl" />
                 </slot>
             </header>
             <div class="h-5/6 main-container px-8">

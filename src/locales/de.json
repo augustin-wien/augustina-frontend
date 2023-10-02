@@ -13,5 +13,11 @@
 
     "symbol": "Symbol zeigen",
     "bought": "Gekauft am: ",
-    "at": "um"
+    "at": " um",
+
+    "failed": "Transaktion fehlgeschlagen",
+    "tryagain": "Erneut versuchen:",
+    "return": "Start",
+
+    "customdonation": "Spende eingeben:"
 }

@@ -13,5 +13,12 @@
 
     "symbol": "Show the symbol",
     "bought": "Bought on the: ",
-    "at": "at"
+    "at": " at",
+
+    "failed": "Transaction failed",
+    "tryagain": "Try again:",
+    "return": "Home",
+
+    "customdonation": "Enter your donation:"
+
 }
