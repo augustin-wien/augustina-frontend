@@ -1,10 +1,20 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Einstellungen ändern</h1></template
+    >
     <template #main>
-      <main>
+      <div class="main">
         <div class="w-full max-w-md mx-auto mt-4" v-if="settings">
-          <h1 className="font-bold text-3xl mt-3 p-3">Einstellungen</h1>
-
+          <div class="flex place-content-center justify-between">
+            <h1 class="text-2xl font-bold">Einstellungen ändern</h1>
+            <button
+              @click="router.push('/backoffice/settings')"
+              class="px-2 rounded-full bg-red-600 text-white font-bold"
+            >
+              X
+            </button>
+          </div>
           <form
             @submit.prevent="updateSettings"
             class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -96,7 +106,7 @@
             </div>
           </form>
         </div>
-      </main>
+      </div>
     </template>
   </component>
 </template>
@@ -106,6 +116,7 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { settingsStore, type Settings } from '@/stores/settings'
 import { itemStore } from '@/stores/items'
 import toast from '@/components/ToastMessage.vue'
+import router from '@/router'
 
 const store = settingsStore()
 const storeItems = itemStore()
@@ -152,7 +163,7 @@ const showToast = (type: string, message: string) => {
 
 const updateLogo = (event: any) => {
   // This logic will execute when a file is selected in the file input
-  updatedSettings.value.Logo= event.target.files[0]
+  updatedSettings.value.Logo = event.target.files[0]
 }
 
 const url = import.meta.env.VITE_API_URL

@@ -1,29 +1,69 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Neue/n VerkäuferIn anlegen</h1></template
+    >
+
     <template #main>
-      <main>
+      <div class="main">
         <div class="w-full max-w-md mx-auto mt-4" v-if="!importing">
-          <form @submit.prevent="submitVendor" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div class="flex place-content-center justify-between">
+            <h1 class="text-2xl font-bold">Neue/n VerkäuferIn</h1>
+            <button
+              @click="router.push('/backoffice/vendorsummary')"
+              class="px-2 rounded-full bg-red-600 text-white font-bold"
+            >
+              X
+            </button>
+          </div>
+          <form
+            @submit.prevent="submitVendor"
+            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          >
             <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName">Vorname:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
+                >Vorname:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.FirstName" type="text" id="firstName" required />
+                v-model="newVendor.FirstName"
+                type="text"
+                id="firstName"
+                required
+              />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName">Nachname:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
+                >Nachname:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.LastName" type="text" id="lastName" required />
+                v-model="newVendor.LastName"
+                type="text"
+                id="lastName"
+                required
+              />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email">Email:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
+                >Email:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Email" type="email" id="email" required />
+                v-model="newVendor.Email"
+                type="email"
+                id="email"
+                required
+              />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID">Lizenznummer:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
+                >Lizenznummer:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.LicenseID" type="text" id="licenseID" required />
+                v-model="newVendor.LicenseID"
+                type="text"
+                id="licenseID"
+                required
+              />
             </div>
 
             <div class="flex place-content-center">
@@ -34,12 +74,13 @@
         </div>
         <div v-else>
           importiere {{ store.vendorsImportedCount }}/{{ importingVendorsCount }} VerkäuferInnen
-
         </div>
-      </main>
+      </div>
       <footer>
-        <button @click="importCSV"
-          className="p-3 rounded-full bg-lime-600 text-white absolute bottom-10 right-10 h-20 w-20">
+        <button
+          @click="importCSV"
+          className="p-3 rounded-full bg-lime-600 text-white absolute bottom-10 right-10 h-20 w-20"
+        >
           CSV import
         </button>
       </footer>
@@ -52,6 +93,7 @@ import { ref } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import Toast from '@/components/ToastMessage.vue'
+import router from '@/router'
 
 const store = vendorsStore()
 
@@ -102,16 +144,28 @@ const importCSV = async () => {
     const vendors: Array<Vendor> = lines.map((line: any, i: number) => {
       if (i === 0) return null
       //@ts-ignore
-      const [PLZ, location, address, workingTime, number, LicenseID, FirstName, LastName, language] = line.split(';')
+      const [
+        PLZ,
+        location,
+        address,
+        workingTime,
+        number,
+        LicenseID,
+        FirstName,
+        LastName,
+        language
+      ] = line.split(';')
       const Email = `${LicenseID}@augustin.or.at`
       return {
-        Email, LicenseID,
+        Email,
+        LicenseID,
         FirstName,
         LastName,
         LastPayout: null,
         UrlID: 'new-url-id',
         IsDisabled: false,
-        Latitude: 0, Longitude: 0
+        Latitude: 0,
+        Longitude: 0
       }
     })
     try {
