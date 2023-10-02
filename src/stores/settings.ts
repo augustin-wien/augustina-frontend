@@ -32,13 +32,12 @@ export const settingsStore = defineStore('settings', {
 
   actions: {
     async getSettingsFromApi() {
-      try {
-        const data = await fetchSettings()
+      fetchSettings().then((data) => {
         this.settings = data.data
         this.imgUrl = import.meta.env.VITE_API_URL + this.settings.Logo
-      } catch (error) {
-        console.log(error)
-      }
+      }).catch((error) => {
+        console.log("failed to get the settings", error)
+      })
     },
 
     async updateSettings(updatedSettings: Settings) {

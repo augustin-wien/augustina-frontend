@@ -20,11 +20,6 @@
           <div><span class="date text-xl">{{ currentDate() }} </span><span class="time text-xl"> um {{ time }}</span></div>
           <span class="date text-xl">Gekauft am: {{ paymentStore.timeStamp }}</span>
         </div>
-        <RouterLink class="w-full" to="/">
-          <button class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full">
-            Start
-          </button>
-        </RouterLink>
       </div>
     </template>
   </component>
