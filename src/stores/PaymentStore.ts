@@ -70,7 +70,9 @@ export const usePaymentStore = defineStore('payment', {
         this.tip = this.tip - c
       }
     },
-
+    setTip(c: number) {
+      this.tip = c
+    },
     epaper() {
       this.digital.digital = true
     },
@@ -121,7 +123,7 @@ export const usePaymentStore = defineStore('payment', {
     },
     async verifyPayment() {
       // dont reverify an already verified order
-      if (this.verification != null){
+      if (this.verification != null) {
         return true
       }
       if (this.transactionID === "") {
