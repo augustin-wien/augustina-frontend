@@ -66,6 +66,7 @@ export interface Vendor {
   VendorSince: string
   OnlineMap: boolean
   HasSmartphone: boolean
+  HasBankAccount: boolean
 }
 
 export interface VendorCheckResponse {
@@ -114,18 +115,19 @@ export const vendorsStore = defineStore('vendors', {
 
     async createVendors(vendors: Array<Vendor>) {
       for (let i = 0; i < vendors.length; i++) {
-        if (vendors[i] !== null) {
+        const vendor = vendors[i];
+        if (vendor !== null) {
           if (
-            vendors[i].LicenseID === '' ||
-            vendors[i].LicenseID === null ||
-            vendors[i].LicenseID === undefined
+            vendor.LicenseID === '' ||
+            vendor.LicenseID === null ||
+            vendor.LicenseID === undefined
           ) {
             return null
           }
           this.vendorsImportedCount = i + 1
-          const vendorCheck = await checkVendorId(vendors[i].LicenseID)
+          const vendorCheck = await checkVendorId(vendor.LicenseID)
           if (vendorCheck === null) {
-            await this.createVendorPromise(vendors[i])
+            await this.createVendorPromise(vendor)
           }
         }
       }

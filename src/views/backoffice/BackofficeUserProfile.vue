@@ -31,6 +31,10 @@
                   <td className="p-3">{{ vendor.LicenseID }}</td>
                 </tr>
                 <tr>
+                  <th className="p-3">Deaktiviert:</th>
+                  <td className="p-3">{{ vendor.IsDisabled }}</td>
+                </tr>
+                <tr>
                   <th className="p-3">Letzte Auszahlung:</th>
                   <td className="p-3">{{ vendor.LastPayout }}</td>
                 </tr>
@@ -47,7 +51,7 @@
                   <td className="p-3">{{ vendor.Telephone }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Adresse:</th>
+                  <th className="p-3">Standplatz-Adresse:</th>
                   <td className="p-3">{{ vendor.Address }}</td>
                 </tr>
                 <tr>
@@ -82,6 +86,10 @@
                 <tr>
                   <th className="p-3">Smartphone:</th>
                   <td className="p-3">{{ vendor.HasSmartphone }}</td>
+                </tr>
+                <tr>
+                  <th className="p-3">Bank-Konto:</th>
+                  <td className="p-3">{{ vendor.HasBankAccount }}</td>
                 </tr>
               </tbody>
             </div>

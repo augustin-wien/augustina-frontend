@@ -76,8 +76,23 @@
               />
             </div>
 
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
+              >Deaktiviert:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2"> {{ vendor.IsDisabled }} </span>
+              <select
+                class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.IsDisabled"
+                id="onlineMap"
+                required
+              >
+                <option value="true">Ja</option>
+                <option value="false">Nein</option>
+              </select>
+            </div>
             <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
-              >Adresse:</label
+              >Standplatz-Adresse:</label
             >
             <div class="flex flex-row">
               <span class="p-2">{{ vendor.Address }} </span>
@@ -198,7 +213,7 @@
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 v-model="updatedVendor.RegistrationDate"
-                type="date"
+                type="text"
                 id="registrationDate"
               />
             </div>
@@ -210,7 +225,7 @@
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 v-model="updatedVendor.VendorSince"
-                type="date"
+                type="text"
                 id="vendorSince"
               />
             </div>
