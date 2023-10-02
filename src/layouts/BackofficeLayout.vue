@@ -91,14 +91,14 @@
         </div>
       </div>
 
-      <main className=" flex">
+      <div className="main-container flex">
         <div class="header-slot fixed">
           <slot name="header"> </slot>
         </div>
         <div class="main-slot">
           <slot name="main"> </slot>
         </div>
-      </main>
+      </div>
       <footer>
         <slot name="footer"></slot>
       </footer>
@@ -136,11 +136,8 @@ const apiUrl = import.meta.env.VITE_API_URL
 
 <style lang="scss" scoped>
 .main-container {
-  display: flex;
-  flex-direction: column;
-  padding-left: 10px;
-  justify-content: flex-start;
-  align-items: flex-start;
+  padding-left: 50px;
+  margin-left: 300px;
 }
 
 .sidemenu-link {
@@ -160,6 +157,7 @@ const apiUrl = import.meta.env.VITE_API_URL
   border-radius: 5px;
   margin-top: 50px;
   padding-top: 50px;
+  max-width: 100%;
 }
 footer {
   position: fixed;

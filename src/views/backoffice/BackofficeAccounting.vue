@@ -3,35 +3,36 @@
     <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Umsätze</h1></template>
     <template #main>
       <main>
-        <div className="page-content space-x-2 mt-5"></div>
-        <div className=" space-y-3 space-x-3">
-          <p className="text-lg">Zeitraum eingeben:</p>
-          <VueDatePicker
-            v-model="date"
-            range
-            :enable-time-picker="false"
-            placeholder="Zeitraum wählen"
-            @range-start="onRangeStart"
-            @range-end="onRangeEnd"
-          />
-          <div className="table-auto border-spacing-4 border-collapse">
-            <thead>
-              <tr>
-                <th className="p-3">Datum</th>
-                <th className="p-3">Betrag</th>
-                <th className="p-3">Betreff</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm">
-              <tr v-for="(payment, id) in payments" :key="id">
-                <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
-                <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
-                <td className="border-t-2 p-3">
-                  von {{ payment.Sender }} an {{ payment.Receiver
-                  }}{{ payment.AuthorizedBy ? ' durch ' + payment.AuthorizedBy : '' }}
-                </td>
-              </tr>
-            </tbody>
+        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className=" space-y-3 space-x-3">
+            <p className="text-lg">Zeitraum eingeben:</p>
+            <VueDatePicker
+              v-model="date"
+              range
+              :enable-time-picker="false"
+              placeholder="Zeitraum wählen"
+              @range-start="onRangeStart"
+              @range-end="onRangeEnd"
+            />
+            <div className="table-auto border-spacing-4 border-collapse">
+              <thead>
+                <tr>
+                  <th className="p-3">Datum</th>
+                  <th className="p-3">Betrag</th>
+                  <th className="p-3">Betreff</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm">
+                <tr v-for="(payment, id) in payments" :key="id">
+                  <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
+                  <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
+                  <td className="border-t-2 p-3">
+                    von {{ payment.Sender }} an {{ payment.Receiver
+                    }}{{ payment.AuthorizedBy ? ' durch ' + payment.AuthorizedBy : '' }}
+                  </td>
+                </tr>
+              </tbody>
+            </div>
           </div>
         </div>
       </main>

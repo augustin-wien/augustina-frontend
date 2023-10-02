@@ -1,93 +1,100 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">VwerkäuferIn bearbeiten</h1></template
+      <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferIn bearbeiten</h1></template
     >
     <template #main>
       <main>
         <div class="w-full max-w-md mx-auto mt-4" v-if="vendor">
-          <form
-            @submit.prevent="updateVendor"
-            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-          >
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
-                >Vorname:</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">{{ vendor.FirstName }} </span>
-                <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedVendor.FirstName"
-                  type="text"
-                  id="firstName"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
-                >Nachname:</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">{{ vendor.LastName }} </span>
-
-                <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedVendor.LastName"
-                  type="text"
-                  id="lastName"
-                  required
-                />
-              </div>
-
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
-                >Email:</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">{{ vendor.Email }} </span>
-
-                <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedVendor.Email"
-                  type="email"
-                  id="email"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
-                >Lizenznummer:</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">{{ vendor.LicenseID }} </span>
-
-                <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedVendor.LicenseID"
-                  type="text"
-                  id="licenseID"
-                  required
-                />
-              </div>
-            </div>
-
-            <div class="flex place-content-center justify-between">
-              <button
-                type="submit"
-                class="p-3 rounded-full bg-lime-600 text-white"
-                @click="updateVendor"
-              >
-                Bestätigen
-              </button>
-              <button
-                type="submit"
-                class="p-3 rounded-full bg-red-600 text-white"
-                @click="deleteVendor"
-              >
-                Löschen
-              </button>
-            </div>
-          </form>
-          <Toast v-if="toast" :toast="toast" />
+          <div class="flex place-content-center justify-between">
+            <h1 class="text-2xl font-bold">{{ vendor.LicenseID }} ändern</h1>
+            <button
+              @click="router.push('/backoffice/vendorsummary')"
+              class="px-2 rounded-full bg-red-600 text-white font-bold"
+            >
+              X
+            </button>
+          </div>
         </div>
+
+        <form @submit.prevent="updateVendor" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
+              >Vorname:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.FirstName }} </span>
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.FirstName"
+                type="text"
+                id="firstName"
+                required
+              />
+            </div>
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
+              >Nachname:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.LastName }} </span>
+
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.LastName"
+                type="text"
+                id="lastName"
+                required
+              />
+            </div>
+
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
+              >Email:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.Email }} </span>
+
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.Email"
+                type="email"
+                id="email"
+                required
+              />
+            </div>
+            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
+              >Lizenznummer:</label
+            >
+            <div class="flex flex-row">
+              <span class="p-2">{{ vendor.LicenseID }} </span>
+
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.LicenseID"
+                type="text"
+                id="licenseID"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="flex place-content-center justify-between">
+            <button
+              type="submit"
+              class="p-3 rounded-full bg-lime-600 text-white"
+              @click="updateVendor"
+            >
+              Bestätigen
+            </button>
+            <button
+              type="submit"
+              class="p-3 rounded-full bg-red-600 text-white"
+              @click="deleteVendor"
+            >
+              Löschen
+            </button>
+          </div>
+        </form>
+        <Toast v-if="toast" :toast="toast" />
       </main>
     </template>
   </component>
@@ -99,6 +106,7 @@ import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
+import router from '@/router'
 
 const store = vendorsStore()
 

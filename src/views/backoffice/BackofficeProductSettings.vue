@@ -11,6 +11,7 @@
                 <th class="p-3">Name</th>
                 <th class="p-3">Beschreibung</th>
                 <th class="p-3">Preis</th>
+                <th class="p-3">Aktion</th>
               </tr>
             </thead>
             <tbody className="text-sm p-3">
@@ -27,6 +28,11 @@
                 <td class="border-t-2 p-3 font-bold">{{ item.Name }}</td>
                 <td class="border-t-2 p-3">{{ item.Description }}</td>
                 <td class="border-t-2 p-3">{{ price(item.Price) }} Euro</td>
+                <td>
+                  <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
+                    <button class="p-3 rounded-full bg-lime-600 text-white">Ändern</button>
+                  </router-link>
+                </td>
               </tr>
             </tbody>
           </div>

@@ -4,11 +4,12 @@
       <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferInnen Profil</h1></template
     >
     <template #main>
-      <main>
-        <div className="container page-content space-x-2 mt-5">
+      <main v-if="vendor">
+        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3">
+            <h1 class="text-2xl font-bold">{{ vendor.LicenseID }}</h1>
             <div className="table-auto border-spacing-4 border-collapse">
-              <tbody className="text-sm text-left" v-if="vendor">
+              <tbody className="text-sm text-left">
                 <tr>
                   <th className="p-3">Vorname:</th>
                   <td className="p-3">{{ vendor.FirstName }}</td>

@@ -4,40 +4,41 @@
 
     <template #main>
       <main>
-        <div className="page-content space-x-2 mt-5"></div>
-        <div className="text-center text-2xl space-y-3 space-x-3" v-if="vendor">
-          <div>
-            Für <strong>{{ vendor.LicenseID }}</strong
-            >, <strong>{{ vendor.FirstName }}</strong> <strong>{{ vendor.LastName }}</strong
-            >:
-          </div>
-
-          <div className="container">
-            <div className="mx-3">
-              <div className="col text-lg underline">Guthaben</div>
-              <div className="col text-md">{{ formatCredit(vendor.Balance) }} Euro</div>
+        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-center text-2xl space-y-3 space-x-3" v-if="vendor">
+            <div>
+              Für <strong>{{ vendor.LicenseID }}</strong
+              >, <strong>{{ vendor.FirstName }}</strong> <strong>{{ vendor.LastName }}</strong
+              >:
             </div>
-            <div className="mx-3">
-              <div className="col">
-                <p className="text-lg">
-                  Auszuzahlender Betrag: <strong> {{ formatCredit(amount * 100) }} Euro</strong>
-                </p>
-                <input
-                  className="text-center border w-20"
-                  v-model="amount"
-                  type="number"
-                  steps="0.10"
-                  placeholder="5"
-                  :max="vendor ? vendor.Balance / 100 : ''"
-                />
-                <button
-                  type="submit"
-                  value="Bestätigen"
-                  className="p-3 m-3 rounded-full bg-lime-600 text-white"
-                  :onClick="payoutVendor"
-                >
-                  Bestätigen
-                </button>
+
+            <div className="container">
+              <div className="mx-3">
+                <div className="col text-lg underline">Guthaben</div>
+                <div className="col text-md">{{ formatCredit(vendor.Balance) }} Euro</div>
+              </div>
+              <div className="mx-3">
+                <div className="col">
+                  <p className="text-lg">
+                    Auszuzahlender Betrag: <strong> {{ formatCredit(amount * 100) }} Euro</strong>
+                  </p>
+                  <input
+                    className="text-center border w-20"
+                    v-model="amount"
+                    type="number"
+                    steps="0.10"
+                    placeholder="5"
+                    :max="vendor ? vendor.Balance / 100 : ''"
+                  />
+                  <button
+                    type="submit"
+                    value="Bestätigen"
+                    className="p-3 m-3 rounded-full bg-lime-600 text-white"
+                    :onClick="payoutVendor"
+                  >
+                    Bestätigen
+                  </button>
+                </div>
               </div>
             </div>
           </div>

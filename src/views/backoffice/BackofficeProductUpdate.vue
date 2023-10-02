@@ -7,8 +7,8 @@
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ item.Name }} bearbeiten</h1>
             <button
-              class="p-3 rounded-full mr-3 bg-white bg-lime-600"
               @click="router.push('/backoffice/productsettings')"
+              class="px-2 rounded-full bg-red-600 text-white font-bold"
             >
               X
             </button>
