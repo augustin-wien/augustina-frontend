@@ -1,30 +1,39 @@
 import agent from '@/api/agent'
 import { defineStore } from 'pinia'
-import { getVendor, fetchVendors, postVendors, patchVendor, removeVendor, checkVendorId } from '@/api/api'
+import {
+  getVendor,
+  fetchVendors,
+  postVendors,
+  patchVendor,
+  removeVendor,
+  checkVendorId
+} from '@/api/api'
 import router from '@/router'
 
 export const useVendorStore = defineStore('vendor', {
   state: () => {
     return {
-      vendorid: "",
-      vendorName: ""
+      vendorid: '',
+      vendorName: ''
     }
   },
   actions: {
     async checkID(vendorId: string | string[] | undefined) {
-      if (!vendorId ) {
-        router.push({ name: "Go to Vendor" })
+      if (!vendorId) {
+        router.push({ name: 'Go to Vendor' })
         return
       }
-      agent.Vendor.checkID(vendorId).then((response) => {
-        this.vendorName = response.FirstName
-        this.vendorid = typeof vendorId == "string"? vendorId : vendorId[0]
-        if (this.vendorName !== "") {
-          router.push(`/v/${vendorId}/landing-page`)
-        }
-      }).catch(() => {
-        router.push({ name: "Go to Vendor" })
-      })
+      agent.Vendor.checkID(vendorId)
+        .then((response) => {
+          this.vendorName = response.FirstName
+          this.vendorid = typeof vendorId == 'string' ? vendorId : vendorId[0]
+          if (this.vendorName !== '') {
+            router.push(`/v/${vendorId}/landing-page`)
+          }
+        })
+        .catch(() => {
+          router.push({ name: 'Go to Vendor' })
+        })
     }
   }
 })
@@ -47,6 +56,16 @@ export interface Vendor {
   Longitude: number
   Latitude: number
   Address: string
+  PLZ: string
+  Location: string
+  WorkingTime: string
+  Language: string
+  Comment: string
+  Telephone: string
+  RegistrationDate: string
+  VendorSince: string
+  OnlineMap: boolean
+  HasSmartphone: boolean
 }
 
 export interface VendorCheckResponse {
@@ -58,7 +77,7 @@ export const vendorsStore = defineStore('vendors', {
     return {
       vendors: [] as Vendor[],
       vendorsImportedCount: Number,
-      filteredVendors: [] as Vendor[],
+      filteredVendors: [] as Vendor[]
     }
   },
 
@@ -80,7 +99,6 @@ export const vendorsStore = defineStore('vendors', {
       }
     },
 
-
     async createVendor(newVendor: Vendor) {
       postVendors(newVendor)
         .then(() => {
@@ -97,16 +115,19 @@ export const vendorsStore = defineStore('vendors', {
     async createVendors(vendors: Array<Vendor>) {
       for (let i = 0; i < vendors.length; i++) {
         if (vendors[i] !== null) {
-          if (vendors[i].LicenseID === '' || vendors[i].LicenseID === null || vendors[i].LicenseID === undefined) {
+          if (
+            vendors[i].LicenseID === '' ||
+            vendors[i].LicenseID === null ||
+            vendors[i].LicenseID === undefined
+          ) {
             return null
           }
-          this.vendorsImportedCount = (i + 1)
+          this.vendorsImportedCount = i + 1
           const vendorCheck = await checkVendorId(vendors[i].LicenseID)
           if (vendorCheck === null) {
             await this.createVendorPromise(vendors[i])
           }
-
-        };
+        }
       }
     },
     async searchVendors(searchTerm: string) {
@@ -114,9 +135,13 @@ export const vendorsStore = defineStore('vendors', {
       if (searchTerm === '') {
         this.filteredVendors = this.vendors
       } else {
-        this.filteredVendors = this.vendors.filter((vendor:Vendor) => {
-          return vendor.FirstName.toLowerCase().includes(searchTerm.toLowerCase()) || vendor.LastName.toLowerCase().includes(searchTerm.toLowerCase()) 
-          || vendor.Email.toLowerCase().includes(searchTerm.toLowerCase()) || vendor.LicenseID.toLowerCase().includes(searchTerm.toLowerCase())
+        this.filteredVendors = this.vendors.filter((vendor: Vendor) => {
+          return (
+            vendor.FirstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            vendor.LastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            vendor.Email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            vendor.LicenseID.toLowerCase().includes(searchTerm.toLowerCase())
+          )
         })
       }
     },
@@ -147,6 +172,5 @@ export const vendorsStore = defineStore('vendors', {
         console.log(error)
       }
     }
-
   }
 })
