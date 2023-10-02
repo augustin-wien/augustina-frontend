@@ -1,19 +1,25 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Umsätze</h1></template>
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Umsätze</h1>
+      <span>
+        <VueDatePicker
+          v-model="date"
+          range
+          :enable-time-picker="false"
+          placeholder="Zeitraum wählen"
+          @range-start="onRangeStart"
+          @range-end="onRangeEnd"
+          class="max-w-md"
+        />
+      </span>
+    </template>
     <template #main>
-      <main>
-        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div class="main">
+        <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className=" space-y-3 space-x-3">
-            <p className="text-lg">Zeitraum eingeben:</p>
-            <VueDatePicker
-              v-model="date"
-              range
-              :enable-time-picker="false"
-              placeholder="Zeitraum wählen"
-              @range-start="onRangeStart"
-              @range-end="onRangeEnd"
-            />
+            <h1 class="text-2xl font-bold">Umsätze im gewählten Zeitraum</h1>
+
             <div className="table-auto border-spacing-4 border-collapse">
               <thead>
                 <tr>
@@ -35,7 +41,7 @@
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </template>
   </component>
 </template>

@@ -2,42 +2,44 @@
   <component :is="$route.meta.layout || 'div'">
     <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Produkte</h1></template>
     <template #main>
-      <main class="w-full">
-        <div className="text-center text-2xl space-y-3 space-x-3">
-          <div className="table-auto border-spacing-4 border-collapse">
-            <thead>
-              <tr>
-                <th class="p-3">Bild</th>
-                <th class="p-3">Name</th>
-                <th class="p-3">Beschreibung</th>
-                <th class="p-3">Preis</th>
-                <th class="p-3">Aktion</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm p-3">
-              <tr v-for="(item, ID) in items" :key="ID">
-                <td class="border-t-2 p-3">
-                  <img
-                    :src="item.Image ? apiUrl + item.Image : ''"
-                    alt="Kein Bild"
-                    class="logo mx-auto my-5"
-                    width="80"
-                    height="auto"
-                  />
-                </td>
-                <td class="border-t-2 p-3 font-bold">{{ item.Name }}</td>
-                <td class="border-t-2 p-3">{{ item.Description }}</td>
-                <td class="border-t-2 p-3">{{ price(item.Price) }} Euro</td>
-                <td>
-                  <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
-                    <button class="p-3 rounded-full bg-lime-600 text-white">Ändern</button>
-                  </router-link>
-                </td>
-              </tr>
-            </tbody>
+      <div class="main w-full">
+        <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-center text-2xl space-y-3 space-x-3">
+            <div className="table-auto border-spacing-4 border-collapse">
+              <thead>
+                <tr>
+                  <th class="p-3">Bild</th>
+                  <th class="p-3">Name</th>
+                  <th class="p-3">Beschreibung</th>
+                  <th class="p-3">Preis</th>
+                  <th class="p-3">Aktion</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm p-3">
+                <tr v-for="(item, ID) in items" :key="ID">
+                  <td class="border-t-2 p-3">
+                    <img
+                      :src="item.Image ? apiUrl + item.Image : ''"
+                      alt="Kein Bild"
+                      class="logo mx-auto my-5"
+                      width="80"
+                      height="auto"
+                    />
+                  </td>
+                  <td class="border-t-2 p-3 font-bold">{{ item.Name }}</td>
+                  <td class="border-t-2 p-3">{{ item.Description }}</td>
+                  <td class="border-t-2 p-3">{{ price(item.Price) }} Euro</td>
+                  <td>
+                    <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
+                      <button class="p-3 rounded-full bg-lime-600 text-white">Ändern</button>
+                    </router-link>
+                  </td>
+                </tr>
+              </tbody>
+            </div>
           </div>
         </div>
-      </main>
+      </div>
     </template>
     <template #footer>
       <footer>
@@ -71,11 +73,13 @@ const price = (price: number) => {
 </script>
 
 <style scoped>
+/*
 .products {
-  /* overflow: hidden;
+   overflow: hidden;
   overflow-y: hidden;
   max-height: 80vh;
   overflow-y: scroll;
-  */
+  
 }
+*/
 </style>

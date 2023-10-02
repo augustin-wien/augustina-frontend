@@ -3,7 +3,7 @@
     <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Logbuch</h1></template>
 
     <template #main>
-      <main>
+      <div class="main">
         <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3">
             <div className="table-auto border-spacing-4 border-collapse">
@@ -29,7 +29,7 @@
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </template>
   </component>
 </template>

@@ -2,7 +2,7 @@
   <component :is="$route.meta.layout || 'div'">
     <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Bearbeitung</h1></template>
     <template #main>
-      <main>
+      <div class="main">
         <div class="w-full max-w-md mx-auto mt-4" v-if="item">
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ item.Name }} bearbeiten</h1>
@@ -166,7 +166,7 @@
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </template>
   </component>
 </template>

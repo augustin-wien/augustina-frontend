@@ -16,44 +16,48 @@
     </template>
 
     <template #main>
-      <main>
-        <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
-          <div className="table-auto border-spacing-4 border-collapse">
-            <thead>
-              <tr>
-                <th className="p-3">Ausweisnummer</th>
-                <th className="p-3">Vorname</th>
-                <th className="p-3">Name</th>
-                <th className="p-3">Aktion</th>
-              </tr>
-            </thead>
-            <tbody className="text-sm p-3">
-              <tr v-for="vendor in displayVendors" :key="vendor.ID">
-                <td className="border-t-2 p-3">
-                  <router-link :to="`/backoffice/userprofile/${vendor.ID}`">{{
-                    vendor?.LicenseID
-                  }}</router-link>
-                </td>
-                <td className="border-t-2 p-3">{{ vendor.FirstName }}</td>
-                <td className="border-t-2 p-3">{{ vendor.LastName }}</td>
+      <div class="main">
+        <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
+            <div className="table-auto border-spacing-4 border-collapse">
+              <thead>
+                <tr>
+                  <th className="p-3">Ausweisnummer</th>
+                  <th className="p-3">Vorname</th>
+                  <th className="p-3">Name</th>
+                  <th className="p-3">Aktion</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm p-3">
+                <tr v-for="vendor in displayVendors" :key="vendor.ID">
+                  <td className="border-t-2 p-3">
+                    <router-link :to="`/backoffice/userprofile/${vendor.ID}`">{{
+                      vendor?.LicenseID
+                    }}</router-link>
+                  </td>
+                  <td className="border-t-2 p-3">{{ vendor.FirstName }}</td>
+                  <td className="border-t-2 p-3">{{ vendor.LastName }}</td>
 
-                <div class="flex">
-                  <button
-                    @click="generateQRCode(vendor)"
-                    className="p-2 rounded-full bg-lime-600 text-white mr-2"
-                  >
-                    QR-Code erstellen
-                  </button>
-                  <span id="canvas"></span>
-                  <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
-                    <router-link :to="`/backoffice/userprofile/${vendor.ID}`"> Ändern</router-link>
-                  </button>
-                </div>
-              </tr>
-            </tbody>
+                  <div class="flex">
+                    <button
+                      @click="generateQRCode(vendor)"
+                      className="p-2 rounded-full bg-lime-600 text-white mr-2"
+                    >
+                      QR-Code erstellen
+                    </button>
+                    <span id="canvas"></span>
+                    <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
+                      <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
+                        Ändern</router-link
+                      >
+                    </button>
+                  </div>
+                </tr>
+              </tbody>
+            </div>
           </div>
         </div>
-      </main>
+      </div>
 
       <footer>
         <router-link to="/backoffice/newvendor">

@@ -5,8 +5,17 @@
     >
 
     <template #main>
-      <main>
+      <div class="main">
         <div class="w-full max-w-md mx-auto mt-4" v-if="!importing">
+          <div class="flex place-content-center justify-between">
+            <h1 class="text-2xl font-bold">Neue/n VerkäuferIn</h1>
+            <button
+              @click="router.push('/backoffice/vendorsummary')"
+              class="px-2 rounded-full bg-red-600 text-white font-bold"
+            >
+              X
+            </button>
+          </div>
           <form
             @submit.prevent="submitVendor"
             class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -66,7 +75,7 @@
         <div v-else>
           importiere {{ store.vendorsImportedCount }}/{{ importingVendorsCount }} VerkäuferInnen
         </div>
-      </main>
+      </div>
       <footer>
         <button
           @click="importCSV"
@@ -84,6 +93,7 @@ import { ref } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import Toast from '@/components/ToastMessage.vue'
+import router from '@/router'
 
 const store = vendorsStore()
 

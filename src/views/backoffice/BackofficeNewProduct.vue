@@ -4,8 +4,17 @@
       <h1 className="font-bold mt-3 pt-3 text-2xl">Neues Produkt anlegen</h1></template
     >
     <template #main>
-      <main>
+      <div class="main">
         <div class="w-full max-w-md mx-auto mt-4">
+          <div class="flex place-content-center justify-between">
+            <h1 class="text-2xl font-bold">Neues Produkt</h1>
+            <button
+              @click="router.push('/backoffice/productsettings')"
+              class="px-2 rounded-full bg-red-600 text-white font-bold"
+            >
+              X
+            </button>
+          </div>
           <form @submit.prevent="submitItem" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
@@ -66,7 +75,7 @@
           </form>
           <Toast v-if="toast" :toast="toast" />
         </div>
-      </main>
+      </div>
     </template>
   </component>
 </template>

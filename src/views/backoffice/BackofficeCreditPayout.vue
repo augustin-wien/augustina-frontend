@@ -3,9 +3,18 @@
     <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Auszahlung</h1></template>
 
     <template #main>
-      <main>
+      <div class="main">
         <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3" v-if="vendor">
+            <div class="flex place-content-center justify-between">
+              <h1 class="text-2xl font-bold"></h1>
+              <button
+                @click="router.push('/backoffice/credits')"
+                class="px-2 rounded-full bg-red-600 text-white font-bold"
+              >
+                X
+              </button>
+            </div>
             <div>
               Für <strong>{{ vendor.LicenseID }}</strong
               >, <strong>{{ vendor.FirstName }}</strong> <strong>{{ vendor.LastName }}</strong
@@ -43,7 +52,7 @@
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </template>
   </component>
 </template>
@@ -59,6 +68,7 @@ import { vendorsStore, type Vendor } from '@/stores/vendor'
 import { ref, computed, onMounted, type ComputedRef } from 'vue'
 import { useRoute } from 'vue-router'
 import { payoutStore } from '@/stores/payout'
+import router from '@/router'
 
 const store = vendorsStore()
 const storePayout = payoutStore()

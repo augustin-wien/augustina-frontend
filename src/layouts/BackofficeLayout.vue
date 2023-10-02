@@ -136,7 +136,7 @@ const apiUrl = import.meta.env.VITE_API_URL
 
 <style lang="scss" scoped>
 .main-container {
-  padding-left: 50px;
+  padding-left: 8px;
   margin-left: 300px;
 }
 
@@ -147,17 +147,19 @@ const apiUrl = import.meta.env.VITE_API_URL
   text-align: left;
   margin-bottom: 20px;
   padding-bottom: 20px;
-  padding-left: 10px;
+  padding-left: 50px;
   border-radius: 5px;
   background: #f2f9f1;
   width: 100%;
+  z-index: 50;
 }
 .main-slot {
   text-align: left;
   border-radius: 5px;
-  margin-top: 50px;
+  margin-top: 70px;
   padding-top: 50px;
-  max-width: 100%;
+  width: auto;
+  padding-left: 50px;
 }
 footer {
   position: fixed;

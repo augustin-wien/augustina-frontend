@@ -2,7 +2,7 @@
   <component :is="$route.meta.layout || 'div'">
     <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Einstellungen</h1></template>
     <template #main>
-      <main>
+      <div class="main">
         <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="container page-content space-x-2 mt-5">
             <div className="text-center text-2xl space-y-3 space-x-3">
@@ -55,7 +55,7 @@
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </template>
   </component>
 </template>
