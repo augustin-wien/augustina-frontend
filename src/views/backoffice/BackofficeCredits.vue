@@ -50,12 +50,21 @@
 <script lang="ts" setup>
 import { vendorsStore } from '@/stores/vendor'
 import { computed, onMounted, ref, watch } from 'vue'
+import keycloak from '@/keycloak/keycloak';
+
 
 const store = vendorsStore()
 
 // Fetch the vendors' data when the component is mounted
-onMounted(() => {
+keycloak.keycloak.onAuthSuccess = () => {
   store.getVendors()
+}
+
+// Fetch the vendors' data when the component is mounted
+onMounted(() => {
+  if (keycloak.keycloak.authenticated) {
+    store.getVendors()
+  }
 })
 function formatCredit(credit: number) {
   return (credit / 100).toFixed(2)

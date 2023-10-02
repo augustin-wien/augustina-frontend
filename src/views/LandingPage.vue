@@ -7,8 +7,9 @@ import { useVendorStore } from '@/stores/vendor';
 const vendorStore = useVendorStore()
 const paymentStore = usePaymentStore()
 const settStore = settingsStore()
-onMounted(settStore.getSettingsFromApi)
+const fetch = settStore.getSettingsFromApi
 
+onMounted(()=>fetch())
 </script>
 
 <template>
@@ -35,7 +36,7 @@ onMounted(settStore.getSettingsFromApi)
                 </div>
                 <div className="place-items-center w-full flex">
                     <RouterLink class="text-center h-[76px] grow" :to="{ name: 'Tippingpage' }">
-                        <button class="bg-green-600 rounded-full p-5 text-white text-3xl w-full font-semibold">
+                        <button class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold">
                             Weiter
                         </button>
                     </RouterLink>
@@ -44,3 +45,9 @@ onMounted(settStore.getSettingsFromApi)
         </template>
     </component>
 </template>
+
+<style>
+.customcolor{
+    background-color: v-bind(settStore.settings.Color);
+}
+</style>
