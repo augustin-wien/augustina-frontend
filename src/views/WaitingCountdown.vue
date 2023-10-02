@@ -7,11 +7,12 @@ import { onMounted } from 'vue'
 const paymentStore = usePaymentStore()
 const settStore = settingsStore()
 const sleep = (delay:number) => new Promise((resolve) => setTimeout(resolve, delay))
+let verified = false
 const verifyPayment = async()=>{
   paymentStore.resetVerification()
-  while (true) {
-    const response = await paymentStore.verifyPayment()
-    if (response) {
+  while (!verified) {
+    verified = await paymentStore.verifyPayment()?true:false
+    if (verified) {
       break;
     }
     await sleep(2000)
