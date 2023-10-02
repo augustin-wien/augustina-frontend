@@ -9,114 +9,226 @@
         <div class="w-full max-w-md mx-auto mt-4" v-if="!importing">
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">Neue/n VerkäuferIn</h1>
-            <button @click="router.push('/backoffice/vendorsummary')"
-              class="px-2 rounded-full bg-red-600 text-white font-bold">
+            <button
+              @click="router.push('/backoffice/vendorsummary')"
+              class="px-2 rounded-full bg-red-600 text-white font-bold"
+            >
               X
             </button>
           </div>
-          <form @submit.prevent="submitVendor" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <form
+            @submit.prevent="submitVendor"
+            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          >
             <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName">Vorname:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
+                >Vorname:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.FirstName" type="text" id="firstName" required />
+                v-model="newVendor.FirstName"
+                type="text"
+                id="firstName"
+                required
+              />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName">Nachname:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
+                >Nachname:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.LastName" type="text" id="lastName" required />
+                v-model="newVendor.LastName"
+                type="text"
+                id="lastName"
+                required
+              />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email">Email:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
+                >Email:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Email" type="email" id="email" required />
+                v-model="newVendor.Email"
+                type="email"
+                id="email"
+                required
+              />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID">Lizenznummer:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
+                >Lizenznummer:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.LicenseID" type="text" id="licenseID" required />
+                v-model="newVendor.LicenseID"
+                type="text"
+                id="licenseID"
+                required
+              />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language">Sprache:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
+                >Sprache:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Language" type="text" id="language" />
+                v-model="newVendor.Language"
+                type="text"
+                id="language"
+              />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone">Telefonnummer:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
+                >Telefonnummer:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Telephone" type="text" id="telephone" />
+                v-model="newVendor.Telephone"
+                type="text"
+                id="telephone"
+              />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="address">Adresse:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="address"
+                >Adresse:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Address" type="text" id="address" />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz">Postleitzahl:</label>
+                v-model="newVendor.Address"
+                type="text"
+                id="address"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
+                >Postleitzahl:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.PLZ" type="text" id="plz" />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location">Ort:</label>
+                v-model="newVendor.PLZ"
+                type="text"
+                id="plz"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+                >Ort:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Location" type="text" id="location" />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime">Arbeitszeit:</label>
+                v-model="newVendor.Location"
+                type="text"
+                id="location"
+              />
+
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="longitude"
+                >Längengrad:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text" v-model="newVendor.WorkingTime" id="workingTime" />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="registrationDate">Registriert
-                seit:</label>
+                v-model="newVendor.Longitude"
+                type="text"
+                id="longitude"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="latitude"
+                >Breitengrad:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="date" v-model="newVendor.RegistrationDate" id="registrationDate" />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince">VerkäuferIn seit:</label>
+                v-model="newVendor.Latitude"
+                type="text"
+                id="latitude"
+              />
+
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
+                >Arbeitszeit:</label
+              >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="date" v-model="newVendor.VendorSince" id="vendorSince" />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment">Kommentar:</label>
+                type="text"
+                v-model="newVendor.WorkingTime"
+                id="workingTime"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="registrationDate"
+                >Registriert seit:</label
+              >
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="date"
+                v-model="newVendor.RegistrationDate"
+                id="registrationDate"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
+                >VerkäuferIn seit:</label
+              >
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="date"
+                v-model="newVendor.VendorSince"
+                id="vendorSince"
+              />
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
+                >Kommentar:</label
+              >
               <textarea
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text" v-model="newVendor.Comment" id="comment"></textarea>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="accountDisabled">Account
-                deaktiviert:</label>
+                type="text"
+                v-model="newVendor.Comment"
+                id="comment"
+              ></textarea>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="accountDisabled"
+                >Account deaktiviert:</label
+              >
               <div class="flex flex-row">
                 <span class="p-2">
                   <select
                     class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="newVendor.IsDisabled" id="accountDisabled" required>
+                    v-model="newVendor.IsDisabled"
+                    id="accountDisabled"
+                    required
+                  >
                     <option value="true">Ja</option>
                     <option value="false">Nein</option>
                   </select>
                 </span>
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap">Online Map:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
+                >Online Map:</label
+              >
               <div class="flex flex-row">
                 <span class="p-2">
                   <select
                     class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="newVendor.OnlineMap" id="onlineMap" required>
+                    v-model="newVendor.OnlineMap"
+                    id="onlineMap"
+                    required
+                  >
                     <option value="true">Ja</option>
                     <option value="false">Nein</option>
                   </select>
                 </span>
               </div>
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone">Bank-konto</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasBankAccount"
+                >Bankkonto</label
+              >
               <div class="flex flex-row">
                 <span class="p-2">
                   <select
                     class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="newVendor.HasSmartphone" id="hasSmartphone" required>
+                    v-model="newVendor.HasBankAccount"
+                    id="hasBankAccount"
+                    required
+                  >
                     <option value="true">Ja</option>
                     <option value="false">Nein</option>
                   </select>
                 </span>
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone">Smartphone:</label>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
+                >Smartphone:</label
+              >
 
               <div class="flex flex-row">
                 <span class="p-2">
                   <select
                     class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="newVendor.HasBankAccount" id="hasBankAccount" required>
+                    v-model="newVendor.HasBankAccount"
+                    id="hasBankAccount"
+                    required
+                  >
                     <option value="true">Ja</option>
                     <option value="false">Nein</option>
                   </select>
@@ -135,8 +247,10 @@
         </div>
       </div>
       <footer>
-        <button @click="importCSV"
-          className="p-3 rounded-full bg-lime-600 text-white absolute bottom-10 right-10 h-20 w-20">
+        <button
+          @click="importCSV"
+          className="p-3 rounded-full bg-lime-600 text-white absolute bottom-10 right-10 h-20 w-20"
+        >
           CSV import
         </button>
       </footer>
@@ -252,8 +366,14 @@ const importCSV = async () => {
         VendorSince,
         Comment,
         OnlineMap: OnlineMap === 'Ja' || OnlineMap === 'ja' || OnlineMap === 'yes' ? true : false,
-        HasSmartphone: HasSmartphone === 'Ja' || HasSmartphone === 'ja' || HasSmartphone === 'yes' ? true : false,
-        HasBankAccount: HasBankAccount === 'Ja' || HasBankAccount === 'ja' || HasBankAccount === 'yes' ? true : false,
+        HasSmartphone:
+          HasSmartphone === 'Ja' || HasSmartphone === 'ja' || HasSmartphone === 'yes'
+            ? true
+            : false,
+        HasBankAccount:
+          HasBankAccount === 'Ja' || HasBankAccount === 'ja' || HasBankAccount === 'yes'
+            ? true
+            : false,
         Address,
         WorkingTime
       }

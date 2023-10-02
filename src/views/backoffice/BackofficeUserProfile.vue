@@ -63,6 +63,14 @@
                   <td className="p-3">{{ vendor.Location }}</td>
                 </tr>
                 <tr>
+                  <th className="p-3">Längengrad:</th>
+                  <td className="p-3">{{ vendor.Longitude }}</td>
+                </tr>
+                <tr>
+                  <th className="p-3">Breitengrad:</th>
+                  <td className="p-3">{{ vendor.Latitude }}</td>
+                </tr>
+                <tr>
                   <th className="p-3">Sprache:</th>
                   <td className="p-3">{{ vendor.Language }}</td>
                 </tr>
