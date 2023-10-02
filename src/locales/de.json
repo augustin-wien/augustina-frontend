@@ -19,5 +19,9 @@
     "tryagain": "Erneut versuchen:",
     "return": "Start",
 
-    "customdonation": "Spende eingeben:"
+    "customdonation": "Spende eingeben:",
+
+    "invalid": "Die gescannte ID ist nicht gültig",
+    "gotovendor": "Gehen sie zu einer Verkäuferin oder einem Verkäufer",
+    "augustin": "Zum Augustin"
 }

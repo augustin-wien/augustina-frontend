@@ -19,6 +19,9 @@
     "tryagain": "Try again:",
     "return": "Home",
 
-    "customdonation": "Enter your donation:"
+    "customdonation": "Enter your donation:",
 
+    "invalid": "This ID is invalid",
+    "gotovendor": "Go to a vendor",
+    "augustin": "Back to Augustin"
 }
