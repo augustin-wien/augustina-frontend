@@ -26,7 +26,7 @@
                   @change="updateLogo"
                   type="file"
                   id="logo"
-                  accept="image/*"
+                  accept="image/png"
                 />
               </div>
             </div>
