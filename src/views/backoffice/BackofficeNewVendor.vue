@@ -136,7 +136,7 @@
       </div>
       <footer>
         <button @click="importCSV"
-          className="p-3 rounded-full bg-lime-600 text-white absolute bottom-10 right-10 h-20 w-20">
+          className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-20 w-20">
           CSV import
         </button>
       </footer>
@@ -224,7 +224,7 @@ const importCSV = async () => {
         LicenseID,
         FirstName,
         LastName,
-        PhoneNumber,
+        Telephone,
         Language,
         RegistrationDate,
         VendorSince,
@@ -247,7 +247,7 @@ const importCSV = async () => {
         PLZ,
         Location,
         Language,
-        PhoneNumber,
+        Telephone,
         RegistrationDate,
         VendorSince,
         Comment,

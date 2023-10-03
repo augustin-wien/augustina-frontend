@@ -78,7 +78,8 @@ export const vendorsStore = defineStore('vendors', {
     return {
       vendors: [] as Vendor[],
       vendorsImportedCount: Number,
-      filteredVendors: [] as Vendor[]
+      filteredVendors: [] as Vendor[],
+      vendor: {} as Vendor
     }
   },
 
@@ -169,6 +170,7 @@ export const vendorsStore = defineStore('vendors', {
     async getVendor(vendorId: number) {
       try {
         const data = await getVendor(vendorId)
+        this.vendor = data.data
         return data.data
       } catch (error) {
         console.log(error)

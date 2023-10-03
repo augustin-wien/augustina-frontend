@@ -3,7 +3,7 @@
     <template #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferIn bearbeiten</h1></template
     >
-    <template #main>
+    <template #main v-if="updatedVendor">
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4" v-if="vendor">
           <div class="flex place-content-center justify-between">
@@ -259,17 +259,17 @@
           <div class="flex place-content-center justify-between">
             <button
               type="submit"
-              class="p-3 rounded-full bg-lime-600 text-white"
-              @click="updateVendor"
-            >
-              Bestätigen
-            </button>
-            <button
-              type="submit"
               class="p-3 rounded-full bg-red-600 text-white"
               @click="deleteVendor"
             >
               Löschen
+            </button>
+            <button
+              type="submit"
+              class="p-3 rounded-full bg-lime-600 text-white"
+              @click="updateVendor"
+            >
+              Bestätigen
             </button>
           </div>
         </form>
@@ -280,59 +280,30 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
+import { useKeycloakStore } from '@/stores/keycloak'
+import { storeToRefs } from 'pinia'
 
 const store = vendorsStore()
+const keycloakStore = useKeycloakStore()
 
-const updatedVendor = ref({
-  Account: 0,
-  Email: 'new@example.com',
-  FirstName: 'Leonie',
-  ID: 0,
-  KeycloakID: 'new-keycloak-id',
-  LastName: 'Löwenherz',
-  LastPayout: null,
-  LicenseID: 'new-license-id',
-  UrlID: 'new-url-id',
-  Balance: 0,
-  IsDisabled: false,
-  Longitude: 0,
-  Latitude: 0,
-  Address: '',
-  PLZ: 'new-plz',
-  Location: 'new-location',
-  WorkingTime: 'new-working-time',
-  Language: 'deutsch',
-  Comment: 'Kommentare',
-  Telephone: 'new-phone-number',
-  RegistrationDate: '2023-10-05',
-  VendorSince: '2023-10-05',
-  OnlineMap: false,
-  HasSmartphone: false,
-  HasBankAccount: false,
-})
+const updatedVendor = ref<Vendor | null>(null)
 
-store.getVendors()
-const vendors = computed(() => store.vendors)
 
 const route = useRoute()
-const idparams = route.params.ID
 
-const vendor = computed(() => {
-  const numericIdParams = Number(idparams) // Convert the string to a number or NaN
-  if (!isNaN(numericIdParams)) {
-    let v = vendors.value.find((vendor: Vendor) => vendor.ID === numericIdParams)
-    //@ts-ignore
-    return v
-  } else {
-    return null
+onMounted(() => {
+  if (keycloakStore.authenticated) {
+    store.getVendor(route.params.ID)
   }
 })
+const { vendor } = storeToRefs(store)
+
 
 watch(vendor, (newVal) => {
   if (newVal) {
