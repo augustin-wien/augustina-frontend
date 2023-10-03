@@ -116,7 +116,7 @@ export const vendorsStore = defineStore('vendors', {
 
     async createVendors(vendors: Array<Vendor>) {
       for (let i = 0; i < vendors.length; i++) {
-        const vendor = vendors[i];
+        const vendor = vendors[i]
         if (vendor !== null) {
           if (
             vendor.LicenseID === '' ||

@@ -25,7 +25,7 @@ export const usePaymentStore = defineStore('payments', {
   },
 
   actions: {
-    async getPayments(startDate: string, endDate: string) {
+    async getPayments(startDate: Date, endDate: Date) {
       try {
         const data = await fetchPayments(startDate, endDate, "")
         //@ts-ignore
@@ -35,7 +35,7 @@ export const usePaymentStore = defineStore('payments', {
         console.log(error)
       }
     },
-    async getPayouts(startDate: string, endDate: string) {
+    async getPayouts(startDate: Date, endDate: Date) {
       try {
         const data = await fetchPayments(startDate, endDate,"payouts=true")
         //@ts-ignore
@@ -45,7 +45,7 @@ export const usePaymentStore = defineStore('payments', {
         console.log(error)
       }
     },    
-    async getSales(startDate: string, endDate: string) {
+    async getSales(startDate: Date, endDate: Date) {
       try {
         const data = await fetchPayments(startDate, endDate,"sales=true")
         //@ts-ignore
