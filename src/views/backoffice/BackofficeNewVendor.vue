@@ -6,7 +6,7 @@
 
     <template #main>
       <div class="main">
-        <div class="w-full max-w-md mx-auto mt-4" v-if="!importing">
+        <div class="w-full mx-auto mt-4" v-if="!importing">
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">Neue/n VerkäuferIn</h1>
             <button
@@ -20,218 +20,232 @@
             @submit.prevent="submitVendor"
             class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           >
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
-                >Vorname:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.FirstName"
-                type="text"
-                id="firstName"
-                required
-              />
-
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
-                >Nachname:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.LastName"
-                type="text"
-                id="lastName"
-                required
-              />
-
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
-                >Email:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Email"
-                type="email"
-                id="email"
-                required
-              />
-
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
-                >Lizenznummer:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.LicenseID"
-                type="text"
-                id="licenseID"
-                required
-              />
-
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
-                >Sprache:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Language"
-                type="text"
-                id="language"
-              />
-
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
-                >Telefonnummer:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Telephone"
-                type="text"
-                id="telephone"
-              />
-
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="address"
-                >Adresse:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Address"
-                type="text"
-                id="address"
-              />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
-                >Postleitzahl:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.PLZ"
-                type="text"
-                id="plz"
-              />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                >Ort:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Location"
-                type="text"
-                id="location"
-              />
-
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="longitude"
-                >Längengrad:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Longitude"
-                type="text"
-                id="longitude"
-              />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="latitude"
-                >Breitengrad:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="newVendor.Latitude"
-                type="text"
-                id="latitude"
-              />
-
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                >Arbeitszeit:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                v-model="newVendor.WorkingTime"
-                id="workingTime"
-              />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="registrationDate"
-                >Registriert seit:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="date"
-                v-model="newVendor.RegistrationDate"
-                id="registrationDate"
-              />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
-                >VerkäuferIn seit:</label
-              >
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="date"
-                v-model="newVendor.VendorSince"
-                id="vendorSince"
-              />
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
-                >Kommentar:</label
-              >
-              <textarea
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                v-model="newVendor.Comment"
-                id="comment"
-              ></textarea>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="accountDisabled"
-                >Account deaktiviert:</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">
-                  <select
-                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="newVendor.IsDisabled"
-                    id="accountDisabled"
-                    required
+            <div class="mb-4 justify-between grid grid-cols-2 gap-5">
+              <div class="row">
+                <span class="col">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
+                    >Vorname:</label
                   >
-                    <option value="true">Ja</option>
-                    <option value="false">Nein</option>
-                  </select>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.FirstName"
+                    type="text"
+                    id="firstName"
+                    required
+                  />
+
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
+                    >Nachname:</label
+                  >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.LastName"
+                    type="text"
+                    id="lastName"
+                    required
+                  />
+
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
+                    >Email:</label
+                  >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.Email"
+                    type="email"
+                    id="email"
+                    required
+                  />
+
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
+                    >Lizenznummer:</label
+                  >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.LicenseID"
+                    type="text"
+                    id="licenseID"
+                    required
+                  />
+
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
+                    >Sprache:</label
+                  >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.Language"
+                    type="text"
+                    id="language"
+                  />
+
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
+                    >Telefonnummer:</label
+                  >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.Telephone"
+                    type="text"
+                    id="telephone"
+                  />
+
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="address"
+                    >Adresse:</label
+                  >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.Address"
+                    type="text"
+                    id="address"
+                  />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
+                    >Postleitzahl:</label
+                  >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.PLZ"
+                    type="text"
+                    id="plz"
+                  />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+                    >Ort:</label
+                  >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.Location"
+                    type="text"
+                    id="location"
+                  />
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                    for="accountDisabled"
+                    >Account deaktiviert:</label
+                  >
+                  <div class="flex flex-row">
+                    <span class="p-2">
+                      <select
+                        class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        v-model="newVendor.IsDisabled"
+                        id="accountDisabled"
+                        required
+                      >
+                        <option value="true">Ja</option>
+                        <option value="false">Nein</option>
+                      </select>
+                    </span>
+                  </div>
                 </span>
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                >Online Map:</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">
-                  <select
-                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="newVendor.OnlineMap"
-                    id="onlineMap"
-                    required
+              <div class="row">
+                <span class="col">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="longitude"
+                    >Längengrad:</label
                   >
-                    <option value="true">Ja</option>
-                    <option value="false">Nein</option>
-                  </select>
-                </span>
-              </div>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.Longitude"
+                    type="text"
+                    id="longitude"
+                  />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="latitude"
+                    >Breitengrad:</label
+                  >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="newVendor.Latitude"
+                    type="text"
+                    id="latitude"
+                  />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasBankAccount"
-                >Bankkonto</label
-              >
-              <div class="flex flex-row">
-                <span class="p-2">
-                  <select
-                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="newVendor.HasBankAccount"
-                    id="hasBankAccount"
-                    required
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
+                    >Arbeitszeit:</label
                   >
-                    <option value="true">Ja</option>
-                    <option value="false">Nein</option>
-                  </select>
-                </span>
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
-                >Smartphone:</label
-              >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                    v-model="newVendor.WorkingTime"
+                    id="workingTime"
+                  />
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                    for="registrationDate"
+                    >Registriert seit:</label
+                  >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="date"
+                    v-model="newVendor.RegistrationDate"
+                    id="registrationDate"
+                  />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
+                    >VerkäuferIn seit:</label
+                  >
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="date"
+                    v-model="newVendor.VendorSince"
+                    id="vendorSince"
+                  />
 
-              <div class="flex flex-row">
-                <span class="p-2">
-                  <select
-                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="newVendor.HasBankAccount"
-                    id="hasBankAccount"
-                    required
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
+                    >Online Map:</label
                   >
-                    <option value="true">Ja</option>
-                    <option value="false">Nein</option>
-                  </select>
+                  <div class="flex flex-row">
+                    <span class="p-2">
+                      <select
+                        class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        v-model="newVendor.OnlineMap"
+                        id="onlineMap"
+                        required
+                      >
+                        <option value="true">Ja</option>
+                        <option value="false">Nein</option>
+                      </select>
+                    </span>
+                  </div>
+
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                    for="hasBankAccount"
+                    >Bankkonto</label
+                  >
+                  <div class="flex flex-row">
+                    <span class="p-2">
+                      <select
+                        class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        v-model="newVendor.HasBankAccount"
+                        id="hasBankAccount"
+                        required
+                      >
+                        <option value="true">Ja</option>
+                        <option value="false">Nein</option>
+                      </select>
+                    </span>
+                  </div>
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
+                    >Smartphone:</label
+                  >
+
+                  <div class="flex flex-row">
+                    <span class="p-2">
+                      <select
+                        class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        v-model="newVendor.HasBankAccount"
+                        id="hasBankAccount"
+                        required
+                      >
+                        <option value="true">Ja</option>
+                        <option value="false">Nein</option>
+                      </select>
+                    </span>
+                  </div>
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
+                    >Kommentar:</label
+                  >
+                  <textarea
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                    v-model="newVendor.Comment"
+                    id="comment"
+                  ></textarea>
                 </span>
               </div>
             </div>
@@ -334,7 +348,6 @@ const importCSV = async () => {
         Location,
         Address,
         WorkingTime,
-        number,
         LicenseID,
         FirstName,
         LastName,

@@ -3,7 +3,7 @@
     <template #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferIn bearbeiten</h1></template
     >
-    <template #main>
+    <template #main v-if="updatedVendor">
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4" v-if="vendor">
           <div class="flex place-content-center justify-between">
@@ -18,301 +18,269 @@
         </div>
 
         <form @submit.prevent="updateVendor" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
-              >Vorname:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.FirstName }} </span>
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.FirstName"
-                type="text"
-                id="firstName"
-                required
-              />
-            </div>
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
-              >Nachname:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.LastName }} </span>
+          <div class="mb-4 justify-between grid grid-cols-2 gap-5">
+            <div class="row">
+              <span class="col">
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
+                  >Vorname:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.FirstName }} </span>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.FirstName"
+                    type="text"
+                    id="firstName"
+                    required
+                  />
+                </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
+                  >Nachname:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.LastName }} </span>
 
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.LastName"
-                type="text"
-                id="lastName"
-                required
-              />
-            </div>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.LastName"
+                    type="text"
+                    id="lastName"
+                    required
+                  />
+                </div>
 
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
-              >Email:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.Email }} </span>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
+                  >Email:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.Email }} </span>
 
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.Email"
-                type="email"
-                id="email"
-                required
-              />
-            </div>
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
-              >Lizenznummer:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.LicenseID }} </span>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.Email"
+                    type="email"
+                    id="email"
+                    required
+                  />
+                </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
+                  >Lizenznummer:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.LicenseID }} </span>
 
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.LicenseID"
-                type="text"
-                id="licenseID"
-                required
-              />
-            </div>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.LicenseID"
+                    type="text"
+                    id="licenseID"
+                    required
+                  />
+                </div>
 
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-              >Deaktiviert:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2"> {{ vendor.IsDisabled }} </span>
-              <select
-                class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.IsDisabled"
-                id="onlineMap"
-                required
-              >
-                <option value="true">Ja</option>
-                <option value="false">Nein</option>
-              </select>
-            </div>
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
-              >Standplatz-Adresse:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.Address }} </span>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
+                  >Deaktiviert:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2"> {{ vendor.IsDisabled }} </span>
+                  <select
+                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.IsDisabled"
+                    id="onlineMap"
+                    required
+                  >
+                    <option value="true">Ja</option>
+                    <option value="false">Nein</option>
+                  </select>
+                </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
+                  >Standplatz-Adresse:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.Address }} </span>
 
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.Address"
-                type="text"
-                id="adress"
-                required
-              />
-            </div>
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
-              >Postleitzahl:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.PLZ }} </span>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.Address"
+                    type="text"
+                    id="adress"
+                    required
+                  />
+                </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
+                  >Postleitzahl:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.PLZ }} </span>
 
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.PLZ"
-                type="text"
-                id="plz"
-              />
-            </div>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.PLZ"
+                    type="text"
+                    id="plz"
+                  />
+                </div>
 
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-              >Ort:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.Location }} </span>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+                  >Ort:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.Location }} </span>
 
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.Location"
-                type="text"
-                id="location"
-              />
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.Location"
+                    type="text"
+                    id="location"
+                  />
+                </div>
+              </span>
             </div>
+            <div class="row">
+              <span class="col">
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
+                  >Telefonnummer:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.Telephone }} </span>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.Telephone"
+                    type="text"
+                    id="telephone"
+                  />
+                </div>
 
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
-              >Telefonnummer:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.Telephone }} </span>
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.Telephone"
-                type="text"
-                id="telephone"
-              />
-            </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
+                  >Smartphone:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2"> {{ vendor.HasSmartphone }} </span>
+                  <select
+                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.HasSmartphone"
+                    id="hasSmartphone"
+                    required
+                  >
+                    <option value="true">Ja</option>
+                    <option value="false">Nein</option>
+                  </select>
+                </div>
 
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
-              >Smartphone:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2"> {{ vendor.HasSmartphone }} </span>
-              <select
-                class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.HasSmartphone"
-                id="hasSmartphone"
-                required
-              >
-                <option value="true">Ja</option>
-                <option value="false">Nein</option>
-              </select>
-            </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
+                  >Arbeitszeit:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.WorkingTime }} </span>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.WorkingTime"
+                    type="text"
+                    id="workingTime"
+                  />
+                </div>
 
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-              >Arbeitszeit:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.WorkingTime }} </span>
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.WorkingTime"
-                type="text"
-                id="workingTime"
-              />
-            </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
+                  >Sprache:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.Language }} </span>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.Language"
+                    type="text"
+                    id="language"
+                    required
+                  />
+                </div>
 
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
-              >Sprache:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.Language }} </span>
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.Language"
-                type="text"
-                id="language"
-                required
-              />
-            </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
+                  >Online Karte:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2"> {{ vendor.OnlineMap }} </span>
+                  <select
+                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.OnlineMap"
+                    id="onlineMap"
+                    required
+                  >
+                    <option value="true">Ja</option>
+                    <option value="false">Nein</option>
+                  </select>
+                </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
+                  >Bankkonto:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2"> {{ vendor.HasBankAccount }} </span>
+                  <select
+                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.HasBankAccount"
+                    id="bankAccount"
+                    required
+                  >
+                    <option value="true">Ja</option>
+                    <option value="false">Nein</option>
+                  </select>
+                </div>
 
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-              >Online Karte:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2"> {{ vendor.OnlineMap }} </span>
-              <select
-                class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.OnlineMap"
-                id="onlineMap"
-                required
-              >
-                <option value="true">Ja</option>
-                <option value="false">Nein</option>
-              </select>
-            </div>
-            <div class="flex flex-row">
-              <span class="p-2"> {{ vendor.HasBankAccount }} </span>
-              <select
-                class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.HasBankAccount"
-                id="bankAccount"
-                required
-              >
-                <option value="true">Ja</option>
-                <option value="false">Nein</option>
-              </select>
-            </div>
-
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasBankAccount"
-              >Bankkonto:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2"> {{ vendor.HasBankAccount }} </span>
-              <select
-                class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.HasBankAccount"
-                id="hasbankAccount"
-                required
-              >
-                <option value="true">Ja</option>
-                <option value="false">Nein</option>
-              </select>
-            </div>
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="registrationDate"
-              >Registriert am:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.RegistrationDate }} </span>
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.RegistrationDate"
-                type="text"
-                id="registrationDate"
-              />
-            </div>
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
-              >Verkauft seit:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.VendorSince }} </span>
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                v-model="updatedVendor.VendorSince"
-                type="text"
-                id="vendorSince"
-              />
-            </div>
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="longitude"
-              >Längengrad:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.Longitude }} </span>
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                rows="5"
-                v-model="updatedVendor.Longitude"
-                type="text"
-                id="longitude"
-              />
-            </div>
-
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="latitude"
-              >Breitengrad:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.Latitude }} </span>
-              <input
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                rows="5"
-                v-model="updatedVendor.Latitude"
-                type="text"
-                id="latitude"
-              />
-            </div>
-
-            <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
-              >Kommentar:</label
-            >
-            <div class="flex flex-row">
-              <span class="p-2">{{ vendor.Comment }} </span>
-              <textarea
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                rows="5"
-                v-model="updatedVendor.Comment"
-                type="text"
-                id="comment"
-              ></textarea>
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                  for="registrationDate"
+                  >Registriert am:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.RegistrationDate }} </span>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.RegistrationDate"
+                    type="text"
+                    id="registrationDate"
+                  />
+                </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
+                  >Verkauft seit:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.VendorSince }} </span>
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.VendorSince"
+                    type="text"
+                    id="vendorSince"
+                  />
+                </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
+                  >Kommentar:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.Comment }} </span>
+                  <textarea
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    rows="5"
+                    v-model="updatedVendor.Comment"
+                    type="text"
+                    id="comment"
+                  ></textarea>
+                </div>
+              </span>
             </div>
           </div>
-
           <div class="flex place-content-center justify-between">
-            <button
-              type="submit"
-              class="p-3 rounded-full bg-lime-600 text-white"
-              @click="updateVendor"
-            >
-              Bestätigen
-            </button>
             <button
               type="submit"
               class="p-3 rounded-full bg-red-600 text-white"
               @click="deleteVendor"
             >
               Löschen
+            </button>
+            <button
+              type="submit"
+              class="p-3 rounded-full bg-lime-600 text-white"
+              @click="updateVendor"
+            >
+              Bestätigen
             </button>
           </div>
         </form>
@@ -357,7 +325,7 @@ const updatedVendor = ref({
   VendorSince: '2023-10-05',
   OnlineMap: false,
   HasSmartphone: false,
-  HasBankAccount: false,
+  HasBankAccount: false
 })
 
 store.getVendors()
