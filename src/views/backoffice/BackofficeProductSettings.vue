@@ -5,7 +5,7 @@
       <div class="main w-full">
         <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3">
-            <div className="table-auto border-spacing-4 border-collapse">
+            <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
                   <th class="p-3">Bild</th>
@@ -36,7 +36,7 @@
                   </td>
                 </tr>
               </tbody>
-            </div>
+            </table>
           </div>
         </div>
       </div>
