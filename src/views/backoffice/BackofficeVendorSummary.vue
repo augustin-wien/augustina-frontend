@@ -62,7 +62,7 @@
       <footer>
         <router-link to="/backoffice/newvendor">
           <button
-            className="p-3 rounded-full bg-lime-600 text-white absolute fixed bottom-10 right-10 h-16 w-16"
+            className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-16 w-16"
           >
             Neu
           </button>

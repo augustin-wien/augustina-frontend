@@ -4,10 +4,16 @@ import { fetchSettings, patchSettings } from '@/api/api'
 //define interface to store data from backend properly
 export interface Settings {
   Color: string
+  FontColor: string
   ID: number
   Logo: string
   MainItem: number
-  RefundFees: boolean
+  MainItemDescription: string
+  MainItemImage: string
+  MainItemName: string
+  MainItemPrice: number
+  MaxOrderAmount: number
+  OrgaCoversTransactionCosts: boolean
 }
 
 export const settingsStore = defineStore('settings', {
@@ -26,13 +32,12 @@ export const settingsStore = defineStore('settings', {
 
   actions: {
     async getSettingsFromApi() {
-      try {
-        const data = await fetchSettings()
+      fetchSettings().then((data) => {
         this.settings = data.data
         this.imgUrl = import.meta.env.VITE_API_URL + this.settings.Logo
-      } catch (error) {
-        console.log(error)
-      }
+      }).catch((error) => {
+        console.log("failed to get the settings", error)
+      })
     },
 
     async updateSettings(updatedSettings: Settings) {

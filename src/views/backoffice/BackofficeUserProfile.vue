@@ -1,18 +1,16 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferInnen Profil</h1></template
-    >
+      <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferInnen Profil</h1>
+    </template>
     <template #main>
       <div class="main" v-if="vendor">
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
               <h1 class="text-2xl font-bold">{{ vendor.LicenseID }}</h1>
-              <button
-                @click="router.push('/backoffice/vendorsummary')"
-                class="px-2 rounded-full bg-red-600 text-white font-bold"
-              >
+              <button @click="router.push('/backoffice/vendorsummary')"
+                class="px-2 rounded-full bg-red-600 text-white font-bold">
                 X
               </button>
             </div>
@@ -98,6 +96,7 @@
 tr {
   padding: 10px;
 }
+
 td {
   padding: 10px;
 }
@@ -105,31 +104,21 @@ td {
 
 <script lang="ts" setup>
 import { vendorsStore, type Vendor } from '@/stores/vendor'
-import { computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useKeycloakStore } from '@/stores/keycloak'
 import router from '@/router'
+import { storeToRefs } from 'pinia'
 
 const keycloakStore = useKeycloakStore()
 
-const store = vendorsStore()
+const vendorStore = vendorsStore()
+const route = useRoute()
+const { vendor } = storeToRefs(vendorStore)
 
 onMounted(() => {
   if (keycloakStore.authenticated) {
-    store.getVendors()
-  }
-})
-const vendors = computed(() => store.vendors)
-
-const route = useRoute()
-const idparams = route.params.ID
-
-const vendor = computed(() => {
-  const numericIdParams = Number(idparams) // Convert the string to a number or NaN
-  if (!isNaN(numericIdParams)) {
-    return vendors.value.find((vendor: Vendor) => vendor.ID === numericIdParams)
-  } else {
-    return null
+    vendorStore.getVendor(route.params.ID)
   }
 })
 

@@ -291,59 +291,29 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
+import { useKeycloakStore } from '@/stores/keycloak'
+import { storeToRefs } from 'pinia'
 
 const store = vendorsStore()
+const keycloakStore = useKeycloakStore()
 
-const updatedVendor = ref({
-  Account: 0,
-  Email: 'new@example.com',
-  FirstName: 'Leonie',
-  ID: 0,
-  KeycloakID: 'new-keycloak-id',
-  LastName: 'Löwenherz',
-  LastPayout: null,
-  LicenseID: 'new-license-id',
-  UrlID: 'new-url-id',
-  Balance: 0,
-  IsDisabled: false,
-  Longitude: 0,
-  Latitude: 0,
-  Address: '',
-  PLZ: 'new-plz',
-  Location: 'new-location',
-  WorkingTime: 'new-working-time',
-  Language: 'deutsch',
-  Comment: 'Kommentare',
-  Telephone: 'new-phone-number',
-  RegistrationDate: '2023-10-05',
-  VendorSince: '2023-10-05',
-  OnlineMap: false,
-  HasSmartphone: false,
-  HasBankAccount: false
-})
-
-store.getVendors()
-const vendors = computed(() => store.vendors)
+const updatedVendor = ref<Vendor | null>(null)
 
 const route = useRoute()
-const idparams = route.params.ID
 
-const vendor = computed(() => {
-  const numericIdParams = Number(idparams) // Convert the string to a number or NaN
-  if (!isNaN(numericIdParams)) {
-    let v = vendors.value.find((vendor: Vendor) => vendor.ID === numericIdParams)
-    //@ts-ignore
-    return v
-  } else {
-    return null
+onMounted(() => {
+  if (keycloakStore.authenticated) {
+    store.getVendor(route.params.ID)
   }
 })
+const { vendor } = storeToRefs(store)
+
 
 watch(vendor, (newVal) => {
   if (newVal) {

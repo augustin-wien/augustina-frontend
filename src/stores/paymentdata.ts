@@ -27,7 +27,27 @@ export const usePaymentStore = defineStore('payments', {
   actions: {
     async getPayments(startDate: string, endDate: string) {
       try {
-        const data = await fetchPayments(startDate, endDate)
+        const data = await fetchPayments(startDate, endDate, "")
+        //@ts-ignore
+        this.payments = data.data
+        //@ts-ignore
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getPayouts(startDate: string, endDate: string) {
+      try {
+        const data = await fetchPayments(startDate, endDate,"payouts=true")
+        //@ts-ignore
+        this.payments = data.data
+        //@ts-ignore
+      } catch (error) {
+        console.log(error)
+      }
+    },    
+    async getSales(startDate: string, endDate: string) {
+      try {
+        const data = await fetchPayments(startDate, endDate,"sales=true")
         //@ts-ignore
         this.payments = data.data
         //@ts-ignore

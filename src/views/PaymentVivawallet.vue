@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { usePaymentStore } from '@/stores/PaymentStore'
+import { usePaymentStore, type orderItem } from '@/stores/PaymentStore'
 import { settingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
 
@@ -11,7 +11,17 @@ const vendorStore = useVendorStore()
 
 onMounted(() => {
   // todo add multiple items
-  paymentStore.postOrder(settings.settings.MainItem, 1, vendorStore.vendorid)
+  const items:Array<orderItem> = [{
+    item: settings.settings.MainItem,
+    quantity: 1
+  }]
+  if (paymentStore.tip>0){
+    items.push({
+      item: paymentStore.tipItem,
+      quantity: paymentStore.tip*100
+    })
+  }
+  paymentStore.postOrder(items, 1, vendorStore.vendorid)
 })
 </script> 
 
@@ -30,7 +40,63 @@ onMounted(() => {
   </component>
 </template>
 
-<style scoped>@import "../assets/loadingwheel.css"
+<style scoped>
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  } 
+  .lds-ellipsis div {
+    position: absolute;
+    top: 33px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background-color: v-bind(settings.settings.Color);
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  }
+  .lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+  }
+  @keyframes lds-ellipsis1 {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes lds-ellipsis3 {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  @keyframes lds-ellipsis2 {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(24px, 0);
+    }
+  }
+  
 .customcolor{
     background-color: v-bind(settings.settings.Color);
 }
