@@ -48,7 +48,7 @@
                     <span id="canvas"></span>
                     <button className="p-2 rounded-full bg-lime-600 text-white mr-2">
                       <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
-                        Ändern</router-link
+                        Details</router-link
                       >
                     </button>
                   </div>
