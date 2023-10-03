@@ -204,6 +204,18 @@
                 <option value="false">Nein</option>
               </select>
             </div>
+            <div class="flex flex-row">
+              <span class="p-2"> {{ vendor.HasBankAccount }} </span>
+              <select
+                class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                v-model="updatedVendor.HasBankAccount"
+                id="bankAccount"
+                required
+              >
+                <option value="true">Ja</option>
+                <option value="false">Nein</option>
+              </select>
+            </div>
 
             <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasBankAccount"
               >Bankkonto:</label
@@ -344,7 +356,8 @@ const updatedVendor = ref({
   RegistrationDate: '2023-10-05',
   VendorSince: '2023-10-05',
   OnlineMap: false,
-  HasSmartphone: false
+  HasSmartphone: false,
+  HasBankAccount: false,
 })
 
 store.getVendors()
