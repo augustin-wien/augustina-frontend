@@ -48,6 +48,10 @@ const decrement = paymentStore.decrement
 </template>
 
 <style scoped>
+input[type=number]{
+    -moz-appearance:textfield;
+    appearance: textfield;
+}
 .button-up,
 .button-down {
   position: relative;

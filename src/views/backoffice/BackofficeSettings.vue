@@ -1,15 +1,14 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Einstellungen</h1></template>
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Einstellungen</h1>
+    </template>
     <template #main>
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="container page-content space-x-2 mt-5">
             <div className="text-center text-2xl space-y-3 space-x-3">
-              <div
-                className="table-auto border-spacing-4 border-collapse text-left"
-                v-if="settings"
-              >
+              <div className="table-auto border-spacing-4 border-collapse text-left" v-if="settings">
                 <tbody className="text-sm">
                   <tr>
                     <th className="text-2xl">Thema</th>
@@ -18,13 +17,8 @@
                   <tr>
                     <th className="p-3">Logo:</th>
                     <td className="p-3">
-                      <img
-                        :src="url + settings.Logo"
-                        alt="Augustin logo"
-                        class="logo mx-auto my-5"
-                        width="50"
-                        height="20"
-                      />
+                      <img :src="url + settings.Logo" alt="Augustin logo" class="logo mx-auto my-5" width="50" height="20"
+                        v-if="settings.Logo" />
                     </td>
                   </tr>
                   <tr>
@@ -36,13 +30,25 @@
                   <tr>
                     <th className="p-3">Transaktionskosten:</th>
                     <td className="p-3">
-                      {{ settings.RefundFees }}
+                      {{ settings.OrgaCoversTransactionCosts }}
                     </td>
                   </tr>
                   <tr>
                     <th className="p-3">Farbe:</th>
                     <td className="p-3">
                       {{ settings.Color }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="p-3">Schriftfarbe:</th>
+                    <td className="p-3">
+                      {{ settings.FontColor }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="p-3">Maximale Bestellsumme</th>
+                    <td className="p-3">
+                      {{ settings.MaxOrderAmount }}
                     </td>
                   </tr>
                 </tbody>
@@ -81,6 +87,7 @@ const url = import.meta.env.VITE_API_URL
 tr {
   padding: 10px;
 }
+
 td {
   padding: 10px;
 }

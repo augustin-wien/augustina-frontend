@@ -6,8 +6,7 @@ import { settingsStore } from '@/stores/settings';
 const settStore = settingsStore()
 const paymentStore = usePaymentStore()
 
-const increment = paymentStore.incrementTipC
-
+const increment = paymentStore.setTip
 </script>
 
 <template>
@@ -39,9 +38,12 @@ const increment = paymentStore.incrementTipC
                     </button>
                 </div>
                 <div className="flex place-items-center w-full">
-                    <button class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full">
-                        <RouterLink :to="{ name: 'Confirmation' }">{{  $t("notToday") }}</RouterLink>
-                    </button>
+                    <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
+                        <button @click="increment(0)"
+                            class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full">
+                            {{  $t("notToday") }}
+                        </button>
+                    </RouterLink>
                 </div>
             </div>
         </template>
@@ -49,7 +51,7 @@ const increment = paymentStore.incrementTipC
 </template>
 
 <style>
-.customcolor{
+.customcolor {
     background-color: v-bind(settStore.settings.Color);
 }
 </style>

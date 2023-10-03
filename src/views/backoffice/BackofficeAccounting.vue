@@ -3,15 +3,8 @@
     <template #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">Umsätze</h1>
       <span>
-        <VueDatePicker
-          v-model="date"
-          range
-          :enable-time-picker="false"
-          placeholder="Zeitraum wählen"
-          @range-start="onRangeStart"
-          @range-end="onRangeEnd"
-          class="max-w-md"
-        />
+        <VueDatePicker v-model="date" range :enable-time-picker="false" placeholder="Zeitraum wählen"
+          @range-start="onRangeStart" @range-end="onRangeEnd" class="max-w-md" />
       </span>
     </template>
     <template #main>
@@ -24,18 +17,18 @@
               <thead>
                 <tr>
                   <th className="p-3">Datum</th>
+                  <th className="p-3">Von</th>
+                  <th className="p-3">An</th>
                   <th className="p-3">Betrag</th>
-                  <th className="p-3">Betreff</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
                 <tr v-for="(payment, id) in payments" :key="id">
                   <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
+                  <td className="border-t-2 p-3">{{ translateSender(payment.SenderName) }}</td>
+                  <td className="border-t-2 p-3">{{ translateReceiver(payment.ReceiverName) }}{{ payment.AuthorizedBy ?
+                    'durch ' + payment.AuthorizedBy : '' }}</td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
-                  <td className="border-t-2 p-3">
-                    von {{ payment.Sender }} an {{ payment.Receiver
-                    }}{{ payment.AuthorizedBy ? ' durch ' + payment.AuthorizedBy : '' }}
-                  </td>
                 </tr>
               </tbody>
             </div>
@@ -49,24 +42,20 @@
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { ref, computed, watch } from 'vue'
+import { ref, computed} from 'vue'
 import { usePaymentStore } from '@/stores/paymentdata'
-import { useKeycloakStore } from '@/stores/keycloak'
 
-const startDate = ref<Date>(new Date(new Date().setDate(new Date().getDate() - 1)))
-const endDate = ref(new Date(new Date().setDate(startDate.value.getDate() + 1)))
-const date = ref([startDate.value, endDate.value])
-
-const keycloakStore = useKeycloakStore()
-const store = usePaymentStore()
-
-if (keycloakStore.authenticated) {
-  store.getPayments(startDate.value.toISOString(), endDate.value.toISOString())
-} else {
-  watch(keycloakStore.authenticated, (newVal) => {
-    store.getPayments(startDate.value.toISOString(), endDate.value.toISOString())
-  })
+const startOfDay = (date: Date) => {
+  const d = new Date(date)
+  d.setHours(0, 0, 0, 0)
+  return d
 }
+const yesterday = startOfDay(new Date(new Date().setDate(new Date().getDate() - 2)))
+const tomorrow = startOfDay(new Date(new Date().setDate(new Date().getDate() + 1)))
+const startDate = ref<Date>(yesterday)
+const endDate = ref(tomorrow)
+const date = ref([startDate.value, endDate.value])
+const store = usePaymentStore()
 
 //fetch paymentlist data once component is mounted
 
@@ -93,6 +82,12 @@ const formatTime = (time: string) => {
 }
 
 const payments = computed(() => store.payments)
+const translateReceiver = (receiver: string) => {
+  return receiver == "Cash" ? "Barkasse" : receiver
+}
+const translateSender = (receiver: string) => {
+  return receiver == "Orga" ? "Augustin" : receiver
+} 
 </script>
 
 <style>

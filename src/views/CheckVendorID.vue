@@ -29,4 +29,4 @@ onMounted(()=>fetch().then(() => checkID(id)))
   </component>
 </template>
 
-<style scoped>@import "../assets/loadingwheel.css"</style>
+<style scoped>@import "../assets/loadingwheel.css";</style>

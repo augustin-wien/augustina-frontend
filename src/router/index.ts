@@ -295,7 +295,7 @@ router.beforeEach(async (to: any) => {
 async function isAuthenticated() {
   if (!keycloak.initailizedKeycloak) {
     try {
-      const resp = await initKeycloak()
+      await initKeycloak()
     } catch (error) {
       console.log('init keycloak failed', error)
     }

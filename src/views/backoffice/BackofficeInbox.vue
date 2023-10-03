@@ -1,6 +1,10 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Eingang</h1></template>
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Eingang</h1>
+      <VueDatePicker v-model="date" range :enable-time-picker="false" placeholder="Zeitraum wählen"
+        @range-start="onRangeStart" @range-end="onRangeEnd" />
+    </template>
 
     <template #main>
       <div class="main">
@@ -9,30 +13,16 @@
             <div className="table-auto border-spacing-4 border-collapse">
               <thead>
                 <tr>
-                  <th className="p-3">Uhrzeit</th>
-                  <th className="p-3">User</th>
-                  <th className="p-3">Einnahme</th>
-                  <th className="p-3">Abgabe</th>
-                  <th className="p-3">Zahlart</th>
-                  <th className="p-3">Ausgabe</th>
+                  <th className="p-3">Datum</th>
+                  <th className="p-3">An</th>
+                  <th className="p-3">Betrag</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
-                <tr>
-                  <td className="border-t-2 p-3">07.02.2023 11:24:03</td>
-                  <td className="border-t-2 p-3">Doris</td>
-                  <td className="border-t-2 p-3">5 €</td>
-                  <td className="border-t-2 p-3">1,5 €</td>
-                  <td className="border-t-2 p-3">Paypal</td>
-                  <td className="border-t-2 p-3">Online</td>
-                </tr>
-                <tr>
-                  <td className="border-t-2 p-3">06.02.2023 09:17:16</td>
-                  <td className="border-t-2 p-3">Sylvia</td>
-                  <td className="border-t-2 p-3">10 €</td>
-                  <td className="border-t-2 p-3">0 €</td>
-                  <td className="border-t-2 p-3">Kreditkarte</td>
-                  <td className="border-t-2 p-3">Print</td>
+                <tr v-for="(payment, id) in payments" :key="id">
+                  <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
+                  <td className="border-t-2 p-3">{{ translateSender(payment.ReceiverName) }}</td>
+                  <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
               </tbody>
             </div>
@@ -43,10 +33,74 @@
   </component>
 </template>
 
+<script lang="ts" setup>
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
+import { ref, computed, watch, onMounted } from 'vue'
+import { usePaymentStore } from '@/stores/paymentdata'
+import { useKeycloakStore } from '@/stores/keycloak';
+
+const startOfDay = (date: Date) => {
+  const d = new Date(date)
+  d.setHours(0, 0, 0, 0)
+  return d
+}
+const yesterday = startOfDay(new Date(new Date().setDate(new Date().getDate() - 2)))
+const tomorrow = startOfDay(new Date(new Date().setDate(new Date().getDate() + 1)))
+const startDate = ref<Date>(yesterday)
+const endDate = ref(tomorrow)
+const date = ref([startDate.value, endDate.value])
+const keycloakStore = useKeycloakStore()
+const store = usePaymentStore()
+
+onMounted(() => {
+  if (keycloakStore.authenticated) {
+    store.getSales(startDate.value.toISOString(), endDate.value.toISOString())
+  } else {
+    watch(keycloakStore.authenticated, () => {
+      store.getSales(startDate.value.toISOString(), endDate.value.toISOString())
+    })
+  }
+})
+
+
+
+
+//fetch paymentlist data once component is mounted
+
+const onRangeStart = (value: any) => {
+  startDate.value = value.toISOString() // Update the startDate variable
+  store.getPayouts(startDate.value, endDate.value)
+}
+
+const onRangeEnd = (value: any) => {
+  endDate.value = value.toISOString() // Update the endDate variable
+  store.getPayouts(startDate.value, endDate.value)
+}
+
+const formatAmount = (amount: number) => {
+  return (amount / 100).toFixed(2)
+}
+
+const formatTime = (time: string) => {
+  const date = new Date(time)
+  return date.toLocaleDateString('de-DE', {
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+const payments = computed(() => store.payments)
+const translateSender = (receiver: string) => {
+  return receiver == "Orga" ? "Augustin" : receiver
+} 
+</script>
+
 <style>
 tr {
   padding: 10px;
 }
+
 td {
   padding: 10px;
 }

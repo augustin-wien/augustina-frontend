@@ -18,13 +18,8 @@
         </div>
         <div class="grid grid-rows-2 place-items-center">
           <div><span class="date text-xl">{{ currentDate() }} </span><span class="time text-xl"> {{ $t("at") }} {{ time }}</span></div>
-          <span class="date text-xl">{{ $t("bought") }} {{ paymentStore.timeStamp }}</span>
+          <span class="date text-xl">{{ $t("bought") }} {{ formatTime(paymentStore.timeStamp) }}</span>
         </div>
-        <RouterLink class="w-full" to="/">
-          <button class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full">
-            Start
-          </button>
-        </RouterLink>
       </div>
     </template>
   </component>
@@ -49,6 +44,11 @@ function currentTime() {
   time.value = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
 }
 
+const formatTime = (date: string) =>{
+  const d = new Date(date)
+  return d.toLocaleString()
+}
+
 function UpdateTime() {
   setTimeout(() => {
     currentTime()
@@ -56,6 +56,7 @@ function UpdateTime() {
   }, 1000)
 }
 UpdateTime()
+
 </script>
 
 <style>
