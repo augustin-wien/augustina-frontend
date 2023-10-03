@@ -30,6 +30,7 @@ export const usePaymentStore = defineStore('payment', {
       transactionID: "",
       verification: {} as VivaWalletVerification | null,
       timeStamp: "",
+      firstName: "",
       url: "",
       failedCount: 0,
     }
@@ -132,8 +133,8 @@ export const usePaymentStore = defineStore('payment', {
       else {
         try {
           this.verification = await agent.VivaWallet.verifyPayment(this.transactionID)
-
-          this.timeStamp = this.verification.TimeStamp
+          this.timeStamp = this.verification.timeStamp
+          this.firstName = this.verification.firstName
         } catch (error) {
           this.failedCount++
           if (this.failedCount > 5) {

@@ -1,3 +1,4 @@
 export interface VivaWalletVerification {
-    TimeStamp: string;
+    firstName: string;
+    timeStamp: string;
 }
