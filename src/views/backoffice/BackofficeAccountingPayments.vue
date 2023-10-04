@@ -40,11 +40,11 @@
 </template>
 
 <script lang="ts" setup>
-import VueDatePicker from '@vuepic/vue-datepicker'
-import '@vuepic/vue-datepicker/dist/main.css'
-import { ref, computed, onMounted, watch} from 'vue'
-import { usePaymentStore } from '@/stores/paymentdata'
 import { useKeycloakStore } from '@/stores/keycloak';
+import { usePaymentStore } from '@/stores/paymentdata';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+import { computed, onMounted, ref, watch } from 'vue';
 
 const keycloakStore = useKeycloakStore()
 
@@ -87,7 +87,7 @@ const formatTime = (time: string) => {
 
 const payments = computed(() => store.payments)
 const translateReceiver = (receiver: string) => {
-  return receiver == "Cash" ? "Barkasse" : receiver
+  return receiver == "Cash" ? "Barkasse " : receiver
 }
 const translateSender = (receiver: string) => {
   return receiver == "Orga" ? "Augustin" : receiver
