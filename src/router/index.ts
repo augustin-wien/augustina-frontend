@@ -1,8 +1,8 @@
 import keycloak, { initKeycloak } from '@/keycloak/keycloak'
-import { createRouter, createWebHistory } from 'vue-router'
-import Default from '@/layouts/DefaultLayout.vue'
 import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
+import Default from '@/layouts/DefaultLayout.vue'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -273,7 +273,15 @@ const router = createRouter({
       meta: {
         layout: Default
       }
-    }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'all',
+      component: () => import('../views/GoToVendor.vue'),
+      meta: {
+        layout: Default
+      }
+    },
   ]
 })
 
