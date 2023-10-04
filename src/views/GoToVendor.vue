@@ -16,7 +16,7 @@ settStore.getSettingsFromApi
                     <img alt="Error Alert" className="logo mx-auto my-1" src="@/assets/red-alert-icon.svg" width="180"
                         height="105" />
                 </div>
-                <div class="text-center">
+                <div class="text-center text-xl">
                     {{ $t("gotovendor") }}
                 </div>
                 <a class="w-full" href="https://www.augustin.or.at">
