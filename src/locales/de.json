@@ -1,27 +1,27 @@
 {
-    "buyItem": "Zeitung kaufen bei:",
-    "newspaper": "Print Zeitung",
-    "next": "Weiter",
+  "buyItem": "Zeitung kaufen bei",
+  "newspaper": "Print Zeitung",
+  "next": "Weiter",
 
-    "donation": "Spende eingeben:",
-    "edit": "Eingabe",
-    "notToday": "Heute nicht",
+  "donation": "Spende eingeben",
+  "edit": "Eingabe",
+  "notToday": "Heute nicht",
 
-    "confirm": "Bezahlung bestätigen:",
-    "agreement": "Mit kauf akzeptiere ich die ",
-    "terms": "AGBs",
+  "confirm": "Bezahlung bestätigen",
+  "agreement": " Mit Kauf akzeptiere ich die ",
+  "terms": "AGBs",
 
-    "symbol": "Zeigen Sie das Symbol ",
-    "bought": "Gekauft am: ",
-    "at": " um",
+  "symbol": "Zeige bitte das Symbol ",
+  "bought": "Gekauft am: ",
+  "at": " um",
 
-    "failed": "Transaktion fehlgeschlagen",
-    "tryagain": "Erneut versuchen:",
-    "return": "Start",
+  "failed": "Transaktion fehlgeschlagen",
+  "tryagain": "Erneut versuchen:",
+  "return": "Start",
 
-    "customdonation": "Spende eingeben:",
+  "customdonation": "Spende eingeben",
 
-    "invalid": "Die gescannte ID ist nicht gültig",
-    "gotovendor": "Gehen sie zu einer Verkäuferin oder einem Verkäufer",
-    "augustin": "Zum Augustin"
+  "invalid": "Die gescannte ID ist nicht gültig",
+  "gotovendor": "Gehe bitte zu einer Verkäuferin oder einem Verkäufer",
+  "augustin": "Zum Augustin"
 }
