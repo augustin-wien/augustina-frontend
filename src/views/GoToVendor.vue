@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { settingsStore } from '@/stores/settings';
+
+const settStore = settingsStore()
+settStore.getSettingsFromApi
 </script>
 
 <template>
@@ -9,13 +13,14 @@
                     {{ $t("invalid") }}
                 </div>
                 <div class="row-span-2">
-                    <img alt="Error Alert" className="logo mx-auto my-1" src="@/assets/red-alert-icon.svg" width="180" height="105" />
+                    <img alt="Error Alert" className="logo mx-auto my-1" src="@/assets/red-alert-icon.svg" width="180"
+                        height="105" />
                 </div>
                 <div class="text-center">
                     {{ $t("gotovendor") }}
                 </div>
                 <a class="w-full" href="https://www.augustin.or.at">
-                    <button class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
+                    <button class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold">
                         {{ $t("augustin") }}
                     </button>
                 </a>
@@ -23,3 +28,10 @@
         </template>
     </component>
 </template>
+
+<style scoped>
+.customcolor {
+    background-color: v-bind(settStore.settings.Color);
+}
+</style>
+
