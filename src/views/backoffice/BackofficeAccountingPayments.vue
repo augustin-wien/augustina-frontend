@@ -27,7 +27,7 @@
                   <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
                   <td className="border-t-2 p-3">{{ translateSender(payment.SenderName) }}</td>
                   <td className="border-t-2 p-3">{{ translateReceiver(payment.ReceiverName) }}{{ payment.AuthorizedBy ?
-                    'durch ' + payment.AuthorizedBy : '' }}</td>
+                    ' durch ' + payment.AuthorizedBy : '' }}</td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
               </tbody>
@@ -40,11 +40,11 @@
 </template>
 
 <script lang="ts" setup>
-import VueDatePicker from '@vuepic/vue-datepicker'
-import '@vuepic/vue-datepicker/dist/main.css'
-import { ref, computed, onMounted, watch} from 'vue'
-import { usePaymentStore } from '@/stores/paymentdata'
 import { useKeycloakStore } from '@/stores/keycloak';
+import { usePaymentStore } from '@/stores/paymentdata';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+import { computed, onMounted, ref, watch } from 'vue';
 
 const keycloakStore = useKeycloakStore()
 

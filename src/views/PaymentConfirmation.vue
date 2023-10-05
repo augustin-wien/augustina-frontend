@@ -18,8 +18,9 @@
             src="../assets/Titelseite.jpg">
         </div>
         <div class="grid grid-rows-2 place-items-center">
-          <div><span class="date text-xl">{{ currentDate() }} </span><span class="time text-xl"> {{ $t("at") }} {{ time
-          }}</span></div>
+          <div class="customMargin"><span class="date text-xl">{{ currentDate() }} </span><span class="time text-xl"> {{
+            $t("at") }} {{ time
+  }}</span></div>
           <span class="date text-xl">{{ $t("bought") }} {{ formatTime(paymentStore.timeStamp) }}</span>
         </div>
       </div>
@@ -28,9 +29,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { settingsStore } from '@/stores/settings'
 import { usePaymentStore } from '@/stores/PaymentStore';
+import { settingsStore } from '@/stores/settings';
+import { ref } from 'vue';
 
 const paymentStore = usePaymentStore()
 const settStore = settingsStore()
@@ -62,11 +63,7 @@ UpdateTime()
 </script>
 
 <style>
-.customcolor {
-  background-color: v-bind(settStore.settings.Color);
-}
-
-.customborder {
-  border-color: v-bind(settStore.settings.Color);
+.customMargin {
+  margin-bottom: 1em;
 }
 </style>
