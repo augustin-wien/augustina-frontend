@@ -2,21 +2,20 @@
 import { settingsStore } from '@/stores/settings';
 
 const settStore = settingsStore()
-settStore.getSettingsFromApi
+settStore.getSettingsFromApi()
 </script>
 
 <template>
     <component :is="$route.meta.layout || 'div'">
         <template #main>
-            <div className="h-full grid grid-rows-5 font-semibold text-2xl">
+            <div className="h-full font-semibold grid text-xl">
                 <div class="text-center">
                     {{ $t("invalid") }}
                 </div>
-                <div class="row-span-2">
-                    <img alt="Error Alert" className="logo mx-auto my-1" src="@/assets/red-alert-icon.svg" width="180"
-                        height="105" />
+                <div class="p-10">
+                    <img alt="Error Alert" className="alert-img mx-auto my-1" src="@/assets/red-alert-icon.svg" />
                 </div>
-                <div class="text-center text-xl">
+                <div class="text-center mb-5">
                     {{ $t("gotovendor") }}
                 </div>
                 <a class="w-full" href="https://www.augustin.or.at">
@@ -33,5 +32,24 @@ settStore.getSettingsFromApi
 .customcolor {
     background-color: v-bind(settStore.settings.Color);
 }
-</style>
+.alert-img {
+    animation: shake 0.5s;
+    animation-iteration-count: 2;
+    animation-timing-function: linear;
+    max-height: 20vh;
+}
 
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+</style>
