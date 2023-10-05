@@ -27,7 +27,7 @@
                   <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
                   <td className="border-t-2 p-3">{{ translateSender(payment.SenderName) }}</td>
                   <td className="border-t-2 p-3">{{ translateReceiver(payment.ReceiverName) }}{{ payment.AuthorizedBy ?
-                    'durch ' + payment.AuthorizedBy : '' }}</td>
+                    ' durch ' + payment.AuthorizedBy : '' }}</td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
               </tbody>
@@ -87,7 +87,7 @@ const formatTime = (time: string) => {
 
 const payments = computed(() => store.payments)
 const translateReceiver = (receiver: string) => {
-  return receiver == "Cash" ? "Barkasse " : receiver
+  return receiver == "Cash" ? "Barkasse" : receiver
 }
 const translateSender = (receiver: string) => {
   return receiver == "Orga" ? "Augustin" : receiver
