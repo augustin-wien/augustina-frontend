@@ -18,21 +18,31 @@ const onlyForCurrency = ($event: any) => {
         return;
     }
 
-    // restrict to 2 decimal places
+    // restrict to 2 decimal places and 1 digit in integer part
     if (paymentStore.tip !== null && paymentStore.tip !== undefined) {
-        const parts = paymentStore.tip.toString().split('.');
+        const currentTip = paymentStore.tip.toString();
+        const parts = currentTip.split('.');
+
+        // Check total number of digits
+        const totalDigits = currentTip.replace('.', '').length;
+        if (totalDigits >= 3 || (parts[0].length > 0 && parseInt(parts[0]) > 9)) {
+            $event.preventDefault();
+            return;
+        }
 
         if (parts.length > 1) {
             const decimalPart = parts[1];
-            const hasMoreThanTwoDecimals = decimalPart?.length > 2;
-            const hasLeadingZeros = decimalPart?.startsWith('0') && decimalPart !== '0';
 
-            if (hasMoreThanTwoDecimals || hasLeadingZeros) {
+            // prevent more than two decimal places
+            if (decimalPart.length >= 2) {
                 $event.preventDefault();
+                return;
             }
         }
     }
 };
+
+
 
 const roundValue = () => {
     if (paymentStore.tip !== null && paymentStore.tip !== undefined) {
