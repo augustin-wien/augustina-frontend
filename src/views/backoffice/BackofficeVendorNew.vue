@@ -16,6 +16,7 @@
               X
             </button>
           </div>
+          <Toast v-if="toast" :toast="toast" class="fixed top-20 right-5"/>
           <form
             @submit.prevent="submitVendor"
             class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -254,7 +255,6 @@
               <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">Anlegen</button>
             </div>
           </form>
-          <Toast v-if="toast" :toast="toast" />
         </div>
         <div v-else>
           importiere {{ store.vendorsImportedCount }}/{{ importingVendorsCount }} VerkäuferInnen
@@ -280,25 +280,25 @@ import router from '@/router'
 const store = vendorsStore()
 
 const newVendor = ref<Vendor>({
-  Email: 'new@example.com',
-  FirstName: 'Leonie',
+  Email: '@augustin.or.at',
+  FirstName: '',
   ID: 0,
-  KeycloakID: 'new-keycloak-id',
-  LastName: 'Löwenherz',
+  KeycloakID: '',
+  LastName: '',
   LastPayout: null,
-  LicenseID: 'new-license-id',
-  UrlID: 'no-id',
+  LicenseID: '',
+  UrlID: '',
   Balance: 0,
   IsDisabled: false,
   Longitude: 0,
   Latitude: 0,
-  Address: 'new-address',
-  PLZ: 'new-plz',
-  Location: 'new-location',
-  WorkingTime: 'new-working-time',
-  Language: 'deutsch',
-  Comment: 'Kommentare',
-  Telephone: 'new-phone-number',
+  Address: '',
+  PLZ: '',
+  Location: '',
+  WorkingTime: '',
+  Language: '',
+  Comment: '',
+  Telephone: '',
   RegistrationDate: '2023-10-05',
   VendorSince: '2023-10-05',
   OnlineMap: false,
@@ -311,12 +311,34 @@ const importing = ref(false)
 const importingVendorsCount = ref(0)
 
 const submitVendor = async () => {
+  if (!newVendor.value) return
+  if (!newVendor.value.Email || newVendor.value.Email === '@augustin.or.at') {
+    showToast('error', 'Email muss angegeben werden')
+    return
+  }
+  if (!newVendor.value.FirstName) {
+    showToast('error', 'Vorname muss angegeben werden')
+    return
+  }
+  if (!newVendor.value.LastName) {
+    showToast('error', 'Nachname muss angegeben werden')
+    return
+  }
+  if (!newVendor.value.LicenseID) {
+    showToast('error', 'Lizenznummer muss angegeben werden')
+    return
+  }
+  if (newVendor.value.WorkingTime.length>1|| !['V','N','G'].includes(newVendor.value.WorkingTime.toUpperCase())) {
+    showToast('error', 'Die Arbeitszeit muss in der Form V,N oder G angegeben werden')
+    return
+  }
   try {
-    await store.createVendor(newVendor.value as Vendor)
-    showToast('success', 'VerkäuferIn erfolgreich angelegt')
-  } catch (err) {
+    await store.createVendorPromise(newVendor.value as Vendor).then((res:any) => {
+      router.push(`/backoffice/vendorsummary/${res.ID}`)
+    })
+  } catch (err:any) {
     console.error('Error creating vendor:', err)
-    showToast('error', 'VerkäuferIn konnte nicht angelegt werden')
+    showToast('error', 'VerkäuferIn konnte nicht angelegt werden '+err.response.data.error.message)
   }
 }
 
