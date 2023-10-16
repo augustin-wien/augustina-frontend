@@ -28,8 +28,8 @@
 import { ref } from 'vue'
 import { settingsStore } from '@/stores/settings'
 import { usePaymentStore } from '@/stores/PaymentStore'
-import IconCheckmark from '@/components/icons/Checkmark.vue'
-import IconCross from '@/components/icons/Cross.vue'
+import IconCheckmark from '@/components/icons/IconCheckmark.vue'
+import IconCross from '@/components/icons/IconCross.vue'
 
 const paymentStore = usePaymentStore()
 const settStore = settingsStore()
