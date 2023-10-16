@@ -8,8 +8,8 @@
         </div>
         <div class="row-span-2 text-6xl font-bold w-fit h-full relative">
           <div class="rounded-full absolute h-12 w-12 fill-white right-0 top-0 place-items-center grid" :class="{ 'bg-red-600': isConfirmed, 'bg-green-600': !isConfirmed}">
-            <Checkmark v-if="!isConfirmed"/>
-            <Cross v-else/>
+            <IconCheckmark v-if="!isConfirmed"/>
+            <IconCross v-else/>
           </div>
           <img class="rounded-full h-44 w-44 object-cover customborder border-4" alt="Titelblatt"
             src="../assets/Titelseite.jpg">
@@ -28,8 +28,8 @@
 import { ref } from 'vue'
 import { settingsStore } from '@/stores/settings'
 import { usePaymentStore } from '@/stores/PaymentStore'
-import Checkmark from '@/components/icons/Checkmark.vue'
-import Cross from '@/components/icons/Cross.vue'
+import IconCheckmark from '@/components/icons/Checkmark.vue'
+import IconCross from '@/components/icons/Cross.vue'
 
 const paymentStore = usePaymentStore()
 const settStore = settingsStore()
