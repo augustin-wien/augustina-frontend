@@ -133,8 +133,8 @@ export const usePaymentStore = defineStore('payment', {
       else {
         try {
           this.verification = await agent.VivaWallet.verifyPayment(this.transactionID)
-          this.timeStamp = this.verification.timeStamp
-          this.firstName = this.verification.firstName
+          this.timeStamp = this.verification.TimeStamp
+          this.firstName = this.verification.FirstName
         } catch (error) {
           this.failedCount++
           if (this.failedCount > 5) {

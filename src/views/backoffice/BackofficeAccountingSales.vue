@@ -3,14 +3,14 @@
     <template #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">Eingang</h1>
       <VueDatePicker v-model="date" range :enable-time-picker="false" placeholder="Zeitraum wählen"
-        @range-start="onRangeStart" @range-end="onRangeEnd" />
+        @range-start="onRangeStart" @range-end="onRangeEnd" class="max-w-md"/>
     </template>
 
     <template #main>
       <div class="main">
         <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3 ">
-            <div className="table-auto border-spacing-4 border-collapse">
+            <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
                   <th className="p-3">Datum</th>
@@ -25,7 +25,7 @@
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
               </tbody>
-            </div>
+            </table>
           </div>
         </div>
       </div>
@@ -53,12 +53,15 @@ const date = ref([startDate.value, endDate.value])
 const keycloakStore = useKeycloakStore()
 const store = usePaymentStore()
 
+const authenticated = computed(() => keycloakStore.authenticated)
+
 onMounted(() => {
-  if (keycloakStore.authenticated) {
-    store.getSales(startDate.value.toISOString(), endDate.value.toISOString())
+  if (authenticated.value) {
+    store.getSales(startDate.value, endDate.value)
   } else {
-    watch(keycloakStore.authenticated, () => {
-      store.getSales(startDate.value.toISOString(), endDate.value.toISOString())
+    watch(authenticated, (val:boolean) => {
+      if (val)
+      store.getSales(startDate.value, endDate.value)
     })
   }
 })
@@ -69,13 +72,14 @@ onMounted(() => {
 //fetch paymentlist data once component is mounted
 
 const onRangeStart = (value: any) => {
-  startDate.value = value.toISOString() // Update the startDate variable
-  store.getPayouts(startDate.value, endDate.value)
+  console.log(value)
+  startDate.value = value // Update the startDate variable
+  store.getSales(startDate.value, endDate.value)
 }
 
 const onRangeEnd = (value: any) => {
-  endDate.value = value.toISOString() // Update the endDate variable
-  store.getPayouts(startDate.value, endDate.value)
+  endDate.value = value // Update the endDate variable
+  store.getSales(startDate.value, endDate.value)
 }
 
 const formatAmount = (amount: number) => {

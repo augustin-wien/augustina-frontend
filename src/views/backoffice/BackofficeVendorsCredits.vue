@@ -10,7 +10,7 @@
           v-model="searchQuery"
           class="border-2 border-gray-400 rounded-md p-2 ml-2"
         />
-        <button class="p-3 rounded-full bg-lime-600 text-white">Suchen</button>
+        <button class="p-3 rounded-full bg-lime-600 text-white ml-2">Suchen</button>
       </span>
     </template>
 
@@ -33,7 +33,7 @@
                     {{ vendor?.LicenseID }}
                   </td>
                   <td className="border-t-2 p-3">{{ formatCredit(vendor.Balance) }} €</td>
-                  <td className="border-t-2 p-3">{{ vendor.LastPayout }}</td>
+                  <td className="border-t-2 p-3">{{ formatDate(vendor.LastPayout) }}</td>
                   <router-link :to="`/backoffice/credits/payout/${vendor.ID}`" v-if="vendor?.ID">
                     <button className="p-3 rounded-full bg-lime-600 text-white">Auszahlen</button>
                   </router-link>
@@ -68,6 +68,10 @@ onMounted(() => {
 })
 function formatCredit(credit: number) {
   return (credit / 100).toFixed(2)
+}
+function formatDate(date: string) {
+  if (!date|| date === '') return ''
+  return new Date(date).toLocaleString()
 }
 const vendors = computed(() => store.vendors)
 // create a search function for the search input

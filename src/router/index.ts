@@ -1,8 +1,8 @@
 import keycloak, { initKeycloak } from '@/keycloak/keycloak'
-import { createRouter, createWebHistory } from 'vue-router'
-import Default from '@/layouts/DefaultLayout.vue'
 import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
+import Default from '@/layouts/DefaultLayout.vue'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -108,13 +108,18 @@ const router = createRouter({
       },
     },
     {
+      path: '/backoffice',
+      name: 'Backoffice',
+      redirect: '/backoffice/vendorsummary',
+    },
+    {
       path: '/backoffice/credits',
       name: 'Backoffice Credit',
       meta: {
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeCredits.vue')
+      component: () => import('../views/backoffice/BackofficeVendorsCredits.vue')
     },
 
     {
@@ -125,34 +130,34 @@ const router = createRouter({
         requiresAuth: true
       },
       props: true,
-      component: () => import('../views/backoffice/BackofficeCreditPayout.vue')
+      component: () => import('../views/backoffice/BackofficeVendorCreditPayout.vue')
     },
     {
-      path: '/backoffice/accounting',
+      path: '/backoffice/payments',
       name: 'Backoffice Accounting',
       meta: {
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeAccounting.vue')
+      component: () => import('../views/backoffice/BackofficeAccountingPayments.vue')
     },
     {
-      path: '/backoffice/logs',
+      path: '/backoffice/payouts',
       name: 'Backoffice Logs',
       meta: {
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeLogs.vue')
+      component: () => import('../views/backoffice/BackofficeAccountingPayouts.vue')
     },
     {
-      path: '/backoffice/inbox',
+      path: '/backoffice/sales',
       name: 'Backoffice Inbox',
       meta: {
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeInbox.vue')
+      component: () => import('../views/backoffice/BackofficeAccountingSales.vue')
     },
     {
       path: '/backoffice/vendorsummary',
@@ -161,7 +166,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeVendorSummary.vue')
+      component: () => import('../views/backoffice/BackofficeVendorsSummary.vue')
     },
     {
       path: '/backoffice/newvendor',
@@ -170,7 +175,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeNewVendor.vue')
+      component: () => import('../views/backoffice/BackofficeVendorNew.vue')
     },
     {
       path: '/backoffice/userprofile/:ID',
@@ -179,7 +184,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeUserProfile.vue')
+      component: () => import('../views/backoffice/BackofficeVendorProfile.vue')
     },
     {
       path: '/backoffice/userprofile/:ID/update',
@@ -188,7 +193,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeUpdateVendor.vue')
+      component: () => import('../views/backoffice/BackofficeVendorUpdate.vue')
     },
     {
       path: '/backoffice/settings',
@@ -206,7 +211,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeUpdateAugustin.vue')
+      component: () => import('../views/backoffice/BackofficeSettingsUpdate.vue')
     },
 
     {
@@ -225,7 +230,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeNewProduct.vue')
+      component: () => import('../views/backoffice/BackofficeProductNew.vue')
     },
     {
       path: '/backoffice/productsettings/update/:ID',
@@ -268,7 +273,15 @@ const router = createRouter({
       meta: {
         layout: Default
       }
-    }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'all',
+      component: () => import('../views/GoToVendor.vue'),
+      meta: {
+        layout: Default
+      }
+    },
   ]
 })
 

@@ -17,7 +17,7 @@
                     <p className="text-center text-8xl font-semibold col-span-3">{{ paymentStore.priceInEuros() }}€</p>
                 </div>
                 <div>
-                    <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked"/>
+                    <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked" class="mr-2"/>
                     <label for="checkbox"> {{ $t("agreement") }} <button @click="paymentStore.toAGB()" class="text-blue-600">{{ $t("terms") }}</button></label>
                 </div>
                 <div className="flex place-items-center w-full">
