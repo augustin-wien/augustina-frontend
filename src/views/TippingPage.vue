@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { usePaymentStore } from '@/stores/PaymentStore';
-import { RouterLink } from 'vue-router';
 import { settingsStore } from '@/stores/settings';
+import { RouterLink } from 'vue-router';
 
 const settStore = settingsStore()
 const paymentStore = usePaymentStore()
@@ -18,17 +18,17 @@ const increment = paymentStore.setTip
                 </div>
                 <div className="flex place-items-center w-full">
                     <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
-                        <button @click="increment(1)"
+                        <button @click="increment(2)"
                             class="customcolor rounded-full p-[18px] text-white text-4xl font font-semibold w-full">
-                            1,00 €
+                            2,00 €
                         </button>
                     </RouterLink>
                 </div>
                 <div className="flex place-items-center w-full">
                     <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
-                        <button @click="increment(0.5)"
+                        <button @click="increment(1)"
                             class="customcolor rounded-full p-[18px] text-white text-4xl font font-semibold w-full">
-                            0,50 €
+                            1,00 €
                         </button>
                     </RouterLink>
                 </div>
@@ -41,7 +41,7 @@ const increment = paymentStore.setTip
                     <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
                         <button @click="increment(0)"
                             class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full">
-                            {{  $t("notToday") }}
+                            {{ $t("notToday") }}
                         </button>
                     </RouterLink>
                 </div>
