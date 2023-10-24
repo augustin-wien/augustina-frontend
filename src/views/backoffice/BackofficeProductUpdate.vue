@@ -1,6 +1,8 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Bearbeitung</h1></template>
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Bearbeitung</h1></template
+    >
     <template #main>
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4" v-if="item">
@@ -14,7 +16,10 @@
             </button>
           </div>
 
-          <form @submit.prevent="updateItem" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <form
+            @submit.prevent="updateItem"
+            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          >
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
                 >Name:</label
@@ -28,7 +33,9 @@
                   required
                 />
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description"
+              <label
+                class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                for="description"
                 >Beschreibung:</label
               >
               <div class="flex flex-row">
@@ -57,13 +64,26 @@
                 >Bild:</label
               >
               <div class="flex flex-col">
-                <img
-                  :src="item.Image.startsWith('img') ? apiUrl + item.Image : item.Image"
-                  alt="item image"
-                  class="productImage"
-                  width="100%"
-                  height="auto"
-                />
+                <div v-if="item.Image.startsWith">
+                  <img
+                    :src="item.Image.startsWith('img') ? apiUrl + item.Image : item.Image"
+                    alt="item image"
+                    class="productImage"
+                    width="100%"
+                    height="auto"
+                    v-if="item.Image"
+                  />
+                </div>
+                <div v-else>
+                  <img
+                    :src="previewImage(item.Image)"
+                    alt="item image"
+                    class="productImage"
+                    width="100%"
+                    height="auto"
+                    v-if="item.Image"
+                  />
+                </div>
                 <input
                   class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   accept="image/png, image/jpeg"
@@ -186,7 +206,7 @@ const updatedItem = ref({
   ID: 0,
   Image: 'tbd',
   Name: 'Kalender',
-  Price: 0
+  Price: 0,
 })
 
 store.getItems()
@@ -260,6 +280,11 @@ const updateImage = (event: any) => {
 }
 
 const apiUrl = import.meta.env.VITE_API_URL
+
+const previewImage = (image: object) => {
+  if (!image || image === '') return
+  return URL.createObjectURL(image)
+}
 </script>
 
 <style scoped>
