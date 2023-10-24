@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { settingsStore } from '@/stores/settings'
 import { usePaymentStore } from '@/stores/PaymentStore'
 import IconCheckmark from '@/components/icons/IconCheckmark.vue'
