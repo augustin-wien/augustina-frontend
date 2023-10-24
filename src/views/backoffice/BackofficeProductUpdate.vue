@@ -64,26 +64,14 @@
                 >Bild:</label
               >
               <div class="flex flex-col">
-                <div v-if="item.Image.startsWith">
-                  <img
-                    :src="item.Image.startsWith('img') ? apiUrl + item.Image : item.Image"
-                    alt="item image"
-                    class="productImage"
-                    width="100%"
-                    height="auto"
-                    v-if="item.Image"
-                  />
-                </div>
-                <div v-else>
-                  <img
-                    :src="previewImage(item.Image)"
-                    alt="item image"
-                    class="productImage"
-                    width="100%"
-                    height="auto"
-                    v-if="item.Image"
-                  />
-                </div>
+                <img
+                  :src="previewImage(item.Image)"
+                  alt="item image"
+                  class="productImage"
+                  width="100%"
+                  height="auto"
+                  v-if="item.Image"
+                />
                 <input
                   class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   accept="image/png, image/jpeg"
@@ -281,9 +269,11 @@ const updateImage = (event: any) => {
 
 const apiUrl = import.meta.env.VITE_API_URL
 
-const previewImage = (image: object) => {
+const previewImage = (image: String | Blob | MediaSource) => {
   if (!image || image === '') return
-  return URL.createObjectURL(image)
+  else if (typeof image === 'string') return apiUrl + image
+  // @ts-ignore
+  else return URL.createObjectURL(image)
 }
 </script>
 
