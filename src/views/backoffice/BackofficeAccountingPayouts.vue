@@ -26,7 +26,9 @@
                   <th className="p-3">Datum</th>
                   <th className="p-3">An</th>
                   <th className="p-3">Durch</th>
-                  <th className="p-3" v-for="item in items">{{ item.Name }}</th>
+                  <th className="p-3" v-for="item in items" v-bind:key="`th_${item.ID}`">
+                    {{ item.Name }}
+                  </th>
                   <th className="p-3">Gesamt</th>
                 </tr>
               </thead>
@@ -37,7 +39,11 @@
                     {{ translateSender(payment.SenderName) }}
                   </td>
                   <td className="border-t-2 p-3">{{ payment.AuthorizedBy }}</td>
-                  <td className="border-t-2 p-3" v-for="item in items">
+                  <td
+                    className="border-t-2 p-3"
+                    v-for="item in items"
+                    v-bind:key="`td_${payment.ID}_${item.ID}`"
+                  >
                     {{ sumItemsForOrder(payment, item.ID) }}
                   </td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>

@@ -9,8 +9,10 @@
           <div className="text-center text-2xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
               <h1 class="text-2xl font-bold">{{ vendor.LicenseID }}</h1>
-              <button @click="router.push('/backoffice/vendorsummary')"
-                class="px-2 rounded-full bg-red-600 text-white font-bold">
+              <button
+                @click="router.push('/backoffice/vendorsummary')"
+                class="px-2 rounded-full bg-red-600 text-white font-bold"
+              >
                 X
               </button>
             </div>
@@ -82,7 +84,9 @@
             </div>
             <div v-if="vendor">
               <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
-                <button class="p-2 rounded-full bg-lime-600 text-white mr-2">Ändern</button>
+                <button class="p-2 rounded-full bg-lime-600 text-white mr-2">
+                  Ändern
+                </button>
               </router-link>
             </div>
           </div>
@@ -103,7 +107,7 @@ td {
 </style>
 
 <script lang="ts" setup>
-import { vendorsStore, type Vendor } from '@/stores/vendor'
+import { vendorsStore } from '@/stores/vendor'
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useKeycloakStore } from '@/stores/keycloak'

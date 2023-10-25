@@ -56,11 +56,9 @@
 
 <script lang="ts" setup>
 import { vendorsStore } from '@/stores/vendor'
-import { usePayoutStore } from '@/stores/payout'
 import { computed, onMounted, ref, watch } from 'vue'
 import keycloak from '@/keycloak/keycloak'
 
-const payoutStore = usePayoutStore()
 const store = vendorsStore()
 
 // Fetch the vendors' data when the component is mounted
