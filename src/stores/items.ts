@@ -10,7 +10,7 @@ export interface Item {
   Price: number
 }
 
-export const itemStore = defineStore('items', {
+export const useItemsStore = defineStore('items', {
   state: () => {
     return {
       items: [] as Item[]

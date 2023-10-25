@@ -1,6 +1,8 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <template #header> <h1 className="font-bold mt-3 pt-3 text-2xl">Produkte</h1></template>
+    <template #header>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">Produkte</h1></template
+    >
     <template #main>
       <div class="main w-full">
         <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -31,7 +33,9 @@
                   <td class="border-t-2 p-3">{{ price(item.Price) }} Euro</td>
                   <td>
                     <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
-                      <button class="p-3 rounded-full bg-lime-600 text-white">Ändern</button>
+                      <button class="p-3 rounded-full bg-lime-600 text-white">
+                        Ändern
+                      </button>
                     </router-link>
                   </td>
                 </tr>
@@ -56,10 +60,10 @@
 </template>
 
 <script lang="ts" setup>
-import { itemStore } from '@/stores/items'
+import { useItemsStore } from '@/stores/items'
 import { computed, onMounted } from 'vue'
 
-const store = itemStore()
+const store = useItemsStore()
 
 // Fetch the items' data when the component is mounted
 onMounted(() => {

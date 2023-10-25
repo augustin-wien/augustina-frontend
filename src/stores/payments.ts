@@ -1,21 +1,28 @@
 import { defineStore } from 'pinia'
 import { fetchPayments } from '@/api/api'
 
-export interface Payments {
+export interface Payment {
   Amount: number
   AuthorizedBy: string
-  Id: number
+  ID: number
   Order: number
   OrderEntry: number
   Receiver: number
+  ReceiverName: string
   Sender: number
+  SenderName: string
   Timestamp: '00:00:00'
+  Item: number
+  Quantity: number
+  Price: number
+  Payout: boolean
+  IsPayoutFor: Array<Payment>
 }
 
-export const usePaymentStore = defineStore('payments', {
+export const usePaymentsStore = defineStore('payments', {
   state: () => {
     return {
-      payments: [] as Payments[]
+      payments: [] as Payment[]
     }
   },
   getters: {

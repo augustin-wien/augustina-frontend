@@ -5,7 +5,7 @@ import type { Name } from '@/models/vendorName'
 import { type AxiosResponse } from 'axios'
 import { VIVAWALLET_TRANSACTION_ORDER, SETTINGS_API_URL, VIVAWALLET_TRANSACTION_VERIFICATION, VENDOR_CHECK_ID } from '@/api/endpoints'
 import { apiInstance } from './api'
-import type { orderItem } from '@/stores/PaymentStore'
+import type { orderItem } from '@/stores/payment'
 
 const responseBody = (response: AxiosResponse) => response.data
 
