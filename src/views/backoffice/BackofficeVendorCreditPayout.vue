@@ -114,7 +114,7 @@ const setVendor = () =>{
 // Compute the 'vendor' property based on the 'ID' parameter
 const vendor = ref<Vendor | null>(setVendor())
 const items = computed(() => itemsStore.items)
-watch(vendor, (val: Vendor) => {
+watch(vendor, (val: Vendor | null) => {
   if (val) {
     amount.value = val.Balance / 100
     payoutStore.getPaymentsForPayout(val.LicenseID)
@@ -123,8 +123,7 @@ watch(vendor, (val: Vendor) => {
 watch(store.vendors, () => {
   vendor.value = setVendor()
   itemsStore.getItems()
-  payoutStore.getPaymentsForPayout(vendor.LicenseID)
-
+  if(vendor.value) payoutStore.getPaymentsForPayout(vendor.value.LicenseID)
 })
 // Initialize a reactive property 'amount' for input data
 const amount = ref<number>(0.0)
@@ -154,6 +153,7 @@ onMounted(() => {
 })
 // post the amount with the licenseID to the payout store
 const payoutVendor = async () => {
+  if (!vendor.value) return
   const data = {
     VendorLicenseID: vendor.value.LicenseID,
     From: null,
@@ -165,7 +165,7 @@ const payoutVendor = async () => {
 const formatReceiver = (payment: Payment) => {
   const amount = formatCredit(payment.Amount)
 
-  if(payment.ReceiverName === vendor.value.LicenseID) {
+  if(payment.ReceiverName === vendor.value?.LicenseID) {
     return `+${amount}`
   }else {
     return `-${amount}`
