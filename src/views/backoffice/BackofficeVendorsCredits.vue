@@ -40,7 +40,10 @@
                     :to="`/backoffice/credits/payout/${vendor.ID}`"
                     v-if="vendor?.ID"
                   >
-                    <button className="p-3 rounded-full bg-lime-600 text-white">
+                    <button
+                      className="p-3 rounded-full bg-lime-600 text-white"
+                      :disabled="vendor.Balance === 0"
+                    >
                       Auszahlen
                     </button>
                   </router-link>
@@ -96,12 +99,11 @@ const displayVendors = computed(() => {
   return searchQuery.value ? store.filteredVendors : vendors.value
 })
 </script>
-
-<style>
-tr {
-  padding: 10px;
-}
-td {
-  padding: 10px;
+<style scoped>
+button:disabled,
+button[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
 }
 </style>

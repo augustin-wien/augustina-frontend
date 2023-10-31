@@ -125,7 +125,7 @@ onMounted(() => {
 
 const sumItemsForOrder = (payment: any, itemID: number) => {
   let sum = 0
-  payment.IsPayoutFor.forEach((payout: Payment) => {
+  payment.IsPayoutFor?.forEach((payout: Payment) => {
     if (payout.Item === itemID) {
       if (payout.Receiver === payment.Sender) {
         sum += payout.Amount
@@ -137,13 +137,3 @@ const sumItemsForOrder = (payment: any, itemID: number) => {
   return `${formatAmount(sum)} €`
 }
 </script>
-
-<style>
-tr {
-  padding: 10px;
-}
-
-td {
-  padding: 10px;
-}
-</style>

@@ -20,10 +20,9 @@
               </button>
             </div>
             <div>
-              Für <strong>{{ vendor.LicenseID }}</strong
-              >, <strong>{{ vendor.FirstName }}</strong>
-              <strong>{{ vendor.LastName }}</strong
-              >:
+              <strong>{{ vendor.LicenseID }}</strong>
+              <br />
+              {{ `${vendor.FirstName} ${vendor.LastName}` }}
             </div>
 
             <div className="container">
@@ -31,25 +30,38 @@
                 <div className="col text-lg underline">Guthaben</div>
                 <div className="col text-md">{{ formatCredit(vendor.Balance) }} Euro</div>
               </div>
-              <div>Für folgende Zahlungen auszahlen:</div>
-              <div
-                v-for="payment in paymentsForPayout"
-                :key="payment.ID"
-                className="grid grid-cols-3"
-              >
-                <div className="text-xs">{{ formatDate(payment.Timestamp) }}</div>
-                <div className="text-xs">{{ getItemName(payment.Item) }}</div>
-                <div className="text-xs">{{ formatReceiver(payment) }} Euro</div>
+              <div v-if="vendor.Balance > 0">
+                <div>Für folgende Zahlungen auszahlen:</div>
+                <div
+                  v-for="payment in paymentsForPayout"
+                  :key="payment.ID"
+                  className="grid grid-cols-3"
+                >
+                  <div className="text-xs">{{ formatDate(payment.Timestamp) }}</div>
+                  <div className="text-xs">{{ getItemName(payment.Item) }}</div>
+                  <div className="text-xs">{{ formatReceiver(payment) }} Euro</div>
+                </div>
               </div>
               <div className="mx-3">
                 <div className="col">
                   <button
+                    v-if="vendor.Balance > 0"
                     type="submit"
                     value="Bestätigen"
                     className="p-3 m-3 rounded-full bg-lime-600 text-white"
                     :onClick="payoutVendor"
+                    :disabled="vendor.Balance === 0"
                   >
                     Auszahlen
+                  </button>
+                  <button
+                    v-else
+                    type="submit"
+                    value="Bestätigen"
+                    className="p-3 m-3 rounded-full bg-lime-600 text-white"
+                    disabled
+                  >
+                    Kein Guthaben
                   </button>
                 </div>
               </div>
@@ -60,12 +72,6 @@
     </template>
   </component>
 </template>
-
-<style scoped>
-.container {
-  flex-direction: column;
-}
-</style>
 
 <script lang="ts" setup>
 import { useKeycloakStore } from '@/stores/keycloak'
@@ -92,25 +98,33 @@ const vendors = computed(() => store.vendors)
 // Get the current route
 const route = useRoute()
 const idparams = route.params.ID
+const vendorID = Number(idparams) // Convert the string to a number or NaN
 
-// Compute the 'vendor' property based on the 'ID' parameter
-const vendor: ComputedRef<Vendor> = computed(() => {
-  const numericIdParams = Number(idparams) // Convert the string to a number or NaN
-  if (!isNaN(numericIdParams)) {
+const setVendor = () =>{
+  if (store.vendors.length === 0) return null
+  if (!isNaN(vendorID)) {
     // Find the vendor in the 'vendors' array that matches the 'ID' parameter
-    return vendors.value.find((vendor: Vendor) => vendor.ID === numericIdParams)
+    return store.vendors.find((vend: Vendor) => {
+      return vend.ID === vendorID})
   } else {
     // Return null if the 'ID' parameter is not a valid number
     return null
   }
-})
+}
+// Compute the 'vendor' property based on the 'ID' parameter
+const vendor = ref<Vendor | null>(setVendor())
 const items = computed(() => itemsStore.items)
 watch(vendor, (val: Vendor) => {
   if (val) {
     amount.value = val.Balance / 100
-    console.log(val.LicenseID)
     payoutStore.getPaymentsForPayout(val.LicenseID)
   }
+})
+watch(store.vendors, () => {
+  vendor.value = setVendor()
+  itemsStore.getItems()
+  payoutStore.getPaymentsForPayout(vendor.LicenseID)
+
 })
 // Initialize a reactive property 'amount' for input data
 const amount = ref<number>(0.0)
@@ -124,6 +138,19 @@ onMounted(() => {
   if (vendor.value) {
     amount.value = vendor.value.Balance / 100
   }
+  if (vendors.value.length === 0) {
+    if (authenticated.value) {
+      store.getVendors().then(() => {
+        vendor.value = setVendor()
+      })
+    } else {
+      watch(authenticated, () => {
+        store.getVendors().then(() => {
+          vendor.value = setVendor()
+        })
+      })
+    }
+  }
 })
 // post the amount with the licenseID to the payout store
 const payoutVendor = async () => {
@@ -133,9 +160,7 @@ const payoutVendor = async () => {
     To: null
   }
   await payoutStore.postPayout(data)
-  store.getVendor(vendor.value.ID).then((v: Vendor) => {
-    amount.value = v.Balance / 100
-  })
+  router.push('/backoffice/payouts')
 }
 const formatReceiver = (payment: Payment) => {
   const amount = formatCredit(payment.Amount)
@@ -155,3 +180,15 @@ const getItemName = (itemID: number) => {
   }
 }
 </script>
+
+<style scoped>
+.container {
+  flex-direction: column;
+}
+button:disabled,
+button[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+</style>

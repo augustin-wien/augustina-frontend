@@ -113,13 +113,3 @@ onMounted(() => {
   }
 })
 </script>
-
-<style>
-tr {
-  padding: 10px;
-}
-
-td {
-  padding: 10px;
-}
-</style>
