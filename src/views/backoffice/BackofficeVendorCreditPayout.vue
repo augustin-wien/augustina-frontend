@@ -38,7 +38,9 @@
                   className="grid grid-cols-3"
                 >
                   <div className="text-xs">{{ formatDate(payment.Timestamp) }}</div>
-                  <div className="text-xs">{{ getItemName(payment.Item) }}</div>
+                  <div className="text-xs" v-if="items.length > 0">
+                    {{ getItemName(payment.Item) }}
+                  </div>
                   <div className="text-xs">{{ formatReceiver(payment) }} Euro</div>
                 </div>
               </div>
@@ -99,13 +101,20 @@ const vendors = computed(() => store.vendors)
 const route = useRoute()
 const idparams = route.params.ID
 const vendorID = Number(idparams) // Convert the string to a number or NaN
-
+const items = computed(() => itemsStore.items)
 const setVendor = () =>{
   if (store.vendors.length === 0) return null
   if (!isNaN(vendorID)) {
     // Find the vendor in the 'vendors' array that matches the 'ID' parameter
-    return store.vendors.find((vend: Vendor) => {
+    const val = store.vendors.find((vend: Vendor) => {
       return vend.ID === vendorID})
+    if (!val) {
+      // Return null if the 'ID' parameter is not a valid number
+      return null
+    }
+    if (items?.value.length === 0) itemsStore.getItems()
+    payoutStore.getPaymentsForPayout(val.LicenseID)
+    return val
   } else {
     // Return null if the 'ID' parameter is not a valid number
     return null
@@ -113,7 +122,6 @@ const setVendor = () =>{
 }
 // Compute the 'vendor' property based on the 'ID' parameter
 const vendor = ref<Vendor | null>(setVendor())
-const items = computed(() => itemsStore.items)
 watch(vendor, (val: Vendor | null) => {
   if (val) {
     amount.value = val.Balance / 100
