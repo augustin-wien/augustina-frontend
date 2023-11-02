@@ -17,7 +17,9 @@
     <template #main>
       <div class="main" v-if="vendors">
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
+          <div
+            className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5"
+          >
             <div className="table-auto border-spacing-4 border-collapse">
               <thead>
                 <tr>
@@ -34,8 +36,16 @@
                   </td>
                   <td className="border-t-2 p-3">{{ formatCredit(vendor.Balance) }} €</td>
                   <td className="border-t-2 p-3">{{ formatDate(vendor.LastPayout) }}</td>
-                  <router-link :to="`/backoffice/credits/payout/${vendor.ID}`" v-if="vendor?.ID">
-                    <button className="p-3 rounded-full bg-lime-600 text-white">Auszahlen</button>
+                  <router-link
+                    :to="`/backoffice/credits/payout/${vendor.ID}`"
+                    v-if="vendor?.ID"
+                  >
+                    <button
+                      className="p-3 rounded-full bg-lime-600 text-white"
+                      :disabled="vendor.Balance === 0"
+                    >
+                      Auszahlen
+                    </button>
                   </router-link>
                 </tr>
               </tbody>
@@ -50,8 +60,7 @@
 <script lang="ts" setup>
 import { vendorsStore } from '@/stores/vendor'
 import { computed, onMounted, ref, watch } from 'vue'
-import keycloak from '@/keycloak/keycloak';
-
+import keycloak from '@/keycloak/keycloak'
 
 const store = vendorsStore()
 
@@ -70,7 +79,7 @@ function formatCredit(credit: number) {
   return (credit / 100).toFixed(2)
 }
 function formatDate(date: string) {
-  if (!date|| date === '') return ''
+  if (!date || date === '') return ''
   return new Date(date).toLocaleString()
 }
 const vendors = computed(() => store.vendors)
@@ -90,12 +99,11 @@ const displayVendors = computed(() => {
   return searchQuery.value ? store.filteredVendors : vendors.value
 })
 </script>
-
-<style>
-tr {
-  padding: 10px;
-}
-td {
-  padding: 10px;
+<style scoped>
+button:disabled,
+button[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
 }
 </style>

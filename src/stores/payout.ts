@@ -1,16 +1,26 @@
 import { defineStore } from 'pinia'
-import { postPayout } from '@/api/api'
+import { getPaymentsForPayout, postPayout } from '@/api/api'
+import { type Payment } from '@/stores/payments'
 
 export interface Payout {
-  Amount: number
-  VendorLicenseID: any
+  From: string | null
+  To: string | null
+  VendorLicenseID: string
 }
 
-export const payoutStore = defineStore('payout', {
+export interface PaymentsForPayout {
+  From: string | null
+  To: string | null
+  Vendor: string
+}
+
+
+export const usePayoutStore = defineStore('payout', {
   state: () => {
     // Define the initial state of the store
     return {
-      payout: {} as Payout // Initialize 'payout' as an empty Payout object
+      payout: {} as Payout, // Initialize 'payout' as an empty Payout object
+      paymentsForPayout: <Array<Payment>> []
     }
   },
   actions: {
@@ -25,6 +35,20 @@ export const payoutStore = defineStore('payout', {
         //@ts-ignore
       } catch (error) {
         // Handle any errors that occur during the API request
+        console.log(error)
+      }
+    },
+    async getPaymentsForPayout(vendorLicenseID: string) {
+      try {
+        const data = await getPaymentsForPayout({
+          From: null,
+          To: null,
+          Vendor: vendorLicenseID
+        })
+        //@ts-ignore
+        this.paymentsForPayout = data.data
+        //@ts-ignore
+      } catch (error) {
         console.log(error)
       }
     }

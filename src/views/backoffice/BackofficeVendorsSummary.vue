@@ -3,16 +3,26 @@
     <template #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferInnen</h1>
       <span>
-        <input id="searchInput" type="text" placeholder="Suche Ausweisnummer"
-          class="border-2 border-gray-400 rounded-md p-2 ml-2" v-model="searchQuery" @keyup.enter="search" />
-        <button @click="search" class="p-3 rounded-full bg-lime-600 ml-2 text-white">Suchen</button>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Suche Ausweisnummer"
+          class="border-2 border-gray-400 rounded-md p-2 ml-2"
+          v-model="searchQuery"
+          @keyup.enter="search"
+        />
+        <button @click="search" class="p-3 rounded-full bg-lime-600 ml-2 text-white">
+          Suchen
+        </button>
       </span>
     </template>
 
     <template #main>
       <div class="main">
         <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
+          <div
+            className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5"
+          >
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
@@ -34,21 +44,36 @@
                   <td className="p-3">{{ vendor.LastName }}</td>
                   <td className="p-3">{{ formatCredit(vendor.Balance) }}€</td>
 
-                  <td class="flex justify-center  ">
+                  <td class="flex justify-center">
                     <span id="canvas"></span>
-                    <button className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2">
-                      <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
+                    <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
+                      <button
+                        className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2"
+                      >
                         <font-awesome-icon :icon="faArrowAltCircleRight" />
-
-                      </router-link>
-                    </button>
-                    <button className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10">
-                      <router-link :to="`/backoffice/credits/payout/${vendor.ID}`">
+                      </button>
+                    </router-link>
+                    <router-link
+                      :to="`/backoffice/credits/payout/${vendor.ID}`"
+                      v-if="vendor.Balance !== 0"
+                    >
+                      <button
+                        className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10"
+                      >
                         <font-awesome-icon :icon="faCreditCard" />
-                      </router-link>
+                      </button>
+                    </router-link>
+                    <button
+                      v-else
+                      disabled
+                      className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10"
+                    >
+                      <font-awesome-icon :icon="faCreditCard" />
                     </button>
-                    <button @click="generateQRCode(vendor)"
-                      className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2">
+                    <button
+                      @click="generateQRCode(vendor)"
+                      className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2"
+                    >
                       <font-awesome-icon :icon="faQrcode" />
                     </button>
                   </td>
@@ -61,7 +86,9 @@
 
       <footer>
         <router-link to="/backoffice/newvendor">
-          <button className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-16 w-16">
+          <button
+            className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-16 w-16"
+          >
             Neu
           </button>
         </router-link>
@@ -70,16 +97,6 @@
   </component>
 </template>
 
-<style scoped>
-tr {
-  padding: 10px;
-}
-
-td {
-  padding: 10px;
-}
-</style>
-
 <script lang="ts" setup>
 // Import necessary dependencies and types
 import { vendorsStore } from '@/stores/vendor'
@@ -87,7 +104,11 @@ import type { Vendor } from '@/stores/vendor'
 import { ref, computed, onMounted, watch } from 'vue'
 import QRCodeStyling from 'qr-code-styling'
 import keycloak from '@/keycloak/keycloak'
-import { faCreditCard, faArrowAltCircleRight, faQrcode } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCreditCard,
+  faArrowAltCircleRight,
+  faQrcode,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 // Initialize the vendor store
@@ -138,28 +159,28 @@ const generateQRCode = async (vendor: Vendor) => {
 
     dotsOptions: {
       color: '#000',
-      type: 'dots'
+      type: 'dots',
     },
     backgroundOptions: {
-      color: '#fff'
+      color: '#fff',
     },
     imageOptions: {
       crossOrigin: 'anonymous',
-      margin: 20
+      margin: 20,
     },
     cornersSquareOptions: {
       type: 'dot',
-      color: '#000000'
+      color: '#000000',
     },
     cornersDotOptions: {
       type: 'dot',
-      color: '#000000'
+      color: '#000000',
     },
     qrOptions: {
       typeNumber: 0,
       mode: 'Byte',
-      errorCorrectionLevel: 'Q'
-    }
+      errorCorrectionLevel: 'Q',
+    },
   })
   const canvas = document.getElementById('canvas')
   if (canvas !== null) {
@@ -169,3 +190,19 @@ const generateQRCode = async (vendor: Vendor) => {
   }
 }
 </script>
+
+<style scoped>
+tr {
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+}
+button:disabled,
+button[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+</style>

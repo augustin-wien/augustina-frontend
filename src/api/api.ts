@@ -3,7 +3,8 @@ import keycloak from '@/keycloak/keycloak'
 import { type Vendor } from '@/stores/vendor'
 import { type Item } from '@/stores/items'
 import { type Settings } from '@/stores/settings'
-import { VENDORS_API_URL } from './endpoints'
+import { type PaymentsForPayout, type Payout } from '@/stores/payout'
+import { PAYMENTS_FOR_PAYOUT_API_URL, VENDORS_API_URL } from './endpoints'
 import { ITEMS_API_URL } from './endpoints'
 import { AUTH_API_URL } from './endpoints'
 import { SETTINGS_API_URL } from './endpoints'
@@ -152,11 +153,16 @@ export async function fetchPayments(startDate: Date, endDate: Date, filter: stri
 }
 
 //payout
-export async function postPayout(payout: any) {
+export async function postPayout(payout: Payout) {
   return apiInstance.post(PAYOUT_API_URL, JSON.stringify(payout), {
     headers: {
       accept: 'application/json',
       'Content-Type': 'application/json'
     }
   })
+}
+
+//payout
+export async function getPaymentsForPayout(payout: PaymentsForPayout) {
+  return apiInstance.get(`${PAYMENTS_FOR_PAYOUT_API_URL}?vendor=${payout.Vendor}`)
 }

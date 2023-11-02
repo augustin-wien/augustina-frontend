@@ -134,7 +134,6 @@ export const vendorsStore = defineStore('vendors', {
       }
     },
     async searchVendors(searchTerm: string) {
-      console.log(searchTerm)
       if (searchTerm === '') {
         this.filteredVendors = this.vendors
       } else {

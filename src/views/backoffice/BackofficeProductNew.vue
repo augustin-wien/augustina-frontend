@@ -15,7 +15,10 @@
               X
             </button>
           </div>
-          <form @submit.prevent="submitItem" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <form
+            @submit.prevent="submitItem"
+            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          >
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
                 >Name:</label
@@ -29,7 +32,9 @@
                 required
               />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Description"
+              <label
+                class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                for="Description"
                 >Beschreibung:</label
               >
               <input
@@ -70,7 +75,9 @@
               >
                 Abbrechen
               </button>
-              <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">Anlegen</button>
+              <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">
+                Anlegen
+              </button>
             </div>
           </form>
           <Toast v-if="toast" :toast="toast" />
@@ -82,19 +89,19 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { itemStore } from '@/stores/items'
+import { useItemsStore } from '@/stores/items'
 import type { Item } from '@/stores/items'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 
-const store = itemStore()
+const store = useItemsStore()
 
 const newItem = ref({
   Description: '',
   ID: 0,
   Image: '',
   Name: '',
-  Price: 0
+  Price: 0,
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)

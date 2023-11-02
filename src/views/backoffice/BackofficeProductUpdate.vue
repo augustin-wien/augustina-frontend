@@ -181,13 +181,13 @@
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { itemStore } from '@/stores/items'
+import { useItemsStore } from '@/stores/items'
 import type { Item } from '@/stores/items'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 
-const store = itemStore()
+const store = useItemsStore()
 
 const updatedItem = ref({
   Description: 'Jahreskalender',

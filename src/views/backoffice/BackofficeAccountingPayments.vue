@@ -3,8 +3,15 @@
     <template #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">Umsätze</h1>
       <span>
-        <VueDatePicker v-model="date" range :enable-time-picker="false" placeholder="Zeitraum wählen"
-          @range-start="onRangeStart" @range-end="onRangeEnd" class="max-w-md" />
+        <VueDatePicker
+          v-model="date"
+          range
+          :enable-time-picker="false"
+          placeholder="Zeitraum wählen"
+          @range-start="onRangeStart"
+          @range-end="onRangeEnd"
+          class="max-w-md"
+        />
       </span>
     </template>
     <template #main>
@@ -25,9 +32,13 @@
               <tbody className="text-sm">
                 <tr v-for="(payment, id) in payments" :key="id">
                   <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
-                  <td className="border-t-2 p-3">{{ translateSender(payment.SenderName) }}</td>
-                  <td className="border-t-2 p-3">{{ translateReceiver(payment.ReceiverName) }}{{ payment.AuthorizedBy ?
-                    ' durch ' + payment.AuthorizedBy : '' }}</td>
+                  <td className="border-t-2 p-3">
+                    {{ translateSender(payment.SenderName) }}
+                  </td>
+                  <td className="border-t-2 p-3">
+                    {{ translateReceiver(payment.ReceiverName)
+                    }}{{ payment.AuthorizedBy ? ' durch ' + payment.AuthorizedBy : '' }}
+                  </td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
               </tbody>
@@ -40,14 +51,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useKeycloakStore } from '@/stores/keycloak';
-import { usePaymentStore } from '@/stores/paymentdata';
-import VueDatePicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
-import { computed, onMounted, ref, watch } from 'vue';
+import { useKeycloakStore } from '@/stores/keycloak'
+import { usePaymentsStore } from '@/stores/payments'
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
+import { computed, onMounted, ref, watch } from 'vue'
 
 const keycloakStore = useKeycloakStore()
-
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -59,7 +69,7 @@ const tomorrow = startOfDay(new Date(new Date().setDate(new Date().getDate() + 1
 const startDate = ref<Date>(yesterday)
 const endDate = ref<Date>(tomorrow)
 const date = ref<Array<Date>>([startDate.value, endDate.value])
-const store = usePaymentStore()
+const store = usePaymentsStore()
 
 //fetch paymentlist data once component is mounted
 
@@ -81,16 +91,16 @@ const formatTime = (time: string) => {
   const date = new Date(time)
   return date.toLocaleDateString('de-DE', {
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   })
 }
 
 const payments = computed(() => store.payments)
 const translateReceiver = (receiver: string) => {
-  return receiver == "Cash" ? "Barkasse" : receiver
+  return receiver == 'Cash' ? 'Barkasse' : receiver
 }
 const translateSender = (receiver: string) => {
-  return receiver == "Orga" ? "Augustin" : receiver
+  return receiver == 'Orga' ? 'Augustin' : receiver
 }
 const authenticated = computed(() => keycloakStore.authenticated)
 onMounted(() => {
@@ -103,13 +113,3 @@ onMounted(() => {
   }
 })
 </script>
-
-<style>
-tr {
-  padding: 10px;
-}
-
-td {
-  padding: 10px;
-}
-</style>

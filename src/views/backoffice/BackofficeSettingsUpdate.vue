@@ -57,7 +57,7 @@
               >Schriftfarbe:</label
             >
             <div class="flex flex-row">
-              <span class="p-2">{{ settings.FontColor}}</span>
+              <span class="p-2">{{ settings.FontColor }}</span>
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 v-model="updatedSettings.FontColor"
@@ -127,12 +127,12 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { settingsStore, type Settings } from '@/stores/settings'
-import { itemStore } from '@/stores/items'
+import { useItemsStore } from '@/stores/items'
 import toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 
 const store = settingsStore()
-const storeItems = itemStore()
+const storeItems = useItemsStore()
 
 onMounted(() => {
   updatedSettings.value = store.settings

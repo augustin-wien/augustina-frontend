@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { settingsStore } from '@/stores/settings'
-import { usePaymentStore } from '@/stores/PaymentStore'
+import { usePaymentStore } from '@/stores/payment'
 import IconCheckmark from '@/components/icons/IconCheckmark.vue'
 import IconCross from '@/components/icons/IconCross.vue'
 
