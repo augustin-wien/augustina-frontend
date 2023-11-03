@@ -5,35 +5,88 @@ const paymentStore = usePaymentStore()
 
 const increment = paymentStore.incrementTipC
 
+const namelist = [
+    {
+        "ID": 1,
+        "Name": "Zeitung",
+        "Description": "Aktuelle Zeitungsausgabe",
+        "Price": 300,
+        "Image": "",
+        "LicenseItem": null,
+        "Archived": false,
+        "IsLicenseItem": false
+    },
+    {
+        "ID": 4,
+        "Name": "Digitale Zeitung (Lizenz)",
+        "Description": "Lizenz für digitale Zeitungsausgabe",
+        "Price": 50,
+        "Image": "",
+        "LicenseItem": null,
+        "Archived": false,
+        "IsLicenseItem": false
+    },
+    {
+        "ID": 5,
+        "Name": "Digitale Zeitung",
+        "Description": "Digitale Zeitungsausgabe",
+        "Price": 300,
+        "Image": "",
+        "LicenseItem": 4,
+        "Archived": false,
+        "IsLicenseItem": false
+    },
+    {
+        "ID": 6,
+        "Name": "Kalender",
+        "Description": "Kalender für das Jahr 2024",
+        "Price": 800,
+        "Image": "",
+        "LicenseItem": null,
+        "Archived": false,
+        "IsLicenseItem": false
+    }
+]
+
 </script>
 
 <template>
     <component :is="$route.meta.layout || 'div'">
         <template #main>
             <div className="h-full grid grid-rows-5 place-items-center w-full">
-                <div className="text-center font-semibold text-3xl">
-                    Produkte wählen
-                </div>
-                <div className="flex place-items-center w-full">
-
-                </div>
-                <div className="place-items-center w-full h-full grid-rows-2">
-                    <div class="w-full text-center text-xl font-semibold bg-black rounded-full text-white p-[6px] m-1">Print Zeitung 3€</div>
-                    <div className="grid grid-cols-3 w-full h-1/2">
-                        <button>
-                            <div class="button-down bg-green-600"></div>
-                        </button>
-                        <input type="number" v-model.number="paymentStore.tip"
-                            className="bg-green-600 text-white text-center text-2xl font-semibold rounded-full w-full h-full">
-                        <button>
-                            <div class="button-up bg-green-600 ml-3"></div>
-                        </button>
+                <div class="row-span-4 h-full">
+                    <div className="text-center font-semibold text-3xl p-4">
+                        Produkte wählen
                     </div>
+                    <div class="h-5/6">
+                    <ul class="list-image-none overflow-y-auto h-full bg-gray-200 border border-gray-600 rounded-3xl">
+                        <li v-for="item in namelist">
+                            <div
+                                className="place-items-center w-full h-full p-1 grid grid-rows-2 border-b-gray-400 border-2">
+                                <div class="w-full h-full py-1">
+                                    <div
+                                        class="bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center">
+                                        {{ item.Name }} {{ item.Price }}
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-3 w-full h-full pb-3 px-4">
+                                    <button>
+                                        <div
+                                            class="button-down bg-green-600 mr-2 h-full rounded-full font-extrabold text-white text-2xl flex items-center justify-center">
+                                            -</div>
+                                    </button>
+                                    <input type="number" v-model.number="paymentStore.tip"
+                                        className="bg-green-600 text-white text-center text-2xl font-semibold rounded-full w-full h-full">
+                                    <button>
+                                        <div
+                                            class="button-up bg-green-600 ml-2 h-full rounded-full font-extrabold text-white text-2xl flex items-center justify-center">
+                                            +</div>
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-                <div className="flex place-items-center w-full">
-                    <button class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full">
-                        <RouterLink to="/custom-tip">Eingabe</RouterLink>
-                    </button>
                 </div>
                 <div className="place-items-center row-span-2 w-full flex">
                     <RouterLink class="flex-none h-[76px] w-[76px] mr-2" to="/">
@@ -51,6 +104,7 @@ const increment = paymentStore.incrementTipC
                         </button>
                     </RouterLink>
                 </div>
-        </div>
-    </template>
-</component></template>
+            </div>
+        </template>
+    </component>
+</template>
