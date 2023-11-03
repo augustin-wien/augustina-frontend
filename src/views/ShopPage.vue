@@ -55,38 +55,45 @@ const namelist = [
         <template #main>
             <div className="h-full grid grid-rows-5 place-items-center w-full">
                 <div class="row-span-4 h-full">
-                    <div className="text-center font-semibold text-3xl p-4">
+                    <div className="text-center font-semibold text-3xl py-4">
                         Produkte wählen
                     </div>
-                    <div class="h-5/6">
-                    <ul class="list-image-none overflow-y-auto h-full bg-gray-200 border border-gray-600 rounded-3xl">
-                        <li v-for="item in namelist">
-                            <div
-                                className="place-items-center w-full h-full p-1 grid grid-rows-2 border-b-gray-400 border-2">
-                                <div class="w-full h-full py-1">
-                                    <div
-                                        class="bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center">
-                                        {{ item.Name }} {{ item.Price }}
+                    <div class="h-5/6 pb-3">
+                        <ul class="list-image-none overflow-y-auto h-full bg-gray-200 border border-gray-600 rounded-3xl">
+                            <li v-for="item in namelist" class="flex">
+                                <div class="h-[80px] w-[80px] flex-none bg-red-600 rounded-2xl">
+                                    
+                                </div>
+                                <div
+                                    className="place-items-center grow h-full p-1 grid grid-rows-2 border-b-gray-400 border-2">
+                                    <div class="w-full h-full py-1">
+                                        <div
+                                            class="bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center">
+                                            {{ item.Name }}€
+                                        </div>
+                                    </div>
+                                    <div className="flex grow h-full pb-3 w-full">
+
+                                        <div class="bg-green-600 text-white text-center text-2xl font-semibold rounded-full grow h-[60px] py-3 mr-1">
+                                            <div>
+                                                1x
+                                            </div>
+                                        </div>
+                                        <button>
+                                            <div
+                                                class="button-down bg-green-600 h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]">
+                                                -</div>
+                                        </button>
+                                        <button class="place-content-">
+                                            <div
+                                                class="button-up bg-green-600 h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]">
+                                                +</div>
+                                        </button>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-3 w-full h-full pb-3 px-4">
-                                    <button>
-                                        <div
-                                            class="button-down bg-green-600 mr-2 h-full rounded-full font-extrabold text-white text-2xl flex items-center justify-center">
-                                            -</div>
-                                    </button>
-                                    <input type="number" v-model.number="paymentStore.tip"
-                                        className="bg-green-600 text-white text-center text-2xl font-semibold rounded-full w-full h-full">
-                                    <button>
-                                        <div
-                                            class="button-up bg-green-600 ml-2 h-full rounded-full font-extrabold text-white text-2xl flex items-center justify-center">
-                                            +</div>
-                                    </button>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div className="place-items-center row-span-2 w-full flex">
                     <RouterLink class="flex-none h-[76px] w-[76px] mr-2" to="/">
