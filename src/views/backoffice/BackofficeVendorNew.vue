@@ -1,14 +1,16 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Neue/n VerkäuferIn anlegen</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">
+        {{ $t('newGendered') }} {{ $t('vendorSingular') }} {{ $t('create') }}
+      </h1>
     </template>
 
     <template #main>
       <div class="main">
         <div class="w-full mx-auto mt-4" v-if="!importing">
           <div class="flex place-content-center justify-between">
-            <h1 class="text-2xl font-bold">Neue/n VerkäuferIn</h1>
+            <h1 class="text-2xl font-bold">{{ $t('newGendered') }} {{ $t('vendorSingular') }}</h1>
             <button
               @click="router.push('/backoffice/vendorsummary')"
               class="px-2 rounded-full bg-red-600 text-white font-bold"
@@ -16,7 +18,7 @@
               X
             </button>
           </div>
-          <Toast v-if="toast" :toast="toast" class="fixed top-20 right-5"/>
+          <Toast v-if="toast" :toast="toast" class="fixed top-20 right-5" />
           <form
             @submit.prevent="submitVendor"
             class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
@@ -25,7 +27,7 @@
               <div class="row">
                 <span class="col">
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
-                    >Vorname:</label
+                    >{{ $t('firstName') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -36,7 +38,7 @@
                   />
 
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
-                    >Nachname:</label
+                    >{{ $t('lastName') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -58,7 +60,7 @@
                   />
 
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
-                    >Lizenznummer:</label
+                    >{{ $t('licenseId') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -69,7 +71,7 @@
                   />
 
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
-                    >Sprache:</label
+                    >{{ $t('language') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -79,7 +81,7 @@
                   />
 
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
-                    >Telefonnummer:</label
+                    >{{ $t('telephone') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -89,7 +91,7 @@
                   />
 
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="address"
-                    >Adresse:</label
+                    >{{ $t('address') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -98,7 +100,7 @@
                     id="address"
                   />
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
-                    >Postleitzahl:</label
+                    >{{ $t('postCode') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -107,7 +109,7 @@
                     id="plz"
                   />
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >Ort:</label
+                    >{{ $t('location') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -118,7 +120,7 @@
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                     for="accountDisabled"
-                    >Account deaktiviert:</label
+                    >{{ $t('accountDeactivation') }}:</label
                   >
                   <div class="flex flex-row">
                     <span class="p-2">
@@ -128,8 +130,8 @@
                         id="accountDisabled"
                         required
                       >
-                        <option value="true">Ja</option>
-                        <option value="false">Nein</option>
+                        <option value="true">{{ $t('yes') }}</option>
+                        <option value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -138,7 +140,7 @@
               <div class="row">
                 <span class="col">
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="longitude"
-                    >Längengrad:</label
+                    >{{ $t('longitude') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -147,7 +149,7 @@
                     id="longitude"
                   />
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="latitude"
-                    >Breitengrad:</label
+                    >{{ $t('latitude') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -157,7 +159,7 @@
                   />
 
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                    >Arbeitszeit:</label
+                    >{{ $t('workingTime') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -168,7 +170,7 @@
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                     for="registrationDate"
-                    >Registriert seit:</label
+                    >{{ $t('registrationDate') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -177,7 +179,7 @@
                     id="registrationDate"
                   />
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
-                    >VerkäuferIn seit:</label
+                    >{{ $t('vendorSince') }}:</label
                   >
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -197,8 +199,8 @@
                         id="onlineMap"
                         required
                       >
-                        <option value="true">Ja</option>
-                        <option value="false">Nein</option>
+                        <option value="true">{{ $t('yes') }}</option>
+                        <option value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -206,7 +208,7 @@
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                     for="hasBankAccount"
-                    >Bankkonto</label
+                    >{{ $t('bankAccount') }}</label
                   >
                   <div class="flex flex-row">
                     <span class="p-2">
@@ -216,8 +218,8 @@
                         id="hasBankAccount"
                         required
                       >
-                        <option value="true">Ja</option>
-                        <option value="false">Nein</option>
+                        <option value="true">{{ $t('yes') }}</option>
+                        <option value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -233,13 +235,13 @@
                         id="hasBankAccount"
                         required
                       >
-                        <option value="true">Ja</option>
-                        <option value="false">Nein</option>
+                        <option value="true">{{ $t('yes') }}</option>
+                        <option value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
-                    >Kommentar:</label
+                    >{{ $t('comment') }}:</label
                   >
                   <textarea
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -252,17 +254,22 @@
             </div>
 
             <div class="flex place-content-center">
-              <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">Anlegen</button>
+              <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">
+                {{ $t('create') }}
+              </button>
             </div>
           </form>
         </div>
         <div v-else>
-          importiere {{ store.vendorsImportedCount }}/{{ importingVendorsCount }} VerkäuferInnen
+          importiere {{ store.vendorsImportedCount }}/{{ importingVendorsCount }}
+          {{ $t('menuVendors') }}
         </div>
       </div>
       <footer>
-        <button @click="importCSV"
-          className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-20 w-20">
+        <button
+          @click="importCSV"
+          className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-20 w-20"
+        >
           CSV import
         </button>
       </footer>
@@ -328,17 +335,23 @@ const submitVendor = async () => {
     showToast('error', 'Lizenznummer muss angegeben werden')
     return
   }
-  if (newVendor.value.WorkingTime.length>1|| !['V','N','G'].includes(newVendor.value.WorkingTime.toUpperCase())) {
+  if (
+    newVendor.value.WorkingTime.length > 1 ||
+    !['V', 'N', 'G'].includes(newVendor.value.WorkingTime.toUpperCase())
+  ) {
     showToast('error', 'Die Arbeitszeit muss in der Form V,N oder G angegeben werden')
     return
   }
   try {
-    await store.createVendorPromise(newVendor.value as Vendor).then((res:any) => {
+    await store.createVendorPromise(newVendor.value as Vendor).then((res: any) => {
       router.push(`/backoffice/vendorsummary/${res.ID}`)
     })
-  } catch (err:any) {
+  } catch (err: any) {
     console.error('Error creating vendor:', err)
-    showToast('error', 'VerkäuferIn konnte nicht angelegt werden '+err.response.data.error.message)
+    showToast(
+      'error',
+      'VerkäuferIn konnte nicht angelegt werden ' + err.response.data.error.message
+    )
   }
 }
 

@@ -1,7 +1,7 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Umsätze</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuAccounting') }}</h1>
       <span>
         <VueDatePicker
           v-model="date"
@@ -18,16 +18,16 @@
       <div class="main">
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className=" space-y-3 space-x-3">
-            <h1 class="text-2xl font-bold">Umsätze im gewählten Zeitraum</h1>
+            <h1 class="text-2xl font-bold">{{ $t('accountingTitle') }}</h1>
 
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
-                  <th className="p-3">Datum</th>
-                  <th className="p-3">Von</th>
-                  <th className="p-3">An</th>
-                  <th className="p-3">Betreff</th>
-                  <th className="p-3">Betrag</th>
+                  <th className="p-3">{{ $t('date') }}</th>
+                  <th className="p-3">{{ $t('from') }}</th>
+                  <th className="p-3">{{ $t('to') }}</th>
+                  <th className="p-3">{{ $t('item') }}</th>
+                  <th className="p-3">{{ $t('amount') }}</th>
                 </tr>
               </thead>
               <tbody className="text-sm">

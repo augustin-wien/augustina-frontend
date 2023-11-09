@@ -1,13 +1,15 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Neues Produkt anlegen</h1></template
+      <h1 className="font-bold mt-3 pt-3 text-2xl">
+        {{ $t('newProduct') }} {{ $t('create') }}
+      </h1></template
     >
     <template #main>
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4">
           <div class="flex place-content-center justify-between">
-            <h1 class="text-2xl font-bold">Neues Produkt</h1>
+            <h1 class="text-2xl font-bold">{{ $t('newProduct') }}</h1>
             <button
               @click="router.push('/backoffice/productsettings')"
               class="px-2 rounded-full bg-red-600 text-white font-bold"
@@ -15,13 +17,10 @@
               X
             </button>
           </div>
-          <form
-            @submit.prevent="submitItem"
-            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-          >
+          <form @submit.prevent="submitItem" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
-                >Name:</label
+                >{{ $t('name') }}:</label
               >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -32,10 +31,8 @@
                 required
               />
 
-              <label
-                class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                for="Description"
-                >Beschreibung:</label
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Description"
+                >{{ $t('description') }}:</label
               >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -46,7 +43,7 @@
               />
 
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price"
-                >Preis:</label
+                >{{ $t('price') }}:</label
               >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -57,7 +54,7 @@
               />
 
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
-                >Bild:</label
+                >{{ $t('image') }}:</label
               >
               <input
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -73,10 +70,10 @@
                 class="p-3 rounded-full mr-3 bg-red-600 bg-lime-600 text-white"
                 @click="cancel"
               >
-                Abbrechen
+                {{ $t('cancel') }}
               </button>
               <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">
-                Anlegen
+                {{ $t('create') }}
               </button>
             </div>
           </form>
@@ -101,7 +98,7 @@ const newItem = ref({
   ID: 0,
   Image: '',
   Name: '',
-  Price: 0,
+  Price: 0
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)

@@ -19,7 +19,7 @@
               class="flex justify-start w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
             >
               <font-awesome-icon :icon="faUserGroup" />
-              <p class="text-base leading-4">VerkäuferInnen</p>
+              <p class="text-base leading-4">{{ $t('menuVendors') }}</p>
             </button>
           </RouterLink>
           <RouterLink to="/backoffice/credits" className="sidemenu-link">
@@ -27,7 +27,7 @@
               class="flex justifyy-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
             >
               <font-awesome-icon :icon="faBagShopping" />
-              <p class="text-base leading-4">Guthaben</p>
+              <p class="text-base leading-4">{{ $t('menuCredits') }}</p>
             </button>
           </RouterLink>
           <RouterLink to="/backoffice/payouts" className="sidemenu-link">
@@ -36,7 +36,7 @@
             >
               <font-awesome-icon :icon="faFileLines" />
 
-              <p class="text-base leading-4">Auszahlungen</p>
+              <p class="text-base leading-4">{{ $t('menuPayouts') }}</p>
             </button>
           </RouterLink>
           <RouterLink to="/backoffice/sales" className="sidemenu-link">
@@ -45,7 +45,7 @@
             >
               <font-awesome-icon :icon="faDungeon" />
 
-              <p class="text-base leading-4">Verkäufe</p>
+              <p class="text-base leading-4">{{ $t('menuSales') }}</p>
             </button>
           </RouterLink>
           <RouterLink to="/backoffice/payments" className="sidemenu-link">
@@ -54,7 +54,7 @@
             >
               <font-awesome-icon :icon="faBagShopping" />
 
-              <p class="text-base leading-4">Buchhaltung</p>
+              <p class="text-base leading-4">{{ $t('menuAccounting') }}</p>
             </button>
           </RouterLink>
           <RouterLink to="/backoffice/productsettings" className="sidemenu-link">
@@ -63,7 +63,7 @@
             >
               <font-awesome-icon :icon="faSplotch" />
 
-              <p class="text-base leading-4">Produkte</p>
+              <p class="text-base leading-4">{{ $t('menuProducts') }}</p>
             </button>
           </RouterLink>
           <RouterLink to="/backoffice/settings" className="sidemenu-link">
@@ -72,7 +72,7 @@
             >
               <font-awesome-icon :icon="faSliders" />
 
-              <p class="text-base leading-4">Einstellungen</p>
+              <p class="text-base leading-4">{{ $t('menuSettings') }}</p>
             </button>
           </RouterLink>
 
@@ -82,14 +82,21 @@
           >
             <font-awesome-icon :icon="faArrowRightFromBracket" />
 
-            <p class="text-base leading-4">Abmelden</p>
+            <p class="text-base leading-4">{{ $t('Logout') }}</p>
           </button>
           <div class="text-white mt-10">
             <p v-if="keycloakStore.username">
-              {{ keycloakStore.username }} ist eingeloggt
+              {{ keycloakStore.username }} {{ $t('userLoggedIn') }}
             </p>
-            <p v-else>Not logged in</p>
+            <p v-else>{{ $t('userNotLoggedIn') }}</p>
           </div>
+          <select
+            class="h-[40px] w-[70px] bg-lime-700 border-2 border-white font-semibold rounded-full text-white text-center mt-4 mr-4 pl-2 text-sm"
+            v-model="$i18n.locale"
+          >
+            <option value="en">EN</option>
+            <option value="de">DE</option>
+          </select>
         </div>
       </div>
 
@@ -163,7 +170,7 @@ import {
   faSplotch,
   faUserGroup,
   faArrowRightFromBracket,
-  faSliders,
+  faSliders
 } from '@fortawesome/free-solid-svg-icons'
 
 const keycloakStore = useKeycloakStore()

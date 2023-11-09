@@ -1,7 +1,7 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferInnen</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuVendors') }}</h1>
       <span>
         <input
           id="searchInput"
@@ -12,7 +12,7 @@
           @keyup.enter="search"
         />
         <button @click="search" class="p-3 rounded-full bg-lime-600 ml-2 text-white">
-          Suchen
+          {{ $t('search') }}
         </button>
       </span>
     </template>
@@ -20,17 +20,15 @@
     <template #main>
       <div class="main">
         <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div
-            className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5"
-          >
+          <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
-                  <th className="p-3">Ausweisnummer</th>
-                  <th className="p-3">Vorname</th>
-                  <th className="p-3">Name</th>
-                  <th className="p-3">Kredit</th>
-                  <th className="p-3">Aktionen</th>
+                  <th className="p-3">{{ $t('IDNumber') }}</th>
+                  <th className="p-3">{{ $t('firstName') }}</th>
+                  <th className="p-3">{{ $t('lastName') }}</th>
+                  <th className="p-3">{{ $t('currentCredit') }}</th>
+                  <th className="p-3">{{ $t('measure') }}</th>
                 </tr>
               </thead>
               <tbody className="text-sm p-3">
@@ -47,9 +45,7 @@
                   <td class="flex justify-center">
                     <span id="canvas"></span>
                     <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
-                      <button
-                        className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2"
-                      >
+                      <button className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2">
                         <font-awesome-icon :icon="faArrowAltCircleRight" />
                       </button>
                     </router-link>
@@ -57,9 +53,7 @@
                       :to="`/backoffice/credits/payout/${vendor.ID}`"
                       v-if="vendor.Balance !== 0"
                     >
-                      <button
-                        className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10"
-                      >
+                      <button className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10">
                         <font-awesome-icon :icon="faCreditCard" />
                       </button>
                     </router-link>
@@ -89,7 +83,7 @@
           <button
             className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-16 w-16"
           >
-            Neu
+            {{ $t('new') }}
           </button>
         </router-link>
       </footer>
@@ -104,11 +98,7 @@ import type { Vendor } from '@/stores/vendor'
 import { ref, computed, onMounted, watch } from 'vue'
 import QRCodeStyling from 'qr-code-styling'
 import keycloak from '@/keycloak/keycloak'
-import {
-  faCreditCard,
-  faArrowAltCircleRight,
-  faQrcode,
-} from '@fortawesome/free-solid-svg-icons'
+import { faCreditCard, faArrowAltCircleRight, faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 // Initialize the vendor store
@@ -159,28 +149,28 @@ const generateQRCode = async (vendor: Vendor) => {
 
     dotsOptions: {
       color: '#000',
-      type: 'dots',
+      type: 'dots'
     },
     backgroundOptions: {
-      color: '#fff',
+      color: '#fff'
     },
     imageOptions: {
       crossOrigin: 'anonymous',
-      margin: 20,
+      margin: 20
     },
     cornersSquareOptions: {
       type: 'dot',
-      color: '#000000',
+      color: '#000000'
     },
     cornersDotOptions: {
       type: 'dot',
-      color: '#000000',
+      color: '#000000'
     },
     qrOptions: {
       typeNumber: 0,
       mode: 'Byte',
-      errorCorrectionLevel: 'Q',
-    },
+      errorCorrectionLevel: 'Q'
+    }
   })
   const canvas = document.getElementById('canvas')
   if (canvas !== null) {

@@ -1,8 +1,8 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Logbuch</h1>
-      <p className="text-lg">Zeitraum eingeben:</p>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('protocol') }}</h1>
+      <p className="text-lg">{{ $t('enterPeriod') }}:</p>
       <span>
         <VueDatePicker
           v-model="date"
@@ -23,13 +23,13 @@
             <table className="table-auto border-spacing-4 border-collapse">
               <thead>
                 <tr>
-                  <th className="p-3">Datum</th>
-                  <th className="p-3">An</th>
-                  <th className="p-3">Durch</th>
+                  <th className="p-3">{{ $t('date') }}</th>
+                  <th className="p-3">{{ $t('to') }}</th>
+                  <th className="p-3">{{ $t('from') }}</th>
                   <th className="p-3" v-for="item in items" v-bind:key="`th_${item.ID}`">
                     {{ item.Name }}
                   </th>
-                  <th className="p-3">Gesamt</th>
+                  <th className="p-3">{{ $t('total') }}</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
@@ -100,7 +100,7 @@ const formatTime = (time: string) => {
   const date = new Date(time)
   return date.toLocaleDateString('de-DE', {
     hour: '2-digit',
-    minute: '2-digit',
+    minute: '2-digit'
   })
 }
 

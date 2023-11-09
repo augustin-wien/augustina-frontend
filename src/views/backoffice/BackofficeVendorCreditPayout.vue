@@ -1,14 +1,12 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Auszahlung</h1></template
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuPayout') }}</h1></template
     >
 
     <template #main>
       <div class="main">
-        <div
-          class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-        >
+        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3" v-if="vendor">
             <div class="flex place-content-center justify-between">
               <h1 class="text-2xl font-bold"></h1>
@@ -27,11 +25,11 @@
 
             <div className="container">
               <div className="mx-3">
-                <div className="col text-lg underline">Guthaben</div>
+                <div className="col text-lg underline">{{ $t('menuCredits') }}</div>
                 <div className="col text-md">{{ formatCredit(vendor.Balance) }} Euro</div>
               </div>
               <div v-if="vendor.Balance > 0">
-                <div>Für folgende Zahlungen auszahlen:</div>
+                <div>{{ $t('payout') }}:</div>
                 <div
                   v-for="payment in paymentsForPayout"
                   :key="payment.ID"
@@ -54,7 +52,7 @@
                     :onClick="payoutVendor"
                     :disabled="vendor.Balance === 0"
                   >
-                    Auszahlen
+                    {{ $t('confirmPayout') }}
                   </button>
                   <button
                     v-else
@@ -63,7 +61,7 @@
                     className="p-3 m-3 rounded-full bg-lime-600 text-white"
                     disabled
                   >
-                    Kein Guthaben
+                    {{ $t('noCredits') }}
                   </button>
                 </div>
               </div>
@@ -91,8 +89,7 @@ const store = vendorsStore()
 const payoutStore = usePayoutStore()
 const itemsStore = useItemsStore()
 
-const paymentsForPayout = computed(()=>payoutStore.paymentsForPayout)
-
+const paymentsForPayout = computed(() => payoutStore.paymentsForPayout)
 
 // Compute a reactive property for vendors
 const vendors = computed(() => store.vendors)
@@ -102,12 +99,13 @@ const route = useRoute()
 const idparams = route.params.ID
 const vendorID = Number(idparams) // Convert the string to a number or NaN
 const items = computed(() => itemsStore.items)
-const setVendor = () =>{
+const setVendor = () => {
   if (store.vendors.length === 0) return null
   if (!isNaN(vendorID)) {
     // Find the vendor in the 'vendors' array that matches the 'ID' parameter
     const val = store.vendors.find((vend: Vendor) => {
-      return vend.ID === vendorID})
+      return vend.ID === vendorID
+    })
     if (!val) {
       // Return null if the 'ID' parameter is not a valid number
       return null
@@ -131,7 +129,7 @@ watch(vendor, (val: Vendor | null) => {
 watch(store.vendors, () => {
   vendor.value = setVendor()
   itemsStore.getItems()
-  if(vendor.value) payoutStore.getPaymentsForPayout(vendor.value.LicenseID)
+  if (vendor.value) payoutStore.getPaymentsForPayout(vendor.value.LicenseID)
 })
 // Initialize a reactive property 'amount' for input data
 const amount = ref<number>(0.0)
@@ -173,9 +171,9 @@ const payoutVendor = async () => {
 const formatReceiver = (payment: Payment) => {
   const amount = formatCredit(payment.Amount)
 
-  if(payment.ReceiverName === vendor.value?.LicenseID) {
+  if (payment.ReceiverName === vendor.value?.LicenseID) {
     return `+${amount}`
-  }else {
+  } else {
     return `-${amount}`
   }
 }
