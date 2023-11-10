@@ -122,6 +122,7 @@
               </router-link>
             </div>
           </form>
+          <Toast v-if="toast" :toast="toast" />
         </div>
       </div>
     </template>

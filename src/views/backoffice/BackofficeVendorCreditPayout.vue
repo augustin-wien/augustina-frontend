@@ -69,6 +69,7 @@
           </div>
         </div>
       </div>
+      <Toast v-if="toast" :toast="toast" />
     </template>
   </component>
 </template>
@@ -83,6 +84,8 @@ import { formatDate, formatCredit } from '@/utils/utils'
 import { useItemsStore } from '@/stores/items'
 import type { Payment } from '@/stores/payments'
 import router from '@/router'
+import toast from '@/components/ToastMessage.vue'
+
 const keycloakStore = useKeycloakStore()
 
 const store = vendorsStore()
