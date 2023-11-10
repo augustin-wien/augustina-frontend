@@ -56,7 +56,7 @@
 
 <script lang="ts" setup>
 import { useKeycloakStore } from '@/stores/keycloak'
-import { usePaymentsStore } from '@/stores/payments'
+import { usePaymentsStore, type Payment } from '@/stores/payments'
 import { useItemsStore } from '@/stores/items'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -109,7 +109,7 @@ const translateReceiver = (receiver: string) => {
 const translateSender = (receiver: string) => {
   return receiver == 'Orga' ? 'Augustin' : receiver
 }
-const translateItem = (payment: payment) => {
+const translateItem = (payment: Payment) => {
   const item = items.value.find((item) => item.ID === payment.Item)
   if (item) {
     return item.Name
