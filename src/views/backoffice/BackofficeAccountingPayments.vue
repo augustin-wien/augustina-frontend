@@ -40,7 +40,7 @@
                     {{ translateReceiver(payment.ReceiverName)
                     }}{{ payment.AuthorizedBy ? ' durch ' + payment.AuthorizedBy : '' }}
                   </td>
-                  <td className="border-t-2 p-3">{{ getItemName(payment.Item) }}</td>
+                  <td className="border-t-2 p-3">{{ $t(getItemName(payment.Item)) }}</td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
               </tbody>

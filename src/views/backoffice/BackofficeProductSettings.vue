@@ -29,7 +29,7 @@
                     />
                   </td>
                   <td class="border-t-2 p-3 font-bold">{{ $t(item.Name) }}</td>
-                  <td class="border-t-2 p-3">{{ item.Description }}</td>
+                  <td class="border-t-2 p-3">{{ $t(item.Description) }}</td>
                   <td class="border-t-2 p-3">{{ price(item.Price) }} Euro</td>
                   <td>
                     <router-link :to="`/backoffice/productsettings/update/${item.ID}`">

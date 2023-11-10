@@ -32,7 +32,7 @@
                   <td className="border-t-2 p-3">
                     {{ translateSender(payment.ReceiverName) }}
                   </td>
-                  <td className="border-t-2 p-3">{{ getItemName(payment.Item) }}</td>
+                  <td className="border-t-2 p-3">{{ $t(getItemName(payment.Item)) }}</td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
               </tbody>
