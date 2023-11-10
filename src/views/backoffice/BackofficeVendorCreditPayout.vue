@@ -1,7 +1,7 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuPayout') }}</h1></template
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuPayouts') }}</h1></template
     >
 
     <template #main>

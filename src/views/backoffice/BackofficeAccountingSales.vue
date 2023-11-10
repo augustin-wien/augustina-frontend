@@ -6,7 +6,7 @@
         v-model="date"
         range
         :enable-time-picker="false"
-        placeholder="{{$t('enterPeriod')}}"
+        :placeholder="$t('enterPeriod')"
         @range-start="onRangeStart"
         @range-end="onRangeEnd"
         class="max-w-md"

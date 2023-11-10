@@ -1,7 +1,7 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuVendor') }} Profil</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('vendorSingular') }} Profil</h1>
     </template>
     <template #main>
       <div class="main" v-if="vendor">

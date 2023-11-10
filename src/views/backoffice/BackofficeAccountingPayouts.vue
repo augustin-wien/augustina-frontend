@@ -27,7 +27,7 @@
                   <th className="p-3">{{ $t('to') }}</th>
                   <th className="p-3">{{ $t('from') }}</th>
                   <th className="p-3" v-for="item in items" v-bind:key="`th_${item.ID}`">
-                    {{ item.Name }}
+                    {{ $t(item.Name) }}
                   </th>
                   <th className="p-3">{{ $t('total') }}</th>
                 </tr>

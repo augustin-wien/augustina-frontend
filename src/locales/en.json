@@ -112,5 +112,9 @@
   "deletionConfirmation": "Do you really want to delete this product?",
 
   "chooseDateRange": "Choose date range",
-  "noImage": "No image"
+  "noImage": "No image",
+
+  "Zeitung": "Newspaper",
+  "Aktuelle Zeitungsausgabe": "Current newspaper issue",
+  "Spende": "Donation"
 }

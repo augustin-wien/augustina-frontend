@@ -111,5 +111,8 @@
   "deletionConfirmation": "Willst du das Produkt wirklich löschen?",
 
   "chooseDateRange": "Zeitraum wählen",
-  "noImage": "Kein Bild"
+  "noImage": "Kein Bild",
+
+  "Transaction Costs": "Transaktionskosten",
+  "Donation": "Spende"
 }
