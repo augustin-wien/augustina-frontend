@@ -42,9 +42,10 @@ export default {
 </script>
 
 <style>
-.toastClasses {
-  position: absolute;
+.toast {
+  position: fixed;
   top: 5px;
   right: 5px;
+  z-index: 9999;
 }
 </style>
