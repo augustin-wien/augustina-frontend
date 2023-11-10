@@ -92,3 +92,10 @@ docker run --rm -p  8060:80 -e VITE_API_URL=http://localhost:3000/ -e VITE_KEYCL
 
 ```
 Note: the container will be removed after it is stopped. If you want to keep it, remove the `--rm` flag.
+
+## Import vendors csv structure
+The delimiter is a `;` and the first line is the header. The header is not used for the import.
+```
+PLZ;Station/Supermarkt;Adresse;Arbeitszeit;Nummer;Ausweis Nr.;Vorname;Nachname;Sprache
+1230;Billa Plus;Schönestr 6;G;;A-123;Augustin;Augustina;engl/deutsch
+```

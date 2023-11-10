@@ -1,80 +1,84 @@
-import keycloak from '@/keycloak/keycloak'
+import keycloak, { initKeycloak } from '@/keycloak/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
-import { usePaymentStore } from '@/stores/PaymentStore'
 import Default from '@/layouts/DefaultLayout.vue'
-
+import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
+import { useKeycloakStore } from '@/stores/keycloak'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'Landingpage',
+      name: 'Home',
+      meta: {
+        layout: Default
+      },
+      component: () => import('../views/ParentPaymentProcess.vue')
+    },
+    {
+      path: '/v/:id',
+      name: 'Parent',
       meta: {
         layout: Default,
       },
-      component: () => import('../views/LandingPage.vue')
+      component: () => import('../views/ParentPaymentProcess.vue'),
+      children: [
+        {
+          path: '/v/:id/check-id',
+          name: 'Check ID',
+          component: () => import('../views/CheckVendorID.vue')
+        },
+        {
+          path: '/v/:id/landing-page',
+          name: 'LandingPage',
+          component: () => import('../views/LandingPage.vue'),
+        },
+        {
+          path: '/v/:id/additionalproducts',
+          name: 'Additional Products',
+          component: () => import('../views/AdditionalProducts.vue'),
+        },
+        {
+          path: '/v/:id/print-digital',
+          name: 'Version choice',
+          component: () => import('../views/PrintDigital.vue'),
+        },
+        {
+          path: '/v/:id/tipping',
+          name: 'Tippingpage',
+          component: () => import('../views/TippingPage.vue'),
+        },
+        {
+          path: '/v/:id/information',
+          name: 'InformationPrintEpaper',
+          component: () => import('../views/InformationPrintEpaper.vue'),
+        },
+        {
+          path: '/v/:id/confirmation',
+          name: 'Confirmation',
+          component: () => import('../views/FinalPurchaseConfirmation.vue'),
+        },
+        {
+          path: '/v/:id/payment',
+          name: 'Payment',
+          component: () => import('../views/PaymentVivawallet.vue'),
+        },
+        {
+          path: '/v/:id/custom-tip',
+          name: 'Custom Tip',
+          component: () => import('../views/CustomTip.vue'),
+        },
+        {
+          path: '/v/:id/shop',
+          name: 'Shop',
+          component: () => import('../views/ShopPage.vue'),
+        },
+      ]
     },
     {
-      path: '/additionalproducts',
-      name: 'Additional Products',
-      component: () => import('../views/AdditionalProducts.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/print-digital',
-      name: 'Version choice',
-      component: () => import('../views/PrintDigital.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/404',
-      name: '404',
-      component: () => import('../views/404View.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/dashboard',
-      name: 'Dashboard',
-      meta: {
-        requiresAuth: true
-      },
-      component: () => import('../views/DashboardView.vue')
-    },
-    {
-      path: '/tipping',
-      name: 'Tippingpage',
-      component: () => import('../views/TippingPage.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/information',
-      name: 'InformationPrintEpaper',
-      component: () => import('../views/InformationPrintEpaper.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/confirmation',
-      name: 'Confirmation',
-      component: () => import('../views/FinalPurchaseConfirmation.vue'),
-      meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/payment',
-      name: 'payment',
-      component: () => import('../views/PaymentVivawallet.vue'),
+      path: '/go-to-vendor',
+      name: 'Go to Vendor',
+      component: () => import('../views/GoToVendor.vue'),
       meta: {
         layout: Default,
       },
@@ -88,11 +92,6 @@ const router = createRouter({
       },
     },
     {
-      path: '/vendoroverview',
-      name: 'Vendor Overview',
-      component: () => import('../views/VendorOverview.vue')
-    },
-    {
       path: '/success',
       name: 'Success',
       component: () => import('../views/WaitingCountdown.vue'),
@@ -101,87 +100,214 @@ const router = createRouter({
       },
     },
     {
-      path: '/custom-tip',
-      name: 'Custom Tip',
-      component: () => import('../views/CustomTip.vue'),
+      path: '/failure',
+      name: 'Failure',
+      component: () => import('../views/FailureVivawallet.vue'),
       meta: {
         layout: Default,
       },
+    },
+    {
+      path: '/backoffice/credits',
+      name: 'Backoffice Credit',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeCredits.vue')
+    },
+
+    {
+      path: '/backoffice/credits/payout/:ID',
+      name: 'Credit Payout',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      props: true,
+      component: () => import('../views/backoffice/BackofficeCreditPayout.vue')
+    },
+    {
+      path: '/backoffice/accounting',
+      name: 'Backoffice Accounting',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeAccounting.vue')
+    },
+    {
+      path: '/backoffice/logs',
+      name: 'Backoffice Logs',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeLogs.vue')
+    },
+    {
+      path: '/backoffice/inbox',
+      name: 'Backoffice Inbox',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeInbox.vue')
+    },
+    {
+      path: '/backoffice/vendorsummary',
+      name: 'Vendor Summary',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeVendorSummary.vue')
+    },
+    {
+      path: '/backoffice/newvendor',
+      name: 'New Vendor',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeNewVendor.vue')
+    },
+    {
+      path: '/backoffice/userprofile/:ID',
+      name: 'Vendor Profile',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeUserProfile.vue')
+    },
+    {
+      path: '/backoffice/userprofile/:ID/update',
+      name: 'Update Vendor Profile',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeUpdateVendor.vue')
+    },
+    {
+      path: '/backoffice/settings',
+      name: 'Backoffice Settings',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeSettings.vue')
+    },
+    {
+      path: '/backoffice/settings/update',
+      name: 'Update Backoffice Settings',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeUpdateAugustin.vue')
+    },
+
+    {
+      path: '/backoffice/productsettings',
+      name: 'Backoffice Product Settings',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeProductSettings.vue')
+    },
+    {
+      path: '/backoffice/newproduct',
+      name: 'New Product',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeNewProduct.vue')
+    },
+    {
+      path: '/backoffice/productsettings/update/:ID',
+      name: 'Update Product',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/backoffice/BackofficeProductUpdate.vue')
+    },
+    {
+      path: '/404',
+      name: '404',
+      component: () => import('../views/404View.vue'),
+      meta: {
+        layout: Default
+      }
+    },
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      meta: {
+        requiresAuth: true
+      },
+      component: () => import('../views/DashboardView.vue')
+    },
+    {
+      path: '/vendoroverview',
+      name: 'Vendor Overview',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('../views/VendorOverview.vue')
     },
     {
       path: '/qr-code',
       name: 'QR Code',
       component: () => import('../views/QRCode.vue'),
       meta: {
-        layout: Default,
-      },
-    },
-    {
-      path: '/shop',
-      name: 'Shop',
-      component: () => import('../views/ShopPage.vue'),
-      meta: {
-        layout: Default,
-      },
+        layout: Default
+      }
     }
   ]
 })
 
 // Check if the user is authenticated
-router.beforeEach(async (to) => {
+router.beforeEach(async (to: any) => {
   if (
     to.meta.requiresAuth &&
     !isAuthenticated() &&
     // ❗️ Avoid an infinite redirect
     to.name !== '404'
   ) {
+    // Redirect happens before the first page load,
+    //so we need to wait for the router to be ready
     // redirect the user to the login page
-    return { name: '404' }
+    // return { name: '404' }
   }
   // Condition to toggle Lite-Mode
-  else if(import.meta.env.VITE_TOGGLE === 'true' && to.name === 'Version choice') {
-    return { name: 'Tippingpage'}
-  }
-})
-
-//Check if AGBs are accepted
-router.beforeEach(async (next) => {
-  if(next.name == 'Payment' && !usePaymentStore().agbChecked){
-    return {}
-  }
-  //Redirect to vivawallet
-  else if(usePaymentStore().paymentservice == 1){
-    //router.push(usePaymentStore().url) 
+  else if (import.meta.env.VITE_TOGGLE === 'true' && to.name === 'Version choice') {
+    return { name: 'Tippingpage' }
   }
 })
 
 // Check if the user is authenticated
-function isAuthenticated() {
+async function isAuthenticated() {
   if (!keycloak.initailizedKeycloak) {
-    keycloak.keycloak.init({
-      onLoad: 'check-sso',
-      flow: 'implicit'
-    }).then(() => {
-      console.log("keycloak init")
-      keycloak.initailizedKeycloak = true
-      if (!keycloak.keycloak.authenticated) {
-        keycloak.keycloak.login()
-      }
-      return keycloak.keycloak.authenticated
+    try {
+      await initKeycloak()
+    } catch (error) {
+      console.log('init keycloak failed', error)
     }
-    ).catch((error) => {
-      console.log("init keycloak failed", error)
-      console.log(keycloak)
-    }
-    )
-  } else {
-    console.log('isAuthenticated', keycloak.keycloak.authenticated)
-    if (!keycloak.keycloak.authenticated) {
-      keycloak.keycloak.login()
+    const keycloakStore = useKeycloakStore()
+    keycloakStore.setAuthenticated(keycloak.keycloak.authenticated)
+    if (keycloak.keycloak.tokenParsed) {
+      keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
     return keycloak.keycloak.authenticated
+  } else {
+    return keycloak.keycloak.authenticated
   }
-
 }
 
 export default router

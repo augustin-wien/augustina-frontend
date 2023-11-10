@@ -1,0 +1,27 @@
+{
+    "buyItem": "Buy a newspaper from:",
+    "newspaper": "Newspaper",
+    "next": "Next",
+
+    "donation": "Give a donation:",
+    "edit": "Edit",
+    "notToday": "Not today",
+
+    "confirm": "Confirm your order:",
+    "agreement": "With this purchase, I confirm the ",
+    "terms": "terms and conditions",
+
+    "symbol": "Show the symbol",
+    "bought": "Bought on the: ",
+    "at": " at",
+
+    "failed": "Transaction failed",
+    "tryagain": "Try again:",
+    "return": "Home",
+
+    "customdonation": "Enter your donation:",
+
+    "invalid": "This ID is invalid",
+    "gotovendor": "Go to a vendor",
+    "augustin": "Back to Augustin"
+}
