@@ -109,5 +109,8 @@
   "deactivated": "Deactivated",
 
   "newProduct": "New product",
-  "deletionConfirmation": "Do you really want to delete this product?"
+  "deletionConfirmation": "Do you really want to delete this product?",
+
+  "chooseDateRange": "Choose date range",
+  "noImage": "No image"
 }

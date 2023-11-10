@@ -6,7 +6,7 @@
         <input
           id="searchInput"
           type="text"
-          placeholder="Suche Ausweisnummer"
+          :placeholder="$t('IDNumber')"
           v-model="searchQuery"
           class="border-2 border-gray-400 rounded-md p-2 ml-2"
         />

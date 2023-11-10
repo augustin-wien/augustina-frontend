@@ -22,7 +22,7 @@
                   <td class="border-t-2 p-3">
                     <img
                       :src="item.Image ? apiUrl + item.Image : ''"
-                      alt="Kein Bild"
+                      :alt="$t('noImage')"
                       class="logo mx-auto my-5"
                       width="80"
                       height="auto"

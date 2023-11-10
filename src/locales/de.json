@@ -108,5 +108,8 @@
   "deactivated": "Deaktiviert",
 
   "newProduct": "Neues Produkt",
-  "deletionConfirmation": "Willst du das Produkt wirklich löschen?"
+  "deletionConfirmation": "Willst du das Produkt wirklich löschen?",
+
+  "chooseDateRange": "Zeitraum wählen",
+  "noImage": "Kein Bild"
 }

@@ -7,7 +7,7 @@
           v-model="date"
           range
           :enable-time-picker="false"
-          placeholder="Zeitraum wählen"
+          :placeholder="$t('chooseDateRange')"
           @range-start="onRangeStart"
           @range-end="onRangeEnd"
           class="max-w-md"
