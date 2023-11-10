@@ -109,16 +109,16 @@ const translateSender = (receiver: string) => {
   return receiver == 'Orga' ? 'Augustin' : receiver
 }
 const authenticated = computed(() => keycloakStore.authenticated)
-const items = computed(() => itemsStore.items)
+const items = computed(() => itemsStore.itemsBackoffice)
 
 onMounted(() => {
   if (authenticated.value) {
     paymentStore.getPayouts(startDate.value, endDate.value)
-    itemsStore.getItems()
+    itemsStore.getItemsBackoffice()
   } else {
     watch(authenticated, () => {
       paymentStore.getPayouts(startDate.value, endDate.value)
-      itemsStore.getItems()
+      itemsStore.getItemsBackoffice()
     })
   }
 })

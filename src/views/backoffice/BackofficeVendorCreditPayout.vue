@@ -101,7 +101,7 @@ const vendors = computed(() => store.vendors)
 const route = useRoute()
 const idparams = route.params.ID
 const vendorID = Number(idparams) // Convert the string to a number or NaN
-const items = computed(() => itemsStore.items)
+const items = computed(() => itemsStore.itemsBackoffice)
 const setVendor = () =>{
   if (store.vendors.length === 0) return null
   if (!isNaN(vendorID)) {
@@ -112,7 +112,7 @@ const setVendor = () =>{
       // Return null if the 'ID' parameter is not a valid number
       return null
     }
-    if (items?.value.length === 0) itemsStore.getItems()
+    if (items?.value.length === 0) itemsStore.getItemsBackoffice()
     payoutStore.getPaymentsForPayout(val.LicenseID)
     return val
   } else {
@@ -130,7 +130,7 @@ watch(vendor, (val: Vendor | null) => {
 })
 watch(store.vendors, () => {
   vendor.value = setVendor()
-  itemsStore.getItems()
+  itemsStore.getItemsBackoffice()
   if(vendor.value) payoutStore.getPaymentsForPayout(vendor.value.LicenseID)
 })
 // Initialize a reactive property 'amount' for input data
@@ -139,7 +139,7 @@ const authenticated = computed(() => keycloakStore.authenticated)
 
 onMounted(() => {
   if (authenticated.value) {
-    itemsStore.getItems()
+    itemsStore.getItemsBackoffice()
     store.getVendors()
   }
   if (vendor.value) {
