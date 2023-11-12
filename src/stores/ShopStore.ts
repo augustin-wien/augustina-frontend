@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia'
 import { fetchItems } from '@/api/api'
 import { type Item } from './items'
+import { usePaymentStore } from './payment'
   
+const paymentStore = usePaymentStore()
+//Item IDs of Items, that should not be displayed in the shop (4: License for E-Paper; 5: E-Paper)
+const itemsBlacklist = [4, 5]
+
 export interface Amount {
   item: number,
   quantity: number
@@ -19,11 +24,14 @@ export const useShopStore = defineStore('shop',{
             try {
               const data = await fetchItems()
               this.items = data.data
+              for (var id of itemsBlacklist){
+                this.items = this.items.filter(item => item.ID != id)
+              }
             } catch (error) {
               console.log(error)
             }
           },
-        addItem(id: number){
+        addItem(id: number, price: number){
           var inList = false
           for (var item of this.amount){
             if(id == item.item){
@@ -34,6 +42,14 @@ export const useShopStore = defineStore('shop',{
           if(inList == false){
             this.amount.push({item: id, quantity: 1})
           }
+          paymentStore.sum += price
+        },
+        subtractItem(id: number){
+          for (var item of this.amount){
+            if(id == item.item && item.quantity > 0){
+              item.quantity--
+            }
+          }
         },
         getAmount(id: number){
           var inList = false
@@ -43,6 +59,14 @@ export const useShopStore = defineStore('shop',{
             }
           }
           return 0
+        },
+        getName(id: number){
+          for (var item of this.items){
+            if(id == item.ID){
+              return item.Name
+            }
+          }
+          return "Not found"
         }
     }
 })

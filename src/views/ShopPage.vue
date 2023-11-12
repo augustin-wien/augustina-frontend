@@ -17,15 +17,25 @@ const items = shopStore.items
     <component :is="$route.meta.layout || 'div'">
         <template #main>
             <div className="h-full grid grid-rows-5 place-items-center w-full">
-                <div class="row-span-4 h-full">
+                <div class="row-span-4 w-full h-full">
                     <div className="text-center font-semibold text-3xl py-4">
-                        Produkte wählen
+                        {{ $t("product") }}
                     </div>
                     <div class="h-5/6 pb-3">
-                        <ul class="list-image-none overflow-y-auto h-full bg-gray-200 border border-gray-600 rounded-3xl">
-                            <li v-for="item in items" class="flex p-1">
-                                <div class="h-[74px] w-[74px] flex-none bg-red-600 rounded-2xl">
-
+                        <ul
+                            class="list-image-none overflow-y-auto w-full h-full bg-gray-200 border border-gray-600 rounded-3xl">
+                            <li v-for="item in items" class="flex w-full p-1">
+                                <div class="w-[74px] flex-none grid grid-rows-2">
+                                    <div class="py-[2px]">
+                                    <div class="w-[70px] h-[70px] flex-none bg-red-600 rounded-2xl">
+                                        
+                                    </div>
+                                </div>
+                                    <div class="">
+                                        <div class="rounded-full h-[60px] bg-black text-center text-white font-semibold text-xl flex justify-center items-center">
+                                            {{ item.Price/100 }}€
+                                        </div>
+                                    </div>
                                 </div>
                                 <div className="place-items-center grow h-full grid grid-rows-2 border-b-gray-400 border-2">
                                     <div class="w-full h-full py-1">
@@ -43,13 +53,13 @@ const items = shopStore.items
                                             </div>
                                         </div>
                                         <button>
-                                            <div
-                                                class="button-down customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]">
+                                            <div class="button-down customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
+                                                @click="shopStore.subtractItem(item.ID)">
                                                 -</div>
                                         </button>
                                         <button class="place-content-">
                                             <div class="button-up customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
-                                                @click="shopStore.addItem(item.ID)">
+                                                @click="shopStore.addItem(item.ID, item.Price)">
                                                 +</div>
                                         </button>
                                     </div>
