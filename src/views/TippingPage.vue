@@ -2,7 +2,10 @@
 import { usePaymentStore } from '@/stores/PaymentStore';
 import { RouterLink } from 'vue-router';
 import { settingsStore } from '@/stores/settings';
+import { onMounted } from 'vue';
+import { useShopStore } from '@/stores/ShopStore';
 
+const shopStore = useShopStore()
 const settStore = settingsStore()
 const paymentStore = usePaymentStore()
 

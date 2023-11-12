@@ -3,24 +3,23 @@ import { onMounted } from 'vue';
 import { usePaymentStore, type orderItem } from '@/stores/PaymentStore'
 import { settingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
+import { useShopStore } from '@/stores/ShopStore';
 
-
+const shopStore = useShopStore()
 const paymentStore = usePaymentStore()
 const settings = settingsStore()
 const vendorStore = useVendorStore()
 
 onMounted(() => {
   // todo add multiple items
-  const items:Array<orderItem> = [{
-    item: settings.settings.MainItem,
-    quantity: 1
-  }]
+  const items = shopStore.amount
   if (paymentStore.tip>0){
     items.push({
       item: paymentStore.tipItem,
       quantity: paymentStore.tip*100
     })
   }
+  console.log(items)
   paymentStore.postOrder(items, 1, vendorStore.vendorid)
 })
 </script> 
