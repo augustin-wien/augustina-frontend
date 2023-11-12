@@ -27,13 +27,14 @@ const items = shopStore.items
                             <li v-for="item in items" class="flex w-full p-1">
                                 <div class="w-[74px] flex-none grid grid-rows-2">
                                     <div class="py-[2px]">
-                                    <div class="w-[70px] h-[70px] flex-none bg-red-600 rounded-2xl">
-                                        
+                                        <div class="w-[70px] h-[70px] flex-none bg-red-600 rounded-2xl">
+                                            <img :alt="item.Description" className="logo mx-auto my-1 scale-75" :src="item.Image" />
+                                        </div>
                                     </div>
-                                </div>
                                     <div class="">
-                                        <div class="rounded-full h-[60px] bg-black text-center text-white font-semibold text-xl flex justify-center items-center">
-                                            {{ item.Price/100 }}€
+                                        <div
+                                            class="rounded-full h-[60px] bg-black text-center text-white font-semibold text-xl flex justify-center items-center">
+                                            {{ item.Price / 100 }}€
                                         </div>
                                     </div>
                                 </div>
