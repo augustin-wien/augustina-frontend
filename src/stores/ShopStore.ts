@@ -24,7 +24,7 @@ export const useShopStore = defineStore('shop',{
             try {
               const data = await fetchItems()
               this.items = data.data
-              for (var id of itemsBlacklist){
+              for (const id of itemsBlacklist){
                 this.items = this.items.filter(item => item.ID != id)
               }
             } catch (error) {
@@ -32,8 +32,8 @@ export const useShopStore = defineStore('shop',{
             }
           },
         addItem(id: number, price: number){
-          var inList = false
-          for (var item of this.amount){
+          let inList = false
+          for (const item of this.amount){
             if(id == item.item){
               inList = true
               item.quantity++
@@ -45,15 +45,15 @@ export const useShopStore = defineStore('shop',{
           paymentStore.sum += price
         },
         subtractItem(id: number){
-          for (var item of this.amount){
+          for (const item of this.amount){
             if(id == item.item && item.quantity > 0){
               item.quantity--
             }
           }
         },
         getAmount(id: number){
-          var inList = false
-          for (var item of this.amount){
+          const inList = false
+          for (const item of this.amount){
             if(id == item.item){
               return item.quantity
             }
@@ -61,7 +61,7 @@ export const useShopStore = defineStore('shop',{
           return 0
         },
         getName(id: number){
-          for (var item of this.items){
+          for (const item of this.items){
             if(id == item.ID){
               return item.Name
             }

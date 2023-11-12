@@ -24,7 +24,7 @@ const items = shopStore.items
                     <div class="h-5/6 pb-3">
                         <ul
                             class="list-image-none overflow-y-auto w-full h-full bg-gray-200 border border-gray-600 rounded-3xl">
-                            <li v-for="item in items" class="flex w-full p-1">
+                            <li v-for="item in items" :key="item.ID" class="flex w-full p-1">
                                 <div class="w-[74px] flex-none grid grid-rows-2">
                                     <div class="py-[2px]">
                                         <div class="w-[70px] h-[70px] flex-none bg-red-600 rounded-2xl">
