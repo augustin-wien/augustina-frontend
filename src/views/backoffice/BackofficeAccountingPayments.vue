@@ -3,15 +3,8 @@
     <template #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuAccounting') }}</h1>
       <span>
-        <VueDatePicker
-          v-model="date"
-          range
-          :enable-time-picker="false"
-          :placeholder="$t('chooseDateRange')"
-          @range-start="onRangeStart"
-          @range-end="onRangeEnd"
-          class="max-w-md"
-        />
+        <VueDatePicker v-model="date" range :enable-time-picker="false" :placeholder="$t('chooseDateRange')"
+          @range-start="onRangeStart" @range-end="onRangeEnd" class="max-w-md" />
       </span>
     </template>
     <template #main>
@@ -40,7 +33,9 @@
                     {{ translateReceiver(payment.ReceiverName)
                     }}{{ payment.AuthorizedBy ? ' durch ' + payment.AuthorizedBy : '' }}
                   </td>
-                  <td className="border-t-2 p-3">{{ $t(getItemName(payment.Item)) }}</td>
+                  <td className="border-t-2 p-3">
+                    {{ translateItem(payment) }}
+                  </td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
               </tbody>
@@ -53,14 +48,16 @@
 </template>
 
 <script lang="ts" setup>
-import { useKeycloakStore } from '@/stores/keycloak'
-import { usePaymentsStore } from '@/stores/payments'
 import { useItemsStore } from '@/stores/items'
+import { useKeycloakStore } from '@/stores/keycloak'
+import { usePaymentsStore, type Payment } from '@/stores/payments'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, onMounted, ref, watch } from 'vue'
 
 const keycloakStore = useKeycloakStore()
+const itemsStore = useItemsStore()
+const items = computed(() => itemsStore.itemsBackoffice)
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -73,8 +70,7 @@ const startDate = ref<Date>(yesterday)
 const endDate = ref<Date>(tomorrow)
 const date = ref<Array<Date>>([startDate.value, endDate.value])
 const store = usePaymentsStore()
-const itemsStore = useItemsStore()
-const items = computed(() => itemsStore.items)
+
 
 //fetch paymentlist data once component is mounted
 
@@ -107,13 +103,27 @@ const translateReceiver = (receiver: string) => {
 const translateSender = (receiver: string) => {
   return receiver == 'Orga' ? 'Augustin' : receiver
 }
+const translateItem = (payment: Payment) => {
+  const item = items.value.find((item) => item.ID === payment.Item)
+  if (item) {
+    return item.Name
+  }
+  if (payment.IsPayoutFor && payment.IsPayoutFor.length > 0) {
+    return 'Auszahlung'
+  }
+  return ''
+}
 const authenticated = computed(() => keycloakStore.authenticated)
 onMounted(() => {
   if (authenticated.value) {
-    store.getPayments(startDate.value, endDate.value)
+    itemsStore.getItemsBackoffice().then(() => {
+      store.getPayments(startDate.value, endDate.value)
+    })
   } else {
     watch(authenticated, () => {
-      store.getPayments(startDate.value, endDate.value)
+      itemsStore.getItemsBackoffice().then(() => {
+        store.getPayments(startDate.value, endDate.value)
+      })
     })
   }
 })
