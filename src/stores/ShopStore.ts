@@ -44,10 +44,11 @@ export const useShopStore = defineStore('shop',{
           }
           paymentStore.sum += price
         },
-        subtractItem(id: number){
+        subtractItem(id: number, price: number){
           for (const item of this.amount){
             if(id == item.item && item.quantity > 0){
               item.quantity--
+              paymentStore.sum -= price
             }
           }
         },
