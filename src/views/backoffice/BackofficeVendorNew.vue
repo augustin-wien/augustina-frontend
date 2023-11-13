@@ -161,6 +161,7 @@
                 {{ $t('create') }}
               </button>
             </div>
+            <Toast v-if="toast" :toast="toast" />
           </form>
         </div>
         <div v-else>

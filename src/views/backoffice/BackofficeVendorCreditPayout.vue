@@ -53,11 +53,13 @@
           </div>
         </div>
       </div>
+      <Toast v-if="toast" :toast="toast" />
     </template>
   </component>
 </template>
 
 <script lang="ts" setup>
+import toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
