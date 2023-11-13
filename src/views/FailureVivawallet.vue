@@ -9,10 +9,8 @@
                     {{ $t("failed") }}
                 </div>
                 <div class="row-span-2">
-                    <img alt="Error Alert" className="logo mx-auto my-1" src="@/assets/red-alert-icon.svg" width="180" height="105" />
-                </div>
-                <div class="text-center pt-8">
-                    {{ $t("tryagain") }}
+                    <img alt="Error Alert" className="logo mx-auto my-1" src="@/assets/red-alert-icon.svg" width="180"
+                        height="105" />
                 </div>
             </div>
         </template>
