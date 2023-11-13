@@ -5,7 +5,7 @@ import { usePaymentStore } from './payment'
   
 const paymentStore = usePaymentStore()
 //Item IDs of Items, that should not be displayed in the shop (4: License for E-Paper; 5: E-Paper)
-const itemsBlacklist = [4, 5]
+const itemsBlacklist = [4]
 
 export interface Amount {
   item: number,
