@@ -26,6 +26,7 @@
                   <th className="p-3">Datum</th>
                   <th className="p-3">Von</th>
                   <th className="p-3">An</th>
+                  <th className="p-3">Was</th>
                   <th className="p-3">Betrag</th>
                 </tr>
               </thead>
@@ -38,6 +39,9 @@
                   <td className="border-t-2 p-3">
                     {{ translateReceiver(payment.ReceiverName)
                     }}{{ payment.AuthorizedBy ? ' durch ' + payment.AuthorizedBy : '' }}
+                  </td>
+                  <td className="border-t-2 p-3">
+                    {{ translateItem(payment) }}
                   </td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
@@ -52,12 +56,15 @@
 
 <script lang="ts" setup>
 import { useKeycloakStore } from '@/stores/keycloak'
-import { usePaymentsStore } from '@/stores/payments'
+import { usePaymentsStore, type Payment } from '@/stores/payments'
+import { useItemsStore } from '@/stores/items'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, onMounted, ref, watch } from 'vue'
 
 const keycloakStore = useKeycloakStore()
+const itemsStore = useItemsStore()
+const items = computed(() => itemsStore.itemsBackoffice)
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -102,13 +109,27 @@ const translateReceiver = (receiver: string) => {
 const translateSender = (receiver: string) => {
   return receiver == 'Orga' ? 'Augustin' : receiver
 }
+const translateItem = (payment: Payment) => {
+  const item = items.value.find((item) => item.ID === payment.Item)
+  if (item) {
+    return item.Name
+  }
+  if (payment.IsPayoutFor && payment.IsPayoutFor.length > 0) {
+    return 'Auszahlung'
+  }
+  return ''
+}
 const authenticated = computed(() => keycloakStore.authenticated)
 onMounted(() => {
   if (authenticated.value) {
-    store.getPayments(startDate.value, endDate.value)
+    itemsStore.getItemsBackoffice().then(() => {
+      store.getPayments(startDate.value, endDate.value)
+    })
   } else {
     watch(authenticated, () => {
-      store.getPayments(startDate.value, endDate.value)
+      itemsStore.getItemsBackoffice().then(() => {
+        store.getPayments(startDate.value, endDate.value)
+      })
     })
   }
 })
