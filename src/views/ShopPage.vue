@@ -70,7 +70,7 @@ const items = shopStore.items
                     </div>
                 </div>
                 <div className="place-items-center row-span-2 w-full flex">
-                    <RouterLink class="flex-none h-[76px] w-[76px] mr-2" to="/v/:id/landing-page">
+                    <RouterLink class="flex-none h-[76px] w-[76px] mr-2" :to="{name: 'LandingPage'}">
                         <button class="customcolor fill-white rounded-full h-full w-full place-items-center grid">
                             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="white"
                                 class="bi bi-arrow-left-short" viewBox="0 0 16 16">
