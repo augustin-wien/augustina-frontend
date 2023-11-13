@@ -43,9 +43,9 @@
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     v-model="newVendor.LicenseID" type="text" id="licenseID" required />
-
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language">{{ $t('language')
                   }}:</label>
+
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     v-model="newVendor.Language" type="text" id="language" />
@@ -55,7 +55,6 @@
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     v-model="newVendor.Telephone" type="text" id="telephone" />
-
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="address">{{ $t('address')
                   }}:</label>
                   <input
@@ -96,7 +95,6 @@
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     v-model="newVendor.Latitude" type="text" id="latitude" />
-
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime">{{ $t('workingTime')
                   }}:</label>
                   <input

@@ -75,6 +75,7 @@ const itemsStore = useItemsStore()
 
 const paymentsForPayout = computed(() => payoutStore.paymentsForPayout)
 
+
 // Compute a reactive property for vendors
 const vendors = computed(() => store.vendors)
 
