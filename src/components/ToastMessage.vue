@@ -1,5 +1,5 @@
 <template>
-  <div v-if="toast" :class="toastClasses">
+  <div v-if="toast" :class="toastClasses" class="toast">
     <svg
       class="w-5 h-5 text-blue-600 dark:text-blue-500 rotate-45"
       aria-hidden="true"
@@ -42,7 +42,10 @@ export default {
 </script>
 
 <style>
-div {
-  position: fixed top-5 right-5;
+.toast {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  z-index: 9999;
 }
 </style>

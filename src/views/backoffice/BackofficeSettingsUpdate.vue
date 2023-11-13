@@ -1,13 +1,15 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Einstellungen ändern</h1></template
+      <h1 className="font-bold mt-3 pt-3 text-2xl">
+        {{ $t('menuSettings') }} {{ $t('change') }}
+      </h1></template
     >
     <template #main>
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4" v-if="settings">
           <div class="flex place-content-center justify-between">
-            <h1 class="text-2xl font-bold">Einstellungen ändern</h1>
+            <h1 class="text-2xl font-bold">{{ $t('menuSettings') }} {{ $t('change') }}</h1>
             <button
               @click="router.push('/backoffice/settings')"
               class="px-2 rounded-full bg-red-600 text-white font-bold"
@@ -41,7 +43,7 @@
               </div>
             </div>
             <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="color"
-              >Farbe:</label
+              >{{ $t('color') }}:</label
             >
             <div class="flex flex-row">
               <span class="p-2">{{ settings.Color }}</span>
@@ -54,7 +56,7 @@
               />
             </div>
             <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="color"
-              >Schriftfarbe:</label
+              >{{ $t('fontColor') }}:</label
             >
             <div class="flex flex-row">
               <span class="p-2">{{ settings.FontColor }}</span>
@@ -67,7 +69,7 @@
               />
             </div>
             <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="mainItem"
-              >Hauptprodukt:</label
+              >{{ $t('mainProduct') }}:</label
             >
             <div class="flex flex-row">
               <span class="p-2">{{ settings.MainItem }}</span>
@@ -83,11 +85,11 @@
               </select>
             </div>
             <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-              >Übernahme Transaktionskosten:</label
+              >{{ $t('transactionCost') }}:</label
             >
             <div class="flex flex-row justify-evenly">
               <span>
-                <label for="RefundFees">Ja</label>
+                <label for="RefundFees">{{ $t('yes') }}</label>
                 <input
                   type="radio"
                   checked
@@ -98,7 +100,7 @@
                 />
               </span>
               <span>
-                <label for="RefundFees">Nein</label>
+                <label for="RefundFees">{{ $t('no') }}</label>
                 <input
                   type="radio"
                   id="RefundFees"
@@ -109,15 +111,18 @@
               </span>
             </div>
             <div class="flex place-content-center">
-              <button
-                onsubmit="updateSettings()"
-                type="submit"
-                class="p-3 rounded-full bg-lime-600 text-white"
-              >
-                Bestätigen
-              </button>
+              <router-link to="/backoffice/settings/">
+                <button
+                  :onsubmit="updateSettings()"
+                  type="submit"
+                  class="p-3 rounded-full bg-lime-600 text-white"
+                >
+                  {{ $t('confirmation') }}
+                </button>
+              </router-link>
             </div>
           </form>
+          <Toast v-if="toast" :toast="toast" />
         </div>
       </div>
     </template>
@@ -159,7 +164,7 @@ const updatedSettings = ref<Settings>({
   MainItemName: '',
   MainItemPrice: 0,
   MainItemImage: '',
-  MaxOrderAmount: 0,
+  MaxOrderAmount: 0
 })
 
 const updateSettings = async () => {

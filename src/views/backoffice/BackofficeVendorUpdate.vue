@@ -1,13 +1,15 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferIn bearbeiten</h1></template
+      <h1 className="font-bold mt-3 pt-3 text-2xl">
+        {{ $t('vendorSingular') }} {{ $t('change') }}
+      </h1></template
     >
     <template #main v-if="updatedVendor">
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4" v-if="vendor">
           <div class="flex place-content-center justify-between">
-            <h1 class="text-2xl font-bold">{{ vendor.LicenseID }} ändern</h1>
+            <h1 class="text-2xl font-bold">{{ vendor.LicenseID }} {{ $t('change') }}</h1>
             <button
               @click="router.push('/backoffice/vendorsummary')"
               class="px-2 rounded-full bg-red-600 text-white font-bold"
@@ -22,7 +24,7 @@
             <div class="row">
               <span class="col">
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
-                  >Vorname:</label
+                  >{{ $t('firstName') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.FirstName }} </span>
@@ -35,7 +37,7 @@
                   />
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
-                  >Nachname:</label
+                  >{{ $t('lastName') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.LastName }} </span>
@@ -64,7 +66,7 @@
                   />
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
-                  >Lizenznummer:</label
+                  >{{ $t('licenseId') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.LicenseID }} </span>
@@ -79,7 +81,7 @@
                 </div>
 
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                  >Deaktiviert:</label
+                  >{{ $t('deactivated') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2"> {{ vendor.IsDisabled }} </span>
@@ -89,12 +91,12 @@
                     id="onlineMap"
                     required
                   >
-                    <option value="true">Ja</option>
-                    <option value="false">Nein</option>
+                    <option value="true">{{ $t('yes') }}</option>
+                    <option value="false">{{ $t('no') }}</option>
                   </select>
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
-                  >Standplatz-Adresse:</label
+                  >{{ $t('address') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Address }} </span>
@@ -108,7 +110,7 @@
                   />
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
-                  >Postleitzahl:</label
+                  >{{ $t('postCode') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.PLZ }} </span>
@@ -122,7 +124,7 @@
                 </div>
 
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                  >Ort:</label
+                  >{{ $t('location') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Location }} </span>
@@ -139,7 +141,7 @@
             <div class="row">
               <span class="col">
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
-                  >Telefonnummer:</label
+                  >{{ $t('telephone') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Telephone }} </span>
@@ -162,13 +164,13 @@
                     id="hasSmartphone"
                     required
                   >
-                    <option value="true">Ja</option>
-                    <option value="false">Nein</option>
+                    <option value="true">{{ $t('yes') }}</option>
+                    <option value="false">{{ $t('no') }}</option>
                   </select>
                 </div>
 
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                  >Arbeitszeit:</label
+                  >{{ $t('workingTime') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.WorkingTime }} </span>
@@ -181,7 +183,7 @@
                 </div>
 
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
-                  >Sprache:</label
+                  >{{ $t('language') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Language }} </span>
@@ -195,7 +197,7 @@
                 </div>
 
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                  >Online Karte:</label
+                  >{{ $t('onlineMap') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2"> {{ vendor.OnlineMap }} </span>
@@ -205,12 +207,12 @@
                     id="onlineMap"
                     required
                   >
-                    <option value="true">Ja</option>
-                    <option value="false">Nein</option>
+                    <option value="true">{{ $t('yes') }}</option>
+                    <option value="false">{{ $t('no') }}</option>
                   </select>
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                  >Bankkonto:</label
+                  >{{ $t('bankAccount') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2"> {{ vendor.HasBankAccount }} </span>
@@ -220,15 +222,15 @@
                     id="bankAccount"
                     required
                   >
-                    <option value="true">Ja</option>
-                    <option value="false">Nein</option>
+                    <option value="true">{{ $t('yes') }}</option>
+                    <option value="false">{{ $t('no') }}</option>
                   </select>
                 </div>
 
                 <label
                   class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                   for="registrationDate"
-                  >Registriert am:</label
+                  >{{ $t('registrationDate') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.RegistrationDate }} </span>
@@ -240,7 +242,7 @@
                   />
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
-                  >Verkauft seit:</label
+                  >{{ $t('vendorSince') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.VendorSince }} </span>
@@ -252,7 +254,7 @@
                   />
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
-                  >Kommentar:</label
+                  >{{ $t('comment') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Comment }} </span>
@@ -273,14 +275,14 @@
               class="p-3 rounded-full bg-red-600 text-white"
               @click="deleteVendor"
             >
-              Löschen
+              {{ $t('delete') }}
             </button>
             <button
               type="submit"
               class="p-3 rounded-full bg-lime-600 text-white"
               @click="updateVendor"
             >
-              Bestätigen
+              {{ $t('confirmation') }}
             </button>
           </div>
         </form>
@@ -313,7 +315,6 @@ onMounted(() => {
   }
 })
 const { vendor } = storeToRefs(store)
-
 
 watch(vendor, (newVal) => {
   if (newVal) {

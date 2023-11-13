@@ -1,7 +1,7 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">VerkäuferInnen Profil</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('vendorSingular') }} Profil</h1>
     </template>
     <template #main>
       <div class="main" v-if="vendor">
@@ -19,57 +19,57 @@
             <div className="table-auto border-spacing-4 border-collapse">
               <tbody className="text-sm text-left">
                 <tr>
-                  <th className="p-3">Vorname:</th>
+                  <th className="p-3">{{ $t('firstName') }}:</th>
                   <td className="p-3">{{ vendor.FirstName }}</td>
-                  <th className="p-3">Nachname:</th>
+                  <th className="p-3">{{ $t('lastName') }}:</th>
                   <td className="p-3">{{ vendor.LastName }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Lizenznummer:</th>
+                  <th className="p-3">{{ $t('LicenseId') }}:</th>
                   <td className="p-3">{{ vendor.LicenseID }}</td>
-                  <th className="p-3">Deaktiviert:</th>
+                  <th className="p-3">{{ $t('accountDeactivation') }}:</th>
                   <td className="p-3">{{ vendor.IsDisabled }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Letzte Auszahlung:</th>
+                  <th className="p-3">{{ $t('lastPayout') }}:</th>
                   <td className="p-3">{{ vendor.LastPayout }}</td>
-                  <th className="p-3">Aktuelles Guthaben:</th>
+                  <th className="p-3">{{ $t('currentCredit') }}:</th>
                   <td className="p-3">{{ formatCredit(vendor.Balance) }} €</td>
                 </tr>
                 <tr>
                   <th className="p-3">E-Mail:</th>
                   <td className="p-3">{{ vendor.Email }}</td>
-                  <th className="p-3">Telefonnummer:</th>
+                  <th className="p-3">{{ $t('telephone') }}:</th>
                   <td className="p-3">{{ vendor.Telephone }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Standplatz-Adresse:</th>
+                  <th className="p-3">{{ $t('address') }}:</th>
                   <td className="p-3">{{ vendor.Address }}</td>
-                  <th className="p-3">Postleitzahl:</th>
+                  <th className="p-3">{{ $t('postCode') }}:</th>
                   <td className="p-3">{{ vendor.PLZ }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Breitengrad:</th>
+                  <th className="p-3">{{ $t('longitude') }}:</th>
                   <td className="p-3">{{ vendor.Longitude }}</td>
 
-                  <th className="p-3">Längengrad:</th>
+                  <th className="p-3">{{ $t('latitude') }}:</th>
                   <td className="p-3">{{ vendor.Longitude }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Ort:</th>
+                  <th className="p-3">{{ $t('location') }}:</th>
                   <td className="p-3">{{ vendor.Location }}</td>
-                  <th className="p-3">Sprache:</th>
+                  <th className="p-3">{{ $t('language') }}:</th>
                   <td className="p-3">{{ vendor.Language }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Verkauft seit:</th>
+                  <th className="p-3">{{ $t('vendorSince') }}:</th>
                   <td className="p-3">{{ vendor.VendorSince }}</td>
 
-                  <th className="p-3">Registriert seit:</th>
+                  <th className="p-3">{{ $t('registrationDate') }}:</th>
                   <td className="p-3">{{ vendor.RegistrationDate }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Arbeitszeit:</th>
+                  <th className="p-3">{{ $t('workingTime') }}:</th>
                   <td className="p-3">{{ vendor.WorkingTime }}</td>
                   <th className="p-3">Online Karte:</th>
                   <td className="p-3">{{ vendor.OnlineMap }}</td>
@@ -77,7 +77,7 @@
                 <tr>
                   <th className="p-3">Smartphone:</th>
                   <td className="p-3">{{ vendor.HasSmartphone }}</td>
-                  <th className="p-3">Bankkonto:</th>
+                  <th className="p-3">{{ $t('bankAccount') }}:</th>
                   <td className="p-3">{{ vendor.HasBankAccount }}</td>
                 </tr>
               </tbody>
@@ -85,7 +85,7 @@
             <div v-if="vendor">
               <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
                 <button class="p-2 rounded-full bg-lime-600 text-white mr-2">
-                  Ändern
+                  {{ $t('change') }}
                 </button>
               </router-link>
             </div>

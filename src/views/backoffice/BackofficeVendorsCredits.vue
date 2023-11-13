@@ -1,32 +1,30 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Offene Beträge</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('openCredits') }}</h1>
       <span>
         <input
           id="searchInput"
           type="text"
-          placeholder="Suche Ausweisnummer"
+          :placeholder="$t('IDNumber')"
           v-model="searchQuery"
           class="border-2 border-gray-400 rounded-md p-2 ml-2"
         />
-        <button class="p-3 rounded-full bg-lime-600 text-white ml-2">Suchen</button>
+        <button class="p-3 rounded-full bg-lime-600 text-white ml-2">{{ $t('search') }}</button>
       </span>
     </template>
 
     <template #main>
       <div class="main" v-if="vendors">
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div
-            className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5"
-          >
+          <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
             <div className="table-auto border-spacing-4 border-collapse">
               <thead>
                 <tr>
-                  <th className="p-3">Ausweisnummer</th>
-                  <th className="p-3">Betrag</th>
-                  <th className="p-3">Zuletzt beglichen</th>
-                  <th className="p-3">Aktion</th>
+                  <th className="p-3">{{ $t('IDNumber') }}</th>
+                  <th className="p-3">{{ $t('amount') }}</th>
+                  <th className="p-3">{{ $t('lastPayout') }}</th>
+                  <th className="p-3">{{ $t('measure') }}</th>
                 </tr>
               </thead>
               <tbody className="text-sm  p-3">
@@ -36,15 +34,12 @@
                   </td>
                   <td className="border-t-2 p-3">{{ formatCredit(vendor.Balance) }} €</td>
                   <td className="border-t-2 p-3">{{ formatDate(vendor.LastPayout) }}</td>
-                  <router-link
-                    :to="`/backoffice/credits/payout/${vendor.ID}`"
-                    v-if="vendor?.ID"
-                  >
+                  <router-link :to="`/backoffice/credits/payout/${vendor.ID}`" v-if="vendor?.ID">
                     <button
                       className="p-3 rounded-full bg-lime-600 text-white"
                       :disabled="vendor.Balance === 0"
                     >
-                      Auszahlen
+                      {{ $t('payNow') }}
                     </button>
                   </router-link>
                 </tr>
