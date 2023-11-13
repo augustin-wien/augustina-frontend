@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { fetchItems, postItems, patchItem, removeItem } from '@/api/api'
+import { fetchItemsBackoffice,fetchItems, postItems, patchItem, removeItem } from '@/api/api'
 
 //define interface to store data from backend properly
 export interface Item {
@@ -13,7 +13,8 @@ export interface Item {
 export const useItemsStore = defineStore('items', {
   state: () => {
     return {
-      items: [] as Item[]
+      items: [] as Item[],
+      itemsBackoffice: [] as Item[]
     }
   },
 
@@ -28,6 +29,14 @@ export const useItemsStore = defineStore('items', {
       try {
         const data = await fetchItems()
         this.items = data.data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getItemsBackoffice() {
+      try {
+        const data = await fetchItemsBackoffice()
+        this.itemsBackoffice = data.data
       } catch (error) {
         console.log(error)
       }
