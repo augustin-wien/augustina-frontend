@@ -111,13 +111,15 @@
               </span>
             </div>
             <div class="flex place-content-center">
-              <button
-                onsubmit="updateSettings()"
-                type="submit"
-                class="p-3 rounded-full bg-lime-600 text-white"
-              >
-                {{ $t('confirmation') }}
-              </button>
+              <router-link to="/backoffice/settings/">
+                <button
+                  :onsubmit="updateSettings()"
+                  type="submit"
+                  class="p-3 rounded-full bg-lime-600 text-white"
+                >
+                  {{ $t('confirmation') }}
+                </button>
+              </router-link>
             </div>
           </form>
         </div>
