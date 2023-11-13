@@ -9,7 +9,7 @@ const route = useRoute()
 const checkID = vendorStore.checkID
 const id = route.params.id
 
-//onMounted(()=> checkID(id))
+onMounted(()=> checkID(id))
 </script>
 
 <template>
