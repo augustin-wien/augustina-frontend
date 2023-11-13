@@ -1,12 +1,12 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Eingang</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('inbox') }}</h1>
       <VueDatePicker
         v-model="date"
         range
         :enable-time-picker="false"
-        placeholder="Zeitraum wählen"
+        :placeholder="$t('enterPeriod')"
         @range-start="onRangeStart"
         @range-end="onRangeEnd"
         class="max-w-md"
@@ -20,10 +20,10 @@
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
-                  <th className="p-3">Datum</th>
-                  <th className="p-3">An</th>
-                  <th className="p-3">Betreff</th>
-                  <th className="p-3">Betrag</th>
+                  <th className="p-3">{{ $t('date') }}</th>
+                  <th className="p-3">{{ $t('to') }}</th>
+                  <th className="p-3">{{ $t('item') }}</th>
+                  <th className="p-3">{{ $t('amount') }}</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
@@ -32,7 +32,7 @@
                   <td className="border-t-2 p-3">
                     {{ translateSender(payment.ReceiverName) }}
                   </td>
-                  <td className="border-t-2 p-3">{{ getItemName(payment.Item) }}</td>
+                  <td className="border-t-2 p-3">{{ $t(getItemName(payment.Item)) }}</td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
               </tbody>
@@ -102,7 +102,7 @@ const formatTime = (time: string) => {
   const date = new Date(time)
   return date.toLocaleDateString('de-DE', {
     hour: '2-digit',
-    minute: '2-digit',
+    minute: '2-digit'
   })
 }
 

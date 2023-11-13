@@ -4,7 +4,7 @@ import { type Vendor } from '@/stores/vendor'
 import { type Item } from '@/stores/items'
 import { type Settings } from '@/stores/settings'
 import { type PaymentsForPayout, type Payout } from '@/stores/payout'
-import { PAYMENTS_FOR_PAYOUT_API_URL, VENDORS_API_URL } from './endpoints'
+import { ITEMS_BACKOFFICE_API_URL, PAYMENTS_FOR_PAYOUT_API_URL, VENDORS_API_URL } from './endpoints'
 import { ITEMS_API_URL } from './endpoints'
 import { AUTH_API_URL } from './endpoints'
 import { SETTINGS_API_URL } from './endpoints'
@@ -88,6 +88,9 @@ export async function fetchItems() {
   return apiInstance.get<Item[]>(ITEMS_API_URL)
 }
 
+export async function fetchItemsBackoffice() {
+  return apiInstance.get<Item[]>(`${ITEMS_BACKOFFICE_API_URL}`)
+}
 export async function postItems(newItem: Item) {
   const formData = new FormData()
   formData.append('Image', newItem.Image)

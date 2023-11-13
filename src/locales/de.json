@@ -25,5 +25,95 @@
   "gotovendor": "Gehe bitte zu einer Verkäuferin oder einem Verkäufer",
   "augustin": "Zum Augustin",
 
-  "product": "Produkt wählen"
+  "product": "Produkt wählen",
+  "menuVendors": "VerkäuferInnen",
+  "menuCredits": "Guthaben",
+  "menuPayouts": "Auszahlungen",
+  "menuSales": "Verkäufe",
+  "menuAccounting": "Buchhaltung",
+  "menuProducts": "Produkte",
+  "menuSettings": "Einstellungen",
+  "menuLogout": "Abmelden",
+  "userLoggedIn": "ist angemeldet.",
+  "userNotLoggedIn": "Kein User ist angemeldet.",
+
+  "accountingTitle": "Umsätze im gewählten Zeitraum",
+
+  "date": "Datum",
+  "from": "Von",
+  "to": "An",
+  "item": "Artikel",
+  "amount": "Betrag",
+  "total": "Gesamt",
+
+  "enterPeriod": "Zeitraum eingeben",
+  "protocol": "Logbuch",
+  "inbox": "Eingang",
+
+  "image": "Bild",
+  "name": "Name",
+  "description": "Beschreibung",
+  "price": "Preis",
+  "measure": "Aktion",
+  "change": "Ändern",
+  "new": "Neu",
+  "newGendered": "Neue/n",
+
+  "vendorSingular": "VerkäuferIn",
+
+  "topic": "Thema",
+  "current": "Aktuell",
+
+  "mainProduct": "Hauptprodukt",
+  "transactionCost": "Übernahme Transaktionskosten",
+  "color": "Farbe",
+  "fontColor": "Schriftfarbe",
+  "maximum": "Maximale Bestellsumme",
+
+  "yes": "Ja",
+  "no": "Nein",
+  "confirmation": "Bestätigen",
+  "delete": "Löschen",
+
+  "payout": "Für folgende Zahlungen auszahlen",
+  "confirmPayout": "Auszahlung bestätigen",
+  "noCredits": "Keine Guthaben vorhanden",
+
+  "create": "anlegen",
+  "cancel": "Abbrechen",
+
+  "firstName": "Vorname",
+  "lastName": "Nachname",
+  "licenseId": "Lizenznummer",
+  "language": "Sprache",
+  "telephone": "Telefonnummer",
+  "address": "Adresse",
+  "postCode": "Postleitzahl",
+  "location": "Ort",
+  "accountDeactivation": "Konto deaktivieren",
+  "longitude": "Längengrad",
+  "latitude": "Breitengrad",
+  "workingTime": "Arbeitszeit",
+  "registrationDate": "Registriert seit",
+  "vendorSince": "VerkäuferIn seit",
+  "bankAccount": "Bankverbindung",
+  "comment": "Kommentar",
+  "onlineMap": "Online Karte",
+
+  "currentCredit": "Aktuelles Guthaben",
+  "lastPayout": "Letzte Auszahlung",
+  "openCredits": "Offene Beträge",
+  "search": "Suchen",
+  "IDNumber": "Ausweisnummer",
+  "payNow": "Auszahlen",
+  "deactivated": "Deaktiviert",
+
+  "newProduct": "Neues Produkt",
+  "deletionConfirmation": "Willst du das Produkt wirklich löschen?",
+
+  "chooseDateRange": "Zeitraum wählen",
+  "noImage": "Kein Bild",
+
+  "Transaction Costs": "Transaktionskosten",
+  "Donation": "Spende"
 }

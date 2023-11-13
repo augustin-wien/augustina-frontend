@@ -1,7 +1,7 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Produkte</h1></template
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuProducts') }}</h1></template
     >
     <template #main>
       <div class="main w-full">
@@ -10,11 +10,11 @@
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
-                  <th class="p-3">Bild</th>
-                  <th class="p-3">Name</th>
-                  <th class="p-3">Beschreibung</th>
-                  <th class="p-3">Preis</th>
-                  <th class="p-3">Aktion</th>
+                  <th class="p-3">{{ $t('image') }}</th>
+                  <th class="p-3">{{ $t('name') }}</th>
+                  <th class="p-3">{{ $t('description') }}</th>
+                  <th class="p-3">{{ $t('price') }}</th>
+                  <th class="p-3">{{ $t('measure') }}</th>
                 </tr>
               </thead>
               <tbody className="text-sm p-3">
@@ -22,19 +22,19 @@
                   <td class="border-t-2 p-3">
                     <img
                       :src="item.Image ? apiUrl + item.Image : ''"
-                      alt="Kein Bild"
+                      :alt="$t('noImage')"
                       class="logo mx-auto my-5"
                       width="80"
                       height="auto"
                     />
                   </td>
-                  <td class="border-t-2 p-3 font-bold">{{ item.Name }}</td>
-                  <td class="border-t-2 p-3">{{ item.Description }}</td>
+                  <td class="border-t-2 p-3 font-bold">{{ $t(item.Name) }}</td>
+                  <td class="border-t-2 p-3">{{ $t(item.Description) }}</td>
                   <td class="border-t-2 p-3">{{ price(item.Price) }} Euro</td>
                   <td>
                     <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
                       <button class="p-3 rounded-full bg-lime-600 text-white">
-                        Ändern
+                        {{ $t('change') }}
                       </button>
                     </router-link>
                   </td>
@@ -51,7 +51,7 @@
           <button
             className="p-3 rounded-full bg-lime-600 text-white absolute fixed bottom-10 right-10 h-16 w-16"
           >
-            Neu
+            {{ $t('new') }}
           </button>
         </router-link>
       </footer>

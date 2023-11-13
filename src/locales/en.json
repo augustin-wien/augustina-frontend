@@ -25,5 +25,97 @@
   "gotovendor": "Please go to a vendor",
   "augustin": "Back to Augustin",
 
-  "product": "Choose a product"
+  "product": "Choose a product",
+  "menuVendors": "Vendors",
+  "menuCredits": "Credits",
+  "menuPayouts": "Payouts",
+  "menuSales": "Sales",
+  "menuAccounting": "Accounting",
+  "menuProducts": "Products",
+  "menuSettings": "Settings",
+  "menuLogout": "Logout",
+  "userLoggedIn": "is logged in.",
+  "userNotLoggedIn": "No user is logged in.",
+
+  "accountingTitle": "Sales in the selected period",
+
+  "date": "Date",
+  "from": "From",
+  "to": "To",
+  "item": "Item",
+  "amount": "Amount",
+  "total": "Total",
+
+  "enterPeriod": "Enter period",
+  "protocol": "Protocol",
+
+  "inbox": "Inbox",
+
+  "image": "Image",
+  "name": "Name",
+  "description": "Description",
+  "price": "Price",
+  "measure": "Measure",
+  "change": "Edit",
+  "new": "New",
+  "newGendered": "New",
+
+  "vendorSingular": "Vendor",
+
+  "topic": "Topic",
+  "current": "Current",
+
+  "mainProduct": "Main product",
+  "transactionCost": "Taking over transaction cost",
+  "color": "Color",
+  "fontColor": "Font color",
+  "maximum": "Maximum order amount",
+
+  "yes": "Yes",
+  "no": "No",
+  "confirmation": "Confirmation",
+  "delete": "Delete",
+
+  "payout": "Pay out for subsequent payments",
+  "confirmPayout": "Confirm payout",
+  "noCredits": "No credits to pay out",
+
+  "create": "Creation",
+  "cancel": "Cancel",
+
+  "firstName": "First name",
+  "lastName": "Last name",
+  "licenseId": "License ID",
+  "language": "Language",
+  "telephone": "Telephone",
+  "address": "Address",
+  "postCode": "Post code",
+  "location": "Location",
+  "accountDeactivation": "Account deactivation",
+  "longitude": "Longitude",
+  "latitude": "Latitude",
+  "workingTime": "Working time",
+  "registrationDate": "Registered since",
+  "vendorSince": "Vendor since",
+  "bankAccount": "Bank account",
+  "comment": "Comment",
+  "onlineMap": "Online map",
+
+  "currentCredit": "Current credit",
+  "lastPayout": "Last payout",
+  "openCredits": "Open credits",
+  "search": "Search",
+  "IDNumber": "ID number",
+  "payNow": "Pay now",
+  "deactivated": "Deactivated",
+
+  "newProduct": "New product",
+  "deletionConfirmation": "Do you really want to delete this product?",
+
+  "chooseDateRange": "Choose date range",
+  "noImage": "No image",
+
+  "Zeitung": "Newspaper",
+  "Aktuelle Zeitungsausgabe": "Current newspaper issue",
+  "Spende": "Donation"
 }
