@@ -127,13 +127,4 @@ onMounted(() => {
     })
   }
 })
-
-const getItemName = (itemID: number) => {
-  const item = items.value.find((item) => item.ID === itemID)
-  if (item) {
-    return item.Name
-  } else {
-    return 'Unbekannt'
-  }
-}
 </script>
