@@ -1,33 +1,26 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Umsätze</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuAccounting') }}</h1>
       <span>
-        <VueDatePicker
-          v-model="date"
-          range
-          :enable-time-picker="false"
-          placeholder="Zeitraum wählen"
-          @range-start="onRangeStart"
-          @range-end="onRangeEnd"
-          class="max-w-md"
-        />
+        <VueDatePicker v-model="date" range :enable-time-picker="false" :placeholder="$t('chooseDateRange')"
+          @range-start="onRangeStart" @range-end="onRangeEnd" class="max-w-md" />
       </span>
     </template>
     <template #main>
       <div class="main">
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className=" space-y-3 space-x-3">
-            <h1 class="text-2xl font-bold">Umsätze im gewählten Zeitraum</h1>
+            <h1 class="text-2xl font-bold">{{ $t('accountingTitle') }}</h1>
 
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
-                  <th className="p-3">Datum</th>
-                  <th className="p-3">Von</th>
-                  <th className="p-3">An</th>
-                  <th className="p-3">Was</th>
-                  <th className="p-3">Betrag</th>
+                  <th className="p-3">{{ $t('date') }}</th>
+                  <th className="p-3">{{ $t('from') }}</th>
+                  <th className="p-3">{{ $t('to') }}</th>
+                  <th className="p-3">{{ $t('item') }}</th>
+                  <th className="p-3">{{ $t('amount') }}</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
@@ -55,9 +48,9 @@
 </template>
 
 <script lang="ts" setup>
+import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { usePaymentsStore, type Payment } from '@/stores/payments'
-import { useItemsStore } from '@/stores/items'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, onMounted, ref, watch } from 'vue'
@@ -77,6 +70,7 @@ const startDate = ref<Date>(yesterday)
 const endDate = ref<Date>(tomorrow)
 const date = ref<Array<Date>>([startDate.value, endDate.value])
 const store = usePaymentsStore()
+
 
 //fetch paymentlist data once component is mounted
 
@@ -98,7 +92,7 @@ const formatTime = (time: string) => {
   const date = new Date(time)
   return date.toLocaleDateString('de-DE', {
     hour: '2-digit',
-    minute: '2-digit',
+    minute: '2-digit'
   })
 }
 
@@ -133,4 +127,13 @@ onMounted(() => {
     })
   }
 })
+
+const getItemName = (itemID: number) => {
+  const item = items.value.find((item) => item.ID === itemID)
+  if (item) {
+    return item.Name
+  } else {
+    return 'Unbekannt'
+  }
+}
 </script>

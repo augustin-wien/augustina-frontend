@@ -1,7 +1,7 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Auszahlung</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuPayouts') }}</h1>
     </template>
 
     <template #main>
@@ -23,11 +23,11 @@
 
             <div className="container">
               <div className="mx-3">
-                <div className="col text-lg underline">Guthaben</div>
+                <div className="col text-lg underline">{{ $t('menuCredits') }}</div>
                 <div className="col text-md">{{ formatCredit(vendor.Balance) }} Euro</div>
               </div>
               <div v-if="vendor.Balance > 0">
-                <div>Für folgende Zahlungen auszahlen:</div>
+                <div>{{ $t('payout') }}:</div>
                 <div v-for="payment in paymentsForPayout" :key="payment.ID" className="grid grid-cols-3">
                   <div className="text-xs">{{ formatDate(payment.Timestamp) }}</div>
                   <div className="text-xs" v-if="items.length > 0">
@@ -41,11 +41,11 @@
                   <button v-if="vendor.Balance > 0" type="submit" value="Bestätigen"
                     className="p-3 m-3 rounded-full bg-lime-600 text-white" :onClick="payoutVendor"
                     :disabled="vendor.Balance === 0">
-                    Auszahlen
+                    {{ $t('confirmPayout') }}
                   </button>
                   <button v-else type="submit" value="Bestätigen" className="p-3 m-3 rounded-full bg-lime-600 text-white"
                     disabled>
-                    Kein Guthaben
+                    {{ $t('noCredits') }}
                   </button>
                 </div>
               </div>

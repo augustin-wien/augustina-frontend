@@ -1,13 +1,15 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">Bearbeitung</h1></template
+      <h1 className="font-bold mt-3 pt-3 text-2xl">
+        {{ $t('menuProducts') }} {{ $t('menuSettings') }}
+      </h1></template
     >
     <template #main>
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4" v-if="item">
           <div class="flex place-content-center justify-between">
-            <h1 class="text-2xl font-bold">{{ item.Name }} bearbeiten</h1>
+            <h1 class="text-2xl font-bold">{{ item.Name }} {{ $t('change') }}</h1>
             <button
               @click="router.push('/backoffice/productsettings')"
               class="px-2 rounded-full bg-red-600 text-white font-bold"
@@ -16,13 +18,10 @@
             </button>
           </div>
 
-          <form
-            @submit.prevent="updateItem"
-            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-          >
+          <form @submit.prevent="updateItem" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
-                >Name:</label
+                >{{ $t('name') }}:</label
               >
               <div class="flex flex-row">
                 <input
@@ -33,10 +32,8 @@
                   required
                 />
               </div>
-              <label
-                class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                for="description"
-                >Beschreibung:</label
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description"
+                >{{ $t('description') }}:</label
               >
               <div class="flex flex-row">
                 <input
@@ -49,7 +46,7 @@
               </div>
 
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price"
-                >Preis:</label
+                >{{ $t('price') }}:</label
               >
               <div class="flex flex-row">
                 <input
@@ -61,7 +58,7 @@
                 />
               </div>
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
-                >Bild:</label
+                >{{ $t('image') }}:</label
               >
               <div class="flex flex-col">
                 <img
@@ -88,14 +85,14 @@
                 class="p-3 rounded-full bg-red-600 text-white"
                 @click="showDeleteModalF"
               >
-                Löschen
+                {{ $t('delete') }}
               </button>
               <button
                 type="submit"
                 class="p-3 rounded-full bg-lime-600 text-white"
                 @click="updateItem"
               >
-                Speichern
+                {{ $t('confirmation') }}
               </button>
             </div>
           </form>
@@ -116,7 +113,7 @@
                     class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600"
                   >
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                      {{ updatedItem.Name }} löschen
+                      {{ updatedItem.Name }} {{ $t('delete') }}
                     </h3>
                     <button
                       type="button"
@@ -145,7 +142,7 @@
                   <!-- Modal body -->
                   <div class="p-6 space-y-6">
                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                      Willst du das Produkt wirklich löschen?
+                      {{ $t('deletionConfirmation') }}
                     </p>
                   </div>
                   <!-- Modal footer -->
@@ -158,7 +155,7 @@
                       @click="deleteItem"
                       class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
-                      Löschen
+                      {{ $t('delete') }}
                     </button>
                     <button
                       data-modal-hide="defaultModal"
@@ -166,7 +163,7 @@
                       class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
                       @click="showDeleteModal = false"
                     >
-                      Abbrechen
+                      {{ $t('cancel') }}
                     </button>
                   </div>
                 </div>
@@ -194,7 +191,7 @@ const updatedItem = ref({
   ID: 0,
   Image: 'tbd',
   Name: 'Kalender',
-  Price: 0,
+  Price: 0
 })
 
 store.getItems()
