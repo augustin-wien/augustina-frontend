@@ -20,28 +20,28 @@ const items = shopStore.items
                     <div class="h-5/6 pb-3">
                         <ul
                             class="list-image-none overflow-y-auto w-full h-full bg-gray-200 border border-gray-600 rounded-3xl">
-                            <li v-for="item in items" :key="item.ID" class="flex w-full p-1">
-                                <div class="w-[74px] flex-none grid grid-rows-2">
-                                    <div class="py-[2px]">
-                                        <div class="w-[70px] h-[70px] flex-none bg-red-600 rounded-2xl">
+                            <li v-for="item in items" :key="item.ID" class="flex w-full p-1 border-b-gray-400 border-2">
+                                <div class="flex-none grid grid-rows-2 place-content-start mr-2">
+                                    <div class="pb-1">
+                                        <div class="w-[64px] h-[64px] flex-none bg-red-600 rounded-2xl">
                                             <img :alt="item.Description" className="logo mx-auto my-1 scale-75" :src="item.Image" />
                                         </div>
                                     </div>
-                                    <div class="">
+                                    <div class="h-[60px]">
                                         <div
-                                            class="rounded-full h-[60px] bg-black text-center text-white font-semibold text-xl flex justify-center items-center">
+                                            class="rounded-full w-[64px] h-[60px] bg-black text-center text-white font-semibold text-xl flex justify-center items-center">
                                             {{ item.Price / 100 }}€
                                         </div>
                                     </div>
                                 </div>
-                                <div className="place-items-center grow h-full grid grid-rows-2 border-b-gray-400 border-2">
+                                <div className="place-items-center grow h-full grid grid-rows-2">
                                     <div class="w-full h-full py-1">
                                         <div
                                             class="bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center">
                                             {{ item.Name }}
                                         </div>
                                     </div>
-                                    <div className="flex grow h-full pb-3 w-full">
+                                    <div className="flex grow h-full pb-2 w-full">
 
                                         <div
                                             class="customcolor text-white text-center text-2xl font-semibold rounded-full grow h-[60px] py-3 mr-1">
