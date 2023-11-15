@@ -54,7 +54,6 @@ export const useShopStore = defineStore('shop',{
           }
         },
         getAmount(id: number){
-          const inList = false
           for (const item of this.amount){
             if(id == item.item){
               return item.quantity

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { usePaymentStore, type orderItem } from '@/stores/payment'
+import { usePaymentStore } from '@/stores/payment'
 import { settingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
 import { useShopStore } from '@/stores/ShopStore';
