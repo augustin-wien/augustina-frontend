@@ -16,7 +16,8 @@ export const useShopStore = defineStore('shop',{
     state: () => {
         return {
           items: [] as Item[],
-          amount: [] as Amount[]
+          amount: [] as Amount[],
+          finalitems: [] as Amount[]
         }
       },
     actions: {
@@ -68,6 +69,13 @@ export const useShopStore = defineStore('shop',{
             }
           }
           return "Not found"
+        },
+        removeEmty() {
+          for (const entry of this.amount){
+            if(entry.quantity != 0){
+              this.finalitems.push(entry)
+            }
+          }
         }
     }
 })

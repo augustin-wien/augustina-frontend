@@ -11,8 +11,9 @@ const settings = settingsStore()
 const vendorStore = useVendorStore()
 
 onMounted(() => {
-  // todo add multiple items
-  const items = shopStore.amount
+  // Removes emty Entries
+  shopStore.removeEmty()
+  const items = shopStore.finalitems
   if (paymentStore.tip>0){
     items.push({
       item: paymentStore.tipItem,
