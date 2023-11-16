@@ -67,7 +67,7 @@ export const useShopStore = defineStore('shop',{
               return item.Name
             }
           }
-          return "Not found"
+          return "Spende"
         },
         removeEmty() {
           for (const entry of this.amount){

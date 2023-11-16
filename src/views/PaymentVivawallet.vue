@@ -11,15 +11,7 @@ const settings = settingsStore()
 const vendorStore = useVendorStore()
 
 onMounted(() => {
-  // Removes emty Entries
-  shopStore.removeEmty()
   const items = shopStore.finalitems
-  if (paymentStore.tip>0){
-    items.push({
-      item: paymentStore.tipItem,
-      quantity: paymentStore.tip*100
-    })
-  }
   console.log(items)
   paymentStore.postOrder(items, 1, vendorStore.vendorid)
 })

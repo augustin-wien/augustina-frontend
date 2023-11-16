@@ -2,10 +2,15 @@
 import { RouterLink } from 'vue-router'
 import { useShopStore } from '@/stores/ShopStore'
 import { settingsStore } from '@/stores/settings';
+import { onMounted } from 'vue';
+
 const shopStore = useShopStore()
 const settStore = settingsStore()
 const items = shopStore.items
 
+onMounted(() => {
+    settStore.getSettingsFromApi()
+})
 
 </script>
 
@@ -24,7 +29,8 @@ const items = shopStore.items
                                 <div class="flex-none grid grid-rows-2 place-content-start mr-2">
                                     <div class="pb-1">
                                         <div class="w-[64px] h-[64px] flex-none bg-red-600 rounded-2xl">
-                                            <img :alt="item.Description" className="logo mx-auto my-1 scale-75" :src="item.Image" />
+                                            <img :alt="item.Description" className="logo mx-auto my-1 scale-75"
+                                                :src="item.Image" />
                                         </div>
                                     </div>
                                     <div class="h-[60px]">
@@ -35,7 +41,13 @@ const items = shopStore.items
                                     </div>
                                 </div>
                                 <div className="place-items-center grow h-full grid grid-rows-2">
-                                    <div class="w-full h-full py-1">
+                                    <div class="w-full h-full py-1 relative">
+                                        <RouterLink :to="{ name: 'Item Available' }">
+                                            <button
+                                                class="bg-gray-500 absolute rounded-full text-center w-6 text-white font-bold top-0 right-0">
+                                                i
+                                            </button>
+                                        </RouterLink>
                                         <div
                                             class="bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center">
                                             {{ item.Name }}
@@ -66,8 +78,8 @@ const items = shopStore.items
                     </div>
                 </div>
                 <div className="place-items-center row-span-2 w-full flex">
-                    <RouterLink class="flex-none h-[76px] w-[76px] mr-2" :to="{name: 'LandingPage'}">
-                        <button class="customcolor fill-white rounded-full h-full w-full place-items-center grid">
+                    <RouterLink class="flex-none h-[76px] w-[76px] mr-2" :to="{ name: 'LandingPage' }">
+                        <button class="customcolor rounded-full h-full w-full place-items-center grid">
                             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="white"
                                 class="bi bi-arrow-left-short" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"

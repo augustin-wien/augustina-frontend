@@ -73,6 +73,11 @@ const router = createRouter({
           name: 'Shop',
           component: () => import('../views/ShopPage.vue'),
         },
+        {
+          path: '/v/:id/item-available',
+          name: 'Item Available',
+          component: () => import('../views/ItemAvailable.vue'),
+        },
       ]
     },
     {

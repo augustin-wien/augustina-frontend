@@ -27,12 +27,7 @@ onMounted(() => {
 
 <template>
     <component :is="$route.meta.layout || 'div'">
-        <select
-            class="h-[55px] w-[55px] absolute font-light border-2 top-0 right-0 border-gray-300 rounded-full text-gray-300 text-center mt-8 mr-4 text-sm"
-            v-model="$i18n.locale">
-            <option value="en">EN</option>
-            <option value="de">DE</option>
-        </select>
+       
         <template #main v-if="settStore.settings.MainItemPrice">
             <div className="grid grid-rows-5 h-full place-items-center w-full">
                 <div class="row-span-2 grid grid-rows-3 h-full w-full">

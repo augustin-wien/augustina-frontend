@@ -2,22 +2,39 @@
 import { usePaymentStore } from '@/stores/payment'
 import { settingsStore } from '@/stores/settings'
 import { useShopStore } from '@/stores/ShopStore'
+import { onMounted } from 'vue';
 
 const shopStore = useShopStore()
 const settStore = settingsStore()
 const paymentStore = usePaymentStore()
+
+const items = shopStore.finalitems
+
+onMounted(() => {
+  if (paymentStore.tip > 0) {
+    items.push({
+      item: paymentStore.tipItem,
+      quantity: paymentStore.tip * 100
+    })
+  }
+})
 </script>
 
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div className="h-full grid grid-rows-5 place-items-center">
+      <div className="h-full w-full grid grid-rows-5 place-items-center">
         <div className="text-center font-semibold text-3xl">
           {{ $t('confirm') }}
         </div>
-        <div class="w-full h-full">
-          <div class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full">
-            {{ shopStore.getAmount(1) }}x {{ $t("newspaper") }}
+        <div class="place-items-center w-full flex">
+          <RouterLink class="flex-none h-[56px] w-[56px] mr-3" :to="{ name: 'Shop' }">
+            <button class="customcolor button-down h-full w-full">
+
+            </button>
+          </RouterLink>
+          <div class="text-xl grow h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full">
+            {{ shopStore.getAmount(1) }}x {{ shopStore.getName(1) }}
           </div>
         </div>
         <div className="grid grid-cols-3 py-10 w-full">
@@ -49,6 +66,36 @@ const paymentStore = usePaymentStore()
 
 <style scoped>
 .customcolor {
-    background-color: v-bind(settStore.settings.Color);
+  background-color: v-bind(settStore.settings.Color);
+}
+
+.button-down {
+  position: relative;
+  padding: 5px;
+  height: 56px;
+  width: 56px;
+  border-radius: 50%;
+  transition: all 0.2s linear;
+}
+
+.button-down {
+  margin-right: auto;
+}
+
+.button-down::after {
+  content: '';
+  position: absolute;
+  left: 15px;
+  z-index: 11;
+  display: block;
+  width: 27px;
+  height: 27px;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+}
+
+.button-down::after {
+  top: 10px;
+  transform: rotate(225deg);
 }
 </style>
