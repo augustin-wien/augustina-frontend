@@ -32,16 +32,16 @@ export const useShopStore = defineStore('shop',{
               console.log(error)
             }
           },
-        addItem(id: number, price: number){
-          let inList = false
-          for (const item of this.amount){
-            if(id == item.item){
-              inList = true
-              item.quantity++
-            }
+        addItem(id: number){
+          const price = this.items.find(item=>id ===item.ID)?.Price
+          if (price == undefined){
+            return
           }
-          if(inList == false){
+          const index = this.amount.findIndex(item=>id ===item.item)
+          if (index === -1){
             this.amount.push({item: id, quantity: 1})
+          } else {
+            this.amount[index].quantity++
           }
           paymentStore.sum += price
         },

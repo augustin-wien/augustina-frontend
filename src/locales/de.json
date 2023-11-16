@@ -3,7 +3,7 @@
   "newspaper": "Zeitung",
   "next": "Weiter",
 
-  "donation": "Spende eingeben",
+  "donation": "Spende",
   "edit": "Eingabe",
   "notToday": "Heute nicht",
 
@@ -115,5 +115,7 @@
   "noImage": "Kein Bild",
 
   "Transaction Costs": "Transaktionskosten",
-  "Donation": "Spende"
+  "Donation": "Spende",
+
+  "error": "Fehler"
 }

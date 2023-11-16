@@ -20,8 +20,8 @@ export const usePaymentStore = defineStore('payment', {
       pricePerPaper: 300,
       digital: { digital: true },
       //the unit for price is cents (smallest unit)
-      sum: 300,
-      price: 300,
+      sum: 0,
+      price: 0,
       //the unit for tip is euros
       tip: 0,
       tipItem: 2,
@@ -97,9 +97,10 @@ export const usePaymentStore = defineStore('payment', {
     checkAgb() {
       if (this.agbChecked) {
         router.push({ name: 'Payment' })
+        return true
       }
       else {
-        console.log('pls check AGB')
+        return false
       }
     },
     setPrice(price: number) {
