@@ -40,7 +40,7 @@ onMounted(() => {
     </component>
 </template>
 
-<style>
+<style scoped>
 .customcolor {
     background-color: v-bind(settStore.settings.Color);
 }
