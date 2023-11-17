@@ -6,7 +6,8 @@ import {
   postVendors,
   patchVendor,
   removeVendor,
-  checkVendorId
+  checkVendorId,
+  getVendorMe
 } from '@/api/api'
 import router from '@/router'
 
@@ -37,6 +38,7 @@ export const useVendorStore = defineStore('vendor', {
     }
   }
 })
+
 //define interface to store data from backend properly
 export interface Vendor {
   Email: string
@@ -170,6 +172,15 @@ export const vendorsStore = defineStore('vendors', {
       try {
         const data = await getVendor(vendorId)
         this.vendor = data.data
+        return data.data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async getVendorMe() {
+      try {
+        const data = await getVendorMe()
         return data.data
       } catch (error) {
         console.log(error)
