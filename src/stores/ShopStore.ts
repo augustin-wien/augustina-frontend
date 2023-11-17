@@ -82,6 +82,13 @@ export const useShopStore = defineStore('shop',{
             }
           }
         },
+        getPriceInEuro(id: number){
+          const item = this.items.find(item => item.ID == id)
+          if (item){
+            return item.Price / 100
+          } 
+          return 0
+        },
         getItembyId(id: number){
           for (const entry of this.items){
             if(entry.ID == id){

@@ -21,7 +21,8 @@ const paymentStore = usePaymentStore()
               class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
               v-if="item.quantity > 0"
             >
-              {{ item.quantity }}x {{ shopStore.getName(item.item) }} {{}}
+              {{ item.quantity }}x {{ shopStore.getName(item.item) }}
+              {{ shopStore.getPriceInEuro(item.item) }}€
             </div>
           </div>
         </div>
