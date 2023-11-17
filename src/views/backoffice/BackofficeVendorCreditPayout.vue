@@ -174,10 +174,16 @@ const payoutVendor = async () => {
     router.push('/backoffice/credits')
   }).catch((error) => {
     console.log(error)
-    showToast('error', error.message + ' ' + error.response.data.error.message)
+    if (error?.message && error?.response?.data?.error?.message) {
+      showToast('error', error.message + ' ' + error.response.data.error.message)
+    } else if(error) {
+      showToast('error', JSON.stringify(error))
+    } else {
+      showToast('error', 'unknown error')
+    }
   })
 }
-const toast = ref(null)
+const toast = ref<Object|null>(null)
 const showToast = (type: string, message: string) => {
   toast.value = { type, message }
   setTimeout(() => {
