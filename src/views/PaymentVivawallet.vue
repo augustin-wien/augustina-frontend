@@ -1,27 +1,28 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { usePaymentStore } from '@/stores/payment'
+import { onMounted, ref } from 'vue';
+import { usePaymentStore, type orderItem } from '@/stores/payment'
 import { settingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
-import { useShopStore } from '@/stores/ShopStore'
-import { ref } from 'vue'
 
-const shopStore = useShopStore()
+
 const paymentStore = usePaymentStore()
 const settings = settingsStore()
 const vendorStore = useVendorStore()
+
 const errorMessage = ref('')
 const errorMessageDetail = ref('')
 const errorTimestamp = ref(new Date().toISOString())
 
 onMounted(() => {
-  // Removes emty Entries
-  shopStore.removeEmty()
-  const items = shopStore.finalitems
-  if (paymentStore.tip > 0) {
+  // todo add multiple items
+  const items:Array<orderItem> = [{
+    item: settings.settings.MainItem,
+    quantity: 1
+  }]
+  if (paymentStore.tip>0){
     items.push({
       item: paymentStore.tipItem,
-      quantity: paymentStore.tip * 100,
+      quantity: paymentStore.tip*100
     })
   }
   paymentStore.postOrder(items, 1, vendorStore.vendorid).catch((error) => {

@@ -8,9 +8,7 @@ const paymentStore = usePaymentStore()
 const shake = ref(false)
 const checkAgb = () => {
   const agbsChecked = paymentStore.checkAgb()
-
   if (!agbsChecked) {
-    console.log(agbsChecked)
     shake.value = true
     setTimeout(() => {
       shake.value = false
