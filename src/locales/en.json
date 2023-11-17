@@ -116,5 +116,7 @@
 
   "Zeitung": "Newspaper",
   "Aktuelle Zeitungsausgabe": "Current newspaper issue",
-  "Spende": "Donation"
+  "Spende": "Donation",
+  "lastTransactions": "Last transactions",
+  "yourData": "Your data"
 }

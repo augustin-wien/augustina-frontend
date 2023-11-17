@@ -114,5 +114,7 @@
   "noImage": "Kein Bild",
 
   "Transaction Costs": "Transaktionskosten",
-  "Donation": "Spende"
+  "Donation": "Spende",
+  "lastTransactions": "Letzte Transaktionen",
+  "yourData": "Deine Informationen"
 }
