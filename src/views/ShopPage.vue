@@ -117,29 +117,7 @@ const checkIfItemSelected = () => {
             </ul>
           </div>
         </div>
-        <div className="place-items-center row-span-2 w-full flex">
-          <RouterLink
-            class="flex-none h-[76px] w-[76px] mr-2"
-            :to="{ name: 'LandingPage' }"
-          >
-            <button
-              class="customcolor rounded-full h-full w-full place-items-center grid"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="64"
-                height="64"
-                fill="white"
-                class="bi bi-arrow-left-short"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
-                />
-              </svg>
-            </button>
-          </RouterLink>
+        <div className="place-items-center row-span-1 w-full flex">
           <button
             class="text-center h-[76px] grow customcolor rounded-full p-5 text-white text-3xl w-full font-semibold"
             @click="checkIfItemSelected"

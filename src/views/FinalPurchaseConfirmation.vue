@@ -11,8 +11,8 @@ const paymentStore = usePaymentStore()
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div className="h-full w-full grid grid-rows-5 place-items-center">
-        <div className="text-center font-semibold text-3xl">
+      <div className="h-full w-full place-items-center">
+        <div className="text-center font-semibold text-3xl mb-7">
           {{ $t('confirm') }}
         </div>
         <div class="w-full">
@@ -25,11 +25,16 @@ const paymentStore = usePaymentStore()
             </div>
           </div>
         </div>
-        <div className="grid grid-rows-3 py-10 w-full mt-10">
-          <div className="row-span-2 grid grid-cols-3 w-full items-center">
-            <p className="text-center text-8xl font-semibold col-span-2">
-              {{ paymentStore.priceInEuros() }}€
-            </p>
+        <div className="grid grid-rows-1 py-10 w-full">
+          <div className="grid grid-cols-6 w-full items-center">
+            <div className="col-span-5">
+              <p className="text-center text-8xl font-semibold">
+                {{ paymentStore.priceInEuros() }}€
+              </p>
+              <p className="text-center text">
+                {{ $t('includes') }} {{ paymentStore.tip }}€ {{ $t('donation') }}
+              </p>
+            </div>
             <RouterLink class="h-[56px] w-[56px]" :to="{ name: 'Shop' }">
               <button
                 class="customcolor fill-white rounded-full h-full text-white text-3xl w-full place-items-center grid"
@@ -50,9 +55,6 @@ const paymentStore = usePaymentStore()
               </button>
             </RouterLink>
           </div>
-          <p className="text-center text">
-            {{ $t('includes') }} {{ paymentStore.tip }}€ {{ $t('donation') }}
-          </p>
         </div>
         <div>
           <input
@@ -68,7 +70,7 @@ const paymentStore = usePaymentStore()
             </button></label
           >
         </div>
-        <div className="flex place-items-center w-full">
+        <div className="flex place-items-center w-full mt-6">
           <button
             @click="paymentStore.checkAgb()"
             class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full"
