@@ -6,7 +6,6 @@ import { useShopStore } from '@/stores/ShopStore'
 const shopStore = useShopStore()
 const settStore = settingsStore()
 const paymentStore = usePaymentStore()
-
 </script>
 
 <template>
@@ -16,35 +15,69 @@ const paymentStore = usePaymentStore()
         <div className="text-center font-semibold text-3xl">
           {{ $t('confirm') }}
         </div>
-        <div class="place-items-center w-full flex">
-          <RouterLink class="flex-none h-[56px] w-[56px] mr-3" :to="{ name: 'Shop' }">
-            <button class="customcolor button-down h-full w-full">
-
-            </button>
-          </RouterLink>
-          <div class="text-xl grow h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full">
-            {{ shopStore.getAmount(1) }}x {{ shopStore.getName(1) }}
+        <div class="w-full">
+          <div v-for="item in shopStore.amount" :key="item.item">
+            <div
+              class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
+              v-if="item.quantity > 0"
+            >
+              {{ item.quantity }}x {{ shopStore.getName(item.item) }} {{}}
+            </div>
           </div>
         </div>
-        <div className="grid grid-cols-3 py-10 w-full">
-          <p className="text-center text-8xl font-semibold col-span-3">
-            {{ paymentStore.priceInEuros() }}€
+        <div className="grid grid-rows-3 py-10 w-full mt-10">
+          <div className="row-span-2 grid grid-cols-3 w-full items-center">
+            <p className="text-center text-8xl font-semibold col-span-2">
+              {{ paymentStore.priceInEuros() }}€
+            </p>
+            <RouterLink class="h-[56px] w-[56px]" :to="{ name: 'Shop' }">
+              <button
+                class="customcolor fill-white rounded-full h-full text-white text-3xl w-full place-items-center grid"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="30"
+                  height="30"
+                  viewBox="0 0 24 24"
+                >
+                  <g>
+                    <path fill="none" d="M0 0h24v24H0z" />
+                    <path
+                      d="M15.728 9.686l-1.414-1.414L5 17.586V19h1.414l9.314-9.314zm1.414-1.414l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM7.242 21H3v-4.243L16.435 3.322a1 1 0 0 1 1.414 0l2.829 2.829a1 1 0 0 1 0 1.414L7.243 21z"
+                    />
+                  </g>
+                </svg>
+              </button>
+            </RouterLink>
+          </div>
+          <p className="text-center text">
+            {{ $t('includes') }} {{ paymentStore.tip }}€ {{ $t('donation') }}
           </p>
         </div>
         <div>
-          <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked" class="mr-2" />
+          <input
+            type="checkbox"
+            id="checkbox"
+            v-model="paymentStore.agbChecked"
+            class="mr-2"
+          />
           <label for="checkbox">
             {{ $t('agreement') }}
             <button @click="paymentStore.toAGB()" class="text-blue-600">
               {{ $t('terms') }}
-            </button></label>
+            </button></label
+          >
         </div>
         <div className="flex place-items-center w-full">
-          <button @click="paymentStore.checkAgb()"
-            class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full" :style="paymentStore.agbChecked
-              ? 'background-color:' + settStore.settings.Color
-              : ''
-              ">
+          <button
+            @click="paymentStore.checkAgb()"
+            class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full"
+            :style="
+              paymentStore.agbChecked
+                ? 'background-color:' + settStore.settings.Color
+                : ''
+            "
+          >
             {{ $t('next') }}
           </button>
         </div>
