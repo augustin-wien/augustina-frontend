@@ -1,28 +1,25 @@
 <script setup lang="ts">
+import { useShopStore } from '@/stores/ShopStore';
+import { usePaymentStore } from '@/stores/payment';
+import { settingsStore } from '@/stores/settings';
+import { useVendorStore } from '@/stores/vendor';
 import { onMounted, ref } from 'vue';
-import { usePaymentStore, type orderItem } from '@/stores/payment'
-import { settingsStore } from '@/stores/settings'
-import { useVendorStore } from '@/stores/vendor'
 
-
+const shopStore = useShopStore()
 const paymentStore = usePaymentStore()
 const settings = settingsStore()
 const vendorStore = useVendorStore()
+const items = shopStore.finalitems
 
 const errorMessage = ref('')
 const errorMessageDetail = ref('')
 const errorTimestamp = ref(new Date().toISOString())
 
 onMounted(() => {
-  // todo add multiple items
-  const items:Array<orderItem> = [{
-    item: settings.settings.MainItem,
-    quantity: 1
-  }]
-  if (paymentStore.tip>0){
+  if (paymentStore.tip > 0) {
     items.push({
       item: paymentStore.tipItem,
-      quantity: paymentStore.tip*100
+      quantity: paymentStore.tip * 100
     })
   }
   paymentStore.postOrder(items, 1, vendorStore.vendorid).catch((error) => {
@@ -30,6 +27,7 @@ onMounted(() => {
     errorMessageDetail.value = error.response.data
     console.log(error)
   })
+  paymentStore.postOrder(items, 1, vendorStore.vendorid)
 })
 </script>
 
@@ -67,6 +65,7 @@ onMounted(() => {
   width: 80px;
   height: 80px;
 }
+
 .lds-ellipsis div {
   position: absolute;
   top: 33px;
@@ -76,42 +75,52 @@ onMounted(() => {
   background-color: v-bind(settings.settings.Color);
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
+
 .lds-ellipsis div:nth-child(1) {
   left: 8px;
   animation: lds-ellipsis1 0.6s infinite;
 }
+
 .lds-ellipsis div:nth-child(2) {
   left: 8px;
   animation: lds-ellipsis2 0.6s infinite;
 }
+
 .lds-ellipsis div:nth-child(3) {
   left: 32px;
   animation: lds-ellipsis2 0.6s infinite;
 }
+
 .lds-ellipsis div:nth-child(4) {
   left: 56px;
   animation: lds-ellipsis3 0.6s infinite;
 }
+
 @keyframes lds-ellipsis1 {
   0% {
     transform: scale(0);
   }
+
   100% {
     transform: scale(1);
   }
 }
+
 @keyframes lds-ellipsis3 {
   0% {
     transform: scale(1);
   }
+
   100% {
     transform: scale(0);
   }
 }
+
 @keyframes lds-ellipsis2 {
   0% {
     transform: translate(0, 0);
   }
+
   100% {
     transform: translate(24px, 0);
   }

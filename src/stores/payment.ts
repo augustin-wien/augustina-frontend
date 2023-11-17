@@ -20,6 +20,7 @@ export const usePaymentStore = defineStore('payment', {
       pricePerPaper: 300,
       digital: { digital: true },
       //the unit for price is cents (smallest unit)
+      sum: 0,
       price: 300,
       //the unit for tip is euros
       tip: 0,
@@ -37,7 +38,7 @@ export const usePaymentStore = defineStore('payment', {
   },
   actions: {
     priceInEuros() {
-      return this.price / 100 + this.tip
+      return this.sum / 100 + this.tip
     },
 
     tipInCents() {
