@@ -87,6 +87,8 @@ import { vendorsStore, type Vendor } from '@/stores/vendor'
 import { formatCredit, formatDate } from '@/utils/utils'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
+
 const keycloakStore = useKeycloakStore()
 
 const store = vendorsStore()
@@ -124,7 +126,7 @@ const setVendor = () => {
   }
 }
 // Compute the 'vendor' property based on the 'ID' parameter
-const vendor = ref<Vendor | null>(setVendor())
+const { vendor } = storeToRefs(store)
 watch(vendor, (val: Vendor | null) => {
   if (val) {
     amount.value = val.Balance / 100
@@ -132,7 +134,6 @@ watch(vendor, (val: Vendor | null) => {
   }
 })
 watch(store.vendors, () => {
-  vendor.value = setVendor()
   itemsStore.getItemsBackoffice()
   if (vendor.value) payoutStore.getPaymentsForPayout(vendor.value.LicenseID)
 })
@@ -143,7 +144,7 @@ const authenticated = computed(() => keycloakStore.authenticated)
 onMounted(() => {
   if (authenticated.value) {
     itemsStore.getItemsBackoffice()
-    store.getVendors()
+    store.getVendor(route.params.ID)
   }
   if (vendor.value) {
     amount.value = vendor.value.Balance / 100
