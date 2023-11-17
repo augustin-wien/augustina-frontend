@@ -5,14 +5,14 @@
         <div className="flex flex-col items-center space-y-8">
           <h2 className="text-2xl font-bold">QR-Code</h2>
           <div id="canvas"></div>
-          <div><strong>Url:</strong> {{ vendorMe?.URLID }}</div>
+          <div><strong>Url:</strong> {{ vendorMe?.UrlID }}</div>
           <div>
             <strong>{{ $t('IDNumber') }}</strong
             >: {{ vendorMe?.LicenseID }}
           </div>
         </div>
         <br />
-        <div class="information my-16 mt-8 pt-8 space-y-4 text-xs">
+        <div class="information my-16 mt-8 pt-8 space-y-4 text-sm">
           <h2 class="text-2xl font-bold text-center">{{ $t('yourData') }}</h2>
           <div class="grid grid-cols-2 place-content-between">
             <strong>Name:</strong>
