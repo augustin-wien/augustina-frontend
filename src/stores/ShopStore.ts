@@ -70,6 +70,7 @@ export const useShopStore = defineStore('shop',{
           return "Spende"
         },
         removeEmty() {
+          this.finalitems = []
           for (const entry of this.amount){
             if(entry.quantity != 0){
               this.finalitems.push(entry)

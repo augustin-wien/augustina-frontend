@@ -10,6 +10,7 @@ const vendorStore = useVendorStore()
 const settStore = settingsStore()
 const fetch = settStore.getSettingsFromApi
 const price = computed(() => settStore.settings.MainItemPrice / 100)
+
 watch(price, () => {
     usePaymentStore().setPrice(settStore.settings.MainItemPrice)
     usePaymentStore().setPricePerPaper(settStore.settings.MainItemPrice)
@@ -17,10 +18,9 @@ watch(price, () => {
 onMounted(() => {
     fetch()
     shopStore.getItems()
-    shopStore.amount.push({
-        item: 1,
-        quantity: 1
-    })
+    if(shopStore.amount.length == 0){
+        shopStore.addItem(1,1)
+    }
 })
 
 </script>
