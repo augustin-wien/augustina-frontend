@@ -97,10 +97,9 @@ export const usePaymentStore = defineStore('payment', {
     checkAgb() {
       if (this.agbChecked) {
         router.push({ name: 'Payment' })
+        return true;
       }
-      else {
-        console.log('pls check AGB')
-      }
+      return false;
     },
     setPrice(price: number) {
       this.price = price

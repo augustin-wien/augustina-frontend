@@ -1,11 +1,22 @@
 <script setup lang="ts">
+import { useShopStore } from '@/stores/ShopStore'
 import { usePaymentStore } from '@/stores/payment'
 import { settingsStore } from '@/stores/settings'
-import { useShopStore } from '@/stores/ShopStore'
+import { ref } from 'vue'
 
 const shopStore = useShopStore()
 const settStore = settingsStore()
 const paymentStore = usePaymentStore()
+const shake = ref(false)
+const checkAgb = () => {
+  const agbsChecked = paymentStore.checkAgb()
+  if (!agbsChecked) {
+    shake.value = true
+    setTimeout(() => {
+      shake.value = false
+    }, 500)
+  }
+}
 </script>
 
 <template>
@@ -57,7 +68,7 @@ const paymentStore = usePaymentStore()
             </RouterLink>
           </div>
         </div>
-        <div>
+        <div :class="shake ? 'shake' : ''">
           <input
             type="checkbox"
             id="checkbox"
@@ -73,7 +84,7 @@ const paymentStore = usePaymentStore()
         </div>
         <div className="flex place-items-center w-full mt-6">
           <button
-            @click="paymentStore.checkAgb()"
+            @click="checkAgb"
             class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full"
             :style="
               paymentStore.agbChecked
@@ -122,5 +133,47 @@ const paymentStore = usePaymentStore()
 .button-down::after {
   top: 10px;
   transform: rotate(225deg);
+}
+.shake {
+  animation: shake 0.5s;
+  animation-iteration-count: 2;
+  animation-timing-function: linear;
+  max-height: 20vh;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
 }
 </style>
