@@ -6,12 +6,16 @@
 
     <template #main>
       <div class="main">
-        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div
+          class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        >
           <div className="text-center text-2xl space-y-3 space-x-3" v-if="vendor">
             <div class="flex place-content-center justify-between">
               <h1 class="text-2xl font-bold"></h1>
-              <button @click="router.push('/backoffice/credits')"
-                class="px-2 rounded-full bg-red-600 text-white font-bold">
+              <button
+                @click="router.push('/backoffice/credits')"
+                class="px-2 rounded-full bg-red-600 text-white font-bold"
+              >
                 X
               </button>
             </div>
@@ -28,7 +32,11 @@
               </div>
               <div v-if="vendor.Balance > 0">
                 <div>{{ $t('payout') }}:</div>
-                <div v-for="payment in paymentsForPayout" :key="payment.ID" className="grid grid-cols-3">
+                <div
+                  v-for="payment in paymentsForPayout"
+                  :key="payment.ID"
+                  className="grid grid-cols-3"
+                >
                   <div className="text-xs">{{ formatDate(payment.Timestamp) }}</div>
                   <div className="text-xs" v-if="items.length > 0">
                     {{ getItemName(payment.Item) }}
@@ -38,13 +46,23 @@
               </div>
               <div className="mx-3">
                 <div className="col">
-                  <button v-if="vendor.Balance > 0" type="submit" value="Bestätigen"
-                    className="p-3 m-3 rounded-full bg-lime-600 text-white" :onClick="payoutVendor"
-                    :disabled="vendor.Balance === 0">
+                  <button
+                    v-if="vendor.Balance > 0"
+                    type="submit"
+                    value="Bestätigen"
+                    className="p-3 m-3 rounded-full bg-lime-600 text-white"
+                    :onClick="payoutVendor"
+                    :disabled="vendor.Balance === 0"
+                  >
                     {{ $t('confirmPayout') }}
                   </button>
-                  <button v-else type="submit" value="Bestätigen" className="p-3 m-3 rounded-full bg-lime-600 text-white"
-                    disabled>
+                  <button
+                    v-else
+                    type="submit"
+                    value="Bestätigen"
+                    className="p-3 m-3 rounded-full bg-lime-600 text-white"
+                    disabled
+                  >
                     {{ $t('noCredits') }}
                   </button>
                 </div>
@@ -59,7 +77,7 @@
 </template>
 
 <script lang="ts" setup>
-import toast from '@/components/ToastMessage.vue'
+import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
@@ -152,8 +170,19 @@ const payoutVendor = async () => {
     From: null,
     To: null
   }
-  await payoutStore.postPayout(data)
-  router.push('/backoffice/payouts')
+  payoutStore.postPayout(data).then(() => {
+    router.push('/backoffice/credits')
+  }).catch((error) => {
+    console.log(error)
+    showToast('error', error.message + ' ' + error.response.data.error.message)
+  })
+}
+const toast = ref(null)
+const showToast = (type: string, message: string) => {
+  toast.value = { type, message }
+  setTimeout(() => {
+    toast.value = null
+  }, 5000)
 }
 const formatReceiver = (payment: Payment) => {
   const amount = formatCredit(payment.Amount)
