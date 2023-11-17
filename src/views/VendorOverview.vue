@@ -1,45 +1,42 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div className="vendor-overview container ontent-center mx-auto mb-8 p-24 space-y-40 pb-3">
+      <div className="vendor-overview container mb-8 space-y-40 pb-3 w-5/6">
         <div className="flex flex-col items-center space-y-8">
-          <h2 className="text-3xl font-bold">QR-Code</h2>
+          <h2 className="text-2xl font-bold">QR-Code</h2>
           <div id="canvas"></div>
           <div><strong>Url:</strong> {{ vendorMe?.URLID }}</div>
           <div>
             <strong>{{ $t('IDNumber') }}</strong
             >: {{ vendorMe?.LicenseID }}
           </div>
-          <!-- <select
-            class="h-[40px] w-[70px] bg-black border-2 border-white font-semibold rounded-full text-white text-center mt-4 mr-4 pl-2 text-sm"
-            v-model="$i18n.locale"
-          >
-            <option value="en">EN</option>
-            <option value="de">DE</option>
-          </select>
-          -->
         </div>
         <br />
-        <div class="my-16 container mt-8 pt-8 space-y-4">
-          <h2 class="text-3xl font-bold">{{ $t('yourData') }}</h2>
-          <div><strong>Name:</strong> {{ vendorMe?.FirstName }} {{ vendorMe?.LastName }}</div>
-          <div><strong>Email: </strong>{{ vendorMe?.Email }}</div>
-          <div>
+        <div class="information my-16 mt-8 pt-8 space-y-4 text-xs">
+          <h2 class="text-2xl font-bold text-center">{{ $t('yourData') }}</h2>
+          <div class="grid grid-cols-2 place-content-between">
+            <strong>Name:</strong>
+            {{ vendorMe?.FirstName }} {{ vendorMe?.LastName }}
+          </div>
+          <div class="grid grid-cols-2 place-content-between">
+            <strong>Email: </strong>{{ vendorMe?.Email }}
+          </div>
+          <div class="grid grid-cols-2 place-content-between">
             <strong> {{ $t('telephone') }}: </strong>{{ vendorMe?.Telephone }}
           </div>
-          <div>
+          <div class="grid grid-cols-2 place-content-between">
             <strong>{{ $t('location') }}: </strong>{{ vendorMe?.Location }}
           </div>
-          <div>
+          <div class="grid grid-cols-2 place-content-between">
             <strong>{{ $t('postCode') }}:</strong> {{ vendorMe?.PLZ }}
           </div>
-          <div>
+          <div class="grid grid-cols-2 place-content-between">
             <strong>{{ $t('menuCredits') }}: </strong>{{ vendorMe?.Balance }}€
           </div>
-          <div>
+          <div class="grid grid-cols-2 place-content-between">
             <strong>{{ $t('lastPayout') }}: </strong>{{ vendorMe?.LastPayout }}
           </div>
-          <div>
+          <div class="grid grid-cols-2 place-content-between">
             <strong>{{ $t('lastTransactions') }}: </strong>tbd
           </div>
 
@@ -71,19 +68,21 @@ const vendorMe = ref<Vendor | null>(null)
 onMounted(async () => {
   try {
     vendorMe.value = await store.getVendorMe()
-    generateQRCode(vendorMe.value)
+    if (vendorMe.value) {
+      generateQRCode(vendorMe.value)
+    }
   } catch (error) {
     console.error('Fehler beim API-Aufruf:', error)
   }
 })
 
 //qrcode
-const generateQRCode = async (vendor: Vendor) => {
+const generateQRCode = async (vendorMe: Vendor) => {
   const qrCode = new QRCodeStyling({
     width: 100,
     height: 100,
     type: 'svg',
-    data: `https://shop.augustin.or.at/v/${vendorMe.LicenseID}`,
+    data: `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}`,
 
     dotsOptions: {
       color: '#000',
@@ -121,9 +120,6 @@ const generateQRCode = async (vendor: Vendor) => {
 .vendor-overview {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   margin-bottom: 20rem;
   padding-bottom: 16rem;
 }
@@ -136,5 +132,15 @@ const generateQRCode = async (vendor: Vendor) => {
 
 h2 {
   font-size: large;
+}
+.container {
+  max-width: 300px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.information {
+  text-align: start;
 }
 </style>
