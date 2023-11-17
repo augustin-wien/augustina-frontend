@@ -13,6 +13,7 @@ const price = computed(() => settStore.settings.MainItemPrice / 100)
 
 watch(price, () => {})
 onMounted(() => {
+  shopStore.reset()
   fetch().then(() => {
     shopStore.getItems().then(() => {
       usePaymentStore().setPrice(settStore.settings.MainItemPrice)

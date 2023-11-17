@@ -53,6 +53,12 @@ export const useShopStore = defineStore('shop',{
             }
           }
         },
+        reset(){
+          this.amount = []
+          this.finalitems = []
+          paymentStore.sum = 0
+          paymentStore.tip = 0
+        },
         getAmount(id: number){
           const item =  this.amount.find(item => item.item == id)
           if (item){
