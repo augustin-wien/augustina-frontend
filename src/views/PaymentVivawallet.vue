@@ -1,27 +1,34 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import { usePaymentStore, type orderItem } from '@/stores/payment'
+import { onMounted } from 'vue'
+import { usePaymentStore } from '@/stores/payment'
 import { settingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
+import { useShopStore } from '@/stores/ShopStore'
+import { ref } from 'vue'
 
-
+const shopStore = useShopStore()
 const paymentStore = usePaymentStore()
 const settings = settingsStore()
 const vendorStore = useVendorStore()
+const errorMessage = ref('')
+const errorMessageDetail = ref('')
+const errorTimestamp = ref(new Date().toISOString())
 
 onMounted(() => {
-  // todo add multiple items
-  const items:Array<orderItem> = [{
-    item: settings.settings.MainItem,
-    quantity: 1
-  }]
-  if (paymentStore.tip>0){
+  // Removes emty Entries
+  shopStore.removeEmty()
+  const items = shopStore.finalitems
+  if (paymentStore.tip > 0) {
     items.push({
       item: paymentStore.tipItem,
-      quantity: paymentStore.tip*100
+      quantity: paymentStore.tip * 100,
     })
   }
-  paymentStore.postOrder(items, 1, vendorStore.vendorid)
+  paymentStore.postOrder(items, 1, vendorStore.vendorid).catch((error) => {
+    errorMessage.value = error.message
+    errorMessageDetail.value = error.response.data
+    console.log(error)
+  })
 })
 </script>
 
@@ -29,11 +36,23 @@ onMounted(() => {
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <main className="h-full grid grid-rows-6 place-items-center">
-        <div class="lds-ellipsis row-span-4">
+        <div class="lds-ellipsis row-span-4" v-if="errorMessage === ''">
           <div></div>
           <div></div>
           <div></div>
           <div></div>
+        </div>
+        <div v-else>
+          <div class="text-center font-semibold text-3xl pb-4 text-rose-700 pt-10">
+            {{ $t('error') }}
+          </div>
+          <div class="text-center font-semibold text-3xl pb-4">
+            {{ errorMessage }}
+          </div>
+          <div class="text-center text-small pb-4">
+            {{ errorMessageDetail }}
+          </div>
+          <div class="text-center">{{ errorTimestamp }}</div>
         </div>
       </main>
     </template>
