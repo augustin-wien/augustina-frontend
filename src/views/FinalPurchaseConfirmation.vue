@@ -2,22 +2,11 @@
 import { usePaymentStore } from '@/stores/payment'
 import { settingsStore } from '@/stores/settings'
 import { useShopStore } from '@/stores/ShopStore'
-import { onMounted } from 'vue';
 
 const shopStore = useShopStore()
 const settStore = settingsStore()
 const paymentStore = usePaymentStore()
 
-const items = shopStore.finalitems
-
-onMounted(() => {
-  if (paymentStore.tip > 0) {
-    items.push({
-      item: paymentStore.tipItem,
-      quantity: paymentStore.tip * 100
-    })
-  }
-})
 </script>
 
 <template>

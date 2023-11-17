@@ -14,13 +14,13 @@ const price = computed(() => settStore.settings.MainItemPrice / 100)
 watch(price, () => {
     usePaymentStore().setPrice(settStore.settings.MainItemPrice)
     usePaymentStore().setPricePerPaper(settStore.settings.MainItemPrice)
+    if(shopStore.amount.length == 0){
+        shopStore.addItem(1, settStore.settings.MainItemPrice)
+    }
 })
 onMounted(() => {
     fetch()
     shopStore.getItems()
-    if(shopStore.amount.length == 0){
-        shopStore.addItem(1,1)
-    }
 })
 
 </script>

@@ -2,15 +2,12 @@
 import { RouterLink } from 'vue-router'
 import { useShopStore } from '@/stores/ShopStore'
 import { settingsStore } from '@/stores/settings';
-import { onMounted } from 'vue';
 
 const shopStore = useShopStore()
 const settStore = settingsStore()
 const items = shopStore.items
 
-onMounted(() => {
-    settStore.getSettingsFromApi()
-})
+const url = import.meta.env.VITE_API_URL
 
 </script>
 
@@ -24,25 +21,25 @@ onMounted(() => {
                     </div>
                     <div class="h-5/6 pb-3">
                         <ul
-                            class="list-image-none overflow-y-auto w-full h-full bg-gray-200 border border-gray-600 rounded-3xl">
-                            <li v-for="item in items" :key="item.ID" class="flex w-full p-1 border-b-gray-400 border-2">
+                            class="list-image-none overflow-y-auto w-full h-full border-4 border-gray-200 rounded-3xl">
+                            <li v-for="item in items" :key="item.ID" class="flex w-full p-1 pt-2 relative">
                                 <div class="flex-none grid grid-rows-2 place-content-start mr-2">
                                     <div class="pb-1">
                                         <div class="w-[64px] h-[64px] flex-none bg-red-600 rounded-2xl">
                                             <img :alt="item.Description" className="logo mx-auto my-1 scale-75"
-                                                :src="item.Image" />
+                                                :src="url + item.Image" />
                                         </div>
                                     </div>
                                     <div class="h-[60px]">
                                         <div
-                                            class="rounded-full w-[64px] h-[60px] bg-black text-center text-white font-semibold text-xl flex justify-center items-center">
+                                            class="rounded-full w-[64px] h-[60px] text-center text-black font-semibold text-xl flex justify-center items-center">
                                             {{ item.Price / 100 }}€
                                         </div>
                                     </div>
                                 </div>
                                 <div className="place-items-center grow h-full grid grid-rows-2">
                                     <div class="w-full h-full py-1 relative">
-                                        <RouterLink :to="{ name: 'Item Available' }">
+                                        <RouterLink :to="{ name: 'Item Available', query: { item: item.ID } }">
                                             <button
                                                 class="bg-gray-500 absolute rounded-full text-center w-6 text-white font-bold top-0 right-0">
                                                 i
@@ -56,7 +53,7 @@ onMounted(() => {
                                     <div className="flex grow h-full pb-2 w-full">
 
                                         <div
-                                            class="customcolor text-white text-center text-2xl font-semibold rounded-full grow h-[60px] py-3 mr-1">
+                                            class=" border-2 border-black text-black text-center text-2xl font-semibold rounded-full grow h-[60px] py-3 mr-1">
                                             <div>
                                                 {{ shopStore.getAmount(item.ID) }}
                                             </div>
@@ -73,7 +70,9 @@ onMounted(() => {
                                         </button>
                                     </div>
                                 </div>
+                                <hr class="absolute bottom-0 left-0 w-full h-[3px] bg-gray-200">
                             </li>
+                            
                         </ul>
                     </div>
                 </div>

@@ -76,6 +76,20 @@ export const useShopStore = defineStore('shop',{
               this.finalitems.push(entry)
             }
           }
+        },
+        getItembyId(id: number){
+          for (const entry of this.items){
+            if(entry.ID == id){
+              return entry
+            }
+          }
+          return {
+              Description: '',
+              ID: 0,
+              Image: '',
+              Name: '',
+              Price: 0
+          }
         }
     }
 })
