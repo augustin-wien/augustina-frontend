@@ -19,7 +19,7 @@ const router = createRouter({
       path: '/v/:id',
       name: 'Parent',
       meta: {
-        layout: Default,
+        layout: Default
       },
       component: () => import('../views/ParentPaymentProcess.vue'),
       children: [
@@ -31,48 +31,48 @@ const router = createRouter({
         {
           path: '/v/:id/landing-page',
           name: 'LandingPage',
-          component: () => import('../views/LandingPage.vue'),
+          component: () => import('../views/LandingPage.vue')
         },
         {
           path: '/v/:id/additionalproducts',
           name: 'Additional Products',
-          component: () => import('../views/AdditionalProducts.vue'),
+          component: () => import('../views/AdditionalProducts.vue')
         },
         {
           path: '/v/:id/print-digital',
           name: 'Version choice',
-          component: () => import('../views/PrintDigital.vue'),
+          component: () => import('../views/PrintDigital.vue')
         },
         {
           path: '/v/:id/tipping',
           name: 'Tippingpage',
-          component: () => import('../views/TippingPage.vue'),
+          component: () => import('../views/TippingPage.vue')
         },
         {
           path: '/v/:id/information',
           name: 'InformationPrintEpaper',
-          component: () => import('../views/InformationPrintEpaper.vue'),
+          component: () => import('../views/InformationPrintEpaper.vue')
         },
         {
           path: '/v/:id/confirmation',
           name: 'Confirmation',
-          component: () => import('../views/FinalPurchaseConfirmation.vue'),
+          component: () => import('../views/FinalPurchaseConfirmation.vue')
         },
         {
           path: '/v/:id/payment',
           name: 'Payment',
-          component: () => import('../views/PaymentVivawallet.vue'),
+          component: () => import('../views/PaymentVivawallet.vue')
         },
         {
           path: '/v/:id/custom-tip',
           name: 'Custom Tip',
-          component: () => import('../views/CustomTip.vue'),
+          component: () => import('../views/CustomTip.vue')
         },
         {
           path: '/v/:id/shop',
           name: 'Shop',
-          component: () => import('../views/ShopPage.vue'),
-        },
+          component: () => import('../views/ShopPage.vue')
+        }
       ]
     },
     {
@@ -80,37 +80,37 @@ const router = createRouter({
       name: 'Go to Vendor',
       component: () => import('../views/GoToVendor.vue'),
       meta: {
-        layout: Default,
-      },
+        layout: Default
+      }
     },
     {
       path: '/paymentconfirmation',
       name: 'Payment Confirmation',
       component: () => import('../views/PaymentConfirmation.vue'),
       meta: {
-        layout: Default,
-      },
+        layout: Default
+      }
     },
     {
       path: '/success',
       name: 'Success',
       component: () => import('../views/WaitingCountdown.vue'),
       meta: {
-        layout: Default,
-      },
+        layout: Default
+      }
     },
     {
       path: '/failure',
       name: 'Failure',
       component: () => import('../views/FailureVivawallet.vue'),
       meta: {
-        layout: Default,
-      },
+        layout: Default
+      }
     },
     {
       path: '/backoffice',
       name: 'Backoffice',
-      redirect: '/backoffice/vendorsummary',
+      redirect: '/backoffice/vendorsummary'
     },
     {
       path: '/backoffice/credits',
@@ -261,7 +261,7 @@ const router = createRouter({
       path: '/vendoroverview',
       name: 'Vendor Overview',
       meta: {
-        layout: BackofficeDefault,
+        layout: Default,
         requiresAuth: true
       },
       component: () => import('../views/VendorOverview.vue')
@@ -281,7 +281,7 @@ const router = createRouter({
       meta: {
         layout: Default
       }
-    },
+    }
   ]
 })
 
