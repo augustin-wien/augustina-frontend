@@ -53,7 +53,6 @@ export interface Vendor {
   } | null
   LicenseID: string
   UrlID: string
-  URLID: string
   Balance: number
   IsDisabled: boolean
   Longitude: number
