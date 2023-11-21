@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useShopStore } from '@/stores/ShopStore';
-import { usePaymentStore } from '@/stores/payment';
-import { settingsStore } from '@/stores/settings';
-import { useVendorStore } from '@/stores/vendor';
-import { onMounted, ref } from 'vue';
+import { useShopStore } from '@/stores/ShopStore'
+import { usePaymentStore } from '@/stores/payment'
+import { settingsStore } from '@/stores/settings'
+import { useVendorStore } from '@/stores/vendor'
+import { onMounted, ref } from 'vue'
 
 const shopStore = useShopStore()
 const paymentStore = usePaymentStore()
@@ -17,10 +17,21 @@ const errorTimestamp = ref(new Date().toISOString())
 
 onMounted(() => {
   if (paymentStore.tip > 0) {
-    items.push({
-      item: paymentStore.tipItem,
-      quantity: paymentStore.tip * 100
-    })
+    // make sure, we have the tip only once added
+    const tipItemIndex = items.findIndex((item) => item.item == paymentStore.tipItem)
+    if (tipItemIndex > -1) {
+      items[tipItemIndex].quantity = paymentStore.tip * 100
+    } else {
+      items.push({
+        item: paymentStore.tipItem,
+        quantity: paymentStore.tip * 100,
+      })
+    }
+  } else {
+    const tipItemIndex = items.findIndex((item) => item.item == paymentStore.tipItem)
+    if (tipItemIndex > -1) {
+      items.splice(tipItemIndex, 1)
+    }
   }
   paymentStore.postOrder(items, 1, vendorStore.vendorid).catch((error) => {
     errorMessage.value = error.message
