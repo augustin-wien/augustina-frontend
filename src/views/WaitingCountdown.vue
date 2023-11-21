@@ -8,13 +8,15 @@ const paymentStore = usePaymentStore()
 const settStore = settingsStore()
 const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay))
 let verified = false
+let counter = 0
 const verifyPayment = async () => {
   paymentStore.resetVerification()
   while (!verified) {
     verified = (await paymentStore.verifyPayment()) ? true : false
-    if (verified) {
+    if (verified || counter > 10) {
       break
     }
+    counter++
     await sleep(2000)
   }
 }

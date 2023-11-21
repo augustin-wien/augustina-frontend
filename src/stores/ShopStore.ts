@@ -4,8 +4,6 @@ import { type Item } from './items'
 import { usePaymentStore } from './payment'
   
 const paymentStore = usePaymentStore()
-//Item IDs of Items, that should not be displayed in the shop (4: License for E-Paper; 5: E-Paper)
-const itemsBlacklist = [4]
 
 export interface Amount {
   item: number,
@@ -25,9 +23,6 @@ export const useShopStore = defineStore('shop',{
             try {
               const data = await fetchItems()
               this.items = data.data
-              for (const id of itemsBlacklist){
-                this.items = this.items.filter(item => item.ID != id)
-              }
             } catch (error) {
               console.log(error)
             }
