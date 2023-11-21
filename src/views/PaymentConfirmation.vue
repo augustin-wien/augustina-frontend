@@ -81,7 +81,9 @@ function currentDate() {
   const date = `${current.getDate()}.${current.getMonth() + 1}.${current.getFullYear()}`
   return date
 }
-const price = computed(() => paymentStore.verification?.TotalSum / 100)
+const price = computed(() =>
+  paymentStore.verification?.TotalSum ? paymentStore.verification?.TotalSum / 100 : 0
+)
 const purchasedItems = computed(() => paymentStore.verification?.PurchasedItems)
 let time = ref('not')
 function currentTime() {
