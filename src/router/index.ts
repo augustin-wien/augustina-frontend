@@ -31,55 +31,52 @@ const router = createRouter({
         {
           path: '/v/:id/landing-page',
           name: 'LandingPage',
-          component: () => import('@/views/LandingPage.vue'),
+          component: () => import('@/views/LandingPage.vue')
         },
         {
           path: '/v/:id/additionalproducts',
           name: 'Additional Products',
-          component: () => import('@/views/AdditionalProducts.vue'),
+          component: () => import('@/views/AdditionalProducts.vue')
         },
         {
           path: '/v/:id/print-digital',
           name: 'Version choice',
-          component: () => import('@/views/PrintDigital.vue'),
+          component: () => import('@/views/PrintDigital.vue')
         },
         {
           path: '/v/:id/tipping',
           name: 'Tippingpage',
-          component: () => import('@/views/TippingPage.vue'),
+          component: () => import('@/views/TippingPage.vue')
         },
         {
           path: '/v/:id/information',
           name: 'InformationPrintEpaper',
-          component: () => import('@/views/InformationPrintEpaper.vue'),
+          component: () => import('@/views/InformationPrintEpaper.vue')
         },
         {
           path: '/v/:id/confirmation',
           name: 'Confirmation',
-          component: () => import('@/views/FinalPurchaseConfirmation.vue'),
+          component: () => import('@/views/FinalPurchaseConfirmation.vue')
         },
         {
           path: '/v/:id/payment',
           name: 'Payment',
-vendor_overview
-          component: () => import('../views/PaymentVivawallet.vue')
-          component: () => import('@/views/PaymentVivawallet.vue'),
- main
+          component: () => import('@/views/PaymentVivawallet.vue')
         },
         {
           path: '/v/:id/custom-tip',
           name: 'Custom Tip',
-          component: () => import('@/views/CustomTip.vue'),
+          component: () => import('@/views/CustomTip.vue')
         },
         {
           path: '/v/:id/shop',
           name: 'Shop',
-          component: () => import('@/views/ShopPage.vue'),
+          component: () => import('@/views/ShopPage.vue')
         },
         {
           path: '/v/:id/item-available',
           name: 'Item Available',
-          component: () => import('@/views/ItemAvailable.vue'),
+          component: () => import('@/views/ItemAvailable.vue')
         }
       ]
     },
