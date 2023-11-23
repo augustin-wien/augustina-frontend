@@ -90,7 +90,7 @@ const checkIfItemSelected = () => {
                     <button>
                       <div
                         class="button-down customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
-                        @click="shopStore.subtractItem(item.ID, item.Price)"
+                        @click="shopStore.subtractItem(item.ID)"
                       >
                         -
                       </div>
@@ -105,7 +105,7 @@ const checkIfItemSelected = () => {
                     <button class="place-content-">
                       <div
                         class="button-up customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
-                        @click="shopStore.addItem(item.ID, item.Price)"
+                        @click="shopStore.addItem(item.ID)"
                       >
                         +
                       </div>

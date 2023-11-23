@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { RouterLink, routeLocationKey } from 'vue-router'
+import { RouterLink } from 'vue-router'
 import { settingsStore } from '@/stores/settings'
-import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useShopStore } from '@/stores/ShopStore'
 

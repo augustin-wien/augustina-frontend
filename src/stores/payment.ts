@@ -4,6 +4,7 @@ import type { VivaWalletVerification } from "@/models/verificationVivaWallet";
 import router from "@/router";
 import agent from '@/api/agent'
 
+
 export interface orderItem {
   item: number,
   quantity: number
@@ -38,9 +39,17 @@ export const usePaymentStore = defineStore('payment', {
   },
   actions: {
     priceInEuros() {
+      if (isNaN(this.tip)) {
+        this.tip = 0
+      }
+      if (isNaN(this.sum)) {
+        return NaN
+      }
       return this.sum / 100 + this.tip
     },
-
+    setSum(sum: number) {
+      this.sum = sum
+    },
     tipInCents() {
       return (this.tip * 100)
     },

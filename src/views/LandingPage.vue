@@ -2,9 +2,11 @@
 import { usePaymentStore } from '@/stores/payment'
 import { settingsStore } from '@/stores/settings'
 import { computed, onMounted, watch } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { useVendorStore } from '@/stores/vendor'
 import { useShopStore } from '@/stores/ShopStore'
+
+const router = useRouter()
 const shopStore = useShopStore()
 const vendorStore = useVendorStore()
 const settStore = settingsStore()
@@ -13,15 +15,23 @@ const price = computed(() => settStore.settings.MainItemPrice / 100)
 
 watch(price, () => {})
 onMounted(() => {
-  shopStore.reset()
   fetch().then(() => {
-    shopStore.getItems().then(() => {
-      usePaymentStore().setPrice(settStore.settings.MainItemPrice)
-      usePaymentStore().setPricePerPaper(settStore.settings.MainItemPrice)
-      if (shopStore.amount.length == 0) {
-        shopStore.addItem(1, settStore.settings.MainItemPrice)
-      }
-    })
+    shopStore.reset()
+    shopStore
+      .getItems()
+      .then(() => {
+        usePaymentStore().setPrice(settStore.settings.MainItemPrice)
+        usePaymentStore().setPricePerPaper(settStore.settings.MainItemPrice)
+        if (shopStore.items.length == 0) {
+          router.push({ name: 'Error' })
+        } else if (shopStore.amount.length == 0) {
+          shopStore.addItem(1)
+        }
+      })
+      .catch(() => {
+        router.push({ name: 'Error' })
+        console.log('error')
+      })
   })
 })
 </script>
