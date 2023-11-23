@@ -1,5 +1,6 @@
 import agent from '@/api/agent'
 import { defineStore } from 'pinia'
+import { useRoute } from 'vue-router'
 import {
   getVendor,
   fetchVendors,
@@ -20,12 +21,21 @@ export const useVendorStore = defineStore('vendor', {
   },
   actions: {
     async checkID(vendorId: string | string[] | undefined) {
+      if (useRoute().name === 'Go to Vendor' || useRoute().name === 'Error') {
+        // we are already on one of the pages we want to check for
+        return
+      } 
       if (!vendorId) {
         router.push({ name: 'Go to Vendor' })
         return
       }
       agent.Vendor.checkID(vendorId)
         .then((response) => {
+          if (!response.FirstName) {
+            // we got an bad answer from the backend
+            router.push({ name: 'Error' })
+            return
+          }
           this.vendorName = response.FirstName
           this.vendorid = typeof vendorId == 'string' ? vendorId : vendorId[0]
           if (this.vendorName !== '') {

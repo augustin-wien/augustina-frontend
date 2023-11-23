@@ -25,6 +25,7 @@
   "gotovendor": "Please go to a vendor",
   "augustin": "Back to Augustin",
 
+  "product": "Choose a product",
   "menuVendors": "Vendors",
   "menuCredits": "Credits",
   "menuPayouts": "Payouts",
@@ -117,6 +118,9 @@
   "Zeitung": "Newspaper",
   "Aktuelle Zeitungsausgabe": "Current newspaper issue",
   "Spende": "Donation",
+
   "lastTransactions": "Last transactions",
   "yourData": "Your data"
+  "information": "Ask your Vendor if they have this product available!"
+
 }

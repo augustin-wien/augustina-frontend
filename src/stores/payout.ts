@@ -20,23 +20,21 @@ export const usePayoutStore = defineStore('payout', {
     // Define the initial state of the store
     return {
       payout: {} as Payout, // Initialize 'payout' as an empty Payout object
-      paymentsForPayout: <Array<Payment>> []
+      paymentsForPayout: <Array<Payment>>[]
     }
   },
   actions: {
     // Define an asynchronous action to post a payout
     async postPayout(payout: Payout) {
-      try {
+      return new Promise((resolve, reject) => {
         // Send a request to post the payout data to the API
-        const data = await postPayout(payout)
-        // Update the 'payout' state with the response data
-        //@ts-ignore
-        this.payout = data.data
-        //@ts-ignore
-      } catch (error) {
-        // Handle any errors that occur during the API request
-        console.log(error)
-      }
+        postPayout(payout).then((response) => {
+          this.payout = response.data
+          resolve(response)
+        }).catch((error) => {
+          reject(error)
+        });
+      });
     },
     async getPaymentsForPayout(vendorLicenseID: string) {
       try {

@@ -1,9 +1,10 @@
 {
   "buyItem": "Zeitung kaufen bei",
-  "newspaper": "Print Zeitung",
+  "newspaper": "Zeitung",
   "next": "Weiter",
 
-  "donation": "Spende eingeben",
+  "donation": "Spende",
+  "includes": "enthält",
   "edit": "Eingabe",
   "notToday": "Heute nicht",
 
@@ -25,6 +26,7 @@
   "gotovendor": "Gehe bitte zu einer Verkäuferin oder einem Verkäufer",
   "augustin": "Zum Augustin",
 
+  "product": "Produkt wählen",
   "menuVendors": "VerkäuferInnen",
   "menuCredits": "Guthaben",
   "menuPayouts": "Auszahlungen",
@@ -78,7 +80,7 @@
   "confirmPayout": "Auszahlung bestätigen",
   "noCredits": "Keine Guthaben vorhanden",
 
-  "create": "anlegen",
+  "create": "Anlegen",
   "cancel": "Abbrechen",
 
   "firstName": "Vorname",
@@ -115,6 +117,12 @@
 
   "Transaction Costs": "Transaktionskosten",
   "Donation": "Spende",
+
   "lastTransactions": "Letzte Transaktionen",
   "yourData": "Deine Informationen"
+
+  "information": "Bitte erkundigen Sie sich, ob Ihre Verkäuferin oder Ihr Verkäufer dieses Produkt verkaufen kann!",
+  "error": "Fehler",
+  "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuchen es erneut."
+
 }

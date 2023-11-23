@@ -2,28 +2,42 @@
 import { usePaymentStore } from '@/stores/payment'
 import { settingsStore } from '@/stores/settings'
 import { computed, onMounted, watch } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import { useVendorStore } from '@/stores/vendor'
+import { useShopStore } from '@/stores/ShopStore'
+
+const router = useRouter()
+const shopStore = useShopStore()
 const vendorStore = useVendorStore()
 const settStore = settingsStore()
 const fetch = settStore.getSettingsFromApi
 const price = computed(() => settStore.settings.MainItemPrice / 100)
-watch(price, () => {
-  usePaymentStore().setPrice(settStore.settings.MainItemPrice)
-  usePaymentStore().setPricePerPaper(settStore.settings.MainItemPrice)
+
+watch(price, () => {})
+onMounted(() => {
+  fetch().then(() => {
+    shopStore.reset()
+    shopStore
+      .getItems()
+      .then(() => {
+        usePaymentStore().setPrice(settStore.settings.MainItemPrice)
+        usePaymentStore().setPricePerPaper(settStore.settings.MainItemPrice)
+        if (shopStore.items.length == 0) {
+          router.push({ name: 'Error' })
+        } else if (shopStore.amount.length == 0) {
+          shopStore.addItem(1)
+        }
+      })
+      .catch(() => {
+        router.push({ name: 'Error' })
+        console.log('error')
+      })
+  })
 })
-onMounted(() => fetch())
 </script>
 
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <select
-      class="h-[55px] w-[55px] absolute font-light border-2 top-0 right-0 border-gray-300 rounded-full text-gray-300 text-center mt-8 mr-4 text-sm"
-      v-model="$i18n.locale"
-    >
-      <option value="en">EN</option>
-      <option value="de">DE</option>
-    </select>
     <template #main v-if="settStore.settings.MainItemPrice">
       <div className="grid grid-rows-5 h-full place-items-center w-full">
         <div class="row-span-2 grid grid-rows-3 h-full w-full">
@@ -38,8 +52,27 @@ onMounted(() => fetch())
             </div>
           </div>
           <div class="place-items-center w-full flex">
+            <RouterLink class="flex-none h-[56px] w-[56px] mr-3" :to="{ name: 'Shop' }">
+              <button
+                class="customcolor fill-white rounded-full h-full text-white text-3xl w-full place-items-center grid"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="30"
+                  height="30"
+                  viewBox="0 0 24 24"
+                >
+                  <g>
+                    <path fill="none" d="M0 0h24v24H0z" />
+                    <path
+                      d="M15.728 9.686l-1.414-1.414L5 17.586V19h1.414l9.314-9.314zm1.414-1.414l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM7.242 21H3v-4.243L16.435 3.322a1 1 0 0 1 1.414 0l2.829 2.829a1 1 0 0 1 0 1.414L7.243 21z"
+                    />
+                  </g>
+                </svg>
+              </button>
+            </RouterLink>
             <div
-              class="text-2xl grow h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full"
+              class="text-xl grow h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full"
             >
               1x {{ $t('newspaper') }}
             </div>

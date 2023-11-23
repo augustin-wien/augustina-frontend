@@ -1,16 +1,11 @@
-import axios from 'axios'
 import keycloak from '@/keycloak/keycloak'
-import { type Vendor } from '@/stores/vendor'
 import { type Item } from '@/stores/items'
-import { type Settings } from '@/stores/settings'
 import { type PaymentsForPayout, type Payout } from '@/stores/payout'
-import { ITEMS_BACKOFFICE_API_URL, PAYMENTS_FOR_PAYOUT_API_URL, VENDORS_API_URL } from './endpoints'
-import { ITEMS_API_URL } from './endpoints'
-import { AUTH_API_URL } from './endpoints'
-import { SETTINGS_API_URL } from './endpoints'
-import { PAYMENT_API_URL } from './endpoints'
-import { PAYOUT_API_URL } from './endpoints'
-import { VENDOR_ME_API_URL } from './endpoints'
+import { type Settings } from '@/stores/settings'
+import { type Vendor } from '@/stores/vendor'
+import axios from 'axios'
+import { AUTH_API_URL, ITEMS_API_URL, ITEMS_BACKOFFICE_API_URL, PAYMENTS_FOR_PAYOUT_API_URL, PAYMENT_API_URL, PAYOUT_API_URL, SETTINGS_API_URL, VENDORS_API_URL, VENDOR_ME_API_URL } from './endpoints'
+
 
 export const apiInstance = axios.create({
   withCredentials: true
@@ -99,15 +94,10 @@ export async function fetchItemsBackoffice() {
   return apiInstance.get<Item[]>(`${ITEMS_BACKOFFICE_API_URL}`)
 }
 export async function postItems(newItem: Item) {
-  const formData = new FormData()
-  formData.append('Image', newItem.Image)
-  formData.append('Name', newItem.Name)
-  formData.append('Price', newItem.Price.toString())
-  formData.append('Description', newItem.Description)
-  return apiInstance.post(ITEMS_API_URL, formData, {
+  return apiInstance.post(ITEMS_API_URL, JSON.stringify(newItem), {
     headers: {
       accept: 'application/json',
-      'Content-Type': 'multipart/form-data'
+      'Content-Type': 'application/json'
     }
   })
 }

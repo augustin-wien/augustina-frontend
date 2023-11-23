@@ -13,7 +13,7 @@ const router = createRouter({
       meta: {
         layout: Default
       },
-      component: () => import('../views/ParentPaymentProcess.vue')
+      component: () => import('@/views/ParentPaymentProcess.vue')
     },
     {
       path: '/v/:id',
@@ -21,64 +21,72 @@ const router = createRouter({
       meta: {
         layout: Default
       },
-      component: () => import('../views/ParentPaymentProcess.vue'),
+      component: () => import('@/views/ParentPaymentProcess.vue'),
       children: [
         {
           path: '/v/:id/check-id',
           name: 'Check ID',
-          component: () => import('../views/CheckVendorID.vue')
+          component: () => import('@/views/CheckVendorID.vue')
         },
         {
           path: '/v/:id/landing-page',
           name: 'LandingPage',
-          component: () => import('../views/LandingPage.vue')
+          component: () => import('@/views/LandingPage.vue'),
         },
         {
           path: '/v/:id/additionalproducts',
           name: 'Additional Products',
-          component: () => import('../views/AdditionalProducts.vue')
+          component: () => import('@/views/AdditionalProducts.vue'),
         },
         {
           path: '/v/:id/print-digital',
           name: 'Version choice',
-          component: () => import('../views/PrintDigital.vue')
+          component: () => import('@/views/PrintDigital.vue'),
         },
         {
           path: '/v/:id/tipping',
           name: 'Tippingpage',
-          component: () => import('../views/TippingPage.vue')
+          component: () => import('@/views/TippingPage.vue'),
         },
         {
           path: '/v/:id/information',
           name: 'InformationPrintEpaper',
-          component: () => import('../views/InformationPrintEpaper.vue')
+          component: () => import('@/views/InformationPrintEpaper.vue'),
         },
         {
           path: '/v/:id/confirmation',
           name: 'Confirmation',
-          component: () => import('../views/FinalPurchaseConfirmation.vue')
+          component: () => import('@/views/FinalPurchaseConfirmation.vue'),
         },
         {
           path: '/v/:id/payment',
           name: 'Payment',
+vendor_overview
           component: () => import('../views/PaymentVivawallet.vue')
+          component: () => import('@/views/PaymentVivawallet.vue'),
+ main
         },
         {
           path: '/v/:id/custom-tip',
           name: 'Custom Tip',
-          component: () => import('../views/CustomTip.vue')
+          component: () => import('@/views/CustomTip.vue'),
         },
         {
           path: '/v/:id/shop',
           name: 'Shop',
-          component: () => import('../views/ShopPage.vue')
+          component: () => import('@/views/ShopPage.vue'),
+        },
+        {
+          path: '/v/:id/item-available',
+          name: 'Item Available',
+          component: () => import('@/views/ItemAvailable.vue'),
         }
       ]
     },
     {
       path: '/go-to-vendor',
       name: 'Go to Vendor',
-      component: () => import('../views/GoToVendor.vue'),
+      component: () => import('@/views/GoToVendor.vue'),
       meta: {
         layout: Default
       }
@@ -86,7 +94,7 @@ const router = createRouter({
     {
       path: '/paymentconfirmation',
       name: 'Payment Confirmation',
-      component: () => import('../views/PaymentConfirmation.vue'),
+      component: () => import('@/views/PaymentConfirmation.vue'),
       meta: {
         layout: Default
       }
@@ -94,7 +102,7 @@ const router = createRouter({
     {
       path: '/success',
       name: 'Success',
-      component: () => import('../views/WaitingCountdown.vue'),
+      component: () => import('@/views/WaitingCountdown.vue'),
       meta: {
         layout: Default
       }
@@ -102,7 +110,7 @@ const router = createRouter({
     {
       path: '/failure',
       name: 'Failure',
-      component: () => import('../views/FailureVivawallet.vue'),
+      component: () => import('@/views/FailureVivawallet.vue'),
       meta: {
         layout: Default
       }
@@ -119,7 +127,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeVendorsCredits.vue')
+      component: () => import('@/views/backoffice/BackofficeVendorsCredits.vue')
     },
 
     {
@@ -130,7 +138,7 @@ const router = createRouter({
         requiresAuth: true
       },
       props: true,
-      component: () => import('../views/backoffice/BackofficeVendorCreditPayout.vue')
+      component: () => import('@/views/backoffice/BackofficeVendorCreditPayout.vue')
     },
     {
       path: '/backoffice/payments',
@@ -139,7 +147,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeAccountingPayments.vue')
+      component: () => import('@/views/backoffice/BackofficeAccountingPayments.vue')
     },
     {
       path: '/backoffice/payouts',
@@ -148,7 +156,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeAccountingPayouts.vue')
+      component: () => import('@/views/backoffice/BackofficeAccountingPayouts.vue')
     },
     {
       path: '/backoffice/sales',
@@ -157,7 +165,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeAccountingSales.vue')
+      component: () => import('@/views/backoffice/BackofficeAccountingSales.vue')
     },
     {
       path: '/backoffice/vendorsummary',
@@ -166,7 +174,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeVendorsSummary.vue')
+      component: () => import('@/views/backoffice/BackofficeVendorsSummary.vue')
     },
     {
       path: '/backoffice/newvendor',
@@ -175,7 +183,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeVendorNew.vue')
+      component: () => import('@/views/backoffice/BackofficeVendorNew.vue')
     },
     {
       path: '/backoffice/userprofile/:ID',
@@ -184,7 +192,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeVendorProfile.vue')
+      component: () => import('@/views/backoffice/BackofficeVendorProfile.vue')
     },
     {
       path: '/backoffice/userprofile/:ID/update',
@@ -193,7 +201,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeVendorUpdate.vue')
+      component: () => import('@/views/backoffice/BackofficeVendorUpdate.vue')
     },
     {
       path: '/backoffice/settings',
@@ -202,7 +210,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeSettings.vue')
+      component: () => import('@/views/backoffice/BackofficeSettings.vue')
     },
     {
       path: '/backoffice/settings/update',
@@ -211,7 +219,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeSettingsUpdate.vue')
+      component: () => import('@/views/backoffice/BackofficeSettingsUpdate.vue')
     },
 
     {
@@ -221,7 +229,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeProductSettings.vue')
+      component: () => import('@/views/backoffice/BackofficeProductSettings.vue')
     },
     {
       path: '/backoffice/newproduct',
@@ -230,7 +238,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeProductNew.vue')
+      component: () => import('@/views/backoffice/BackofficeProductNew.vue')
     },
     {
       path: '/backoffice/productsettings/update/:ID',
@@ -239,12 +247,20 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('../views/backoffice/BackofficeProductUpdate.vue')
+      component: () => import('@/views/backoffice/BackofficeProductUpdate.vue')
     },
     {
       path: '/404',
       name: '404',
-      component: () => import('../views/404View.vue'),
+      component: () => import('@/views/404View.vue'),
+      meta: {
+        layout: Default
+      }
+    },
+    {
+      path: '/error',
+      name: 'Error',
+      component: () => import('@/views/ErrorPage.vue'),
       meta: {
         layout: Default
       }
@@ -255,7 +271,7 @@ const router = createRouter({
       meta: {
         requiresAuth: true
       },
-      component: () => import('../views/DashboardView.vue')
+      component: () => import('@/views/DashboardView.vue')
     },
     {
       path: '/vendoroverview',
@@ -264,12 +280,12 @@ const router = createRouter({
         layout: Default,
         requiresAuth: true
       },
-      component: () => import('../views/VendorOverview.vue')
+      component: () => import('@/views/VendorOverview.vue')
     },
     {
       path: '/qr-code',
       name: 'QR Code',
-      component: () => import('../views/QRCode.vue'),
+      component: () => import('@/views/QRCode.vue'),
       meta: {
         layout: Default
       }
@@ -277,7 +293,7 @@ const router = createRouter({
     {
       path: '/:pathMatch(.*)*',
       name: 'all',
-      component: () => import('../views/GoToVendor.vue'),
+      component: () => import('@/views/GoToVendor.vue'),
       meta: {
         layout: Default
       }
