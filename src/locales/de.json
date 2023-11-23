@@ -118,5 +118,7 @@
   "Transaction Costs": "Transaktionskosten",
   "Donation": "Spende",
 
-  "information": "Bitte erkundigen Sie sich, ob Ihre Verkäuferin oder Ihr Verkäufer dieses Produkt verkaufen kann!"
+  "information": "Bitte erkundigen Sie sich, ob Ihre Verkäuferin oder Ihr Verkäufer dieses Produkt verkaufen kann!",
+  "error": "Fehler",
+  "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuchen es erneut."
 }

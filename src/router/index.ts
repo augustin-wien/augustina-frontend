@@ -255,6 +255,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/error',
+      name: 'Error',
+      component: () => import('../views/Error.vue'),
+      meta: {
+        layout: Default
+      }
+    },
+    {
       path: '/dashboard',
       name: 'Dashboard',
       meta: {

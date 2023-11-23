@@ -2,8 +2,10 @@
 import { useShopStore } from '@/stores/ShopStore'
 import { usePaymentStore } from '@/stores/payment'
 import { settingsStore } from '@/stores/settings'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const shopStore = useShopStore()
 const settStore = settingsStore()
 const paymentStore = usePaymentStore()
@@ -17,6 +19,17 @@ const checkAgb = () => {
     }, 500)
   }
 }
+onMounted(() => {
+  if (isNaN(paymentStore.priceInEuros()) || paymentStore.priceInEuros() == 0) {
+    const sum = shopStore.calculateSum()
+    if (sum > 0) {
+      paymentStore.setPrice(sum)
+    } else {
+      // when the sum is still 0 or NaN, then something is wrong with the items in the shop
+      router.push({ name: 'Shop' })
+    }
+  }
+})
 </script>
 
 <template>
