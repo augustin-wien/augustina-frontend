@@ -79,6 +79,26 @@ export interface Vendor {
   OnlineMap: boolean
   HasSmartphone: boolean
   HasBankAccount: boolean
+  OpenPayments: [
+    {
+      amount: number
+      authorizedBy: string
+      id: number
+      isPayoutFor: string[]
+      isSale: boolean
+      item: number
+      order: number
+      orderEntry: number
+      payout: number
+      price: number
+      quantity: number
+      receiver: number
+      receiverName: string
+      sender: number
+      senderName: string
+      timestamp: string
+    }
+  ]
 }
 
 export interface VendorCheckResponse {
