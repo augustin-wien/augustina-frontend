@@ -115,9 +115,3 @@ const itemName = (id: number) => {
 UpdateTime()
 const apiUrl = import.meta.env.VITE_API_URL
 </script>
-
-<style>
-.customMargin {
-  margin-bottom: 1em;
-}
-</style>
