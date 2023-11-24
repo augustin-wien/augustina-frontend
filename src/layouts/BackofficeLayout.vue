@@ -62,7 +62,14 @@
               <p class="text-base leading-4">{{ $t('menuSettings') }}</p>
             </button>
           </RouterLink>
+          <RouterLink to="/backoffice/map" className="sidemenu-link">
+            <button
+              class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded">
+              <font-awesome-icon :icon="faMapLocation" />
 
+              <p class="text-base leading-4">{{ $t('menuMap') }}</p>
+            </button>
+          </RouterLink>
           <button
             class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
             @click="keycloak.keycloak.logout">
@@ -138,6 +145,7 @@ import {
   faSliders,
   faSplotch,
   faUserGroup,
+  faMapLocation,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { computed } from 'vue'
