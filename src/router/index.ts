@@ -271,8 +271,8 @@ const router = createRouter({
       component: () => import('@/views/DashboardView.vue')
     },
     {
-      path: '/vendoroverview',
-      name: 'Vendor Overview',
+      path: '/me',
+      name: 'My Info',
       meta: {
         layout: Default,
         requiresAuth: true
