@@ -35,8 +35,8 @@ onMounted(() => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div className="h-full w-full place-items-center">
-        <div className="text-center font-semibold text-3xl mb-7">
+      <div class="h-full w-full grid grid-rows-5 place-items-center">
+        <div class="text-center font-semibold text-3xl mb-7">
           {{ $t('confirm') }}
         </div>
         <div class="w-full">
@@ -50,10 +50,10 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <div className="grid grid-rows-1 py-10 w-full">
-          <div className="grid grid-cols-6 w-full items-center">
-            <div className="col-span-5">
-              <p className="text-center text-8xl font-semibold">
+        <div class="grid grid-rows-1 w-full">
+          <div class="grid grid-cols-6 w-full items-center">
+            <div class="col-span-5">
+              <p class="text-center text-8xl font-semibold">
                 {{ paymentStore.priceInEuros() }}€
               </p>
               <p className="text-center text">
@@ -95,7 +95,7 @@ onMounted(() => {
             </button></label
           >
         </div>
-        <div className="flex place-items-center w-full mt-6">
+        <div class="place-items-center w-full">
           <button
             @click="checkAgb"
             class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full"
