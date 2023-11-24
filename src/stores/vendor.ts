@@ -24,7 +24,7 @@ export const useVendorStore = defineStore('vendor', {
       if (useRoute().name === 'Go to Vendor' || useRoute().name === 'Error') {
         // we are already on one of the pages we want to check for
         return
-      } 
+      }
       if (!vendorId) {
         router.push({ name: 'Go to Vendor' })
         return
@@ -188,7 +188,7 @@ export const vendorsStore = defineStore('vendors', {
       }
     },
 
-    async getVendorMe() {
+    async fetchVendorMe() {
       try {
         const data = await getVendorMe()
         return data.data

@@ -67,7 +67,7 @@ const vendorMe = ref<Vendor | null>(null)
 
 onMounted(async () => {
   try {
-    vendorMe.value = await store.getVendorMe()
+    vendorMe.value = await store.fetchVendorMe()
     if (vendorMe.value) {
       generateQRCode(vendorMe.value)
     }
