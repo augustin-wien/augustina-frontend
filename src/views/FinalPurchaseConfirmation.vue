@@ -98,7 +98,7 @@ onMounted(() => {
         <div class="place-items-center w-full">
           <button
             @click="checkAgb"
-            class="bg-gray-600 rounded-full text-center p-5 text-white text-3xl font font-semibold w-full"
+            class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full"
             :style="
               paymentStore.agbChecked
                 ? 'background-color:' + settStore.settings.Color
@@ -116,6 +116,12 @@ onMounted(() => {
 <style scoped>
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
+  color: v-bind(settStore.settings.FontColor);
+  fill: v-bind(settStore.settings.FontColor);
+}
+
+.customfont {
+  color: v-bind(settStore.settings.FontColor);
 }
 
 .button-down {

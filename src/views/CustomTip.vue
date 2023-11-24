@@ -65,7 +65,7 @@ const roundValue = () => {
             <div class="button-down customcolor"></div>
           </button>
           <div
-            class="col-span-3 grid grid-cols-3 lightcolor bg-opacity-0 text-white rounded-3xl border-spacing-7 place-items-center"
+            class="col-span-3 grid grid-cols-3 customcolor bg-opacity-0 text-white rounded-3xl border-spacing-7 place-items-center"
           >
             <input
               type="number"
@@ -128,8 +128,8 @@ input[type='number'] {
   display: block;
   width: 20px;
   height: 20px;
-  border-top: 2px solid #fff;
-  border-left: 2px solid #fff;
+  border-top: 2px solid v-bind(settStore.settings.FontColor);
+  border-left: 2px solid v-bind(settStore.settings.FontColor);
 }
 
 .button-up::after {
@@ -144,13 +144,11 @@ input[type='number'] {
 
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
+  color: v-bind(settStore.settings.FontColor);
 }
 
 .customborder {
   border-color: v-bind(settStore.settings.Color);
 }
 
-.lightcolor {
-  background-color: v-bind(settStore.settings.Color);
-}
 </style>

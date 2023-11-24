@@ -31,6 +31,7 @@ settStore.getSettingsFromApi()
 <style scoped>
 .customcolor {
     background-color: v-bind(settStore.settings.Color);
+    color: v-bind(settStore.settings.FontColor);
 }
 .alert-img {
     animation: shake 0.5s;
