@@ -162,6 +162,5 @@ export async function getPaymentsForPayout(payout: PaymentsForPayout) {
 }
 
 export async function getLocations() {
-  console.log((await apiInstance.get(VENDORS_LOCATION_URL)).data)
   return apiInstance.get(VENDORS_LOCATION_URL)
 }

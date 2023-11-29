@@ -10,6 +10,9 @@
                     <l-map ref="map" v-model:zoom="zoom" v-model:center="center">
                         <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
                             name="OpenStreetMap"></l-tile-layer>
+                        <li v-for="vendor in mapStore.vendors" :key="vendor.licenseID">
+                            <l-marker :lat-lng="[vendor.latitude, vendor.longitude]"></l-marker>
+                        </li>
                     </l-map>
                 </div>
             </div>
@@ -19,7 +22,7 @@
   
 <script lang="ts" setup>
 import "leaflet/dist/leaflet.css";
-import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
+import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
 import { useMapStore } from '@/stores/map'
 import { onMounted } from "vue";
 
