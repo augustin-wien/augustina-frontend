@@ -3,8 +3,9 @@ import { type Item } from '@/stores/items'
 import { type PaymentsForPayout, type Payout } from '@/stores/payout'
 import { type Settings } from '@/stores/settings'
 import { type Vendor } from '@/stores/vendor'
+import { type VendorLocation } from '@/stores/map'
 import axios from 'axios'
-import { AUTH_API_URL, ITEMS_API_URL, ITEMS_BACKOFFICE_API_URL, PAYMENTS_FOR_PAYOUT_API_URL, PAYMENT_API_URL, PAYOUT_API_URL, SETTINGS_API_URL, VENDORS_API_URL } from './endpoints'
+import { AUTH_API_URL, ITEMS_API_URL, ITEMS_BACKOFFICE_API_URL, PAYMENTS_FOR_PAYOUT_API_URL, PAYMENT_API_URL, PAYOUT_API_URL, SETTINGS_API_URL, VENDORS_API_URL, VENDORS_LOCATION_URL } from './endpoints'
 
 export const apiInstance = axios.create({
   withCredentials: true
@@ -158,4 +159,9 @@ export async function postPayout(payout: Payout) {
 //payout
 export async function getPaymentsForPayout(payout: PaymentsForPayout) {
   return apiInstance.get(`${PAYMENTS_FOR_PAYOUT_API_URL}?vendor=${payout.Vendor}`)
+}
+
+export async function getLocations() {
+  console.log((await apiInstance.get(VENDORS_LOCATION_URL)).data)
+  return apiInstance.get(VENDORS_LOCATION_URL)
 }

@@ -6,8 +6,8 @@
         </template>
         <template #main>
             <div class="h-full">
-                <div style="height:600px; width:800px">
-                    <l-map ref="map" v-model:zoom="zoom" :center="[47.41322, -1.219482]">
+                <div style="height:550px; width:100%">
+                    <l-map ref="map" v-model:zoom="zoom" v-model:center="center">
                         <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
                             name="OpenStreetMap"></l-tile-layer>
                     </l-map>
@@ -20,11 +20,20 @@
 <script lang="ts" setup>
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
-const zoom = 2
+import { useMapStore } from '@/stores/map'
+import { onMounted } from "vue";
+
+const mapStore = useMapStore()
+
+//Map configuration
+const zoom = 12
+const center = [48.2083, 16.3731]
+
+onMounted(() => {
+    mapStore.getLocations()
+})
 </script>
   
 <style>
-#map {
-    height: 180px;
-}
+
 </style>
