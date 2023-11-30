@@ -57,7 +57,7 @@ onMounted(() => {
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                     <g id="SVGRepo_iconCarrier">
-                      <path d="M6 12H18M12 6V18" stroke="#ffffff" stroke-width="2" stroke-linecap="round"
+                      <path d="M6 12H18M12 6V18" :stroke="settStore.settings.FontColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round"></path>
                     </g>
                   </svg>
@@ -81,7 +81,7 @@ onMounted(() => {
             <RouterLink class="h-[56px] w-[56px]" :to="{ name: 'Shop' }">
               <button
                 class="customcolor fill-white rounded-full h-full text-white text-3xl w-full place-items-center grid">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+                <svg xmlns="http://www.w3.org/2000/svg" class="customfill" width="30" height="30" viewBox="0 0 24 24">
                   <g>
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path
