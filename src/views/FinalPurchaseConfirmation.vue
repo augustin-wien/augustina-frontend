@@ -36,23 +36,41 @@ onMounted(() => {
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <div class="h-full w-full grid grid-rows-5 place-items-center">
-        <div class="text-center font-semibold text-3xl mb-7">
+        <div class="text-center font-semibold text-3xl">
           {{ $t('confirm') }}
         </div>
         <div class="w-full">
-          <div v-for="item in shopStore.amount" :key="item.item">
-            <div
-              class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
-              v-if="item.quantity > 0"
-            >
+          <div v-if="shopStore.finalitems.length < 2" v-for="item in shopStore.amount" :key="item.item">
+            <div class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3 "
+              v-if="item.quantity > 0">
               {{ item.quantity }}x {{ shopStore.getName(item.item) }}
               {{ shopStore.getPriceInEuro(item.item) }}€
             </div>
           </div>
+          <div v-if="shopStore.finalitems.length >= 2">
+            <div class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full relative">
+              {{ shopStore.finalitems[0].quantity }}x {{ shopStore.getName(shopStore.finalitems[0].item) }}
+              {{ shopStore.getPriceInEuro(shopStore.finalitems[0].item) }}€
+              <RouterLink class="h-6 w-6 bottom-0 right-0 absolute" :to="{ name: 'Items' }">
+                <button class="customcolor text-center rounded-full w-full h-full flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path d="M6 12H18M12 6V18" stroke="#ffffff" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+                    </g>
+                  </svg>
+                </button>
+              </RouterLink>
+            </div>
+
+          </div>
         </div>
         <div class="grid grid-rows-1 w-full">
           <div class="grid grid-cols-6 w-full items-center">
-            <div class="col-span-5">
+            <div></div>
+            <div class="col-span-4">
               <p class="text-center text-8xl font-semibold">
                 {{ paymentStore.priceInEuros() }}€
               </p>
@@ -62,19 +80,12 @@ onMounted(() => {
             </div>
             <RouterLink class="h-[56px] w-[56px]" :to="{ name: 'Shop' }">
               <button
-                class="customcolor fill-white rounded-full h-full text-white text-3xl w-full place-items-center grid"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="30"
-                  height="30"
-                  viewBox="0 0 24 24"
-                >
+                class="customcolor fill-white rounded-full h-full text-white text-3xl w-full place-items-center grid">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
                   <g>
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path
-                      d="M15.728 9.686l-1.414-1.414L5 17.586V19h1.414l9.314-9.314zm1.414-1.414l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM7.242 21H3v-4.243L16.435 3.322a1 1 0 0 1 1.414 0l2.829 2.829a1 1 0 0 1 0 1.414L7.243 21z"
-                    />
+                      d="M15.728 9.686l-1.414-1.414L5 17.586V19h1.414l9.314-9.314zm1.414-1.414l1.414-1.414-1.414-1.414-1.414 1.414 1.414 1.414zM7.242 21H3v-4.243L16.435 3.322a1 1 0 0 1 1.414 0l2.829 2.829a1 1 0 0 1 0 1.414L7.243 21z" />
                   </g>
                 </svg>
               </button>
@@ -82,29 +93,19 @@ onMounted(() => {
           </div>
         </div>
         <div :class="shake ? 'shake' : ''">
-          <input
-            type="checkbox"
-            id="checkbox"
-            v-model="paymentStore.agbChecked"
-            class="mr-2"
-          />
+          <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked" class="mr-2" />
           <label for="checkbox">
             {{ $t('agreement') }}
             <button @click="paymentStore.toAGB()" class="text-blue-600">
               {{ $t('terms') }}
-            </button></label
-          >
+            </button></label>
         </div>
         <div class="place-items-center w-full">
-          <button
-            @click="checkAgb"
-            class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full"
-            :style="
-              paymentStore.agbChecked
-                ? 'background-color:' + settStore.settings.Color
-                : ''
-            "
-          >
+          <button @click="checkAgb"
+            class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full" :style="paymentStore.agbChecked
+              ? 'background-color:' + settStore.settings.Color
+              : ''
+              ">
             {{ $t('next') }}
           </button>
         </div>
@@ -127,8 +128,8 @@ onMounted(() => {
 .button-down {
   position: relative;
   padding: 5px;
-  height: 56px;
-  width: 56px;
+  height: 24px;
+  width: 24px;
   border-radius: 50%;
   transition: all 0.2s linear;
 }
@@ -153,6 +154,7 @@ onMounted(() => {
   top: 10px;
   transform: rotate(225deg);
 }
+
 .shake {
   animation: shake 0.5s;
   animation-iteration-count: 2;
@@ -164,35 +166,44 @@ onMounted(() => {
   0% {
     transform: translate(1px, 1px) rotate(0deg);
   }
+
   10% {
     transform: translate(-1px, -2px) rotate(-1deg);
   }
+
   20% {
     transform: translate(-3px, 0px) rotate(1deg);
   }
+
   30% {
     transform: translate(3px, 2px) rotate(0deg);
   }
+
   40% {
     transform: translate(1px, -1px) rotate(1deg);
   }
+
   50% {
     transform: translate(-1px, 2px) rotate(-1deg);
   }
+
   60% {
     transform: translate(-3px, 1px) rotate(0deg);
   }
+
   70% {
     transform: translate(3px, 1px) rotate(-1deg);
   }
+
   80% {
     transform: translate(-1px, -1px) rotate(1deg);
   }
+
   90% {
     transform: translate(1px, 2px) rotate(0deg);
   }
+
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
   }
-}
-</style>
+}</style>

@@ -3,7 +3,7 @@
   "newspaper": "Newspaper",
   "next": "Next",
 
-  "donation": "Give a donation",
+  "donation": "Donation",
   "edit": "Edit",
   "notToday": "Not today",
 
@@ -119,5 +119,10 @@
   "Aktuelle Zeitungsausgabe": "Current newspaper issue",
   "Spende": "Donation",
 
-  "information": "Ask your Vendor if they have this product available!"
+  "information": "Ask your Vendor if they have this product available!",
+
+  "includes": "includes",
+
+  "Items": "Your items"
+
 }
