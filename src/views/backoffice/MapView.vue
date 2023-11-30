@@ -55,7 +55,7 @@ onMounted(() => {
     background-color: #65a30d;
 }
 
-.leaflet-container a.leaflet-popup-close-button:hover, .leaflet-container a.leaflet-popup-close-button:focus {
-    color: rgb(255 255 255);
+.leaflet-container a.leaflet-popup-close-button {
+     color: #ffffff;
 }
 </style>
