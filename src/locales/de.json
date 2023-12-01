@@ -118,7 +118,10 @@
   "Transaction Costs": "Transaktionskosten",
   "Donation": "Spende",
 
-  "information": "Bitte erkundigen Sie sich, ob Ihre Verkäuferin oder Ihr Verkäufer dieses Produkt verkaufen kann!",
+  "information": "Bitte erkundige dich, ob dieses Produkt vorhanden ist!",
   "error": "Fehler",
-  "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuchen es erneut."
+  "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+
+  "export": "Exportieren",
+  "Logout": "Logout"
 }

@@ -1,18 +1,36 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuAccounting') }}</h1>
-      <span>
-        <VueDatePicker v-model="date" range :enable-time-picker="false" :placeholder="$t('chooseDateRange')"
-          @range-start="onRangeStart" @range-end="onRangeEnd" class="max-w-md" />
-      </span>
+      <div class="flex space-between justify-between content-center items-center">
+        <div class="grid grid-cols-2">
+          <div>
+            <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuAccounting') }}</h1>
+            <span>
+              <VueDatePicker
+                v-model="date"
+                range
+                :enable-time-picker="false"
+                :placeholder="$t('chooseDateRange')"
+                @range-start="onRangeStart"
+                @range-end="onRangeEnd"
+                class="max-w-md"
+              />
+            </span>
+          </div>
+        </div>
+        <button
+          class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
+          @click="exportTable"
+        >
+          {{ $t('export') }}
+        </button>
+      </div>
     </template>
     <template #main>
       <div class="main">
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className=" space-y-3 space-x-3">
             <h1 class="text-2xl font-bold">{{ $t('accountingTitle') }}</h1>
-
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
@@ -54,6 +72,7 @@ import { usePaymentsStore, type Payment } from '@/stores/payments'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, onMounted, ref, watch } from 'vue'
+import { exportAsCsv } from '@/utils/utils'
 
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
@@ -127,4 +146,29 @@ onMounted(() => {
     })
   }
 })
+
+const exportTable = () => {
+  if (!payments.value || payments.value.length == 0) {
+    alert('Nothing to export')
+    return
+  }
+  const header = [
+    'Datum',
+    'Sender',
+    'Empfänger',
+    'Artikel',
+    'Betrag'
+  ]
+  const data = payments.value.map((payment:Payment) => {
+    return [
+      formatTime(payment.Timestamp),
+      translateSender(payment.SenderName),
+      translateReceiver(payment.ReceiverName),
+      translateItem(payment),
+      formatAmount(payment.Amount) + ' €'
+    ]
+  })
+
+  exportAsCsv([header, ...data], `payments_${startDate.value.toLocaleDateString()}-${endDate.value.toLocaleDateString()}`)
+}
 </script>
