@@ -81,22 +81,22 @@ export interface Vendor {
   HasBankAccount: boolean
   OpenPayments: [
     {
-      amount: number
-      authorizedBy: string
-      id: number
-      isPayoutFor: string[]
-      isSale: boolean
-      item: number
-      order: number
-      orderEntry: number
-      payout: number
-      price: number
-      quantity: number
-      receiver: number
-      receiverName: string
-      sender: number
-      senderName: string
-      timestamp: string
+      Amount: number
+      AuthorizedBy: string
+      Id: number
+      IsPayoutFor: string[]
+      IsSale: boolean
+      Item: number
+      Order: number
+      OrderEntry: number
+      Payout: number
+      Price: number
+      Quantity: number
+      Receiver: number
+      ReceiverName: string
+      Sender: number
+      SenderName: string
+      Timestamp: string
     }
   ]
 }
