@@ -123,5 +123,7 @@
 
   "information": "Bitte erkundigen Sie sich, ob Ihre Verkäuferin oder Ihr Verkäufer dieses Produkt verkaufen kann!",
   "error": "Fehler",
-  "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuchen es erneut."
+  "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+
+  "back": "Zurück"
 }

@@ -121,5 +121,7 @@
 
   "lastTransactions": "Last transactions",
   "yourData": "Your account",
-  "information": "Ask your Vendor if they have this product available!"
+  "information": "Ask your Vendor if they have this product available!",
+
+  "back": "Back"
 }
