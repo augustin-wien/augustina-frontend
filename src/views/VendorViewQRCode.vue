@@ -4,7 +4,7 @@
       <!--Main template-->
       <div className="vendor-overview container mb-8 space-y-40 pb-3 w-5/6">
         <div className="flex flex-col items-center space-y-8">
-          <h1 className="text-3xl font-bold">Mein QR-Code</h1>
+          <h1 className="text-3xl font-bold">QR-Code</h1>
           <div class="content-center">
             <div id="canvas"></div>
             <div><strong>Url:</strong> {{ vendorMe?.UrlID }}</div>
@@ -13,7 +13,7 @@
             @click="router.push('/me')"
             class="px-2 rounded-full bg-red-600 text-white font-bold"
           >
-            Zurück
+            {{ $t('back') }}
           </button>
         </div>
       </div>

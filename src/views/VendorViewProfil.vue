@@ -29,7 +29,7 @@
             @click="router.push('/me')"
             class="px-2 rounded-full bg-red-600 text-white font-bold"
           >
-            Zurück
+            {{ $t('back') }}
           </button>
         </div>
       </div>
