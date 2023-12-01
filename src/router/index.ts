@@ -280,6 +280,24 @@ const router = createRouter({
       component: () => import('@/views/VendorOverview.vue')
     },
     {
+      path: '/me/qrcode',
+      name: 'My QR Code',
+      meta: {
+        layout: Default,
+        requiresAuth: true
+      },
+      component: () => import('@/views/VendorViewQRCode.vue')
+    },
+    {
+      path: '/me/profile',
+      name: 'My Profile',
+      meta: {
+        layout: Default,
+        requiresAuth: true
+      },
+      component: () => import('@/views/VendorViewProfil.vue')
+    },
+    {
       path: '/qr-code',
       name: 'QR Code',
       component: () => import('@/views/QRCode.vue'),
