@@ -1,47 +1,88 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
+      <!--Main template-->
       <div className="vendor-overview container mb-8 space-y-40 pb-3 w-5/6">
         <div className="flex flex-col items-center space-y-8">
-          <h2 className="text-2xl font-bold">QR-Code</h2>
-          <div id="canvas"></div>
-          <div><strong>Url:</strong> {{ vendorMe?.UrlID }}</div>
-          <div>
-            <strong>{{ $t('IDNumber') }}</strong
-            >: {{ vendorMe?.LicenseID }}
-          </div>
-        </div>
-        <br />
-        <div class="information my-16 mt-8 pt-8 space-y-4 text-sm">
-          <h2 class="text-2xl font-bold text-center">{{ $t('yourData') }}</h2>
-          <div class="grid grid-cols-2 place-content-between">
-            <strong>Name:</strong>
-            {{ vendorMe?.FirstName }} {{ vendorMe?.LastName }}
-          </div>
-          <div class="grid grid-cols-2 place-content-between">
-            <strong>Email: </strong>{{ vendorMe?.Email }}
-          </div>
-          <div class="grid grid-cols-2 place-content-between">
-            <strong> {{ $t('telephone') }}: </strong>{{ vendorMe?.Telephone }}
-          </div>
-          <div class="grid grid-cols-2 place-content-between">
-            <strong>{{ $t('location') }}: </strong>{{ vendorMe?.Location }}
-          </div>
-          <div class="grid grid-cols-2 place-content-between">
-            <strong>{{ $t('postCode') }}:</strong> {{ vendorMe?.PLZ }}
-          </div>
-          <div class="grid grid-cols-2 place-content-between">
-            <strong>{{ $t('menuCredits') }}: </strong>{{ vendorMe?.Balance }}€
+          <h1 className="text-3xl font-bold">Meine Info</h1>
+          <div class="grid grid-cols-2 place-content-between text-2xl">
+            <strong>{{ $t('menuCredits') }}: </strong>
+            <span class="font-bold"
+              >{{
+                vendorMe?.Balance !== undefined ? (vendorMe?.Balance / 100).toFixed(2) : 'N/A'
+              }}
+              €</span
+            >
           </div>
           <div class="grid grid-cols-2 place-content-between">
             <strong>{{ $t('lastPayout') }}: </strong>{{ vendorMe?.LastPayout }}
           </div>
           <div class="grid grid-cols-2 place-content-between">
-            <strong>{{ $t('lastTransactions') }}: </strong>tbd
+            <strong>{{ $t('lastTransactions') }}: </strong>
+            {{ vendorMe?.OpenPayments[1].SenderName }}
+
+            <!--Liste zum scrollen Anfang-->
+            <div class="h-5/6 pb-3">
+              <ul
+                class="list-image-none overflow-y-auto w-full h-full border-4 border-gray-200 rounded-3xl"
+              >
+                <li v-if="vendorMe?.LastPayout" class="flex w-full p-1 pt-2 relative">
+                  <div class="flex-none grid grid-rows-1 place-content-start mr-2">
+                    <div class="pb-1"></div>
+                  </div>
+                  <hr class="absolute bottom-0 left-0 w-full h-[3px] bg-gray-200" />
+                </li>
+              </ul>
+            </div>
+            <!--Liste zum scrollen Ende-->
           </div>
 
+          <!-- Buttons -->
+
+          <router-link to="/me/qrcode">
+            <button class="p-2 rounded-full bg-lime-600 text-white mr-2">QR-Code</button>
+          </router-link>
+          <router-link to="/me/profile">
+            <button class="p-2 rounded-full bg-lime-600 text-white mr-2">Profil</button>
+          </router-link>
+
+          <!-- First Content 
+          <div v-if="showFirstContent">
+            <h2 className="text-2xl font-bold">QR-Code</h2>
+            <div id="canvas"></div>
+            <div><strong>Url:</strong> {{ vendorMe?.UrlID }}</div>
+          </div>
+
+
+          <div v-if="showSecondContent">
+            <div class="information my-16 mt-8 pt-8 space-y-4 text-sm">
+              <h2 class="text-2xl font-bold text-center">{{ $t('yourData') }}</h2>
+              <div class="grid grid-cols-2 place-content-between">
+                <strong>Name:</strong>
+                {{ vendorMe?.FirstName }} {{ vendorMe?.LastName }}
+              </div>
+              <div>
+                <strong>{{ $t('IDNumber') }}</strong
+                >: {{ vendorMe?.LicenseID }}
+              </div>
+              <div class="grid grid-cols-2 place-content-between">
+                <strong>Email: </strong>{{ vendorMe?.Email }}
+              </div>
+              <div class="grid grid-cols-2 place-content-between">
+                <strong> {{ $t('telephone') }}: </strong>{{ vendorMe?.Telephone }}
+              </div>
+              <div class="grid grid-cols-2 place-content-between">
+                <strong>{{ $t('location') }}: </strong>{{ vendorMe?.Location }}
+              </div>
+              <div class="grid grid-cols-2 place-content-between">
+                <strong>{{ $t('postCode') }}:</strong> {{ vendorMe?.PLZ }}
+              </div>
+            </div>
+          </div>
+-->
+          <!-- Logout Button -->
           <button
-            class="bg-black rounded-full p-5 text-white text-3xl w-full font-semibold"
+            class="p-2 rounded-full bg-lime-600 text-white mr-2"
             @click="keycloak.keycloak.logout"
           >
             <font-awesome-icon :icon="faArrowRightFromBracket" />
@@ -120,14 +161,10 @@ const generateQRCode = async (vendorMe: Vendor) => {
 .vendor-overview {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20rem;
-  padding-bottom: 16rem;
 }
 
 .my-16 {
-  margin-top: 30rem;
   margin-bottom: 4rem;
-  padding-top: 30rem;
 }
 
 h2 {
