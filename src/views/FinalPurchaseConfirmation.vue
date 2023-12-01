@@ -40,11 +40,13 @@ onMounted(() => {
           {{ $t('confirm') }}
         </div>
         <div class="w-full">
-          <div v-if="shopStore.finalitems.length < 2" v-for="item in shopStore.amount" :key="item.item">
-            <div class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3 "
-              v-if="item.quantity > 0">
-              {{ item.quantity }}x {{ shopStore.getName(item.item) }}
-              {{ shopStore.getPriceInEuro(item.item) }}€
+          <div v-if="shopStore.finalitems.length < 2">
+            <div  v-for="item in shopStore.amount" :key="item.item">
+              <div class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3 "
+                v-if="item.quantity > 0">
+                {{ item.quantity }}x {{ shopStore.getName(item.item) }}
+                {{ shopStore.getPriceInEuro(item.item) }}€
+              </div>
             </div>
           </div>
           <div v-if="shopStore.finalitems.length >= 2">
@@ -57,8 +59,8 @@ onMounted(() => {
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                     <g id="SVGRepo_iconCarrier">
-                      <path d="M6 12H18M12 6V18" :stroke="settStore.settings.FontColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round"></path>
+                      <path d="M6 12H18M12 6V18" :stroke="settStore.settings.FontColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"></path>
                     </g>
                   </svg>
                 </button>
@@ -206,4 +208,5 @@ onMounted(() => {
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
   }
-}</style>
+}
+</style>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { settingsStore } from '@/stores/settings'
-import { useRoute } from 'vue-router'
 import { useShopStore } from '@/stores/ShopStore'
 
 const settStore = settingsStore()
