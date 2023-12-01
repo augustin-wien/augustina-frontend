@@ -45,13 +45,13 @@
 
           <div class="flex space-x-4">
             <router-link to="/me/qrcode">
-              <button class="p-2 rounded-full bg-lime-600 text-white">QR-Code</button>
+              <button class="p-2 rounded-full customcolor text-white">QR-Code</button>
             </router-link>
             <router-link to="/me/profile">
-              <button class="p-2 rounded-full bg-lime-600 text-white">Profil</button>
+              <button class="p-2 rounded-full customcolor text-white">Profil</button>
             </router-link>
             <button
-              class="p-2 rounded-full bg-lime-600 text-white"
+              class="p-2 rounded-full customcolor text-white"
               @click="keycloak.keycloak.logout"
             >
               <font-awesome-icon :icon="faArrowRightFromBracket" />
@@ -71,12 +71,29 @@ import type { Vendor } from '@/stores/vendor'
 import keycloak from '@/keycloak/keycloak'
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import QRCodeStyling from 'qr-code-styling'
+import { useKeycloakStore } from '@/stores/keycloak'
+import { computed } from 'vue'
+import { settingsStore } from '@/stores/settings'
 
+const settStore = settingsStore()
 const store = vendorsStore()
+const keycloakStore = useKeycloakStore()
 
 const vendorMe = ref<Vendor | null>(null)
 
+const authenticated = computed(() => keycloakStore.authenticated)
+
 onMounted(async () => {
+  if (authenticated.value) {
+    try {
+      vendorMe.value = await store.fetchVendorMe()
+      if (vendorMe.value) {
+        generateQRCode(vendorMe.value)
+      }
+    } catch (error) {
+      console.error('Fehler beim API-Aufruf:', error)
+    }
+  }
   try {
     vendorMe.value = await store.fetchVendorMe()
     if (vendorMe.value) {
@@ -127,7 +144,10 @@ const generateQRCode = async (vendorMe: Vendor) => {
 }
 </script>
 
-<style>
+<style scoped>
+.customcolor {
+  background-color: v-bind(settStore.settings.Color);
+}
 .vendor-overview {
   display: flex;
   flex-direction: column;
