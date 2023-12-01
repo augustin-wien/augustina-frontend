@@ -1,6 +1,7 @@
 import keycloak, { initKeycloak } from '@/keycloak/keycloak'
 import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
 import Default from '@/layouts/DefaultLayout.vue'
+import VendorLayoutVue from '@/layouts/VendorLayout.vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -283,7 +284,7 @@ const router = createRouter({
       path: '/me/qrcode',
       name: 'My QR Code',
       meta: {
-        layout: Default,
+        layout: VendorLayoutVue,
         requiresAuth: true
       },
       component: () => import('@/views/VendorViewQRCode.vue')
@@ -292,7 +293,7 @@ const router = createRouter({
       path: '/me/profile',
       name: 'My Profile',
       meta: {
-        layout: Default,
+        layout: VendorLayoutVue,
         requiresAuth: true
       },
       component: () => import('@/views/VendorViewProfil.vue')
@@ -302,7 +303,7 @@ const router = createRouter({
       name: 'QR Code',
       component: () => import('@/views/QRCode.vue'),
       meta: {
-        layout: Default
+        layout: VendorLayoutVue
       }
     },
     {
