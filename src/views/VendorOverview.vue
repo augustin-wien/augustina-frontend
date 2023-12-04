@@ -33,7 +33,7 @@
               >
                 <div class="flex-none grid grid-rows-1 place-content-start">
                   <div class="pb-1">
-                    {{ $t('date') }}: {{ OpenPayment.Timestamp }}, {{ $t('amount') }}:
+                    {{ $t('date') }}: {{ formatTime(OpenPayment.Timestamp) }}, {{ $t('amount') }}:
                     {{ (OpenPayment.Amount / 100).toFixed(2) }}€
                   </div>
                 </div>
@@ -82,6 +82,11 @@ const keycloakStore = useKeycloakStore()
 const vendorMe = ref<Vendor | null>(null)
 
 const authenticated = computed(() => keycloakStore.authenticated)
+
+const formatTime = (date: string) => {
+  const d = new Date(date)
+  return d.toLocaleDateString()
+}
 
 onMounted(async () => {
   if (authenticated.value) {
@@ -148,6 +153,7 @@ const generateQRCode = async (vendorMe: Vendor) => {
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
 }
+
 .vendor-overview {
   display: flex;
   flex-direction: column;
