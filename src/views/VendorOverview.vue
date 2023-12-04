@@ -43,7 +43,7 @@
           </div>
           <!--Liste zum scrollen Ende-->
 
-          <div class="flex space-x-4">
+          <div :style="customColor" class="flex space-x-4">
             <router-link to="/me/qrcode">
               <button class="p-2 rounded-full customcolor text-white">QR-Code</button>
             </router-link>
@@ -147,11 +147,17 @@ const generateQRCode = async (vendorMe: Vendor) => {
     qrCode.append(canvas)
   }
 }
+// Computed property to manage dynamic styles
+const customColor = computed(() => {
+  return {
+    '--custom-bg-color': settStore.settings.Color
+  }
+})
 </script>
 
 <style scoped>
 .customcolor {
-  background-color: v-bind(settStore.settings.Color);
+  background-color: var(--custom-bg-color);
 }
 
 .vendor-overview {
