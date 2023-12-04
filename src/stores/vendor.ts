@@ -56,11 +56,7 @@ export interface Vendor {
   ID: number
   KeycloakID: string
   LastName: string
-  LastPayout: {
-    infinityModifier: number
-    time: string
-    valid: true
-  } | null
+  LastPayout: string | null
   LicenseID: string
   UrlID: string
   Balance: number
