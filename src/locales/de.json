@@ -118,11 +118,10 @@
   "Transaction Costs": "Transaktionskosten",
   "Donation": "Spende",
 
-
   "lastTransactions": "Letzte Transaktionen",
   "yourData": "Dein Account",
 
-  "back": "Zurück"
+  "back": "Zurück",
 
   "information": "Bitte erkundige dich, ob dieses Produkt vorhanden ist!",
   "error": "Fehler",
@@ -130,5 +129,4 @@
 
   "export": "Exportieren",
   "Logout": "Logout"
-
 }
