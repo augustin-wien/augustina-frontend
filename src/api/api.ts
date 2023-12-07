@@ -4,7 +4,16 @@ import { type PaymentsForPayout, type Payout } from '@/stores/payout'
 import { type Settings } from '@/stores/settings'
 import { type Vendor } from '@/stores/vendor'
 import axios from 'axios'
-import { AUTH_API_URL, ITEMS_API_URL, ITEMS_BACKOFFICE_API_URL, PAYMENTS_FOR_PAYOUT_API_URL, PAYMENT_API_URL, PAYOUT_API_URL, SETTINGS_API_URL, VENDORS_API_URL } from './endpoints'
+import {
+  AUTH_API_URL,
+  ITEMS_API_URL,
+  ITEMS_BACKOFFICE_API_URL,
+  PAYMENTS_FOR_PAYOUT_API_URL,
+  PAYMENT_API_URL,
+  PAYOUT_API_URL,
+  SETTINGS_API_URL,
+  VENDORS_API_URL
+} from './endpoints'
 
 export const apiInstance = axios.create({
   withCredentials: true
@@ -90,7 +99,7 @@ export async function postItems(newItem: Item) {
   return apiInstance.post(ITEMS_API_URL, JSON.stringify(newItem), {
     headers: {
       accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'multipart/form-data'
     }
   })
 }
@@ -121,28 +130,31 @@ export async function fetchSettings() {
 export async function patchSettings(updatedSettings: Settings) {
   const formData = new FormData()
   formData.append('Color', updatedSettings.Color)
-  formData.append('FontColor', updatedSettings.FontColor);
+  formData.append('FontColor', updatedSettings.FontColor)
   formData.append('Logo', updatedSettings.Logo)
   formData.append('MainItem', updatedSettings.MainItem.toString())
-  formData.append('OrgaCoversTransactionCosts', updatedSettings.OrgaCoversTransactionCosts.toString());
-  formData.append('MaxOrderAmount', updatedSettings.MaxOrderAmount.toString());
-
-  return apiInstance.put(
-    `${SETTINGS_API_URL}`,
-    formData,
-    {
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'multipart/form-data'
-      }
-    }
+  formData.append(
+    'OrgaCoversTransactionCosts',
+    updatedSettings.OrgaCoversTransactionCosts.toString()
   )
+  formData.append('MaxOrderAmount', updatedSettings.MaxOrderAmount.toString())
+
+  return apiInstance.put(`${SETTINGS_API_URL}`, formData, {
+    headers: {
+      accept: 'application/json',
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 }
 
 //payments list
 //sind rfc dates strings?
 export async function fetchPayments(startDate: Date, endDate: Date, filter: string) {
-  return apiInstance.get(`${PAYMENT_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}${filter ? '&' + filter : ''}`)
+  return apiInstance.get(
+    `${PAYMENT_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}${
+      filter ? '&' + filter : ''
+    }`
+  )
 }
 
 //payout

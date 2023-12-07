@@ -113,7 +113,7 @@
             <div class="flex place-content-center">
               <router-link to="/backoffice/settings/">
                 <button
-                  :onsubmit="updateSettings()"
+                  @click="updateSettings()"
                   type="submit"
                   class="p-3 rounded-full bg-lime-600 text-white"
                 >
