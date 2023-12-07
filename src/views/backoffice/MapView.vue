@@ -4,9 +4,9 @@
             <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t("menuMap") }}</h1>
 
         </template>
-        <template #main>
+        <template #main class="h-full">
             <div class="h-full">
-                <div style="height:550px; width:100%">
+                <div style="height:100%; width:100%">
                     <l-map ref="map" v-model:zoom="zoom" v-model:center="center">
                         <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
                             name="OpenStreetMap"></l-tile-layer>

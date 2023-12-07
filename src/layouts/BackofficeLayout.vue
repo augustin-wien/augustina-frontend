@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div className="backoffice-layout h-screen" v-if="authenticated">
-      <div className="">
+    <div className="backoffice-layout h-screen flex " v-if="authenticated">
+      <div class="h-full flex-none w-100">
         <div
-          className="sidemenu fixed t-0 l-0 h-full w-100 flex flex-col justify-start items-start pr-5 pl-4 border-gray-600 border-b space-y-3 pb-5 bg-lime-600">
+          className="sidemenu fixed t-0 l-0 h-full w-100 flex-none flex flex-col justify-start items-start pr-5 pl-4 border-gray-600 border-b space-y-3 pb-5 bg-lime-600">
           <div className="sidemenu-item object-center">
             <img :src="apiUrl + 'img/logo.png'" alt="Augustin logo" className="logo mx-auto my-5" width="270"
               height="150" />
@@ -92,11 +92,12 @@
         </div>
       </div>
 
-      <div className="main-container flex">
-        <div class="header-slot fixed">
+
+      <div className="main-container grow h-full flex">
+        <div class="header-slot fixed flex-none">
           <slot name="header"> </slot>
         </div>
-        <div class="main-slot">
+        <div class="main-slot grow">
           <slot name="main"> </slot>
         </div>
       </div>
@@ -161,7 +162,6 @@ const apiUrl = import.meta.env.VITE_API_URL
 .main-container {
   padding-left: 8px;
   margin-left: 300px;
-  width: calc(100% - 310px);
 }
 
 .sidemenu-link {
@@ -175,7 +175,7 @@ const apiUrl = import.meta.env.VITE_API_URL
   padding-left: 50px;
   border-radius: 5px;
   background: #f2f9f1;
-  width: calc(100% - 310px);
+  width: 100%;
   z-index: 50;
 }
 
