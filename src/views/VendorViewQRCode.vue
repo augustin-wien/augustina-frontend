@@ -7,7 +7,12 @@
           <h1 className="text-3xl font-bold">QR-Code</h1>
           <div class="content-center">
             <div id="canvas"></div>
-            <div><strong>Url:</strong> {{ vendorMe?.UrlID }}</div>
+            <div>
+              <strong class="mr-2">{{ $t('Url') }}:</strong>
+              <a href="{{ `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}` }}">
+                {{ `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}` }}
+              </a>
+            </div>
           </div>
           <button
             @click="router.push('/me')"
@@ -46,35 +51,35 @@ onMounted(async () => {
 //qrcode
 const generateQRCode = async (vendorMe: Vendor) => {
   const qrCode = new QRCodeStyling({
-    width: 100,
-    height: 100,
+    width: 200,
+    height: 200,
     type: 'svg',
     data: `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}`,
 
     dotsOptions: {
       color: '#000',
-      type: 'dots'
+      type: 'dots',
     },
     backgroundOptions: {
-      color: '#fff'
+      color: '#fff',
     },
     imageOptions: {
       crossOrigin: 'anonymous',
-      margin: 20
+      margin: 20,
     },
     cornersSquareOptions: {
       type: 'dot',
-      color: '#000000'
+      color: '#000000',
     },
     cornersDotOptions: {
       type: 'dot',
-      color: '#000000'
+      color: '#000000',
     },
     qrOptions: {
       typeNumber: 0,
       mode: 'Byte',
-      errorCorrectionLevel: 'Q'
-    }
+      errorCorrectionLevel: 'Q',
+    },
   })
   const canvas = document.getElementById('canvas')
   if (canvas !== null) {
