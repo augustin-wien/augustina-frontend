@@ -84,11 +84,11 @@ const authenticated = computed(() => keycloakStore.authenticated)
 onMounted(() => {
   if (authenticated.value) {
     store.getSales(startDate.value, endDate.value)
-    itemsStore.getItems()
+    itemsStore.getItemsBackoffice()
   } else {
     watch(authenticated, (val: boolean) => {
       if (val) store.getSales(startDate.value, endDate.value)
-      itemsStore.getItems()
+      itemsStore.getItemsBackoffice()
     })
   }
 })
