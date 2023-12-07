@@ -52,8 +52,8 @@ onMounted(() => {
           <div v-if="shopStore.finalitems.length >= 2">
             <div class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full relative">
               {{ shopStore.finalitems[0].quantity }}x {{ shopStore.getName(shopStore.finalitems[0].item) }}
-              {{ shopStore.getPriceInEuro(shopStore.finalitems[0].item) }}€
-              <RouterLink class="h-6 w-6 bottom-0 right-0 absolute" :to="{ name: 'Items' }">
+              {{ shopStore.getPriceInEuro(shopStore.finalitems[0].item) }}€ & ...
+              <RouterLink class="h-8 w-8 bottom-0 right-0 absolute" :to="{ name: 'Items' }">
                 <button class="customcolor text-center rounded-full w-full h-full flex items-center justify-center">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -73,7 +73,7 @@ onMounted(() => {
           <div class="grid grid-cols-6 w-full items-center">
             <div></div>
             <div class="col-span-4">
-              <p class="text-center text-8xl font-semibold">
+              <p class="text-center text-6xl font-semibold">
                 {{ paymentStore.priceInEuros() }}€
               </p>
               <p className="text-center text">
