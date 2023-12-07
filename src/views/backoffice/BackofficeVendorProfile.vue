@@ -53,7 +53,7 @@
                   <td className="p-3">{{ vendor.Longitude }}</td>
 
                   <th className="p-3">{{ $t('latitude') }}:</th>
-                  <td className="p-3">{{ vendor.Longitude }}</td>
+                  <td className="p-3">{{ vendor.Latitude }}</td>
                 </tr>
                 <tr>
                   <th className="p-3">{{ $t('location') }}:</th>
