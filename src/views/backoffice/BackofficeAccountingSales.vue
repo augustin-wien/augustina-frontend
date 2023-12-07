@@ -141,7 +141,7 @@ const exportTable = () => {
       formatTime(payment.Timestamp),
       translateSender(payment.ReceiverName),
       getItemName(payment.Item),
-      formatAmount(payment.Amount) + ' €',
+      formatAmount(payment.Amount),
     ]
   })
 

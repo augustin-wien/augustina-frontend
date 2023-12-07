@@ -54,7 +54,7 @@
                     v-for="item in items"
                     v-bind:key="`td_${payment.ID}_${item.ID}`"
                   >
-                    {{ sumItemsForOrder(payment, item.ID) }}
+                    {{ sumItemsForOrder(payment, item.ID) }} €
                   </td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
@@ -145,7 +145,7 @@ const sumItemsForOrder = (payment: any, itemID: number) => {
       }
     }
   })
-  return `${formatAmount(sum)} €`
+  return formatAmount(sum)
 }
 const exportTable = () => {
   if (!payments.value || payments.value.length == 0) {
@@ -167,7 +167,7 @@ const exportTable = () => {
       translateSender(payment.SenderName),
       payment.AuthorizedBy,
       ...itemAmounts,
-      formatAmount(payment.Amount) + ' €'
+      formatAmount(payment.Amount)
     ]
   })
 

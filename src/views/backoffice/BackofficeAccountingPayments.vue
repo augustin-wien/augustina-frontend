@@ -165,7 +165,7 @@ const exportTable = () => {
       translateSender(payment.SenderName),
       translateReceiver(payment.ReceiverName),
       translateItem(payment),
-      formatAmount(payment.Amount) + ' €'
+      formatAmount(payment.Amount)
     ]
   })
 
