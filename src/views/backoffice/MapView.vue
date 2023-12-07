@@ -4,7 +4,7 @@
             <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t("menuMap") }}</h1>
 
         </template>
-        <template #main class="h-full">
+        <template #main>
             <div class="h-full">
                 <div style="height:100%; width:100%">
                     <l-map ref="map" v-model:zoom="zoom" v-model:center="center">
