@@ -1,19 +1,29 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('protocol') }}</h1>
-      <p className="text-lg">{{ $t('enterPeriod') }}:</p>
-      <span>
-        <VueDatePicker
-          v-model="date"
-          range
-          :enable-time-picker="false"
-          :placeholder="$t('chooseDateRange')"
-          @range-start="onRangeStart"
-          @range-end="onRangeEnd"
-          class="max-w-md"
-        />
-      </span>
+      <div class="flex space-between justify-between content-center items-center">
+        <div>
+          <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('protocol') }}</h1>
+          <p className="text-lg">{{ $t('enterPeriod') }}:</p>
+          <span>
+            <VueDatePicker
+              v-model="date"
+              range
+              :enable-time-picker="false"
+              :placeholder="$t('chooseDateRange')"
+              @range-start="onRangeStart"
+              @range-end="onRangeEnd"
+              class="max-w-md"
+            />
+          </span>
+        </div>
+        <button
+          class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
+          @click="exportTable"
+        >
+          {{ $t('export') }}
+        </button>
+      </div>
     </template>
 
     <template #main>
@@ -44,7 +54,7 @@
                     v-for="item in items"
                     v-bind:key="`td_${payment.ID}_${item.ID}`"
                   >
-                    {{ sumItemsForOrder(payment, item.ID) }}
+                    {{ sumItemsForOrder(payment, item.ID) }} €
                   </td>
                   <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
                 </tr>
@@ -65,6 +75,7 @@ import { usePaymentsStore } from '@/stores/payments'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useItemsStore } from '@/stores/items'
 import { type Payment } from '@/stores/payments'
+import { exportAsCsv } from '@/utils/utils'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -134,6 +145,32 @@ const sumItemsForOrder = (payment: any, itemID: number) => {
       }
     }
   })
-  return `${formatAmount(sum)} €`
+  return formatAmount(sum)
+}
+const exportTable = () => {
+  if (!payments.value || payments.value.length == 0) {
+    alert('Nothing to export')
+    return
+  }
+  const itemNames = items.value.map((item) => item.Name)
+  const header = [
+    'Datum',
+    'Sender',
+    'Empfänger',
+    ...itemNames,
+    'Gesamt'
+  ]
+  const data = payments.value.map((payment: Payment) => {
+    const itemAmounts = items.value.map((item) => sumItemsForOrder(payment, item.ID))
+    return [
+       formatTime(payment.Timestamp),
+      translateSender(payment.SenderName),
+      payment.AuthorizedBy,
+      ...itemAmounts,
+      formatAmount(payment.Amount)
+    ]
+  })
+
+  exportAsCsv([header, ...data], `payouts_${startDate.value.toLocaleDateString()}-${endDate.value.toLocaleDateString()}`)
 }
 </script>

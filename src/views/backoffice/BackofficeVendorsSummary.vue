@@ -1,26 +1,38 @@
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuVendors') }}</h1>
-      <span>
-        <input
-          id="searchInput"
-          type="text"
-          :placeholder="$t('IDNumber')"
-          class="border-2 border-gray-400 rounded-md p-2 ml-2"
-          v-model="searchQuery"
-          @keyup.enter="search"
-        />
-        <button @click="search" class="p-3 rounded-full bg-lime-600 ml-2 text-white">
-          {{ $t('search') }}
+      <div class="flex space-between justify-between content-center items-center">
+        <div>
+          <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuVendors') }}</h1>
+          <span>
+            <input
+              id="searchInput"
+              type="text"
+              :placeholder="$t('IDNumber')"
+              class="border-2 border-gray-400 rounded-md p-2 ml-2"
+              v-model="searchQuery"
+              @keyup.enter="search"
+            />
+            <button @click="search" class="p-3 rounded-full bg-lime-600 ml-2 text-white">
+              {{ $t('search') }}
+            </button>
+          </span>
+        </div>
+        <button
+          class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
+          @click="exportTable"
+        >
+          {{ $t('export') }}
         </button>
-      </span>
+      </div>
     </template>
 
     <template #main>
       <div class="main">
         <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
+          <div
+            className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5"
+          >
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
@@ -45,7 +57,9 @@
                   <td class="flex justify-center">
                     <span id="canvas"></span>
                     <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
-                      <button className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2">
+                      <button
+                        className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2"
+                      >
                         <font-awesome-icon :icon="faArrowAltCircleRight" />
                       </button>
                     </router-link>
@@ -53,7 +67,9 @@
                       :to="`/backoffice/credits/payout/${vendor.ID}`"
                       v-if="vendor.Balance !== 0"
                     >
-                      <button className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10">
+                      <button
+                        className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10"
+                      >
                         <font-awesome-icon :icon="faCreditCard" />
                       </button>
                     </router-link>
@@ -98,7 +114,13 @@ import type { Vendor } from '@/stores/vendor'
 import { ref, computed, onMounted, watch } from 'vue'
 import QRCodeStyling from 'qr-code-styling'
 import keycloak from '@/keycloak/keycloak'
-import { faCreditCard, faArrowAltCircleRight, faQrcode } from '@fortawesome/free-solid-svg-icons'
+import { exportAsCsv } from '@/utils/utils'
+
+import {
+  faCreditCard,
+  faArrowAltCircleRight,
+  faQrcode,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 // Initialize the vendor store
@@ -149,28 +171,28 @@ const generateQRCode = async (vendor: Vendor) => {
 
     dotsOptions: {
       color: '#000',
-      type: 'dots'
+      type: 'dots',
     },
     backgroundOptions: {
-      color: '#fff'
+      color: '#fff',
     },
     imageOptions: {
       crossOrigin: 'anonymous',
-      margin: 20
+      margin: 20,
     },
     cornersSquareOptions: {
       type: 'dot',
-      color: '#000000'
+      color: '#000000',
     },
     cornersDotOptions: {
       type: 'dot',
-      color: '#000000'
+      color: '#000000',
     },
     qrOptions: {
       typeNumber: 0,
       mode: 'Byte',
-      errorCorrectionLevel: 'Q'
-    }
+      errorCorrectionLevel: 'Q',
+    },
   })
   const canvas = document.getElementById('canvas')
   if (canvas !== null) {
@@ -178,6 +200,23 @@ const generateQRCode = async (vendor: Vendor) => {
     qrCode.download({ name: vendor.LicenseID, extension: 'png' })
     canvas.innerHTML = ''
   }
+}
+const exportTable = () => {
+  if (!displayVendors.value || displayVendors.value.length == 0) {
+    alert('Nothing to export')
+    return
+  }
+  const header = ['Ausweisnummer', 'Vorname', 'Nachname', 'Aktuelles Guthaben']
+  const data = displayVendors.value.map((vendor: Vendor) => {
+    return [
+      vendor.LicenseID,
+      vendor.FirstName,
+      vendor.LastName,
+      formatCredit(vendor.Balance) + ' €',
+    ]
+  })
+  const now = new Date()
+  exportAsCsv([header, ...data], `vendors_${now.toLocaleDateString()}`)
 }
 </script>
 
