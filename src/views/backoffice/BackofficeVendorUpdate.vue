@@ -136,6 +136,32 @@
                     id="location"
                   />
                 </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+                  >Longitude:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.Longitude }} </span>
+
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.Longitude"
+                    type="text"
+                    id="location"
+                  />
+                </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+                  >Latitude:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.Latitude }} </span>
+
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model="updatedVendor.Latitude"
+                    type="text"
+                    id="location"
+                  />
+                </div>
               </span>
             </div>
             <div class="row">

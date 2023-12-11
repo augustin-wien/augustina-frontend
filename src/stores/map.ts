@@ -17,6 +17,7 @@ export const useMapStore = defineStore('mapStore', {
     actions: {
      async getLocations() {
         try {
+            //timeout to prevent deadlock
             await new Promise(f => setTimeout(f, 500));
             const data = await getLocations()
             //@ts-ignore
