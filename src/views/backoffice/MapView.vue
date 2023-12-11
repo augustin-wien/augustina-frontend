@@ -48,9 +48,6 @@ onMounted(() => {
     background-color: #65a30d;
 }
 
-.leaflet-popup-content-wrapper .leaflet-popup-content {
-}
-
 .leaflet-popup-tip {
     background-color: #65a30d;
 }
