@@ -131,7 +131,33 @@
 
                   <input
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.Location"
+                    v-model.number="updatedVendor.Location"
+                    type="text"
+                    id="location"
+                  />
+                </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+                  >{{ $t("longitude") }}:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.Longitude }} </span>
+
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model.number="updatedVendor.Longitude"
+                    type="text"
+                    id="location"
+                  />
+                </div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+                  >{{ $t("latitude") }}:</label
+                >
+                <div class="flex flex-row">
+                  <span class="p-2">{{ vendor.Latitude }} </span>
+
+                  <input
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    v-model.number="updatedVendor.Latitude"
                     type="text"
                     id="location"
                   />

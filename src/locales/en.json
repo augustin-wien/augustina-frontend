@@ -33,6 +33,7 @@
   "menuAccounting": "Accounting",
   "menuProducts": "Products",
   "menuSettings": "Settings",
+  "menuMap": "Map",
   "menuLogout": "Logout",
   "userLoggedIn": "is logged in.",
   "userNotLoggedIn": "No user is logged in.",
