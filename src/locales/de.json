@@ -128,5 +128,7 @@
   "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuche es erneut.",
 
   "export": "Exportieren",
-  "Logout": "Logout"
+  "Logout": "Logout",
+
+  "yourProfile": "Dein Profil"
 }

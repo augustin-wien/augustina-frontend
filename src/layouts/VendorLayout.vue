@@ -32,9 +32,7 @@ settStore.getSettingsFromApi()
         </slot>
       </header>
       <div class="h-5/6 main-container px-8">
-        <slot name="main">
-          <h1>Default Content</h1>
-        </slot>
+        <slot name="main"> </slot>
       </div>
     </main>
     <footer>

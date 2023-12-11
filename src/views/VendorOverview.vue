@@ -33,7 +33,7 @@
               >
                 <div class="flex-none grid grid-rows-1 place-content-start">
                   <div class="pb-1">
-                    {{ $t('date') }}: {{ formatTime(OpenPayment.Timestamp) }}, {{ $t('amount') }}:
+                    {{ formatTime(OpenPayment.Timestamp) }}, {{ $t('amount') }}:
                     {{ (OpenPayment.Amount / 100).toFixed(2) }}€
                   </div>
                 </div>
@@ -85,7 +85,15 @@ const authenticated = computed(() => keycloakStore.authenticated)
 
 const formatTime = (date: string) => {
   const d = new Date(date)
-  return d.toLocaleDateString()
+  const formattedDate = `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}.${d.getFullYear()}`
+  const formattedTime = `${d.getHours().toString().padStart(2, '0')}:${d
+    .getMinutes()
+    .toString()
+    .padStart(2, '0')}`
+
+  return `${formattedDate} - ${formattedTime}`
 }
 
 onMounted(async () => {

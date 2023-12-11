@@ -3,7 +3,7 @@
     <template #main>
       <div className="vendor-overview container mb-8 space-y-40 pb-3 w-5/6">
         <div className="flex flex-col items-center space-y-8">
-          <h1 className="text-3xl font-bold">{{ $t('yourData') }}</h1>
+          <h1 className="text-3xl font-bold">{{ $t('yourProfile') }}</h1>
           <div class="information">
             <div class="grid grid-cols-2 place-content-between">
               <strong>Name:</strong>
@@ -26,8 +26,9 @@
             </div>
           </div>
           <button
+            :style="customColor"
             @click="router.push('/me')"
-            class="px-2 rounded-full bg-red-600 text-white font-bold"
+            class="p-2 rounded-full customcolor text-white"
           >
             {{ $t('back') }}
           </button>
@@ -41,9 +42,12 @@
 import { ref, onMounted } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
+import { settingsStore } from '@/stores/settings'
+import { computed } from 'vue'
 import router from '@/router'
 
 const store = vendorsStore()
+const settStore = settingsStore()
 
 const vendorMe = ref<Vendor | null>(null)
 
@@ -54,9 +58,18 @@ onMounted(async () => {
     console.error('Fehler beim API-Aufruf:', error)
   }
 })
+// Computed property to manage dynamic styles
+const customColor = computed(() => {
+  return {
+    '--custom-bg-color': settStore.settings.Color
+  }
+})
 </script>
 
-<style>
+<style scoped>
+.customcolor {
+  background-color: var(--custom-bg-color);
+}
 .vendor-overview {
   display: flex;
   flex-direction: column;

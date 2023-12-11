@@ -10,8 +10,9 @@
             <div><strong>Url:</strong> {{ vendorMe?.UrlID }}</div>
           </div>
           <button
+            :style="customColor"
             @click="router.push('/me')"
-            class="px-2 rounded-full bg-red-600 text-white font-bold"
+            class="p-2 rounded-full customcolor text-white"
           >
             {{ $t('back') }}
           </button>
@@ -25,10 +26,13 @@
 import { ref, onMounted } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
+import { computed } from 'vue'
+import { settingsStore } from '@/stores/settings'
 import QRCodeStyling from 'qr-code-styling'
 import router from '@/router'
 
 const store = vendorsStore()
+const settStore = settingsStore()
 
 const vendorMe = ref<Vendor | null>(null)
 
@@ -81,6 +85,13 @@ const generateQRCode = async (vendorMe: Vendor) => {
     qrCode.append(canvas)
   }
 }
+
+// Computed property to manage dynamic styles
+const customColor = computed(() => {
+  return {
+    '--custom-bg-color': settStore.settings.Color
+  }
+})
 </script>
 
 <style>
@@ -107,5 +118,8 @@ const generateQRCode = async (vendorMe: Vendor) => {
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+.customcolor {
+  background-color: var(--custom-bg-color);
 }
 </style>
