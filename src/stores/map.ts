@@ -17,6 +17,7 @@ export const useMapStore = defineStore('mapStore', {
     actions: {
      async getLocations() {
         try {
+            await new Promise(f => setTimeout(f, 500));
             const data = await getLocations()
             //@ts-ignore
             this.vendors = data.data
