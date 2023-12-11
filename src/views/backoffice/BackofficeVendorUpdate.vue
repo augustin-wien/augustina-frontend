@@ -137,7 +137,7 @@
                   />
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                  >Longitude:</label
+                  >{{ $t("longitude") }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Longitude }} </span>
@@ -150,7 +150,7 @@
                   />
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                  >Latitude:</label
+                  >{{ $t("latitude") }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Latitude }} </span>
