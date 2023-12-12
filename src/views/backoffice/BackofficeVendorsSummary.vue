@@ -114,7 +114,7 @@ import type { Vendor } from '@/stores/vendor'
 import { ref, computed, onMounted, watch } from 'vue'
 import QRCodeStyling from 'qr-code-styling'
 import keycloak from '@/keycloak/keycloak'
-import { exportAsCsv } from '@/utils/utils'
+import { exportAsCsv, formatCredit } from '@/utils/utils'
 
 import {
   faCreditCard,
@@ -154,10 +154,6 @@ const search = () => {
 const displayVendors = computed(() => {
   return searchQuery.value ? store.filteredVendors : vendors.value
 })
-
-function formatCredit(credit: number) {
-  return (credit / 100).toFixed(2)
-}
 
 // Function to generate QR code only if the button is clicked
 const generateQRCode = async (vendor: Vendor) => {

@@ -1,5 +1,5 @@
 export function formatCredit(credit: number) {
-    return (credit / 100).toFixed(2)
+    return (credit / 100).toFixed(2).replace('.', ',')
 }
 export function formatDate(date: string) {
     if (!date || date === '') return ''

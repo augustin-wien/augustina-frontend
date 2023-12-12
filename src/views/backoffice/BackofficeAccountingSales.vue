@@ -43,7 +43,7 @@
                     {{ translateSender(payment.ReceiverName) }}
                   </td>
                   <td className="border-t-2 p-3">{{ $t(getItemName(payment.Item)) }}</td>
-                  <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
+                  <td className="border-t-2 p-3">{{ formatCredit(payment.Amount) }} €</td>
                 </tr>
               </tbody>
             </table>
@@ -61,7 +61,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { usePaymentsStore } from '@/stores/payments'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useItemsStore } from '@/stores/items'
-import { exportAsCsv } from '@/utils/utils'
+import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Payment } from '@/stores/payments'
 
 const startOfDay = (date: Date) => {
@@ -106,10 +106,6 @@ const onRangeEnd = (value: any) => {
   store.getSales(startDate.value, endDate.value)
 }
 
-const formatAmount = (amount: number) => {
-  return (amount / 100).toFixed(2)
-}
-
 const formatTime = (time: string) => {
   const date = new Date(time)
   return date.toLocaleDateString('de-DE', {
@@ -141,7 +137,7 @@ const exportTable = () => {
       formatTime(payment.Timestamp),
       translateSender(payment.ReceiverName),
       getItemName(payment.Item),
-      formatAmount(payment.Amount),
+      formatCredit(payment.Amount),
     ]
   })
 
