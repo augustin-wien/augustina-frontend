@@ -8,6 +8,7 @@ export interface Item {
   Image: 'string'
   Name: 'string'
   Price: number
+  LicenseItem: number | null
 }
 
 export const useItemsStore = defineStore('items', {

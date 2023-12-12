@@ -33,12 +33,13 @@ onMounted(() => {
       items.splice(tipItemIndex, 1)
     }
   }
-  paymentStore.postOrder(items, 1, vendorStore.vendorid).catch((error) => {
-    errorMessage.value = error.message
-    errorMessageDetail.value = error.response.data
-    console.log(error)
-  })
-  paymentStore.postOrder(items, 1, vendorStore.vendorid)
+  paymentStore
+    .postOrder(items, 1, vendorStore.vendorid, paymentStore.email)
+    .catch((error) => {
+      errorMessage.value = error.message
+      errorMessageDetail.value = error.response.data
+      console.log(error)
+    })
 })
 </script>
 
