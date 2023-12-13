@@ -187,7 +187,7 @@
                   />
 
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                    >Online Map:</label
+                    >{{ $t('onlineMap') }}:</label
                   >
                   <div class="flex flex-row">
                     <span class="p-2">
