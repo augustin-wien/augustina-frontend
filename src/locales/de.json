@@ -129,5 +129,6 @@
 
   "export": "Exportieren",
   "Logout": "Logout",
-  "Something went wrong please try it again or contact the office.": "Etwas ist schief gelaufen, bitte versuche es erneut oder kontaktiere das Büro."
+  "Something went wrong please try it again or contact the office.": "Etwas ist schief gelaufen, bitte versuche es erneut oder kontaktiere das Büro.",
+  "yourProfile": "Dein Profil"
 }
