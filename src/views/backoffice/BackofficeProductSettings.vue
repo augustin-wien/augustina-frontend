@@ -30,7 +30,7 @@
                   </td>
                   <td class="border-t-2 p-3 font-bold">{{ $t(item.Name) }}</td>
                   <td class="border-t-2 p-3">{{ $t(item.Description) }}</td>
-                  <td class="border-t-2 p-3">{{ price(item.Price) }} Euro</td>
+                  <td class="border-t-2 p-3">{{ formatCredit(item.Price) }} Euro</td>
                   <td>
                     <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
                       <button class="p-3 rounded-full bg-lime-600 text-white">
@@ -62,6 +62,7 @@
 <script lang="ts" setup>
 import { useItemsStore } from '@/stores/items'
 import { computed, onMounted } from 'vue'
+import { formatCredit } from '@/utils/utils'
 
 const store = useItemsStore()
 
@@ -71,9 +72,6 @@ onMounted(() => {
 })
 const items = computed(() => store.items)
 const apiUrl = import.meta.env.VITE_API_URL
-const price = (price: number) => {
-  return (price / 100).toFixed(2)
-}
 </script>
 
 <style scoped></style>
