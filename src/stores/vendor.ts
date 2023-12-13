@@ -125,7 +125,7 @@ export const vendorsStore = defineStore('vendors', {
         this.vendors = data.data
         //@ts-ignore
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     },
 
@@ -135,7 +135,7 @@ export const vendorsStore = defineStore('vendors', {
           this.getVendors()
         })
         .catch((error) => {
-          console.log('Error creating vendor:', error)
+          console.error('Error creating vendor:', error)
         })
     },
     async createVendorPromise(newVendor: Vendor) {
@@ -182,7 +182,7 @@ export const vendorsStore = defineStore('vendors', {
           this.getVendors()
         })
         .catch((error) => {
-          console.log('Error updating vendor:', error)
+          console.error('Error updating vendor:', error)
         })
     },
     async deleteVendor(vendorId: number) {
@@ -191,7 +191,7 @@ export const vendorsStore = defineStore('vendors', {
           this.getVendors()
         })
         .catch((error) => {
-          console.log('Error deleting vendor:', error)
+          console.error('Error deleting vendor:', error)
         })
     },
     async getVendor(vendorId: number) {
@@ -200,7 +200,7 @@ export const vendorsStore = defineStore('vendors', {
         this.vendor = data.data
         return data.data
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     },
 
@@ -209,7 +209,7 @@ export const vendorsStore = defineStore('vendors', {
         const data = await getVendorMe()
         return data.data
       } catch (error) {
-        console.log(error)
+        throw error
       }
     }
   }

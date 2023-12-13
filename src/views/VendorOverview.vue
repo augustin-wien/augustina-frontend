@@ -2,12 +2,12 @@
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <!--Main template-->
-      <div className="vendor-overview container mb-8 space-y-2">
-        <div className="flex flex-col items-center space-y-4">
+      <div className="vendor-overview container mb-8 space-y-2" v-if="authenticated">
+        <div className="flex flex-col items-center space-y-4" v-if="!failure">
           <h1 className="text-3xl font-bold">{{ $t('yourData') }}</h1>
           <div class="grid grid-cols-2 place-content-between text-2xl">
             <strong>{{ $t('menuCredits') }}: </strong>
-            <span class="font-bold"
+            <span class="font-bold" v-if="vendorMe?.Balance !== undefined"
               >{{
                 vendorMe?.Balance !== undefined ? (vendorMe?.Balance / 100).toFixed(2) : 'N/A'
               }}
@@ -33,7 +33,7 @@
               >
                 <div class="flex-none grid grid-rows-1 place-content-start">
                   <div class="pb-1">
-                    {{ formatTime(OpenPayment.Timestamp) }}, {{ $t('amount') }}:
+                    {{ $t('date') }}: {{ formatTime(OpenPayment.Timestamp) }}, {{ $t('amount') }}:
                     {{ (OpenPayment.Amount / 100).toFixed(2) }}€
                   </div>
                 </div>
@@ -59,13 +59,19 @@
             </button>
           </div>
         </div>
+        <div v-else>
+          <div class="mt-10 font-bold text-lg mb-5 text-red-800">
+            {{ $t('Something went wrong please try it again or contact the office.') }}
+          </div>
+          {{ $t('error') + ': ' + failureMessage }}
+        </div>
       </div>
     </template>
   </component>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import keycloak from '@/keycloak/keycloak'
@@ -82,6 +88,9 @@ const keycloakStore = useKeycloakStore()
 const vendorMe = ref<Vendor | null>(null)
 
 const authenticated = computed(() => keycloakStore.authenticated)
+
+const failure = ref(false)
+const failureMessage = ref('')
 
 const formatTime = (date: string) => {
   const d = new Date(date)
@@ -106,14 +115,21 @@ onMounted(async () => {
     } catch (error) {
       console.error('Fehler beim API-Aufruf:', error)
     }
-  }
-  try {
-    vendorMe.value = await store.fetchVendorMe()
-    if (vendorMe.value) {
-      generateQRCode(vendorMe.value)
-    }
-  } catch (error) {
-    console.error('Fehler beim API-Aufruf:', error)
+  } else {
+    watch(authenticated, async () => {
+      if (authenticated.value) {
+        try {
+          vendorMe.value = await store.fetchVendorMe()
+          if (vendorMe.value) {
+            generateQRCode(vendorMe.value)
+          }
+        } catch (error) {
+          console.error('Fehler beim API-Aufruf:', error)
+          failure.value = true
+          failureMessage.value = error.response?.data?.error?.message
+        }
+      }
+    })
   }
 })
 
