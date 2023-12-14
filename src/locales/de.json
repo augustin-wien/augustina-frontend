@@ -124,5 +124,11 @@
   "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuche es erneut.",
 
   "export": "Exportieren",
-  "Logout": "Logout"
+  "Logout": "Logout",
+  "Save": "Speichern",
+  "Your item": "Dein Artikel",
+  "needs an email address.": "benötigt eine E-Mail Adresse.",
+  "for": "für",
+  "Please enter a valid email address.": "Bitte gib eine gültige E-Mail Adresse ein.",
+  "Back": "Zurück"
 }

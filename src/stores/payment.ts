@@ -12,6 +12,8 @@ export interface orderItem {
 
 export const usePaymentStore = defineStore('payment', {
   state: () => {
+    const email = localStorage.getItem('email')
+
     return {
       //Payment service (0: Stripe, 1: vivawallet)
       paymentservice: 1,
@@ -35,6 +37,7 @@ export const usePaymentStore = defineStore('payment', {
       firstName: "",
       url: "",
       failedCount: 0,
+      email: email ? email : "",
     }
   },
   actions: {
@@ -124,10 +127,14 @@ export const usePaymentStore = defineStore('payment', {
       this.failedCount = 0
       this.verification = null
     },
+    setEmail(email: string) {
+      this.email = email
+      localStorage.setItem('email', email)
+    },
 
     //vivawallet methodes
-    async postOrder(items: Array<orderItem>, quantity: number, vendorLicenseID: string) {
-      this.response[0] = await agent.VivaWallet.postOrder(items, vendorLicenseID)
+    async postOrder(items: Array<orderItem>, quantity: number, vendorLicenseID: string, customerEmail: string) {
+      this.response[0] = await agent.VivaWallet.postOrder(items, vendorLicenseID, customerEmail)
       this.url = this.response[0].SmartCheckoutURL
       window.location.href = this.url
     },

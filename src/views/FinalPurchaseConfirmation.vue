@@ -2,8 +2,9 @@
 import { useShopStore } from '@/stores/ShopStore'
 import { usePaymentStore } from '@/stores/payment'
 import { settingsStore } from '@/stores/settings'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import EmailModal from '@/components/EmailModal.vue'
 
 const router = useRouter()
 const shopStore = useShopStore()
@@ -30,6 +31,13 @@ onMounted(() => {
     }
   }
 })
+const hasLicenseItem = computed(() => {
+  const item = shopStore.items?.find((item) => item.LicenseItem != null)
+  if (item) {
+    if (shopStore.finalitems.find((i) => i.item == item.ID)) return item
+  }
+  return null
+})
 </script>
 
 <template>
@@ -39,6 +47,12 @@ onMounted(() => {
         <div className="text-center font-semibold text-3xl mb-7">
           {{ $t('confirm') }}
         </div>
+        <div v-if="hasLicenseItem">
+          <EmailModal
+            v-if="!paymentStore.email || paymentStore.email == ''"
+            :licenceItem="hasLicenseItem"
+          />
+        </div>
         <div class="w-full">
           <div v-for="item in shopStore.amount" :key="item.item">
             <div
@@ -47,6 +61,15 @@ onMounted(() => {
             >
               {{ item.quantity }}x {{ shopStore.getName(item.item) }}
               {{ shopStore.getPriceInEuro(item.item) }}€
+            </div>
+            <div
+              v-if="item.item == hasLicenseItem?.ID"
+              class="text-small text-center mb-3"
+            >
+              {{ `${$t('for')} ${paymentStore.email}` }}
+              <button class="text-blue-600" @click="paymentStore.email = ''">
+                {{ $t('change') }}
+              </button>
             </div>
           </div>
         </div>
