@@ -23,7 +23,7 @@
       </div>
     </template>
 
-    <template #main>
+    <template #main v-if="authenticated && items.length > 0">
       <div class="main">
         <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3 ">
@@ -77,7 +77,7 @@ const date = ref([startDate.value, endDate.value])
 const keycloakStore = useKeycloakStore()
 const store = usePaymentsStore()
 const itemsStore = useItemsStore()
-const items = computed(() => itemsStore.items)
+const items = computed(() => itemsStore.itemsBackoffice)
 
 const authenticated = computed(() => keycloakStore.authenticated)
 
