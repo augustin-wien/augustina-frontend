@@ -47,52 +47,50 @@ const hasLicenseItem = computed(() => {
         <div class="text-center font-semibold text-3xl">
           {{ $t('confirm') }}
         </div>
-        <div class="row-span-2 overflow-y-auto w-full h-full border-4 border-gray-200 rounded-3xl">
-          <div class="w-full items-center py-3">
-            <p class="text-center text-7xl font-semibold">
-              {{ paymentStore.priceInEuros() }}€
-            </p>
-            <p className="text-center text">
-              {{ $t('includes') }} {{ paymentStore.tip }}€ {{ $t('donation') }}
-            </p>
+        <div class="row-span-3 w-full h-full ">
+          <div class="overflow-y-auto h-5/6 border-4 border-gray-200 rounded-3xl">
+            <div class="w-full items-center py-4">
+              <p class="text-center text-8xl font-semibold">
+                {{ paymentStore.priceInEuros() }}€
+              </p>
+              <p className="text-center text">
+                {{ $t('includes') }} {{ paymentStore.tip }}€ {{ $t('donation') }}
+              </p>
+            </div>
+            <div class="w-full">
+              <div v-for="item in shopStore.amount" :key="item.item">
+                <div class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-4 "
+                  v-if="item.quantity > 0">
+                  {{ item.quantity }}x {{ shopStore.getName(item.item) }}
+                  {{ shopStore.getPriceInEuro(item.item) }}€
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="w-full">
-            <div v-for="item in shopStore.amount" :key="item.item">
-              <div class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3 "
-                v-if="item.quantity > 0">
-                {{ item.quantity }}x {{ shopStore.getName(item.item) }}
-                {{ shopStore.getPriceInEuro(item.item) }}€
+
+          <div :class="shake ? 'shake' : ''">
+            <div class="flex items-center justify-center">
+              <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked" class="mr-2" />
+              <label for="checkbox" class="text-center">
+                {{ $t('agreement') }}
+                <button @click="paymentStore.toAGB()" class="text-blue-600">
+                  {{ $t('terms') }}
+                </button></label>
+            </div>
+            <div v-if="hasLicenseItem">
+              <EmailModal v-if="!paymentStore.email || paymentStore.email == ''" :licenceItem="hasLicenseItem" />
+            </div>
+            <div class="w-full">
+              <div v-if="hasLicenseItem != null" class="text-small text-center mb-3">
+                {{ `${$t('for')} ${paymentStore.email}` }}
+                <button class="text-blue-600" @click="paymentStore.email = ''">
+                  {{ $t('change') }}
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div :class="shake ? 'shake' : ''">
-        <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked" class="mr-2" />
-        <label for="checkbox">
-          {{ $t('agreement') }}
-          <button @click="paymentStore.toAGB()" class="text-blue-600">
-            {{ $t('terms') }}
-          </button></label>
-        <div v-if="hasLicenseItem">
-          <EmailModal v-if="!paymentStore.email || paymentStore.email == ''" :licenceItem="hasLicenseItem" />
-        </div>
-        <div class="w-full">
-          <div v-for="item in shopStore.amount" :key="item.item">
-            <div class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
-              v-if="item.quantity > 0">
-              {{ item.quantity }}x {{ shopStore.getName(item.item) }}
-              {{ shopStore.getPriceInEuro(item.item) }}€
-            </div>
-            <div v-if="item.item == hasLicenseItem?.ID" class="text-small text-center mb-3">
-              {{ `${$t('for')} ${paymentStore.email}` }}
-              <button class="text-blue-600" @click="paymentStore.email = ''">
-                {{ $t('change') }}
-              </button>
-            </div>
-          </div>
-        </div>
         <div class="place-items-center w-full">
           <button @click="checkAgb"
             class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full" :style="paymentStore.agbChecked
@@ -103,6 +101,8 @@ const hasLicenseItem = computed(() => {
           </button>
         </div>
       </div>
+
+
     </template>
   </component>
 </template>
