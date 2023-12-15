@@ -7,7 +7,8 @@ import {
   postVendors,
   patchVendor,
   removeVendor,
-  checkVendorId
+  checkVendorId,
+  getVendorMe
 } from '@/api/api'
 import router from '@/router'
 
@@ -23,7 +24,7 @@ export const useVendorStore = defineStore('vendor', {
       if (useRoute().name === 'Go to Vendor' || useRoute().name === 'Error') {
         // we are already on one of the pages we want to check for
         return
-      } 
+      }
       if (!vendorId) {
         router.push({ name: 'Go to Vendor' })
         return
@@ -47,6 +48,7 @@ export const useVendorStore = defineStore('vendor', {
     }
   }
 })
+
 //define interface to store data from backend properly
 export interface Vendor {
   Email: string
@@ -73,6 +75,28 @@ export interface Vendor {
   OnlineMap: boolean
   HasSmartphone: boolean
   HasBankAccount: boolean
+  OpenPayments:
+    | [
+        {
+          Amount: number
+          AuthorizedBy: string
+          Id: number
+          IsPayoutFor: string[]
+          IsSale: boolean
+          Item: number
+          Order: number
+          OrderEntry: number
+          Payout: number
+          Price: number
+          Quantity: number
+          Receiver: number
+          ReceiverName: string
+          Sender: number
+          SenderName: string
+          Timestamp: string
+        }
+      ]
+    | null
 }
 
 export interface VendorCheckResponse {
@@ -103,7 +127,7 @@ export const vendorsStore = defineStore('vendors', {
         this.vendors = data.data
         //@ts-ignore
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
     },
 
@@ -113,7 +137,7 @@ export const vendorsStore = defineStore('vendors', {
           this.getVendors()
         })
         .catch((error) => {
-          console.log('Error creating vendor:', error)
+          console.error('Error creating vendor:', error)
         })
     },
     async createVendorPromise(newVendor: Vendor) {
@@ -160,7 +184,7 @@ export const vendorsStore = defineStore('vendors', {
           this.getVendors()
         })
         .catch((error) => {
-          console.log('Error updating vendor:', error)
+          console.error('Error updating vendor:', error)
         })
     },
     async deleteVendor(vendorId: number) {
@@ -169,7 +193,7 @@ export const vendorsStore = defineStore('vendors', {
           this.getVendors()
         })
         .catch((error) => {
-          console.log('Error deleting vendor:', error)
+          console.error('Error deleting vendor:', error)
         })
     },
     async getVendor(vendorId: number) {
@@ -178,8 +202,18 @@ export const vendorsStore = defineStore('vendors', {
         this.vendor = data.data
         return data.data
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
+    },
+
+    async fetchVendorMe() {
+      getVendorMe()
+        .then((response) => {
+          this.vendor = response.data
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
   }
 })
