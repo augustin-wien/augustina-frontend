@@ -33,6 +33,7 @@
   "menuAccounting": "Accounting",
   "menuProducts": "Products",
   "menuSettings": "Settings",
+  "menuMap": "Map",
   "menuLogout": "Logout",
   "userLoggedIn": "is logged in.",
   "userNotLoggedIn": "No user is logged in.",
@@ -124,6 +125,14 @@
   "information": "Ask your Vendor if they have this product available!",
 
   "back": "Back",
+  "yourProfile": "Your profile",
 
-  "yourProfile": "Your profile"
+  "information": "Ask your Vendor if they have this product available!",
+  "Logout": "Logout",
+  "Save": "Save",
+  "Your item": "Your item",
+  "needs an email address.": "needs an email address.",
+  "for": "for",
+  "Please enter a valid email address.": "Please enter a valid email address.",
+  "Back": "Back"
 }

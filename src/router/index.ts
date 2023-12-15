@@ -239,6 +239,15 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeProductNew.vue')
     },
     {
+      path: '/backoffice/map',
+      name: 'Map',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('@/views/backoffice/MapView.vue')
+    },
+    {
       path: '/backoffice/productsettings/update/:ID',
       name: 'Update Product',
       meta: {
