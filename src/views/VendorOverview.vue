@@ -1,66 +1,208 @@
 <template>
-  <div class="vendor-overview container mx-auto mb-8 p-24 space-y-40 pb-3">
-    <div class="flex flex-col items-center space-y-8">
-      <img class="w-30 inset-12" alt="Augustin logo" :src="apiUrl + 'img/logo.png'" />
-      <h2 class="text-3xl font-bold">Dein QR-Code</h2>
-      <img class="w-30 inset-12" alt="vendor qr code" :src="qrcode" />
-    </div>
-    <br />
-    <div class="my-16 container mt-8 pt-8 space-y-4">
-      <h2 class="text-3xl font-bold">Dein Guthaben</h2>
-      <div class="vendor-credit text-6xl font-bold">{{ credit }}€</div>
-      <div class="vendor-number">Ausweisnummer: {{ idNumber }}</div>
-      <div class="vendor-name">Name: Doris</div>
-      <button class="bg-green-500 rounded-full py-3 px-6 text-white font-bold">Logout</button>
-    </div>
-  </div>
+  <component :is="$route.meta.layout || 'div'">
+    <template #main>
+      <!--Main template-->
+      <div className="vendor-overview container mb-8 space-y-2" v-if="authenticated">
+        <div className="flex flex-col items-center space-y-4" v-if="!failure">
+          <h1 className="text-3xl font-bold">{{ $t('yourData') }}</h1>
+          <div class="grid grid-cols-2 place-content-between text-2xl">
+            <strong>{{ $t('menuCredits') }}: </strong>
+            <span class="font-bold" v-if="vendorMe?.Balance !== undefined"
+              >{{
+                vendorMe?.Balance !== undefined ? (vendorMe?.Balance / 100).toFixed(2) : 'N/A'
+              }}
+              €</span
+            >
+          </div>
+          <div class="grid grid-cols-2 place-content-between">
+            <strong>{{ $t('lastPayout') }}: </strong>{{ vendorMe?.LastPayout }}
+          </div>
+          <div class="grid grid-cols-2 place-content-between">
+            <strong>{{ $t('lastTransactions') }}: </strong>
+          </div>
+
+          <!--Liste zum scrollen Anfang-->
+          <div class="h-5/6 pb-3">
+            <ul
+              class="list-image-none overflow-y-auto w-full h-full border-4 border-gray-200 rounded-3xl"
+            >
+              <li
+                v-for="(OpenPayment, index) in vendorMe?.OpenPayments"
+                :key="index"
+                class="flex w-full p-1 pt-2 relative"
+              >
+                <div class="flex-none grid grid-rows-1 place-content-start">
+                  <div class="pb-1">
+                    {{ $t('date') }}: {{ formatTime(OpenPayment.Timestamp) }}, {{ $t('amount') }}:
+                    {{ (OpenPayment.Amount / 100).toFixed(2) }}€
+                  </div>
+                </div>
+                <hr class="absolute bottom-0 left-0 w-full h-[3px] bg-gray-200" />
+              </li>
+            </ul>
+          </div>
+          <!--Liste zum scrollen Ende-->
+
+          <div :style="customColor" class="flex space-x-4">
+            <router-link to="/me/qrcode">
+              <button class="p-2 rounded-full customcolor text-white">QR-Code</button>
+            </router-link>
+            <router-link to="/me/profile">
+              <button class="p-2 rounded-full customcolor text-white">Profil</button>
+            </router-link>
+            <button
+              class="p-2 rounded-full customcolor text-white"
+              @click="keycloak.keycloak.logout"
+            >
+              <font-awesome-icon :icon="faArrowRightFromBracket" />
+              <p class="text-base leading-4">{{ $t('Logout') }}</p>
+            </button>
+          </div>
+        </div>
+        <div v-else>
+          <div class="mt-10 font-bold text-lg mb-5 text-red-800">
+            {{ $t('Something went wrong please try it again or contact the office.') }}
+          </div>
+          {{ $t('error') + ': ' + failureMessage }}
+        </div>
+      </div>
+    </template>
+  </component>
 </template>
 
 <script lang="ts" setup>
-import axios from 'axios'
-import { onMounted, ref } from 'vue';
+import { ref, onMounted, watch } from 'vue'
+import { vendorsStore } from '@/stores/vendor'
+import type { Vendor } from '@/stores/vendor'
+import keycloak from '@/keycloak/keycloak'
+import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import QRCodeStyling from 'qr-code-styling'
+import { useKeycloakStore } from '@/stores/keycloak'
+import { computed } from 'vue'
+import { settingsStore } from '@/stores/settings'
 
-const credit = ref("")
-const idNumber = ref("")
-const qrcode = ref("")
-const apiUrl = import.meta.env.VITE_API_URL
+const settStore = settingsStore()
+const store = vendorsStore()
+const keycloakStore = useKeycloakStore()
 
-onMounted(()=>{
-  axios
-      .get('http://localhost:3000/api/vendor/')
-      .then((response) => {
-        const { rCredit, rIdNumber, rQrcode } = response.data
+const vendorMe = ref<Vendor | null>(null)
 
-        credit.value = rCredit
-        idNumber.value = rIdNumber
-        qrcode.value = 'http://localhost:3000' + rQrcode
-      })
+const authenticated = computed(() => keycloakStore.authenticated)
 
-      .catch((error) => {
-        console.error('Fehler beim API-Aufruf:', error)
-      })
+const failure = ref(false)
+const failureMessage = ref('')
+
+const formatTime = (date: string) => {
+  const d = new Date(date)
+  const formattedDate = `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}.${d.getFullYear()}`
+  const formattedTime = `${d.getHours().toString().padStart(2, '0')}:${d
+    .getMinutes()
+    .toString()
+    .padStart(2, '0')}`
+
+  return `${formattedDate} - ${formattedTime}`
+}
+
+onMounted(async () => {
+  if (authenticated.value) {
+    try {
+      vendorMe.value = await store.fetchVendorMe()
+      if (vendorMe.value) {
+        generateQRCode(vendorMe.value)
+      }
+    } catch (error) {
+      console.error('Fehler beim API-Aufruf:', error)
+    }
+  } else {
+    watch(authenticated, async () => {
+      if (authenticated.value) {
+        try {
+          vendorMe.value = await store.fetchVendorMe()
+          if (vendorMe.value) {
+            generateQRCode(vendorMe.value)
+          }
+        } catch (error) {
+          failure.value = true
+          if (error instanceof Error) {
+            console.error('Fehler beim API-Aufruf:', error)
+          } else {
+            console.error('Fehler beim API-Aufruf:', error as Error)
+          }
+        }
+      }
+    })
+  }
 })
 
+//qrcode
+const generateQRCode = async (vendorMe: Vendor) => {
+  const qrCode = new QRCodeStyling({
+    width: 100,
+    height: 100,
+    type: 'svg',
+    data: `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}`,
+
+    dotsOptions: {
+      color: '#000',
+      type: 'dots'
+    },
+    backgroundOptions: {
+      color: '#fff'
+    },
+    imageOptions: {
+      crossOrigin: 'anonymous',
+      margin: 20
+    },
+    cornersSquareOptions: {
+      type: 'dot',
+      color: '#000000'
+    },
+    cornersDotOptions: {
+      type: 'dot',
+      color: '#000000'
+    },
+    qrOptions: {
+      typeNumber: 0,
+      mode: 'Byte',
+      errorCorrectionLevel: 'Q'
+    }
+  })
+  const canvas = document.getElementById('canvas')
+  if (canvas !== null) {
+    qrCode.append(canvas)
+  }
+}
+// Computed property to manage dynamic styles
+const customColor = computed(() => {
+  return {
+    '--custom-bg-color': settStore.settings.Color
+  }
+})
 </script>
 
-<style>
+<style scoped>
+.customcolor {
+  background-color: var(--custom-bg-color);
+}
+
 .vendor-overview {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-bottom: 20rem;
-  padding-bottom: 16rem;
-}
-
-.my-16 {
-  margin-top: 30rem;
-  margin-bottom: 4rem;
-  padding-top: 30rem;
 }
 
 h2 {
   font-size: large;
+}
+.container {
+  max-width: 300px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.information {
+  text-align: start;
 }
 </style>

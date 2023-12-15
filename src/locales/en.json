@@ -33,6 +33,7 @@
   "menuAccounting": "Accounting",
   "menuProducts": "Products",
   "menuSettings": "Settings",
+  "menuMap": "Map",
   "menuLogout": "Logout",
   "userLoggedIn": "is logged in.",
   "userNotLoggedIn": "No user is logged in.",
@@ -119,10 +120,22 @@
   "Aktuelle Zeitungsausgabe": "Current newspaper issue",
   "Spende": "Donation",
 
-  "information": "Ask your Vendor if they have this product available!",
-
   "includes": "includes",
 
-  "Items": "Your items"
+  "Items": "Your items",
 
+  "lastTransactions": "Last transactions",
+  "yourData": "Your account",
+  "information": "Ask your Vendor if they have this product available!",
+
+  "back": "Back",
+  "yourProfile": "Your profile",
+
+  "Logout": "Logout",
+  "Save": "Save",
+  "Your item": "Your item",
+  "needs an email address.": "needs an email address.",
+  "for": "for",
+  "Please enter a valid email address.": "Please enter a valid email address.",
+  "Back": "Back"
 }

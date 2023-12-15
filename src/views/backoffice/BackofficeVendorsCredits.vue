@@ -73,7 +73,7 @@
 import { vendorsStore } from '@/stores/vendor'
 import { computed, onMounted, ref, watch } from 'vue'
 import keycloak from '@/keycloak/keycloak'
-import { exportAsCsv } from '@/utils/utils'
+import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Vendor } from '@/stores/vendor'
 
 const store = vendorsStore()
@@ -89,9 +89,6 @@ onMounted(() => {
     store.getVendors()
   }
 })
-function formatCredit(credit: number) {
-  return (credit / 100).toFixed(2)
-}
 function formatDate(date: string) {
   if (!date || date === '') return ''
   return new Date(date).toLocaleString()

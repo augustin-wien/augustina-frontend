@@ -23,7 +23,7 @@
       </div>
     </template>
 
-    <template #main>
+    <template #main v-if="authenticated && items.length > 0">
       <div class="main">
         <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3 ">
@@ -43,7 +43,7 @@
                     {{ translateSender(payment.ReceiverName) }}
                   </td>
                   <td className="border-t-2 p-3">{{ $t(getItemName(payment.Item)) }}</td>
-                  <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
+                  <td className="border-t-2 p-3">{{ formatCredit(payment.Amount) }} €</td>
                 </tr>
               </tbody>
             </table>
@@ -61,7 +61,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { usePaymentsStore } from '@/stores/payments'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useItemsStore } from '@/stores/items'
-import { exportAsCsv } from '@/utils/utils'
+import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Payment } from '@/stores/payments'
 
 const startOfDay = (date: Date) => {
@@ -77,7 +77,7 @@ const date = ref([startDate.value, endDate.value])
 const keycloakStore = useKeycloakStore()
 const store = usePaymentsStore()
 const itemsStore = useItemsStore()
-const items = computed(() => itemsStore.items)
+const items = computed(() => itemsStore.itemsBackoffice)
 
 const authenticated = computed(() => keycloakStore.authenticated)
 
@@ -104,10 +104,6 @@ const onRangeStart = (value: any) => {
 const onRangeEnd = (value: any) => {
   endDate.value = value // Update the endDate variable
   store.getSales(startDate.value, endDate.value)
-}
-
-const formatAmount = (amount: number) => {
-  return (amount / 100).toFixed(2)
 }
 
 const formatTime = (time: string) => {
@@ -141,7 +137,7 @@ const exportTable = () => {
       formatTime(payment.Timestamp),
       translateSender(payment.ReceiverName),
       getItemName(payment.Item),
-      formatAmount(payment.Amount),
+      formatCredit(payment.Amount),
     ]
   })
 

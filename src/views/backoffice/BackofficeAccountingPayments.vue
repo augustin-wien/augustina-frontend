@@ -54,7 +54,7 @@
                   <td className="border-t-2 p-3">
                     {{ translateItem(payment) }}
                   </td>
-                  <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
+                  <td className="border-t-2 p-3">{{ formatCredit(payment.Amount) }} €</td>
                 </tr>
               </tbody>
             </table>
@@ -72,7 +72,7 @@ import { usePaymentsStore, type Payment } from '@/stores/payments'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, onMounted, ref, watch } from 'vue'
-import { exportAsCsv } from '@/utils/utils'
+import { exportAsCsv, formatCredit } from '@/utils/utils'
 
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
@@ -101,10 +101,6 @@ const onRangeStart = (value: any) => {
 const onRangeEnd = (value: any) => {
   endDate.value = value // Update the endDate variable
   store.getPayments(startDate.value, endDate.value)
-}
-
-const formatAmount = (amount: number) => {
-  return (amount / 100).toFixed(2)
 }
 
 const formatTime = (time: string) => {
@@ -165,7 +161,7 @@ const exportTable = () => {
       translateSender(payment.SenderName),
       translateReceiver(payment.ReceiverName),
       translateItem(payment),
-      formatAmount(payment.Amount)
+      formatCredit(payment.Amount)
     ]
   })
 

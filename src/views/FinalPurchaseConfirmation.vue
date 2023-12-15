@@ -2,8 +2,9 @@
 import { useShopStore } from '@/stores/ShopStore'
 import { usePaymentStore } from '@/stores/payment'
 import { settingsStore } from '@/stores/settings'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import EmailModal from '@/components/EmailModal.vue'
 
 const router = useRouter()
 const shopStore = useShopStore()
@@ -29,6 +30,13 @@ onMounted(() => {
       router.push({ name: 'Shop' })
     }
   }
+})
+const hasLicenseItem = computed(() => {
+  const item = shopStore.items?.find((item) => item.LicenseItem != null)
+  if (item) {
+    if (shopStore.finalitems.find((i) => i.item == item.ID)) return item
+  }
+  return null
 })
 </script>
 
@@ -58,14 +66,32 @@ onMounted(() => {
             </div>
           </div>
         </div>
+      </div>
 
-        <div :class="shake ? 'shake' : ''">
-          <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked" class="mr-2" />
-          <label for="checkbox">
-            {{ $t('agreement') }}
-            <button @click="paymentStore.toAGB()" class="text-blue-600">
-              {{ $t('terms') }}
-            </button></label>
+      <div :class="shake ? 'shake' : ''">
+        <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked" class="mr-2" />
+        <label for="checkbox">
+          {{ $t('agreement') }}
+          <button @click="paymentStore.toAGB()" class="text-blue-600">
+            {{ $t('terms') }}
+          </button></label>
+        <div v-if="hasLicenseItem">
+          <EmailModal v-if="!paymentStore.email || paymentStore.email == ''" :licenceItem="hasLicenseItem" />
+        </div>
+        <div class="w-full">
+          <div v-for="item in shopStore.amount" :key="item.item">
+            <div class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
+              v-if="item.quantity > 0">
+              {{ item.quantity }}x {{ shopStore.getName(item.item) }}
+              {{ shopStore.getPriceInEuro(item.item) }}€
+            </div>
+            <div v-if="item.item == hasLicenseItem?.ID" class="text-small text-center mb-3">
+              {{ `${$t('for')} ${paymentStore.email}` }}
+              <button class="text-blue-600" @click="paymentStore.email = ''">
+                {{ $t('change') }}
+              </button>
+            </div>
+          </div>
         </div>
         <div class="place-items-center w-full">
           <button @click="checkAgb"

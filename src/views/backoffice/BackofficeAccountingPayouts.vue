@@ -56,7 +56,7 @@
                   >
                     {{ sumItemsForOrder(payment, item.ID) }} €
                   </td>
-                  <td className="border-t-2 p-3">{{ formatAmount(payment.Amount) }} €</td>
+                  <td className="border-t-2 p-3">{{ formatCredit(payment.Amount) }} €</td>
                 </tr>
               </tbody>
             </table>
@@ -75,7 +75,7 @@ import { usePaymentsStore } from '@/stores/payments'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useItemsStore } from '@/stores/items'
 import { type Payment } from '@/stores/payments'
-import { exportAsCsv } from '@/utils/utils'
+import { exportAsCsv, formatCredit } from '@/utils/utils'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -101,10 +101,6 @@ const onRangeStart = (value: any) => {
 const onRangeEnd = (value: any) => {
   endDate.value = value // Update the endDate variable
   paymentStore.getPayouts(startDate.value, endDate.value)
-}
-
-const formatAmount = (amount: number) => {
-  return (amount / 100).toFixed(2)
 }
 
 const formatTime = (time: string) => {
@@ -145,7 +141,7 @@ const sumItemsForOrder = (payment: any, itemID: number) => {
       }
     }
   })
-  return formatAmount(sum)
+  return formatCredit(sum)
 }
 const exportTable = () => {
   if (!payments.value || payments.value.length == 0) {
@@ -167,7 +163,7 @@ const exportTable = () => {
       translateSender(payment.SenderName),
       payment.AuthorizedBy,
       ...itemAmounts,
-      formatAmount(payment.Amount)
+      formatCredit(payment.Amount)
     ]
   })
 
