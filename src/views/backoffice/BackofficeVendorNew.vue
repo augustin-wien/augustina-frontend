@@ -310,26 +310,7 @@ const newVendor = ref<Vendor>({
   OnlineMap: false,
   HasSmartphone: false,
   HasBankAccount: false,
-  OpenPayments: [
-    {
-      Amount: 0,
-      AuthorizedBy: '',
-      Id: 0,
-      IsPayoutFor: [],
-      IsSale: false,
-      Item: 0,
-      Order: 0,
-      OrderEntry: 0,
-      Payout: 0,
-      Price: 0,
-      Quantity: 0,
-      Receiver: 0,
-      ReceiverName: '',
-      Sender: 0,
-      SenderName: '',
-      Timestamp: ''
-    }
-  ]
+  OpenPayments: null
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)
