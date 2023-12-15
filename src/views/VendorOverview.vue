@@ -124,9 +124,12 @@ onMounted(async () => {
             generateQRCode(vendorMe.value)
           }
         } catch (error) {
-          console.error('Fehler beim API-Aufruf:', error)
           failure.value = true
-          failureMessage.value = error.response?.data?.error?.message
+          if (error instanceof Error) {
+            console.error('Fehler beim API-Aufruf:', error)
+          } else {
+            console.error('Fehler beim API-Aufruf:', error as Error)
+          }
         }
       }
     })

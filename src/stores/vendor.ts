@@ -75,26 +75,28 @@ export interface Vendor {
   OnlineMap: boolean
   HasSmartphone: boolean
   HasBankAccount: boolean
-  OpenPayments: [
-    {
-      Amount: number
-      AuthorizedBy: string
-      Id: number
-      IsPayoutFor: string[]
-      IsSale: boolean
-      Item: number
-      Order: number
-      OrderEntry: number
-      Payout: number
-      Price: number
-      Quantity: number
-      Receiver: number
-      ReceiverName: string
-      Sender: number
-      SenderName: string
-      Timestamp: string
-    }
-  ]
+  OpenPayments:
+    | [
+        {
+          Amount: number
+          AuthorizedBy: string
+          Id: number
+          IsPayoutFor: string[]
+          IsSale: boolean
+          Item: number
+          Order: number
+          OrderEntry: number
+          Payout: number
+          Price: number
+          Quantity: number
+          Receiver: number
+          ReceiverName: string
+          Sender: number
+          SenderName: string
+          Timestamp: string
+        }
+      ]
+    | null
 }
 
 export interface VendorCheckResponse {
@@ -205,12 +207,13 @@ export const vendorsStore = defineStore('vendors', {
     },
 
     async fetchVendorMe() {
-      try {
-        const data = await getVendorMe()
-        return data.data
-      } catch (error) {
-        throw error
-      }
+      getVendorMe()
+        .then((response) => {
+          this.vendor = response.data
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
   }
 })
