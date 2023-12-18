@@ -85,16 +85,11 @@ const showToast = (type: string, message: string) => {
           </div>
         </div>
 
-        <form
-          class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-          @submit.prevent="updateVendor"
-        >
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="updateVendor">
           <div class="mb-4 justify-between grid grid-cols-2 gap-5">
             <div class="row">
               <span class="col">
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="firstName"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
                   >{{ $t('firstName') }}:</label
                 >
                 <div class="flex flex-row">
@@ -107,9 +102,7 @@ const showToast = (type: string, message: string) => {
                     required
                   />
                 </div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="lastName"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
                   >{{ $t('lastName') }}:</label
                 >
                 <div class="flex flex-row">
@@ -138,9 +131,7 @@ const showToast = (type: string, message: string) => {
                     required
                   />
                 </div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="licenseID"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
                   >{{ $t('licenseId') }}:</label
                 >
                 <div class="flex flex-row">
@@ -155,9 +146,7 @@ const showToast = (type: string, message: string) => {
                   />
                 </div>
 
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="workingTime"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
                   >{{ $t('deactivated') }}:</label
                 >
                 <div class="flex flex-row">
@@ -172,9 +161,7 @@ const showToast = (type: string, message: string) => {
                     <option value="false">{{ $t('no') }}</option>
                   </select>
                 </div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="adress"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
                   >{{ $t('address') }}:</label
                 >
                 <div class="flex flex-row">
@@ -202,9 +189,7 @@ const showToast = (type: string, message: string) => {
                   />
                 </div>
 
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="location"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
                   >{{ $t('location') }}:</label
                 >
                 <div class="flex flex-row">
@@ -217,9 +202,7 @@ const showToast = (type: string, message: string) => {
                     type="text"
                   />
                 </div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="location"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
                   >{{ $t('longitude') }}:</label
                 >
                 <div class="flex flex-row">
@@ -232,9 +215,7 @@ const showToast = (type: string, message: string) => {
                     type="text"
                   />
                 </div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="location"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
                   >{{ $t('latitude') }}:</label
                 >
                 <div class="flex flex-row">
@@ -251,9 +232,7 @@ const showToast = (type: string, message: string) => {
             </div>
             <div class="row">
               <span class="col">
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="telephone"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
                   >{{ $t('telephone') }}:</label
                 >
                 <div class="flex flex-row">
@@ -266,9 +245,7 @@ const showToast = (type: string, message: string) => {
                   />
                 </div>
 
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="hasSmartphone"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
                   >Smartphone:</label
                 >
                 <div class="flex flex-row">
@@ -284,9 +261,7 @@ const showToast = (type: string, message: string) => {
                   </select>
                 </div>
 
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="workingTime"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
                   >{{ $t('workingTime') }}:</label
                 >
                 <div class="flex flex-row">
@@ -299,9 +274,7 @@ const showToast = (type: string, message: string) => {
                   />
                 </div>
 
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="language"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
                   >{{ $t('language') }}:</label
                 >
                 <div class="flex flex-row">
@@ -315,9 +288,7 @@ const showToast = (type: string, message: string) => {
                   />
                 </div>
 
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="onlineMap"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
                   >{{ $t('onlineMap') }}:</label
                 >
                 <div class="flex flex-row">
@@ -332,9 +303,7 @@ const showToast = (type: string, message: string) => {
                     <option value="false">{{ $t('no') }}</option>
                   </select>
                 </div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="onlineMap"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
                   >{{ $t('bankAccount') }}:</label
                 >
                 <div class="flex flex-row">
@@ -364,9 +333,7 @@ const showToast = (type: string, message: string) => {
                     type="text"
                   />
                 </div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="vendorSince"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
                   >{{ $t('vendorSince') }}:</label
                 >
                 <div class="flex flex-row">
@@ -378,9 +345,7 @@ const showToast = (type: string, message: string) => {
                     type="text"
                   />
                 </div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="comment"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
                   >{{ $t('comment') }}:</label
                 >
                 <div class="flex flex-row">

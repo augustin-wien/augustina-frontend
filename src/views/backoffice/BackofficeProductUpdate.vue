@@ -13,7 +13,7 @@ const updatedItem = ref({
   ID: 0,
   Image: 'tbd',
   Name: 'Kalender',
-  Price: 0,
+  Price: 0
 })
 
 store.getItems()
@@ -121,10 +121,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
             </button>
           </div>
 
-          <form
-            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-            @submit.prevent="updateItem"
-          >
+          <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="updateItem">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
                 >{{ $t('name') }}:</label
@@ -138,9 +135,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
-              <label
-                class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                for="description"
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description"
                 >{{ $t('description') }}:</label
               >
               <div class="flex flex-row">

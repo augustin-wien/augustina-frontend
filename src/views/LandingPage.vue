@@ -46,9 +46,7 @@ onMounted(() => {
             {{ $t('buyItem') }}
           </div>
           <div class="flex place-content-center">
-            <div
-              class="text-center min-w-fit h-4/5 text-4xl rounded-full text-black font-bold"
-            >
+            <div class="text-center min-w-fit h-4/5 text-4xl rounded-full text-black font-bold">
               {{ vendorStore.vendorName }}
             </div>
           </div>
@@ -57,12 +55,7 @@ onMounted(() => {
               <button
                 class="customcolor fill-white rounded-full h-full text-3xl w-full place-items-center grid"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="30"
-                  height="30"
-                  viewBox="0 0 24 24"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
                   <g>
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path
