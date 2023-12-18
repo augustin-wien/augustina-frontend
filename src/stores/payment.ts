@@ -1,12 +1,11 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
 import type { VivaWalletResponse } from '@/models/responseVivaWallet'
-import type { VivaWalletVerification } from "@/models/verificationVivaWallet";
-import router from "@/router";
+import type { VivaWalletVerification } from '@/models/verificationVivaWallet'
+import router from '@/router'
 import agent from '@/api/agent'
 
-
 export interface orderItem {
-  item: number,
+  item: number
   quantity: number
 }
 
@@ -29,15 +28,15 @@ export const usePaymentStore = defineStore('payment', {
       tip: 0,
       tipItem: 2,
 
-      //vivawallet 
+      //vivawallet
       response: [] as VivaWalletResponse[],
-      transactionID: "",
+      transactionID: '',
       verification: {} as VivaWalletVerification | null,
-      timeStamp: "",
-      firstName: "",
-      url: "",
+      timeStamp: '',
+      firstName: '',
+      url: '',
       failedCount: 0,
-      email: email ? email : "",
+      email: email ? email : ''
     }
   },
   actions: {
@@ -45,23 +44,24 @@ export const usePaymentStore = defineStore('payment', {
       if (isNaN(this.tip)) {
         this.tip = 0
       }
+
       if (isNaN(this.sum)) {
         return NaN
       }
+
       return this.sum / 100 + this.tip
     },
     setSum(sum: number) {
       this.sum = sum
     },
     tipInCents() {
-      return (this.tip * 100)
+      return this.tip * 100
     },
 
     increment() {
       if (this.tip < 10) {
         this.tip = this.tip + 0.5
-      }
-      else {
+      } else {
         this.tip = this.tip + 1
       }
     },
@@ -69,8 +69,7 @@ export const usePaymentStore = defineStore('payment', {
     decrement() {
       if (this.tip > 10) {
         this.tip = this.tip - 1
-      }
-      else if (this.tip - 0.5 >= 0) {
+      } else if (this.tip - 0.5 >= 0) {
         this.tip = this.tip - 0.5
       }
     },
@@ -102,16 +101,17 @@ export const usePaymentStore = defineStore('payment', {
     },
     addN(n: number) {
       this.testamount++
-      this.price = this.price + (this.pricePerPaper * n)
+      this.price = this.price + this.pricePerPaper * n
     },
 
     //AGB
     checkAgb() {
       if (this.agbChecked) {
         router.push({ name: 'Payment' })
-        return true;
+        return true
       }
-      return false;
+
+      return false
     },
     setPrice(price: number) {
       this.price = price
@@ -121,7 +121,7 @@ export const usePaymentStore = defineStore('payment', {
     },
     toAGB() {
       console.log(import.meta.env.VITE_AGB_URL)
-      window.open(import.meta.env.VITE_AGB_URL, "_blank");
+      window.open(import.meta.env.VITE_AGB_URL, '_blank')
     },
     resetVerification() {
       this.failedCount = 0
@@ -133,7 +133,12 @@ export const usePaymentStore = defineStore('payment', {
     },
 
     //vivawallet methodes
-    async postOrder(items: Array<orderItem>, quantity: number, vendorLicenseID: string, customerEmail: string) {
+    async postOrder(
+      items: Array<orderItem>,
+      quantity: number,
+      vendorLicenseID: string,
+      customerEmail: string
+    ) {
       this.response[0] = await agent.VivaWallet.postOrder(items, vendorLicenseID, customerEmail)
       this.url = this.response[0].SmartCheckoutURL
       window.location.href = this.url
@@ -143,33 +148,36 @@ export const usePaymentStore = defineStore('payment', {
       if (this.verification != null) {
         return true
       }
-      if (this.transactionID === "") {
+
+      if (this.transactionID === '') {
         console.log('id undefined')
-      }
-      else {
+      } else {
         try {
           this.verification = await agent.VivaWallet.verifyPayment(this.transactionID)
           this.timeStamp = this.verification.TimeStamp
           this.firstName = this.verification.FirstName
         } catch (error) {
           this.failedCount++
+
           if (this.failedCount > 5) {
             router.push('/failure')
           }
+
           return false
         }
       }
-      if (this.timeStamp != "") {
+
+      if (this.timeStamp != '') {
         router.push('/paymentconfirmation')
-      }
-      else {
+      } else {
         this.failedCount++
+
         if (this.failedCount > 5) {
           router.push('/failure')
         }
+
         return false
       }
     }
   }
-}
-)
+})

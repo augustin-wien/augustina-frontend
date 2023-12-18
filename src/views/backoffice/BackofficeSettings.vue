@@ -1,3 +1,20 @@
+<script lang="ts" setup>
+import { settingsStore } from '@/stores/settings'
+import { useItemsStore } from '@/stores/items'
+import { computed, onMounted } from 'vue'
+
+const store = settingsStore()
+const storeItems = useItemsStore()
+
+onMounted(() => {
+  storeItems.getItems()
+  store.getSettingsFromApi()
+})
+
+const settings = computed(() => store.settings)
+const url = import.meta.env.VITE_API_URL
+</script>
+
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
@@ -9,8 +26,8 @@
           <div className="container page-content space-x-2 mt-5">
             <div className="text-center text-2xl space-y-3 space-x-3">
               <div
-                className="table-auto border-spacing-4 border-collapse text-left"
                 v-if="settings"
+                className="table-auto border-spacing-4 border-collapse text-left"
               >
                 <tbody className="text-sm">
                   <tr>
@@ -21,12 +38,12 @@
                     <th className="p-3">Logo:</th>
                     <td className="p-3">
                       <img
+                        v-if="settings.Logo"
                         :src="url + settings.Logo"
                         alt="Augustin logo"
                         class="logo mx-auto my-5"
                         width="50"
                         height="20"
-                        v-if="settings.Logo"
                       />
                     </td>
                   </tr>
@@ -76,23 +93,6 @@
     </template>
   </component>
 </template>
-
-<script lang="ts" setup>
-import { settingsStore } from '@/stores/settings'
-import { useItemsStore } from '@/stores/items'
-import { computed, onMounted } from 'vue'
-
-const store = settingsStore()
-const storeItems = useItemsStore()
-
-onMounted(() => {
-  storeItems.getItems()
-  store.getSettingsFromApi()
-})
-
-const settings = computed(() => store.settings)
-const url = import.meta.env.VITE_API_URL
-</script>
 
 <style>
 tr {

@@ -14,17 +14,15 @@ const url = import.meta.env.VITE_API_URL
 <template>
   <component :is="$route.meta.layout || 'div'">
     <select
-      class="h-[55px] w-[55px] absolute font-light border-2 top-0 right-0 border-gray-300 rounded-full text-gray-300 text-center mt-8 mr-4 text-sm"
       v-model="$i18n.locale"
+      class="h-[55px] w-[55px] absolute font-light border-2 top-0 right-0 border-gray-300 rounded-full text-gray-300 text-center mt-8 mr-4 text-sm"
     >
       <option value="en">EN</option>
       <option value="de">DE</option>
     </select>
     <template #main>
       <div class="h-full w-full grid grid-rows-5 place-items-center">
-        <div
-          class="w-44 h-44 flex-none place-content-center rounded-2xl row-span-2 relative"
-        >
+        <div class="w-44 h-44 flex-none place-content-center rounded-2xl row-span-2 relative">
           <div
             class="rounded-full absolute h-12 w-12 right-0 top-0 place-items-center grid text-lg text-white font-semibold customcolor"
           >

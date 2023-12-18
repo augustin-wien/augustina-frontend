@@ -25,10 +25,12 @@ export const useVendorStore = defineStore('vendor', {
         // we are already on one of the pages we want to check for
         return
       }
+
       if (!vendorId) {
         router.push({ name: 'Go to Vendor' })
         return
       }
+
       agent.Vendor.checkID(vendorId)
         .then((response) => {
           if (!response.FirstName) {
@@ -36,8 +38,10 @@ export const useVendorStore = defineStore('vendor', {
             router.push({ name: 'Error' })
             return
           }
+
           this.vendorName = response.FirstName
           this.vendorid = typeof vendorId == 'string' ? vendorId : vendorId[0]
+
           if (this.vendorName !== '') {
             router.push(`/v/${vendorId}/landing-page`)
           }
@@ -147,6 +151,7 @@ export const vendorsStore = defineStore('vendors', {
     async createVendors(vendors: Array<Vendor>) {
       for (let i = 0; i < vendors.length; i++) {
         const vendor = vendors[i]
+
         if (vendor !== null) {
           if (
             vendor.LicenseID === '' ||
@@ -155,8 +160,10 @@ export const vendorsStore = defineStore('vendors', {
           ) {
             return null
           }
+
           this.vendorsImportedCount = i + 1
           const vendorCheck = await checkVendorId(vendor.LicenseID)
+
           if (vendorCheck === null) {
             await this.createVendorPromise(vendor)
           }

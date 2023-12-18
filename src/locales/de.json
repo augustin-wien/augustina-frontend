@@ -129,7 +129,7 @@
   "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuche es erneut.",
 
   "Items": "Deine Produkte",
-  
+
   "export": "Exportieren",
   "Logout": "Logout",
 
@@ -142,5 +142,4 @@
   "for": "für",
   "Please enter a valid email address.": "Bitte gib eine gültige E-Mail Adresse ein.",
   "Back": "Zurück"
-
 }

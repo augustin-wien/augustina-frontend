@@ -13,15 +13,16 @@ const settStore = settingsStore()
 const fetch = settStore.getSettingsFromApi
 const price = computed(() => settStore.settings.MainItemPrice / 100)
 
-watch(price, () => {})
 onMounted(() => {
   fetch().then(() => {
     shopStore.reset()
+
     shopStore
       .getItems()
       .then(() => {
         usePaymentStore().setPrice(settStore.settings.MainItemPrice)
         usePaymentStore().setPricePerPaper(settStore.settings.MainItemPrice)
+
         if (shopStore.items.length == 0) {
           router.push({ name: 'Error' })
         } else if (shopStore.amount.length == 0) {
@@ -38,7 +39,7 @@ onMounted(() => {
 
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <template #main v-if="settStore.settings.MainItemPrice">
+    <template v-if="settStore.settings.MainItemPrice" #main>
       <div className="grid grid-rows-5 h-full place-items-center w-full">
         <div class="row-span-2 grid grid-rows-3 h-full w-full">
           <div className="text-center font-semibold text-2xl pt-5">

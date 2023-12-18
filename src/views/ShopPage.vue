@@ -20,20 +20,22 @@ const toast = ref<ToastMessage | null>(null)
 const checkIfItemSelected = () => {
   if (shopStore.amount.length > 0) {
     let sum = 0
+
     for (let i = 0; i < shopStore.amount.length; i++) {
       sum += shopStore.amount[i].quantity
     }
+
     if (sum > 0) router.push({ name: 'Tippingpage' })
     else {
       toast.value = {
         message: 'Bitte wähle ein Produkt aus',
-        type: 'error',
+        type: 'error'
       }
     }
   } else {
     toast.value = {
       message: 'Bitte wähle ein Produkt aus',
-      type: 'error',
+      type: 'error'
     }
   }
 }
@@ -52,16 +54,10 @@ const checkIfItemSelected = () => {
             <ul
               class="list-image-none overflow-y-auto w-full h-full border-4 border-gray-200 rounded-3xl"
             >
-              <li
-                v-for="item in items"
-                :key="item.ID"
-                class="flex w-full p-1 pt-2 relative"
-              >
+              <li v-for="item in items" :key="item.ID" class="flex w-full p-1 pt-2 relative">
                 <div class="flex-none grid grid-rows-1 place-content-start mr-2">
                   <div class="pb-1">
-                    <RouterLink
-                      :to="{ name: 'Item Available', query: { item: item.ID } }"
-                    >
+                    <RouterLink :to="{ name: 'Item Available', query: { item: item.ID } }">
                       <div
                         class="w-[90px] h-[90%] flex-none bg-cover bg-red-600 rounded-2xl"
                         :style="'background-image: url(' + url + item.Image + ')'"
@@ -71,9 +67,7 @@ const checkIfItemSelected = () => {
                 </div>
                 <div className="place-items-center grow h-full grid grid-rows-2">
                   <div class="w-full h-full py-1 relative">
-                    <RouterLink
-                      :to="{ name: 'Item Available', query: { item: item.ID } }"
-                    >
+                    <RouterLink :to="{ name: 'Item Available', query: { item: item.ID } }">
                       <button
                         class="bg-gray-500 absolute rounded-full text-center w-6 text-white font-bold top-0 right-0"
                       >

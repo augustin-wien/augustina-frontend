@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { usePaymentStore } from '@/stores/payment'
 import { RouterLink } from 'vue-router'
+
 const paymentStore = usePaymentStore()
 const digital = paymentStore.epaper
 const print = paymentStore.print
@@ -14,8 +15,8 @@ const print = paymentStore.print
         <div className="flex place-items-center w-full">
           <RouterLink class="w-full" to="/tipping">
             <button
-              @click="digital"
               class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full"
+              @click="digital"
             >
               E-Paper
             </button>
@@ -24,8 +25,8 @@ const print = paymentStore.print
         <div className="flex place-items-center w-full">
           <RouterLink class="w-full" to="/tipping">
             <button
-              @click="print"
               class="bg-green-600 rounded-full p-5 text-white text-3xl font font-semibold w-full"
+              @click="print"
             >
               Print
             </button>
