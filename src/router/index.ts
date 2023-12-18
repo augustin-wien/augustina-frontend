@@ -77,7 +77,12 @@ const router = createRouter({
         {
           path: '/v/:id/item-available',
           name: 'Item Available',
-          component: () => import('@/views/ItemAvailable.vue')
+          component: () => import('@/views/ItemAvailable.vue'),
+        },
+        {
+          path: '/v/:id/items',
+          name: 'Items',
+          component: () => import('@/views/SelectedItems.vue'),
         }
       ]
     },

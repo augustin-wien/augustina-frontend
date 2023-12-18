@@ -54,7 +54,7 @@ onMounted(() => {
           <div class="place-items-center w-full flex">
             <RouterLink class="flex-none h-[56px] w-[56px] mr-3" :to="{ name: 'Shop' }">
               <button
-                class="customcolor fill-white rounded-full h-full text-white text-3xl w-full place-items-center grid"
+                class="customcolor fill-white rounded-full h-full text-3xl w-full place-items-center grid"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -99,5 +99,7 @@ onMounted(() => {
 <style scoped>
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
+  color: v-bind(settStore.settings.FontColor);
+  fill: v-bind(settStore.settings.FontColor);
 }
 </style>

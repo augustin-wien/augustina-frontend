@@ -55,7 +55,7 @@ const url = import.meta.env.VITE_API_URL
                 width="64"
                 height="64"
                 fill="white"
-                class="bi bi-arrow-left-short"
+                class="bi bi-arrow-left-short customfill"
                 viewBox="0 0 16 16"
               >
                 <path
@@ -74,5 +74,11 @@ const url = import.meta.env.VITE_API_URL
 <style scoped>
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
+  color: v-bind(settStore.settings.FontColor);
+  fill: v-bind(settStore.settings.FontColor);
+}
+
+.customfill {
+  fill: v-bind(settStore.settings.FontColor);
 }
 </style>
