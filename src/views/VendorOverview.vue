@@ -1,13 +1,133 @@
+<script lang="ts" setup>
+import { ref, onMounted, watch } from 'vue'
+import { vendorsStore } from '@/stores/vendor'
+import type { Vendor } from '@/stores/vendor'
+import keycloak from '@/keycloak/keycloak'
+import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import QRCodeStyling from 'qr-code-styling'
+import { useKeycloakStore } from '@/stores/keycloak'
+import { computed } from 'vue'
+import { settingsStore } from '@/stores/settings'
+
+const settStore = settingsStore()
+const store = vendorsStore()
+const keycloakStore = useKeycloakStore()
+
+const vendorMe = ref<Vendor | null>(null)
+
+const authenticated = computed(() => keycloakStore.authenticated)
+
+const failure = ref(false)
+const failureMessage = ref('')
+
+const formatTime = (date: string) => {
+  const d = new Date(date)
+
+  const formattedDate = `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}.${d.getFullYear()}`
+
+  const formattedTime = `${d.getHours().toString().padStart(2, '0')}:${d
+    .getMinutes()
+    .toString()
+    .padStart(2, '0')}`
+
+  return `${formattedDate} - ${formattedTime}`
+}
+
+onMounted(async () => {
+  if (authenticated.value) {
+    try {
+      vendorMe.value = await store.fetchVendorMe()
+
+      if (vendorMe.value) {
+        generateQRCode(vendorMe.value)
+      }
+    } catch (error) {
+      console.error('Fehler beim API-Aufruf:', error)
+    }
+  } else {
+    watch(authenticated, async () => {
+      if (authenticated.value) {
+        try {
+          vendorMe.value = await store.fetchVendorMe()
+
+          if (vendorMe.value) {
+            generateQRCode(vendorMe.value)
+          }
+        } catch (error) {
+          failure.value = true
+
+          if (error instanceof Error) {
+            console.error('Fehler beim API-Aufruf:', error)
+          } else {
+            console.error('Fehler beim API-Aufruf:', error as Error)
+          }
+        }
+      }
+    })
+  }
+})
+
+//qrcode
+const generateQRCode = async (vendorMe: Vendor) => {
+  const qrCode = new QRCodeStyling({
+    width: 100,
+    height: 100,
+    type: 'svg',
+    data: `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}`,
+
+    dotsOptions: {
+      color: '#000',
+      type: 'dots'
+    },
+    backgroundOptions: {
+      color: '#fff'
+    },
+    imageOptions: {
+      crossOrigin: 'anonymous',
+      margin: 20
+    },
+    cornersSquareOptions: {
+      type: 'dot',
+      color: '#000000'
+    },
+    cornersDotOptions: {
+      type: 'dot',
+      color: '#000000'
+    },
+    qrOptions: {
+      typeNumber: 0,
+      mode: 'Byte',
+      errorCorrectionLevel: 'Q'
+    }
+  })
+
+  const canvas = document.getElementById('canvas')
+
+  if (canvas !== null) {
+    qrCode.append(canvas)
+  }
+}
+
+// Computed property to manage dynamic styles
+const customColor = computed(() => {
+  return {
+    '--custom-bg-color': settStore.settings.Color
+  }
+})
+</script>
+
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <!--Main template-->
-      <div className="vendor-overview container mb-8 space-y-2" v-if="authenticated">
-        <div className="flex flex-col items-center space-y-4" v-if="!failure">
+      <div v-if="authenticated" className="vendor-overview container mb-8 space-y-2">
+        <div v-if="!failure" className="flex flex-col items-center space-y-4">
           <h1 className="text-3xl font-bold">{{ $t('yourData') }}</h1>
           <div class="grid grid-cols-2 place-content-between text-2xl">
             <strong>{{ $t('menuCredits') }}: </strong>
-            <span class="font-bold" v-if="vendorMe?.Balance !== undefined"
+            <span v-if="vendorMe?.Balance !== undefined" class="font-bold"
               >{{
                 vendorMe?.Balance !== undefined ? (vendorMe?.Balance / 100).toFixed(2) : 'N/A'
               }}
@@ -69,118 +189,6 @@
     </template>
   </component>
 </template>
-
-<script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue'
-import { vendorsStore } from '@/stores/vendor'
-import type { Vendor } from '@/stores/vendor'
-import keycloak from '@/keycloak/keycloak'
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
-import QRCodeStyling from 'qr-code-styling'
-import { useKeycloakStore } from '@/stores/keycloak'
-import { computed } from 'vue'
-import { settingsStore } from '@/stores/settings'
-
-const settStore = settingsStore()
-const store = vendorsStore()
-const keycloakStore = useKeycloakStore()
-
-const vendorMe = ref<Vendor | null>(null)
-
-const authenticated = computed(() => keycloakStore.authenticated)
-
-const failure = ref(false)
-const failureMessage = ref('')
-
-const formatTime = (date: string) => {
-  const d = new Date(date)
-  const formattedDate = `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1)
-    .toString()
-    .padStart(2, '0')}.${d.getFullYear()}`
-  const formattedTime = `${d.getHours().toString().padStart(2, '0')}:${d
-    .getMinutes()
-    .toString()
-    .padStart(2, '0')}`
-
-  return `${formattedDate} - ${formattedTime}`
-}
-
-onMounted(async () => {
-  if (authenticated.value) {
-    try {
-      vendorMe.value = await store.fetchVendorMe()
-      if (vendorMe.value) {
-        generateQRCode(vendorMe.value)
-      }
-    } catch (error) {
-      console.error('Fehler beim API-Aufruf:', error)
-    }
-  } else {
-    watch(authenticated, async () => {
-      if (authenticated.value) {
-        try {
-          vendorMe.value = await store.fetchVendorMe()
-          if (vendorMe.value) {
-            generateQRCode(vendorMe.value)
-          }
-        } catch (error) {
-          failure.value = true
-          if (error instanceof Error) {
-            console.error('Fehler beim API-Aufruf:', error)
-          } else {
-            console.error('Fehler beim API-Aufruf:', error as Error)
-          }
-        }
-      }
-    })
-  }
-})
-
-//qrcode
-const generateQRCode = async (vendorMe: Vendor) => {
-  const qrCode = new QRCodeStyling({
-    width: 100,
-    height: 100,
-    type: 'svg',
-    data: `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}`,
-
-    dotsOptions: {
-      color: '#000',
-      type: 'dots'
-    },
-    backgroundOptions: {
-      color: '#fff'
-    },
-    imageOptions: {
-      crossOrigin: 'anonymous',
-      margin: 20
-    },
-    cornersSquareOptions: {
-      type: 'dot',
-      color: '#000000'
-    },
-    cornersDotOptions: {
-      type: 'dot',
-      color: '#000000'
-    },
-    qrOptions: {
-      typeNumber: 0,
-      mode: 'Byte',
-      errorCorrectionLevel: 'Q'
-    }
-  })
-  const canvas = document.getElementById('canvas')
-  if (canvas !== null) {
-    qrCode.append(canvas)
-  }
-}
-// Computed property to manage dynamic styles
-const customColor = computed(() => {
-  return {
-    '--custom-bg-color': settStore.settings.Color
-  }
-})
-</script>
 
 <style scoped>
 .customcolor {

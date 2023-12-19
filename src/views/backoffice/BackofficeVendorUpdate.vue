@@ -1,3 +1,69 @@
+<script lang="ts" setup>
+import { ref, onMounted, watch } from 'vue'
+import { vendorsStore } from '@/stores/vendor'
+import type { Vendor } from '@/stores/vendor'
+import { useRoute } from 'vue-router'
+import Toast from '@/components/ToastMessage.vue'
+import router from '@/router'
+import { useKeycloakStore } from '@/stores/keycloak'
+import { storeToRefs } from 'pinia'
+
+const store = vendorsStore()
+const keycloakStore = useKeycloakStore()
+
+const updatedVendor = ref<Vendor | null>(null)
+
+const route = useRoute()
+
+onMounted(() => {
+  if (keycloakStore.authenticated) {
+    store.getVendor(route.params.ID)
+  }
+})
+
+const { vendor } = storeToRefs(store)
+
+watch(vendor, (newVal) => {
+  if (newVal) {
+    updatedVendor.value = newVal
+  }
+})
+
+const toast = ref<{ type: string; message: string } | null>(null)
+
+const updateVendor = async () => {
+  try {
+    await store.updateVendor(updatedVendor.value as Vendor)
+    showToast('success', 'VerkäuferIn erfolgreich aktualisiert')
+  } catch (error) {
+    console.error('Error creating vendor:', error)
+    showToast('error', 'VerkäuferIn konnte nicht angelegt werden')
+  }
+}
+
+const deleteVendor = async () => {
+  try {
+    if (vendor.value) {
+      await store.deleteVendor(vendor.value.ID)
+      showToast('success', 'VerkäuferIn erfolgreich gelöscht')
+    }
+  } catch (error) {
+    console.error('Error deleting vendor:', error)
+    showToast('error', 'VerkäuferIn konnte nicht gelöscht werden')
+  }
+}
+
+const showToast = (type: string, message: string) => {
+  // Set the toast message
+  toast.value = { type, message }
+
+  // Clear the toast after a delay (e.g., 5 seconds)
+  setTimeout(() => {
+    toast.value = null
+  }, 5000)
+}
+</script>
+
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
@@ -5,21 +71,21 @@
         {{ $t('vendorSingular') }} {{ $t('change') }}
       </h1></template
     >
-    <template #main v-if="updatedVendor">
+    <template v-if="updatedVendor" #main>
       <div class="main">
-        <div class="w-full max-w-md mx-auto mt-4" v-if="vendor">
+        <div v-if="vendor" class="w-full max-w-md mx-auto mt-4">
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ vendor.LicenseID }} {{ $t('change') }}</h1>
             <button
-              @click="router.push('/backoffice/vendorsummary')"
               class="px-2 rounded-full bg-red-600 text-white font-bold"
+              @click="router.push('/backoffice/vendorsummary')"
             >
               X
             </button>
           </div>
         </div>
 
-        <form @submit.prevent="updateVendor" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="updateVendor">
           <div class="mb-4 justify-between grid grid-cols-2 gap-5">
             <div class="row">
               <span class="col">
@@ -29,10 +95,10 @@
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.FirstName }} </span>
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.FirstName"
-                    type="text"
                     id="firstName"
+                    v-model="updatedVendor.FirstName"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                     required
                   />
                 </div>
@@ -43,10 +109,10 @@
                   <span class="p-2">{{ vendor.LastName }} </span>
 
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.LastName"
-                    type="text"
                     id="lastName"
+                    v-model="updatedVendor.LastName"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                     required
                   />
                 </div>
@@ -58,10 +124,10 @@
                   <span class="p-2">{{ vendor.Email }} </span>
 
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.Email"
-                    type="email"
                     id="email"
+                    v-model="updatedVendor.Email"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="email"
                     required
                   />
                 </div>
@@ -72,10 +138,10 @@
                   <span class="p-2">{{ vendor.LicenseID }} </span>
 
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.LicenseID"
-                    type="text"
                     id="licenseID"
+                    v-model="updatedVendor.LicenseID"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                     required
                   />
                 </div>
@@ -86,9 +152,9 @@
                 <div class="flex flex-row">
                   <span class="p-2"> {{ vendor.IsDisabled }} </span>
                   <select
-                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.IsDisabled"
                     id="onlineMap"
+                    v-model="updatedVendor.IsDisabled"
+                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     required
                   >
                     <option value="true">{{ $t('yes') }}</option>
@@ -102,10 +168,10 @@
                   <span class="p-2">{{ vendor.Address }} </span>
 
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.Address"
-                    type="text"
                     id="adress"
+                    v-model="updatedVendor.Address"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                     required
                   />
                 </div>
@@ -116,10 +182,10 @@
                   <span class="p-2">{{ vendor.PLZ }} </span>
 
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.PLZ"
-                    type="text"
                     id="plz"
+                    v-model="updatedVendor.PLZ"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                   />
                 </div>
 
@@ -130,36 +196,36 @@
                   <span class="p-2">{{ vendor.Location }} </span>
 
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model.number="updatedVendor.Location"
-                    type="text"
                     id="location"
+                    v-model.number="updatedVendor.Location"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                   />
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                  >{{ $t("longitude") }}:</label
+                  >{{ $t('longitude') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Longitude }} </span>
 
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model.number="updatedVendor.Longitude"
-                    type="text"
                     id="location"
+                    v-model.number="updatedVendor.Longitude"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                   />
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                  >{{ $t("latitude") }}:</label
+                  >{{ $t('latitude') }}:</label
                 >
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Latitude }} </span>
 
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model.number="updatedVendor.Latitude"
-                    type="text"
                     id="location"
+                    v-model.number="updatedVendor.Latitude"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                   />
                 </div>
               </span>
@@ -172,10 +238,10 @@
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Telephone }} </span>
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.Telephone"
-                    type="text"
                     id="telephone"
+                    v-model="updatedVendor.Telephone"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                   />
                 </div>
 
@@ -185,9 +251,9 @@
                 <div class="flex flex-row">
                   <span class="p-2"> {{ vendor.HasSmartphone }} </span>
                   <select
-                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.HasSmartphone"
                     id="hasSmartphone"
+                    v-model="updatedVendor.HasSmartphone"
+                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     required
                   >
                     <option value="true">{{ $t('yes') }}</option>
@@ -201,10 +267,10 @@
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.WorkingTime }} </span>
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.WorkingTime"
-                    type="text"
                     id="workingTime"
+                    v-model="updatedVendor.WorkingTime"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                   />
                 </div>
 
@@ -214,10 +280,10 @@
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Language }} </span>
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.Language"
-                    type="text"
                     id="language"
+                    v-model="updatedVendor.Language"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                     required
                   />
                 </div>
@@ -228,9 +294,9 @@
                 <div class="flex flex-row">
                   <span class="p-2"> {{ vendor.OnlineMap }} </span>
                   <select
-                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.OnlineMap"
                     id="onlineMap"
+                    v-model="updatedVendor.OnlineMap"
+                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     required
                   >
                     <option value="true">{{ $t('yes') }}</option>
@@ -243,9 +309,9 @@
                 <div class="flex flex-row">
                   <span class="p-2"> {{ vendor.HasBankAccount }} </span>
                   <select
-                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.HasBankAccount"
                     id="bankAccount"
+                    v-model="updatedVendor.HasBankAccount"
+                    class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     required
                   >
                     <option value="true">{{ $t('yes') }}</option>
@@ -261,10 +327,10 @@
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.RegistrationDate }} </span>
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.RegistrationDate"
-                    type="text"
                     id="registrationDate"
+                    v-model="updatedVendor.RegistrationDate"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                   />
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
@@ -273,10 +339,10 @@
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.VendorSince }} </span>
                   <input
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    v-model="updatedVendor.VendorSince"
-                    type="text"
                     id="vendorSince"
+                    v-model="updatedVendor.VendorSince"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
                   />
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
@@ -285,11 +351,11 @@
                 <div class="flex flex-row">
                   <span class="p-2">{{ vendor.Comment }} </span>
                   <textarea
+                    id="comment"
+                    v-model="updatedVendor.Comment"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     rows="5"
-                    v-model="updatedVendor.Comment"
                     type="text"
-                    id="comment"
                   ></textarea>
                 </div>
               </span>
@@ -317,69 +383,6 @@
     </template>
   </component>
 </template>
-
-<script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue'
-import { vendorsStore } from '@/stores/vendor'
-import type { Vendor } from '@/stores/vendor'
-import { useRoute } from 'vue-router'
-import Toast from '@/components/ToastMessage.vue'
-import router from '@/router'
-import { useKeycloakStore } from '@/stores/keycloak'
-import { storeToRefs } from 'pinia'
-
-const store = vendorsStore()
-const keycloakStore = useKeycloakStore()
-
-const updatedVendor = ref<Vendor | null>(null)
-
-const route = useRoute()
-
-onMounted(() => {
-  if (keycloakStore.authenticated) {
-    store.getVendor(route.params.ID)
-  }
-})
-const { vendor } = storeToRefs(store)
-
-watch(vendor, (newVal) => {
-  if (newVal) {
-    updatedVendor.value = newVal
-  }
-})
-onMounted(() => {})
-const toast = ref<{ type: string; message: string } | null>(null)
-
-const updateVendor = async () => {
-  try {
-    await store.updateVendor(updatedVendor.value as Vendor)
-    showToast('success', 'VerkäuferIn erfolgreich aktualisiert')
-  } catch (error) {
-    console.error('Error creating vendor:', error)
-    showToast('error', 'VerkäuferIn konnte nicht angelegt werden')
-  }
-}
-const deleteVendor = async () => {
-  try {
-    if (vendor.value) {
-      await store.deleteVendor(vendor.value.ID)
-      showToast('success', 'VerkäuferIn erfolgreich gelöscht')
-    }
-  } catch (error) {
-    console.error('Error deleting vendor:', error)
-    showToast('error', 'VerkäuferIn konnte nicht gelöscht werden')
-  }
-}
-
-const showToast = (type: string, message: string) => {
-  // Set the toast message
-  toast.value = { type, message }
-  // Clear the toast after a delay (e.g., 5 seconds)
-  setTimeout(() => {
-    toast.value = null
-  }, 5000)
-}
-</script>
 
 <style>
 tr {

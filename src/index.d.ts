@@ -1,8 +1,7 @@
 export {}
 
-  declare global {
-    interface Window {
-      Stripe: Stripe
-    }
+declare global {
+  interface Window {
+    Stripe: Stripe
   }
-  
+}

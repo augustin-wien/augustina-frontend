@@ -1,6 +1,29 @@
+<script setup lang="ts">
+import keycloak from '@/keycloak/keycloak'
+import { useKeycloakStore } from '@/stores/keycloak'
+import {
+  faArrowRightFromBracket,
+  faBagShopping,
+  faDungeon,
+  faFileLines,
+  faSliders,
+  faSplotch,
+  faUserGroup,
+  faMapLocation
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { computed } from 'vue'
+
+const keycloakStore = useKeycloakStore()
+
+const authenticated = computed(() => keycloakStore.authenticated)
+
+const apiUrl = import.meta.env.VITE_API_URL
+</script>
+
 <template>
   <div>
-    <div className="backoffice-layout h-screen flex " v-if="authenticated">
+    <div v-if="authenticated" className="backoffice-layout h-screen flex ">
       <div class="h-full flex-none w-100">
         <div
           className="sidemenu fixed t-0 l-0 h-full w-100 flex-none flex flex-col justify-start items-start pr-5 pl-4 border-gray-600 border-b space-y-3 pb-5 bg-lime-600"
@@ -22,7 +45,7 @@
               <p class="text-base leading-4">{{ $t('menuVendors') }}</p>
             </button>
           </RouterLink>
-          <RouterLink to="/backoffice/credits" className="sidemenu-link">
+          <RouterLink to="/backoffice/credits" class-name="sidemenu-link">
             <button
               class="flex justifyy-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
             >
@@ -30,7 +53,7 @@
               <p class="text-base leading-4">{{ $t('menuCredits') }}</p>
             </button>
           </RouterLink>
-          <RouterLink to="/backoffice/payouts" className="sidemenu-link">
+          <RouterLink to="/backoffice/payouts" class-name="sidemenu-link">
             <button
               class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
             >
@@ -39,7 +62,7 @@
               <p class="text-base leading-4">{{ $t('menuPayouts') }}</p>
             </button>
           </RouterLink>
-          <RouterLink to="/backoffice/sales" className="sidemenu-link">
+          <RouterLink to="/backoffice/sales" class-name="sidemenu-link">
             <button
               class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
             >
@@ -48,7 +71,7 @@
               <p class="text-base leading-4">{{ $t('menuSales') }}</p>
             </button>
           </RouterLink>
-          <RouterLink to="/backoffice/payments" className="sidemenu-link">
+          <RouterLink to="/backoffice/payments" class-name="sidemenu-link">
             <button
               class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
             >
@@ -57,7 +80,7 @@
               <p class="text-base leading-4">{{ $t('menuAccounting') }}</p>
             </button>
           </RouterLink>
-          <RouterLink to="/backoffice/productsettings" className="sidemenu-link">
+          <RouterLink to="/backoffice/productsettings" class-name="sidemenu-link">
             <button
               class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
             >
@@ -66,7 +89,7 @@
               <p class="text-base leading-4">{{ $t('menuProducts') }}</p>
             </button>
           </RouterLink>
-          <RouterLink to="/backoffice/settings" className="sidemenu-link">
+          <RouterLink to="/backoffice/settings" class-name="sidemenu-link">
             <button
               class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
             >
@@ -75,7 +98,7 @@
               <p class="text-base leading-4">{{ $t('menuSettings') }}</p>
             </button>
           </RouterLink>
-          <RouterLink to="/backoffice/map" className="sidemenu-link">
+          <RouterLink to="/backoffice/map" class-name="sidemenu-link">
             <button
               class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
             >
@@ -99,8 +122,8 @@
             <p v-else>{{ $t('userNotLoggedIn') }}</p>
           </div>
           <select
-            class="h-[40px] w-[70px] bg-lime-700 border-2 border-white font-semibold rounded-full text-white text-center mt-4 mr-4 pl-2 text-sm"
             v-model="$i18n.locale"
+            class="h-[40px] w-[70px] bg-lime-700 border-2 border-white font-semibold rounded-full text-white text-center mt-4 mr-4 pl-2 text-sm"
           >
             <option value="en">EN</option>
             <option value="de">DE</option>
@@ -165,29 +188,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import keycloak from '@/keycloak/keycloak'
-import { useKeycloakStore } from '@/stores/keycloak'
-import {
-  faArrowRightFromBracket,
-  faBagShopping,
-  faDungeon,
-  faFileLines,
-  faSliders,
-  faSplotch,
-  faUserGroup,
-  faMapLocation,
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { computed } from 'vue'
-
-const keycloakStore = useKeycloakStore()
-
-const authenticated = computed(() => keycloakStore.authenticated)
-
-const apiUrl = import.meta.env.VITE_API_URL
-</script>
-
 <style lang="scss" scoped>
 .main-container {
   padding-left: 8px;
@@ -227,6 +227,7 @@ footer {
   padding-top: 50px;
 }
 </style>
+
 <style lang="scss">
 .backoffice-layout {
   tbody {

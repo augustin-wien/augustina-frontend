@@ -1,3 +1,61 @@
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { settingsStore } from '@/stores/settings'
+import { usePaymentStore } from '@/stores/payment'
+import { useItemsStore } from '@/stores/items'
+import IconCheckmark from '@/components/icons/IconCheckmark.vue'
+import IconCross from '@/components/icons/IconCross.vue'
+
+const paymentStore = usePaymentStore()
+const settStore = settingsStore()
+const itemsStore = useItemsStore()
+
+const isConfirmed = ref(paymentStore.timeStamp == '')
+
+function currentDate() {
+  const current = new Date()
+  const date = `${current.getDate()}.${current.getMonth() + 1}.${current.getFullYear()}`
+  return date
+}
+
+const price = computed(() =>
+  paymentStore.verification?.TotalSum ? paymentStore.verification?.TotalSum / 100 : 0
+)
+
+const purchasedItems = computed(() => paymentStore.verification?.PurchasedItems)
+const time = ref('not')
+
+function currentTime() {
+  const now = new Date()
+  time.value = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
+}
+
+const formatTime = (date: string) => {
+  const d = new Date(date)
+  return d.toLocaleString()
+}
+
+function UpdateTime() {
+  setTimeout(() => {
+    currentTime()
+    UpdateTime()
+  }, 1000)
+}
+
+onMounted(() => {
+  itemsStore.getItems()
+})
+
+const itemName = (id: number) => {
+  const item = itemsStore.items?.find((item) => item.ID == id)
+
+  return item?.Name
+}
+
+UpdateTime()
+const apiUrl = import.meta.env.VITE_API_URL
+</script>
+
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
@@ -61,57 +119,3 @@
     </template>
   </component>
 </template>
-
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { settingsStore } from '@/stores/settings'
-import { usePaymentStore } from '@/stores/payment'
-import { useItemsStore } from '@/stores/items'
-import IconCheckmark from '@/components/icons/IconCheckmark.vue'
-import IconCross from '@/components/icons/IconCross.vue'
-
-const paymentStore = usePaymentStore()
-const settStore = settingsStore()
-const itemsStore = useItemsStore()
-
-const isConfirmed = ref(paymentStore.timeStamp == '')
-
-function currentDate() {
-  const current = new Date()
-  const date = `${current.getDate()}.${current.getMonth() + 1}.${current.getFullYear()}`
-  return date
-}
-const price = computed(() =>
-  paymentStore.verification?.TotalSum ? paymentStore.verification?.TotalSum / 100 : 0
-)
-const purchasedItems = computed(() => paymentStore.verification?.PurchasedItems)
-let time = ref('not')
-function currentTime() {
-  const now = new Date()
-  time.value = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`
-}
-
-const formatTime = (date: string) => {
-  const d = new Date(date)
-  return d.toLocaleString()
-}
-
-function UpdateTime() {
-  setTimeout(() => {
-    currentTime()
-    UpdateTime()
-  }, 1000)
-}
-onMounted(() => {
-  itemsStore.getItems()
-})
-
-const itemName = (id: number) => {
-  const item = itemsStore.items?.find((item) => item.ID == id)
-
-  return item?.Name
-}
-
-UpdateTime()
-const apiUrl = import.meta.env.VITE_API_URL
-</script>

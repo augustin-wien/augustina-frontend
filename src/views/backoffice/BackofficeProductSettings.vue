@@ -1,3 +1,19 @@
+<script lang="ts" setup>
+import { useItemsStore } from '@/stores/items'
+import { computed, onMounted } from 'vue'
+import { formatCredit } from '@/utils/utils'
+
+const store = useItemsStore()
+
+// Fetch the items' data when the component is mounted
+onMounted(() => {
+  store.getItems()
+})
+
+const items = computed(() => store.items)
+const apiUrl = import.meta.env.VITE_API_URL
+</script>
+
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
@@ -58,20 +74,5 @@
     </template>
   </component>
 </template>
-
-<script lang="ts" setup>
-import { useItemsStore } from '@/stores/items'
-import { computed, onMounted } from 'vue'
-import { formatCredit } from '@/utils/utils'
-
-const store = useItemsStore()
-
-// Fetch the items' data when the component is mounted
-onMounted(() => {
-  store.getItems()
-})
-const items = computed(() => store.items)
-const apiUrl = import.meta.env.VITE_API_URL
-</script>
 
 <style scoped></style>

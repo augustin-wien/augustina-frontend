@@ -1,3 +1,3 @@
 export interface VivaWalletResponse {
-    SmartCheckoutURL: string;
+  SmartCheckoutURL: string
 }

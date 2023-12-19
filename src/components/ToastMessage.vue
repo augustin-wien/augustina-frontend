@@ -1,24 +1,3 @@
-<template>
-  <div v-if="toast" :class="toastClasses" class="toast">
-    <svg
-      class="w-5 h-5 text-blue-600 dark:text-blue-500 rotate-45"
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 18 20"
-    >
-      <path
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="m9 17 8 2L9 1 1 19l8-2Zm0 0V9"
-      />
-    </svg>
-    <div class="pl-4 text-sm font-normal">{{ toast.message }}</div>
-  </div>
-</template>
-
 <script lang="ts">
 export default {
   props: {
@@ -40,6 +19,27 @@ export default {
   }
 }
 </script>
+
+<template>
+  <div v-if="toast" :class="toastClasses" class="toast">
+    <svg
+      class="w-5 h-5 text-blue-600 dark:text-blue-500 rotate-45"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 18 20"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="m9 17 8 2L9 1 1 19l8-2Zm0 0V9"
+      />
+    </svg>
+    <div class="pl-4 text-sm font-normal">{{ toast.message }}</div>
+  </div>
+</template>
 
 <style>
 .toast {

@@ -8,17 +8,17 @@
   transition: all 0.2s linear;
 }
 
-.button-down{
-    margin-right: auto;
+.button-down {
+  margin-right: auto;
 }
 
-.button-up{
-    margin-left: auto;
+.button-up {
+  margin-left: auto;
 }
 
 .button-up::after,
 .button-down::after {
-  content: "";
+  content: '';
   position: absolute;
   left: 15px;
   z-index: 11;

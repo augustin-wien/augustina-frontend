@@ -10,6 +10,7 @@ const paymentStore = usePaymentStore()
 const shopStore = useShopStore()
 
 const increment = paymentStore.setTip
+
 onMounted(() => {
   shopStore.removeEmty()
 })
@@ -25,8 +26,8 @@ onMounted(() => {
         <div className="flex place-items-center w-full">
           <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
             <button
-              @click="increment(2)"
               class="customcolor rounded-full p-[18px] text-white text-4xl font font-semibold w-full"
+              @click="increment(2)"
             >
               2,00 €
             </button>
@@ -35,8 +36,8 @@ onMounted(() => {
         <div className="flex place-items-center w-full">
           <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
             <button
-              @click="increment(1)"
               class="customcolor rounded-full p-[18px] text-white text-4xl font font-semibold w-full"
+              @click="increment(1)"
             >
               1,00 €
             </button>
@@ -52,8 +53,8 @@ onMounted(() => {
         <div className="flex place-items-center w-full">
           <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
             <button
-              @click="increment(0)"
               class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
+              @click="increment(0)"
             >
               {{ $t('notToday') }}
             </button>

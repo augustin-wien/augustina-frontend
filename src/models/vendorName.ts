@@ -1,3 +1,3 @@
-export interface Name{
-    FirstName: string
+export interface Name {
+  FirstName: string
 }

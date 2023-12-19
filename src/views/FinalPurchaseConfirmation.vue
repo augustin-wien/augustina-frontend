@@ -11,18 +11,23 @@ const shopStore = useShopStore()
 const settStore = settingsStore()
 const paymentStore = usePaymentStore()
 const shake = ref(false)
+
 const checkAgb = () => {
   const agbsChecked = paymentStore.checkAgb()
+
   if (!agbsChecked) {
     shake.value = true
+
     setTimeout(() => {
       shake.value = false
     }, 500)
   }
 }
+
 onMounted(() => {
   if (isNaN(paymentStore.priceInEuros()) || paymentStore.priceInEuros() == 0) {
     const sum = shopStore.calculateSum()
+
     if (sum > 0) {
       paymentStore.setPrice(sum)
     } else {
@@ -31,11 +36,14 @@ onMounted(() => {
     }
   }
 })
+
 const hasLicenseItem = computed(() => {
   const item = shopStore.items?.find((item) => item.LicenseItem != null)
+
   if (item) {
     if (shopStore.finalitems.find((i) => i.item == item.ID)) return item
   }
+
   return null
 })
 </script>
@@ -47,20 +55,20 @@ const hasLicenseItem = computed(() => {
         <div class="text-center font-semibold text-3xl">
           {{ $t('confirm') }}
         </div>
-        <div class="row-span-3 w-full h-full ">
+        <div class="row-span-3 w-full h-full">
           <div class="overflow-y-auto h-5/6 border-4 border-gray-200 rounded-3xl">
             <div class="w-full items-center py-4">
-              <p class="text-center text-8xl font-semibold">
-                {{ paymentStore.priceInEuros() }}€
-              </p>
+              <p class="text-center text-8xl font-semibold">{{ paymentStore.priceInEuros() }}€</p>
               <p className="text-center text">
                 {{ $t('includes') }} {{ paymentStore.tip }}€ {{ $t('donation') }}
               </p>
             </div>
             <div class="w-full">
               <div v-for="item in shopStore.amount" :key="item.item">
-                <div class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-4 "
-                  v-if="item.quantity > 0">
+                <div
+                  v-if="item.quantity > 0"
+                  class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-4"
+                >
                   {{ item.quantity }}x {{ shopStore.getName(item.item) }}
                   {{ shopStore.getPriceInEuro(item.item) }}€
                 </div>
@@ -70,15 +78,19 @@ const hasLicenseItem = computed(() => {
 
           <div :class="shake ? 'shake' : ''">
             <div class="flex items-center justify-center">
-              <input type="checkbox" id="checkbox" v-model="paymentStore.agbChecked" class="mr-2" />
+              <input id="checkbox" v-model="paymentStore.agbChecked" type="checkbox" class="mr-2" />
               <label for="checkbox" class="text-center">
                 {{ $t('agreement') }}
-                <button @click="paymentStore.toAGB()" class="text-blue-600">
+                <button class="text-blue-600" @click="paymentStore.toAGB()">
                   {{ $t('terms') }}
-                </button></label>
+                </button></label
+              >
             </div>
             <div v-if="hasLicenseItem">
-              <EmailModal v-if="!paymentStore.email || paymentStore.email == ''" :licenceItem="hasLicenseItem" />
+              <EmailModal
+                v-if="!paymentStore.email || paymentStore.email == ''"
+                :licence-item="hasLicenseItem"
+              />
             </div>
             <div class="w-full">
               <div v-if="hasLicenseItem != null" class="text-small text-center mb-3">
@@ -92,17 +104,15 @@ const hasLicenseItem = computed(() => {
         </div>
 
         <div class="place-items-center w-full">
-          <button @click="checkAgb"
-            class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full" :style="paymentStore.agbChecked
-              ? 'background-color:' + settStore.settings.Color
-              : ''
-              ">
+          <button
+            class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full"
+            :style="paymentStore.agbChecked ? 'background-color:' + settStore.settings.Color : ''"
+            @click="checkAgb"
+          >
             {{ $t('next') }}
           </button>
         </div>
       </div>
-
-
     </template>
   </component>
 </template>

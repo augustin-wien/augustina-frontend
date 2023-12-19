@@ -1,3 +1,106 @@
+<script lang="ts" setup>
+import { ref, computed, onMounted, watch } from 'vue'
+import { useItemsStore } from '@/stores/items'
+import type { Item } from '@/stores/items'
+import { useRoute } from 'vue-router'
+import Toast from '@/components/ToastMessage.vue'
+import router from '@/router'
+
+const store = useItemsStore()
+
+const updatedItem = ref({
+  Description: 'Jahreskalender',
+  ID: 0,
+  Image: 'tbd',
+  Name: 'Kalender',
+  Price: 0
+})
+
+store.getItems()
+const items = computed(() => store.items)
+
+const route = useRoute()
+const idparams = route.params.ID
+
+const item = computed(() => {
+  const numericIdParams = Number(idparams) // Convert the string to a number or NaN
+
+  if (!isNaN(numericIdParams)) {
+    const i = items.value.find((item) => item.ID === numericIdParams)
+    //@ts-ignore
+    return i
+  } else {
+    return null
+  }
+})
+
+watch(item, (newVal) => {
+  if (newVal) {
+    updatedItem.value = newVal
+  }
+})
+
+const toast = ref<{ type: string; message: string } | null>(null)
+
+const updateItem = async () => {
+  try {
+    store
+      .updateItem(updatedItem.value as Item)
+      .then(() => {
+        showToast('success', 'Produkt erfolgreich aktualisiert')
+        store.getItems()
+      })
+      .catch((err) => {
+        showToast('error', 'Produkt konnte nicht aktualisiert werden' + err)
+      })
+  } catch (error) {
+    console.error('Error creating item:', error)
+    showToast('error', 'Produkt konnte nicht angelegt werden')
+  }
+}
+
+const showDeleteModal = ref(false)
+
+const showDeleteModalF = (event: Event) => {
+  event.preventDefault()
+  showDeleteModal.value = true
+}
+
+const deleteItem = async () => {
+  try {
+    if (item.value) {
+      await store.deleteItem(item.value.ID)
+      showToast('success', 'Produkt erfolgreich gelöscht')
+      router.push({ name: 'Backoffice Product Settings' })
+    }
+  } catch (error) {
+    console.error('Error deleting item:', error)
+    showToast('error', 'Produkt konnte nicht gelöscht werden')
+  }
+}
+
+const showToast = (type: string, message: string) => {
+  toast.value = { type, message }
+
+  setTimeout(() => {
+    toast.value = null
+  }, 5000)
+}
+
+const updateImage = (event: any) => {
+  updatedItem.value.Image = event.target.files[0]
+}
+
+const apiUrl = import.meta.env.VITE_API_URL
+
+const previewImage = (image: string | Blob | MediaSource) => {
+  if (!image || image === '') return
+  else if (typeof image === 'string') return apiUrl + image
+  // @ts-ignore
+  else return URL.createObjectURL(image)
+}
+</script>
+
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
@@ -7,28 +110,28 @@
     >
     <template #main>
       <div class="main">
-        <div class="w-full max-w-md mx-auto mt-4" v-if="item">
+        <div v-if="item" class="w-full max-w-md mx-auto mt-4">
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ item.Name }} {{ $t('change') }}</h1>
             <button
-              @click="router.push('/backoffice/productsettings')"
               class="px-2 rounded-full bg-red-600 text-white font-bold"
+              @click="router.push('/backoffice/productsettings')"
             >
               X
             </button>
           </div>
 
-          <form @submit.prevent="updateItem" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="updateItem">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
                 >{{ $t('name') }}:</label
               >
               <div class="flex flex-row">
                 <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedItem.Name"
-                  type="text"
                   id="Name"
+                  v-model="updatedItem.Name"
+                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
                   required
                 />
               </div>
@@ -37,10 +140,10 @@
               >
               <div class="flex flex-row">
                 <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedItem.Description"
-                  type="text"
                   id="description"
+                  v-model="updatedItem.Description"
+                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
                   required
                 />
               </div>
@@ -50,10 +153,10 @@
               >
               <div class="flex flex-row">
                 <input
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  v-model="updatedItem.Price"
-                  type="number"
                   id="price"
+                  v-model="updatedItem.Price"
+                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="number"
                   required
                 />
               </div>
@@ -62,19 +165,19 @@
               >
               <div class="flex flex-col">
                 <img
+                  v-if="item.Image"
                   :src="previewImage(item.Image)"
                   alt="item image"
                   class="productImage"
                   width="100%"
                   height="auto"
-                  v-if="item.Image"
                 />
                 <input
+                  id="image"
                   class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   accept="image/png, image/jpeg"
-                  @change="updateImage"
                   type="file"
-                  id="image"
+                  @change="updateImage"
                 />
               </div>
             </div>
@@ -152,8 +255,8 @@
                     <button
                       data-modal-hide="defaultModal"
                       type="button"
-                      @click="deleteItem"
                       class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      @click="deleteItem"
                     >
                       {{ $t('delete') }}
                     </button>
@@ -175,104 +278,6 @@
     </template>
   </component>
 </template>
-
-<script lang="ts" setup>
-import { ref, computed, onMounted, watch } from 'vue'
-import { useItemsStore } from '@/stores/items'
-import type { Item } from '@/stores/items'
-import { useRoute } from 'vue-router'
-import Toast from '@/components/ToastMessage.vue'
-import router from '@/router'
-
-const store = useItemsStore()
-
-const updatedItem = ref({
-  Description: 'Jahreskalender',
-  ID: 0,
-  Image: 'tbd',
-  Name: 'Kalender',
-  Price: 0
-})
-
-store.getItems()
-const items = computed(() => store.items)
-
-const route = useRoute()
-const idparams = route.params.ID
-
-const item = computed(() => {
-  const numericIdParams = Number(idparams) // Convert the string to a number or NaN
-  if (!isNaN(numericIdParams)) {
-    let i = items.value.find((item) => item.ID === numericIdParams)
-    //@ts-ignore
-    return i
-  } else {
-    return null
-  }
-})
-watch(item, (newVal) => {
-  if (newVal) {
-    updatedItem.value = newVal
-  }
-})
-onMounted(() => {})
-const toast = ref<{ type: string; message: string } | null>(null)
-
-const updateItem = async () => {
-  try {
-    store
-      .updateItem(updatedItem.value as Item)
-      .then(() => {
-        showToast('success', 'Produkt erfolgreich aktualisiert')
-        store.getItems()
-      })
-      .catch((err) => {
-        showToast('error', 'Produkt konnte nicht aktualisiert werden' + err)
-      })
-  } catch (error) {
-    console.error('Error creating item:', error)
-    showToast('error', 'Produkt konnte nicht angelegt werden')
-  }
-}
-const showDeleteModal = ref(false)
-const showDeleteModalF = (event: Event) => {
-  event.preventDefault()
-  showDeleteModal.value = true
-}
-
-const deleteItem = async () => {
-  try {
-    if (item.value) {
-      await store.deleteItem(item.value.ID)
-      showToast('success', 'Produkt erfolgreich gelöscht')
-      router.push({ name: 'Backoffice Product Settings' })
-    }
-  } catch (error) {
-    console.error('Error deleting item:', error)
-    showToast('error', 'Produkt konnte nicht gelöscht werden')
-  }
-}
-
-const showToast = (type: string, message: string) => {
-  toast.value = { type, message }
-  setTimeout(() => {
-    toast.value = null
-  }, 5000)
-}
-
-const updateImage = (event: any) => {
-  updatedItem.value.Image = event.target.files[0]
-}
-
-const apiUrl = import.meta.env.VITE_API_URL
-
-const previewImage = (image: String | Blob | MediaSource) => {
-  if (!image || image === '') return
-  else if (typeof image === 'string') return apiUrl + image
-  // @ts-ignore
-  else return URL.createObjectURL(image)
-}
-</script>
 
 <style scoped>
 tr {

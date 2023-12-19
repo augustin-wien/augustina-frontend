@@ -1,3 +1,5 @@
+<script setup lang="ts"></script>
+
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
@@ -6,5 +8,3 @@
     </template>
   </component>
 </template>
-
-<script setup lang="ts"></script>

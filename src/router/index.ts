@@ -77,12 +77,12 @@ const router = createRouter({
         {
           path: '/v/:id/item-available',
           name: 'Item Available',
-          component: () => import('@/views/ItemAvailable.vue'),
+          component: () => import('@/views/ItemAvailable.vue')
         },
         {
           path: '/v/:id/items',
           name: 'Items',
-          component: () => import('@/views/SelectedItems.vue'),
+          component: () => import('@/views/SelectedItems.vue')
         }
       ]
     },
@@ -358,11 +358,14 @@ async function isAuthenticated() {
     } catch (error) {
       console.log('init keycloak failed', error)
     }
+
     const keycloakStore = useKeycloakStore()
     keycloakStore.setAuthenticated(keycloak.keycloak.authenticated)
+
     if (keycloak.keycloak.tokenParsed) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
+
     return keycloak.keycloak.authenticated
   } else {
     return keycloak.keycloak.authenticated
