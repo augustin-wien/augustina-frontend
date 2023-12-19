@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { RouterLink, useRouter } from 'vue-router'
 import { useShopStore } from '@/stores/ShopStore'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { ref } from 'vue'
 import Toast from '@/components/ToastMessage.vue'
 
 const shopStore = useShopStore()
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const items = shopStore.items
 const router = useRouter()
 

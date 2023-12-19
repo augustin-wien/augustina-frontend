@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { computed } from 'vue'
 
@@ -7,7 +7,7 @@ const keycloakStore = useKeycloakStore()
 
 const authenticated = computed(() => keycloakStore.authenticated)
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 settStore.getSettingsFromApi()
 </script>
 

@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useShopStore } from '@/stores/ShopStore'
 import { usePaymentStore } from '@/stores/payment'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import EmailModal from '@/components/EmailModal.vue'
 
 const router = useRouter()
 const shopStore = useShopStore()
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const paymentStore = usePaymentStore()
 const shake = ref(false)
 

@@ -1,19 +1,32 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { settingsStore, type Settings } from '@/stores/settings'
+import { useSettingsStore, type Settings } from '@/stores/settings'
+import { useKeycloakStore } from '@/stores/keycloak'
 import { useItemsStore } from '@/stores/items'
 import toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 
-const store = settingsStore()
+const settingsStore = useSettingsStore()
 const storeItems = useItemsStore()
+const keycloakStore = useKeycloakStore()
+
+const authenticated = computed(() => keycloakStore.authenticated)
 
 onMounted(() => {
-  updatedSettings.value = store.settings
-  storeItems.getItems()
+  if (authenticated.value) {
+    storeItems.getItems()
+    settingsStore.getSettingsFromApi()
+    updatedSettings.value = settingsStore.settings
+  } else {
+    watch(authenticated, () => {
+      storeItems.getItems()
+      settingsStore.getSettingsFromApi()
+      updatedSettings.value = settingsStore.settings
+    })
+  }
 })
 
-const settings = computed(() => store.settings)
+const settings = computed(() => settingsStore.settings)
 const items = computed(() => storeItems.items)
 
 watch(settings, (newVal) => {
@@ -39,7 +52,7 @@ const updatedSettings = ref<Settings>({
 const updateSettings = async () => {
   try {
     // This logic will execute when the "Bestätigen" button is clicked
-    await store.updateSettings(updatedSettings.value)
+    await settingsStore.updateSettings(updatedSettings.value)
     showToast('success', 'Einstellungen erfolgreich aktualisiert')
   } catch (error) {
     console.error('Error updating settings:', error)
@@ -58,7 +71,10 @@ const showToast = (type: string, message: string) => {
 const updateLogo = (event: any) => {
   // This logic will execute when a file is selected in the file input
   updatedSettings.value.Logo = event.target.files[0]
+  newLogo.value = URL.createObjectURL(event.target.files[0])
 }
+
+const newLogo = ref('')
 
 const url = import.meta.env.VITE_API_URL
 </script>
@@ -72,7 +88,7 @@ const url = import.meta.env.VITE_API_URL
     >
     <template #main>
       <div class="main">
-        <div v-if="settings" class="w-full max-w-md mx-auto mt-4">
+        <div v-if="settings" class="w-full max-w-l mx-auto mt-4">
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ $t('menuSettings') }} {{ $t('change') }}</h1>
             <button
@@ -92,11 +108,27 @@ const url = import.meta.env.VITE_API_URL
               >
               <div class="flex flex-row">
                 <img
-                  :src="url + settings.Logo"
+                  v-if="
+                    (updatedSettings && typeof updatedSettings.Logo === 'string') ||
+                    !updatedSettings?.Logo
+                  "
+                  :src="
+                    updatedSettings?.Logo && updatedSettings?.Logo !== ''
+                      ? url + updatedSettings.Logo
+                      : url + 'img/logo.png'
+                  "
                   alt="Augustin logo"
                   class="logo mx-auto my-5"
-                  width="50"
-                  height="20"
+                  width="200"
+                  height="auto"
+                />
+                <img
+                  v-else
+                  :src="newLogo"
+                  alt="Augustin logo2"
+                  class="logo mx-auto my-5"
+                  width="200"
+                  height="auto"
                 />
                 <input
                   id="logo"
@@ -111,7 +143,6 @@ const url = import.meta.env.VITE_API_URL
               >{{ $t('color') }}:</label
             >
             <div class="flex flex-row">
-              <span class="p-2">{{ settings.Color }}</span>
               <input
                 id="color"
                 v-model="updatedSettings.Color"
@@ -124,7 +155,6 @@ const url = import.meta.env.VITE_API_URL
               >{{ $t('fontColor') }}:</label
             >
             <div class="flex flex-row">
-              <span class="p-2">{{ settings.FontColor }}</span>
               <input
                 id="color"
                 v-model="updatedSettings.FontColor"
@@ -137,7 +167,6 @@ const url = import.meta.env.VITE_API_URL
               >{{ $t('mainProduct') }}:</label
             >
             <div class="flex flex-row">
-              <span class="p-2">{{ settings.MainItem }}</span>
               <select
                 id="mainItem"
                 v-model="updatedSettings.MainItem"

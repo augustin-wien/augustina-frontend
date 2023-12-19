@@ -1,17 +1,27 @@
 <script lang="ts" setup>
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { useItemsStore } from '@/stores/items'
-import { computed, onMounted } from 'vue'
+import { useKeycloakStore } from '@/stores/keycloak'
+import { computed, onMounted, watch } from 'vue'
 
-const store = settingsStore()
-const storeItems = useItemsStore()
+const settingsStore = useSettingsStore()
+const itemsStore = useItemsStore()
+const keycloakStore = useKeycloakStore()
+const authenticated = computed(() => keycloakStore.authenticated)
 
 onMounted(() => {
-  storeItems.getItems()
-  store.getSettingsFromApi()
+  if (authenticated.value) {
+    settingsStore.getSettingsFromApi()
+    itemsStore.getItems()
+  } else {
+    watch(authenticated, () => {
+      settingsStore.getSettingsFromApi()
+      itemsStore.getItems()
+    })
+  }
 })
 
-const settings = computed(() => store.settings)
+const settings = computed(() => settingsStore.settings)
 const url = import.meta.env.VITE_API_URL
 </script>
 
@@ -22,11 +32,11 @@ const url = import.meta.env.VITE_API_URL
     </template>
     <template #main>
       <div class="main">
-        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="w-full max-w-l mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="container page-content space-x-2 mt-5">
             <div className="text-center text-2xl space-y-3 space-x-3">
               <div
-                v-if="settings"
+                v-if="settings.ID"
                 className="table-auto border-spacing-4 border-collapse text-left"
               >
                 <tbody className="text-sm">
@@ -38,8 +48,20 @@ const url = import.meta.env.VITE_API_URL
                     <th className="p-3">Logo:</th>
                     <td className="p-3">
                       <img
-                        v-if="settings.Logo"
-                        :src="url + settings.Logo"
+                        v-if="typeof settings.Logo === 'string'"
+                        :src="
+                          settings.Logo && settings.Logo !== ''
+                            ? url + settings.Logo
+                            : url + 'img/logo.png'
+                        "
+                        alt="Augustin logo"
+                        class="logo mx-auto my-5"
+                        width="50"
+                        height="20"
+                      />
+                      <img
+                        v-else
+                        :src="settings.Logo"
                         alt="Augustin logo"
                         class="logo mx-auto my-5"
                         width="50"

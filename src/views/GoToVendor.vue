@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 settStore.getSettingsFromApi()
 </script>
 

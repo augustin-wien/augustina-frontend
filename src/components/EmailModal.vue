@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { usePaymentStore } from '@/stores/payment'
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const paymentStore = usePaymentStore()
 
 const props = defineProps(['licenceItem'])

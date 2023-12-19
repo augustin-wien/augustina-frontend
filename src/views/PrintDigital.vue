@@ -45,4 +45,4 @@ const print = paymentStore.print
     </template>
   </component>
 </template>
-@/stores/settingsStore
+@/stores/useSettingsStore

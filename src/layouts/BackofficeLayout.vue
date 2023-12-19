@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import keycloak from '@/keycloak/keycloak'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { useSettingsStore } from '@/stores/settings'
 import {
   faArrowRightFromBracket,
   faBagShopping,
@@ -12,13 +13,25 @@ import {
   faMapLocation
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { computed } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 
 const keycloakStore = useKeycloakStore()
+const settingsStore = useSettingsStore()
+const settings = computed(() => settingsStore.settings)
 
 const authenticated = computed(() => keycloakStore.authenticated)
 
 const apiUrl = import.meta.env.VITE_API_URL
+
+onMounted(() => {
+  if (authenticated.value) {
+    settingsStore.getSettingsFromApi()
+  } else {
+    watch(authenticated, () => {
+      settingsStore.getSettingsFromApi()
+    })
+  }
+})
 </script>
 
 <template>
@@ -30,11 +43,24 @@ const apiUrl = import.meta.env.VITE_API_URL
         >
           <div className="sidemenu-item object-center">
             <img
-              :src="apiUrl + 'img/logo.png'"
+              v-if="typeof settings.Logo === 'string'"
+              :src="
+                settings.Logo && settings.Logo !== ''
+                  ? apiUrl + settings.Logo
+                  : apiUrl + 'img/logo.png'
+              "
               alt="Augustin logo"
-              className="logo mx-auto my-5"
+              class="logo mx-auto my-5"
               width="270"
-              height="150"
+              height="auto"
+            />
+            <img
+              v-else
+              :src="settings.Logo"
+              alt="Augustin logo"
+              class="logo mx-auto my-5"
+              width="270"
+              height="auto"
             />
           </div>
           <RouterLink to="/backoffice/vendorsummary">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePaymentStore } from '@/stores/payment'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { computed, onMounted, watch } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useVendorStore } from '@/stores/vendor'
@@ -9,7 +9,7 @@ import { useShopStore } from '@/stores/ShopStore'
 const router = useRouter()
 const shopStore = useShopStore()
 const vendorStore = useVendorStore()
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const fetch = settStore.getSettingsFromApi
 const price = computed(() => settStore.settings.MainItemPrice / 100)
 
