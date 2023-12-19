@@ -107,26 +107,11 @@ export async function fetchItemsBackoffice() {
   return apiInstance.get<Item[]>(`${ITEMS_BACKOFFICE_API_URL}`)
 }
 export async function postItems(newItem: Item) {
-  return apiInstance.post(ITEMS_API_URL, JSON.stringify(newItem), {
-    headers: {
-      accept: 'application/json',
-      'Content-Type': 'multipart/form-data'
-    }
-  })
+  return apiInstance.postForm(ITEMS_API_URL, newItem)
 }
 
 export async function patchItem(updatedItem: Item) {
-  const formData = new FormData()
-  formData.append('Image', updatedItem.Image)
-  formData.append('Name', updatedItem.Name)
-  formData.append('Price', updatedItem.Price.toString())
-  formData.append('Description', updatedItem.Description)
-  return apiInstance.put(`${ITEMS_API_URL}${updatedItem.ID}/`, formData, {
-    headers: {
-      accept: 'application/json',
-      'Content-Type': 'multipart/form-data'
-    }
-  })
+  return apiInstance.putForm(`${ITEMS_API_URL}${updatedItem.ID}/`, updatedItem)
 }
 
 export async function removeItem(itemId: number) {
