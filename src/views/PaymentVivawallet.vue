@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useShopStore } from '@/stores/ShopStore'
 import { usePaymentStore } from '@/stores/payment'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
 import { onMounted, ref } from 'vue'
 
 const shopStore = useShopStore()
 const paymentStore = usePaymentStore()
-const settings = settingsStore()
+const settings = useSettingsStore()
 const vendorStore = useVendorStore()
 const items = shopStore.finalitems
 

@@ -16,7 +16,7 @@ export interface Settings {
   OrgaCoversTransactionCosts: boolean
 }
 
-export const settingsStore = defineStore('settings', {
+export const useSettingsStore = defineStore('settings', {
   state: () => {
     return {
       settings: {} as Settings,

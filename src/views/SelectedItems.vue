@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { useShopStore } from '@/stores/ShopStore'
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const shopStore = useShopStore()
 </script>
 

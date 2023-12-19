@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import router from '@/router'
 import { usePaymentStore } from '@/stores/payment'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { onMounted } from 'vue'
 
 const paymentStore = usePaymentStore()
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay))
 let verified = false
 let counter = 0

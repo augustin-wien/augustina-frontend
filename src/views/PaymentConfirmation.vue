@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { usePaymentStore } from '@/stores/payment'
 import { useItemsStore } from '@/stores/items'
 import IconCheckmark from '@/components/icons/IconCheckmark.vue'
 import IconCross from '@/components/icons/IconCross.vue'
 
 const paymentStore = usePaymentStore()
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const itemsStore = useItemsStore()
 
 const isConfirmed = ref(paymentStore.timeStamp == '')

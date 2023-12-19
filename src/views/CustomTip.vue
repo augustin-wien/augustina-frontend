@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { usePaymentStore } from '@/stores/payment'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { RouterLink } from 'vue-router'
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const paymentStore = usePaymentStore()
 
 const increment = paymentStore.increment

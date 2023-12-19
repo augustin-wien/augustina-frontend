@@ -3,12 +3,12 @@ import { ref, onMounted } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { computed } from 'vue'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import QRCodeStyling from 'qr-code-styling'
 import router from '@/router'
 
 const store = vendorsStore()
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 
 const vendorMe = ref<Vendor | null>(null)
 

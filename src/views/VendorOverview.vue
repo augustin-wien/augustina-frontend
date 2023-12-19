@@ -7,9 +7,9 @@ import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import QRCodeStyling from 'qr-code-styling'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { computed } from 'vue'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const store = vendorsStore()
 const keycloakStore = useKeycloakStore()
 

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const vendorStore = useVendorStore()
 const fetch = settStore.getSettingsFromApi
 const route = useRoute()
