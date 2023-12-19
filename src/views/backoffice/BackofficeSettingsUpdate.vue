@@ -90,9 +90,7 @@ const url = import.meta.env.VITE_API_URL
       <div class="main">
         <div v-if="settings" class="w-full max-w-l mx-auto mt-4">
           <div class="flex place-content-center justify-between">
-            <h1 class="text-2xl font-bold">
-              {{ $t('menuSettings') }} {{ $t('change') }}
-            </h1>
+            <h1 class="text-2xl font-bold">{{ $t('menuSettings') }} {{ $t('change') }}</h1>
             <button
               class="px-2 rounded-full bg-red-600 text-white font-bold"
               @click="router.push('/backoffice/settings')"
