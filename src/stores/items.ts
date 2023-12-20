@@ -5,10 +5,12 @@ import { fetchItemsBackoffice, fetchItems, postItems, patchItem, removeItem } fr
 export interface Item {
   Description: 'string'
   ID: number
-  Image: 'string'
+  Image: 'string' | null | undefined
   Name: 'string'
   Price: number
+  IsLicenseItem: boolean
   LicenseItem: number | null
+  LicenseGroup: string | null
 }
 
 export const useItemsStore = defineStore('items', {

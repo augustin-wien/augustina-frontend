@@ -5,38 +5,56 @@ import type { Item } from '@/stores/items'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
+import { useKeycloakStore } from '@/stores/keycloak'
 
-const store = useItemsStore()
+const itemsStore = useItemsStore()
+const keycloakStore = useKeycloakStore()
+const authenticated = computed(() => keycloakStore.authenticated)
 
-const updatedItem = ref({
-  Description: 'Jahreskalender',
-  ID: 0,
-  Image: 'tbd',
-  Name: 'Kalender',
-  Price: 0
-})
+const updatedItem = ref<Item | null>()
 
-store.getItems()
-const items = computed(() => store.items)
-
-const route = useRoute()
-const idparams = route.params.ID
-
-const item = computed(() => {
-  const numericIdParams = Number(idparams) // Convert the string to a number or NaN
-
-  if (!isNaN(numericIdParams)) {
-    const i = items.value.find((item) => item.ID === numericIdParams)
-    //@ts-ignore
-    return i
+onMounted(() => {
+  if (authenticated.value) {
+    itemsStore.getItems()
+    itemsStore.getItemsBackoffice()
   } else {
-    return null
+    watch(authenticated, (val: boolean) => {
+      itemsStore.getItems()
+      itemsStore.getItemsBackoffice()
+    })
   }
 })
 
-watch(item, (newVal) => {
+const items = computed(() => itemsStore.itemsBackoffice)
+
+const licenseItems = computed(() => itemsStore.itemsBackoffice.filter((item) => item.IsLicenseItem))
+
+const item = computed(() => updatedItem.value)
+
+const route = useRoute()
+const idParams = computed(() => Number(route.params.ID))
+
+function getItem() {
+  console.log('idParams', idParams.value, items.value)
+
+  if (!isNaN(idParams.value)) {
+    const i = items.value.find((item) => item.ID === idParams.value)
+    //@ts-ignore
+    return JSON.parse(JSON.stringify(i))
+  } else {
+    return null
+  }
+}
+
+watch(idParams, (newVal) => {
   if (newVal) {
-    updatedItem.value = newVal
+    updatedItem.value = getItem()
+  }
+})
+
+watch(items, (newVal) => {
+  if (newVal) {
+    updatedItem.value = getItem()
   }
 })
 
@@ -44,11 +62,11 @@ const toast = ref<{ type: string; message: string } | null>(null)
 
 const updateItem = async () => {
   try {
-    store
+    itemsStore
       .updateItem(updatedItem.value as Item)
       .then(() => {
         showToast('success', 'Produkt erfolgreich aktualisiert')
-        store.getItems()
+        itemsStore.getItems()
       })
       .catch((err) => {
         showToast('error', 'Produkt konnte nicht aktualisiert werden' + err)
@@ -69,7 +87,7 @@ const showDeleteModalF = (event: Event) => {
 const deleteItem = async () => {
   try {
     if (item.value) {
-      await store.deleteItem(item.value.ID)
+      await itemsStore.deleteItem(item.value.ID)
       showToast('success', 'Produkt erfolgreich gelöscht')
       router.push({ name: 'Backoffice Product Settings' })
     }
@@ -88,7 +106,8 @@ const showToast = (type: string, message: string) => {
 }
 
 const updateImage = (event: any) => {
-  updatedItem.value.Image = event.target.files[0]
+  if (!updatedItem.value) return
+  updatedItem.value.Image = event.target?.files[0]
 }
 
 const apiUrl = import.meta.env.VITE_API_URL
@@ -108,7 +127,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
         {{ $t('menuProducts') }} {{ $t('menuSettings') }}
       </h1></template
     >
-    <template #main>
+    <template v-if="updatedItem" #main>
       <div class="main">
         <div v-if="item" class="w-full max-w-md mx-auto mt-4">
           <div class="flex place-content-center justify-between">
@@ -147,7 +166,6 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
-
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price"
                 >{{ $t('price') }}:</label
               >
@@ -160,6 +178,44 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
+                >{{ $t('isLicenseItem') }}:</label
+              >
+              <div class="flex flex-row">
+                <input
+                  id="isLicenseItem"
+                  v-model="updatedItem.IsLicenseItem"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  type="checkbox"
+                />
+              </div>
+
+              <div v-if="!updatedItem.IsLicenseItem">
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
+                  >{{ $t('licenseItem') }}:</label
+                >
+                <select
+                  v-model="updatedItem.LicenseItem"
+                  class="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
+                >
+                  <option :value="undefined">-- {{ $t('none') }} --</option>
+                  <option v-for="item in licenseItems" :key="item.ID" :value="item.ID">
+                    {{ item.Name }}
+                  </option>
+                </select>
+                <div v-if="updatedItem.LicenseItem !== undefined">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
+                    >{{ $t('licenseGroup') }}:</label
+                  >
+                  <input
+                    id="licenseGroup"
+                    v-model="updatedItem.LicenseGroup"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                  />
+                </div>
+              </div>
+
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
                 >{{ $t('image') }}:</label
               >
