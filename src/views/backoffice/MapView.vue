@@ -2,7 +2,7 @@
 import 'leaflet/dist/leaflet.css'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { useMapStore } from '@/stores/map'
-import { onMounted, computed, watch } from 'vue'
+import { onMounted, computed, watch, ref } from 'vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 
 const keycloakStore = useKeycloakStore()
@@ -13,8 +13,8 @@ const mapStore = useMapStore()
 const map = LMap
 
 //Map configuration
-const zoom = 12
-const center = [48.2083, 16.3731]
+const zoom = ref(12)
+const center = ref([48.2083, 16.3731])
 
 onMounted(() => {
   if (authenticated.value) {
