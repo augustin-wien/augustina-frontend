@@ -3,7 +3,6 @@ import 'leaflet/dist/leaflet.css'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { useMapStore } from '@/stores/map'
 import { onMounted, computed, watch } from 'vue'
-import L from 'leaflet'
 import { useKeycloakStore } from '@/stores/keycloak'
 
 const keycloakStore = useKeycloakStore()
@@ -12,7 +11,6 @@ const authenticated = computed(() => keycloakStore.authenticated)
 const mapStore = useMapStore()
 
 const map = LMap
-const marker = LMarker
 
 //Map configuration
 const zoom = 12
@@ -22,7 +20,7 @@ onMounted(() => {
   if (authenticated.value) {
     mapStore.getLocations()
   } else {
-    watch(authenticated, (val: boolean) => {
+    watch(authenticated, () => {
       mapStore.getLocations()
     })
   }
@@ -31,18 +29,13 @@ onMounted(() => {
 
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <template #header v-if="mapStore.vendors.length > 0">
+    <template v-if="mapStore.vendors.length > 0" #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuMap') }}</h1>
     </template>
     <template #main>
       <div class="h-full">
         <div style="height: 100%; width: 100%">
-          <l-map
-            ref="map"
-            v-model:zoom="zoom"
-            v-model:center="center"
-            :use-global-leaflet="false"
-          >
+          <l-map ref="map" v-model:zoom="zoom" v-model:center="center" :use-global-leaflet="false">
             <l-tile-layer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               layer-type="base"
@@ -50,8 +43,8 @@ onMounted(() => {
             ></l-tile-layer>
             <li v-for="vendor in mapStore.vendors" :key="vendor.licenseID">
               <l-marker
-                :lat-lng="[vendor.latitude, vendor.longitude]"
                 v-if="vendor.latitude && vendor.longitude"
+                :lat-lng="[vendor.latitude, vendor.longitude]"
               >
                 <l-popup class="text-center text-black grid"
                   ><h2 class="text-xl font-semibold">{{ vendor.firstName }}</h2>
@@ -60,7 +53,7 @@ onMounted(() => {
                     v-if="vendor.id"
                     :to="{
                       name: 'Vendor Profile',
-                      params: { ID: vendor.id },
+                      params: { ID: vendor.id }
                     }"
                   >
                     <button

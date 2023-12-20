@@ -6,6 +6,7 @@ export interface VendorLocation {
   latitude: number
   licenseID: string
   longitude: number
+  id: number
 }
 
 export const useMapStore = defineStore('mapStore', {
