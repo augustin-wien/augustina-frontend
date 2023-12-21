@@ -5,7 +5,8 @@
 
   "donation": "Spende",
   "includes": "enthält",
-  "edit": "Eingabe",
+  "editTip": "Eingabe",
+  "edit": "Bearbeiten",
   "notToday": "Heute nicht",
 
   "confirm": "Bezahlung bestätigen",
