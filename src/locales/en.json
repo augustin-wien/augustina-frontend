@@ -138,5 +138,9 @@
   "needs an email address.": "needs an email address.",
   "for": "for",
   "Please enter a valid email address.": "Please enter a valid email address.",
-  "Back": "Back"
+  "Back": "Back",
+
+  "isLicenseItem": "Is digital license item",
+  "licenseItem": "License item",
+  "licenseGroup": "License group"
 }
