@@ -52,30 +52,48 @@ const checkIfItemSelected = () => {
           </div>
           <div class="h-5/6 pb-3">
             <Toast v-if="toast" :toast="toast" />
-            <ul class="list-image-none overflow-y-auto w-full h-full border-4 border-gray-200 rounded-3xl">
+            <ul
+              class="list-image-none overflow-y-auto w-full h-full border-4 border-gray-200 rounded-3xl"
+            >
               <div class="flex w-full p-1 pt-2 relative">
                 <div class="flex-none grid grid-rows-1 place-content-start mr-2">
                   <div class="pb-1">
                     <RouterLink
-                      :to="{ name: 'Item Available', query: { item: shopStore.getItembyId(settings.MainItem).ID } }">
-                      <div class="w-[90px] h-[90%] flex-none bg-cover bg-red-600 rounded-2xl"
-                        :style="'background-image: url(' + url + shopStore.getItembyId(settings.MainItem).Image + ')'">
-                      </div>
+                      :to="{
+                        name: 'Item Available',
+                        query: { item: shopStore.getItembyId(settings.MainItem).ID }
+                      }"
+                    >
+                      <div
+                        class="w-[90px] h-[90%] flex-none bg-cover bg-red-600 rounded-2xl"
+                        :style="
+                          'background-image: url(' +
+                          url +
+                          shopStore.getItembyId(settings.MainItem).Image +
+                          ')'
+                        "
+                      ></div>
                     </RouterLink>
                   </div>
                 </div>
                 <div className="place-items-center grow h-full grid grid-rows-2">
                   <div class="w-full h-full py-1 relative">
                     <RouterLink
-                      :to="{ name: 'Item Available', query: { item: shopStore.getItembyId(settings.MainItem).ID } }">
+                      :to="{
+                        name: 'Item Available',
+                        query: { item: shopStore.getItembyId(settings.MainItem).ID }
+                      }"
+                    >
                       <button
-                        class="bg-gray-500 absolute rounded-full text-center w-6 text-white font-bold top-0 right-0">
+                        class="bg-gray-500 absolute rounded-full text-center w-6 text-white font-bold top-0 right-0"
+                      >
                         i
                       </button>
                       <div
-                        class="bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center">
-                        {{ shopStore.getItembyId(settings.MainItem).Name }} {{
-                          shopStore.getItembyId(settings.MainItem).Price / 100 }}€
+                        class="bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center"
+                      >
+                        {{ shopStore.getItembyId(settings.MainItem).Name }}
+                        {{ shopStore.getItembyId(settings.MainItem).Price / 100 }}€
                       </div>
                     </RouterLink>
                   </div>
@@ -83,12 +101,14 @@ const checkIfItemSelected = () => {
                     <button>
                       <div
                         class="button-down customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
-                        @click="shopStore.subtractItem(settings.MainItem)">
+                        @click="shopStore.subtractItem(settings.MainItem)"
+                      >
                         -
                       </div>
                     </button>
                     <div
-                      class="border-2 border-black text-black text-center text-2xl font-semibold rounded-full grow h-[60px] py-3 mr-1">
+                      class="border-2 border-black text-black text-center text-2xl font-semibold rounded-full grow h-[60px] py-3 mr-1"
+                    >
                       <div>
                         {{ shopStore.getAmount(settings.MainItem) }}
                       </div>
@@ -96,21 +116,26 @@ const checkIfItemSelected = () => {
                     <button class="place-content-">
                       <div
                         class="button-up customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
-                        @click="shopStore.addItem(settings.MainItem)">
+                        @click="shopStore.addItem(settings.MainItem)"
+                      >
                         +
                       </div>
                     </button>
                   </div>
                 </div>
-                
               </div>
               <li v-for="item in items" :key="item.ID">
-                <div v-if="item.ID != settings.MainItem" class="flex w-full p-1 pt-2 relative border-t-4 border">
+                <div
+                  v-if="item.ID != settings.MainItem"
+                  class="flex w-full p-1 pt-2 relative border-t-4 border"
+                >
                   <div class="flex-none grid grid-rows-1 place-content-start mr-2">
                     <div class="pb-1">
                       <RouterLink :to="{ name: 'Item Available', query: { item: item.ID } }">
-                        <div class="w-[90px] h-[90%] flex-none bg-cover bg-red-600 rounded-2xl"
-                          :style="'background-image: url(' + url + item.Image + ')'"></div>
+                        <div
+                          class="w-[90px] h-[90%] flex-none bg-cover bg-red-600 rounded-2xl"
+                          :style="'background-image: url(' + url + item.Image + ')'"
+                        ></div>
                       </RouterLink>
                     </div>
                   </div>
@@ -118,11 +143,13 @@ const checkIfItemSelected = () => {
                     <div class="w-full h-full py-1 relative">
                       <RouterLink :to="{ name: 'Item Available', query: { item: item.ID } }">
                         <button
-                          class="bg-gray-500 absolute rounded-full text-center w-6 text-white font-bold top-0 right-0">
+                          class="bg-gray-500 absolute rounded-full text-center w-6 text-white font-bold top-0 right-0"
+                        >
                           i
                         </button>
                         <div
-                          class="bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center">
+                          class="bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center"
+                        >
                           {{ item.Name }} {{ item.Price / 100 }}€
                         </div>
                       </RouterLink>
@@ -131,12 +158,14 @@ const checkIfItemSelected = () => {
                       <button>
                         <div
                           class="button-down customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
-                          @click="shopStore.subtractItem(item.ID)">
+                          @click="shopStore.subtractItem(item.ID)"
+                        >
                           -
                         </div>
                       </button>
                       <div
-                        class="border-2 border-black text-black text-center text-2xl font-semibold rounded-full grow h-[60px] py-3 mr-1">
+                        class="border-2 border-black text-black text-center text-2xl font-semibold rounded-full grow h-[60px] py-3 mr-1"
+                      >
                         <div>
                           {{ shopStore.getAmount(item.ID) }}
                         </div>
@@ -144,7 +173,8 @@ const checkIfItemSelected = () => {
                       <button class="place-content-">
                         <div
                           class="button-up customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
-                          @click="shopStore.addItem(item.ID)">
+                          @click="shopStore.addItem(item.ID)"
+                        >
                           +
                         </div>
                       </button>
@@ -156,8 +186,10 @@ const checkIfItemSelected = () => {
           </div>
         </div>
         <div className="place-items-center row-span-1 w-full flex">
-          <button class="text-center h-[76px] grow customcolor rounded-full p-5 text-white text-3xl w-full font-semibold"
-            @click="checkIfItemSelected">
+          <button
+            class="text-center h-[76px] grow customcolor rounded-full p-5 text-white text-3xl w-full font-semibold"
+            @click="checkIfItemSelected"
+          >
             Weiter
           </button>
         </div>
