@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 settStore.getSettingsFromApi()
 </script>
 
@@ -10,8 +10,8 @@ settStore.getSettingsFromApi()
     <main class="absolute inset-0 pt-4 pb-16 place-items-center base-layout">
       <header class="relative place-items-center h-1/6">
         <select
-          class="h-[55px] w-[55px] absolute font-semibold border-2 top-0 right-0 border-gray-300 rounded-full text-gray-300 text-center mt-4 mr-4 pl-2 text-sm"
           v-model="$i18n.locale"
+          class="h-[55px] w-[55px] absolute font-semibold border-2 top-0 right-0 border-gray-300 rounded-full text-gray-300 text-center mt-4 mr-4 pl-2 text-sm"
         >
           <option value="en">EN</option>
           <option value="de">DE</option>
@@ -36,6 +36,7 @@ settStore.getSettingsFromApi()
     </footer>
   </div>
 </template>
+
 <style lang="scss" scoped>
 .main-container {
   display: flex;
@@ -48,6 +49,7 @@ settStore.getSettingsFromApi()
   width: auto;
 }
 </style>
+
 <style>
 main {
   max-width: 400px;

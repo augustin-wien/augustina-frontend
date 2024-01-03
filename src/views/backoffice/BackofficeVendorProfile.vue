@@ -1,17 +1,42 @@
+<script lang="ts" setup>
+import { vendorsStore } from '@/stores/vendor'
+import { onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useKeycloakStore } from '@/stores/keycloak'
+import router from '@/router'
+import { storeToRefs } from 'pinia'
+
+const keycloakStore = useKeycloakStore()
+
+const vendorStore = vendorsStore()
+const route = useRoute()
+const { vendor } = storeToRefs(vendorStore)
+
+onMounted(() => {
+  if (keycloakStore.authenticated) {
+    vendorStore.getVendor(route.params.ID)
+  }
+})
+
+const formatCredit = (credit: number) => {
+  return (credit / 100).toFixed(2)
+}
+</script>
+
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('vendorSingular') }} Profil</h1>
     </template>
     <template #main>
-      <div class="main" v-if="vendor">
+      <div v-if="vendor" class="main">
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
               <h1 class="text-2xl font-bold">{{ vendor.LicenseID }}</h1>
               <button
-                @click="router.push('/backoffice/vendorsummary')"
                 class="px-2 rounded-full bg-red-600 text-white font-bold"
+                @click="router.push('/backoffice/vendorsummary')"
               >
                 X
               </button>
@@ -105,28 +130,3 @@ td {
   padding: 10px;
 }
 </style>
-
-<script lang="ts" setup>
-import { vendorsStore } from '@/stores/vendor'
-import { onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { useKeycloakStore } from '@/stores/keycloak'
-import router from '@/router'
-import { storeToRefs } from 'pinia'
-
-const keycloakStore = useKeycloakStore()
-
-const vendorStore = vendorsStore()
-const route = useRoute()
-const { vendor } = storeToRefs(vendorStore)
-
-onMounted(() => {
-  if (keycloakStore.authenticated) {
-    vendorStore.getVendor(route.params.ID)
-  }
-})
-
-const formatCredit = (credit: number) => {
-  return (credit / 100).toFixed(2)
-}
-</script>

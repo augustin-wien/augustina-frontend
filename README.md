@@ -67,6 +67,21 @@ yarn test:e2e
 ```sh
 yarn lint
 ```
+to fix linting errors automagically run
+```sh
+yarn lint:fix
+```
+
+### Format with [Prettier](https://prettier.io/)
+
+```sh
+yarn format
+```
+to fix formatting errors automagically run
+```sh
+yarn format:fix
+```
+
 
 ### Disable CORS for local testing (Google Chrome / Windows)
 

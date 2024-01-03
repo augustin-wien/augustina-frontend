@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { usePaymentStore } from '@/stores/payment'
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const paymentStore = usePaymentStore()
 
 const props = defineProps(['licenceItem'])
 const email = ref('')
+
 const validateEmail = (email: string) => {
   // Regular expression for a simple email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -15,9 +16,12 @@ const validateEmail = (email: string) => {
   // Test the email against the regular expression
   return emailRegex.test(email)
 }
+
 const error = ref(false)
+
 const validate = () => {
   error.value = false
+
   if (validateEmail(email.value)) {
     paymentStore.setEmail(email.value)
   } else {
@@ -53,16 +57,10 @@ const validate = () => {
           </svg>
 
           <h3 class="mb-5 text-lg font-normal">
-            {{
-              `${$t('Your item')} ${props.licenceItem.Name} ${$t(
-                'needs an email address.'
-              )}`
-            }}
+            {{ `${$t('Your item')} ${props.licenceItem.Name} ${$t('needs an email address.')}` }}
           </h3>
           <div class="text-left mb-4">
-            <label
-              for="email"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >Email</label
             >
             <div v-if="error">
@@ -71,11 +69,11 @@ const validate = () => {
               }}</span>
             </div>
             <input
-              type="text"
               id="email"
+              v-model="email"
+              type="text"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Augustus@example.com"
-              v-model="email"
               required
             />
           </div>

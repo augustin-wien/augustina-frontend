@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { usePaymentStore } from '@/stores/payment'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { RouterLink } from 'vue-router'
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const paymentStore = usePaymentStore()
 
 const increment = paymentStore.increment
 const decrement = paymentStore.decrement
 
 const onlyForCurrency = ($event: any) => {
-  let keycode = $event.keyCode ? $event.keyCode : $event.which
+  const keycode = $event.keyCode ? $event.keyCode : $event.which
 
   // only allow number and one dot
   if (
@@ -28,6 +28,7 @@ const onlyForCurrency = ($event: any) => {
 
     // Check total number of digits
     const totalDigits = currentTip.replace('.', '').length
+
     if (totalDigits >= 3 || (parts[0].length > 0 && parseInt(parts[0]) > 9)) {
       $event.preventDefault()
       return
@@ -65,13 +66,13 @@ const roundValue = () => {
             <div class="button-down customcolor"></div>
           </button>
           <div
-            class="col-span-3 grid grid-cols-3 lightcolor bg-opacity-0 text-white rounded-3xl border-spacing-7 place-items-center"
+            class="col-span-3 grid grid-cols-3 customcolor bg-opacity-0 text-white rounded-3xl border-spacing-7 place-items-center"
           >
             <input
-              type="number"
               v-model.number="paymentStore.tip"
-              @keypress="onlyForCurrency"
+              type="number"
               class="customcolor col-span-2 text-white text-center text-6xl font-semibold border-2 customborder rounded-3xl w-full h-full"
+              @keypress="onlyForCurrency"
             />
             <p className="text-6xl font-semibold text-left">€</p>
           </div>
@@ -83,8 +84,8 @@ const roundValue = () => {
         <div className="flex place-items-center w-full">
           <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
             <button
-              @click="roundValue"
               class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
+              @click="roundValue"
             >
               {{ $t('next') }}
             </button>
@@ -128,8 +129,8 @@ input[type='number'] {
   display: block;
   width: 20px;
   height: 20px;
-  border-top: 2px solid #fff;
-  border-left: 2px solid #fff;
+  border-top: 2px solid v-bind(settStore.settings.FontColor);
+  border-left: 2px solid v-bind(settStore.settings.FontColor);
 }
 
 .button-up::after {
@@ -144,13 +145,10 @@ input[type='number'] {
 
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
+  color: v-bind(settStore.settings.FontColor);
 }
 
 .customborder {
   border-color: v-bind(settStore.settings.Color);
-}
-
-.lightcolor {
-  background-color: v-bind(settStore.settings.Color);
 }
 </style>

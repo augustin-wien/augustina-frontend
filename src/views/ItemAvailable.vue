@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { useRoute } from 'vue-router'
 import { useShopStore } from '@/stores/ShopStore'
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const shopStore = useShopStore()
 const route = useRoute()
 const item = shopStore.getItembyId(Number(route.query['item']))
@@ -14,17 +14,15 @@ const url = import.meta.env.VITE_API_URL
 <template>
   <component :is="$route.meta.layout || 'div'">
     <select
-      class="h-[55px] w-[55px] absolute font-light border-2 top-0 right-0 border-gray-300 rounded-full text-gray-300 text-center mt-8 mr-4 text-sm"
       v-model="$i18n.locale"
+      class="h-[55px] w-[55px] absolute font-light border-2 top-0 right-0 border-gray-300 rounded-full text-gray-300 text-center mt-8 mr-4 text-sm"
     >
       <option value="en">EN</option>
       <option value="de">DE</option>
     </select>
     <template #main>
       <div class="h-full w-full grid grid-rows-5 place-items-center">
-        <div
-          class="w-44 h-44 flex-none place-content-center rounded-2xl row-span-2 relative"
-        >
+        <div class="w-44 h-44 flex-none place-content-center rounded-2xl row-span-2 relative">
           <div
             class="rounded-full absolute h-12 w-12 right-0 top-0 place-items-center grid text-lg text-white font-semibold customcolor"
           >
@@ -55,7 +53,7 @@ const url = import.meta.env.VITE_API_URL
                 width="64"
                 height="64"
                 fill="white"
-                class="bi bi-arrow-left-short"
+                class="bi bi-arrow-left-short customfill"
                 viewBox="0 0 16 16"
               >
                 <path
@@ -74,5 +72,11 @@ const url = import.meta.env.VITE_API_URL
 <style scoped>
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
+  color: v-bind(settStore.settings.FontColor);
+  fill: v-bind(settStore.settings.FontColor);
+}
+
+.customfill {
+  fill: v-bind(settStore.settings.FontColor);
 }
 </style>

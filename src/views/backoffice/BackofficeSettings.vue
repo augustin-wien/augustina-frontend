@@ -1,3 +1,30 @@
+<script lang="ts" setup>
+import { useSettingsStore } from '@/stores/settings'
+import { useItemsStore } from '@/stores/items'
+import { useKeycloakStore } from '@/stores/keycloak'
+import { computed, onMounted, watch } from 'vue'
+
+const settingsStore = useSettingsStore()
+const itemsStore = useItemsStore()
+const keycloakStore = useKeycloakStore()
+const authenticated = computed(() => keycloakStore.authenticated)
+
+onMounted(() => {
+  if (authenticated.value) {
+    settingsStore.getSettingsFromApi()
+    itemsStore.getItems()
+  } else {
+    watch(authenticated, () => {
+      settingsStore.getSettingsFromApi()
+      itemsStore.getItems()
+    })
+  }
+})
+
+const settings = computed(() => settingsStore.settings)
+const url = import.meta.env.VITE_API_URL
+</script>
+
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
@@ -5,12 +32,12 @@
     </template>
     <template #main>
       <div class="main">
-        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="w-full max-w-l mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="container page-content space-x-2 mt-5">
             <div className="text-center text-2xl space-y-3 space-x-3">
               <div
+                v-if="settings.ID"
                 className="table-auto border-spacing-4 border-collapse text-left"
-                v-if="settings"
               >
                 <tbody className="text-sm">
                   <tr>
@@ -21,12 +48,24 @@
                     <th className="p-3">Logo:</th>
                     <td className="p-3">
                       <img
-                        :src="url + settings.Logo"
+                        v-if="typeof settings.Logo === 'string'"
+                        :src="
+                          settings.Logo && settings.Logo !== ''
+                            ? url + settings.Logo
+                            : url + 'img/logo.png'
+                        "
                         alt="Augustin logo"
                         class="logo mx-auto my-5"
                         width="50"
                         height="20"
-                        v-if="settings.Logo"
+                      />
+                      <img
+                        v-else
+                        :src="settings.Logo"
+                        alt="Augustin logo"
+                        class="logo mx-auto my-5"
+                        width="50"
+                        height="20"
                       />
                     </td>
                   </tr>
@@ -76,23 +115,6 @@
     </template>
   </component>
 </template>
-
-<script lang="ts" setup>
-import { settingsStore } from '@/stores/settings'
-import { useItemsStore } from '@/stores/items'
-import { computed, onMounted } from 'vue'
-
-const store = settingsStore()
-const storeItems = useItemsStore()
-
-onMounted(() => {
-  storeItems.getItems()
-  store.getSettingsFromApi()
-})
-
-const settings = computed(() => store.settings)
-const url = import.meta.env.VITE_API_URL
-</script>
 
 <style>
 tr {

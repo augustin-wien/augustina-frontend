@@ -13,4 +13,3 @@ export const PAYOUT_API_URL = `${import.meta.env.VITE_API_URL}api/payments/payou
 export const PAYMENTS_FOR_PAYOUT_API_URL = `${import.meta.env.VITE_API_URL}api/payments/forpayout/`
 export const VENDOR_ME_API_URL = `${import.meta.env.VITE_API_URL}api/vendors/me/`
 export const VENDORS_LOCATION_URL = `${import.meta.env.VITE_API_URL}api/map/`
-

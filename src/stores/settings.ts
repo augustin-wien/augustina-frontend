@@ -16,11 +16,11 @@ export interface Settings {
   OrgaCoversTransactionCosts: boolean
 }
 
-export const settingsStore = defineStore('settings', {
+export const useSettingsStore = defineStore('settings', {
   state: () => {
     return {
       settings: {} as Settings,
-      imgUrl: ""
+      imgUrl: ''
     }
   },
 
@@ -32,12 +32,14 @@ export const settingsStore = defineStore('settings', {
 
   actions: {
     async getSettingsFromApi() {
-      fetchSettings().then((data) => {
-        this.settings = data.data
-        this.imgUrl = import.meta.env.VITE_API_URL + this.settings.Logo
-      }).catch((error) => {
-        console.log("failed to get the settings", error)
-      })
+      fetchSettings()
+        .then((data) => {
+          this.settings = data.data
+          this.imgUrl = import.meta.env.VITE_API_URL + this.settings.Logo
+        })
+        .catch((error) => {
+          console.log('failed to get the settings', error)
+        })
     },
 
     async updateSettings(updatedSettings: Settings) {

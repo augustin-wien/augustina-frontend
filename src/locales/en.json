@@ -3,8 +3,9 @@
   "newspaper": "Newspaper",
   "next": "Next",
 
-  "donation": "Give a donation",
+  "donation": "Donation",
   "edit": "Edit",
+  "editTip": "Edit",
   "notToday": "Not today",
 
   "confirm": "Confirm your order",
@@ -120,6 +121,10 @@
   "Aktuelle Zeitungsausgabe": "Current newspaper issue",
   "Spende": "Donation",
 
+  "includes": "includes",
+
+  "Items": "Your items",
+
   "lastTransactions": "Last transactions",
   "yourData": "Your account",
   "information": "Ask your Vendor if they have this product available!",
@@ -127,12 +132,15 @@
   "back": "Back",
   "yourProfile": "Your profile",
 
-  "information": "Ask your Vendor if they have this product available!",
   "Logout": "Logout",
   "Save": "Save",
   "Your item": "Your item",
   "needs an email address.": "needs an email address.",
   "for": "for",
   "Please enter a valid email address.": "Please enter a valid email address.",
-  "Back": "Back"
+  "Back": "Back",
+
+  "isLicenseItem": "Is digital license item",
+  "licenseItem": "License item",
+  "licenseGroup": "License group"
 }

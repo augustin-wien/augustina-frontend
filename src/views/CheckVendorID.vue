@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { useRoute } from 'vue-router';
-import { settingsStore } from '@/stores/settings';
-import { useVendorStore } from '@/stores/vendor';
+import { useRoute } from 'vue-router'
+import { useSettingsStore } from '@/stores/settings'
+import { useVendorStore } from '@/stores/vendor'
 
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const vendorStore = useVendorStore()
 const fetch = settStore.getSettingsFromApi
 const route = useRoute()
 const checkID = vendorStore.checkID
 const id = route.params.id
 
-onMounted(()=>fetch().then(() => checkID(id)))
+onMounted(() => fetch().then(() => checkID(id)))
 </script>
 
 <template>
@@ -29,4 +29,6 @@ onMounted(()=>fetch().then(() => checkID(id)))
   </component>
 </template>
 
-<style scoped>@import "../assets/loadingwheel.css";</style>
+<style scoped>
+@import '../assets/loadingwheel.css';
+</style>

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { RouterLink, useRouter } from 'vue-router'
 import { useShopStore } from '@/stores/ShopStore'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { ref } from 'vue'
 import Toast from '@/components/ToastMessage.vue'
 
 const shopStore = useShopStore()
-const settStore = settingsStore()
+const settStore = useSettingsStore()
 const settings = settStore.settings
 const items = shopStore.items
 const router = useRouter()
@@ -21,20 +21,22 @@ const toast = ref<ToastMessage | null>(null)
 const checkIfItemSelected = () => {
   if (shopStore.amount.length > 0) {
     let sum = 0
+
     for (let i = 0; i < shopStore.amount.length; i++) {
       sum += shopStore.amount[i].quantity
     }
+
     if (sum > 0) router.push({ name: 'Tippingpage' })
     else {
       toast.value = {
         message: 'Bitte wähle ein Produkt aus',
-        type: 'error',
+        type: 'error'
       }
     }
   } else {
     toast.value = {
       message: 'Bitte wähle ein Produkt aus',
-      type: 'error',
+      type: 'error'
     }
   }
 }
@@ -167,5 +169,6 @@ const checkIfItemSelected = () => {
 <style scoped>
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
+  color: v-bind(settStore.settings.FontColor);
 }
 </style>

@@ -1,3 +1,32 @@
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue'
+import { vendorsStore } from '@/stores/vendor'
+import type { Vendor } from '@/stores/vendor'
+import { useSettingsStore } from '@/stores/settings'
+import { computed } from 'vue'
+import router from '@/router'
+
+const store = vendorsStore()
+const settStore = useSettingsStore()
+
+const vendorMe = ref<Vendor | null>(null)
+
+onMounted(async () => {
+  try {
+    vendorMe.value = await store.fetchVendorMe()
+  } catch (error) {
+    console.error('Fehler beim API-Aufruf:', error)
+  }
+})
+
+// Computed property to manage dynamic styles
+const customColor = computed(() => {
+  return {
+    '--custom-bg-color': settStore.settings.Color
+  }
+})
+</script>
+
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
@@ -27,8 +56,8 @@
           </div>
           <button
             :style="customColor"
-            @click="router.push('/me')"
             class="p-2 rounded-full customcolor text-white"
+            @click="router.push('/me')"
           >
             {{ $t('back') }}
           </button>
@@ -37,34 +66,6 @@
     </template>
   </component>
 </template>
-
-<script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import { vendorsStore } from '@/stores/vendor'
-import type { Vendor } from '@/stores/vendor'
-import { settingsStore } from '@/stores/settings'
-import { computed } from 'vue'
-import router from '@/router'
-
-const store = vendorsStore()
-const settStore = settingsStore()
-
-const vendorMe = ref<Vendor | null>(null)
-
-onMounted(async () => {
-  try {
-    vendorMe.value = await store.fetchVendorMe()
-  } catch (error) {
-    console.error('Fehler beim API-Aufruf:', error)
-  }
-})
-// Computed property to manage dynamic styles
-const customColor = computed(() => {
-  return {
-    '--custom-bg-color': settStore.settings.Color
-  }
-})
-</script>
 
 <style scoped>
 .customcolor {

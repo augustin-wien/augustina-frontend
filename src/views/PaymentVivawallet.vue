@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { useShopStore } from '@/stores/ShopStore'
 import { usePaymentStore } from '@/stores/payment'
-import { settingsStore } from '@/stores/settings'
+import { useSettingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
 import { onMounted, ref } from 'vue'
 
 const shopStore = useShopStore()
 const paymentStore = usePaymentStore()
-const settings = settingsStore()
+const settings = useSettingsStore()
 const vendorStore = useVendorStore()
 const items = shopStore.finalitems
 
@@ -19,27 +19,28 @@ onMounted(() => {
   if (paymentStore.tip > 0) {
     // make sure, we have the tip only once added
     const tipItemIndex = items.findIndex((item) => item.item == paymentStore.tipItem)
+
     if (tipItemIndex > -1) {
       items[tipItemIndex].quantity = paymentStore.tip * 100
     } else {
       items.push({
         item: paymentStore.tipItem,
-        quantity: paymentStore.tip * 100,
+        quantity: paymentStore.tip * 100
       })
     }
   } else {
     const tipItemIndex = items.findIndex((item) => item.item == paymentStore.tipItem)
+
     if (tipItemIndex > -1) {
       items.splice(tipItemIndex, 1)
     }
   }
-  paymentStore
-    .postOrder(items, 1, vendorStore.vendorid, paymentStore.email)
-    .catch((error) => {
-      errorMessage.value = error.message
-      errorMessageDetail.value = error.response.data
-      console.log(error)
-    })
+
+  paymentStore.postOrder(items, 1, vendorStore.vendorid, paymentStore.email).catch((error) => {
+    errorMessage.value = error.message
+    errorMessageDetail.value = error.response.data
+    console.log(error)
+  })
 })
 </script>
 
@@ -47,7 +48,7 @@ onMounted(() => {
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <main className="h-full grid grid-rows-6 place-items-center">
-        <div class="lds-ellipsis row-span-4" v-if="errorMessage === ''">
+        <div v-if="errorMessage === ''" class="lds-ellipsis row-span-4">
           <div></div>
           <div></div>
           <div></div>
