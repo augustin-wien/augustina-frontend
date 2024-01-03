@@ -140,4 +140,4 @@ export const useShopStore = defineStore('shop', {
     }
     }
   }
-})
+)
