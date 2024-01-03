@@ -25,7 +25,7 @@ onMounted(() => {
         if (shopStore.items.length == 0) {
           router.push({ name: 'Error' })
         } else if (shopStore.amount.length == 0) {
-          shopStore.addItem(1)
+          shopStore.addItem(settStore.settings.MainItem)
         }
       })
       .catch(() => {
@@ -74,7 +74,7 @@ onMounted(() => {
             <div
               class="text-xl grow h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full"
             >
-              1x {{ $t('newspaper') }}
+              1x {{ shopStore.getName(settStore.settings.MainItem) }}
             </div>
           </div>
         </div>

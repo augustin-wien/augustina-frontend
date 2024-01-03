@@ -119,7 +119,6 @@ export const useShopStore = defineStore('shop', {
         }
       })
       return sum
-    },
-
+    }
   }
 })
