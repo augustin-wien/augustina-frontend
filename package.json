@@ -28,6 +28,7 @@
     "@vuepic/vue-datepicker": "^6.1.0",
     "axios": "^1.4.0",
     "file-saver": "^2.0.5",
+    "format": "^0.2.2",
     "jspdf": "^2.5.1",
     "keycloak-js": "^21.1.2",
     "leaflet": "^1.9.4",
