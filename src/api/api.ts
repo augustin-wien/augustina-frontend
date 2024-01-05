@@ -15,7 +15,8 @@ import {
   SETTINGS_API_URL,
   VENDORS_API_URL,
   VENDORS_LOCATION_URL,
-  VENDOR_ME_API_URL
+  VENDOR_ME_API_URL,
+  PAYMENT_STATISTICS_API_URL
 } from './endpoints'
 
 export const apiInstance = axios.create({
@@ -170,6 +171,16 @@ export async function getPaymentsForPayout(payout: PaymentsForPayout) {
   return apiInstance.get(`${PAYMENTS_FOR_PAYOUT_API_URL}?vendor=${payout.Vendor}`)
 }
 
+//locations
 export async function getLocations() {
   return apiInstance.get(VENDORS_LOCATION_URL)
+}
+
+//statistics
+export async function fetchStatistics(startDate: Date, endDate: Date, filter: string) {
+  return apiInstance.get(
+    `${PAYMENT_STATISTICS_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}${
+      filter ? '&' + filter : ''
+    }`
+  )
 }
