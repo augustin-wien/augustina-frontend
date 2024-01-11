@@ -9,6 +9,7 @@ const keycloakStore = useKeycloakStore()
 const authenticated = computed(() => keycloakStore.authenticated)
 
 const mapStore = useMapStore()
+const vendors = computed(() => mapStore.vendors)
 
 const map = LMap
 
@@ -29,19 +30,24 @@ onMounted(() => {
 
 <template>
   <component :is="$route.meta.layout || 'div'" v-if="authenticated">
-    <template v-if="mapStore.vendors.length > 0" #header>
+    <template v-if="vendors && vendors.length > 0" #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuMap') }}</h1>
     </template>
-    <template v-if="mapStore.vendors.length > 0" #main>
+    <template v-if="vendors && vendors.length > 0" #main>
       <div class="h-full">
         <div style="height: 100%; width: 100%">
-          <l-map ref="map" v-model:zoom="zoom" v-model:center="center" :use-global-leaflet="false">
+          <l-map
+            ref="map"
+            v-model:zoom="zoom"
+            v-model:center="center"
+            :use-global-leaflet="false"
+          >
             <l-tile-layer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               layer-type="base"
               name="OpenStreetMap"
             ></l-tile-layer>
-            <li v-for="vendor in mapStore.vendors" :key="vendor.licenseID">
+            <li v-for="vendor in vendors" :key="vendor.licenseID">
               <l-marker
                 v-if="vendor.latitude && vendor.longitude"
                 :lat-lng="[vendor.latitude, vendor.longitude]"
@@ -53,7 +59,7 @@ onMounted(() => {
                     v-if="vendor.id"
                     :to="{
                       name: 'Vendor Profile',
-                      params: { ID: vendor.id }
+                      params: { ID: vendor.id },
                     }"
                   >
                     <button
