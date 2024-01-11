@@ -28,11 +28,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <component :is="$route.meta.layout || 'div'">
+  <component :is="$route.meta.layout || 'div'" v-if="authenticated">
     <template v-if="mapStore.vendors.length > 0" #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuMap') }}</h1>
     </template>
-    <template #main>
+    <template v-if="mapStore.vendors.length > 0" #main>
       <div class="h-full">
         <div style="height: 100%; width: 100%">
           <l-map ref="map" v-model:zoom="zoom" v-model:center="center" :use-global-leaflet="false">
