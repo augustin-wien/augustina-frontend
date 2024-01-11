@@ -52,7 +52,7 @@ onMounted(() => {
                     v-if="vendor.id"
                     :to="{
                       name: 'Vendor Profile',
-                      params: { ID: vendor.id },
+                      params: { ID: vendor.id }
                     }"
                   >
                     <button
