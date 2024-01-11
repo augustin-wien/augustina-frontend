@@ -11,8 +11,6 @@ const authenticated = computed(() => keycloakStore.authenticated)
 const mapStore = useMapStore()
 const vendors = computed(() => mapStore.vendors)
 
-const map = LMap
-
 //Map configuration
 const zoom = ref(12)
 const center = ref([48.2083, 16.3731])
@@ -36,12 +34,7 @@ onMounted(() => {
     <template v-if="vendors && vendors.length > 0" #main>
       <div class="h-full">
         <div style="height: 100%; width: 100%">
-          <l-map
-            ref="map"
-            v-model:zoom="zoom"
-            v-model:center="center"
-            :use-global-leaflet="false"
-          >
+          <l-map v-model:zoom="zoom" v-model:center="center" :use-global-leaflet="false">
             <l-tile-layer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               layer-type="base"
