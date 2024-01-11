@@ -13,8 +13,7 @@ const settStore = useSettingsStore()
 const store = vendorsStore()
 const keycloakStore = useKeycloakStore()
 
-const vendorMe = ref<Vendor | null>(null)
-
+const vendorMe = computed(() => store.vendor)
 const authenticated = computed(() => keycloakStore.authenticated)
 
 const failure = ref(false)
@@ -25,7 +24,7 @@ const formatTime = (date: string) => {
 
   const formattedDate = `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1)
     .toString()
-    .padStart(2, '0')}.${d.getFullYear()}`
+    .padStart(2, '0')}.${d.getFullYear() - 2000}`
 
   const formattedTime = `${d.getHours().toString().padStart(2, '0')}:${d
     .getMinutes()
@@ -35,10 +34,14 @@ const formatTime = (date: string) => {
   return `${formattedDate} - ${formattedTime}`
 }
 
+watch(vendorMe as any, (newValue) => {
+  generateQRCode(vendorMe.value)
+})
+
 onMounted(async () => {
   if (authenticated.value) {
     try {
-      vendorMe.value = await store.fetchVendorMe()
+      store.fetchVendorMe()
 
       if (vendorMe.value) {
         generateQRCode(vendorMe.value)
@@ -50,7 +53,7 @@ onMounted(async () => {
     watch(authenticated, async () => {
       if (authenticated.value) {
         try {
-          vendorMe.value = await store.fetchVendorMe()
+          await store.fetchVendorMe()
 
           if (vendorMe.value) {
             generateQRCode(vendorMe.value)
@@ -151,13 +154,16 @@ const customColor = computed(() => {
                 :key="index"
                 class="flex w-full p-1 pt-2 relative"
               >
-                <div class="flex-none grid grid-rows-1 place-content-start">
-                  <div class="pb-1">
-                    {{ $t('date') }}: {{ formatTime(OpenPayment.Timestamp) }}, {{ $t('amount') }}:
-                    {{ (OpenPayment.Amount / 100).toFixed(2) }}€
+                <div v-if="OpenPayment.Item !== 3">
+                  <div class="flex-none grid grid-rows-1 place-content-start">
+                    <div class="pb-1">
+                      {{ formatTime(OpenPayment.Timestamp) }},<b class="ml-3">
+                        {{ (OpenPayment.Amount / 100).toFixed(2) }}€
+                      </b>
+                    </div>
                   </div>
+                  <hr class="absolute bottom-0 left-0 w-full h-[3px] bg-gray-200" />
                 </div>
-                <hr class="absolute bottom-0 left-0 w-full h-[3px] bg-gray-200" />
               </li>
             </ul>
           </div>

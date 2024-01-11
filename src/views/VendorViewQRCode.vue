@@ -1,26 +1,43 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { computed } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import QRCodeStyling from 'qr-code-styling'
 import router from '@/router'
+import { useKeycloakStore } from '@/stores/keycloak'
+
+const keycloakStore = useKeycloakStore()
+const authenticated = computed(() => keycloakStore.authenticated)
 
 const store = vendorsStore()
 const settStore = useSettingsStore()
 
-const vendorMe = ref<Vendor | null>(null)
+const vendorMe = computed(() => store.vendor)
 
 onMounted(async () => {
-  try {
-    vendorMe.value = await store.fetchVendorMe()
+  if (authenticated.value) {
+    generateQRCode(vendorMe.value)
 
-    if (vendorMe.value) {
-      generateQRCode(vendorMe.value)
+    try {
+      store.fetchVendorMe()
+    } catch (error) {
+      console.error('Fehler beim API-Aufruf:', error)
     }
-  } catch (error) {
-    console.error('Fehler beim API-Aufruf:', error)
+  } else {
+    watch(authenticated, async () => {
+      store.fetchVendorMe()
+      generateQRCode(vendorMe.value)
+
+      if (authenticated.value) {
+        try {
+          store.fetchVendorMe()
+        } catch (error) {
+          console.error('Fehler beim API-Aufruf:', error)
+        }
+      }
+    })
   }
 })
 
