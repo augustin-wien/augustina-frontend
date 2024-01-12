@@ -54,6 +54,7 @@ const updateSettings = async () => {
     // This logic will execute when the "Bestätigen" button is clicked
     await settingsStore.updateSettings(updatedSettings.value)
     showToast('success', 'Einstellungen erfolgreich aktualisiert')
+    router.push({name: 'Backoffice Settings'})
   } catch (error) {
     console.error('Error updating settings:', error)
     showToast('error', 'Einstellungen konnten nicht aktualisiert werden')
@@ -205,7 +206,6 @@ const url = import.meta.env.VITE_API_URL
               </span>
             </div>
             <div class="flex place-content-center">
-              <router-link to="/backoffice/settings/">
                 <button
                   type="submit"
                   class="p-3 rounded-full bg-lime-600 text-white"
@@ -213,7 +213,6 @@ const url = import.meta.env.VITE_API_URL
                 >
                   {{ $t('confirmation') }}
                 </button>
-              </router-link>
             </div>
           </form>
           <Toast v-if="toast" :toast="toast" />
