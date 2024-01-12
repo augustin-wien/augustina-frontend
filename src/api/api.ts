@@ -147,7 +147,6 @@ export async function patchSettings(updatedSettings: Settings) {
 }
 
 //payments list
-//sind rfc dates strings?
 export async function fetchPayments(startDate: Date, endDate: Date, filter: string) {
   return apiInstance.get(
     `${PAYMENT_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}${
