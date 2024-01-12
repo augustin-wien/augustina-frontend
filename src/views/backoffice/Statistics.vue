@@ -52,13 +52,17 @@ onMounted(() => {
         // Access the statistics data
         const statisticsData = store.statisticsList
 
+        console.log('statisticsData:', statisticsData)
+
         // Extract data for the charts
-        const quantityData = statisticsData.map((item: Statistics) => ({
-          id: item.Id,
+        const itemsArray = statisticsData.Items || [] // Use default value if Items is undefined
+
+        const quantityData = itemsArray.map((item: Statistics) => ({
+          id: item.Id, // Use "ID" instead of "Id" based on your response structure
           value: item.SumQuantity
         }))
 
-        const amountData = statisticsData.map((item: Statistics) => ({
+        const amountData = itemsArray.map((item: Statistics) => ({
           id: item.Id,
           value: item.SumAmount
         }))
