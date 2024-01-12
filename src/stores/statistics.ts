@@ -3,6 +3,10 @@ import { fetchStatistics } from '@/api/api'
 
 //define interface to store data from backend properly
 export interface Statistics {
+  Id: number
+  Name: string
+  SumAmount: number
+  SumQuantity: number
   Items:
     | [
         {
