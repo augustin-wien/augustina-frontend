@@ -49,31 +49,41 @@ onMounted(() => {
   if (authenticated.value) {
     itemsStore.getItemsBackoffice().then(() => {
       store.getPayments(startDate.value, endDate.value).then(() => {
-        // Access the statistics data
         const statisticsData = store.statisticsList
-
-        console.log('statisticsData:', statisticsData)
-
-        // Extract data for the charts
-        const itemsArray = statisticsData.Items || [] // Use default value if Items is undefined
+        const itemsArray = statisticsData.Items || []
 
         const quantityData = itemsArray.map((item: Statistics) => ({
-          id: item.Id, // Use "ID" instead of "Id" based on your response structure
-          value: item.SumQuantity
+          id: item.Id,
+          value: item.SumQuantity,
+          name: item.Name
         }))
 
         const amountData = itemsArray.map((item: Statistics) => ({
           id: item.Id,
-          value: item.SumAmount
+          value: item.SumAmount,
+          name: item.Name
         }))
 
-        // D3 Code for Quantity Bar Chart
-        const quantityChart = d3
-          .select('#chart-container')
-          .append('svg')
-          .attr('width', 400)
-          .attr('height', 200)
+        //#region D3 Code for Quantity Bar Chart
+        const quantityChartContainer = d3.select('#chart-container').append('span')
 
+        const quantityChart = quantityChartContainer
+          .append('svg')
+          .attr('width', 500)
+          .attr('height', 400)
+          .attr('style', 'margin: 10px;')
+          .style('display', 'inline-block')
+
+        //title
+        quantityChart
+          .append('text')
+          .attr('x', 200)
+          .attr('y', 20)
+          .attr('text-anchor', 'middle')
+          .attr('class', 'chart-title')
+          .text('Quantity Chart')
+
+        //data
         quantityChart
           .selectAll('rect')
           .data(quantityData)
@@ -85,13 +95,73 @@ onMounted(() => {
           .attr('height', (d: any) => d.value)
           .attr('fill', 'blue')
 
-        // D3 Code for Amount Bar Chart
-        const amountChart = d3
-          .select('#chart-container')
-          .append('svg')
-          .attr('width', 400)
-          .attr('height', 200)
+        // Add labels to the quantity chart
+        quantityChart
+          .selectAll('.bar-label')
+          .data(quantityData)
+          .enter()
+          .append('text')
+          .attr('class', 'bar-label')
+          .attr('x', (d, i) => i * 70 + 30)
+          .attr('y', (d: any) => 200 - d.value - 5)
+          .attr('text-anchor', 'middle')
+          .text((d: any) => d.value)
 
+        // Add x-axis at the bottom with names of items
+        quantityChart
+          .append('g')
+          .attr('transform', 'translate(0, 200)')
+          .call(
+            d3
+              .axisBottom(
+                d3
+                  .scaleBand()
+                  .domain(quantityData.map((d: any) => d.name))
+                  .range([0, quantityData.length * 70]) // Adjust range based on the number of items
+              )
+              .tickSize(30)
+              .tickPadding(10)
+          )
+          .selectAll('text')
+          .attr('transform', 'translate(-20, 0)rotate(-60)')
+          .style('text-anchor', 'end')
+          .style('text-color', 'black')
+          .style('font-size', '12px')
+
+        // Find the maximum quantity value in your dataset
+        const maxQuantity = d3.max(quantityData, (d: any) => d.value)
+
+        // Create a linear scale for the y-axis based on the maximum quantity value
+        const yScale = d3
+          .scaleLinear()
+          .domain([0, Number(maxQuantity)])
+          .range([200, 0])
+
+        // Add y-axis on the left with dynamic quantity values
+        quantityChart.append('g').attr('transform', 'translate(0, 0)').call(d3.axisLeft(yScale))
+
+        //#endregion
+
+        //#region D3 Code for Amount Bar Chart
+        const amountChartContainer = d3.select('#chart-container').append('span')
+
+        const amountChart = amountChartContainer
+          .append('svg')
+          .attr('width', 500)
+          .attr('height', 400)
+          .attr('style', 'margin: 10px; padding: 10px;')
+          .style('display', 'inline-block')
+
+        //title
+        amountChart
+          .append('text')
+          .attr('x', 200)
+          .attr('y', 20)
+          .attr('text-anchor', 'middle')
+          .attr('class', 'chart-title')
+          .text('Amount Chart')
+
+        //data
         amountChart
           .selectAll('rect')
           .data(amountData)
@@ -102,6 +172,52 @@ onMounted(() => {
           .attr('width', 60)
           .attr('height', (d: any) => d.value)
           .attr('fill', 'green')
+
+        // Add labels to the amount chart
+        amountChart
+          .selectAll('.bar-label')
+          .data(amountData)
+          .enter()
+          .append('text')
+          .attr('class', 'bar-label')
+          .attr('x', (d, i) => i * 70 + 30)
+          .attr('y', (d: any) => 200 - d.value - 5)
+          .attr('text-anchor', 'middle')
+          .text((d: any) => d.value)
+
+        // Find the maximum quantity value in your dataset
+        const maxAmount = d3.max(amountData, (d: any) => d.value)
+
+        // Create a linear scale for the y-axis based on the maximum quantity value
+        const yScaleAmount = d3
+          .scaleLinear()
+          .domain([0, Number(maxAmount)])
+          .range([200, 0])
+
+        // Add y-axis on the left with dynamic quantity values
+        amountChart.append('g').attr('transform', 'translate(0, 0)').call(d3.axisLeft(yScaleAmount))
+
+        // Add x-axis at the bottom with names of items
+        amountChart
+          .append('g')
+          .attr('transform', 'translate(0, 200)')
+          .call(
+            d3
+              .axisBottom(
+                d3
+                  .scaleBand()
+                  .domain(amountData.map((d: any) => d.name))
+                  .range([0, amountData.length * 70])
+              )
+              .tickSize(30)
+              .tickPadding(10)
+          )
+          .selectAll('text')
+          .attr('transform', 'translate(-20, 0)rotate(-60)')
+          .style('text-anchor', 'end')
+          .style('text-color', 'black')
+          .style('font-size', '12px')
+        //#endregion
       })
     })
   }
@@ -135,7 +251,7 @@ onMounted(() => {
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className=" space-y-3 space-x-3">
             <h1 class="text-2xl font-bold">{{ $t('menuStatistics') }}</h1>
-            <div id="chart-container">chart-container</div>
+            <div id="chart-container"></div>
           </div>
         </div>
       </div>
