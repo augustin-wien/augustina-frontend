@@ -67,6 +67,8 @@ const updateItem = async () => {
       .then(() => {
         showToast('success', 'Produkt erfolgreich aktualisiert')
         itemsStore.getItems()
+      })
+      .then(()=> {
         router.push({ name: 'Backoffice Product Settings' })
       })
       .catch((err) => {
