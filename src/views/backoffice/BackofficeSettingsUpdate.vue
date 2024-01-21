@@ -53,9 +53,9 @@ const updateSettings = async () => {
   try {
     // This logic will execute when the "Bestätigen" button is clicked
     await settingsStore.updateSettings(updatedSettings.value).then(() => {
+      showToast('success', 'Einstellungen erfolgreich aktualisiert')
       router.push({ name: 'Backoffice Settings' })
     })
-    showToast('success', 'Einstellungen erfolgreich aktualisiert')
   } catch (error) {
     console.error('Error updating settings:', error)
     showToast('error', 'Einstellungen konnten nicht aktualisiert werden')
