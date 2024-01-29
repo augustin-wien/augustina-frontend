@@ -71,8 +71,8 @@ onMounted(() => {
           .append('svg')
           .attr('width', 500)
           .attr('height', 400)
-          .attr('style', 'margin: 10px;')
-          .style('display', 'inline-block')
+          .attr('style', 'margin: 10px; padding: 10px; border: 1px solid black;')
+        //  .style('display', 'inline-block')
 
         //title
         quantityChart
@@ -149,14 +149,14 @@ onMounted(() => {
           .append('svg')
           .attr('width', 500)
           .attr('height', 400)
-          .attr('style', 'margin: 10px; padding: 10px;')
+          .attr('style', 'margin: 10px; padding: 10px; border: 1px solid black; ')
           .style('display', 'inline-block')
 
         //title
         amountChart
           .append('text')
           .attr('x', 200)
-          .attr('y', 20)
+          .attr('y', 10)
           .attr('text-anchor', 'middle')
           .attr('class', 'chart-title')
           .text('Amount Chart')
