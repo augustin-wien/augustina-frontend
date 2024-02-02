@@ -3,6 +3,7 @@ import { useSettingsStore } from '@/stores/settings'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { computed, onMounted, watch } from 'vue'
+import router from '@/router'
 
 const settingsStore = useSettingsStore()
 const itemsStore = useItemsStore()
