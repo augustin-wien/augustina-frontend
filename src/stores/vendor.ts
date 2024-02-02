@@ -186,13 +186,13 @@ export const vendorsStore = defineStore('vendors', {
     },
 
     async updateVendor(updatedVendor: Vendor) {
-      patchVendor(updatedVendor)
-        .then(() => {
-          this.getVendors()
-        })
-        .catch((error) => {
-          console.error('Error updating vendor:', error)
-        })
+      try {
+        await patchVendor(updatedVendor)
+        this.getVendors()
+        return
+      } catch (error) {
+        return error
+      }
     },
     async deleteVendor(vendorId: number) {
       removeVendor(vendorId)

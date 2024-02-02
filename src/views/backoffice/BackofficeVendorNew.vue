@@ -72,7 +72,8 @@ const submitVendor = async () => {
 
   try {
     await store.createVendorPromise(newVendor.value as Vendor).then((res: any) => {
-      router.push(`/backoffice/vendorsummary/${res.ID}`)
+      console.log('res', res)
+      router.push(`/backoffice/userprofile/${res.data}`)
     })
   } catch (err: any) {
     console.error('Error creating vendor:', err)

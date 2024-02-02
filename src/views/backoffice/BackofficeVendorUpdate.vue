@@ -33,11 +33,17 @@ const toast = ref<{ type: string; message: string } | null>(null)
 
 const updateVendor = async () => {
   try {
-    await store.updateVendor(updatedVendor.value as Vendor)
-    showToast('success', 'VerkäuferIn erfolgreich aktualisiert')
+    const response = await store.updateVendor(updatedVendor.value as Vendor)
+
+    if (response) {
+      console.error('Error creating vendor:', response)
+      showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
+    } else {
+      showToast('success', 'VerkäuferIn erfolgreich aktualisiert')
+    }
   } catch (error) {
-    console.error('Error creating vendor:', error)
-    showToast('error', 'VerkäuferIn konnte nicht angelegt werden')
+    console.error('Error updating vendor:', error)
+    showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
   }
 }
 
