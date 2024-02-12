@@ -78,7 +78,7 @@ onMounted(() => {
               labels: quantityData.map((item: { name: string }) => item.name),
               datasets: [
                 {
-                  label: 'Quantity',
+                  label: 'Menge',
                   data: quantityData.map((item: { value: number }) => item.value),
                   backgroundColor: 'rgba(75, 192, 192, 0.2)',
                   borderColor: 'rgba(75, 192, 192, 1)',
@@ -89,7 +89,15 @@ onMounted(() => {
             options: {
               scales: {
                 y: {
-                  beginAtZero: true
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: 'Anzahl verkaufter Produkte',
+                    padding: {
+                      top: 10,
+                      bottom: 10
+                    }
+                  }
                 }
               }
             }
@@ -110,7 +118,7 @@ onMounted(() => {
               labels: amountData.map((item: { name: string }) => item.name),
               datasets: [
                 {
-                  label: 'Amount',
+                  label: 'Geldbetrag',
                   data: amountData.map((item: { value: number }) => item.value),
                   backgroundColor: 'rgba(255, 99, 132, 0.2)',
                   borderColor: 'rgba(255, 99, 132, 1)',
@@ -121,7 +129,15 @@ onMounted(() => {
             options: {
               scales: {
                 y: {
-                  beginAtZero: true
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: 'Eingenommener Betrag in Eurocent',
+                    padding: {
+                      top: 10,
+                      bottom: 10
+                    }
+                  }
                 }
               }
             }
