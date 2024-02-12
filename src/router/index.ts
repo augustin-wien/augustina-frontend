@@ -341,7 +341,7 @@ const router = createRouter({
 })
 
 // Check if the user is authenticated
-router.beforeEach(async (to: any) => {
+router.beforeEach(async (to: any, from: any) => {
   if (
     to.meta.requiresAuth &&
     !isAuthenticated() &&

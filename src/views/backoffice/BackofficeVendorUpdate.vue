@@ -33,11 +33,17 @@ const toast = ref<{ type: string; message: string } | null>(null)
 
 const updateVendor = async () => {
   try {
-    await store.updateVendor(updatedVendor.value as Vendor)
-    showToast('success', 'VerkäuferIn erfolgreich aktualisiert')
+    const response = await store.updateVendor(updatedVendor.value as Vendor)
+
+    if (response) {
+      console.error('Error creating vendor:', response)
+      showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
+    } else {
+      showToast('success', 'VerkäuferIn erfolgreich aktualisiert')
+    }
   } catch (error) {
-    console.error('Error creating vendor:', error)
-    showToast('error', 'VerkäuferIn konnte nicht angelegt werden')
+    console.error('Error updating vendor:', error)
+    showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
   }
 }
 
@@ -93,7 +99,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('firstName') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.FirstName }} </span>
                   <input
                     id="firstName"
                     v-model="updatedVendor.FirstName"
@@ -106,8 +111,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('lastName') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.LastName }} </span>
-
                   <input
                     id="lastName"
                     v-model="updatedVendor.LastName"
@@ -121,8 +124,6 @@ const showToast = (type: string, message: string) => {
                   >Email:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.Email }} </span>
-
                   <input
                     id="email"
                     v-model="updatedVendor.Email"
@@ -135,8 +136,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('licenseId') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.LicenseID }} </span>
-
                   <input
                     id="licenseID"
                     v-model="updatedVendor.LicenseID"
@@ -150,7 +149,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('deactivated') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2"> {{ vendor.IsDisabled }} </span>
                   <select
                     id="onlineMap"
                     v-model="updatedVendor.IsDisabled"
@@ -165,8 +163,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('address') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.Address }} </span>
-
                   <input
                     id="adress"
                     v-model="updatedVendor.Address"
@@ -179,8 +175,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('postCode') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.PLZ }} </span>
-
                   <input
                     id="plz"
                     v-model="updatedVendor.PLZ"
@@ -193,8 +187,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('location') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.Location }} </span>
-
                   <input
                     id="location"
                     v-model.number="updatedVendor.Location"
@@ -206,8 +198,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('longitude') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.Longitude }} </span>
-
                   <input
                     id="location"
                     v-model.number="updatedVendor.Longitude"
@@ -219,8 +209,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('latitude') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.Latitude }} </span>
-
                   <input
                     id="location"
                     v-model.number="updatedVendor.Latitude"
@@ -236,7 +224,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('telephone') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.Telephone }} </span>
                   <input
                     id="telephone"
                     v-model="updatedVendor.Telephone"
@@ -249,7 +236,6 @@ const showToast = (type: string, message: string) => {
                   >Smartphone:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2"> {{ vendor.HasSmartphone }} </span>
                   <select
                     id="hasSmartphone"
                     v-model="updatedVendor.HasSmartphone"
@@ -265,7 +251,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('workingTime') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.WorkingTime }} </span>
                   <input
                     id="workingTime"
                     v-model="updatedVendor.WorkingTime"
@@ -278,7 +263,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('language') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.Language }} </span>
                   <input
                     id="language"
                     v-model="updatedVendor.Language"
@@ -292,7 +276,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('onlineMap') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2"> {{ vendor.OnlineMap }} </span>
                   <select
                     id="onlineMap"
                     v-model="updatedVendor.OnlineMap"
@@ -307,7 +290,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('bankAccount') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2"> {{ vendor.HasBankAccount }} </span>
                   <select
                     id="bankAccount"
                     v-model="updatedVendor.HasBankAccount"
@@ -325,7 +307,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('registrationDate') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.RegistrationDate }} </span>
                   <input
                     id="registrationDate"
                     v-model="updatedVendor.RegistrationDate"
@@ -337,7 +318,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('vendorSince') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.VendorSince }} </span>
                   <input
                     id="vendorSince"
                     v-model="updatedVendor.VendorSince"
@@ -349,7 +329,6 @@ const showToast = (type: string, message: string) => {
                   >{{ $t('comment') }}:</label
                 >
                 <div class="flex flex-row">
-                  <span class="p-2">{{ vendor.Comment }} </span>
                   <textarea
                     id="comment"
                     v-model="updatedVendor.Comment"

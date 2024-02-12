@@ -3,19 +3,37 @@ import { ref, onMounted } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { useSettingsStore } from '@/stores/settings'
-import { computed } from 'vue'
+import { computed, watch } from 'vue'
 import router from '@/router'
+import { useKeycloakStore } from '@/stores/keycloak'
+
+const keycloakStore = useKeycloakStore()
+const authenticated = computed(() => keycloakStore.authenticated)
 
 const store = vendorsStore()
 const settStore = useSettingsStore()
 
-const vendorMe = ref<Vendor | null>(null)
+const vendorMe = computed(() => store.vendor)
 
 onMounted(async () => {
-  try {
-    vendorMe.value = await store.fetchVendorMe()
-  } catch (error) {
-    console.error('Fehler beim API-Aufruf:', error)
+  if (authenticated.value) {
+    try {
+      store.fetchVendorMe()
+    } catch (error) {
+      console.error('Fehler beim API-Aufruf:', error)
+    }
+  } else {
+    watch(authenticated, async () => {
+      store.fetchVendorMe()
+
+      if (authenticated.value) {
+        try {
+          store.fetchVendorMe()
+        } catch (error) {
+          console.error('Fehler beim API-Aufruf:', error)
+        }
+      }
+    })
   }
 })
 

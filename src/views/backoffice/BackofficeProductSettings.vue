@@ -1,16 +1,34 @@
 <script lang="ts" setup>
 import { useItemsStore } from '@/stores/items'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { formatCredit } from '@/utils/utils'
+import { useKeycloakStore } from '@/stores/keycloak'
+import type { Item } from '@/stores/items'
 
-const store = useItemsStore()
+const keycloakStore = useKeycloakStore()
+const itemsStore = useItemsStore()
+const authenticated = computed(() => keycloakStore.authenticated)
 
 // Fetch the items' data when the component is mounted
 onMounted(() => {
-  store.getItems()
+  if (authenticated.value) {
+    itemsStore.getItemsBackoffice()
+  } else {
+    watch(authenticated, () => {
+      itemsStore.getItemsBackoffice()
+    })
+  }
 })
 
-const items = computed(() => store.items)
+const items = computed(() => {
+  const tmpItems = JSON.parse(JSON.stringify(itemsStore.itemsBackoffice))
+  // Sort items by is license item and remove donation and transaction costs
+  const filter = ['donation', 'transactionCosts']
+  return tmpItems
+    .sort((a: Item, b: Item) => Number(a.IsLicenseItem) - Number(b.IsLicenseItem))
+    .filter((item: Item) => !filter.includes(item.Name))
+})
+
 const apiUrl = import.meta.env.VITE_API_URL
 </script>
 

@@ -47,7 +47,7 @@ onMounted(() => {
           <button
             class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
           >
-            <RouterLink :to="{ name: 'Custom Tip' }">{{ $t('edit') }}</RouterLink>
+            <RouterLink :to="{ name: 'Custom Tip' }">{{ $t('editTip') }}</RouterLink>
           </button>
         </div>
         <div className="flex place-items-center w-full">
