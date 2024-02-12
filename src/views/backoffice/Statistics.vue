@@ -6,7 +6,7 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, onMounted, ref } from 'vue'
 import { type Statistics } from '@/stores/statistics'
-import * as d3 from 'd3'
+import Chart from 'chart.js/auto'
 
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
@@ -64,160 +64,69 @@ onMounted(() => {
           name: item.Name
         }))
 
-        //#region D3 Code for Quantity Bar Chart
-        const quantityChartContainer = d3.select('#chart-container').append('span')
+        // Create the quantity chart
+        const quantityChartElement = document.getElementById('quantity-chart')
 
-        const quantityChart = quantityChartContainer
-          .append('svg')
-          .attr('width', 500)
-          .attr('height', 400)
-          .attr('style', 'margin: 10px; padding: 10px; border: 1px solid black;')
-        //  .style('display', 'inline-block')
+        const quantityChartCtx = quantityChartElement
+          ? (quantityChartElement as HTMLCanvasElement).getContext('2d')
+          : null
 
-        //title
-        quantityChart
-          .append('text')
-          .attr('x', 200)
-          .attr('y', 20)
-          .attr('text-anchor', 'middle')
-          .attr('class', 'chart-title')
-          .text('Quantity Chart')
+        if (quantityChartCtx) {
+          new Chart(quantityChartCtx, {
+            type: 'bar',
+            data: {
+              labels: quantityData.map((item: { name: string }) => item.name),
+              datasets: [
+                {
+                  label: 'Quantity',
+                  data: quantityData.map((item: { value: number }) => item.value),
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                }
+              ]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          })
+        }
 
-        //data
-        quantityChart
-          .selectAll('rect')
-          .data(quantityData)
-          .enter()
-          .append('rect')
-          .attr('x', (d, i) => i * 70)
-          .attr('y', (d: any) => 200 - d.value)
-          .attr('width', 60)
-          .attr('height', (d: any) => d.value)
-          .attr('fill', 'blue')
+        // Create the amount chart
+        const amountChartElement = document.getElementById('amount-chart')
 
-        // Add labels to the quantity chart
-        quantityChart
-          .selectAll('.bar-label')
-          .data(quantityData)
-          .enter()
-          .append('text')
-          .attr('class', 'bar-label')
-          .attr('x', (d, i) => i * 70 + 30)
-          .attr('y', (d: any) => 200 - d.value - 5)
-          .attr('text-anchor', 'middle')
-          .text((d: any) => d.value)
+        const amountChartCtx = amountChartElement
+          ? (amountChartElement as HTMLCanvasElement).getContext('2d')
+          : null
 
-        // Add x-axis at the bottom with names of items
-        quantityChart
-          .append('g')
-          .attr('transform', 'translate(0, 200)')
-          .call(
-            d3
-              .axisBottom(
-                d3
-                  .scaleBand()
-                  .domain(quantityData.map((d: any) => d.name))
-                  .range([0, quantityData.length * 70]) // Adjust range based on the number of items
-              )
-              .tickSize(30)
-              .tickPadding(10)
-          )
-          .selectAll('text')
-          .attr('transform', 'translate(-20, 0)rotate(-60)')
-          .style('text-anchor', 'end')
-          .style('text-color', 'black')
-          .style('font-size', '12px')
-
-        // Find the maximum quantity value in your dataset
-        const maxQuantity = d3.max(quantityData, (d: any) => d.value)
-
-        // Create a linear scale for the y-axis based on the maximum quantity value
-        const yScale = d3
-          .scaleLinear()
-          .domain([0, Number(maxQuantity)])
-          .range([200, 0])
-
-        // Add y-axis on the left with dynamic quantity values
-        quantityChart.append('g').attr('transform', 'translate(0, 0)').call(d3.axisLeft(yScale))
-
-        //#endregion
-
-        //#region D3 Code for Amount Bar Chart
-        const amountChartContainer = d3.select('#chart-container').append('span')
-
-        const amountChart = amountChartContainer
-          .append('svg')
-          .attr('width', 500)
-          .attr('height', 400)
-          .attr('style', 'margin: 10px; padding: 10px; border: 1px solid black; ')
-          .style('display', 'inline-block')
-
-        //title
-        amountChart
-          .append('text')
-          .attr('x', 200)
-          .attr('y', 10)
-          .attr('text-anchor', 'middle')
-          .attr('class', 'chart-title')
-          .text('Amount Chart')
-
-        //data
-        amountChart
-          .selectAll('rect')
-          .data(amountData)
-          .enter()
-          .append('rect')
-          .attr('x', (d, i) => i * 70)
-          .attr('y', (d: any) => 200 - d.value)
-          .attr('width', 60)
-          .attr('height', (d: any) => d.value)
-          .attr('fill', 'green')
-
-        // Add labels to the amount chart
-        amountChart
-          .selectAll('.bar-label')
-          .data(amountData)
-          .enter()
-          .append('text')
-          .attr('class', 'bar-label')
-          .attr('x', (d, i) => i * 70 + 30)
-          .attr('y', (d: any) => 200 - d.value - 5)
-          .attr('text-anchor', 'middle')
-          .text((d: any) => d.value)
-
-        // Find the maximum quantity value in your dataset
-        const maxAmount = d3.max(amountData, (d: any) => d.value)
-
-        // Create a linear scale for the y-axis based on the maximum quantity value
-        const yScaleAmount = d3
-          .scaleLinear()
-          .domain([0, Number(maxAmount)])
-          .range([200, 0])
-
-        // Add y-axis on the left with dynamic quantity values
-        amountChart.append('g').attr('transform', 'translate(0, 0)').call(d3.axisLeft(yScaleAmount))
-
-        // Add x-axis at the bottom with names of items
-        amountChart
-          .append('g')
-          .attr('transform', 'translate(0, 200)')
-          .call(
-            d3
-              .axisBottom(
-                d3
-                  .scaleBand()
-                  .domain(amountData.map((d: any) => d.name))
-                  .range([0, amountData.length * 70])
-              )
-              .tickSize(30)
-              .tickPadding(10)
-          )
-          .selectAll('text')
-          .attr('transform', 'translate(-20, 0)rotate(-60)')
-          .style('text-anchor', 'end')
-          .style('text-color', 'black')
-          .style('font-size', '12px')
-        //#endregion
+        if (amountChartCtx) {
+          new Chart(amountChartCtx, {
+            type: 'bar',
+            data: {
+              labels: amountData.map((item: { name: string }) => item.name),
+              datasets: [
+                {
+                  label: 'Amount',
+                  data: amountData.map((item: { value: number }) => item.value),
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 1
+                }
+              ]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          })
+        }
       })
     })
   }
@@ -251,7 +160,8 @@ onMounted(() => {
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className=" space-y-3 space-x-3">
             <h1 class="text-2xl font-bold">{{ $t('menuStatistics') }}</h1>
-            <div id="chart-container"></div>
+            <canvas id="quantity-chart" width="300" height="150"></canvas>
+            <canvas id="amount-chart" width="300" height="150"></canvas>
           </div>
         </div>
       </div>
