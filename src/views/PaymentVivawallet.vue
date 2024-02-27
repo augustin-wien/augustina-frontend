@@ -21,13 +21,11 @@ onMounted(() => {
     shopStore.deleteZeroDonation()
   }
 
-  paymentStore
-    .postOrder(items, 1, vendorStore.vendorid, paymentStore.email)
-    .catch((error) => {
-      errorMessage.value = error.message
-      errorMessageDetail.value = error.response.data
-      console.log(error)
-    })
+  paymentStore.postOrder(items, 1, vendorStore.vendorid, paymentStore.email).catch((error) => {
+    errorMessage.value = error.message
+    errorMessageDetail.value = error.response.data
+    console.log(error)
+  })
 })
 </script>
 
