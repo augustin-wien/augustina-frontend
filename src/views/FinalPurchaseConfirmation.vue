@@ -25,15 +25,11 @@ const checkAgb = () => {
 }
 
 onMounted(() => {
-  if (isNaN(paymentStore.priceInEuros()) || paymentStore.priceInEuros() == 0) {
-    const sum = shopStore.calculateSum()
+  const sum = shopStore.calculateSum()
 
-    if (sum > 0) {
-      paymentStore.setPrice(sum)
-    } else {
-      // when the sum is still 0 or NaN, then something is wrong with the items in the shop
-      router.push({ name: 'Shop' })
-    }
+  if (isNaN(sum) || sum == 0) {
+    // when the sum is still 0 or NaN, then something is wrong with the items in the shop
+    router.push({ name: 'Shop' })
   }
 })
 
@@ -41,7 +37,7 @@ const hasLicenseItem = computed(() => {
   const item = shopStore.items?.find((item) => item.LicenseItem != null)
 
   if (item) {
-    if (shopStore.finalitems.find((i) => i.item == item.ID)) return item
+    if (shopStore.amount.find((i) => i.item == item.ID)) return item
   }
 
   return null
@@ -58,15 +54,16 @@ const hasLicenseItem = computed(() => {
         <div class="row-span-3 w-full h-full">
           <div class="overflow-y-auto h-5/6 border-4 border-gray-200 rounded-3xl">
             <div class="w-full items-center py-4">
-              <p class="text-center text-8xl font-semibold">{{ paymentStore.priceInEuros() }}€</p>
+              <p class="text-center text-8xl font-semibold">{{ shopStore.calculateSum() }}€</p>
               <p className="text-center text">
-                {{ $t('includes') }} {{ paymentStore.tip }}€ {{ $t('donation') }}
+                {{ $t('includes') }} {{ shopStore.donationInEuro }}€
+                {{ $t('donation') }}
               </p>
             </div>
             <div class="w-full">
               <div v-for="item in shopStore.amount" :key="item.item">
                 <div
-                  v-if="item.quantity > 0"
+                  v-if="item.quantity > 0 && item.item != shopStore.donationItem"
                   class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-4"
                 >
                   {{ item.quantity }}x {{ shopStore.getName(item.item) }}

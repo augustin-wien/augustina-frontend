@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import { usePaymentStore } from '@/stores/payment'
 import { useSettingsStore } from '@/stores/settings'
-import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
 import { useShopStore } from '@/stores/ShopStore'
 
+const router = useRouter()
 const settStore = useSettingsStore()
-const paymentStore = usePaymentStore()
 const shopStore = useShopStore()
 
-const increment = paymentStore.setTip
-
 onMounted(() => {
-  shopStore.removeEmty()
+  shopStore.setDonation(0)
 })
+
+const fixedDonationClick = (amount: number) => {
+  shopStore.setDonation(amount * 100)
+  router.push({ name: 'Confirmation' })
+}
 </script>
 
 <template>
@@ -24,24 +26,20 @@ onMounted(() => {
           {{ $t('donation') }}
         </div>
         <div className="flex place-items-center w-full">
-          <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
-            <button
-              class="customcolor rounded-full p-[18px] text-white text-4xl font font-semibold w-full"
-              @click="increment(2)"
-            >
-              2,00 €
-            </button>
-          </RouterLink>
+          <button
+            class="customcolor rounded-full p-[18px] text-white text-4xl font font-semibold w-full"
+            @click="fixedDonationClick(2)"
+          >
+            2,00 €
+          </button>
         </div>
         <div className="flex place-items-center w-full">
-          <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
-            <button
-              class="customcolor rounded-full p-[18px] text-white text-4xl font font-semibold w-full"
-              @click="increment(1)"
-            >
-              1,00 €
-            </button>
-          </RouterLink>
+          <button
+            class="customcolor rounded-full p-[18px] text-white text-4xl font font-semibold w-full"
+            @click="fixedDonationClick(1)"
+          >
+            1,00 €
+          </button>
         </div>
         <div className="flex place-items-center w-full">
           <button
@@ -51,14 +49,12 @@ onMounted(() => {
           </button>
         </div>
         <div className="flex place-items-center w-full">
-          <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
-            <button
-              class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
-              @click="increment(0)"
-            >
-              {{ $t('notToday') }}
-            </button>
-          </RouterLink>
+          <button
+            class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
+            @click="fixedDonationClick(0)"
+          >
+            {{ $t('notToday') }}
+          </button>
         </div>
       </div>
     </template>
