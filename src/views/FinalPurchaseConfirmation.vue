@@ -102,6 +102,15 @@ const hasLicenseItem = computed(() => {
 
         <div class="place-items-center w-full">
           <button
+            v-if="
+              shopStore.amount.length == 1 && shopStore.amount[0].item == shopStore.donationItem
+            "
+            class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full"
+          >
+            {{ $t('donation_only') }}
+          </button>
+          <button
+            v-else
             class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full"
             :style="paymentStore.agbChecked ? 'background-color:' + settStore.settings.Color : ''"
             @click="checkAgb"

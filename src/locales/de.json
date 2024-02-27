@@ -146,5 +146,6 @@
 
   "isLicenseItem": "Ist digitaler Lizenzartikel",
   "licenseItem": "Lizenzartikel",
-  "licenseGroup": "Lizenzgruppe"
+  "licenseGroup": "Lizenzgruppe",
+  "donation_only": "Nur Spende ist nicht möglich"
 }

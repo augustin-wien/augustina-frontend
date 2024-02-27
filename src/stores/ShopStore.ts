@@ -22,6 +22,7 @@ export const useShopStore = defineStore('shop', {
     donationInEuro: (state) => {
       const donElement = state.amount.find((item) => item.item == 2)
       if (donElement) return donElement.quantity / 100
+      else return 0
     }
   },
   actions: {
