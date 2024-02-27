@@ -24,11 +24,7 @@
   grid-column: 1;
   grid-row: 1;
   place-self: center;
-  font:
-    5em/2 ubuntu mono,
-    consolas,
-    monaco,
-    monospace;
+  font: 5em/2 ubuntu mono, consolas, monaco, monospace;
   counter-reset: s var(--s);
   content: counter(s, decimal);
 }
