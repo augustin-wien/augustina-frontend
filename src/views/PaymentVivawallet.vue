@@ -17,15 +17,17 @@ const errorTimestamp = ref(new Date().toISOString())
 const donation = shopStore.donation
 
 onMounted(() => {
-  if (!(donation > 0)) {
+  if (!(donation && donation > 0)) {
     shopStore.deleteZeroDonation()
   }
 
-  paymentStore.postOrder(items, 1, vendorStore.vendorid, paymentStore.email).catch((error) => {
-    errorMessage.value = error.message
-    errorMessageDetail.value = error.response.data
-    console.log(error)
-  })
+  paymentStore
+    .postOrder(items, 1, vendorStore.vendorid, paymentStore.email)
+    .catch((error) => {
+      errorMessage.value = error.message
+      errorMessageDetail.value = error.response.data
+      console.log(error)
+    })
 })
 </script>
 

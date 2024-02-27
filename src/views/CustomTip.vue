@@ -15,13 +15,13 @@ const localDonation = ref(0)
 
 onMounted(() => {
   shopStore.setDonation(100)
-  localDonation.value = donation.value / 100
+  localDonation.value = donation?.value ? donation.value / 100 : 0
 })
 
 watch(
   () => donation.value,
   () => {
-    localDonation.value = donation.value / 100
+    localDonation.value = donation?.value ? donation.value / 100 : 0
   }
 )
 
