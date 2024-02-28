@@ -1,9 +1,6 @@
 import { defineStore } from 'pinia'
 import { fetchItems } from '@/api/api'
 import { type Item } from './items'
-import { usePaymentStore } from './payment'
-
-const paymentStore = usePaymentStore()
 
 export interface Amount {
   item: number
@@ -15,7 +12,17 @@ export const useShopStore = defineStore('shop', {
     return {
       items: [] as Item[],
       amount: [] as Amount[],
-      finalitems: [] as Amount[]
+      donationItem: 2
+    }
+  },
+  getters: {
+    donation: (state) => {
+      return state.amount.find((item) => item.item == 2)?.quantity
+    },
+    donationInEuro: (state) => {
+      const donElement = state.amount.find((item) => item.item == 2)
+      if (donElement) return donElement.quantity / 100
+      else return 0
     }
   },
   actions: {
@@ -51,8 +58,6 @@ export const useShopStore = defineStore('shop', {
       if (inList == false) {
         this.amount.push({ item: id, quantity: 1 })
       }
-
-      paymentStore.sum += item.Price
     },
     subtractItem(id: number) {
       const item = this.items.find((item) => item.ID == id)
@@ -64,15 +69,11 @@ export const useShopStore = defineStore('shop', {
       for (const selectedItem of this.amount) {
         if (id == selectedItem.item && selectedItem.quantity > 0) {
           selectedItem.quantity--
-          paymentStore.sum -= item.Price
         }
       }
     },
     reset() {
       this.amount = []
-      this.finalitems = []
-      paymentStore.sum = 0
-      paymentStore.tip = 0
     },
     getAmount(id: number) {
       const item = this.amount.find((item) => item.item == id)
@@ -93,11 +94,9 @@ export const useShopStore = defineStore('shop', {
       return 'Spende'
     },
     removeEmty() {
-      this.finalitems = []
-
       for (const entry of this.amount) {
         if (entry.quantity != 0) {
-          this.finalitems.push(entry)
+          this.amount.push(entry)
         }
       }
     },
@@ -105,7 +104,7 @@ export const useShopStore = defineStore('shop', {
       const item = this.items.find((item) => item.ID == id)
 
       if (item) {
-        return item.Price / 100
+        return item.Price / 100.0
       }
 
       return 0
@@ -133,10 +132,41 @@ export const useShopStore = defineStore('shop', {
 
         if (price) {
           sum += price * item.quantity
+        } else if (item.item == this.donationItem) {
+          sum += item.quantity
+        } else {
+          console.log('Item not found')
         }
       })
 
-      return sum
+      // should be in euro
+      return sum / 100
+    },
+    setDonation(amount: number) {
+      // remove old donation
+      this.amount = this.amount.filter((item) => item.item != this.donationItem)
+      // add new donation
+      this.amount.push({ item: this.donationItem, quantity: Math.floor(amount) })
+    },
+    deleteZeroDonation() {
+      if (this.amount.find((item) => item.item == this.donationItem)?.quantity == 0)
+        this.amount = this.amount.filter((item) => item.item != this.donationItem)
+    },
+    incrementDonation() {
+      for (const selectedItem of this.amount) {
+        if (this.donationItem == selectedItem.item) {
+          selectedItem.quantity += 100
+        }
+      }
+    },
+    decrementDonation() {
+      const donationId = 2
+
+      for (const selectedItem of this.amount) {
+        if (donationId == selectedItem.item && selectedItem.quantity > 0) {
+          selectedItem.quantity -= 100
+        }
+      }
     }
   }
 })
