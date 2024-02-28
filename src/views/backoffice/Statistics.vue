@@ -26,12 +26,16 @@ const date = ref<Array<Date>>([startDate.value, endDate.value])
 
 const onRangeStart = (value: Date) => {
   startDate.value = value
-  store.getPayments(startDate.value, endDate.value)
+  store.getPayments(startDate.value, endDate.value).then(() => {
+    createCharts()
+  })
 }
 
 const onRangeEnd = (value: Date) => {
   endDate.value = value
-  store.getPayments(startDate.value, endDate.value)
+  store.getPayments(startDate.value, endDate.value).then(() => {
+    createCharts()
+  })
 }
 
 const formatTime = (time: string) => {
@@ -44,23 +48,27 @@ const formatTime = (time: string) => {
 
 const authenticated = computed(() => keycloakStore.authenticated)
 
-onMounted(() => {
-  // Fetch statistics data
-  if (authenticated.value) {
-    itemsStore.getItemsBackoffice().then(() => {
-      store.getPayments(startDate.value, endDate.value).then(() => {
-        const statisticsData = store.statisticsList
-        const itemsArray = statisticsData.Items || []
+let quantityChart: Chart
+let amountChart: Chart
 
+const createCharts = () => {
+  if (quantityChart) {
+    quantityChart.destroy()
+  }
+  if (amountChart) {
+    amountChart.destroy()
+  }
+  const statisticsData = store.statisticsList
+        const itemsArray = statisticsData.Items || []
+        console.log("itemsArray", itemsArray)
         const quantityData = itemsArray.map((item: Statistics) => ({
-          id: item.Id,
+          id: item.ID,
           value: item.SumQuantity,
           name: item.Name
         }))
-
         const amountData = itemsArray.map((item: Statistics) => ({
-          id: item.Id,
-          value: item.SumAmount,
+          id: item.ID,
+          value: item.SumAmount/100, // convert to euro
           name: item.Name
         }))
 
@@ -72,7 +80,7 @@ onMounted(() => {
           : null
 
         if (quantityChartCtx) {
-          new Chart(quantityChartCtx, {
+          quantityChart = new Chart(quantityChartCtx, {
             type: 'bar',
             data: {
               labels: quantityData.map((item: { name: string }) => item.name),
@@ -112,7 +120,7 @@ onMounted(() => {
           : null
 
         if (amountChartCtx) {
-          new Chart(amountChartCtx, {
+          amountChart = new Chart(amountChartCtx, {
             type: 'bar',
             data: {
               labels: amountData.map((item: { name: string }) => item.name),
@@ -132,7 +140,7 @@ onMounted(() => {
                   beginAtZero: true,
                   title: {
                     display: true,
-                    text: 'Eingenommener Betrag in Eurocent',
+                    text: 'Eingenommener Betrag in €',
                     padding: {
                       top: 10,
                       bottom: 10
@@ -143,6 +151,31 @@ onMounted(() => {
             }
           })
         }
+}
+const fetchDataAndCreateCharts = () => {
+  if (authenticated.value) {
+    itemsStore.getItemsBackoffice().then(() => {
+      store.getPayments(startDate.value, endDate.value).then(() => {
+        createCharts()
+      })
+    })
+
+  } else {
+    watch(authenticated, async () => {
+    itemsStore.getItemsBackoffice().then(() => {
+      store.getPayments(startDate.value, endDate.value).then(() => {
+        createCharts()
+      })
+    })
+    })
+  }
+}
+ onMounted(() => {
+  // Fetch statistics data
+  if (authenticated.value) {
+    itemsStore.getItemsBackoffice().then(() => {
+      store.getPayments(startDate.value, endDate.value).then(() => {
+        createCharts()
       })
     })
   }
