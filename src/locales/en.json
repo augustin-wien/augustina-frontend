@@ -143,5 +143,6 @@
 
   "isLicenseItem": "Is digital license item",
   "licenseItem": "License item",
-  "licenseGroup": "License group"
+  "licenseGroup": "License group",
+  "donation_only": "Donation only is not allowed"
 }

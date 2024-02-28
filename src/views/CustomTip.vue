@@ -1,13 +1,29 @@
 <script setup lang="ts">
-import { usePaymentStore } from '@/stores/payment'
+import { onMounted, computed, ref, watch } from 'vue'
+import { useShopStore } from '@/stores/ShopStore'
 import { useSettingsStore } from '@/stores/settings'
 import { RouterLink } from 'vue-router'
+import { storeToRefs } from 'pinia'
 
 const settStore = useSettingsStore()
-const paymentStore = usePaymentStore()
+const shopStore = useShopStore()
+const increment = shopStore.incrementDonation
+const decrement = shopStore.decrementDonation
+const donation = storeToRefs(shopStore).donation
+const setDonation = shopStore.setDonation
+const localDonation = ref(0)
 
-const increment = paymentStore.increment
-const decrement = paymentStore.decrement
+onMounted(() => {
+  shopStore.setDonation(100)
+  localDonation.value = donation?.value ? donation.value / 100 : 0
+})
+
+watch(
+  () => donation.value,
+  () => {
+    localDonation.value = donation?.value ? donation.value / 100 : 0
+  }
+)
 
 const onlyForCurrency = ($event: any) => {
   const keycode = $event.keyCode ? $event.keyCode : $event.which
@@ -15,15 +31,15 @@ const onlyForCurrency = ($event: any) => {
   // only allow number and one dot
   if (
     (keycode < 48 || keycode > 57) &&
-    (keycode !== 46 || paymentStore.tip.toString().indexOf('.') !== -1)
+    (keycode !== 46 || localDonation.value.toString().indexOf('.') !== -1)
   ) {
     $event.preventDefault()
     return
   }
 
   // restrict to 2 decimal places and 1 digit in integer part
-  if (paymentStore.tip !== null && paymentStore.tip !== undefined) {
-    const currentTip = paymentStore.tip.toString()
+  if (localDonation.value !== null && localDonation.value !== undefined) {
+    const currentTip = localDonation.value.toString()
     const parts = currentTip.split('.')
 
     // Check total number of digits
@@ -47,9 +63,10 @@ const onlyForCurrency = ($event: any) => {
 }
 
 const roundValue = () => {
-  if (paymentStore.tip !== null && paymentStore.tip !== undefined) {
+  if (localDonation.value !== null && localDonation.value !== undefined) {
     // Convert to number, round to two decimal places, and then convert back to a string
-    paymentStore.tip = parseFloat(Number(paymentStore.tip).toFixed(2))
+    const cleanedDonation = parseFloat(Number(localDonation.value).toFixed(2))
+    setDonation(cleanedDonation * 100)
   }
 }
 </script>
@@ -69,7 +86,7 @@ const roundValue = () => {
             class="col-span-3 grid grid-cols-3 customcolor bg-opacity-0 text-white rounded-3xl border-spacing-7 place-items-center"
           >
             <input
-              v-model.number="paymentStore.tip"
+              v-model.number="localDonation"
               type="number"
               class="customcolor col-span-2 text-white text-center text-6xl font-semibold border-2 customborder rounded-3xl w-full h-full"
               @keypress="onlyForCurrency"

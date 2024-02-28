@@ -9,31 +9,16 @@ const shopStore = useShopStore()
 const paymentStore = usePaymentStore()
 const settings = useSettingsStore()
 const vendorStore = useVendorStore()
-const items = shopStore.finalitems
+const items = shopStore.amount
 
 const errorMessage = ref('')
 const errorMessageDetail = ref('')
 const errorTimestamp = ref(new Date().toISOString())
+const donation = shopStore.donation
 
 onMounted(() => {
-  if (paymentStore.tip > 0) {
-    // make sure, we have the tip only once added
-    const tipItemIndex = items.findIndex((item) => item.item == paymentStore.tipItem)
-
-    if (tipItemIndex > -1) {
-      items[tipItemIndex].quantity = paymentStore.tip * 100
-    } else {
-      items.push({
-        item: paymentStore.tipItem,
-        quantity: paymentStore.tip * 100
-      })
-    }
-  } else {
-    const tipItemIndex = items.findIndex((item) => item.item == paymentStore.tipItem)
-
-    if (tipItemIndex > -1) {
-      items.splice(tipItemIndex, 1)
-    }
+  if (!(donation && donation > 0)) {
+    shopStore.deleteZeroDonation()
   }
 
   paymentStore.postOrder(items, 1, vendorStore.vendorid, paymentStore.email).catch((error) => {

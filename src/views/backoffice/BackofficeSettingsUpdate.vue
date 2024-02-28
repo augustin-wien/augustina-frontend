@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted, watch } from 'vue'
-import { useSettingsStore, type Settings } from '@/stores/settings'
-import { useKeycloakStore } from '@/stores/keycloak'
-import { useItemsStore } from '@/stores/items'
 import toast from '@/components/ToastMessage.vue'
 import router from '@/router'
+import { useItemsStore } from '@/stores/items'
+import { useKeycloakStore } from '@/stores/keycloak'
+import { useSettingsStore, type Settings } from '@/stores/settings'
+import { computed, onMounted, ref, watch } from 'vue'
 
 const settingsStore = useSettingsStore()
 const storeItems = useItemsStore()
@@ -84,10 +84,8 @@ const url = import.meta.env.VITE_API_URL
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">
-        {{ $t('menuSettings') }} {{ $t('change') }}
-      </h1></template
-    >
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuSettings') }} {{ $t('change') }}</h1>
+    </template>
     <template #main>
       <div class="main">
         <div v-if="settings" class="w-full max-w-l mx-auto mt-4">
@@ -100,10 +98,7 @@ const url = import.meta.env.VITE_API_URL
               X
             </button>
           </div>
-          <form
-            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-            @submit.prevent="updateSettings"
-          >
+          <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="logo"
                 >Logo:</label
@@ -227,6 +222,7 @@ const url = import.meta.env.VITE_API_URL
 tr {
   padding: 10px;
 }
+
 td {
   padding: 10px;
 }
