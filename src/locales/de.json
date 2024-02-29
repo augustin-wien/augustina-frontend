@@ -38,6 +38,7 @@
   "menuMap": "Karte",
   "menuLogout": "Abmelden",
   "userLoggedIn": "ist angemeldet.",
+  "menuStatistics": "Statistik",
   "userNotLoggedIn": "Kein User ist angemeldet.",
 
   "accountingTitle": "Umsätze im gewählten Zeitraum",

@@ -10,7 +10,8 @@ import {
   faSliders,
   faSplotch,
   faUserGroup,
-  faMapLocation
+  faMapLocation,
+  faAreaChart
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { computed, onMounted, watch } from 'vue'
@@ -131,6 +132,15 @@ onMounted(() => {
               <font-awesome-icon :icon="faMapLocation" />
 
               <p class="text-base leading-4">{{ $t('menuMap') }}</p>
+            </button>
+          </RouterLink>
+          <RouterLink to="/backoffice/statistics" class-name="sidemenu-link">
+            <button
+              class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+            >
+              <font-awesome-icon :icon="faAreaChart" />
+
+              <p class="text-base leading-4">{{ $t('menuStatistics') }}</p>
             </button>
           </RouterLink>
           <button
