@@ -4,7 +4,7 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { useStatisticsStore } from '@/stores/statistics'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { type Statistics } from '@/stores/statistics'
 import Chart from 'chart.js/auto'
 
@@ -26,6 +26,7 @@ const date = ref<Array<Date>>([startDate.value, endDate.value])
 
 const onRangeStart = (value: Date) => {
   startDate.value = value
+
   store.getPayments(startDate.value, endDate.value).then(() => {
     createCharts()
   })
@@ -33,6 +34,7 @@ const onRangeStart = (value: Date) => {
 
 const onRangeEnd = (value: Date) => {
   endDate.value = value
+
   store.getPayments(startDate.value, endDate.value).then(() => {
     createCharts()
   })
@@ -55,103 +57,108 @@ const createCharts = () => {
   if (quantityChart) {
     quantityChart.destroy()
   }
+
   if (amountChart) {
     amountChart.destroy()
   }
+
   const statisticsData = store.statisticsList
-        const itemsArray = statisticsData.Items || []
-        console.log("itemsArray", itemsArray)
-        const quantityData = itemsArray.map((item: Statistics) => ({
-          id: item.ID,
-          value: item.SumQuantity,
-          name: item.Name
-        }))
-        const amountData = itemsArray.map((item: Statistics) => ({
-          id: item.ID,
-          value: item.SumAmount/100, // convert to euro
-          name: item.Name
-        }))
+  const itemsArray = statisticsData.Items || []
+  console.log('itemsArray', itemsArray)
 
-        // Create the quantity chart
-        const quantityChartElement = document.getElementById('quantity-chart')
+  const quantityData = itemsArray.map((item: Statistics) => ({
+    id: item.ID,
+    value: item.SumQuantity,
+    name: item.Name
+  }))
 
-        const quantityChartCtx = quantityChartElement
-          ? (quantityChartElement as HTMLCanvasElement).getContext('2d')
-          : null
+  const amountData = itemsArray.map((item: Statistics) => ({
+    id: item.ID,
+    value: item.SumAmount / 100, // convert to euro
+    name: item.Name
+  }))
 
-        if (quantityChartCtx) {
-          quantityChart = new Chart(quantityChartCtx, {
-            type: 'bar',
-            data: {
-              labels: quantityData.map((item: { name: string }) => item.name),
-              datasets: [
-                {
-                  label: 'Menge',
-                  data: quantityData.map((item: { value: number }) => item.value),
-                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                  borderColor: 'rgba(75, 192, 192, 1)',
-                  borderWidth: 1
-                }
-              ]
-            },
-            options: {
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  title: {
-                    display: true,
-                    text: 'Anzahl verkaufter Produkte',
-                    padding: {
-                      top: 10,
-                      bottom: 10
-                    }
-                  }
-                }
+  // Create the quantity chart
+  const quantityChartElement = document.getElementById('quantity-chart')
+
+  const quantityChartCtx = quantityChartElement
+    ? (quantityChartElement as HTMLCanvasElement).getContext('2d')
+    : null
+
+  if (quantityChartCtx) {
+    quantityChart = new Chart(quantityChartCtx, {
+      type: 'bar',
+      data: {
+        labels: quantityData.map((item: { name: string }) => item.name),
+        datasets: [
+          {
+            label: 'Menge',
+            data: quantityData.map((item: { value: number }) => item.value),
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Anzahl verkaufter Produkte',
+              padding: {
+                top: 10,
+                bottom: 10
               }
             }
-          })
+          }
         }
+      }
+    })
+  }
 
-        // Create the amount chart
-        const amountChartElement = document.getElementById('amount-chart')
+  // Create the amount chart
+  const amountChartElement = document.getElementById('amount-chart')
 
-        const amountChartCtx = amountChartElement
-          ? (amountChartElement as HTMLCanvasElement).getContext('2d')
-          : null
+  const amountChartCtx = amountChartElement
+    ? (amountChartElement as HTMLCanvasElement).getContext('2d')
+    : null
 
-        if (amountChartCtx) {
-          amountChart = new Chart(amountChartCtx, {
-            type: 'bar',
-            data: {
-              labels: amountData.map((item: { name: string }) => item.name),
-              datasets: [
-                {
-                  label: 'Geldbetrag',
-                  data: amountData.map((item: { value: number }) => item.value),
-                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                  borderColor: 'rgba(255, 99, 132, 1)',
-                  borderWidth: 1
-                }
-              ]
-            },
-            options: {
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  title: {
-                    display: true,
-                    text: 'Eingenommener Betrag in €',
-                    padding: {
-                      top: 10,
-                      bottom: 10
-                    }
-                  }
-                }
+  if (amountChartCtx) {
+    amountChart = new Chart(amountChartCtx, {
+      type: 'bar',
+      data: {
+        labels: amountData.map((item: { name: string }) => item.name),
+        datasets: [
+          {
+            label: 'Geldbetrag',
+            data: amountData.map((item: { value: number }) => item.value),
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Eingenommener Betrag in €',
+              padding: {
+                top: 10,
+                bottom: 10
               }
             }
-          })
+          }
         }
+      }
+    })
+  }
 }
+
 const fetchDataAndCreateCharts = () => {
   if (authenticated.value) {
     itemsStore.getItemsBackoffice().then(() => {
@@ -159,18 +166,18 @@ const fetchDataAndCreateCharts = () => {
         createCharts()
       })
     })
-
   } else {
     watch(authenticated, async () => {
-    itemsStore.getItemsBackoffice().then(() => {
-      store.getPayments(startDate.value, endDate.value).then(() => {
-        createCharts()
+      itemsStore.getItemsBackoffice().then(() => {
+        store.getPayments(startDate.value, endDate.value).then(() => {
+          createCharts()
+        })
       })
-    })
     })
   }
 }
- onMounted(() => {
+
+onMounted(() => {
   // Fetch statistics data
   if (authenticated.value) {
     itemsStore.getItemsBackoffice().then(() => {
