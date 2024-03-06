@@ -137,7 +137,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
     >
     <template v-if="updatedItem" #main>
       <div class="main">
-        <div v-if="item" class="w-full max-w-md mx-auto mt-4">
+        <div v-if="item" class="w-full mx-auto mt-4">
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ item.Name }} {{ $t('change') }}</h1>
             <button
