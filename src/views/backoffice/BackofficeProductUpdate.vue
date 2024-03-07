@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted, watch } from 'vue'
-import { useItemsStore } from '@/stores/items'
-import type { Item } from '@/stores/items'
-import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
+import type { Item } from '@/stores/items'
+import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 const itemsStore = useItemsStore()
 const keycloakStore = useKeycloakStore()
@@ -128,8 +128,8 @@ const previewImage = (image: string | Blob | MediaSource) => {
     <template #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">
         {{ $t('menuProducts') }} {{ $t('menuSettings') }}
-      </h1></template
-    >
+      </h1>
+    </template>
     <template v-if="updatedItem" #main>
       <div class="main">
         <div v-if="item" class="w-full max-w-md mx-auto mt-4">
@@ -143,7 +143,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
             </button>
           </div>
 
-          <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="updateItem">
+          <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
                 >{{ $t('name') }}:</label
@@ -346,6 +346,7 @@ tr {
 td {
   padding: 10px;
 }
+
 .productImage {
   width: 100% !important;
 }
