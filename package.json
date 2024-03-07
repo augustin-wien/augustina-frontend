@@ -27,8 +27,8 @@
     "@vueform/slider": "^2.1.7",
     "@vuepic/vue-datepicker": "^6.1.0",
     "axios": "^1.4.0",
+    "browserslist": "^4.23.0",
     "chart.js": "^4.4.1",
-    "caniuse-lite": "^1.0.30001576",
     "file-saver": "^2.0.5",
     "format": "^0.2.2",
     "jspdf": "^2.5.1",
@@ -70,5 +70,6 @@
     "vite": "^4.3.9",
     "vitest": "^0.32.2",
     "vue-tsc": "^1.8.3"
-  }
+  },
+  "packageManager": "yarn@4.1.1"
 }
