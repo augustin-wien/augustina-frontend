@@ -106,16 +106,16 @@ module.exports = {
   overrides: [
     {
       files: ['cypress/e2e/**/*.{cy,spec}.{js,ts,jsx,tsx}', '*.ts', '*.vue'],
-      parser: "vue-eslint-parser",
+      parser: 'vue-eslint-parser',
       parserOptions: {
-        parser: "@typescript-eslint/parser",
+        parser: '@typescript-eslint/parser'
       },
-      plugins: ["@typescript-eslint"],
+      plugins: ['@typescript-eslint'],
       extends: getExtends([
         // Recommended TypeScript rules for code correctness
-        "plugin:@typescript-eslint/recommended",
+        'plugin:@typescript-eslint/recommended',
         // Enables Vue plugin and recommended rules
-        "plugin:vue/vue3-recommended",
+        'plugin:vue/vue3-recommended',
         //  enable cypress rules
         'plugin:cypress/recommended'
       ]),
@@ -123,12 +123,11 @@ module.exports = {
         // Disables core rules which are already handled by TypeScript and
         // enables rules that make sense due to TS's typechecking / transpilation
         // (fetched directly to enable it for Vue files too)
-        ...require("@typescript-eslint/eslint-plugin").configs[
-          "eslint-recommended"
-        ].overrides[0].rules,
+        ...require('@typescript-eslint/eslint-plugin').configs['eslint-recommended'].overrides[0]
+          .rules,
         ...tsRules,
-        ...vueRules,
-      },
+        ...vueRules
+      }
     }
   ],
   parserOptions: {

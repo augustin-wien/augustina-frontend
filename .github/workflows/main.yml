@@ -3,9 +3,9 @@ name: Build
 on:
   push:
     branches:
-      - "**"
+      - '**'
     tags:
-      - "!**"
+      - '!**'
 jobs:
   build:
     name: Build frontend
@@ -25,7 +25,7 @@ jobs:
 
       - name: Lint application
         run: yarn lint
-      
+
       - name: Format application
         run: yarn format
 

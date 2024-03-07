@@ -12,8 +12,8 @@
     }
   ],
   "compilerOptions": {
-  "noImplicitAny": false,
-  "allowJs": true,
-  "strict": true,
+    "noImplicitAny": false,
+    "allowJs": true,
+    "strict": true
   }
 }

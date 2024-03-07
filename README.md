@@ -16,12 +16,12 @@ TypeScript cannot handle type information for `.vue` imports by default, so we r
 If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
 
 1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
+   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
+   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
 2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
 
-
 ## Project Setup
+
 Install [Node.js](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/) and run the following commands:
 
 ```sh
@@ -67,7 +67,9 @@ yarn test:e2e
 ```sh
 yarn lint
 ```
+
 to fix linting errors automagically run
+
 ```sh
 yarn lint:fix
 ```
@@ -77,11 +79,12 @@ yarn lint:fix
 ```sh
 yarn format
 ```
+
 to fix formatting errors automagically run
+
 ```sh
 yarn format:fix
 ```
-
 
 ### Disable CORS for local testing (Google Chrome / Windows)
 
@@ -91,25 +94,31 @@ cd c:\'Program Files'\Google\Chrome\Application
 ```
 
 ## Keycloak Setup
+
 please use the [Keycloak Setup provided by the backend](https://github.com/augustin-wien/augustin-backend/#keycloak)
 
 ## Vivawallet local testing
+
 vivawallet checkout will redirect the user to https://www.local.com/success?t={TRANSACTION_ID}&s=4101073583353389&lang=en-GB&eventId=0&eci=1
 To test the validation locally the programmer must manually change the url in the browser to http://localhost:5137/success?t={TRANSACTION_ID}&s=4101073583353389&lang=en-GB&eventId=0&eci=1
 
 ## Build and run in a docker container
 
 For building and running the frontend in a docker container, use the following commands:
+
 ```sh
 docker build . -t augustin/augustin-frontend
 
 docker run --rm -p  8060:80 -e VITE_API_URL=http://localhost:3000/ -e VITE_KEYCLOAK_URL=http://keycloak:8080/ augustin/augustin-frontend
 
 ```
+
 Note: the container will be removed after it is stopped. If you want to keep it, remove the `--rm` flag.
 
 ## Import vendors csv structure
+
 The delimiter is a `;` and the first line is the header. The header is not used for the import.
+
 ```
 PLZ;Station/Supermarkt;Adresse;Arbeitszeit;Nummer;Ausweis Nr.;Vorname;Nachname;Sprache
 1230;Billa Plus;Schönestr 6;G;;A-123;Augustin;Augustina;engl/deutsch
