@@ -148,5 +148,6 @@
   "licenseItem": "License item",
   "licenseGroup": "License group",
   "donation_only": "Donation only is not allowed",
-  "isPDFLicenseItem": "Is PDF license item"
+  "isPDFLicenseItem": "Is PDF license item",
+  "pdf item": "PDF item"
 }
