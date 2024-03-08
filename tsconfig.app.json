@@ -7,9 +7,6 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "types": [
-      "stripe-v3"
-    ]
+    }
   }
 }
