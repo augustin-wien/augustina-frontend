@@ -132,6 +132,9 @@
 
   "back": "Back",
   "yourProfile": "Your profile",
+  "error": "Error",
+  "errorText": "An error occurred. Please try again later.",
+  "errorTextInvalidLink": "The link to the pdf is invalid or expired. Please contact the office. ",
 
   "Logout": "Logout",
   "Save": "Save",
@@ -144,5 +147,6 @@
   "isLicenseItem": "Is digital license item",
   "licenseItem": "License item",
   "licenseGroup": "License group",
-  "donation_only": "Donation only is not allowed"
+  "donation_only": "Donation only is not allowed",
+  "isPDFLicenseItem": "Is PDF license item"
 }

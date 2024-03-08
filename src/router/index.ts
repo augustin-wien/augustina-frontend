@@ -287,6 +287,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/error-invalid-link',
+      name: 'Error invalid link',
+      component: () => import('@/views/ErrorPageInvalidLink.vue'),
+      meta: {
+        layout: Default
+      }
+    },
+    {
       path: '/dashboard',
       name: 'Dashboard',
       meta: {

@@ -129,6 +129,7 @@
   "information": "Bitte erkundige dich, ob dieses Produkt vorhanden ist!",
   "error": "Fehler",
   "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+  "errorTextInvalidLink": "Der Link zur PDF-Datei ist ungültig oder abgelaufen. Bitte kontaktiere das Büro.",
 
   "Items": "Deine Produkte",
 
@@ -148,5 +149,6 @@
   "isLicenseItem": "Ist digitaler Lizenzartikel",
   "licenseItem": "Lizenzartikel",
   "licenseGroup": "Lizenzgruppe",
-  "donation_only": "Nur Spende ist nicht möglich"
+  "donation_only": "Nur Spende ist nicht möglich",
+  "isPDFLicenseItem": "Ist PDF Lizenzartikel"
 }
