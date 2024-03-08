@@ -223,7 +223,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   updatedItem.IsLicenseItem ? $t('yes') : $t('no')
                 }}</span>
               </label>
-              <div v-if="updatedItem.IsLicenseItem">
+              <div v-if="!updatedItem.IsLicenseItem">
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
                   >{{ $t('licenseItem') }}:</label
                 >
