@@ -14,10 +14,6 @@ const pdfId = ref('')
 onMounted(() => {
   const tmpId = $route.params.id
 
-  if (!pdfId.value) {
-    router.push({ name: 'Error invalid link' })
-  }
-
   if (Array.isArray(tmpId)) {
     pdfId.value = tmpId[0]
   } else {
