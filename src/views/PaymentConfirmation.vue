@@ -55,6 +55,7 @@ const itemName = (id: number) => {
 
   return item?.Name
 }
+
 const downloadPDF = (link: string) => {
   PDFDownloadStore.downloadPDF(link)
   // TODO: Implement validation without triggering spam protection in the browser
@@ -118,11 +119,11 @@ const apiUrl = import.meta.env.VITE_API_URL
           </div>
           <div class="w-full row-span-1 mt-1">
             <button
+              v-for="downloadLink in downloadLinks"
+              :key="downloadLink.ItemID"
               class="bg-gray-500 rounded-full text-center p-5 customfont text-sm font font-semibold w-full"
               :style="'background-color:' + settStore.settings.Color"
               @click="downloadPDF(downloadLink.Link)"
-              v-for="downloadLink in downloadLinks"
-              v-bind:key="downloadLink.ItemID"
             >
               {{ $t('Download') + ' ' + itemName(downloadLink.ItemID) }}
             </button>

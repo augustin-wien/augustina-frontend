@@ -6,7 +6,7 @@ export interface PurchesedItem {
   Quantity: number
 }
 export interface PDFDownloadLinks {
-  ItemID: number,
+  ItemID: number
   Link: string
 }
 
