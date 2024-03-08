@@ -185,7 +185,6 @@ export async function fetchStatistics(startDate: Date, endDate: Date, filter: st
   )
 }
 
-
 // pdf download
 export async function validatePdfDownload(linkId: string) {
   return apiInstance.get(`${PDF_DOWNLOAD_API_URL}${linkId}/validate/`)
