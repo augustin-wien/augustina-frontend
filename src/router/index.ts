@@ -295,6 +295,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/pdf/:id',
+      name: 'pdf download link',
+      component: () => import('@/views/PDFDownload.vue'),
+      meta: {
+        layout: Default
+      }
+    },
+    {
       path: '/dashboard',
       name: 'Dashboard',
       meta: {
