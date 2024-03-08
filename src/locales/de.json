@@ -129,6 +129,7 @@
   "information": "Bitte erkundige dich, ob dieses Produkt vorhanden ist!",
   "error": "Fehler",
   "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+  "errorTextInvalidLink": "Der Link zur PDF-Datei ist ungültig oder abgelaufen. Bitte kontaktiere das Büro.",
 
   "Items": "Deine Produkte",
 
@@ -145,8 +146,10 @@
   "Please enter a valid email address.": "Bitte gib eine gültige E-Mail Adresse ein.",
   "Back": "Zurück",
 
-  "isLicenseItem": "Ist digitaler Lizenzartikel",
+  "isLicenseItem": "Ist das Produkt ein digitaler Lizenzartikel?",
   "licenseItem": "Lizenzartikel",
   "licenseGroup": "Lizenzgruppe",
-  "donation_only": "Nur Spende ist nicht möglich"
+  "donation_only": "Nur Spende ist nicht möglich",
+  "isPDFLicenseItem": "Ist das Produkt ein PDF Lizenzartikel?",
+  "pdf item": "PDF Datei"
 }

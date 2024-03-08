@@ -16,7 +16,8 @@ import {
   VENDORS_API_URL,
   VENDORS_LOCATION_URL,
   VENDOR_ME_API_URL,
-  PAYMENT_STATISTICS_API_URL
+  PAYMENT_STATISTICS_API_URL,
+  PDF_DOWNLOAD_API_URL
 } from './endpoints'
 
 export const apiInstance = axios.create({
@@ -182,4 +183,18 @@ export async function fetchStatistics(startDate: Date, endDate: Date, filter: st
       filter ? '&' + filter : ''
     }`
   )
+}
+
+// pdf download
+export async function validatePdfDownload(linkId: string) {
+  return apiInstance.get(`${PDF_DOWNLOAD_API_URL}${linkId}/validate/`)
+}
+export async function pdfDownload(linkId: string) {
+  // create a hidden link and click it
+  const link = document.createElement('a')
+  link.href = `${PDF_DOWNLOAD_API_URL}${linkId}/`
+  link.target = '_blank'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
