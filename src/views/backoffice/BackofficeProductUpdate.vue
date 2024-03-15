@@ -27,7 +27,9 @@ onMounted(() => {
 
 const items = computed(() => itemsStore.itemsBackoffice)
 
-const licenseItems = computed(() => itemsStore.itemsBackoffice.filter((item) => item.IsLicenseItem))
+const licenseItems = computed(() =>
+  itemsStore.itemsBackoffice.filter((item) => item.IsLicenseItem)
+)
 
 const item = computed(() => updatedItem.value)
 
@@ -162,7 +164,9 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description"
+              <label
+                class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                for="description"
                 >{{ $t('description') }}:</label
               >
               <div class="flex flex-row">
@@ -206,9 +210,11 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   @change="updateImage"
                 />
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image">{{
-                $t('isLicenseItem')
-              }}</label>
+              <label
+                class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                for="image"
+                >{{ $t('isLicenseItem') }}</label
+              >
               <label class="inline-flex items-center cursor-pointer mt-4">
                 <input
                   id="isLicenseItem"
@@ -236,10 +242,12 @@ const previewImage = (image: string | Blob | MediaSource) => {
                     {{ item.Name }}
                   </option>
                 </select>
-                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="pdf">{{
-                  $t('isPDFLicenseItem')
-                }}</label>
                 <label
+                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                  for="pdf"
+                  >{{ $t('isPDFLicenseItem') }}</label
+                >
+                <div
                   v-if="updatedItem.LicenseItem !== undefined"
                   class="inline-flex items-center cursor-pointer mt-4"
                 >
@@ -255,9 +263,13 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   <span class="ms-3 text-sm font-medium">{{
                     updatedItem.IsPDFItem ? $t('yes') : $t('no')
                   }}</span>
-                </label>
-                <div v-if="updatedItem.LicenseItem !== undefined && !updatedItem.IsPDFItem">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
+                </div>
+                <div
+                  v-if="updatedItem.LicenseItem !== undefined && !updatedItem.IsPDFItem"
+                >
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                    for="image"
                     >{{ $t('licenseGroup') }}:</label
                   >
                   <input
