@@ -239,7 +239,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="pdf">{{
                   $t('isPDFLicenseItem')
                 }}</label>
-                <label
+                <div
                   v-if="updatedItem.LicenseItem !== undefined"
                   class="inline-flex items-center cursor-pointer mt-4"
                 >
@@ -255,7 +255,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   <span class="ms-3 text-sm font-medium">{{
                     updatedItem.IsPDFItem ? $t('yes') : $t('no')
                   }}</span>
-                </label>
+                </div>
                 <div v-if="updatedItem.LicenseItem !== undefined && !updatedItem.IsPDFItem">
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
                     >{{ $t('licenseGroup') }}:</label
