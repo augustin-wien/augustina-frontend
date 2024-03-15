@@ -3,12 +3,14 @@ import { ref, computed, onMounted } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import { usePaymentStore } from '@/stores/payment'
 import { useItemsStore } from '@/stores/items'
+import { usePDFDownloadStore } from '@/stores/pdfDownload'
 import IconCheckmark from '@/components/icons/IconCheckmark.vue'
 import IconCross from '@/components/icons/IconCross.vue'
 
 const paymentStore = usePaymentStore()
 const settStore = useSettingsStore()
 const itemsStore = useItemsStore()
+const PDFDownloadStore = usePDFDownloadStore()
 
 const isConfirmed = ref(paymentStore.timeStamp == '')
 
@@ -21,6 +23,8 @@ function currentDate() {
 const price = computed(() =>
   paymentStore.verification?.TotalSum ? paymentStore.verification?.TotalSum / 100 : 0
 )
+
+const downloadLinks = computed(() => paymentStore.verification?.PDFDownloadLinks)
 
 const purchasedItems = computed(() => paymentStore.verification?.PurchasedItems)
 const time = ref('not')
@@ -50,6 +54,22 @@ const itemName = (id: number) => {
   const item = itemsStore.items?.find((item) => item.ID == id)
 
   return item?.Name
+}
+
+const downloadPDF = (link: string) => {
+  PDFDownloadStore.downloadPDF(link)
+  // TODO: Implement validation without triggering spam protection in the browser
+  // PDFDownloadStore.validatePDFDownload(link)
+  //   .then((res) => {
+  //     if (res) {
+  //       PDFDownloadStore.downloadPDF(link)
+  //     }
+  //   })
+  //   .catch((error) => {
+  //     console.log('PDF is invalid')
+  //     alert('PDF is invalid')
+  //     console.log(error)
+  //   })
 }
 
 UpdateTime()
@@ -96,6 +116,17 @@ const apiUrl = import.meta.env.VITE_API_URL
           </div>
           <div class="w-full row-span-2">
             <p class="text-center text-3xl font-semibold">{{ price }}€</p>
+          </div>
+          <div class="w-full row-span-1 mt-1">
+            <button
+              v-for="downloadLink in downloadLinks"
+              :key="downloadLink.ItemID"
+              class="bg-gray-500 rounded-full text-center p-5 customfont text-sm font font-semibold w-full"
+              :style="'background-color:' + settStore.settings.Color"
+              @click="downloadPDF(downloadLink.Link)"
+            >
+              {{ $t('Download') + ' ' + itemName(downloadLink.ItemID) }}
+            </button>
           </div>
         </div>
         <div v-else class="text-6xl row-span-4 font-bold w-fit h-full relative">
