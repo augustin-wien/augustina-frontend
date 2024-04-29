@@ -31,24 +31,38 @@ const purchasedItems = computed(() => paymentStore.verification?.PurchasedItems)
 // Define the computed property that checks the condition
 const hasSingleDigitaleZeitung = computed(() => {
   // Get the list of purchased items
-  const items = purchasedItems.value;
-
+  const items = purchasedItems.value
 
   // Check if the list length is exactly one
   if (items?.length === 1) {
     // Get the first item in the list
-    const item = items[0];
+    const item = items[0]
 
     // Get the name of the item using the itemName function
-    const itemNameValue = itemName(item.Item);
+    const itemNameValue = itemName(item.Item)
 
     // Check if the item name is "Digitale Zeitung"
-    return String(itemNameValue) === 'Digitale Zeitung';
+    return String(itemNameValue) === 'Digitale Zeitung'
   }
 
-  // Return false if the list length is not exactly one
-  return false;
-});
+  if (items?.length === 2) {
+    // Iterate over the list of purchased items
+    for (const item of items) {
+      // Get the name of the item using the itemName function
+      const itemNameValue = itemName(item.Item)
+
+      // Return false if the item name is neither "Digitale Zeitung" nor "Spende"
+      if (String(itemNameValue) !== 'Digitale Zeitung' && String(itemNameValue) !== 'Spende') {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  // Return false if the list length is not one or two
+  return false
+})
 
 const time = ref('not')
 
@@ -103,8 +117,10 @@ const apiUrl = import.meta.env.VITE_API_URL
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <div className="grid grid-rows-6 h-full place-items-center w-full">
-        <div v-if="!hasSingleDigitaleZeitung"
-          className="h-full w-full text-center grid grid-rows-2 font-semibold text-xl">
+        <div
+          v-if="!hasSingleDigitaleZeitung"
+          className="h-full w-full text-center grid grid-rows-2 font-semibold text-xl"
+        >
           <div>{{ $t('symbol') }}</div>
           <div>{{ paymentStore.firstName }}</div>
         </div>
@@ -113,21 +129,29 @@ const apiUrl = import.meta.env.VITE_API_URL
         </div>
         <div v-if="!isConfirmed" class="row-span-4 font-bold w-fit h-full relative">
           <div v-if="!hasSingleDigitaleZeitung" class="flex justify-center mb-4">
-            <div v-if="!isConfirmed"
+            <div
+              v-if="!isConfirmed"
               class="rounded-full text-6xl absolute h-12 w-12 fill-white right-0 top-0 place-items-center grid"
-              :class="{ 'bg-red-600': isConfirmed, 'bg-green-600': !isConfirmed }">
+              :class="{ 'bg-red-600': isConfirmed, 'bg-green-600': !isConfirmed }"
+            >
               <IconCheckmark v-if="!isConfirmed" />
             </div>
-            <img v-if="!isConfirmed" class="rounded-full h-44 w-44 object-cover customborder border-4" alt="Titelblatt"
-              :src="settStore.settings.MainItemImage
-          ? apiUrl + settStore.settings.MainItemImage
-          : '/Titelseite.jpg'
-          " />
+            <img
+              v-if="!isConfirmed"
+              class="rounded-full h-44 w-44 object-cover customborder border-4"
+              alt="Titelblatt"
+              :src="
+                settStore.settings.MainItemImage
+                  ? apiUrl + settStore.settings.MainItemImage
+                  : '/Titelseite.jpg'
+              "
+            />
           </div>
           <div class="grid grid-cols-2">
             <div v-for="item in purchasedItems" :key="item.ID" class="col-span-1">
               <div
-                class="col-span-1 text-s w-full h-[45px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3">
+                class="col-span-1 text-s w-full h-[45px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
+              >
                 {{ item.Item == 2 ? item.Quantity / 100 + ' €' : item.Quantity + 'x' }}
                 {{ item.Item == 2 ? $t('donation') : itemName(item.Item) }}
               </div>
@@ -137,24 +161,32 @@ const apiUrl = import.meta.env.VITE_API_URL
             <p class="text-center text-3xl font-semibold">{{ price }}€</p>
           </div>
           <div class="w-full row-span-1 mt-1">
-            <button v-for="downloadLink in downloadLinks" :key="downloadLink.ItemID"
+            <button
+              v-for="downloadLink in downloadLinks"
+              :key="downloadLink.ItemID"
               class="bg-gray-500 rounded-full text-center p-5 customfont text-sm font font-semibold w-full"
-              :style="'background-color:' + settStore.settings.Color" @click="downloadPDF(downloadLink.Link)">
+              :style="'background-color:' + settStore.settings.Color"
+              @click="downloadPDF(downloadLink.Link)"
+            >
               {{ $t('Download') + ' ' + itemName(downloadLink.ItemID) }}
             </button>
           </div>
         </div>
         <div v-else class="text-6xl row-span-4 font-bold w-fit h-full relative">
-          <div class="bg-red-600 rounded-full h-44 w-44 fill-white right-0 top-0 place-items-center grid">
+          <div
+            class="bg-red-600 rounded-full h-44 w-44 fill-white right-0 top-0 place-items-center grid"
+          >
             <IconCross />
           </div>
         </div>
         <div class="grid grid-rows-2 place-items-center">
           <div>
-            <span class="date text-l">{{ currentDate() }} </span><span class="time text-l"> {{ $t('at') }} {{ time
-              }}</span>
+            <span class="date text-l">{{ currentDate() }} </span
+            ><span class="time text-l"> {{ $t('at') }} {{ time }}</span>
           </div>
-          <span class="date text-l">{{ $t('bought') }} {{ formatTime(paymentStore.timeStamp) }}</span>
+          <span class="date text-l"
+            >{{ $t('bought') }} {{ formatTime(paymentStore.timeStamp) }}</span
+          >
         </div>
       </div>
     </template>
