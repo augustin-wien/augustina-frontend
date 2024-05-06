@@ -29,5 +29,4 @@ settStore.getSettingsFromApi()
   background-color: v-bind(settStore.settings.Color);
   color: v-bind(settStore.settings.FontColor);
 }
-
 </style>
