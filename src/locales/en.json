@@ -149,5 +149,7 @@
   "licenseGroup": "License group",
   "donation_only": "Donation only is not allowed",
   "isPDFLicenseItem": "Is PDF license item",
-  "pdf item": "PDF item"
+  "pdf item": "PDF item",
+
+  "maintenance": "This page is currently under maintenance. We are sorry for the inconveniences. Please try again within the next days."
 }

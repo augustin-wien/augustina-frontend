@@ -14,6 +14,7 @@ export interface Settings {
   MainItemPrice: number
   MaxOrderAmount: number
   OrgaCoversTransactionCosts: boolean
+  WebshopIsClosed: boolean
 }
 
 export const useSettingsStore = defineStore('settings', {
