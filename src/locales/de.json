@@ -13,7 +13,7 @@
   "agreement": "Mit Kauf akzeptiere ich die ",
   "terms": "AGBs",
 
-  "symbol": "Zeige bitte das Symbol ",
+  "symbol": "Zeige bitte das Symbol an ",
   "bought": "Gekauft am: ",
   "at": " um",
 
@@ -151,5 +151,7 @@
   "licenseGroup": "Lizenzgruppe",
   "donation_only": "Nur Spende ist nicht möglich",
   "isPDFLicenseItem": "Ist das Produkt ein PDF Lizenzartikel?",
-  "pdf item": "PDF Datei"
+  "pdf item": "PDF Datei",
+  "Download": "Download",
+  "have fun": "Viel Spaß beim Lesen!"
 }
