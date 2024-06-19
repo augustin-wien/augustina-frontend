@@ -131,6 +131,7 @@ export const vendorsStore = defineStore('vendors', {
         this.vendors = data.data
         //@ts-ignore
       } catch (error) {
+        /* eslint-disable no-console */
         console.error(error)
       }
     },
@@ -141,6 +142,7 @@ export const vendorsStore = defineStore('vendors', {
           this.getVendors()
         })
         .catch((error) => {
+          /* eslint-disable no-console */
           console.error('Error creating vendor:', error)
         })
     },
@@ -153,7 +155,6 @@ export const vendorsStore = defineStore('vendors', {
         const vendor = vendors[i]
 
         if (vendor !== null) {
-          console.log('vendor', vendor)
           if (
             vendor.LicenseID === '' ||
             vendor.LicenseID === null ||
@@ -164,7 +165,6 @@ export const vendorsStore = defineStore('vendors', {
 
           this.vendorsImportedCount = i + 1
           const vendorCheck = await checkVendorId(vendor.LicenseID)
-          console.log('vendorCheck', vendorCheck)
 
           if (vendorCheck === null) {
             await this.createVendorPromise(vendor)
@@ -202,6 +202,7 @@ export const vendorsStore = defineStore('vendors', {
           this.getVendors()
         })
         .catch((error) => {
+          /* eslint-disable no-console */
           console.error('Error deleting vendor:', error)
         })
     },
@@ -221,6 +222,7 @@ export const vendorsStore = defineStore('vendors', {
           this.vendor = response.data
         })
         .catch((error) => {
+          /* eslint-disable no-console */
           console.error(error)
         })
     }
