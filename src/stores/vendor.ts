@@ -153,6 +153,7 @@ export const vendorsStore = defineStore('vendors', {
         const vendor = vendors[i]
 
         if (vendor !== null) {
+          console.log('vendor', vendor)
           if (
             vendor.LicenseID === '' ||
             vendor.LicenseID === null ||
@@ -163,6 +164,7 @@ export const vendorsStore = defineStore('vendors', {
 
           this.vendorsImportedCount = i + 1
           const vendorCheck = await checkVendorId(vendor.LicenseID)
+          console.log('vendorCheck', vendorCheck)
 
           if (vendorCheck === null) {
             await this.createVendorPromise(vendor)

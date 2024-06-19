@@ -52,8 +52,8 @@ const formatCredit = (credit: number) => {
                 <tr>
                   <th className="p-3">{{ $t('LicenseId') }}:</th>
                   <td className="p-3">{{ vendor.LicenseID }}</td>
-                  <th className="p-3">{{ $t('accountDeactivation') }}:</th>
-                  <td className="p-3">{{ vendor.IsDisabled }}</td>
+                  <th className="p-3">{{ $t('accountDeactivated') }}:</th>
+                  <td className="p-3">{{ vendor.IsDisabled? $t('yes'):$t('no') }}</td>
                 </tr>
                 <tr>
                   <th className="p-3">{{ $t('lastPayout') }}:</th>
@@ -97,13 +97,13 @@ const formatCredit = (credit: number) => {
                   <th className="p-3">{{ $t('workingTime') }}:</th>
                   <td className="p-3">{{ vendor.WorkingTime }}</td>
                   <th className="p-3">Online Karte:</th>
-                  <td className="p-3">{{ vendor.OnlineMap }}</td>
+                  <td className="p-3">{{ vendor.OnlineMap?$t('yes'):$t('no') }}</td>
                 </tr>
                 <tr>
                   <th className="p-3">Smartphone:</th>
                   <td className="p-3">{{ vendor.HasSmartphone }}</td>
                   <th className="p-3">{{ $t('bankAccount') }}:</th>
-                  <td className="p-3">{{ vendor.HasBankAccount }}</td>
+                  <td className="p-3">{{ vendor.HasBankAccount?$t('yes'):$t('no')}}</td>
                 </tr>
               </tbody>
             </div>

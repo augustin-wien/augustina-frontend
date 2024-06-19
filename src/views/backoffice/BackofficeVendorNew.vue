@@ -106,14 +106,17 @@ const importCSV = async () => {
     const text = await file.text()
     const lines = text.split('\n')
 
-    const vendors: Array<Vendor> = lines.map((line: any, i: number) => {
+    let vendors: Array<Vendor> = lines.map((line: any, i: number) => {
       if (i === 0) return null
+      if (line == '') return null
 
       //@ts-ignore
       const [
         PLZ,
         Location,
         Address,
+        Longitude,
+        Latitude,
         WorkingTime,
         LicenseID,
         FirstName,
@@ -127,7 +130,9 @@ const importCSV = async () => {
         HasSmartphone,
         HasBankAccount
       ] = line.split(';')
-
+      console.log(HasBankAccount,  HasBankAccount === 'Ja' || HasBankAccount === 'ja' || HasBankAccount === 'yes'
+            ? true
+            : false, OnlineMap)
       const Email = `${LicenseID}@augustin.or.at`
       return {
         Email,
@@ -137,8 +142,8 @@ const importCSV = async () => {
         LastPayout: null,
         UrlID: '',
         IsDisabled: false,
-        Latitude: 0,
-        Longitude: 0,
+        Latitude: Latitude ? parseFloat(Latitude) : 0.0,
+        Longitude: Longitude ? parseFloat(Longitude) : 0.0,
         PLZ,
         Location,
         Language,
@@ -161,6 +166,9 @@ const importCSV = async () => {
     })
 
     try {
+      // filter null values
+      vendors = vendors.filter((v) => v)
+
       importing.value = true
       importingVendorsCount.value = vendors.length
       await store.createVendors(vendors)
@@ -190,124 +198,71 @@ const importCSV = async () => {
         <div v-if="!importing" class="w-full mx-auto mt-4">
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ $t('newGendered') }} {{ $t('vendorSingular') }}</h1>
-            <button
-              class="px-2 rounded-full bg-red-600 text-white font-bold"
-              @click="router.push('/backoffice/vendorsummary')"
-            >
+            <button class="px-2 rounded-full bg-red-600 text-white font-bold"
+              @click="router.push('/backoffice/vendorsummary')">
               X
             </button>
           </div>
           <Toast v-if="toast" :toast="toast" class="fixed top-20 right-5" />
-          <form
-            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-            @submit.prevent="submitVendor"
-          >
+          <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="submitVendor">
             <div class="mb-4 justify-between grid grid-cols-2 gap-5">
               <div class="row">
                 <span class="col">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
-                    >{{ $t('firstName') }}:</label
-                  >
-                  <input
-                    id="firstName"
-                    v-model="newVendor.FirstName"
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName">{{ $t('firstName')
+                    }}:</label>
+                  <input id="firstName" v-model="newVendor.FirstName"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    required
-                  />
+                    type="text" required />
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
-                    >{{ $t('lastName') }}:</label
-                  >
-                  <input
-                    id="lastName"
-                    v-model="newVendor.LastName"
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName">{{ $t('lastName')
+                    }}:</label>
+                  <input id="lastName" v-model="newVendor.LastName"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    required
-                  />
+                    type="text" required />
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
-                    >Email:</label
-                  >
-                  <input
-                    id="email"
-                    v-model="newVendor.Email"
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email">Email:</label>
+                  <input id="email" v-model="newVendor.Email"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="email"
-                    required
-                  />
+                    type="email" required />
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
-                    >{{ $t('licenseId') }}:</label
-                  >
-                  <input
-                    id="licenseID"
-                    v-model="newVendor.LicenseID"
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID">{{ $t('licenseId')
+                    }}:</label>
+                  <input id="licenseID" v-model="newVendor.LicenseID"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    required
-                  />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
-                    >{{ $t('language') }}:</label
-                  >
+                    type="text" required />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language">{{ $t('language')
+                    }}:</label>
 
-                  <input
-                    id="language"
-                    v-model="newVendor.Language"
+                  <input id="language" v-model="newVendor.Language"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
+                    type="text" />
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
-                    >{{ $t('telephone') }}:</label
-                  >
-                  <input
-                    id="telephone"
-                    v-model="newVendor.Telephone"
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone">{{ $t('telephone')
+                    }}:</label>
+                  <input id="telephone" v-model="newVendor.Telephone"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="address"
-                    >{{ $t('address') }}:</label
-                  >
-                  <input
-                    id="address"
-                    v-model="newVendor.Address"
+                    type="text" />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="address">{{ $t('address')
+                    }}:</label>
+                  <input id="address" v-model="newVendor.Address"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
-                    >{{ $t('postCode') }}:</label
-                  >
-                  <input
-                    id="plz"
-                    v-model="newVendor.PLZ"
+                    type="text" />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz">{{ $t('postCode') }}:</label>
+                  <input id="plz" v-model="newVendor.PLZ"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >{{ $t('location') }}:</label
-                  >
-                  <input
-                    id="location"
-                    v-model="newVendor.Location"
+                    type="text" />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location">{{ $t('location')
+                    }}:</label>
+                  <input id="location" v-model="newVendor.Location"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                    for="accountDisabled"
-                    >{{ $t('accountDeactivation') }}:</label
-                  >
+                    type="text" />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="accountDisabled">{{
+                    $t('accountDeactivation') }}:</label>
                   <div class="flex flex-row">
                     <span class="p-2">
-                      <select
-                        id="accountDisabled"
-                        v-model="newVendor.IsDisabled"
+                      <select id="accountDisabled" v-model="newVendor.IsDisabled"
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                      >
+                        required>
                         <option value="true">{{ $t('yes') }}</option>
                         <option value="false">{{ $t('no') }}</option>
                       </select>
@@ -317,115 +272,74 @@ const importCSV = async () => {
               </div>
               <div class="row">
                 <span class="col">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="longitude"
-                    >{{ $t('longitude') }}:</label
-                  >
-                  <input
-                    id="longitude"
-                    v-model="newVendor.Longitude"
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="longitude">{{ $t('longitude')
+                    }}:</label>
+                  <input id="longitude" v-model="newVendor.Longitude"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="latitude"
-                    >{{ $t('latitude') }}:</label
-                  >
-                  <input
-                    id="latitude"
-                    v-model="newVendor.Latitude"
+                    type="text" />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="latitude">{{ $t('latitude')
+                    }}:</label>
+                  <input id="latitude" v-model="newVendor.Latitude"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                    >{{ $t('workingTime') }}:</label
-                  >
-                  <input
-                    id="workingTime"
-                    v-model="newVendor.WorkingTime"
+                    type="text" />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime">{{ $t('workingTime')
+                    }}:</label>
+                  <input id="workingTime" v-model="newVendor.WorkingTime"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                    for="registrationDate"
-                    >{{ $t('registrationDate') }}:</label
-                  >
-                  <input
-                    id="registrationDate"
-                    v-model="newVendor.RegistrationDate"
+                    type="text" />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="registrationDate">{{
+                    $t('registrationDate') }}:</label>
+                  <input id="registrationDate" v-model="newVendor.RegistrationDate"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="date"
-                  />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
-                    >{{ $t('vendorSince') }}:</label
-                  >
-                  <input
-                    id="vendorSince"
-                    v-model="newVendor.VendorSince"
+                    type="date" />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince">{{ $t('vendorSince')
+                    }}:</label>
+                  <input id="vendorSince" v-model="newVendor.VendorSince"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="date"
-                  />
+                    type="date" />
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                    >{{ $t('onlineMap') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap">{{ $t('onlineMap')
+                    }}:</label>
                   <div class="flex flex-row">
                     <span class="p-2">
-                      <select
-                        id="onlineMap"
-                        v-model="newVendor.OnlineMap"
+                      <select id="onlineMap" v-model="newVendor.OnlineMap"
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                      >
+                        required>
                         <option value="true">{{ $t('yes') }}</option>
                         <option value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
 
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                    for="hasBankAccount"
-                    >{{ $t('bankAccount') }}</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasBankAccount">{{
+                    $t('bankAccount') }}</label>
                   <div class="flex flex-row">
                     <span class="p-2">
-                      <select
-                        id="hasBankAccount"
-                        v-model="newVendor.HasBankAccount"
+                      <select id="hasBankAccount" v-model="newVendor.HasBankAccount"
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                      >
+                        required>
                         <option value="true">{{ $t('yes') }}</option>
                         <option value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
-                    >Smartphone:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone">Smartphone:</label>
 
                   <div class="flex flex-row">
                     <span class="p-2">
-                      <select
-                        id="hasBankAccount"
-                        v-model="newVendor.HasBankAccount"
+                      <select id="hasBankAccount" v-model="newVendor.HasBankAccount"
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                      >
+                        required>
                         <option value="true">{{ $t('yes') }}</option>
                         <option value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
-                    >{{ $t('comment') }}:</label
-                  >
-                  <textarea
-                    id="comment"
-                    v-model="newVendor.Comment"
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment">{{ $t('comment')
+                    }}:</label>
+                  <textarea id="comment" v-model="newVendor.Comment"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  ></textarea>
+                    type="text"></textarea>
                 </span>
               </div>
             </div>
@@ -444,10 +358,8 @@ const importCSV = async () => {
         </div>
       </div>
       <footer>
-        <button
-          className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-20 w-20"
-          @click="importCSV"
-        >
+        <button className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-20 w-20"
+          @click="importCSV">
           CSV import
         </button>
       </footer>
