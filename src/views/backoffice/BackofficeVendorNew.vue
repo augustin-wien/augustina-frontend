@@ -8,7 +8,7 @@ import { ref } from 'vue'
 const store = vendorsStore()
 
 const newVendor = ref<Vendor>({
-  Email: '@augustin.or.at',
+  Email: import.meta.env.VITE_VENDOR_EMAIL_POSTFIX,
   FirstName: '',
   ID: 0,
   KeycloakID: '',
@@ -42,7 +42,7 @@ const importingVendorsCount = ref(0)
 const submitVendor = async () => {
   if (!newVendor.value) return
 
-  if (!newVendor.value.Email || newVendor.value.Email === '@augustin.or.at') {
+  if (!newVendor.value.Email || newVendor.value.Email === '@'+import.meta.env.VITE_VENDOR_EMAIL_POSTFIX) {
     showToast('error', 'Email muss angegeben werden')
     return
   }
@@ -128,7 +128,7 @@ const importCSV = async () => {
         HasBankAccount
       ] = line.split(';')
 
-      const Email = `${LicenseID}@augustin.or.at`
+      const Email = `${LicenseID}@${import.meta.env.VITE_VENDOR_EMAIL_POSTFIX}`
       return {
         Email,
         LicenseID,
