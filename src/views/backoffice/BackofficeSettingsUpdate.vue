@@ -46,7 +46,8 @@ const updatedSettings = ref<Settings>({
   MainItemName: '',
   MainItemPrice: 0,
   MainItemImage: '',
-  MaxOrderAmount: 0
+  MaxOrderAmount: 0,
+  WebshopIsClosed: false
 })
 
 const updateSettings = async () => {
