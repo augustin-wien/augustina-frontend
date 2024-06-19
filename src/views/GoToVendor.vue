@@ -3,6 +3,7 @@ import { useSettingsStore } from '@/stores/settings'
 
 const settStore = useSettingsStore()
 settStore.getSettingsFromApi()
+const helpUrl = import.meta.env.VITE_VENDOR_NOT_FOUND_HELP_URL
 </script>
 
 <template>
@@ -22,7 +23,7 @@ settStore.getSettingsFromApi()
         <div class="text-center mb-5">
           {{ $t('gotovendor') }}
         </div>
-        <a class="w-full" href="https://www.augustin.or.at">
+        <a class="w-full" :href="helpUrl">
           <button
             class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold"
           >

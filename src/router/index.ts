@@ -4,10 +4,7 @@ import Default from '@/layouts/DefaultLayout.vue'
 import VendorLayoutVue from '@/layouts/VendorLayout.vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
-import { useSettingsStore } from '@/stores/settings'
 
-const settStore = useSettingsStore()
-settStore.getSettingsFromApi()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -355,21 +352,16 @@ const router = createRouter({
       component: () => import('@/views/GoToVendor.vue'),
       meta: {
         layout: Default
-      }
+      },
     },
-    // Add conditional route if variable webshop is set to true coming from the settingsStore
-    ...(settStore.settings.WebshopIsClosed
-      ? [
-          {
-            path: 'maintenance',
-            name: 'Maintenance',
-            component: () => import('@/views/MaintenanceWork.vue'),
-            meta: {
-              layout: Default
-            }
-          }
-        ]
-      : [])
+    {
+      path: '/maintenance',
+      name: 'Maintenance',
+      component: () => import('@/views/MaintenanceWork.vue'),
+      meta: {
+        layout: Default
+      }
+    }
   ]
 })
 

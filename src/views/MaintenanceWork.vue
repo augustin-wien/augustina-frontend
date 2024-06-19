@@ -3,6 +3,7 @@ import { useSettingsStore } from '@/stores/settings'
 
 const settStore = useSettingsStore()
 settStore.getSettingsFromApi()
+const maintenanceUrl = import.meta.env.VITE_MAINTENANCE_HELP_URL
 </script>
 
 <template>
@@ -12,7 +13,7 @@ settStore.getSettingsFromApi()
         <div class="text-center mb-5">
           {{ $t('maintenance') }}
         </div>
-        <a class="w-full" href="https://www.augustin.or.at">
+        <a class="w-full" :href="maintenanceUrl">
           <button
             class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold"
           >

@@ -78,7 +78,7 @@ const generateQRCode = async (vendorMe: Vendor) => {
     width: 100,
     height: 100,
     type: 'svg',
-    data: `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}`,
+    data: `${import.meta.env.VITE_FRONTEND_URL}/v/${vendorMe?.LicenseID}`,
 
     dotsOptions: {
       color: '#000',
