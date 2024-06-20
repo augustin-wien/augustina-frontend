@@ -69,9 +69,9 @@ const exportTable = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center">
+      <div class="flex space-between justify-between content-center items-center pt-3">
+        <h1 className="font-bold text-2xl">{{ $t('openCredits') }}</h1>
         <div>
-          <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('openCredits') }}</h1>
           <span>
             <input
               id="searchInput"
@@ -96,9 +96,9 @@ const exportTable = () => {
 
     <template #main>
       <div v-if="vendors" class="main">
-        <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
-            <div className="table-auto border-spacing-4 border-collapse">
+        <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-xl space-y-3 space-x-3 page-content space-x-2">
+            <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
                   <th className="p-3">{{ $t('IDNumber') }}</th>
@@ -124,7 +124,7 @@ const exportTable = () => {
                   </router-link>
                 </tr>
               </tbody>
-            </div>
+            </table>
           </div>
         </div>
       </div>

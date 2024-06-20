@@ -35,16 +35,12 @@ const url = import.meta.env.VITE_API_URL
       <div class="main">
         <div class="w-full max-w-l mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="container page-content space-x-2 mt-5">
-            <div className="text-center text-2xl space-y-3 space-x-3">
+            <div className="text-xl space-y-3 space-x-3">
               <div
                 v-if="settings.ID"
                 className="table-auto border-spacing-4 border-collapse text-left"
               >
                 <tbody className="text-sm">
-                  <tr>
-                    <th className="text-2xl">{{ $t('topic') }}</th>
-                    <th className="text-2xl">{{ $t('current') }}</th>
-                  </tr>
                   <tr>
                     <th className="p-3">Logo:</th>
                     <td className="p-3">

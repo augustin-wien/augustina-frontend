@@ -7,6 +7,7 @@ import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { storeToRefs } from 'pinia'
+import { transformToFloat } from '@/utils/utils'
 
 const store = vendorsStore()
 const keycloakStore = useKeycloakStore()
@@ -32,8 +33,18 @@ watch(vendor, (newVal) => {
 const toast = ref<{ type: string; message: string } | null>(null)
 
 const updateVendor = async () => {
+  const newVendor = updatedVendor.value
+
+  if (!newVendor) {
+    return
+  }
+
+  // fix for int bug
+  newVendor.Longitude = transformToFloat(newVendor.Longitude)
+  newVendor.Latitude = transformToFloat(newVendor.Latitude)
+
   try {
-    const response = await store.updateVendor(updatedVendor.value as Vendor)
+    const response = await store.updateVendor(newVendor as Vendor)
 
     if (response) {
       console.error('Error creating vendor:', response)
@@ -63,8 +74,8 @@ const showToast = (type: string, message: string) => {
     <template #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">
         {{ $t('vendorSingular') }} {{ $t('change') }}
-      </h1></template
-    >
+      </h1>
+    </template>
     <template v-if="updatedVendor" #main>
       <div class="main">
         <div v-if="vendor" class="w-full max-w-md mx-auto mt-4">
@@ -148,7 +159,7 @@ const showToast = (type: string, message: string) => {
                   </select>
                 </div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
-                  >{{ $t('address') }}:</label
+                  >{{ $t('address') }}<span class="text-red">*</span>:</label
                 >
                 <div class="flex flex-row">
                   <input
@@ -328,6 +339,13 @@ const showToast = (type: string, message: string) => {
               </span>
             </div>
           </div>
+          <button
+            type="submit"
+            class="p-3 rounded-full bg-lime-600 text-white"
+            @click="updateVendor"
+          >
+            {{ $t('save') }}
+          </button>
         </form>
         <Toast v-if="toast" :toast="toast" />
       </div>
@@ -339,6 +357,7 @@ const showToast = (type: string, message: string) => {
 tr {
   padding: 10px;
 }
+
 td {
   padding: 10px;
 }
