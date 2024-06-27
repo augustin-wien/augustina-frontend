@@ -961,7 +961,7 @@
   resolved "https://registry.yarnpkg.com/@vue/tsconfig/-/tsconfig-0.5.1.tgz#3124ec16cc0c7e04165b88dc091e6b97782fffa9"
   integrity sha512-VcZK7MvpjuTPx2w6blwnwZAu5/LgBUtejFOi3pPGQFXQN5Ela03FUtd2Qtg4yWGGissVL0dr6Ro1LfOFh+PCuQ==
 
-"@vuepic/vue-datepicker@^8.4.0":
+"@vuepic/vue-datepicker@^8.8.0":
   version "8.8.0"
   resolved "https://registry.yarnpkg.com/@vuepic/vue-datepicker/-/vue-datepicker-8.8.0.tgz#aa1a555e32d02399bd7e471ea84610030a7182f7"
   integrity sha512-I9c0EBF+zsCXEGRM/2D8M8N3Jafr0/KftxdLqbbn2DZ1RfVDefUrWZaGDrp8XwWfowEw7963ES59NPKC+nkgdA==

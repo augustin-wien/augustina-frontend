@@ -244,6 +244,7 @@ onMounted(() => {
   width: 100%;
   z-index: 50;
   max-width: calc(100vw - 300px);
+  min-height: 80px;
 }
 .main-slot {
   text-align: left;
@@ -262,6 +263,9 @@ footer {
   text-align: left;
   margin-top: 50px;
   padding-top: 50px;
+}
+.logo.mx-auto.my-5 {
+  min-height: 70px;
 }
 </style>
 
