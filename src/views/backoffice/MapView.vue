@@ -5,7 +5,7 @@ globalThis.L = L
 import 'leaflet/dist/leaflet.css'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
-import type { PointExpression } from "leaflet";
+import type { PointExpression } from 'leaflet'
 import 'vue-leaflet-markercluster/dist/style.css'
 import { useMapStore } from '@/stores/map'
 import { onMounted, computed, watch, ref } from 'vue'
@@ -19,7 +19,7 @@ const vendors = computed(() => mapStore.vendors)
 
 //Map configuration
 const zoom = ref(12)
-const center: PointExpression = [48.2083, 16.3731];
+const center: PointExpression = [48.2083, 16.3731]
 
 onMounted(() => {
   if (authenticated.value) {
