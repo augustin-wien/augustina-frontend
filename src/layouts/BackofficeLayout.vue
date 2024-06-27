@@ -240,18 +240,20 @@ onMounted(() => {
   padding-bottom: 20px;
   padding-left: 50px;
   border-radius: 5px;
-  background: #f2f9f1;
+  background: #fff;
   width: 100%;
   z-index: 50;
   max-width: calc(100vw - 300px);
+  min-height: 80px;
 }
-
 .main-slot {
   text-align: left;
   border-radius: 5px;
   margin-top: 70px;
   width: 100%;
   padding: 50px;
+  background-color: #f2f2f2;
+  display: inline-table;
 }
 
 footer {
@@ -261,6 +263,9 @@ footer {
   text-align: left;
   margin-top: 50px;
   padding-top: 50px;
+}
+.logo.mx-auto.my-5 {
+  min-height: 70px;
 }
 </style>
 

@@ -24,3 +24,11 @@ export function exportAsCsv(data: any[], fileName: string) {
   anchor.click()
   document.body.removeChild(anchor)
 }
+
+export function transformToFloat(num: number) {
+  if (Number.isInteger(num)) {
+    return parseFloat(num.toString())
+  } else {
+    return num
+  }
+}

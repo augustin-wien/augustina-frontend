@@ -5,6 +5,8 @@ import { useRoute } from 'vue-router'
 import { useKeycloakStore } from '@/stores/keycloak'
 import router from '@/router'
 import { storeToRefs } from 'pinia'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const keycloakStore = useKeycloakStore()
 
@@ -26,14 +28,19 @@ const formatCredit = (credit: number) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('vendorSingular') }} Profil</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">
+        <button @click="router.push('/backoffice/vendorsummary')">
+          <font-awesome-icon :icon="faArrowLeft" />
+        </button>
+        {{ $t('vendorSingular') }} Profil {{ vendor.LicenseID }}
+      </h1>
     </template>
     <template #main>
       <div v-if="vendor" class="main">
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
-              <h1 class="text-2xl font-bold">{{ vendor.LicenseID }}</h1>
+              <span />
               <button
                 class="px-2 rounded-full bg-red-600 text-white font-bold"
                 @click="router.push('/backoffice/vendorsummary')"
