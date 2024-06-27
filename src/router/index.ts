@@ -365,7 +365,7 @@ const router = createRouter({
 })
 
 // Check if the user is authenticated
-router.beforeEach(async (to: any, from: any) => {
+router.beforeEach(async (to: any, _from: any) => {
   if (
     to.meta.requiresAuth &&
     !isAuthenticated() &&
@@ -389,6 +389,7 @@ async function isAuthenticated() {
     try {
       await initKeycloak()
     } catch (error) {
+      /* eslint-disable no-console */
       console.log('init keycloak failed', error)
     }
 

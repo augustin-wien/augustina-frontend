@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { usePaymentStore } from '@/stores/payment'
 import { useSettingsStore } from '@/stores/settings'
-import { computed, onMounted, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useVendorStore } from '@/stores/vendor'
 import { useShopStore } from '@/stores/ShopStore'
@@ -31,6 +31,7 @@ onMounted(() => {
       })
       .catch(() => {
         router.push({ name: 'Error' })
+        /* eslint-disable no-console */
         console.log('error')
       })
   })

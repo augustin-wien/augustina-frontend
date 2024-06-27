@@ -18,7 +18,7 @@ onMounted(() => {
     itemsStore.getItems()
     itemsStore.getItemsBackoffice()
   } else {
-    watch(authenticated, (val: boolean) => {
+    watch(authenticated, () => {
       itemsStore.getItems()
       itemsStore.getItemsBackoffice()
     })
@@ -35,6 +35,7 @@ const route = useRoute()
 const idParams = computed(() => Number(route.params.ID))
 
 function getItem() {
+  /* eslint-disable no-console */
   console.log('idParams', idParams.value, items.value)
 
   if (!isNaN(idParams.value)) {
@@ -75,6 +76,7 @@ const updateItem = async () => {
         showToast('error', 'Produkt konnte nicht aktualisiert werden' + err)
       })
   } catch (error) {
+    /* eslint-disable no-console */
     console.error('Error creating item:', error)
     showToast('error', 'Produkt konnte nicht angelegt werden')
   }
@@ -95,6 +97,7 @@ const deleteItem = async () => {
       router.push({ name: 'Backoffice Product Settings' })
     }
   } catch (error) {
+    /* eslint-disable no-console */
     console.error('Error deleting item:', error)
     showToast('error', 'Produkt konnte nicht gelöscht werden')
   }
