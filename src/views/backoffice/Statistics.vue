@@ -40,14 +40,6 @@ const onRangeEnd = (value: Date) => {
   })
 }
 
-const formatTime = (time: string) => {
-  const date = new Date(time)
-  return date.toLocaleDateString('de-DE', {
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
-
 const authenticated = computed(() => keycloakStore.authenticated)
 
 let quantityChart: Chart
@@ -64,7 +56,6 @@ const createCharts = () => {
 
   const statisticsData = store.statisticsList
   const itemsArray = statisticsData.Items || []
-  console.log('itemsArray', itemsArray)
 
   let quantityData = itemsArray.map((item: Statistics) => ({
     id: item.ID,

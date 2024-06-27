@@ -70,7 +70,6 @@ export const usePaymentStore = defineStore('payment', {
       this.pricePerPaper = price
     },
     toAGB() {
-      console.log(import.meta.env.VITE_AGB_URL)
       window.open(import.meta.env.VITE_AGB_URL, '_blank')
     },
     resetVerification() {
@@ -100,6 +99,7 @@ export const usePaymentStore = defineStore('payment', {
       }
 
       if (this.transactionID === '') {
+        /* eslint-disable no-console */
         console.log('id undefined')
       } else {
         try {

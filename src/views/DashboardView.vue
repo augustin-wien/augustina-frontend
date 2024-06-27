@@ -12,7 +12,6 @@ const message = ref('Press the button to call the backend')
 function get() {
   getAuthHello().then((response: any) => {
     message.value = response.data
-    console.log(response)
   })
 }
 </script>

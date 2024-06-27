@@ -39,6 +39,7 @@ export const usePaymentsStore = defineStore('payments', {
         this.payments = data.data
         //@ts-ignore
       } catch (error) {
+        /* eslint-disable no-console */
         console.log(error)
       }
     },
@@ -49,6 +50,7 @@ export const usePaymentsStore = defineStore('payments', {
         this.payments = data.data
         //@ts-ignore
       } catch (error) {
+        /* eslint-disable no-console */
         console.log(error)
       }
     },
@@ -59,6 +61,7 @@ export const usePaymentsStore = defineStore('payments', {
         this.payments = data.data
         //@ts-ignore
       } catch (error) {
+        /* eslint-disable no-console */
         console.log(error)
       }
     }
