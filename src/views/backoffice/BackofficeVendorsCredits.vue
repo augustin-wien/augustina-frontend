@@ -18,9 +18,7 @@ onMounted(() => {
         store.getVendors()
       }
     }
-
   }
-
 })
 
 function formatDate(date: string) {
@@ -77,15 +75,22 @@ const exportTable = () => {
         <div>
           <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('openCredits') }}</h1>
           <span>
-            <input id="searchInput" v-model="searchQuery" type="text" :placeholder="$t('IDNumber')"
-              class="border-2 border-gray-400 rounded-md p-2 ml-2" />
+            <input
+              id="searchInput"
+              v-model="searchQuery"
+              type="text"
+              :placeholder="$t('IDNumber')"
+              class="border-2 border-gray-400 rounded-md p-2 ml-2"
+            />
             <button class="p-3 rounded-full bg-lime-600 text-white ml-2">
               {{ $t('search') }}
             </button>
           </span>
         </div>
-        <button class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
-          @click="exportTable">
+        <button
+          class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
+          @click="exportTable"
+        >
           {{ $t('export') }}
         </button>
       </div>
@@ -112,7 +117,10 @@ const exportTable = () => {
                   <td className="border-t-2 p-3">{{ formatCredit(vendor.Balance) }} €</td>
                   <td className="border-t-2 p-3">{{ formatDate(vendor.LastPayout) }}</td>
                   <router-link v-if="vendor?.ID" :to="`/backoffice/credits/payout/${vendor.ID}`">
-                    <button className="p-3 rounded-full bg-lime-600 text-white" :disabled="vendor.Balance === 0">
+                    <button
+                      className="p-3 rounded-full bg-lime-600 text-white"
+                      :disabled="vendor.Balance === 0"
+                    >
                       {{ $t('payNow') }}
                     </button>
                   </router-link>

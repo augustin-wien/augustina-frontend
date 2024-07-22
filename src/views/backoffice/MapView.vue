@@ -15,7 +15,7 @@ const vendors = computed(() => mapStore.vendors)
 
 //Map configuration
 const zoom = ref(12)
-const center:Ref<PointExpression> = ref([48.2083, 16.3731])
+const center: Ref<PointExpression> = ref([48.2083, 16.3731])
 
 onMounted(() => {
   if (authenticated.value) {
