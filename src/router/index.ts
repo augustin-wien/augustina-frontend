@@ -394,15 +394,15 @@ async function isAuthenticated() {
     }
 
     const keycloakStore = useKeycloakStore()
-    keycloakStore.setAuthenticated(keycloak.keycloak.authenticated)
+    keycloakStore.setAuthenticated(keycloak.keycloak?.authenticated)
 
-    if (keycloak.keycloak.tokenParsed) {
+    if (keycloak.keycloak?.tokenParsed) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
 
-    return keycloak.keycloak.authenticated
+    return keycloak.keycloak?.authenticated
   } else {
-    return keycloak.keycloak.authenticated
+    return keycloak.keycloak?.authenticated
   }
 }
 

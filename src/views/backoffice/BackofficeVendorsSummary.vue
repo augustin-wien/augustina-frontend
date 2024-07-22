@@ -13,14 +13,19 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // Initialize the vendor store
 const store = vendorsStore()
 
-keycloak.keycloak.onAuthSuccess = () => {
-  store.getVendors()
-}
+
 
 // Fetch the vendors' data when the component is mounted
 onMounted(() => {
-  if (keycloak.keycloak.authenticated) {
-    store.getVendors()
+  if (keycloak.keycloak) {
+    if (keycloak.keycloak.authenticated) {
+      store.getVendors()
+    }
+    else {
+      keycloak.keycloak.onAuthSuccess = () => {
+        store.getVendors()
+      }
+    }
   }
 })
 
@@ -121,23 +126,15 @@ const exportTable = () => {
         <div>
           <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuVendors') }}</h1>
           <span>
-            <input
-              id="searchInput"
-              v-model="searchQuery"
-              type="text"
-              :placeholder="$t('IDNumber')"
-              class="border-2 border-gray-400 rounded-md p-2 ml-2"
-              @keyup.enter="search"
-            />
+            <input id="searchInput" v-model="searchQuery" type="text" :placeholder="$t('IDNumber')"
+              class="border-2 border-gray-400 rounded-md p-2 ml-2" @keyup.enter="search" />
             <button class="p-3 rounded-full bg-lime-600 ml-2 text-white" @click="search">
               {{ $t('search') }}
             </button>
           </span>
         </div>
-        <button
-          class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
-          @click="exportTable"
-        >
+        <button class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
+          @click="exportTable">
           {{ $t('export') }}
         </button>
       </div>
@@ -162,7 +159,7 @@ const exportTable = () => {
                   <td className="p-3">
                     <router-link :to="`/backoffice/userprofile/${vendor.ID}`">{{
                       vendor?.LicenseID
-                    }}</router-link>
+                      }}</router-link>
                   </td>
                   <td className="p-3">{{ vendor.FirstName }}</td>
                   <td className="p-3">{{ vendor.LastName }}</td>
@@ -175,25 +172,16 @@ const exportTable = () => {
                         <font-awesome-icon :icon="faArrowAltCircleRight" />
                       </button>
                     </router-link>
-                    <router-link
-                      v-if="vendor.Balance !== 0"
-                      :to="`/backoffice/credits/payout/${vendor.ID}`"
-                    >
+                    <router-link v-if="vendor.Balance !== 0" :to="`/backoffice/credits/payout/${vendor.ID}`">
                       <button className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10">
                         <font-awesome-icon :icon="faCreditCard" />
                       </button>
                     </router-link>
-                    <button
-                      v-else
-                      disabled
-                      className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10"
-                    >
+                    <button v-else disabled className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10">
                       <font-awesome-icon :icon="faCreditCard" />
                     </button>
-                    <button
-                      className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2"
-                      @click="generateQRCode(vendor)"
-                    >
+                    <button className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2"
+                      @click="generateQRCode(vendor)">
                       <font-awesome-icon :icon="faQrcode" />
                     </button>
                   </td>
@@ -206,9 +194,7 @@ const exportTable = () => {
 
       <footer>
         <router-link to="/backoffice/newvendor">
-          <button
-            className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-16 w-16"
-          >
+          <button className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-16 w-16">
             {{ $t('new') }}
           </button>
         </router-link>
@@ -225,6 +211,7 @@ tr {
 td {
   padding: 10px;
 }
+
 button:disabled,
 button[disabled] {
   border: 1px solid #999999;

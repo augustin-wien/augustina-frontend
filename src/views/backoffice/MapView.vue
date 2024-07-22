@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import 'leaflet/dist/leaflet.css'
+import type { PointExpression } from 'leaflet'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { useMapStore } from '@/stores/map'
 import { onMounted, computed, watch, ref } from 'vue'
+import type { Ref } from 'vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 
 const keycloakStore = useKeycloakStore()
@@ -13,7 +15,7 @@ const vendors = computed(() => mapStore.vendors)
 
 //Map configuration
 const zoom = ref(12)
-const center = ref([48.2083, 16.3731])
+const center:Ref<PointExpression> = ref([48.2083, 16.3731])
 
 onMounted(() => {
   if (authenticated.value) {
