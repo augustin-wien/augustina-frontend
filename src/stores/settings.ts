@@ -14,6 +14,7 @@ export interface Settings {
   MainItemPrice: number
   MaxOrderAmount: number
   OrgaCoversTransactionCosts: boolean
+  WebshopIsClosed: boolean
 }
 
 export const useSettingsStore = defineStore('settings', {
@@ -38,6 +39,7 @@ export const useSettingsStore = defineStore('settings', {
           this.imgUrl = import.meta.env.VITE_API_URL + this.settings.Logo
         })
         .catch((error) => {
+          /* eslint-disable no-console */
           console.log('failed to get the settings', error)
         })
     },
@@ -47,6 +49,7 @@ export const useSettingsStore = defineStore('settings', {
         await patchSettings(updatedSettings)
         await this.getSettingsFromApi()
       } catch (error) {
+        /* eslint-disable no-console */
         console.log('Error updating settings:', error)
       }
     }

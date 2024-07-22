@@ -36,6 +36,7 @@ const updateVendor = async () => {
     const response = await store.updateVendor(updatedVendor.value as Vendor)
 
     if (response) {
+      /* eslint-disable no-console */
       console.error('Error creating vendor:', response)
       showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
     } else {
@@ -44,18 +45,6 @@ const updateVendor = async () => {
   } catch (error) {
     console.error('Error updating vendor:', error)
     showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
-  }
-}
-
-const deleteVendor = async () => {
-  try {
-    if (vendor.value) {
-      await store.deleteVendor(vendor.value.ID)
-      showToast('success', 'VerkäuferIn erfolgreich gelöscht')
-    }
-  } catch (error) {
-    console.error('Error deleting vendor:', error)
-    showToast('error', 'VerkäuferIn konnte nicht gelöscht werden')
   }
 }
 
@@ -339,22 +328,6 @@ const showToast = (type: string, message: string) => {
                 </div>
               </span>
             </div>
-          </div>
-          <div class="flex place-content-center justify-between">
-            <button
-              type="submit"
-              class="p-3 rounded-full bg-red-600 text-white"
-              @click="deleteVendor"
-            >
-              {{ $t('delete') }}
-            </button>
-            <button
-              type="submit"
-              class="p-3 rounded-full bg-lime-600 text-white"
-              @click="updateVendor"
-            >
-              {{ $t('confirmation') }}
-            </button>
           </div>
         </form>
         <Toast v-if="toast" :toast="toast" />

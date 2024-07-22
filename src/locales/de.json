@@ -95,6 +95,7 @@
   "postCode": "Postleitzahl",
   "location": "Ort",
   "accountDeactivation": "Konto deaktivieren",
+  "accountDeactivated": "Konto Deaktiviert",
   "longitude": "Längengrad",
   "latitude": "Breitengrad",
   "workingTime": "Arbeitszeit",
@@ -153,5 +154,7 @@
   "isPDFLicenseItem": "Ist das Produkt ein PDF Lizenzartikel?",
   "pdf item": "PDF Datei",
   "Download": "Download",
-  "have fun": "Viel Spaß beim Lesen!"
+  "have fun": "Viel Spaß beim Lesen!",
+
+  "maintenance": "Die Webseite steht derzeit unter Wartungsarbeiten. Wir entschuldigen uns für die Unannehmlichkeiten. Bitte versuche es in den nächsten Tagen erneut."
 }

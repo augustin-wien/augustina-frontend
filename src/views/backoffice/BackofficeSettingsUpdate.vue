@@ -46,7 +46,8 @@ const updatedSettings = ref<Settings>({
   MainItemName: '',
   MainItemPrice: 0,
   MainItemImage: '',
-  MaxOrderAmount: 0
+  MaxOrderAmount: 0,
+  WebshopIsClosed: false
 })
 
 const updateSettings = async () => {
@@ -57,6 +58,7 @@ const updateSettings = async () => {
       router.push({ name: 'Backoffice Settings' })
     })
   } catch (error) {
+    /* eslint-disable no-console */
     console.error('Error updating settings:', error)
     showToast('error', 'Einstellungen konnten nicht aktualisiert werden')
   }
