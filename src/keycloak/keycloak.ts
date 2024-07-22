@@ -1,14 +1,12 @@
 import Keycloak from 'keycloak-js'
-import { fetchSettings} from '@/api/api'
-
+import { fetchSettings } from '@/api/api'
 
 type KeycloakInstnace = {
-  initailizedKeycloak: boolean,
+  initailizedKeycloak: boolean
   keycloak: Keycloak | undefined
 }
 
-
-let keycloak:KeycloakInstnace = {
+const keycloak: KeycloakInstnace = {
   initailizedKeycloak: false,
   keycloak: undefined
 }
@@ -17,21 +15,19 @@ export const initKeycloak = async () => {
   if (keycloak.keycloak == undefined) {
     // get keycloak configuration from server
     const settings = await (await fetchSettings()).data
-    console.log(settings)
 
     if (!settings) {
       return
     }
+
     const instance = new Keycloak({
       url: settings.Keycloak.URL,
       realm: settings.Keycloak.Realm,
-      clientId: "frontend"
+      clientId: 'frontend'
     })
 
     keycloak.keycloak = instance
-
   }
-
 
   keycloak.keycloak.onAuthError = () => {
     /* eslint-disable no-console */
