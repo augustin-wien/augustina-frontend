@@ -103,7 +103,7 @@ For building and running the frontend in a docker container, use the following c
 ```sh
 docker build . -t augustin/augustin-frontend
 
-docker run --rm -p  8060:80 -e VITE_API_URL=http://localhost:3000/ -e VITE_KEYCLOAK_URL=http://keycloak:8080/ augustin/augustin-frontend
+docker run --rm -p  8060:80 -e VITE_API_URL=http://localhost:3000/  augustin/augustin-frontend
 
 ```
 Note: the container will be removed after it is stopped. If you want to keep it, remove the `--rm` flag.
