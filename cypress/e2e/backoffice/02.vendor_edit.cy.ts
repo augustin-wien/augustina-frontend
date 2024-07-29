@@ -22,7 +22,7 @@ describe('Go to backoffice', () => {
 
 
     cy.wait(2500)
-    cy.get('button').contains("Ändern").click()
+    cy.get('button').contains("ändern").click()
     cy.get('#licenseID').clear().type(tempLicenceID)
     cy.get('#adress').clear().type("Teststraße 123")
     cy.get('#language').clear().type("de")
@@ -35,7 +35,7 @@ describe('Go to backoffice', () => {
 
 
     cy.wait(2500)
-    cy.get('button').contains("Ändern").click()
+    cy.get('button').contains("ändern").click()
     cy.get('#licenseID').clear().type(basicLicenceId)
     cy.get("button").contains("Speichern").click()
   })
