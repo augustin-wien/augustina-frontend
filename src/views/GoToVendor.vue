@@ -4,6 +4,7 @@ import { useSettingsStore } from '@/stores/settings'
 const settStore = useSettingsStore()
 settStore.getSettingsFromApi()
 const helpUrl = import.meta.env.VITE_VENDOR_NOT_FOUND_HELP_URL
+const newspaperName = import.meta.env.VITE_NEWSPAPER_NAME
 </script>
 
 <template>
@@ -27,7 +28,7 @@ const helpUrl = import.meta.env.VITE_VENDOR_NOT_FOUND_HELP_URL
           <button
             class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold"
           >
-            {{ $t('augustin') }}
+            {{ $t('augustin')+newspaperName }} 
           </button>
         </a>
       </div>
