@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { computed } from 'vue'
@@ -24,6 +24,7 @@ onMounted(async () => {
     try {
       store.fetchVendorMe()
     } catch (error) {
+      /* eslint-disable no-console */
       console.error('Fehler beim API-Aufruf:', error)
     }
   } else {
@@ -35,6 +36,7 @@ onMounted(async () => {
         try {
           store.fetchVendorMe()
         } catch (error) {
+          /* eslint-disable no-console */
           console.error('Fehler beim API-Aufruf:', error)
         }
       }
