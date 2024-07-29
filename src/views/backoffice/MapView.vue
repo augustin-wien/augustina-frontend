@@ -20,6 +20,7 @@ const vendors = computed(() => mapStore.vendors)
 
 //Map configuration
 const zoom = ref(12)
+// Todo: Get the center from the settings
 const center: PointExpression = [48.2083, 16.3731]
 
 onMounted(() => {
