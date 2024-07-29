@@ -28,7 +28,7 @@ const newspaperName = import.meta.env.VITE_NEWSPAPER_NAME
           <button
             class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold"
           >
-            {{ $t('augustin')+newspaperName }} 
+            {{ $t('augustin') + newspaperName }}
           </button>
         </a>
       </div>

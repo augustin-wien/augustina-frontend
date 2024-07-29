@@ -42,7 +42,10 @@ const importingVendorsCount = ref(0)
 const submitVendor = async () => {
   if (!newVendor.value) return
 
-  if (!newVendor.value.Email || newVendor.value.Email === '@'+import.meta.env.VITE_VENDOR_EMAIL_POSTFIX) {
+  if (
+    !newVendor.value.Email ||
+    newVendor.value.Email === '@' + import.meta.env.VITE_VENDOR_EMAIL_POSTFIX
+  ) {
     showToast('error', 'Email muss angegeben werden')
     return
   }
