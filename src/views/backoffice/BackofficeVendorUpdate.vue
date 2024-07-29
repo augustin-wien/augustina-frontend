@@ -36,7 +36,6 @@ const updateVendor = async () => {
     const response = await store.updateVendor(updatedVendor.value as Vendor)
 
     if (response) {
-      /* eslint-disable no-console */
       console.error('Error creating vendor:', response)
       showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
     } else {

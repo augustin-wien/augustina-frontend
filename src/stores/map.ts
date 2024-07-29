@@ -23,8 +23,8 @@ export const useMapStore = defineStore('mapStore', {
         const data = await getLocations()
         //@ts-ignore
         this.vendors = data.data
+        //@ts-ignore
       } catch (error) {
-        /* eslint-disable no-console */
         console.log(error)
       }
     }

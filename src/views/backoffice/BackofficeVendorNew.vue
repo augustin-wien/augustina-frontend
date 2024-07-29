@@ -75,10 +75,10 @@ const submitVendor = async () => {
 
   try {
     await store.createVendorPromise(newVendor.value as Vendor).then((res: any) => {
+      console.log('res', res)
       router.push(`/backoffice/userprofile/${res.data}`)
     })
   } catch (err: any) {
-    /* eslint-disable no-console */
     console.error('Error creating vendor:', err)
 
     showToast(
@@ -109,17 +109,14 @@ const importCSV = async () => {
     const text = await file.text()
     const lines = text.split('\n')
 
-    let vendors: Array<Vendor> = lines.map((line: any, i: number) => {
+    const vendors: Array<Vendor> = lines.map((line: any, i: number) => {
       if (i === 0) return null
-      if (line == '') return null
 
       //@ts-ignore
       const [
         PLZ,
         Location,
         Address,
-        Longitude,
-        Latitude,
         WorkingTime,
         LicenseID,
         FirstName,
@@ -143,8 +140,8 @@ const importCSV = async () => {
         LastPayout: null,
         UrlID: '',
         IsDisabled: false,
-        Latitude: Latitude ? parseFloat(Latitude) : 0.0,
-        Longitude: Longitude ? parseFloat(Longitude) : 0.0,
+        Latitude: 0,
+        Longitude: 0,
         PLZ,
         Location,
         Language,
@@ -167,16 +164,12 @@ const importCSV = async () => {
     })
 
     try {
-      // filter null values
-      vendors = vendors.filter((v) => v)
-
       importing.value = true
       importingVendorsCount.value = vendors.length
       await store.createVendors(vendors)
       showToast('success', 'VerkäuferInnen erfolgreich angelegt')
       importing.value = false
     } catch (err) {
-      /* eslint-disable no-console */
       console.error('Error creating vendors:', err)
       showToast('error', 'VerkäuferInnen konnten nicht angelegt werden')
       importing.value = false

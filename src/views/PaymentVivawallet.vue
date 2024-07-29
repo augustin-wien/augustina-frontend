@@ -29,7 +29,6 @@ onMounted(() => {
     .catch((error) => {
       errorMessage.value = error.message
       errorMessageDetail.value = error.response.data
-      /* eslint-disable no-console */
       console.log(error)
     })
 })

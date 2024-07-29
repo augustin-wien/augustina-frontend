@@ -34,7 +34,7 @@ const formatTime = (date: string) => {
   return `${formattedDate} - ${formattedTime}`
 }
 
-watch(vendorMe as any, () => {
+watch(vendorMe as any, (newValue) => {
   generateQRCode(vendorMe.value)
 })
 
@@ -47,7 +47,6 @@ onMounted(async () => {
         generateQRCode(vendorMe.value)
       }
     } catch (error) {
-      /* eslint-disable no-console */
       console.error('Fehler beim API-Aufruf:', error)
     }
   } else {
@@ -63,10 +62,8 @@ onMounted(async () => {
           failure.value = true
 
           if (error instanceof Error) {
-            /* eslint-disable no-console */
             console.error('Fehler beim API-Aufruf:', error)
           } else {
-            /* eslint-disable no-console */
             console.error('Fehler beim API-Aufruf:', error as Error)
           }
         }

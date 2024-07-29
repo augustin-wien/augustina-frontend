@@ -41,6 +41,7 @@ onMounted(() => {
 //fetch paymentlist data once component is mounted
 
 const onRangeStart = (value: any) => {
+  console.log(value)
   startDate.value = value // Update the startDate variable
   store.getSales(startDate.value, endDate.value)
 }
