@@ -26,7 +26,7 @@ export const apiInstance = axios.create({
 
 apiInstance.interceptors.request.use(
   (config) => {
-    if (keycloak && keycloak.keycloak.authenticated) {
+    if (keycloak && keycloak.keycloak?.authenticated) {
       config.headers.Authorization = `Bearer ${keycloak.keycloak.token}`
     }
 
@@ -43,7 +43,7 @@ apiInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response.status === 401) {
-      keycloak.keycloak.login()
+      keycloak.keycloak?.login()
     }
 
     return Promise.reject(error)

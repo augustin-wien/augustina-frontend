@@ -1,15 +1,34 @@
 import Keycloak from 'keycloak-js'
+import { fetchSettings } from '@/api/api'
 
-const keycloak = {
+type KeycloakInstnace = {
+  initailizedKeycloak: boolean
+  keycloak: Keycloak | undefined
+}
+
+const keycloak: KeycloakInstnace = {
   initailizedKeycloak: false,
-  keycloak: new Keycloak({
-    url: import.meta.env.VITE_KEYCLOAK_URL as string,
-    realm: 'augustin',
-    clientId: 'frontend'
-  })
+  keycloak: undefined
 }
 
 export const initKeycloak = async () => {
+  if (keycloak.keycloak == undefined) {
+    // get keycloak configuration from server
+    const settings = await (await fetchSettings()).data
+
+    if (!settings) {
+      return
+    }
+
+    const instance = new Keycloak({
+      url: settings.Keycloak.URL,
+      realm: settings.Keycloak.Realm,
+      clientId: 'frontend'
+    })
+
+    keycloak.keycloak = instance
+  }
+
   keycloak.keycloak.onAuthError = () => {
     /* eslint-disable no-console */
     console.log('onAuthError')
@@ -28,12 +47,16 @@ export const initKeycloak = async () => {
   keycloak.keycloak.onAuthLogout = () => {
     /* eslint-disable no-console */
     console.log('onAuthLogout')
+    if (!keycloak.keycloak) return
+
     keycloak.keycloak.logout()
   }
 
   keycloak.keycloak.onTokenExpired = () => {
     /* eslint-disable no-console */
     console.log('onTokenExpired')
+
+    if (!keycloak.keycloak) return
 
     keycloak.keycloak.updateToken(100).then((refreshed) => {
       /* eslint-disable no-console */
@@ -44,6 +67,7 @@ export const initKeycloak = async () => {
   keycloak.keycloak.onReady = (authenticated) => {
     /* eslint-disable no-console */
     console.log('onReady', authenticated)
+    if (!keycloak.keycloak) return
 
     if (!authenticated) {
       keycloak.keycloak.login({

@@ -145,7 +145,7 @@ onMounted(() => {
           </RouterLink>
           <button
             class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
-            @click="keycloak.keycloak.logout"
+            @click="keycloak.keycloak?.logout"
           >
             <font-awesome-icon :icon="faArrowRightFromBracket" />
 
