@@ -39,8 +39,8 @@ const apiUrl = import.meta.env.VITE_API_URL
     >
     <template #main>
       <div class="main w-full">
-        <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-center text-2xl space-y-3 space-x-3">
+        <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-xl space-y-3 space-x-3">
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>

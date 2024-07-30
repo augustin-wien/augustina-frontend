@@ -163,7 +163,7 @@ const getItemName = (itemID: number) => {
     <template #main>
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div v-if="vendor" className="text-center text-2xl space-y-3 space-x-3">
+          <div v-if="vendor" className="text-xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
               <h1 class="text-2xl font-bold"></h1>
               <button

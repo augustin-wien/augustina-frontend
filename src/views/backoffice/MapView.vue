@@ -33,7 +33,7 @@ onMounted(() => {
     </template>
     <template v-if="vendors && vendors.length > 0" #main>
       <div class="h-full">
-        <div style="height: 100%; width: 100%">
+        <div style="height: 80vh; width: 100%">
           <l-map v-model:zoom="zoom" v-model:center="center" :use-global-leaflet="false">
             <l-tile-layer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
