@@ -8,14 +8,16 @@ import { type Vendor } from '@/stores/vendor'
 const store = vendorsStore()
 
 // Fetch the vendors' data when the component is mounted
-keycloak.keycloak.onAuthSuccess = () => {
-  store.getVendors()
-}
-
-// Fetch the vendors' data when the component is mounted
 onMounted(() => {
-  if (keycloak.keycloak.authenticated) {
+  if (keycloak.keycloak?.authenticated) {
     store.getVendors()
+  } else {
+    if (keycloak.keycloak) {
+      // Fetch the vendors' data when the component is mounted
+      keycloak.keycloak.onAuthSuccess = () => {
+        store.getVendors()
+      }
+    }
   }
 })
 
