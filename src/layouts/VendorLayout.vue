@@ -25,7 +25,7 @@ settStore.getSettingsFromApi()
         <slot name="header">
           <img
             v-if="settStore.imgUrl"
-            alt="Augustin logo"
+            alt="Newspaper logo"
             className="logo mx-auto my-1 scale-75"
             :src="settStore.imgUrl"
           />
