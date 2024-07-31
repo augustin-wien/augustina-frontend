@@ -342,9 +342,7 @@ const url = import.meta.env.VITE_API_URL
                 </div>
               </div>
               <div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="mapcenterlat"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="mapcenterlat"
                   >{{ $t('Map center latititude') }}:</label
                 >
                 <div class="flex flex-row">
@@ -358,9 +356,7 @@ const url = import.meta.env.VITE_API_URL
                 </div>
               </div>
               <div>
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="mapcenterlong"
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="mapcenterlong"
                   >{{ $t('Map center longitude') }}:</label
                 >
                 <div class="flex flex-row">
