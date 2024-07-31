@@ -21,9 +21,12 @@ export const useMapStore = defineStore('mapStore', {
         //timeout to prevent deadlock
         await new Promise((f) => setTimeout(f, 500))
         const data = await getLocations()
-        //@ts-ignore
-        this.vendors = data.data
-        //@ts-ignore
+        const vendors_data = data.data
+
+        //filter out vendors with no location
+        this.vendors = vendors_data.filter(
+          (vendor: VendorLocation) => vendor.latitude && vendor.longitude
+        )
       } catch (error) {
         console.log(error)
       }

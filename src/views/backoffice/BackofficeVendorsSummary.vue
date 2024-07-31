@@ -13,14 +13,16 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // Initialize the vendor store
 const store = vendorsStore()
 
-keycloak.keycloak.onAuthSuccess = () => {
-  store.getVendors()
-}
-
 // Fetch the vendors' data when the component is mounted
 onMounted(() => {
-  if (keycloak.keycloak.authenticated) {
-    store.getVendors()
+  if (keycloak.keycloak) {
+    if (keycloak.keycloak.authenticated) {
+      store.getVendors()
+    } else {
+      keycloak.keycloak.onAuthSuccess = () => {
+        store.getVendors()
+      }
+    }
   }
 })
 

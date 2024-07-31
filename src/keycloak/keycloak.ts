@@ -1,15 +1,34 @@
 import Keycloak from 'keycloak-js'
+import { fetchSettings } from '@/api/api'
 
-const keycloak = {
+type KeycloakInstnace = {
+  initailizedKeycloak: boolean
+  keycloak: Keycloak | undefined
+}
+
+const keycloak: KeycloakInstnace = {
   initailizedKeycloak: false,
-  keycloak: new Keycloak({
-    url: import.meta.env.VITE_KEYCLOAK_URL as string,
-    realm: 'augustin',
-    clientId: 'frontend'
-  })
+  keycloak: undefined
 }
 
 export const initKeycloak = async () => {
+  if (keycloak.keycloak == undefined) {
+    // get keycloak configuration from server
+    const settings = await (await fetchSettings()).data
+
+    if (!settings) {
+      return
+    }
+
+    const instance = new Keycloak({
+      url: settings.Keycloak.URL,
+      realm: settings.Keycloak.Realm,
+      clientId: 'frontend'
+    })
+
+    keycloak.keycloak = instance
+  }
+
   keycloak.keycloak.onAuthError = () => {
     console.log('onAuthError')
   }
@@ -24,11 +43,15 @@ export const initKeycloak = async () => {
 
   keycloak.keycloak.onAuthLogout = () => {
     console.log('onAuthLogout')
+    if (!keycloak.keycloak) return
+
     keycloak.keycloak.logout()
   }
 
   keycloak.keycloak.onTokenExpired = () => {
     console.log('onTokenExpired')
+
+    if (!keycloak.keycloak) return
 
     keycloak.keycloak.updateToken(100).then((refreshed) => {
       console.log('refreshed', refreshed)
@@ -37,6 +60,7 @@ export const initKeycloak = async () => {
 
   keycloak.keycloak.onReady = (authenticated) => {
     console.log('onReady', authenticated)
+    if (!keycloak.keycloak) return
 
     if (!authenticated) {
       keycloak.keycloak.login({
