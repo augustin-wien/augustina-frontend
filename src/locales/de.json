@@ -59,7 +59,7 @@
   "description": "Beschreibung",
   "price": "Preis",
   "measure": "Aktion",
-  "change": "Ändern",
+  "change": "ändern",
   "new": "Neu",
   "newGendered": "Neue/n",
 
@@ -78,6 +78,7 @@
   "no": "Nein",
   "confirmation": "Bestätigen",
   "delete": "Löschen",
+  "save": "Speichern",
 
   "payout": "Für folgende Zahlungen auszahlen",
   "confirmPayout": "Auszahlung bestätigen",
@@ -110,6 +111,7 @@
   "openCredits": "Offene Beträge",
   "search": "Suchen",
   "IDNumber": "Ausweisnummer",
+  "SearchPlaceholder": "Suche nach Name oder ID",
   "payNow": "Auszahlen",
   "deactivated": "Deaktiviert",
 

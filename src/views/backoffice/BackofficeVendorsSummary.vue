@@ -119,15 +119,15 @@ const exportTable = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center">
+      <div class="flex space-between justify-between content-center items-center pt-3">
+        <h1 className="font-bold text-2xl">{{ $t('menuVendors') }}</h1>
         <div>
-          <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuVendors') }}</h1>
           <span>
             <input
               id="searchInput"
               v-model="searchQuery"
               type="text"
-              :placeholder="$t('IDNumber')"
+              :placeholder="$t('SearchPlaceholder')"
               class="border-2 border-gray-400 rounded-md p-2 ml-2"
               @keyup.enter="search"
             />
@@ -147,8 +147,8 @@ const exportTable = () => {
 
     <template #main>
       <div class="main">
-        <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
+        <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-xl space-y-3 space-x-3 page-content space-x-2">
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>

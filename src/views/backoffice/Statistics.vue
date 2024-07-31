@@ -57,11 +57,15 @@ const createCharts = () => {
   const statisticsData = store.statisticsList
   const itemsArray = statisticsData.Items || []
 
-  const quantityData = itemsArray.map((item: Statistics) => ({
+  let quantityData = itemsArray.map((item: Statistics) => ({
     id: item.ID,
     value: item.SumQuantity,
     name: item.Name
   }))
+
+  // sort by name and exclude transactionCosts
+  quantityData = quantityData.sort((a: any, b: any) => b.value - a.value)
+  quantityData = quantityData.filter((item: any) => item.name != 'transactionCosts')
 
   const amountData = itemsArray.map((item: Statistics) => ({
     id: item.ID,
@@ -183,30 +187,27 @@ onMounted(() => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center">
+      <div class="flex space-between justify-between content-center items-center pt-3">
         <div class="grid grid-cols-2">
+          <h1 className="font-bold text-2xl">{{ $t('menuStatistics') }}</h1>
           <div>
-            <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuStatistics') }}</h1>
-            <span>
-              <VueDatePicker
-                v-model="date"
-                range
-                :enable-time-picker="false"
-                :placeholder="$t('chooseDateRange')"
-                class="max-w-md"
-                @range-start="onRangeStart"
-                @range-end="onRangeEnd"
-              />
-            </span>
+            <VueDatePicker
+              v-model="date"
+              range
+              :enable-time-picker="false"
+              :placeholder="$t('chooseDateRange')"
+              class="max-w-md"
+              @range-start="onRangeStart"
+              @range-end="onRangeEnd"
+            />
           </div>
         </div>
       </div>
     </template>
     <template #main>
       <div class="main">
-        <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className=" space-y-3 space-x-3">
-            <h1 class="text-2xl font-bold">{{ $t('menuStatistics') }}</h1>
             <canvas id="quantity-chart" width="300" height="150"></canvas>
             <canvas id="amount-chart" width="300" height="150"></canvas>
           </div>
