@@ -18,7 +18,7 @@ onMounted(() => {
     itemsStore.getItems()
     itemsStore.getItemsBackoffice()
   } else {
-    watch(authenticated, (val: boolean) => {
+    watch(authenticated, () => {
       itemsStore.getItems()
       itemsStore.getItemsBackoffice()
     })
@@ -232,8 +232,8 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   class="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
                 >
                   <option :value="undefined">-- {{ $t('none') }} --</option>
-                  <option v-for="item in licenseItems" :key="item.ID" :value="item.ID">
-                    {{ item.Name }}
+                  <option v-for="elItem in licenseItems" :key="elItem.ID" :value="elItem.ID">
+                    {{ elItem.Name }}
                   </option>
                 </select>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="pdf">{{

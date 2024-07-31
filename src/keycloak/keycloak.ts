@@ -30,18 +30,22 @@ export const initKeycloak = async () => {
   }
 
   keycloak.keycloak.onAuthError = () => {
+    /* eslint-disable no-console */
     console.log('onAuthError')
   }
 
   keycloak.keycloak.onAuthRefreshSuccess = () => {
+    /* eslint-disable no-console */
     console.log('onAuthRefreshSuccess')
   }
 
   keycloak.keycloak.onAuthRefreshError = () => {
+    /* eslint-disable no-console */
     console.log('onAuthRefreshError')
   }
 
   keycloak.keycloak.onAuthLogout = () => {
+    /* eslint-disable no-console */
     console.log('onAuthLogout')
     if (!keycloak.keycloak) return
 
@@ -49,16 +53,19 @@ export const initKeycloak = async () => {
   }
 
   keycloak.keycloak.onTokenExpired = () => {
+    /* eslint-disable no-console */
     console.log('onTokenExpired')
 
     if (!keycloak.keycloak) return
 
     keycloak.keycloak.updateToken(100).then((refreshed) => {
+      /* eslint-disable no-console */
       console.log('refreshed', refreshed)
     })
   }
 
   keycloak.keycloak.onReady = (authenticated) => {
+    /* eslint-disable no-console */
     console.log('onReady', authenticated)
     if (!keycloak.keycloak) return
 

@@ -12,8 +12,8 @@
     "cypress:open": "cypress open --e2e --config baseUrl=http://localhost:5173",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore",
-    "lint:fix": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "lint": "eslint . ",
+    "lint:fix": "eslint .  --fix ",
     "format": "prettier --cache --check src/",
     "format:fix": "prettier --cache --check src/ --write"
   },

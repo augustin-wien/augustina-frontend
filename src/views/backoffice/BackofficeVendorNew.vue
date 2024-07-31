@@ -1,14 +1,16 @@
 <script lang="ts" setup>
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
+import { useSettingsStore } from '@/stores/settings'
 import type { Vendor } from '@/stores/vendor'
 import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
 
 const store = vendorsStore()
+const settingsStore = useSettingsStore()
 
 const newVendor = ref<Vendor>({
-  Email: import.meta.env.VITE_VENDOR_EMAIL_POSTFIX,
+  Email: settingsStore.settings.VendorEmailPostfix,
   FirstName: '',
   ID: 0,
   KeycloakID: '',
@@ -32,7 +34,9 @@ const newVendor = ref<Vendor>({
   OnlineMap: false,
   HasSmartphone: false,
   HasBankAccount: false,
-  OpenPayments: null
+  OpenPayments: null,
+  AccountProofUrl: null,
+  IsDeleted: false
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)
@@ -75,7 +79,6 @@ const submitVendor = async () => {
 
   try {
     await store.createVendorPromise(newVendor.value as Vendor).then((res: any) => {
-      console.log('res', res)
       router.push(`/backoffice/userprofile/${res.data}`)
     })
   } catch (err: any) {

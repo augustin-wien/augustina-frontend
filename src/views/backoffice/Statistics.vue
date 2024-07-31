@@ -4,7 +4,7 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { useStatisticsStore } from '@/stores/statistics'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { type Statistics } from '@/stores/statistics'
 import Chart from 'chart.js/auto'
 
@@ -40,14 +40,6 @@ const onRangeEnd = (value: Date) => {
   })
 }
 
-const formatTime = (time: string) => {
-  const date = new Date(time)
-  return date.toLocaleDateString('de-DE', {
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
-
 const authenticated = computed(() => keycloakStore.authenticated)
 
 let quantityChart: Chart
@@ -64,7 +56,6 @@ const createCharts = () => {
 
   const statisticsData = store.statisticsList
   const itemsArray = statisticsData.Items || []
-  console.log('itemsArray', itemsArray)
 
   let quantityData = itemsArray.map((item: Statistics) => ({
     id: item.ID,
@@ -159,24 +150,6 @@ const createCharts = () => {
           }
         }
       }
-    })
-  }
-}
-
-const fetchDataAndCreateCharts = () => {
-  if (authenticated.value) {
-    itemsStore.getItemsBackoffice().then(() => {
-      store.getPayments(startDate.value, endDate.value).then(() => {
-        createCharts()
-      })
-    })
-  } else {
-    watch(authenticated, async () => {
-      itemsStore.getItemsBackoffice().then(() => {
-        store.getPayments(startDate.value, endDate.value).then(() => {
-          createCharts()
-        })
-      })
     })
   }
 }

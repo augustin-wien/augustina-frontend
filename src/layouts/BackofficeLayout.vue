@@ -50,7 +50,7 @@ onMounted(() => {
                   ? apiUrl + settings.Logo
                   : apiUrl + 'img/logo.png'
               "
-              alt="Augustin logo"
+              alt="Newspaper logo"
               class="logo mx-auto my-5"
               width="270"
               height="auto"
@@ -58,7 +58,7 @@ onMounted(() => {
             <img
               v-else
               :src="settings.Logo"
-              alt="Augustin logo"
+              alt="Newspaper logo"
               class="logo mx-auto my-5"
               width="270"
               height="auto"
@@ -145,7 +145,7 @@ onMounted(() => {
           </RouterLink>
           <button
             class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
-            @click="keycloak.keycloak?.logout"
+            @click="keycloak.keycloak?.logout()"
           >
             <font-awesome-icon :icon="faArrowRightFromBracket" />
 

@@ -7,6 +7,7 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { useItemsStore } from '@/stores/items'
 import { type Payment } from '@/stores/payments'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
+import { useSettingsStore } from '@/stores/settings'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -22,6 +23,7 @@ const date = ref([startDate.value, endDate.value])
 const paymentStore = usePaymentsStore()
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
+const settingsStore = useSettingsStore()
 
 //fetch paymentlist data once component is mounted
 
@@ -46,7 +48,7 @@ const formatTime = (time: string) => {
 const payments = computed(() => paymentStore.payments)
 
 const translateSender = (receiver: string) => {
-  return receiver == 'Orga' ? 'Augustin' : receiver
+  return receiver == 'Orga' ? settingsStore.settings.NewspaperName : receiver
 }
 
 const authenticated = computed(() => keycloakStore.authenticated)

@@ -6,9 +6,11 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, onMounted, ref, watch } from 'vue'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
+import { useSettingsStore } from '@/stores/settings'
 
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
+const settingsStore = useSettingsStore()
 const items = computed(() => itemsStore.itemsBackoffice)
 
 const startOfDay = (date: Date) => {
@@ -51,7 +53,7 @@ const translateReceiver = (receiver: string) => {
 }
 
 const translateSender = (receiver: string) => {
-  return receiver == 'Orga' ? 'Augustin' : receiver
+  return receiver == 'Orga' ? settingsStore.settings.NewspaperName : receiver
 }
 
 const translateItem = (payment: Payment) => {

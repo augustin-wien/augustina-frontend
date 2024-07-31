@@ -78,7 +78,7 @@ const hasLicenseItem = computed(() => {
               <input id="checkbox" v-model="paymentStore.agbChecked" type="checkbox" class="mr-2" />
               <label for="checkbox" class="text-center">
                 {{ $t('agreement') }}
-                <button class="text-blue-600" @click="paymentStore.toAGB()">
+                <button class="text-blue-600" @click="settStore.toAGB()">
                   {{ $t('terms') }}
                 </button></label
               >

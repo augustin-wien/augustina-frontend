@@ -131,6 +131,16 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('FontColor', updatedSettings.FontColor)
   formData.append('Logo', updatedSettings.Logo)
   formData.append('MainItem', updatedSettings.MainItem.toString())
+  formData.append('AGBUrl', updatedSettings.AGBUrl)
+  formData.append('MaintainanceModeHelpUrl', updatedSettings.MaintainanceModeHelpUrl)
+  formData.append('QRCodeLogoImgUrl', updatedSettings.QRCodeLogoImgUrl)
+  formData.append('QRCodeUrl', updatedSettings.QRCodeUrl)
+  formData.append('VendorNotFoundHelpUrl', updatedSettings.VendorNotFoundHelpUrl)
+  formData.append('VendorEmailPostfix', updatedSettings.VendorEmailPostfix)
+  formData.append('WebshopIsClosed', updatedSettings.WebshopIsClosed.toString())
+  formData.append('NewspaperName', updatedSettings.NewspaperName)
+  formData.append('MapCenterLat', updatedSettings.MapCenterLat.toString())
+  formData.append('MapCenterLong', updatedSettings.MapCenterLong.toString())
 
   formData.append(
     'OrgaCoversTransactionCosts',
@@ -197,4 +207,34 @@ export async function pdfDownload(linkId: string) {
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
+}
+
+// image Download
+
+export async function getBase64ImageFromUrl(url: string) {
+  const response = await axios.get(url, { responseType: 'blob' })
+  if (response.status == 200) {
+    const base64data = await blobToData(response.data)
+    return base64data
+  } else return undefined
+}
+
+function blobToData(blob: Blob): Promise<string | undefined> {
+  const result = new Promise<string | undefined>((resolve) => {
+    const reader = new FileReader()
+
+    reader.onloadend = () => {
+      const result = reader.result
+
+      if (result && result !== null && typeof result === 'string') {
+        resolve(result)
+      }
+
+      resolve(undefined)
+    }
+
+    reader.readAsDataURL(blob)
+  })
+
+  return result
 }

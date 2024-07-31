@@ -222,7 +222,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('@/views/backoffice/BackofficeSettingsUpdate.vue')
+      component: () => import('@/views/backoffice/SettingsUpdate.vue')
     },
 
     {
@@ -338,14 +338,6 @@ const router = createRouter({
       component: () => import('@/views/VendorViewProfil.vue')
     },
     {
-      path: '/qr-code',
-      name: 'QR Code',
-      component: () => import('@/views/QRCode.vue'),
-      meta: {
-        layout: VendorLayoutVue
-      }
-    },
-    {
       path: '/:pathMatch(.*)*',
       name: 'all',
       component: () => import('@/views/GoToVendor.vue'),
@@ -365,7 +357,7 @@ const router = createRouter({
 })
 
 // Check if the user is authenticated
-router.beforeEach(async (to: any, from: any) => {
+router.beforeEach(async (to: any) => {
   if (
     to.meta.requiresAuth &&
     !isAuthenticated() &&
@@ -376,10 +368,6 @@ router.beforeEach(async (to: any, from: any) => {
     //so we need to wait for the router to be ready
     // redirect the user to the login page
     // return { name: '404' }
-  }
-  // Condition to toggle Lite-Mode
-  else if (import.meta.env.VITE_TOGGLE === 'true' && to.name === 'Version choice') {
-    return { name: 'Tippingpage' }
   }
 })
 
