@@ -1,4 +1,4 @@
-# Augustin-bargeldlos-frontend
+# Augustina-bargeldlos-frontend
 
 This repository contains the frontend for the Augustina bargeldlos project. It is based on [Vite](https://vitejs.dev/) and [Vue 3](https://v3.vuejs.org/).
 See the [backend repository](https://github.com/augustin-wien/augustina-backend/) on how-to get started.
@@ -103,7 +103,7 @@ For building and running the frontend in a docker container, use the following c
 ```sh
 docker build . -t augustina/augustina-frontend
 
-docker run --rm -p  8060:80 -e VITE_API_URL=http://localhost:3000/  augustin/augustin-frontend
+docker run --rm -p  8060:80 -e VITE_API_URL=http://localhost:3000/  augustina/augustina-frontend
 
 ```
 Note: the container will be removed after it is stopped. If you want to keep it, remove the `--rm` flag.

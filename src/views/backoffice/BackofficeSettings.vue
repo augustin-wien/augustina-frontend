@@ -100,33 +100,33 @@ const url = import.meta.env.VITE_API_URL
                     <td className="p-3">{{ settings.MaxOrderAmount }} Cent</td>
                   </tr>
                   <tr>
-                    <th className="p-3">{{ $t('agb url') }}</th>
+                    <th className="p-3">{{ $t('AGB URL') }}</th>
                     <td className="p-3">
                       {{ settings.AGBUrl }}
                     </td>
                   </tr>
                   <tr>
-                    <th className="p-3">{{ $t('Maintainencemode help url') }}</th>
+                    <th className="p-3">{{ $t('Maintainence mode help URL') }}</th>
                     <td className="p-3">
                       {{ settings.MaintainanceModeHelpUrl }}
                     </td>
                   </tr>
 
                   <tr>
-                    <th className="p-3">{{ $t('QrCode Logo img url') }}</th>
+                    <th className="p-3">{{ $t('Logo path') }}</th>
                     <td className="p-3">
                       {{ settings.QRCodeLogoImgUrl }}
                     </td>
                   </tr>
                   <tr>
-                    <th className="p-3">{{ $t('Vendor not found help url') }}</th>
+                    <th className="p-3">{{ $t('LicenseID-not-found-URL') }}</th>
                     <td className="p-3">
                       {{ settings.VendorNotFoundHelpUrl }}
                     </td>
                   </tr>
 
                   <tr>
-                    <th className="p-3">{{ $t('New vendor email template') }}</th>
+                    <th className="p-3">{{ $t('Email ending domain') }}</th>
                     <td className="p-3">
                       {{ settings.VendorEmailPostfix }}
                     </td>

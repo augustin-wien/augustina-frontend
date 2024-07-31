@@ -255,7 +255,7 @@ const url = import.meta.env.VITE_API_URL
               </div>
               <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="agburl"
-                  >{{ $t('AGB url') }}:</label
+                  >{{ $t('AGB URL') }}:</label
                 >
                 <div class="flex flex-row">
                   <input
@@ -269,7 +269,7 @@ const url = import.meta.env.VITE_API_URL
               </div>
               <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="maintainanceurl"
-                  >{{ $t('Webshop closed help url') }}:</label
+                  >{{ $t('URL for maintenance') }}:</label
                 >
                 <div class="flex flex-row">
                   <input
@@ -283,7 +283,7 @@ const url = import.meta.env.VITE_API_URL
               </div>
               <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="qrcodelogourl"
-                  >{{ $t('Logo in QR Code url') }}:</label
+                  >{{ $t('Logo path') }}:</label
                 >
                 <div class="flex flex-row">
                   <input
@@ -313,7 +313,7 @@ const url = import.meta.env.VITE_API_URL
                 <label
                   class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                   for="vendornotfoundhelpurl"
-                  >{{ $t('Vendor not found help url') }}:</label
+                  >{{ $t('LicenseID-not-found-URL') }}:</label
                 >
                 <div class="flex flex-row">
                   <input
@@ -329,7 +329,7 @@ const url = import.meta.env.VITE_API_URL
                 <label
                   class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                   for="vendoremaolpostix"
-                  >{{ $t('Vendor email template') }}:</label
+                  >{{ $t('Email ending domain') }}:</label
                 >
                 <div class="flex flex-row">
                   <input
@@ -343,7 +343,7 @@ const url = import.meta.env.VITE_API_URL
               </div>
               <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="mapcenterlat"
-                  >{{ $t('Map center latititude') }}:</label
+                  >{{ $t('Map center latitude') }}:</label
                 >
                 <div class="flex flex-row">
                   <input
