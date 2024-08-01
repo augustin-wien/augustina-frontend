@@ -1,7 +1,7 @@
-# Augustin-bargeldlos-frontend
+# Augustina-bargeldlos-frontend
 
-This repository contains the frontend for the Augustin bargeldlos project. It is based on [Vite](https://vitejs.dev/) and [Vue 3](https://v3.vuejs.org/).
-See the [backend repository](https://github.com/augustin-wien/augustin-backend/) on how-to get started.
+This repository contains the frontend for the Augustina bargeldlos project. It is based on [Vite](https://vitejs.dev/) and [Vue 3](https://v3.vuejs.org/).
+See the [backend repository](https://github.com/augustin-wien/augustina-backend/) on how-to get started.
 
 ## Development Setup
 
@@ -91,7 +91,7 @@ cd c:\'Program Files'\Google\Chrome\Application
 ```
 
 ## Keycloak Setup
-please use the [Keycloak Setup provided by the backend](https://github.com/augustin-wien/augustin-backend/#keycloak)
+please use the [Keycloak Setup provided by the backend](https://github.com/augustin-wien/augustina-backend/#keycloak)
 
 ## Vivawallet local testing
 vivawallet checkout will redirect the user to https://www.local.com/success?t={TRANSACTION_ID}&s=4101073583353389&lang=en-GB&eventId=0&eci=1
@@ -101,9 +101,9 @@ To test the validation locally the programmer must manually change the url in th
 
 For building and running the frontend in a docker container, use the following commands:
 ```sh
-docker build . -t augustin/augustin-frontend
+docker build . -t augustina/augustina-frontend
 
-docker run --rm -p  8060:80 -e VITE_API_URL=http://localhost:3000/  augustin/augustin-frontend
+docker run --rm -p  8060:80 -e VITE_API_URL=http://localhost:3000/  augustina/augustina-frontend
 
 ```
 Note: the container will be removed after it is stopped. If you want to keep it, remove the `--rm` flag.

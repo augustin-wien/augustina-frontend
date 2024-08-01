@@ -222,7 +222,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('@/views/backoffice/BackofficeSettingsUpdate.vue')
+      component: () => import('@/views/backoffice/SettingsUpdate.vue')
     },
 
     {
@@ -338,11 +338,11 @@ const router = createRouter({
       component: () => import('@/views/VendorViewProfil.vue')
     },
     {
-      path: '/qr-code',
-      name: 'QR Code',
-      component: () => import('@/views/QRCode.vue'),
+      path: '/:pathMatch(.*)*',
+      name: 'all',
+      component: () => import('@/views/GoToVendor.vue'),
       meta: {
-        layout: VendorLayoutVue
+        layout: Default
       }
     },
     {
@@ -352,20 +352,12 @@ const router = createRouter({
       meta: {
         layout: Default
       }
-    },
-    {
-      path: '/:pathMatch(.*)*',
-      name: 'all',
-      component: () => import('@/views/GoToVendor.vue'),
-      meta: {
-        layout: Default
-      }
     }
   ]
 })
 
 // Check if the user is authenticated
-router.beforeEach(async (to: any, _from: any) => {
+router.beforeEach(async (to: any) => {
   if (
     to.meta.requiresAuth &&
     !isAuthenticated() &&
@@ -377,10 +369,6 @@ router.beforeEach(async (to: any, _from: any) => {
     // redirect the user to the login page
     // return { name: '404' }
   }
-  // Condition to toggle Lite-Mode
-  else if (import.meta.env.VITE_TOGGLE === 'true' && to.name === 'Version choice') {
-    return { name: 'Tippingpage' }
-  }
 })
 
 // Check if the user is authenticated
@@ -389,7 +377,6 @@ async function isAuthenticated() {
     try {
       await initKeycloak()
     } catch (error) {
-      /* eslint-disable no-console */
       console.log('init keycloak failed', error)
     }
 

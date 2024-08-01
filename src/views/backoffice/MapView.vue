@@ -4,16 +4,18 @@ import L from 'leaflet'
 globalThis.L = L
 import 'leaflet/dist/leaflet.css'
 import type { PointExpression } from 'leaflet'
+import type { Ref } from 'vue'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
 import 'vue-leaflet-markercluster/dist/style.css'
 import { useMapStore } from '@/stores/map'
 import { onMounted, computed, watch, ref } from 'vue'
-import type { Ref } from 'vue'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { useSettingsStore } from '@/stores/settings'
 
 const keycloakStore = useKeycloakStore()
 const authenticated = computed(() => keycloakStore.authenticated)
+const settingsStore = useSettingsStore()
 
 const mapStore = useMapStore()
 const vendors = computed(() => mapStore.vendors)
@@ -21,7 +23,7 @@ const vendors = computed(() => mapStore.vendors)
 //Map configuration
 const zoom = ref(12)
 // Todo: Get the center from the settings
-const center: PointExpression = [48.2083, 16.3731]
+const center: Ref<PointExpression> = ref([48.2083, 16.3731])
 
 onMounted(() => {
   if (authenticated.value) {
@@ -32,6 +34,11 @@ onMounted(() => {
     })
   }
 })
+
+function onMapReady(instance: any) {
+  console.log(instance)
+  center.value = [settingsStore.settings.MapCenterLat, settingsStore.settings.MapCenterLong]
+}
 </script>
 
 <template>
@@ -41,8 +48,14 @@ onMounted(() => {
     </template>
     <template v-if="vendors && vendors.length > 0" #main>
       <div class="h-full">
-        <div style="height: 100%; width: 100%">
-          <l-map v-model:zoom="zoom" :center="center" use-global-leaflet :max-zoom="18">
+        <div style="height: 75vh; width: 100%">
+          <l-map
+            v-model:zoom="zoom"
+            :center="center"
+            use-global-leaflet
+            :max-zoom="18"
+            @ready="onMapReady"
+          >
             <l-tile-layer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               layer-type="base"

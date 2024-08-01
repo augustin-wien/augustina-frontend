@@ -35,7 +35,6 @@ const route = useRoute()
 const idParams = computed(() => Number(route.params.ID))
 
 function getItem() {
-  /* eslint-disable no-console */
   console.log('idParams', idParams.value, items.value)
 
   if (!isNaN(idParams.value)) {
@@ -76,7 +75,6 @@ const updateItem = async () => {
         showToast('error', 'Produkt konnte nicht aktualisiert werden' + err)
       })
   } catch (error) {
-    /* eslint-disable no-console */
     console.error('Error creating item:', error)
     showToast('error', 'Produkt konnte nicht angelegt werden')
   }
@@ -97,7 +95,6 @@ const deleteItem = async () => {
       router.push({ name: 'Backoffice Product Settings' })
     }
   } catch (error) {
-    /* eslint-disable no-console */
     console.error('Error deleting item:', error)
     showToast('error', 'Produkt konnte nicht gelöscht werden')
   }
@@ -235,8 +232,8 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   class="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
                 >
                   <option :value="undefined">-- {{ $t('none') }} --</option>
-                  <option v-for="item in licenseItems" :key="item.ID" :value="item.ID">
-                    {{ item.Name }}
+                  <option v-for="elItem in licenseItems" :key="elItem.ID" :value="elItem.ID">
+                    {{ elItem.Name }}
                   </option>
                 </select>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="pdf">{{

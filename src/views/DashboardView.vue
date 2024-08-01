@@ -12,6 +12,7 @@ const message = ref('Press the button to call the backend')
 function get() {
   getAuthHello().then((response: any) => {
     message.value = response.data
+    console.log(response)
   })
 }
 </script>
@@ -19,7 +20,7 @@ function get() {
 <template>
   <header>
     <img
-      alt="Augustin logo"
+      alt="Newspaper logo"
       className="logo mx-auto my-5"
       src="@/assets/logo.svg"
       width="270"

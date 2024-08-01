@@ -22,6 +22,7 @@ const submitItem = async () => {
     store
       .createItem(newItem.value as Item)
       .then(() => {
+        console.log('Item created')
         router.push({ name: 'Backoffice Product Settings' })
       })
       .catch((err) => {
@@ -32,7 +33,6 @@ const submitItem = async () => {
       })
   } catch (err: any) {
     showToast('error', 'Produkt konnte nicht angelegt werden' + err)
-    /* eslint-disable no-console */
     console.error('Error creating item:', err)
   }
 }

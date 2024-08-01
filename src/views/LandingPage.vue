@@ -31,7 +31,6 @@ onMounted(() => {
       })
       .catch(() => {
         router.push({ name: 'Error' })
-        /* eslint-disable no-console */
         console.log('error')
       })
   })

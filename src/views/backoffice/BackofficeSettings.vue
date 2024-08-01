@@ -41,6 +41,12 @@ const url = import.meta.env.VITE_API_URL
               >
                 <tbody className="text-sm">
                   <tr>
+                    <th className="p-3">{{ $t('Newspaper name') }}</th>
+                    <td className="p-3" id="newspapername_value">
+                      {{ settings.NewspaperName }}
+                    </td>
+                  </tr>
+                  <tr>
                     <th className="p-3">Logo:</th>
                     <td className="p-3">
                       <img
@@ -50,7 +56,7 @@ const url = import.meta.env.VITE_API_URL
                             ? url + settings.Logo
                             : url + 'img/logo.png'
                         "
-                        alt="Augustin logo"
+                        alt="Newspaper logo"
                         class="logo mx-auto my-5"
                         width="50"
                         height="20"
@@ -58,7 +64,7 @@ const url = import.meta.env.VITE_API_URL
                       <img
                         v-else
                         :src="settings.Logo"
-                        alt="Augustin logo"
+                        alt="Newspaper logo"
                         class="logo mx-auto my-5"
                         width="50"
                         height="20"
@@ -91,15 +97,57 @@ const url = import.meta.env.VITE_API_URL
                   </tr>
                   <tr>
                     <th className="p-3">{{ $t('maximum') }}</th>
+                    <td className="p-3">{{ settings.MaxOrderAmount }} Cent</td>
+                  </tr>
+                  <tr>
+                    <th className="p-3">{{ $t('AGB URL') }}</th>
                     <td className="p-3">
-                      {{ settings.MaxOrderAmount }}
+                      {{ settings.AGBUrl }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="p-3">{{ $t('Maintainence mode help URL') }}</th>
+                    <td className="p-3">
+                      {{ settings.MaintainanceModeHelpUrl }}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th className="p-3">{{ $t('Logo path') }}</th>
+                    <td className="p-3">
+                      {{ settings.QRCodeLogoImgUrl }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="p-3">{{ $t('LicenseID-not-found-URL') }}</th>
+                    <td className="p-3">
+                      {{ settings.VendorNotFoundHelpUrl }}
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th className="p-3">{{ $t('Email ending domain') }}</th>
+                    <td className="p-3">
+                      {{ settings.VendorEmailPostfix }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="p-3">{{ $t('Webshop is closed') }}</th>
+                    <td className="p-3">
+                      {{ settings.WebshopIsClosed }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="p-3">{{ $t('Map center') }}</th>
+                    <td className="p-3">
+                      {{ settings.MapCenterLat }}, {{ settings.MapCenterLong }}
                     </td>
                   </tr>
                 </tbody>
               </div>
               <div>
                 <router-link to="/backoffice/settings/update">
-                  <button class="p-2 rounded-full bg-lime-600 text-white mr-2">
+                  <button class="p-2 rounded-full bg-lime-600 text-white mr-2" id="editSettings">
                     {{ $t('change') }}
                   </button>
                 </router-link>

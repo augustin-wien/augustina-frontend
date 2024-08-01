@@ -28,7 +28,6 @@ export const useMapStore = defineStore('mapStore', {
           (vendor: VendorLocation) => vendor.latitude && vendor.longitude
         )
       } catch (error) {
-        /* eslint-disable no-console */
         console.log(error)
       }
     }

@@ -34,7 +34,6 @@ export const useShopStore = defineStore('shop', {
             resolve(this.items)
           })
           .catch((error) => {
-            /* eslint-disable no-console */
             console.log(error)
             reject(error)
           })
@@ -136,7 +135,6 @@ export const useShopStore = defineStore('shop', {
         } else if (item.item == this.donationItem) {
           sum += item.quantity
         } else {
-          /* eslint-disable no-console */
           console.log('Item not found')
         }
       })

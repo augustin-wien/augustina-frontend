@@ -2,7 +2,6 @@
 import { useSettingsStore } from '@/stores/settings'
 
 const settStore = useSettingsStore()
-settStore.getSettingsFromApi()
 </script>
 
 <template>
@@ -12,11 +11,11 @@ settStore.getSettingsFromApi()
         <div class="text-center mb-5">
           {{ $t('maintenance') }}
         </div>
-        <a class="w-full" href="https://www.augustin.or.at">
+        <a class="w-full" :href="settStore.settings.MaintainanceModeHelpUrl">
           <button
             class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold"
           >
-            {{ $t('augustin') }}
+            {{ settStore.settings.NewspaperName }}
           </button>
         </a>
       </div>

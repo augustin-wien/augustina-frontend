@@ -4,7 +4,7 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { useStatisticsStore } from '@/stores/statistics'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { type Statistics } from '@/stores/statistics'
 import Chart from 'chart.js/auto'
 
@@ -150,24 +150,6 @@ const createCharts = () => {
           }
         }
       }
-    })
-  }
-}
-
-const fetchDataAndCreateCharts = () => {
-  if (authenticated.value) {
-    itemsStore.getItemsBackoffice().then(() => {
-      store.getPayments(startDate.value, endDate.value).then(() => {
-        createCharts()
-      })
-    })
-  } else {
-    watch(authenticated, async () => {
-      itemsStore.getItemsBackoffice().then(() => {
-        store.getPayments(startDate.value, endDate.value).then(() => {
-          createCharts()
-        })
-      })
     })
   }
 }

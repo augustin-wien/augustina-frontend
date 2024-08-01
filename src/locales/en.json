@@ -24,7 +24,6 @@
 
   "invalid": "This ID is invalid",
   "gotovendor": "Please go to a vendor",
-  "augustin": "Back to Augustin",
 
   "product": "Choose a product",
   "menuVendors": "Vendors",
@@ -73,6 +72,15 @@
   "color": "Color",
   "fontColor": "Font color",
   "maximum": "Maximum order amount",
+  "AGB URL": "Terms and conditions URL",
+  "URL for maintenance": "URL for maintenance",
+  "Logo path": "Path to logo",
+  "LicenseID-not-found-URL": "LicenseID not found URL",
+  "Email ending domain": "Email ending domain i.e. @example.com",
+  "Webshop is closed": "Webshop is closed",
+  "Map center latitude": "Map center latitude",
+  "Map center longitude": "Map center longitude",
+  "Map center": "Coordinates of map center",
 
   "yes": "Yes",
   "no": "No",

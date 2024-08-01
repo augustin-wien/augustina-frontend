@@ -7,6 +7,7 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { useItemsStore } from '@/stores/items'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Payment } from '@/stores/payments'
+import { useSettingsStore } from '@/stores/settings'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -23,6 +24,7 @@ const keycloakStore = useKeycloakStore()
 const store = usePaymentsStore()
 const itemsStore = useItemsStore()
 const items = computed(() => itemsStore.itemsBackoffice)
+const settingsStore = useSettingsStore()
 
 const authenticated = computed(() => keycloakStore.authenticated)
 
@@ -61,7 +63,7 @@ const formatTime = (time: string) => {
 const payments = computed(() => store.payments)
 
 const translateSender = (receiver: string) => {
-  return receiver == 'Orga' ? 'Augustin' : receiver
+  return receiver == 'Orga' ? settingsStore.settings.NewspaperName : receiver
 }
 
 const getItemName = (itemID: number) => {
