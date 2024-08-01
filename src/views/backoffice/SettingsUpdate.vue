@@ -65,7 +65,7 @@ const updateSettings = async () => {
     // This logic will execute when the "Bestätigen" button is clicked
     await settingsStore.updateSettings(updatedSettings.value).then(() => {
       showToast('success', 'Einstellungen erfolgreich aktualisiert')
-      // router.push({ name: 'Backoffice Settings' })
+      router.push({ name: 'Backoffice Settings' })
     })
   } catch (error) {
     console.error('Error updating settings:', error)
@@ -371,6 +371,7 @@ const url = import.meta.env.VITE_API_URL
               </div>
               <div class="flex place-content-center">
                 <button
+                  id="saveSettings"
                   type="submit"
                   class="p-3 rounded-full bg-lime-600 text-white"
                   @click="updateSettings()"
