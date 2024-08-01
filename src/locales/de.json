@@ -23,9 +23,11 @@
 
   "customdonation": "Spende eingeben",
 
+  "invalid confirmation": "Ungültige Zahlungsbestätigung",
   "invalid": "Die gescannte ID ist nicht gültig",
   "gotovendor": "Gehe bitte zu einer Verkäuferin oder einem Verkäufer",
   "augustin": "Zum Augustin",
+  
 
   "product": "Produkt wählen",
   "menuVendors": "VerkäuferInnen",
