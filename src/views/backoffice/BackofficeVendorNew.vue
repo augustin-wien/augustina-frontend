@@ -20,8 +20,8 @@ const newVendor = ref<Vendor>({
   UrlID: '',
   Balance: 0,
   IsDisabled: false,
-  Longitude: 0,
-  Latitude: 0,
+  Longitude: 0.1,
+  Latitude: 0.1,
   Address: '',
   PLZ: '',
   Location: '',
@@ -120,6 +120,8 @@ const importCSV = async () => {
         PLZ,
         Location,
         Address,
+        Longitude,
+        Latitude,
         WorkingTime,
         LicenseID,
         FirstName,
@@ -134,24 +136,24 @@ const importCSV = async () => {
         HasBankAccount
       ] = line.split(';')
 
-      const Email = `${LicenseID}@${import.meta.env.VITE_VENDOR_EMAIL_POSTFIX}`
+      const Email = `${LicenseID}${settingsStore.settings.VendorEmailPostfix}`
       return {
-        Email,
+        PLZ,
+        Location,
+        Address,
+        Longitude: Longitude === '' ? 0.1 : Longitude,
+        Latitude: Latitude === '' ? 0.1 : Latitude,
+        WorkingTime: WorkingTime === '' ? 'g' : WorkingTime,
         LicenseID,
         FirstName,
         LastName,
-        LastPayout: null,
-        UrlID: '',
-        IsDisabled: false,
-        Latitude: 0,
-        Longitude: 0,
-        PLZ,
-        Location,
-        Language,
         Telephone,
+        Language,
         RegistrationDate,
         VendorSince,
         Comment,
+        LastPayout: null,
+        UrlID: '',
         OnlineMap: OnlineMap === 'Ja' || OnlineMap === 'ja' || OnlineMap === 'yes' ? true : false,
         HasSmartphone:
           HasSmartphone === 'Ja' || HasSmartphone === 'ja' || HasSmartphone === 'yes'
@@ -161,8 +163,8 @@ const importCSV = async () => {
           HasBankAccount === 'Ja' || HasBankAccount === 'ja' || HasBankAccount === 'yes'
             ? true
             : false,
-        Address,
-        WorkingTime
+        IsDisabled: false,
+        Email
       }
     })
 
