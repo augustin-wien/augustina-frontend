@@ -174,8 +174,20 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description"
+                >{{ $t('Item order (higher moves the item up)') }}:</label
+              >
+              <div class="flex flex-row">
+                <input
+                  id="description"
+                  v-model="updatedItem.ItemOrder"
+                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  required
+                />
+              </div>
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price"
-                >{{ $t('price') }}:</label
+                >{{ $t('price') }} (Cent):</label
               >
               <div class="flex flex-row">
                 <input
