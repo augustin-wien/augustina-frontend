@@ -42,7 +42,7 @@ const url = import.meta.env.VITE_API_URL
                 <tbody className="text-sm">
                   <tr>
                     <th className="p-3">{{ $t('Newspaper name') }}</th>
-                    <td className="p-3" id="newspapername_value">
+                    <td id="newspapername_value" className="p-3">
                       {{ settings.NewspaperName }}
                     </td>
                   </tr>
@@ -147,7 +147,7 @@ const url = import.meta.env.VITE_API_URL
               </div>
               <div>
                 <router-link to="/backoffice/settings/update">
-                  <button class="p-2 rounded-full bg-lime-600 text-white mr-2" id="editSettings">
+                  <button id="editSettings" class="p-2 rounded-full bg-lime-600 text-white mr-2">
                     {{ $t('change') }}
                   </button>
                 </router-link>
