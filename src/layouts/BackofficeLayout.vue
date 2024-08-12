@@ -20,7 +20,6 @@ const keycloakStore = useKeycloakStore()
 const settingsStore = useSettingsStore()
 settingsStore.getSettingsFromApi()
 const settings = computed(() => settingsStore.settings)
-console.log(settingsStore.settings)
 const authenticated = computed(() => keycloakStore.authenticated)
 const apiUrl = import.meta.env.VITE_API_URL
 
