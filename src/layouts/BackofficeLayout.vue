@@ -66,7 +66,7 @@ onMounted(() => {
           </div>
           <RouterLink to="/backoffice/vendorsummary">
             <button
-              class="flex justify-start w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+              class="flex justify-start w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
             >
               <font-awesome-icon :icon="faUserGroup" />
               <p class="text-base leading-4">{{ $t('menuVendors') }}</p>
@@ -74,7 +74,7 @@ onMounted(() => {
           </RouterLink>
           <RouterLink to="/backoffice/credits" class-name="sidemenu-link">
             <button
-              class="flex justifyy-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+              class="flex justifyy-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
             >
               <font-awesome-icon :icon="faBagShopping" />
               <p class="text-base leading-4">{{ $t('menuCredits') }}</p>
@@ -82,7 +82,7 @@ onMounted(() => {
           </RouterLink>
           <RouterLink to="/backoffice/payouts" class-name="sidemenu-link">
             <button
-              class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+              class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
             >
               <font-awesome-icon :icon="faFileLines" />
 
@@ -91,7 +91,7 @@ onMounted(() => {
           </RouterLink>
           <RouterLink to="/backoffice/sales" class-name="sidemenu-link">
             <button
-              class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+              class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
             >
               <font-awesome-icon :icon="faDungeon" />
 
@@ -100,7 +100,7 @@ onMounted(() => {
           </RouterLink>
           <RouterLink to="/backoffice/payments" class-name="sidemenu-link">
             <button
-              class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+              class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
             >
               <font-awesome-icon :icon="faBagShopping" />
 
@@ -109,7 +109,7 @@ onMounted(() => {
           </RouterLink>
           <RouterLink to="/backoffice/productsettings" class-name="sidemenu-link">
             <button
-              class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+              class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
             >
               <font-awesome-icon :icon="faSplotch" />
 
@@ -118,7 +118,7 @@ onMounted(() => {
           </RouterLink>
           <RouterLink to="/backoffice/settings" class-name="sidemenu-link">
             <button
-              class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+              class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
             >
               <font-awesome-icon :icon="faSliders" />
 
@@ -127,7 +127,7 @@ onMounted(() => {
           </RouterLink>
           <RouterLink to="/backoffice/map" class-name="sidemenu-link">
             <button
-              class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+              class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
             >
               <font-awesome-icon :icon="faMapLocation" />
 
@@ -136,7 +136,7 @@ onMounted(() => {
           </RouterLink>
           <RouterLink to="/backoffice/statistics" class-name="sidemenu-link">
             <button
-              class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+              class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
             >
               <font-awesome-icon :icon="faAreaChart" />
 
@@ -144,14 +144,14 @@ onMounted(() => {
             </button>
           </RouterLink>
           <button
-            class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+            class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
             @click="keycloak.keycloak?.logout()"
           >
             <font-awesome-icon :icon="faArrowRightFromBracket" />
 
             <p class="text-base leading-4">{{ $t('Logout') }}</p>
           </button>
-          <div class="text-white mt-10">
+          <div class="customcolor mt-10">
             <p v-if="keycloakStore.username">
               {{ keycloakStore.username }} {{ $t('userLoggedIn') }}
             </p>

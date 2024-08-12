@@ -120,7 +120,7 @@ const formatCredit = (credit: number) => {
             </div>
             <div v-if="vendor">
               <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
-                <button class="p-2 rounded-full bg-lime-600 text-white mr-2">
+                <button class="p-2 rounded-full customcolor mr-2">
                   {{ $t('change') }}
                 </button>
               </router-link>
@@ -139,5 +139,10 @@ tr {
 
 td {
   padding: 10px;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

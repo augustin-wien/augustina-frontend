@@ -439,7 +439,7 @@ const importCSV = async () => {
             </div>
 
             <div class="flex place-content-center">
-              <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">
+              <button type="submit" class="p-3 rounded-full customcolor">
                 {{ $t('create') }}
               </button>
             </div>
@@ -453,7 +453,7 @@ const importCSV = async () => {
       </div>
       <footer>
         <button
-          className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-20 w-20"
+          className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-20 w-20"
           @click="importCSV"
         >
           CSV import
@@ -470,5 +470,10 @@ tr {
 
 td {
   padding: 10px;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

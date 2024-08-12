@@ -207,7 +207,7 @@ const getItemName = (itemID: number) => {
                     v-if="vendor.Balance > 0"
                     type="submit"
                     value="Bestätigen"
-                    className="p-3 m-3 rounded-full bg-lime-600 text-white"
+                    className="p-3 m-3 rounded-full customcolor"
                     :onClick="payoutVendor"
                     :disabled="vendor.Balance === 0"
                   >
@@ -217,7 +217,7 @@ const getItemName = (itemID: number) => {
                     v-else
                     type="submit"
                     value="Bestätigen"
-                    className="p-3 m-3 rounded-full bg-lime-600 text-white"
+                    className="p-3 m-3 rounded-full customcolor"
                     disabled
                   >
                     {{ $t('noCredits') }}
@@ -243,5 +243,9 @@ button[disabled] {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
+}
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

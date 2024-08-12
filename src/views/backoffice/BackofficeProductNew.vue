@@ -134,10 +134,7 @@ const updateImage = (event: any) => {
             </div>
 
             <div class="flex justify-between">
-              <button
-                class="p-3 rounded-full mr-3 bg-red-600 bg-lime-600 text-white"
-                @click="cancel"
-              >
+              <button class="p-3 rounded-full mr-3 bg-red-600 text-white" @click="cancel">
                 {{ $t('cancel') }}
               </button>
               <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">

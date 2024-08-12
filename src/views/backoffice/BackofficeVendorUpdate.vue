@@ -349,11 +349,7 @@ const showToast = (type: string, message: string) => {
                 </span>
               </div>
             </div>
-            <button
-              type="submit"
-              class="p-3 rounded-full bg-lime-600 text-white"
-              @click="updateVendor"
-            >
+            <button type="submit" class="p-3 rounded-full customcolor" @click="updateVendor">
               {{ $t('save') }}
             </button>
           </form>
@@ -364,12 +360,17 @@ const showToast = (type: string, message: string) => {
   </component>
 </template>
 
-<style>
+<style scoped>
 tr {
   padding: 10px;
 }
 
 td {
   padding: 10px;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

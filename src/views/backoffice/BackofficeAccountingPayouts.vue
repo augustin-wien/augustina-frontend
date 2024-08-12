@@ -126,10 +126,7 @@ const exportTable = () => {
             @range-end="onRangeEnd"
           />
         </div>
-        <button
-          class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
-          @click="exportTable"
-        >
+        <button class="rounded-full customcolor ml-2 px-4 py-2 h-10 mr-5" @click="exportTable">
           {{ $t('export') }}
         </button>
       </div>
@@ -175,3 +172,10 @@ const exportTable = () => {
     </template>
   </component>
 </template>
+
+<style scoped>
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
+}
+</style>
