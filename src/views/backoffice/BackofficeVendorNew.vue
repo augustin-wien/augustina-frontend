@@ -5,9 +5,7 @@ import { useSettingsStore } from '@/stores/settings'
 import type { Vendor } from '@/stores/vendor'
 import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
-import { useSettingsStore } from '@/stores/settings'
 
-const settingsStore = useSettingsStore()
 
 const store = vendorsStore()
 const settingsStore = useSettingsStore()
