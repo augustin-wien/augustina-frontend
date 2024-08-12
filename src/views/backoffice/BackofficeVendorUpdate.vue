@@ -10,6 +10,7 @@ import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores/settings'
 
 const settingsStore = useSettingsStore()
+
 import { transformToFloat } from '@/utils/utils'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'

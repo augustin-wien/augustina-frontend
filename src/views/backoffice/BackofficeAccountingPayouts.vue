@@ -9,7 +9,6 @@ import { type Payment } from '@/stores/payments'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { useSettingsStore } from '@/stores/settings'
 
-
 const startOfDay = (date: Date) => {
   const d = new Date(date)
   d.setHours(0, 0, 0, 0)

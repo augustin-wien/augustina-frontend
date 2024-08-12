@@ -7,6 +7,7 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
 
 const settingsStore = useSettingsStore()
+
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
