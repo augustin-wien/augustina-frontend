@@ -15,7 +15,9 @@ import {
   SETTINGS_API_URL,
   VENDORS_API_URL,
   VENDORS_LOCATION_URL,
-  VENDOR_ME_API_URL
+  VENDOR_ME_API_URL,
+  PAYMENT_STATISTICS_API_URL,
+  PDF_DOWNLOAD_API_URL
 } from './endpoints'
 
 export const apiInstance = axios.create({
@@ -24,7 +26,7 @@ export const apiInstance = axios.create({
 
 apiInstance.interceptors.request.use(
   (config) => {
-    if (keycloak && keycloak.keycloak.authenticated) {
+    if (keycloak && keycloak.keycloak?.authenticated) {
       config.headers.Authorization = `Bearer ${keycloak.keycloak.token}`
     }
 
@@ -41,7 +43,7 @@ apiInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response.status === 401) {
-      keycloak.keycloak.login()
+      keycloak.keycloak?.login()
     }
 
     return Promise.reject(error)
@@ -129,6 +131,16 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('FontColor', updatedSettings.FontColor)
   formData.append('Logo', updatedSettings.Logo)
   formData.append('MainItem', updatedSettings.MainItem.toString())
+  formData.append('AGBUrl', updatedSettings.AGBUrl)
+  formData.append('MaintainanceModeHelpUrl', updatedSettings.MaintainanceModeHelpUrl)
+  formData.append('QRCodeLogoImgUrl', updatedSettings.QRCodeLogoImgUrl)
+  formData.append('QRCodeUrl', updatedSettings.QRCodeUrl)
+  formData.append('VendorNotFoundHelpUrl', updatedSettings.VendorNotFoundHelpUrl)
+  formData.append('VendorEmailPostfix', updatedSettings.VendorEmailPostfix)
+  formData.append('WebshopIsClosed', updatedSettings.WebshopIsClosed.toString())
+  formData.append('NewspaperName', updatedSettings.NewspaperName)
+  formData.append('MapCenterLat', updatedSettings.MapCenterLat.toString())
+  formData.append('MapCenterLong', updatedSettings.MapCenterLong.toString())
 
   formData.append(
     'OrgaCoversTransactionCosts',
@@ -146,7 +158,6 @@ export async function patchSettings(updatedSettings: Settings) {
 }
 
 //payments list
-//sind rfc dates strings?
 export async function fetchPayments(startDate: Date, endDate: Date, filter: string) {
   return apiInstance.get(
     `${PAYMENT_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}${
@@ -170,6 +181,60 @@ export async function getPaymentsForPayout(payout: PaymentsForPayout) {
   return apiInstance.get(`${PAYMENTS_FOR_PAYOUT_API_URL}?vendor=${payout.Vendor}`)
 }
 
+//locations
 export async function getLocations() {
   return apiInstance.get(VENDORS_LOCATION_URL)
+}
+
+//statistics
+export async function fetchStatistics(startDate: Date, endDate: Date, filter: string) {
+  return apiInstance.get(
+    `${PAYMENT_STATISTICS_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}${
+      filter ? '&' + filter : ''
+    }`
+  )
+}
+
+// pdf download
+export async function validatePdfDownload(linkId: string) {
+  return apiInstance.get(`${PDF_DOWNLOAD_API_URL}${linkId}/validate/`)
+}
+export async function pdfDownload(linkId: string) {
+  // create a hidden link and click it
+  const link = document.createElement('a')
+  link.href = `${PDF_DOWNLOAD_API_URL}${linkId}/`
+  link.target = '_blank'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
+// image Download
+
+export async function getBase64ImageFromUrl(url: string) {
+  const response = await axios.get(url, { responseType: 'blob' })
+  if (response.status == 200) {
+    const base64data = await blobToData(response.data)
+    return base64data
+  } else return undefined
+}
+
+function blobToData(blob: Blob): Promise<string | undefined> {
+  const result = new Promise<string | undefined>((resolve) => {
+    const reader = new FileReader()
+
+    reader.onloadend = () => {
+      const result = reader.result
+
+      if (result && result !== null && typeof result === 'string') {
+        resolve(result)
+      }
+
+      resolve(undefined)
+    }
+
+    reader.readAsDataURL(blob)
+  })
+
+  return result
 }

@@ -4,5 +4,5 @@ import keycloak from '@/keycloak/keycloak'
 
 <template>
   error 404
-  <div class="btn" @click="keycloak.keycloak.login()">Login</div>
+  <div class="btn" @click="keycloak.keycloak?.login()">Login</div>
 </template>

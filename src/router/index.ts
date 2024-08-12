@@ -222,7 +222,7 @@ const router = createRouter({
         layout: BackofficeDefault,
         requiresAuth: true
       },
-      component: () => import('@/views/backoffice/BackofficeSettingsUpdate.vue')
+      component: () => import('@/views/backoffice/SettingsUpdate.vue')
     },
 
     {
@@ -253,6 +253,15 @@ const router = createRouter({
       component: () => import('@/views/backoffice/MapView.vue')
     },
     {
+      path: '/backoffice/statistics',
+      name: 'Statistics',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true
+      },
+      component: () => import('@/views/backoffice/Statistics.vue')
+    },
+    {
       path: '/backoffice/productsettings/update/:ID',
       name: 'Update Product',
       meta: {
@@ -273,6 +282,22 @@ const router = createRouter({
       path: '/error',
       name: 'Error',
       component: () => import('@/views/ErrorPage.vue'),
+      meta: {
+        layout: Default
+      }
+    },
+    {
+      path: '/error-invalid-link',
+      name: 'Error invalid link',
+      component: () => import('@/views/ErrorPageInvalidLink.vue'),
+      meta: {
+        layout: Default
+      }
+    },
+    {
+      path: '/pdf/:id',
+      name: 'pdf download link',
+      component: () => import('@/views/PDFDownload.vue'),
       meta: {
         layout: Default
       }
@@ -313,17 +338,17 @@ const router = createRouter({
       component: () => import('@/views/VendorViewProfil.vue')
     },
     {
-      path: '/qr-code',
-      name: 'QR Code',
-      component: () => import('@/views/QRCode.vue'),
-      meta: {
-        layout: VendorLayoutVue
-      }
-    },
-    {
       path: '/:pathMatch(.*)*',
       name: 'all',
       component: () => import('@/views/GoToVendor.vue'),
+      meta: {
+        layout: Default
+      }
+    },
+    {
+      path: '/maintenance',
+      name: 'Maintenance',
+      component: () => import('@/views/MaintenanceWork.vue'),
       meta: {
         layout: Default
       }
@@ -344,10 +369,6 @@ router.beforeEach(async (to: any) => {
     // redirect the user to the login page
     // return { name: '404' }
   }
-  // Condition to toggle Lite-Mode
-  else if (import.meta.env.VITE_TOGGLE === 'true' && to.name === 'Version choice') {
-    return { name: 'Tippingpage' }
-  }
 })
 
 // Check if the user is authenticated
@@ -360,15 +381,15 @@ async function isAuthenticated() {
     }
 
     const keycloakStore = useKeycloakStore()
-    keycloakStore.setAuthenticated(keycloak.keycloak.authenticated)
+    keycloakStore.setAuthenticated(keycloak.keycloak?.authenticated)
 
-    if (keycloak.keycloak.tokenParsed) {
+    if (keycloak.keycloak?.tokenParsed) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
 
-    return keycloak.keycloak.authenticated
+    return keycloak.keycloak?.authenticated
   } else {
-    return keycloak.keycloak.authenticated
+    return keycloak.keycloak?.authenticated
   }
 }
 

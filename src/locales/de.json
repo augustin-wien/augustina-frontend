@@ -25,7 +25,6 @@
 
   "invalid": "Die gescannte ID ist nicht gültig",
   "gotovendor": "Gehe bitte zu einer Verkäuferin oder einem Verkäufer",
-  "augustin": "Zum Augustin",
 
   "product": "Produkt wählen",
   "menuVendors": "VerkäuferInnen",
@@ -38,6 +37,7 @@
   "menuMap": "Karte",
   "menuLogout": "Abmelden",
   "userLoggedIn": "ist angemeldet.",
+  "menuStatistics": "Statistik",
   "userNotLoggedIn": "Kein User ist angemeldet.",
 
   "accountingTitle": "Umsätze im gewählten Zeitraum",
@@ -58,7 +58,7 @@
   "description": "Beschreibung",
   "price": "Preis",
   "measure": "Aktion",
-  "change": "Ändern",
+  "change": "ändern",
   "new": "Neu",
   "newGendered": "Neue/n",
 
@@ -72,11 +72,21 @@
   "color": "Farbe",
   "fontColor": "Schriftfarbe",
   "maximum": "Maximale Bestellsumme",
+  "AGB URL": "AGB URL",
+  "URL for maintenance": "URL bei Wartungsarbeiten",
+  "Logo path": "Pfad zum Logo",
+  "LicenseID-not-found-URL": "Ausweisnummer nicht gefunden URL",
+  "Email ending domain": "E-Mail Endung",
+  "Webshop is closed": "Webshop ist geschlossen",
+  "Map center latitude": "Kartenmitte Breitengrad",
+  "Map center longitude": "Kartenmitte Längengrad",
+  "Map center": "Koordinaten der Kartenmitte",
 
   "yes": "Ja",
   "no": "Nein",
   "confirmation": "Bestätigen",
   "delete": "Löschen",
+  "save": "Speichern",
 
   "payout": "Für folgende Zahlungen auszahlen",
   "confirmPayout": "Auszahlung bestätigen",
@@ -108,6 +118,7 @@
   "openCredits": "Offene Beträge",
   "search": "Suchen",
   "IDNumber": "Ausweisnummer",
+  "SearchPlaceholder": "Suche nach Name oder ID",
   "payNow": "Auszahlen",
   "deactivated": "Deaktiviert",
 
@@ -128,6 +139,7 @@
   "information": "Bitte erkundige dich, ob dieses Produkt vorhanden ist!",
   "error": "Fehler",
   "errorText": "Upsi, es ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+  "errorTextInvalidLink": "Der Link zur PDF-Datei ist ungültig oder abgelaufen. Bitte kontaktiere das Büro.",
 
   "Items": "Deine Produkte",
 
@@ -144,7 +156,12 @@
   "Please enter a valid email address.": "Bitte gib eine gültige E-Mail Adresse ein.",
   "Back": "Zurück",
 
-  "isLicenseItem": "Ist digitaler Lizenzartikel",
+  "isLicenseItem": "Ist das Produkt ein digitaler Lizenzartikel?",
   "licenseItem": "Lizenzartikel",
-  "licenseGroup": "Lizenzgruppe"
+  "licenseGroup": "Lizenzgruppe",
+  "donation_only": "Nur Spende ist nicht möglich",
+  "isPDFLicenseItem": "Ist das Produkt ein PDF Lizenzartikel?",
+  "pdf item": "PDF Datei",
+
+  "maintenance": "Die Webseite steht derzeit unter Wartungsarbeiten. Wir entschuldigen uns für die Unannehmlichkeiten. Bitte versuche es in den nächsten Tagen erneut."
 }

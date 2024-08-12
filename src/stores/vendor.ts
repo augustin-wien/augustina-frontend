@@ -55,9 +55,10 @@ export const useVendorStore = defineStore('vendor', {
 
 //define interface to store data from backend properly
 export interface Vendor {
+  ID: number
+  AccountProofUrl: string | null
   Email: string
   FirstName: string
-  ID: number
   KeycloakID: string
   LastName: string
   LastPayout: string | null
@@ -65,6 +66,7 @@ export interface Vendor {
   UrlID: string
   Balance: number
   IsDisabled: boolean
+  IsDeleted: boolean
   Longitude: number
   Latitude: number
   Address: string
@@ -79,6 +81,7 @@ export interface Vendor {
   OnlineMap: boolean
   HasSmartphone: boolean
   HasBankAccount: boolean
+
   OpenPayments:
     | [
         {
@@ -186,13 +189,13 @@ export const vendorsStore = defineStore('vendors', {
     },
 
     async updateVendor(updatedVendor: Vendor) {
-      patchVendor(updatedVendor)
-        .then(() => {
-          this.getVendors()
-        })
-        .catch((error) => {
-          console.error('Error updating vendor:', error)
-        })
+      try {
+        await patchVendor(updatedVendor)
+        this.getVendors()
+        return
+      } catch (error) {
+        return error
+      }
     },
     async deleteVendor(vendorId: number) {
       removeVendor(vendorId)

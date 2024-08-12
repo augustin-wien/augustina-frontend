@@ -11,6 +11,7 @@ import { useSettingsStore } from '@/stores/settings'
 const settingsStore = useSettingsStore()
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
+const settingsStore = useSettingsStore()
 const items = computed(() => itemsStore.itemsBackoffice)
 
 const startOfDay = (date: Date) => {
@@ -53,7 +54,7 @@ const translateReceiver = (receiver: string) => {
 }
 
 const translateSender = (receiver: string) => {
-  return receiver == 'Orga' ? 'Augustin' : receiver
+  return receiver == 'Orga' ? settingsStore.settings.NewspaperName : receiver
 }
 
 const translateItem = (payment: Payment) => {
@@ -114,22 +115,20 @@ const exportTable = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center">
-        <div class="grid grid-cols-2">
-          <div>
-            <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuAccounting') }}</h1>
-            <span>
-              <VueDatePicker
-                v-model="date"
-                range
-                :enable-time-picker="false"
-                :placeholder="$t('chooseDateRange')"
-                class="max-w-md"
-                @range-start="onRangeStart"
-                @range-end="onRangeEnd"
-              />
-            </span>
-          </div>
+      <div class="flex space-between justify-between content-center items-center mt-3">
+        <h1 className="font-bold text-2xl">{{ $t('menuAccounting') }}</h1>
+        <div>
+          <span>
+            <VueDatePicker
+              v-model="date"
+              range
+              :enable-time-picker="false"
+              :placeholder="$t('chooseDateRange')"
+              class="max-w-md"
+              @range-start="onRangeStart"
+              @range-end="onRangeEnd"
+            />
+          </span>
         </div>
         <button
           class="rounded-full customcolor ml-2 px-4 py-2 h-10 mr-5"
@@ -141,9 +140,9 @@ const exportTable = () => {
     </template>
     <template #main>
       <div class="main">
-        <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className=" space-y-3 space-x-3">
-            <h1 class="text-2xl font-bold">{{ $t('accountingTitle') }}</h1>
+            <h1 class="text-xl font-bold">{{ $t('accountingTitle') }}</h1>
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>

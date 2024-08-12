@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
+import { useSettingsStore } from '@/stores/settings'
 import type { Vendor } from '@/stores/vendor'
 import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
@@ -9,9 +10,10 @@ import { useSettingsStore } from '@/stores/settings'
 const settingsStore = useSettingsStore()
 
 const store = vendorsStore()
+const settingsStore = useSettingsStore()
 
 const newVendor = ref<Vendor>({
-  Email: '@augustin.or.at',
+  Email: settingsStore.settings.VendorEmailPostfix,
   FirstName: '',
   ID: 0,
   KeycloakID: '',
@@ -21,8 +23,8 @@ const newVendor = ref<Vendor>({
   UrlID: '',
   Balance: 0,
   IsDisabled: false,
-  Longitude: 0,
-  Latitude: 0,
+  Longitude: 0.1,
+  Latitude: 0.1,
   Address: '',
   PLZ: '',
   Location: '',
@@ -35,7 +37,9 @@ const newVendor = ref<Vendor>({
   OnlineMap: false,
   HasSmartphone: false,
   HasBankAccount: false,
-  OpenPayments: null
+  OpenPayments: null,
+  AccountProofUrl: null,
+  IsDeleted: false
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)
@@ -45,7 +49,10 @@ const importingVendorsCount = ref(0)
 const submitVendor = async () => {
   if (!newVendor.value) return
 
-  if (!newVendor.value.Email || newVendor.value.Email === '@augustin.or.at') {
+  if (
+    !newVendor.value.Email ||
+    newVendor.value.Email === '@' + import.meta.env.VITE_VENDOR_EMAIL_POSTFIX
+  ) {
     showToast('error', 'Email muss angegeben werden')
     return
   }
@@ -75,7 +82,7 @@ const submitVendor = async () => {
 
   try {
     await store.createVendorPromise(newVendor.value as Vendor).then((res: any) => {
-      router.push(`/backoffice/vendorsummary/${res.ID}`)
+      router.push(`/backoffice/userprofile/${res.data}`)
     })
   } catch (err: any) {
     console.error('Error creating vendor:', err)
@@ -116,6 +123,8 @@ const importCSV = async () => {
         PLZ,
         Location,
         Address,
+        Longitude,
+        Latitude,
         WorkingTime,
         LicenseID,
         FirstName,
@@ -130,24 +139,24 @@ const importCSV = async () => {
         HasBankAccount
       ] = line.split(';')
 
-      const Email = `${LicenseID}@augustin.or.at`
+      const Email = `${LicenseID}${settingsStore.settings.VendorEmailPostfix}`
       return {
-        Email,
+        PLZ,
+        Location,
+        Address,
+        Longitude: Longitude === '' ? 0.1 : Longitude,
+        Latitude: Latitude === '' ? 0.1 : Latitude,
+        WorkingTime: WorkingTime === '' ? 'g' : WorkingTime,
         LicenseID,
         FirstName,
         LastName,
-        LastPayout: null,
-        UrlID: '',
-        IsDisabled: false,
-        Latitude: 0,
-        Longitude: 0,
-        PLZ,
-        Location,
-        Language,
         Telephone,
+        Language,
         RegistrationDate,
         VendorSince,
         Comment,
+        LastPayout: null,
+        UrlID: '',
         OnlineMap: OnlineMap === 'Ja' || OnlineMap === 'ja' || OnlineMap === 'yes' ? true : false,
         HasSmartphone:
           HasSmartphone === 'Ja' || HasSmartphone === 'ja' || HasSmartphone === 'yes'
@@ -157,8 +166,8 @@ const importCSV = async () => {
           HasBankAccount === 'Ja' || HasBankAccount === 'ja' || HasBankAccount === 'yes'
             ? true
             : false,
-        Address,
-        WorkingTime
+        IsDisabled: false,
+        Email
       }
     })
 

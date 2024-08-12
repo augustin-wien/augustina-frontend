@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted, watch } from 'vue'
-import { useItemsStore } from '@/stores/items'
-import type { Item } from '@/stores/items'
-import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
+import type { Item } from '@/stores/items'
+import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
 
 const settingsStore = useSettingsStore()
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 const itemsStore = useItemsStore()
 const keycloakStore = useKeycloakStore()
@@ -21,7 +21,7 @@ onMounted(() => {
     itemsStore.getItems()
     itemsStore.getItemsBackoffice()
   } else {
-    watch(authenticated, (val: boolean) => {
+    watch(authenticated, () => {
       itemsStore.getItems()
       itemsStore.getItemsBackoffice()
     })
@@ -69,7 +69,10 @@ const updateItem = async () => {
       .updateItem(updatedItem.value as Item)
       .then(() => {
         showToast('success', 'Produkt erfolgreich aktualisiert')
-        itemsStore.getItems()
+
+        itemsStore.getItems().then(() => {
+          router.push({ name: 'Backoffice Product Settings' })
+        })
       })
       .catch((err) => {
         showToast('error', 'Produkt konnte nicht aktualisiert werden' + err)
@@ -113,6 +116,11 @@ const updateImage = (event: any) => {
   updatedItem.value.Image = event.target?.files[0]
 }
 
+const updatePDF = (event: any) => {
+  if (!updatedItem.value) return
+  updatedItem.value.PDF = event.target?.files[0]
+}
+
 const apiUrl = import.meta.env.VITE_API_URL
 
 const previewImage = (image: string | Blob | MediaSource) => {
@@ -128,11 +136,11 @@ const previewImage = (image: string | Blob | MediaSource) => {
     <template #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">
         {{ $t('menuProducts') }} {{ $t('menuSettings') }}
-      </h1></template
-    >
+      </h1>
+    </template>
     <template v-if="updatedItem" #main>
       <div class="main">
-        <div v-if="item" class="w-full max-w-md mx-auto mt-4">
+        <div v-if="item" class="w-full mx-auto mt-4">
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ item.Name }} {{ $t('change') }}</h1>
             <button
@@ -143,7 +151,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
             </button>
           </div>
 
-          <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="updateItem">
+          <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
                 >{{ $t('name') }}:</label
@@ -169,8 +177,20 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description"
+                >{{ $t('Item order (higher moves the item up)') }}:</label
+              >
+              <div class="flex flex-row">
+                <input
+                  id="description"
+                  v-model="updatedItem.ItemOrder"
+                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  required
+                />
+              </div>
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price"
-                >{{ $t('price') }}:</label
+                >{{ $t('price') }} (Cent):</label
               >
               <div class="flex flex-row">
                 <input
@@ -181,44 +201,6 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
-                >{{ $t('isLicenseItem') }}:</label
-              >
-              <div class="flex flex-row">
-                <input
-                  id="isLicenseItem"
-                  v-model="updatedItem.IsLicenseItem"
-                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                  type="checkbox"
-                />
-              </div>
-
-              <div v-if="!updatedItem.IsLicenseItem">
-                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
-                  >{{ $t('licenseItem') }}:</label
-                >
-                <select
-                  v-model="updatedItem.LicenseItem"
-                  class="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
-                >
-                  <option :value="undefined">-- {{ $t('none') }} --</option>
-                  <option v-for="item in licenseItems" :key="item.ID" :value="item.ID">
-                    {{ item.Name }}
-                  </option>
-                </select>
-                <div v-if="updatedItem.LicenseItem !== undefined">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
-                    >{{ $t('licenseGroup') }}:</label
-                  >
-                  <input
-                    id="licenseGroup"
-                    v-model="updatedItem.LicenseGroup"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                </div>
-              </div>
-
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
                 >{{ $t('image') }}:</label
               >
@@ -239,6 +221,86 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   @change="updateImage"
                 />
               </div>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image">{{
+                $t('isLicenseItem')
+              }}</label>
+              <label class="inline-flex items-center cursor-pointer mt-4">
+                <input
+                  id="isLicenseItem"
+                  v-model="updatedItem.IsLicenseItem"
+                  class="sr-only peer"
+                  type="checkbox"
+                />
+                <div
+                  class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                ></div>
+                <span class="ms-3 text-sm font-medium">{{
+                  updatedItem.IsLicenseItem ? $t('yes') : $t('no')
+                }}</span>
+              </label>
+              <div v-if="!updatedItem.IsLicenseItem">
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
+                  >{{ $t('licenseItem') }}:</label
+                >
+                <select
+                  v-model="updatedItem.LicenseItem"
+                  class="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
+                >
+                  <option :value="undefined">-- {{ $t('none') }} --</option>
+                  <option v-for="elItem in licenseItems" :key="elItem.ID" :value="elItem.ID">
+                    {{ elItem.Name }}
+                  </option>
+                </select>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="pdf">{{
+                  $t('isPDFLicenseItem')
+                }}</label>
+                <label
+                  v-if="updatedItem.LicenseItem !== undefined"
+                  class="inline-flex items-center cursor-pointer mt-4"
+                >
+                  <input
+                    id="isLicenseItem"
+                    v-model="updatedItem.IsPDFItem"
+                    class="sr-only peer"
+                    type="checkbox"
+                  />
+                  <div
+                    class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                  ></div>
+                  <span class="ms-3 text-sm font-medium">{{
+                    updatedItem.IsPDFItem ? $t('yes') : $t('no')
+                  }}</span>
+                </label>
+                <div v-if="updatedItem.LicenseItem !== undefined && !updatedItem.IsPDFItem">
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
+                    >{{ $t('licenseGroup') }}:</label
+                  >
+                  <input
+                    id="licenseGroup"
+                    v-model="updatedItem.LicenseGroup"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                  />
+                </div>
+                <label
+                  v-if="updatedItem.LicenseItem !== undefined && updatedItem.IsPDFItem"
+                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                  for="pdf"
+                  >{{ $t('pdf item') }}:</label
+                >
+                <div
+                  v-if="updatedItem.LicenseItem !== undefined && updatedItem.IsPDFItem"
+                  class="flex flex-col"
+                >
+                  <input
+                    id="pdf"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    accept=".pdf"
+                    type="file"
+                    @change="updatePDF"
+                  />
+                </div>
+              </div>
             </div>
 
             <div class="flex place-content-center justify-between">
@@ -257,7 +319,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
                 {{ $t('confirmation') }}
               </button>
             </div>
-          </form>
+          </div>
           <Toast v-if="toast" :toast="toast" />
           <!-- delete modal -->
           <div v-if="showDeleteModal">
@@ -346,6 +408,7 @@ tr {
 td {
   padding: 10px;
 }
+
 .productImage {
   width: 100% !important;
 }

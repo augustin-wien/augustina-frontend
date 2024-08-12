@@ -11,6 +11,10 @@ export interface Item {
   IsLicenseItem: boolean
   LicenseItem: number | null
   LicenseGroup: string | null
+  IsPDFItem: boolean
+  PDF: string | null
+  ItemColor: string | null
+  ItemOrder: number
 }
 
 export const useItemsStore = defineStore('items', {

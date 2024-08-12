@@ -42,8 +42,8 @@ const apiUrl = import.meta.env.VITE_API_URL
     >
     <template #main>
       <div class="main w-full">
-        <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-center text-2xl space-y-3 space-x-3">
+        <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-xl space-y-3 space-x-3">
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
@@ -51,6 +51,7 @@ const apiUrl = import.meta.env.VITE_API_URL
                   <th class="p-3">{{ $t('name') }}</th>
                   <th class="p-3">{{ $t('description') }}</th>
                   <th class="p-3">{{ $t('price') }}</th>
+                  <th class="p-3">{{ $t('order') }}</th>
                   <th class="p-3">{{ $t('measure') }}</th>
                 </tr>
               </thead>
@@ -68,7 +69,8 @@ const apiUrl = import.meta.env.VITE_API_URL
                   <td class="border-t-2 p-3 font-bold">{{ $t(item.Name) }}</td>
                   <td class="border-t-2 p-3">{{ $t(item.Description) }}</td>
                   <td class="border-t-2 p-3">{{ formatCredit(item.Price) }} Euro</td>
-                  <td>
+                  <td class="border-t-2 p-3">{{ item.ItemOrder }}</td>
+                  <td class="border-t-2">
                     <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
                       <button class="p-3 rounded-full bg-lime-600 text-white">
                         {{ $t('change') }}

@@ -25,7 +25,6 @@ export const usePaymentStore = defineStore('payment', {
       sum: 0,
       price: 300,
       //the unit for tip is euros
-      tip: 0,
       tipItem: 2,
 
       //vivawallet
@@ -40,51 +39,8 @@ export const usePaymentStore = defineStore('payment', {
     }
   },
   actions: {
-    priceInEuros() {
-      if (isNaN(this.tip)) {
-        this.tip = 0
-      }
-
-      if (isNaN(this.sum)) {
-        return NaN
-      }
-
-      return this.sum / 100 + this.tip
-    },
     setSum(sum: number) {
       this.sum = sum
-    },
-    tipInCents() {
-      return this.tip * 100
-    },
-
-    increment() {
-      if (this.tip < 10) {
-        this.tip = this.tip + 0.5
-      } else {
-        this.tip = this.tip + 1
-      }
-    },
-
-    decrement() {
-      if (this.tip > 10) {
-        this.tip = this.tip - 1
-      } else if (this.tip - 0.5 >= 0) {
-        this.tip = this.tip - 0.5
-      }
-    },
-
-    incrementTipC(c: number) {
-      this.tip = this.tip + c
-    },
-
-    decrementTipC(c: number) {
-      if (this.tip - c >= 0) {
-        this.tip = this.tip - c
-      }
-    },
-    setTip(c: number) {
-      this.tip = c
     },
     epaper() {
       this.digital.digital = true
@@ -92,12 +48,6 @@ export const usePaymentStore = defineStore('payment', {
 
     print() {
       this.digital.digital = false
-    },
-    // decrement with custom values for cent (c)
-    decrementec(c: number) {
-      if (this.tip - c >= 0) {
-        this.tip = this.tip - c
-      }
     },
     addN(n: number) {
       this.testamount++
@@ -120,7 +70,6 @@ export const usePaymentStore = defineStore('payment', {
       this.pricePerPaper = price
     },
     toAGB() {
-      console.log(import.meta.env.VITE_AGB_URL)
       window.open(import.meta.env.VITE_AGB_URL, '_blank')
     },
     resetVerification() {

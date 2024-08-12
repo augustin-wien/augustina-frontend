@@ -10,7 +10,8 @@ import {
   faSliders,
   faSplotch,
   faUserGroup,
-  faMapLocation
+  faMapLocation,
+  faAreaChart
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { computed, onMounted, watch } from 'vue'
@@ -49,7 +50,7 @@ onMounted(() => {
                   ? apiUrl + settings.Logo
                   : apiUrl + 'img/logo.png'
               "
-              alt="Augustin logo"
+              alt="Newspaper logo"
               class="logo mx-auto my-5"
               width="270"
               height="auto"
@@ -57,7 +58,7 @@ onMounted(() => {
             <img
               v-else
               :src="settings.Logo"
-              alt="Augustin logo"
+              alt="Newspaper logo"
               class="logo mx-auto my-5"
               width="270"
               height="auto"
@@ -133,9 +134,18 @@ onMounted(() => {
               <p class="text-base leading-4">{{ $t('menuMap') }}</p>
             </button>
           </RouterLink>
+          <RouterLink to="/backoffice/statistics" class-name="sidemenu-link">
+            <button
+              class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
+            >
+              <font-awesome-icon :icon="faAreaChart" />
+
+              <p class="text-base leading-4">{{ $t('menuStatistics') }}</p>
+            </button>
+          </RouterLink>
           <button
             class="flex justify-start items-center w-full space-x-6 focus:outline-none text-white focus:text-indigo-400 pr-5 pb-1 rounded"
-            @click="keycloak.keycloak.logout"
+            @click="keycloak.keycloak?.logout()"
           >
             <font-awesome-icon :icon="faArrowRightFromBracket" />
 
@@ -235,18 +245,20 @@ onMounted(() => {
   padding-bottom: 20px;
   padding-left: 50px;
   border-radius: 5px;
-  background: #f2f9f1;
+  background: #fff;
   width: 100%;
   z-index: 50;
   max-width: calc(100vw - 300px);
+  min-height: 80px;
 }
-
 .main-slot {
   text-align: left;
   border-radius: 5px;
   margin-top: 70px;
   width: 100%;
   padding: 50px;
+  background-color: #f2f2f2;
+  display: inline-table;
 }
 
 footer {
@@ -256,6 +268,9 @@ footer {
   text-align: left;
   margin-top: 50px;
   padding-top: 50px;
+}
+.logo.mx-auto.my-5 {
+  min-height: 70px;
 }
 </style>
 

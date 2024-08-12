@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue'
+import { onMounted, watch } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { computed } from 'vue'
@@ -13,6 +13,7 @@ const authenticated = computed(() => keycloakStore.authenticated)
 
 const store = vendorsStore()
 const settStore = useSettingsStore()
+const shopUrl = import.meta.env.VITE_FRONTEND_URL
 
 const vendorMe = computed(() => store.vendor)
 
@@ -47,7 +48,7 @@ const generateQRCode = async (vendorMe: Vendor) => {
     width: 200,
     height: 200,
     type: 'svg',
-    data: `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}`,
+    data: `${shopUrl}/v/${vendorMe?.LicenseID}`,
 
     dotsOptions: {
       color: '#000',
@@ -101,8 +102,8 @@ const customColor = computed(() => {
             <div id="canvas"></div>
             <div>
               <strong class="mr-2">{{ $t('Url') }}:</strong>
-              <a href="{{ `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}` }}">
-                {{ `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}` }}
+              <a href="{{ `${shopUrl}/v/${vendorMe?.LicenseID}` }}">
+                {{ `${shopUrl}/v/${vendorMe?.LicenseID}` }}
               </a>
             </div>
           </div>
