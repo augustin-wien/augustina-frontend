@@ -17,10 +17,10 @@ import { computed, onMounted, watch } from 'vue'
 
 const keycloakStore = useKeycloakStore()
 const settingsStore = useSettingsStore()
+settingsStore.getSettingsFromApi()
 const settings = computed(() => settingsStore.settings)
-
+console.log(settingsStore.settings)
 const authenticated = computed(() => keycloakStore.authenticated)
-
 const apiUrl = import.meta.env.VITE_API_URL
 
 onMounted(() => {
@@ -39,7 +39,7 @@ onMounted(() => {
     <div v-if="authenticated" className="backoffice-layout h-screen flex ">
       <div class="h-full flex-none w-100">
         <div
-          className="sidemenu fixed t-0 l-0 h-full w-100 flex-none flex flex-col justify-start items-start pr-5 pl-4 border-gray-600 border-b space-y-3 pb-5 bg-lime-600"
+          className="sidemenu fixed t-0 l-0 h-full w-100 flex-none flex flex-col justify-start items-start pr-5 pl-4 border-gray-600 border-b space-y-3 pb-5 customcolor"
         >
           <div className="sidemenu-item object-center">
             <img
@@ -149,7 +149,7 @@ onMounted(() => {
           </div>
           <select
             v-model="$i18n.locale"
-            class="h-[40px] w-[70px] bg-lime-700 border-2 border-white font-semibold rounded-full text-white text-center mt-4 mr-4 pl-2 text-sm"
+            class="h-[40px] w-[70px] customcolor border-2 border-white font-semibold rounded-full text-center mt-4 mr-4 pl-2 text-sm"
           >
             <option value="en">EN</option>
             <option value="de">DE</option>
@@ -214,10 +214,15 @@ onMounted(() => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .main-container {
   padding-left: 8px;
   margin-left: 300px;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 
 .sidemenu-link {
