@@ -4,6 +4,9 @@ import { computed, onMounted, ref, watch } from 'vue'
 import keycloak from '@/keycloak/keycloak'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Vendor } from '@/stores/vendor'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const store = vendorsStore()
 

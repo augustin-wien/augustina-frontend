@@ -6,6 +6,9 @@ import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const itemsStore = useItemsStore()
 const keycloakStore = useKeycloakStore()

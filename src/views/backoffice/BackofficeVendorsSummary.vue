@@ -9,6 +9,9 @@ import { exportAsCsv, formatCredit } from '@/utils/utils'
 
 import { faCreditCard, faArrowAltCircleRight, faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 // Initialize the vendor store
 const store = vendorsStore()

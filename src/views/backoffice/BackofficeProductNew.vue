@@ -4,6 +4,9 @@ import { useItemsStore } from '@/stores/items'
 import type { Item } from '@/stores/items'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const store = useItemsStore()
 

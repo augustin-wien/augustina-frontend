@@ -10,6 +10,9 @@ import { formatCredit, formatDate } from '@/utils/utils'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const keycloakStore = useKeycloakStore()
 

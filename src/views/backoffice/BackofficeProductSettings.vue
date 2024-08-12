@@ -4,6 +4,9 @@ import { computed, onMounted, watch } from 'vue'
 import { formatCredit } from '@/utils/utils'
 import { useKeycloakStore } from '@/stores/keycloak'
 import type { Item } from '@/stores/items'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()

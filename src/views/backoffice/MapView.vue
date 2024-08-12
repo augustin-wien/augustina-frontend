@@ -4,6 +4,9 @@ import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { useMapStore } from '@/stores/map'
 import { onMounted, computed, watch, ref } from 'vue'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const keycloakStore = useKeycloakStore()
 const authenticated = computed(() => keycloakStore.authenticated)

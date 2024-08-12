@@ -5,6 +5,9 @@ import { useRoute } from 'vue-router'
 import { useKeycloakStore } from '@/stores/keycloak'
 import router from '@/router'
 import { storeToRefs } from 'pinia'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const keycloakStore = useKeycloakStore()
 

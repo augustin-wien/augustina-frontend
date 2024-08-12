@@ -7,6 +7,9 @@ import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { storeToRefs } from 'pinia'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const store = vendorsStore()
 const keycloakStore = useKeycloakStore()

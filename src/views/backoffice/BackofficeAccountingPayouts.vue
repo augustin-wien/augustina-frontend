@@ -7,6 +7,9 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { useItemsStore } from '@/stores/items'
 import { type Payment } from '@/stores/payments'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
