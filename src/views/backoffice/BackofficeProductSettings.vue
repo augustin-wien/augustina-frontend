@@ -4,6 +4,9 @@ import { computed, onMounted, watch } from 'vue'
 import { formatCredit } from '@/utils/utils'
 import { useKeycloakStore } from '@/stores/keycloak'
 import type { Item } from '@/stores/items'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
@@ -69,7 +72,7 @@ const apiUrl = import.meta.env.VITE_API_URL
                   <td class="border-t-2 p-3">{{ item.ItemOrder }}</td>
                   <td class="border-t-2">
                     <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
-                      <button class="p-3 rounded-full bg-lime-600 text-white">
+                      <button class="p-3 rounded-full customcolor">
                         {{ $t('change') }}
                       </button>
                     </router-link>
@@ -85,7 +88,7 @@ const apiUrl = import.meta.env.VITE_API_URL
       <footer>
         <router-link to="/backoffice/newproduct">
           <button
-            className="p-3 rounded-full bg-lime-600 text-white absolute fixed bottom-10 right-10 h-16 w-16"
+            className="p-3 rounded-full customcolor absolute fixed bottom-10 right-10 h-16 w-16"
           >
             {{ $t('new') }}
           </button>
@@ -95,4 +98,9 @@ const apiUrl = import.meta.env.VITE_API_URL
   </component>
 </template>
 
-<style scoped></style>
+<style scoped>
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
+}
+</style>

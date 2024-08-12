@@ -142,15 +142,12 @@ const exportTable = () => {
               class="border-2 border-gray-400 rounded-md p-2 ml-2"
               @keyup.enter="search"
             />
-            <button class="p-3 rounded-full bg-lime-600 ml-2 text-white" @click="search">
+            <button class="p-3 rounded-full ml-2 customcolor" @click="search">
               {{ $t('search') }}
             </button>
           </span>
         </div>
-        <button
-          class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
-          @click="exportTable"
-        >
+        <button class="rounded-full customcolor px-4 py-2 h-10 mr-5" @click="exportTable">
           {{ $t('export') }}
         </button>
       </div>
@@ -159,7 +156,7 @@ const exportTable = () => {
     <template #main>
       <div class="main">
         <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-xl space-y-3 space-x-3 page-content space-x-2">
+          <div className="text-xl space-y-3 space-x-3 page-content">
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
@@ -184,7 +181,7 @@ const exportTable = () => {
                   <td class="flex justify-center">
                     <span id="canvas"></span>
                     <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
-                      <button className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2">
+                      <button className="p-2 rounded-full h-10 w-10 customcolor mr-2">
                         <font-awesome-icon :icon="faArrowAltCircleRight" />
                       </button>
                     </router-link>
@@ -192,19 +189,15 @@ const exportTable = () => {
                       v-if="vendor.Balance !== 0"
                       :to="`/backoffice/credits/payout/${vendor.ID}`"
                     >
-                      <button className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10">
+                      <button className="p-2 rounded-full customcolor mr-2 h-10 w-10">
                         <font-awesome-icon :icon="faCreditCard" />
                       </button>
                     </router-link>
-                    <button
-                      v-else
-                      disabled
-                      className="p-2 rounded-full bg-lime-600 text-white mr-2 h-10 w-10"
-                    >
+                    <button v-else disabled className="p-2 rounded-full customcolor mr-2 h-10 w-10">
                       <font-awesome-icon :icon="faCreditCard" />
                     </button>
                     <button
-                      className="p-2 rounded-full h-10 w-10 bg-lime-600 text-white mr-2"
+                      className="p-2 rounded-full h-10 w-10 customcolor mr-2"
                       @click="generateQRCode(vendor)"
                     >
                       <font-awesome-icon :icon="faQrcode" />
@@ -219,9 +212,7 @@ const exportTable = () => {
 
       <footer>
         <router-link to="/backoffice/newvendor">
-          <button
-            className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-16 w-16"
-          >
+          <button className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">
             {{ $t('new') }}
           </button>
         </router-link>
@@ -244,5 +235,10 @@ button[disabled] {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

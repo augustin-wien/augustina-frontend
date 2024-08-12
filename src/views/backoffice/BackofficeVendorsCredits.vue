@@ -4,6 +4,9 @@ import { computed, onMounted, ref, watch } from 'vue'
 import keycloak from '@/keycloak/keycloak'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Vendor } from '@/stores/vendor'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const store = vendorsStore()
 
@@ -82,15 +85,12 @@ const exportTable = () => {
               :placeholder="$t('IDNumber')"
               class="border-2 border-gray-400 rounded-md p-2 ml-2"
             />
-            <button class="p-3 rounded-full bg-lime-600 text-white ml-2">
+            <button class="p-3 rounded-full customcolor ml-2">
               {{ $t('search') }}
             </button>
           </span>
         </div>
-        <button
-          class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
-          @click="exportTable"
-        >
+        <button class="rounded-full customcolor px-4 py-2 h-10 mr-5" @click="exportTable">
           {{ $t('export') }}
         </button>
       </div>
@@ -118,7 +118,7 @@ const exportTable = () => {
                   <td className="border-t-2 p-3">{{ formatDate(vendor.LastPayout) }}</td>
                   <router-link v-if="vendor?.ID" :to="`/backoffice/credits/payout/${vendor.ID}`">
                     <button
-                      className="p-3 rounded-full bg-lime-600 text-white"
+                      className="p-3 rounded-full customcolor"
                       :disabled="vendor.Balance === 0"
                     >
                       {{ $t('payNow') }}
@@ -140,5 +140,10 @@ button[disabled] {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

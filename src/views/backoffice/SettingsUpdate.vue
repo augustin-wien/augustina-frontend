@@ -373,7 +373,7 @@ const url = import.meta.env.VITE_API_URL
                 <button
                   id="saveSettings"
                   type="submit"
-                  class="p-3 rounded-full bg-lime-600 text-white"
+                  class="p-3 rounded-full customcolor"
                   @click="updateSettings()"
                 >
                   {{ $t('confirmation') }}
@@ -388,12 +388,17 @@ const url = import.meta.env.VITE_API_URL
   </component>
 </template>
 
-<style>
+<style scoped>
 tr {
   padding: 10px;
 }
 
 td {
   padding: 10px;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

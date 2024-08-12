@@ -13,9 +13,10 @@ import { onMounted, computed, watch, ref } from 'vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
 
+const settingsStore = useSettingsStore()
+
 const keycloakStore = useKeycloakStore()
 const authenticated = computed(() => keycloakStore.authenticated)
-const settingsStore = useSettingsStore()
 
 const mapStore = useMapStore()
 const vendors = computed(() => mapStore.vendors)
@@ -77,9 +78,7 @@ function onMapReady(instance: any) {
                         params: { ID: vendor.id }
                       }"
                     >
-                      <button
-                        class="rounded-full bg-lime-600 text-white hover:bg-lime-700 px-4 py-2 h-10"
-                      >
+                      <button class="rounded-full customcolor py-2 px-3 h-10">
                         {{ $t('edit') }}
                       </button>
                     </RouterLink>
@@ -94,7 +93,7 @@ function onMapReady(instance: any) {
   </component>
 </template>
 
-<style>
+<style scoped>
 .leaflet-popup-content-wrapper {
   background-color: #fff;
 }
@@ -105,5 +104,10 @@ function onMapReady(instance: any) {
 
 .leaflet-container a.leaflet-popup-close-button {
   color: #000;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

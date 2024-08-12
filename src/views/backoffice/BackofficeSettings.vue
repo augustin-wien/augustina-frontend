@@ -147,7 +147,7 @@ const url = import.meta.env.VITE_API_URL
               </div>
               <div>
                 <router-link to="/backoffice/settings/update">
-                  <button id="editSettings" class="p-2 rounded-full bg-lime-600 text-white mr-2">
+                  <button id="editSettings" class="p-2 rounded-full customcolor mr-2">
                     {{ $t('change') }}
                   </button>
                 </router-link>
@@ -160,12 +160,17 @@ const url = import.meta.env.VITE_API_URL
   </component>
 </template>
 
-<style>
+<style scoped>
 tr {
   padding: 10px;
 }
 
 td {
   padding: 10px;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

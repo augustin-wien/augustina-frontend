@@ -4,6 +4,10 @@ import router from '@/router'
 import type { Item } from '@/stores/items'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
+
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
