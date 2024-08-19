@@ -46,7 +46,7 @@ const formatCredit = (credit: number) => {
             <div class="flex place-content-center justify-between">
               <span />
               <button
-                class="px-2 rounded-full bg-red-600 text-white font-bold"
+                class="px-2 rounded-full font-bold"
                 @click="router.push('/backoffice/vendorsummary')"
               >
                 X
@@ -64,7 +64,7 @@ const formatCredit = (credit: number) => {
                   <th className="p-3">{{ $t('LicenseId') }}:</th>
                   <td className="p-3">{{ vendor.LicenseID }}</td>
                   <th className="p-3">{{ $t('accountDeactivation') }}:</th>
-                  <td className="p-3">{{ vendor.IsDisabled }}</td>
+                  <td className="p-3">{{ vendor.IsDisabled?"yes":"no" }}</td>
                 </tr>
                 <tr>
                   <th className="p-3">{{ $t('lastPayout') }}:</th>
@@ -108,13 +108,13 @@ const formatCredit = (credit: number) => {
                   <th className="p-3">{{ $t('workingTime') }}:</th>
                   <td className="p-3">{{ vendor.WorkingTime }}</td>
                   <th className="p-3">Online Karte:</th>
-                  <td className="p-3">{{ vendor.OnlineMap }}</td>
+                  <td className="p-3">{{ $t(vendor.OnlineMap?"yes":"no") }}</td>
                 </tr>
                 <tr>
                   <th className="p-3">Smartphone:</th>
-                  <td className="p-3">{{ vendor.HasSmartphone }}</td>
+                  <td className="p-3">{{ $t(vendor.HasSmartphone?"yes":"no") }}</td>
                   <th className="p-3">{{ $t('bankAccount') }}:</th>
-                  <td className="p-3">{{ vendor.HasBankAccount }}</td>
+                  <td className="p-3">{{ $t(vendor.HasBankAccount?"yes":"no") }}</td>
                 </tr>
               </tbody>
             </div>

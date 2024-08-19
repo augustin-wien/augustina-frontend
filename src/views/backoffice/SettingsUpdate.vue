@@ -104,7 +104,7 @@ const url = import.meta.env.VITE_API_URL
             <div class="flex place-content-center justify-between">
               <span />
               <button
-                class="px-2 rounded-full bg-red-600 text-white font-bold"
+                class="px-2 rounded-full font-bold"
                 @click="router.push('/backoffice/settings')"
               >
                 X

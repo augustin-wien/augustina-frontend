@@ -79,7 +79,7 @@ const updateImage = (event: any) => {
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ $t('newProduct') }}</h1>
             <button
-              class="px-2 rounded-full bg-red-600 text-white font-bold"
+              class="px-2 rounded-full font-bold"
               @click="router.push('/backoffice/productsettings')"
             >
               X

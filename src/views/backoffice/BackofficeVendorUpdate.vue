@@ -91,10 +91,8 @@ const showToast = (type: string, message: string) => {
           <div v-if="vendor" class="w-full">
             <div class="flex place-content-center justify-between">
               <span></span>
-              <button
-                class="px-2 rounded-full bg-red-600 text-white font-bold"
-                @click="router.push('/backoffice/vendorsummary')"
-              >
+              <button class="px-2 rounded-full font-bold"
+                @click="router.push('/backoffice/vendorsummary')">
                 X
               </button>
             </div>
@@ -104,247 +102,161 @@ const showToast = (type: string, message: string) => {
             <div class="mb-4 justify-between grid grid-cols-2 gap-5">
               <div class="row">
                 <span class="col">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
-                    >{{ $t('firstName') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName">{{ $t('firstName')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="firstName"
-                      v-model="updatedVendor.FirstName"
+                    <input id="firstName" v-model="updatedVendor.FirstName"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      required
-                    />
+                      type="text" required />
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
-                    >{{ $t('lastName') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName">{{ $t('lastName')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="lastName"
-                      v-model="updatedVendor.LastName"
+                    <input id="lastName" v-model="updatedVendor.LastName"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      required
-                    />
+                      type="text" required />
                   </div>
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
-                    >Email:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email">Email:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="email"
-                      v-model="updatedVendor.Email"
+                    <input id="email" v-model="updatedVendor.Email"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="email"
-                      required
-                    />
+                      type="email" required />
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
-                    >{{ $t('licenseId') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID">{{ $t('licenseId')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="licenseID"
-                      v-model="updatedVendor.LicenseID"
+                    <input id="licenseID" v-model="updatedVendor.LicenseID"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      required
-                    />
+                      type="text" required />
                   </div>
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                    >{{ $t('deactivated') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime">{{ $t('deactivated')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <select
-                      id="onlineMap"
-                      v-model="updatedVendor.IsDisabled"
+                    <select id="onlineMap" v-model="updatedVendor.IsDisabled"
                       class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
+                      required>
                       <option value="true">{{ $t('yes') }}</option>
                       <option value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
-                    >{{ $t('address') }}<span class="text-red">*</span>:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress">{{ $t('address') }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="adress"
-                      v-model="updatedVendor.Address"
+                    <input id="adress" v-model="updatedVendor.Address"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      required
-                    />
+                      type="text" required />
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
-                    >{{ $t('postCode') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz">{{ $t('postCode') }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="plz"
-                      v-model="updatedVendor.PLZ"
+                    <input id="plz" v-model="updatedVendor.PLZ"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
+                      type="text" />
                   </div>
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >{{ $t('location') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location">{{ $t('location')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="location"
-                      v-model.number="updatedVendor.Location"
+                    <input id="location" v-model.number="updatedVendor.Location"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
+                      type="text" />
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >{{ $t('longitude') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location">{{ $t('longitude')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="location"
-                      v-model.number="updatedVendor.Longitude"
+                    <input id="location" v-model.number="updatedVendor.Longitude"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
+                      type="text" />
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >{{ $t('latitude') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location">{{ $t('latitude')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="location"
-                      v-model.number="updatedVendor.Latitude"
+                    <input id="location" v-model.number="updatedVendor.Latitude"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
+                      type="text" />
                   </div>
                 </span>
               </div>
               <div class="row">
                 <span class="col">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
-                    >{{ $t('telephone') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone">{{ $t('telephone')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="telephone"
-                      v-model="updatedVendor.Telephone"
+                    <input id="telephone" v-model="updatedVendor.Telephone"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
+                      type="text" />
                   </div>
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
-                    >Smartphone:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone">Smartphone:</label>
                   <div class="flex flex-row">
-                    <select
-                      id="hasSmartphone"
-                      v-model="updatedVendor.HasSmartphone"
+                    <select id="hasSmartphone" v-model="updatedVendor.HasSmartphone"
                       class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
+                      required>
                       <option value="true">{{ $t('yes') }}</option>
                       <option value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                    >{{ $t('workingTime') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime">{{ $t('workingTime')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="workingTime"
-                      v-model="updatedVendor.WorkingTime"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
+                    <select v-model="updatedVendor.WorkingTime"
+                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                      <option value="G" selected>{{ $t('(G) all day') }}</option>
+                      <option value="V">{{ $t('(v) mornings') }}</option>
+                      <option value="N">{{ $t('(N) afternoons') }}</option>
+                    </select>
                   </div>
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
-                    >{{ $t('language') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language">{{ $t('language')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="language"
-                      v-model="updatedVendor.Language"
+                    <input id="language" v-model="updatedVendor.Language"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      required
-                    />
+                      type="text" required />
                   </div>
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                    >{{ $t('onlineMap') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap">{{ $t('onlineMap')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <select
-                      id="onlineMap"
-                      v-model="updatedVendor.OnlineMap"
+                    <select id="onlineMap" v-model="updatedVendor.OnlineMap"
                       class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
+                      required>
                       <option value="true">{{ $t('yes') }}</option>
                       <option value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                    >{{ $t('bankAccount') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap">{{ $t('bankAccount')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <select
-                      id="bankAccount"
-                      v-model="updatedVendor.HasBankAccount"
+                    <select id="bankAccount" v-model="updatedVendor.HasBankAccount"
                       class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
+                      required>
                       <option value="true">{{ $t('yes') }}</option>
                       <option value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
 
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                    for="registrationDate"
-                    >{{ $t('registrationDate') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="registrationDate">{{
+                    $t('registrationDate') }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="registrationDate"
-                      v-model="updatedVendor.RegistrationDate"
+                    <input id="registrationDate" v-model="updatedVendor.RegistrationDate"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
+                      type="text" />
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
-                    >{{ $t('vendorSince') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince">{{ $t('vendorSince')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <input
-                      id="vendorSince"
-                      v-model="updatedVendor.VendorSince"
+                    <input id="vendorSince" v-model="updatedVendor.VendorSince"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
+                      type="text" />
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
-                    >{{ $t('comment') }}:</label
-                  >
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment">{{ $t('comment')
+                    }}:</label>
                   <div class="flex flex-row">
-                    <textarea
-                      id="comment"
-                      v-model="updatedVendor.Comment"
+                    <textarea id="comment" v-model="updatedVendor.Comment"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      rows="5"
-                      type="text"
-                    ></textarea>
+                      rows="5" type="text"></textarea>
                   </div>
                 </span>
               </div>

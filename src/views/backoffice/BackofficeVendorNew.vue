@@ -25,7 +25,7 @@ const newVendor = ref<Vendor>({
   Address: '',
   PLZ: '',
   Location: '',
-  WorkingTime: '',
+  WorkingTime: 'G',
   Language: '',
   Comment: '',
   Telephone: '',
@@ -143,7 +143,7 @@ const importCSV = async () => {
         Address,
         Longitude: Longitude === '' ? 0.1 : Longitude,
         Latitude: Latitude === '' ? 0.1 : Latitude,
-        WorkingTime: WorkingTime === '' ? 'g' : WorkingTime,
+        WorkingTime: WorkingTime === '' ? 'G' : WorkingTime,
         LicenseID,
         FirstName,
         LastName,
@@ -199,7 +199,7 @@ const importCSV = async () => {
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ $t('newGendered') }} {{ $t('vendorSingular') }}</h1>
             <button
-              class="px-2 rounded-full bg-red-600 text-white font-bold"
+              class="px-2 rounded-full font-bold"
               @click="router.push('/backoffice/vendorsummary')"
             >
               X
@@ -346,12 +346,11 @@ const importCSV = async () => {
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
                     >{{ $t('workingTime') }}:</label
                   >
-                  <input
-                    id="workingTime"
-                    v-model="newVendor.WorkingTime"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
+                  <select v-model="newVendor.WorkingTime" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <option value="G" selected>{{ $t('(G) all day') }}</option>
+                    <option value="V">{{ $t('(v) mornings') }}</option>
+                    <option value="N">{{ $t('(N) afternoons') }}</option>
+                  </select>
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                     for="registrationDate"
