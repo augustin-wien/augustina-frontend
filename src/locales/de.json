@@ -81,7 +81,8 @@
   "Map center latitude": "Kartenmitte Breitengrad",
   "Map center longitude": "Kartenmitte Längengrad",
   "Map center": "Koordinaten der Kartenmitte",
-
+  "false": "Nein",
+  "true": "Ja",
   "yes": "Ja",
   "no": "Nein",
   "confirmation": "Bestätigen",

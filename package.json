@@ -35,6 +35,7 @@
     "jspdf": "^2.5.1",
     "keycloak-js": "^21.1.2",
     "leaflet": "^1.9.4",
+    "leaflet-geosearch": "^4.0.0",
     "npm": "^10.2.4",
     "pinia": "^2.1.6",
     "qr-code-styling": "^1.6.0-rc.1",

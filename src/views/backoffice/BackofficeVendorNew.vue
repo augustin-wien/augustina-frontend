@@ -346,7 +346,10 @@ const importCSV = async () => {
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
                     >{{ $t('workingTime') }}:</label
                   >
-                  <select v-model="newVendor.WorkingTime" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                  <select
+                    v-model="newVendor.WorkingTime"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  >
                     <option value="G" selected>{{ $t('(G) all day') }}</option>
                     <option value="V">{{ $t('(v) mornings') }}</option>
                     <option value="N">{{ $t('(N) afternoons') }}</option>
