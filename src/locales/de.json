@@ -58,7 +58,7 @@
   "description": "Beschreibung",
   "price": "Preis",
   "measure": "Aktion",
-  "change": "ändern",
+  "change": "Bearbeiten",
   "new": "Neu",
   "newGendered": "Neue/n",
 
@@ -97,7 +97,7 @@
 
   "firstName": "Vorname",
   "lastName": "Nachname",
-  "licenseId": "Lizenznummer",
+  "LicenseId": "Ausweisnummer",
   "language": "Sprache",
   "telephone": "Telefonnummer",
   "address": "Adresse",

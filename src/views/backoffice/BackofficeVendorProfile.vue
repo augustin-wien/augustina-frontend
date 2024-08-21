@@ -6,6 +6,7 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import router from '@/router'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores/settings'
+import IconCross from '@/components/icons/IconCross.vue'
 
 const settingsStore = useSettingsStore()
 
@@ -45,11 +46,9 @@ const formatCredit = (credit: number) => {
           <div className="text-center text-2xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
               <span />
-              <button
-                class="px-2 rounded-full bg-red-600 text-white font-bold"
-                @click="router.push('/backoffice/vendorsummary')"
-              >
-                X
+              <button class="rounded-full bg-red-600 text-white font-bold"
+                @click="router.push('/backoffice/vendorsummary')">
+                <IconCross />
               </button>
             </div>
             <div className="table-auto border-spacing-4 border-collapse">
@@ -120,7 +119,7 @@ const formatCredit = (credit: number) => {
             </div>
             <div v-if="vendor">
               <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
-                <button class="p-2 rounded-full customcolor mr-2">
+                <button class="px-4 py-2 rounded-full customcolor mr-3">
                   {{ $t('change') }}
                 </button>
               </router-link>

@@ -147,7 +147,7 @@ const url = import.meta.env.VITE_API_URL
               </div>
               <div>
                 <router-link to="/backoffice/settings/update">
-                  <button id="editSettings" class="p-2 rounded-full customcolor mr-2">
+                  <button id="editSettings" class="py-2 px-4 rounded-full customcolor h-[44px]">
                     {{ $t('change') }}
                   </button>
                 </router-link>

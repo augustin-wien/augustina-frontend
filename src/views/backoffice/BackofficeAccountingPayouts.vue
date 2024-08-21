@@ -126,7 +126,7 @@ const exportTable = () => {
             @range-end="onRangeEnd"
           />
         </div>
-        <button class="rounded-full customcolor ml-2 px-4 py-2 h-10 mr-5" @click="exportTable">
+        <button class="py-2 px-4 rounded-full customcolor ml-2 h-[44px] mr-6" @click="exportTable">
           {{ $t('export') }}
         </button>
       </div>

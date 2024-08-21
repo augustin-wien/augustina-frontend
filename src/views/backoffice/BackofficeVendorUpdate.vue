@@ -8,6 +8,7 @@ import router from '@/router'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores/settings'
+import IconCross from '@/components/icons/IconCross.vue'
 
 const settingsStore = useSettingsStore()
 
@@ -92,10 +93,10 @@ const showToast = (type: string, message: string) => {
             <div class="flex place-content-center justify-between">
               <span></span>
               <button
-                class="px-2 rounded-full bg-red-600 text-white font-bold"
+                class="rounded-full bg-red-600 text-white"
                 @click="router.push('/backoffice/vendorsummary')"
               >
-                X
+                <IconCross/>
               </button>
             </div>
           </div>

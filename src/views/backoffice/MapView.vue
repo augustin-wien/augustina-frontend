@@ -78,7 +78,7 @@ function onMapReady(instance: any) {
                         params: { ID: vendor.id }
                       }"
                     >
-                      <button class="rounded-full customcolor py-2 px-3 h-10">
+                      <button class="rounded-full customcolor py-2 px-4 h-10">
                         {{ $t('edit') }}
                       </button>
                     </RouterLink>

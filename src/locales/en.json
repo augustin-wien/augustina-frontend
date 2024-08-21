@@ -96,7 +96,7 @@
 
   "firstName": "First name",
   "lastName": "Last name",
-  "licenseId": "License ID",
+  "LicenseId": "License ID",
   "language": "Language",
   "telephone": "Telephone",
   "address": "Address",
