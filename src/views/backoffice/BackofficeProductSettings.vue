@@ -72,7 +72,7 @@ const apiUrl = import.meta.env.VITE_API_URL
                   <td class="border-t-2 p-3">{{ item.ItemOrder }}</td>
                   <td class="border-t-2">
                     <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
-                      <button class="p-3 rounded-full customcolor">
+                      <button class="px-4 py-2 rounded-full customcolor h-[44px]">
                         {{ $t('change') }}
                       </button>
                     </router-link>

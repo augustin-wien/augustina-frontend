@@ -99,7 +99,7 @@ const exportTable = () => {
     <template #main>
       <div v-if="vendors" class="main">
         <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-xl space-y-3 space-x-3 page-content space-x-2">
+          <div className="text-xl space-y-3 page-content space-x-2">
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
