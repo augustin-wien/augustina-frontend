@@ -69,6 +69,7 @@ const updateSettings = async () => {
       router.push({ name: 'Backoffice Settings' })
     })
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error updating settings:', error)
     showToast('error', 'Einstellungen konnten nicht aktualisiert werden')
   }
@@ -214,7 +215,7 @@ const url = import.meta.env.VITE_API_URL
                     type="radio"
                     checked
                     name="RefundFees"
-                    value="true"
+                    :value="true"
                   />
                 </span>
                 <span class="me-4">
@@ -224,7 +225,7 @@ const url = import.meta.env.VITE_API_URL
                     v-model="updatedSettings.OrgaCoversTransactionCosts"
                     type="radio"
                     name="RefundFees"
-                    value="false"
+                    :value="false"
                   />
                 </span>
               </div>
@@ -240,7 +241,7 @@ const url = import.meta.env.VITE_API_URL
                     type="radio"
                     checked
                     name="WebshopClosed"
-                    value="true"
+                    :value="true"
                   />
                 </span>
                 <span>
@@ -250,7 +251,7 @@ const url = import.meta.env.VITE_API_URL
                     v-model="updatedSettings.WebshopIsClosed"
                     type="radio"
                     name="WebshopClosed"
-                    value="false"
+                    :value="false"
                   />
                 </span>
               </div>
@@ -284,7 +285,7 @@ const url = import.meta.env.VITE_API_URL
               </div>
               <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="qrcodelogourl"
-                  >{{ $t('Logo path') }}:</label
+                  >{{ $t('QR Code Logo path') }}:</label
                 >
                 <div class="flex flex-row">
                   <input

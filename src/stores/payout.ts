@@ -49,6 +49,7 @@ export const usePayoutStore = defineStore('payout', {
         this.paymentsForPayout = data.data
         //@ts-ignore
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log(error)
       }
     }

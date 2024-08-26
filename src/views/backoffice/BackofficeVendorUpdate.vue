@@ -9,6 +9,8 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores/settings'
 import IconCross from '@/components/icons/IconCross.vue'
+import VendorMapView from '@/components/VendorMapView.vue'
+import keycloak from '@/keycloak/keycloak'
 
 const settingsStore = useSettingsStore()
 
@@ -26,6 +28,12 @@ const route = useRoute()
 onMounted(() => {
   if (keycloakStore.authenticated) {
     store.getVendor(route.params.ID)
+  } else {
+    if (keycloak.keycloak) {
+      keycloak.keycloak.onAuthSuccess = () => {
+        store.getVendor(route.params.ID)
+      }
+    }
   }
 })
 
@@ -54,12 +62,14 @@ const updateVendor = async () => {
     const response = await store.updateVendor(newVendor as Vendor)
 
     if (response) {
+      // eslint-disable-next-line no-console
       console.error('Error creating vendor:', response)
       showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
     } else {
       showToast('success', 'VerkäuferIn erfolgreich aktualisiert')
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error updating vendor:', error)
     showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
   }
@@ -73,6 +83,13 @@ const showToast = (type: string, message: string) => {
   setTimeout(() => {
     toast.value = null
   }, 5000)
+}
+
+const updateLocation = (newLocation: any) => {
+  if (updatedVendor.value) {
+    updatedVendor.value.Longitude = newLocation.location.x
+    updatedVendor.value.Latitude = newLocation.location.y
+  }
 }
 </script>
 
@@ -170,7 +187,7 @@ const showToast = (type: string, message: string) => {
                     </select>
                   </div>
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
-                    >{{ $t('address') }}<span class="text-red">*</span>:</label
+                    >{{ $t('address') }}:</label
                   >
                   <div class="flex flex-row">
                     <input
@@ -178,7 +195,6 @@ const showToast = (type: string, message: string) => {
                       v-model="updatedVendor.Address"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       type="text"
-                      required
                     />
                   </div>
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
@@ -252,8 +268,8 @@ const showToast = (type: string, message: string) => {
                       class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     >
-                      <option value="true">{{ $t('yes') }}</option>
-                      <option value="false">{{ $t('no') }}</option>
+                      <option :value="true">{{ $t('yes') }}</option>
+                      <option :value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
 
@@ -261,12 +277,14 @@ const showToast = (type: string, message: string) => {
                     >{{ $t('workingTime') }}:</label
                   >
                   <div class="flex flex-row">
-                    <input
-                      id="workingTime"
+                    <select
                       v-model="updatedVendor.WorkingTime"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
+                    >
+                      <option value="G" selected>{{ $t('(G) all day') }}</option>
+                      <option value="V">{{ $t('(v) mornings') }}</option>
+                      <option value="N">{{ $t('(N) afternoons') }}</option>
+                    </select>
                   </div>
 
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
@@ -278,7 +296,6 @@ const showToast = (type: string, message: string) => {
                       v-model="updatedVendor.Language"
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       type="text"
-                      required
                     />
                   </div>
 
@@ -292,8 +309,8 @@ const showToast = (type: string, message: string) => {
                       class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     >
-                      <option value="true">{{ $t('yes') }}</option>
-                      <option value="false">{{ $t('no') }}</option>
+                      <option :value="true">{{ $t('yes') }}</option>
+                      <option :value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
@@ -306,8 +323,8 @@ const showToast = (type: string, message: string) => {
                       class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     >
-                      <option value="true">{{ $t('yes') }}</option>
-                      <option value="false">{{ $t('no') }}</option>
+                      <option :value="true">{{ $t('yes') }}</option>
+                      <option :value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
 
@@ -348,6 +365,13 @@ const showToast = (type: string, message: string) => {
                     ></textarea>
                   </div>
                 </span>
+              </div>
+              <div v-if="updatedVendor.Latitude != 0.1 && updatedVendor.Longitude != 0.1">
+                <VendorMapView
+                  :vendors="[updatedVendor]"
+                  enable-search
+                  @new-location="updateLocation"
+                />
               </div>
             </div>
             <button type="submit" class="p-3 rounded-full customcolor" @click="updateVendor">

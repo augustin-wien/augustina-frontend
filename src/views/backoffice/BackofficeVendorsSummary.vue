@@ -55,13 +55,14 @@ const displayVendors = computed(() => {
 // Function to generate QR code only if the button is clicked
 const generateQRCode = async (vendor: Vendor) => {
   //  fetch image
-  let image: string | undefined = ''
+  const image: string | undefined = ''
   const logoUrl = settingsStore.settings.QRCodeLogoImgUrl
+  console.log(logoUrl)
 
-  if (logoUrl && logoUrl !== '') {
-    const result = await getBase64ImageFromUrl(settingsStore.settings.QRCodeLogoImgUrl)
-    if (result) image = result
-  }
+  // if (logoUrl && logoUrl !== '') {
+  //   const result = await getBase64ImageFromUrl(settingsStore.settings.QRCodeLogoImgUrl)
+  //   if (result) image = result
+  // }
 
   const qrCode = new QRCodeStyling({
     width: 500,

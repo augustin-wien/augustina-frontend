@@ -31,6 +31,7 @@ onMounted(() => {
       })
       .catch(() => {
         router.push({ name: 'Error' })
+        // eslint-disable-next-line no-console
         console.log('error')
       })
   })
