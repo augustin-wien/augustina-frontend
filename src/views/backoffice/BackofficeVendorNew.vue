@@ -417,8 +417,8 @@ const importCSV = async () => {
                   <div class="flex flex-row">
                     <span class="p-2">
                       <select
-                        id="hasBankAccount"
-                        v-model="newVendor.HasBankAccount"
+                        id="hasSmartphone"
+                        v-model="newVendor.HasSmartphone"
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
