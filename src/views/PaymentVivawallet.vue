@@ -29,6 +29,7 @@ onMounted(() => {
     .catch((error) => {
       errorMessage.value = error.message
       errorMessageDetail.value = error.response.data
+      // eslint-disable-next-line no-console
       console.log(error)
     })
 })

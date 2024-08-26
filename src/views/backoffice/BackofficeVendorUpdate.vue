@@ -61,12 +61,14 @@ const updateVendor = async () => {
     const response = await store.updateVendor(newVendor as Vendor)
 
     if (response) {
+      // eslint-disable-next-line no-console
       console.error('Error creating vendor:', response)
       showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
     } else {
       showToast('success', 'VerkäuferIn erfolgreich aktualisiert')
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error updating vendor:', error)
     showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
   }
@@ -364,7 +366,11 @@ const updateLocation = (newLocation: any) => {
                 </span>
               </div>
               <div v-if="updatedVendor.Latitude != 0.1 && updatedVendor.Longitude != 0.1">
-                <VendorMapView :vendors="[updatedVendor]" :enable-search="true" @new-location="updateLocation"/>
+                <VendorMapView
+                  :vendors="[updatedVendor]"
+                  enable-search
+                  @new-location="updateLocation"
+                />
               </div>
             </div>
             <button type="submit" class="p-3 rounded-full customcolor" @click="updateVendor">

@@ -36,8 +36,7 @@ onMounted(() => {
   }
 })
 
-function onMapReady(instance: any) {
-  console.log(instance)
+function onMapReady() {
   center.value = [settingsStore.settings.MapCenterLat, settingsStore.settings.MapCenterLong]
 }
 </script>

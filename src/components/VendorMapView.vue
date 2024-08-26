@@ -21,7 +21,6 @@ const searchControl: any = new (GeoSearchControl as any)({
   provider: provider
 })
 
-
 const vendors = computed(() => props.vendors)
 
 watch(vendors, () => {
@@ -38,7 +37,7 @@ function onMapReady(instance: any) {
   if (instance) {
     center.value = [vendors.value[0].Latitude, vendors.value[0].Longitude]
     map.value = instance
-    
+
     map.value.on('dblclick', function (event: any) {
       alert('Latitude: ' + event.latlng.lat + ' \n Longitude: ' + event.latlng.lng)
     })

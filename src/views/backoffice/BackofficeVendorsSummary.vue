@@ -55,7 +55,7 @@ const displayVendors = computed(() => {
 // Function to generate QR code only if the button is clicked
 const generateQRCode = async (vendor: Vendor) => {
   //  fetch image
-  let image: string | undefined = ''
+  const image: string | undefined = ''
   const logoUrl = settingsStore.settings.QRCodeLogoImgUrl
   console.log(logoUrl)
 

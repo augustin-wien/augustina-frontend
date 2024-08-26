@@ -114,6 +114,7 @@ const payoutVendor = async () => {
       router.push('/backoffice/credits')
     })
     .catch((error) => {
+      // eslint-disable-next-line no-console
       console.log(error)
 
       if (error?.message && error?.response?.data?.error?.message) {

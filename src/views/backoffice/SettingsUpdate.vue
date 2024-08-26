@@ -68,6 +68,7 @@ const updateSettings = async () => {
       router.push({ name: 'Backoffice Settings' })
     })
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error updating settings:', error)
     showToast('error', 'Einstellungen konnten nicht aktualisiert werden')
   }

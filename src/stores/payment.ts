@@ -99,6 +99,7 @@ export const usePaymentStore = defineStore('payment', {
       }
 
       if (this.transactionID === '') {
+        // eslint-disable-next-line no-console
         console.log('id undefined')
       } else {
         try {

@@ -10,7 +10,6 @@ import VendorMapView from '@/components/VendorMapView.vue'
 const store = vendorsStore()
 const settingsStore = useSettingsStore()
 
-
 const newVendor = ref<Vendor>({
   Email: settingsStore.settings.VendorEmailPostfix,
   FirstName: '',
@@ -84,6 +83,7 @@ const submitVendor = async () => {
       router.push(`/backoffice/userprofile/${res.data}`)
     })
   } catch (err: any) {
+    // eslint-disable-next-line no-console
     console.error('Error creating vendor:', err)
 
     showToast(
@@ -184,6 +184,7 @@ const importCSV = async () => {
       showToast('success', 'VerkäuferInnen erfolgreich angelegt')
       importing.value = false
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Error creating vendors:', err)
       showToast('error', 'VerkäuferInnen konnten nicht angelegt werden')
       importing.value = false
@@ -446,9 +447,8 @@ const importCSV = async () => {
                     type="text"
                   ></textarea>
                 </span>
-
               </div>
-              <VendorMapView :vendors="[newVendor]" :enable-search="true" @new-location="updateLocation"/>
+              <VendorMapView :vendors="[newVendor]" enable-search @new-location="updateLocation" />
             </div>
 
             <div class="flex place-content-center">

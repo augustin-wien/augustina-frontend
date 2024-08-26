@@ -128,7 +128,7 @@ const formatCredit = (credit: number) => {
                   "
                   class="map"
                 >
-                  <VendorMapView :vendors="[vendor]" :enable-search="false"/>
+                  <VendorMapView :vendors="[vendor]" :enable-search="false" />
                 </div>
               </div>
             </div>
