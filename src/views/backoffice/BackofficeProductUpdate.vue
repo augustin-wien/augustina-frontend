@@ -308,14 +308,14 @@ const previewImage = (image: string | Blob | MediaSource) => {
             <div class="flex place-content-center justify-between">
               <button
                 type="submit"
-                class="p-3 rounded-full bg-red-600 text-white"
+                class="py-2 px-4 h-[44px] rounded-full bg-red-600 text-white"
                 @click="showDeleteModalF"
               >
                 {{ $t('delete') }}
               </button>
               <button
                 type="submit"
-                class="p-3 rounded-full bg-lime-600 text-white"
+                class="py-2 px-4 h-[44px] rounded-full customcolor"
                 @click="updateItem"
               >
                 {{ $t('confirmation') }}
@@ -413,5 +413,10 @@ td {
 
 .productImage {
   width: 100% !important;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

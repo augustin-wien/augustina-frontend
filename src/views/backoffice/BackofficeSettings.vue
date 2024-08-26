@@ -35,10 +35,7 @@ const url = import.meta.env.VITE_API_URL
         <div class="w-full max-w-l mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="container page-content space-x-2 mt-5">
             <div className="text-xl space-y-3 space-x-3">
-              <div
-                v-if="settings.ID"
-                className="table-auto border-spacing-4 border-collapse text-left"
-              >
+              <div v-if="settings.ID" className="table-auto border-spacing-4 border-collapse text-left">
                 <tbody className="text-sm">
                   <tr>
                     <th className="p-3">{{ $t('Newspaper name') }}</th>
@@ -49,26 +46,12 @@ const url = import.meta.env.VITE_API_URL
                   <tr>
                     <th className="p-3">Logo:</th>
                     <td className="p-3">
-                      <img
-                        v-if="typeof settings.Logo === 'string'"
-                        :src="
-                          settings.Logo && settings.Logo !== ''
-                            ? url + settings.Logo
-                            : url + 'img/logo.png'
-                        "
-                        alt="Newspaper logo"
-                        class="logo mx-auto my-5"
-                        width="50"
-                        height="20"
-                      />
-                      <img
-                        v-else
-                        :src="settings.Logo"
-                        alt="Newspaper logo"
-                        class="logo mx-auto my-5"
-                        width="50"
-                        height="20"
-                      />
+                      <img v-if="typeof settings.Logo === 'string'" :src="settings.Logo && settings.Logo !== ''
+                          ? url + settings.Logo
+                          : url + 'img/logo.png'
+                        " alt="Newspaper logo" class="logo mx-auto my-5" width="50" height="20" />
+                      <img v-else :src="settings.Logo" alt="Newspaper logo" class="logo mx-auto my-5" width="50"
+                        height="20" />
                     </td>
                   </tr>
                   <tr>
@@ -145,13 +128,14 @@ const url = import.meta.env.VITE_API_URL
                   </tr>
                 </tbody>
               </div>
-              <div>
-                <router-link to="/backoffice/settings/update">
-                  <button id="editSettings" class="py-2 px-4 rounded-full customcolor h-[44px]">
+              <div class="flex justify-center">
+                <router-link to="/backoffice/settings/update" class="mr-[6px]">
+                  <button id="editSettings" class="py-2 px-4 text-[16px] rounded-full customcolor h-[44px]">
                     {{ $t('change') }}
                   </button>
                 </router-link>
               </div>
+
             </div>
           </div>
         </div>

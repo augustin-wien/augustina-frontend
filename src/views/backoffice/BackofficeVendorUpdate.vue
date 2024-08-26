@@ -374,9 +374,11 @@ const updateLocation = (newLocation: any) => {
                 />
               </div>
             </div>
-            <button type="submit" class="p-3 rounded-full customcolor" @click="updateVendor">
-              {{ $t('save') }}
+            <div class="flex justify-center">
+            <button type="submit" class="py-2 px-4 rounded-full customcolor" @click="updateVendor">
+              {{ $t('confirmation') }}
             </button>
+          </div>
           </form>
         </div>
         <Toast v-if="toast" :toast="toast" />
@@ -397,5 +399,6 @@ td {
 .customcolor {
   background-color: v-bind(settingsStore.settings.Color);
   color: v-bind(settingsStore.settings.FontColor);
+  font-size: 16px;
 }
 </style>
