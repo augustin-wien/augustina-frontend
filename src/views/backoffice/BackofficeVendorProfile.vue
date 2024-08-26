@@ -133,9 +133,11 @@ const formatCredit = (credit: number) => {
                 </div>
               </div>
             </div>
-            <div v-if="vendor" class="flex place-content-center ">
+            <div v-if="vendor" class="flex place-content-center">
               <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
-                <button class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center">
+                <button
+                  class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center"
+                >
                   {{ $t('change') }}
                 </button>
               </router-link>

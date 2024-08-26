@@ -375,10 +375,14 @@ const updateLocation = (newLocation: any) => {
               </div>
             </div>
             <div class="flex justify-center">
-            <button type="submit" class="py-2 px-4 rounded-full customcolor" @click="updateVendor">
-              {{ $t('confirmation') }}
-            </button>
-          </div>
+              <button
+                type="submit"
+                class="py-2 px-4 rounded-full customcolor"
+                @click="updateVendor"
+              >
+                {{ $t('confirmation') }}
+              </button>
+            </div>
           </form>
         </div>
         <Toast v-if="toast" :toast="toast" />
