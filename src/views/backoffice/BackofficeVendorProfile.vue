@@ -46,8 +46,10 @@ const formatCredit = (credit: number) => {
           <div className="text-center text-2xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
               <span />
-              <button class="rounded-full bg-red-600 text-white font-bold"
-                @click="router.push('/backoffice/vendorsummary')">
+              <button
+                class="rounded-full bg-red-600 text-white font-bold"
+                @click="router.push('/backoffice/vendorsummary')"
+              >
                 <IconCross />
               </button>
             </div>

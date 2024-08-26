@@ -96,7 +96,7 @@ const showToast = (type: string, message: string) => {
                 class="rounded-full bg-red-600 text-white"
                 @click="router.push('/backoffice/vendorsummary')"
               >
-                <IconCross/>
+                <IconCross />
               </button>
             </div>
           </div>
