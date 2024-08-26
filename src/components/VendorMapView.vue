@@ -12,6 +12,7 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 import 'leaflet-geosearch/dist/geosearch.css'
 
 const emit = defineEmits(['newLocation'])
+const props = defineProps(['vendors', 'enableSearch'])
 
 const provider = new OpenStreetMapProvider()
 
@@ -20,11 +21,10 @@ const searchControl: any = new (GeoSearchControl as any)({
   provider: provider
 })
 
-const props = defineProps(['vendors'])
 
 const vendors = computed(() => props.vendors)
 
-watch(vendors, (val) => {
+watch(vendors, () => {
   center.value = [vendors.value[0].Latitude, vendors.value[0].Longitude]
 })
 
@@ -38,16 +38,16 @@ function onMapReady(instance: any) {
   if (instance) {
     center.value = [vendors.value[0].Latitude, vendors.value[0].Longitude]
     map.value = instance
-    map.value.addControl(searchControl)
-
+    
     map.value.on('dblclick', function (event: any) {
       alert('Latitude: ' + event.latlng.lat + ' \n Longitude: ' + event.latlng.lng)
     })
-
-    map.value.on('geosearch/showlocation', function (event: any) {
-      console.log(event)
-      emit('newLocation', event)
-    })
+    if (props.enableSearch) {
+      map.value.addControl(searchControl)
+      map.value.on('geosearch/showlocation', function (event: any) {
+        emit('newLocation', event)
+      })
+    }
   }
 }
 </script>

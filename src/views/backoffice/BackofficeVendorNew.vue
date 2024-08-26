@@ -5,9 +5,11 @@ import { useSettingsStore } from '@/stores/settings'
 import type { Vendor } from '@/stores/vendor'
 import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
+import VendorMapView from '@/components/VendorMapView.vue'
 
 const store = vendorsStore()
 const settingsStore = useSettingsStore()
+
 
 const newVendor = ref<Vendor>({
   Email: settingsStore.settings.VendorEmailPostfix,
@@ -20,8 +22,8 @@ const newVendor = ref<Vendor>({
   UrlID: '',
   Balance: 0,
   IsDisabled: false,
-  Longitude: 0.1,
-  Latitude: 0.1,
+  Longitude: settingsStore.settings.MapCenterLong,
+  Latitude: settingsStore.settings.MapCenterLat,
   Address: '',
   PLZ: '',
   Location: '',
@@ -99,6 +101,12 @@ const showToast = (type: string, message: string) => {
   setTimeout(() => {
     toast.value = null
   }, 5000)
+}
+const updateLocation = (newLocation: any) => {
+  if (newVendor.value) {
+    newVendor.value.Longitude = newLocation.location.x
+    newVendor.value.Latitude = newLocation.location.y
+  }
 }
 
 const importCSV = async () => {
@@ -437,7 +445,9 @@ const importCSV = async () => {
                     type="text"
                   ></textarea>
                 </span>
+
               </div>
+              <VendorMapView :vendors="[newVendor]" @new-location="updateLocation" :enableSearch="true"/>
             </div>
 
             <div class="flex place-content-center">

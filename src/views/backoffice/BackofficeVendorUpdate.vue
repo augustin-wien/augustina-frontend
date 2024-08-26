@@ -364,7 +364,7 @@ const updateLocation = (newLocation: any) => {
                 </span>
               </div>
               <div v-if="updatedVendor.Latitude != 0.1 && updatedVendor.Longitude != 0.1">
-                <VendorMapView :vendors="[updatedVendor]" @new-location="updateLocation" />
+                <VendorMapView :vendors="[updatedVendor]" @new-location="updateLocation" :enableSearch="true"/>
               </div>
             </div>
             <button type="submit" class="p-3 rounded-full customcolor" @click="updateVendor">
