@@ -324,8 +324,8 @@ const importCSV = async () => {
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -394,8 +394,8 @@ const importCSV = async () => {
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -413,8 +413,8 @@ const importCSV = async () => {
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -430,8 +430,8 @@ const importCSV = async () => {
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
