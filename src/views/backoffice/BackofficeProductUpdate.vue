@@ -149,7 +149,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
               class="rounded-full bg-red-600 text-white font-bold"
               @click="router.push('/backoffice/productsettings')"
             >
-              <IconCross/>
+              <IconCross />
             </button>
           </div>
 

@@ -171,10 +171,10 @@ const getItemName = (itemID: number) => {
             <div class="flex place-content-center justify-between">
               <h1 class="text-2xl font-bold"></h1>
               <button
-                class=" rounded-full bg-red-600 text-white font-bold"
+                class="rounded-full bg-red-600 text-white font-bold"
                 @click="router.push('/backoffice/credits')"
               >
-                <IconCross/>
+                <IconCross />
               </button>
             </div>
             <div>
