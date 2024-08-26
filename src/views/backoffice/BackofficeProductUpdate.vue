@@ -5,6 +5,7 @@ import type { Item } from '@/stores/items'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
+import IconCross from '@/components/icons/IconCross.vue'
 
 const settingsStore = useSettingsStore()
 
@@ -142,13 +143,13 @@ const previewImage = (image: string | Blob | MediaSource) => {
     <template v-if="updatedItem" #main>
       <div class="main">
         <div v-if="item" class="w-full mx-auto mt-4">
-          <div class="flex place-content-center justify-between">
+          <div class="flex place-content-center justify-between mb-4">
             <h1 class="text-2xl font-bold">{{ item.Name }} {{ $t('change') }}</h1>
             <button
-              class="px-2 rounded-full bg-red-600 text-white font-bold"
+              class="rounded-full bg-red-600 text-white font-bold"
               @click="router.push('/backoffice/productsettings')"
             >
-              X
+              <IconCross/>
             </button>
           </div>
 
