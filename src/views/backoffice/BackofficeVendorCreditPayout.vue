@@ -114,6 +114,7 @@ const payoutVendor = async () => {
       router.push('/backoffice/credits')
     })
     .catch((error) => {
+      // eslint-disable-next-line no-console
       console.log(error)
 
       if (error?.message && error?.response?.data?.error?.message) {
@@ -170,7 +171,7 @@ const getItemName = (itemID: number) => {
             <div class="flex place-content-center justify-between">
               <h1 class="text-2xl font-bold"></h1>
               <button
-                class="px-2 rounded-full bg-red-600 text-white font-bold"
+                class="px-2 rounded-full font-bold"
                 @click="router.push('/backoffice/credits')"
               >
                 X

@@ -4,9 +4,6 @@ import { useItemsStore } from '@/stores/items'
 import type { Item } from '@/stores/items'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
-import { useSettingsStore } from '@/stores/settings'
-
-const settingsStore = useSettingsStore()
 
 const store = useItemsStore()
 
@@ -25,7 +22,6 @@ const submitItem = async () => {
     store
       .createItem(newItem.value as Item)
       .then(() => {
-        console.log('Item created')
         router.push({ name: 'Backoffice Product Settings' })
       })
       .catch((err) => {
@@ -36,6 +32,7 @@ const submitItem = async () => {
       })
   } catch (err: any) {
     showToast('error', 'Produkt konnte nicht angelegt werden' + err)
+    // eslint-disable-next-line no-console
     console.error('Error creating item:', err)
   }
 }
@@ -79,7 +76,7 @@ const updateImage = (event: any) => {
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ $t('newProduct') }}</h1>
             <button
-              class="px-2 rounded-full bg-red-600 text-white font-bold"
+              class="px-2 rounded-full font-bold"
               @click="router.push('/backoffice/productsettings')"
             >
               X

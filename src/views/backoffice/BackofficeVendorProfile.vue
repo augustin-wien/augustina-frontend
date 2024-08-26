@@ -11,6 +11,7 @@ const settingsStore = useSettingsStore()
 
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import VendorMapView from '@/components/VendorMapView.vue'
 
 const keycloakStore = useKeycloakStore()
 
@@ -46,13 +47,13 @@ const formatCredit = (credit: number) => {
             <div class="flex place-content-center justify-between">
               <span />
               <button
-                class="px-2 rounded-full bg-red-600 text-white font-bold"
+                class="px-2 rounded-full font-bold"
                 @click="router.push('/backoffice/vendorsummary')"
               >
                 X
               </button>
             </div>
-            <div className="table-auto border-spacing-4 border-collapse">
+            <div className="table-auto border-spacing-4 border-collapse profile-wrapper">
               <tbody className="text-sm text-left">
                 <tr>
                   <th className="p-3">{{ $t('firstName') }}:</th>
@@ -64,7 +65,7 @@ const formatCredit = (credit: number) => {
                   <th className="p-3">{{ $t('LicenseId') }}:</th>
                   <td className="p-3">{{ vendor.LicenseID }}</td>
                   <th className="p-3">{{ $t('accountDeactivation') }}:</th>
-                  <td className="p-3">{{ vendor.IsDisabled }}</td>
+                  <td className="p-3">{{ $t(vendor.IsDisabled ? 'yes' : 'no') }}</td>
                 </tr>
                 <tr>
                   <th className="p-3">{{ $t('lastPayout') }}:</th>
@@ -108,15 +109,28 @@ const formatCredit = (credit: number) => {
                   <th className="p-3">{{ $t('workingTime') }}:</th>
                   <td className="p-3">{{ vendor.WorkingTime }}</td>
                   <th className="p-3">Online Karte:</th>
-                  <td className="p-3">{{ vendor.OnlineMap }}</td>
+                  <td className="p-3">{{ $t(vendor.OnlineMap ? 'yes' : 'no') }}</td>
                 </tr>
                 <tr>
                   <th className="p-3">Smartphone:</th>
-                  <td className="p-3">{{ vendor.HasSmartphone }}</td>
+                  <td className="p-3">{{ $t(vendor.HasSmartphone ? 'yes' : 'no') }}</td>
                   <th className="p-3">{{ $t('bankAccount') }}:</th>
-                  <td className="p-3">{{ vendor.HasBankAccount }}</td>
+                  <td className="p-3">{{ $t(vendor.HasBankAccount ? 'yes' : 'no') }}</td>
                 </tr>
               </tbody>
+              <div class="map-wrapper">
+                <div
+                  v-if="
+                    vendor.Latitude &&
+                    vendor.Longitude &&
+                    vendor.Latitude != 0.1 &&
+                    vendor.Longitude != 0.1
+                  "
+                  class="map"
+                >
+                  <VendorMapView :vendors="[vendor]" :enable-search="false" />
+                </div>
+              </div>
             </div>
             <div v-if="vendor">
               <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
@@ -144,5 +158,14 @@ td {
 .customcolor {
   background-color: v-bind(settingsStore.settings.Color);
   color: v-bind(settingsStore.settings.FontColor);
+}
+
+.profile-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.map-wrapper {
+  width: 100%;
+  max-width: 500px;
 }
 </style>

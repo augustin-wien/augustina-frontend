@@ -5,6 +5,7 @@ import { useSettingsStore } from '@/stores/settings'
 import type { Vendor } from '@/stores/vendor'
 import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
+import VendorMapView from '@/components/VendorMapView.vue'
 
 const store = vendorsStore()
 const settingsStore = useSettingsStore()
@@ -20,12 +21,12 @@ const newVendor = ref<Vendor>({
   UrlID: '',
   Balance: 0,
   IsDisabled: false,
-  Longitude: 0.1,
-  Latitude: 0.1,
+  Longitude: settingsStore.settings.MapCenterLong,
+  Latitude: settingsStore.settings.MapCenterLat,
   Address: '',
   PLZ: '',
   Location: '',
-  WorkingTime: '',
+  WorkingTime: 'G',
   Language: '',
   Comment: '',
   Telephone: '',
@@ -82,6 +83,7 @@ const submitVendor = async () => {
       router.push(`/backoffice/userprofile/${res.data}`)
     })
   } catch (err: any) {
+    // eslint-disable-next-line no-console
     console.error('Error creating vendor:', err)
 
     showToast(
@@ -99,6 +101,13 @@ const showToast = (type: string, message: string) => {
   setTimeout(() => {
     toast.value = null
   }, 5000)
+}
+
+const updateLocation = (newLocation: any) => {
+  if (newVendor.value) {
+    newVendor.value.Longitude = newLocation.location.x
+    newVendor.value.Latitude = newLocation.location.y
+  }
 }
 
 const importCSV = async () => {
@@ -141,9 +150,9 @@ const importCSV = async () => {
         PLZ,
         Location,
         Address,
-        Longitude: Longitude === '' ? 0.1 : Longitude,
-        Latitude: Latitude === '' ? 0.1 : Latitude,
-        WorkingTime: WorkingTime === '' ? 'g' : WorkingTime,
+        Longitude: Longitude === '' ? 0.1 : parseFloat(Longitude),
+        Latitude: Latitude === '' ? 0.1 : parseFloat(Latitude),
+        WorkingTime: WorkingTime === '' ? 'G' : WorkingTime,
         LicenseID,
         FirstName,
         LastName,
@@ -175,6 +184,7 @@ const importCSV = async () => {
       showToast('success', 'VerkäuferInnen erfolgreich angelegt')
       importing.value = false
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Error creating vendors:', err)
       showToast('error', 'VerkäuferInnen konnten nicht angelegt werden')
       importing.value = false
@@ -199,7 +209,7 @@ const importCSV = async () => {
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ $t('newGendered') }} {{ $t('vendorSingular') }}</h1>
             <button
-              class="px-2 rounded-full bg-red-600 text-white font-bold"
+              class="px-2 rounded-full font-bold"
               @click="router.push('/backoffice/vendorsummary')"
             >
               X
@@ -316,8 +326,8 @@ const importCSV = async () => {
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -346,12 +356,14 @@ const importCSV = async () => {
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
                     >{{ $t('workingTime') }}:</label
                   >
-                  <input
-                    id="workingTime"
+                  <select
                     v-model="newVendor.WorkingTime"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
+                  >
+                    <option value="G" selected>{{ $t('(G) all day') }}</option>
+                    <option value="V">{{ $t('(v) mornings') }}</option>
+                    <option value="N">{{ $t('(N) afternoons') }}</option>
+                  </select>
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                     for="registrationDate"
@@ -384,8 +396,8 @@ const importCSV = async () => {
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -403,8 +415,8 @@ const importCSV = async () => {
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -415,13 +427,13 @@ const importCSV = async () => {
                   <div class="flex flex-row">
                     <span class="p-2">
                       <select
-                        id="hasBankAccount"
-                        v-model="newVendor.HasBankAccount"
+                        id="hasSmartphone"
+                        v-model="newVendor.HasSmartphone"
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -436,6 +448,7 @@ const importCSV = async () => {
                   ></textarea>
                 </span>
               </div>
+              <VendorMapView :vendors="[newVendor]" enable-search @new-location="updateLocation" />
             </div>
 
             <div class="flex place-content-center">

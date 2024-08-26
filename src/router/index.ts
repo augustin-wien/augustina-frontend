@@ -377,6 +377,7 @@ async function isAuthenticated() {
     try {
       await initKeycloak()
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.log('init keycloak failed', error)
     }
 
