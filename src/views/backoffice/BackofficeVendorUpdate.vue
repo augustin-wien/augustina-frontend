@@ -265,8 +265,8 @@ const updateLocation = (newLocation: any) => {
                       class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     >
-                      <option value="true">{{ $t('yes') }}</option>
-                      <option value="false">{{ $t('no') }}</option>
+                      <option :value="true">{{ $t('yes') }}</option>
+                      <option :value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
 
@@ -306,8 +306,8 @@ const updateLocation = (newLocation: any) => {
                       class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     >
-                      <option value="true">{{ $t('yes') }}</option>
-                      <option value="false">{{ $t('no') }}</option>
+                      <option :value="true">{{ $t('yes') }}</option>
+                      <option :value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
@@ -320,8 +320,8 @@ const updateLocation = (newLocation: any) => {
                       class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     >
-                      <option value="true">{{ $t('yes') }}</option>
-                      <option value="false">{{ $t('no') }}</option>
+                      <option :value="true">{{ $t('yes') }}</option>
+                      <option :value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
 

@@ -213,7 +213,7 @@ const url = import.meta.env.VITE_API_URL
                     type="radio"
                     checked
                     name="RefundFees"
-                    value="true"
+                    :value="true"
                   />
                 </span>
                 <span class="me-4">
@@ -223,7 +223,7 @@ const url = import.meta.env.VITE_API_URL
                     v-model="updatedSettings.OrgaCoversTransactionCosts"
                     type="radio"
                     name="RefundFees"
-                    value="false"
+                    :value="false"
                   />
                 </span>
               </div>
@@ -239,7 +239,7 @@ const url = import.meta.env.VITE_API_URL
                     type="radio"
                     checked
                     name="WebshopClosed"
-                    value="true"
+                    :value="true"
                   />
                 </span>
                 <span>
@@ -249,7 +249,7 @@ const url = import.meta.env.VITE_API_URL
                     v-model="updatedSettings.WebshopIsClosed"
                     type="radio"
                     name="WebshopClosed"
-                    value="false"
+                    :value="false"
                   />
                 </span>
               </div>
