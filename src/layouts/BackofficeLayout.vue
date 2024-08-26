@@ -158,7 +158,7 @@ onMounted(() => {
           </div>
           <select
             v-model="$i18n.locale"
-            class="h-[40px] w-[70px] customcolor border-2 border-white font-semibold rounded-full text-center mt-4 mr-4 pl-2 text-sm"
+            class="h-[40px] w-[70px] customcolor border-2 customborder font-semibold rounded-full text-center mt-4 mr-4 pl-2 text-sm"
           >
             <option value="en">EN</option>
             <option value="de">DE</option>
@@ -232,6 +232,10 @@ onMounted(() => {
 .customcolor {
   background-color: v-bind(settingsStore.settings.Color);
   color: v-bind(settingsStore.settings.FontColor);
+}
+
+.customborder {
+  border-color: v-bind(settingsStore.settings.FontColor);
 }
 
 .sidemenu-link {

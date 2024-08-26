@@ -5,6 +5,7 @@ import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore, type Settings } from '@/stores/settings'
 import { computed, onMounted, ref, watch } from 'vue'
+import IconCross from '@/components/icons/IconCross.vue'
 
 const settingsStore = useSettingsStore()
 const storeItems = useItemsStore()
@@ -105,10 +106,10 @@ const url = import.meta.env.VITE_API_URL
             <div class="flex place-content-center justify-between">
               <span />
               <button
-                class="px-2 rounded-full font-bold"
+                class="rounded-full bg-red-600 text-white"
                 @click="router.push('/backoffice/settings')"
               >
-                X
+                <IconCross />
               </button>
             </div>
             <div class="form">
@@ -374,7 +375,7 @@ const url = import.meta.env.VITE_API_URL
                 <button
                   id="saveSettings"
                   type="submit"
-                  class="p-3 rounded-full customcolor"
+                  class="px-4 py-2 mt-2 rounded-full customcolor h-[44px]"
                   @click="updateSettings()"
                 >
                   {{ $t('confirmation') }}

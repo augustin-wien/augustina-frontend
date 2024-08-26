@@ -11,6 +11,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores/settings'
+import IconCross from '@/components/icons/IconCross.vue'
 
 const settingsStore = useSettingsStore()
 
@@ -171,10 +172,10 @@ const getItemName = (itemID: number) => {
             <div class="flex place-content-center justify-between">
               <h1 class="text-2xl font-bold"></h1>
               <button
-                class="px-2 rounded-full font-bold"
+                class="rounded-full bg-red-600 text-white font-bold"
                 @click="router.push('/backoffice/credits')"
               >
-                X
+                <IconCross />
               </button>
             </div>
             <div>

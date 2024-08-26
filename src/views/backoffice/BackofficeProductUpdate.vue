@@ -4,6 +4,10 @@ import router from '@/router'
 import type { Item } from '@/stores/items'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { useSettingsStore } from '@/stores/settings'
+import IconCross from '@/components/icons/IconCross.vue'
+
+const settingsStore = useSettingsStore()
 
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -139,13 +143,13 @@ const previewImage = (image: string | Blob | MediaSource) => {
     <template v-if="updatedItem" #main>
       <div class="main">
         <div v-if="item" class="w-full mx-auto mt-4">
-          <div class="flex place-content-center justify-between">
+          <div class="flex place-content-center justify-between mb-4">
             <h1 class="text-2xl font-bold">{{ item.Name }} {{ $t('change') }}</h1>
             <button
-              class="px-2 rounded-full font-bold"
+              class="rounded-full bg-red-600 text-white font-bold"
               @click="router.push('/backoffice/productsettings')"
             >
-              X
+              <IconCross />
             </button>
           </div>
 
@@ -304,14 +308,14 @@ const previewImage = (image: string | Blob | MediaSource) => {
             <div class="flex place-content-center justify-between">
               <button
                 type="submit"
-                class="p-3 rounded-full bg-red-600 text-white"
+                class="py-2 px-4 h-[44px] rounded-full bg-red-600 text-white"
                 @click="showDeleteModalF"
               >
                 {{ $t('delete') }}
               </button>
               <button
                 type="submit"
-                class="p-3 rounded-full bg-lime-600 text-white"
+                class="py-2 px-4 h-[44px] rounded-full customcolor"
                 @click="updateItem"
               >
                 {{ $t('confirmation') }}
@@ -409,5 +413,10 @@ td {
 
 .productImage {
   width: 100% !important;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>
