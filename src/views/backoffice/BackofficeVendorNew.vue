@@ -102,6 +102,7 @@ const showToast = (type: string, message: string) => {
     toast.value = null
   }, 5000)
 }
+
 const updateLocation = (newLocation: any) => {
   if (newVendor.value) {
     newVendor.value.Longitude = newLocation.location.x
@@ -447,7 +448,7 @@ const importCSV = async () => {
                 </span>
 
               </div>
-              <VendorMapView :vendors="[newVendor]" @new-location="updateLocation" :enableSearch="true"/>
+              <VendorMapView :vendors="[newVendor]" :enable-search="true" @new-location="updateLocation"/>
             </div>
 
             <div class="flex place-content-center">

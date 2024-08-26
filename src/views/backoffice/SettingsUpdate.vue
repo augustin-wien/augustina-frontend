@@ -283,7 +283,7 @@ const url = import.meta.env.VITE_API_URL
               </div>
               <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="qrcodelogourl"
-                  >{{ $t('Logo path') }}:</label
+                  >{{ $t('QR Code Logo path') }}:</label
                 >
                 <div class="flex flex-row">
                   <input
