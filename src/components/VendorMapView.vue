@@ -42,7 +42,7 @@ function onMapReady(instance: any) {
       alert('Latitude: ' + event.latlng.lat + ' \n Longitude: ' + event.latlng.lng)
     })
 
-    if (props.enableSearch) {
+    if (props.enableSearch == 1) {
       map.value.addControl(searchControl)
 
       map.value.on('geosearch/showlocation', function (event: any) {
