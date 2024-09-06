@@ -10,7 +10,8 @@ const keycloakStore = useKeycloakStore()
 const authenticated = computed(() => keycloakStore.authenticated)
 
 onMounted(() => {
-  document.title = import.meta.env.VITE_PAGE_NAME + ' | Settings';
+  document.title = import.meta.env.VITE_PAGE_NAME + ' | Settings'
+
   if (authenticated.value) {
     settingsStore.getSettingsFromApi()
     itemsStore.getItems()

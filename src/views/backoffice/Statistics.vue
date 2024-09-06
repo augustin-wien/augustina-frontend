@@ -8,8 +8,8 @@ import { computed, onMounted, ref } from 'vue'
 import { type Statistics } from '@/stores/statistics'
 import Chart from 'chart.js/auto'
 
-onMounted(()=> {
-  document.title = import.meta.env.VITE_PAGE_NAME + ' | Statistics';
+onMounted(() => {
+  document.title = import.meta.env.VITE_PAGE_NAME + ' | Statistics'
 })
 
 const keycloakStore = useKeycloakStore()

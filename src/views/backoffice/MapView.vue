@@ -27,7 +27,8 @@ const zoom = ref(12)
 const center: Ref<PointExpression> = ref([48.2083, 16.3731])
 
 onMounted(() => {
-  document.title = import.meta.env.VITE_PAGE_NAME + ' | Map';
+  document.title = import.meta.env.VITE_PAGE_NAME + ' | Map'
+
   if (authenticated.value) {
     mapStore.getLocations()
   } else {
