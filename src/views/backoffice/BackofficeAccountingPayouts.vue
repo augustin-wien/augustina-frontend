@@ -55,6 +55,7 @@ const authenticated = computed(() => keycloakStore.authenticated)
 const items = computed(() => itemsStore.itemsBackoffice)
 
 onMounted(() => {
+  document.title = import.meta.env.VITE_PAGE_NAME + ' | Payouts';
   if (authenticated.value) {
     paymentStore.getPayouts(startDate.value, endDate.value)
     itemsStore.getItemsBackoffice()

@@ -14,6 +14,7 @@ const authenticated = computed(() => keycloakStore.authenticated)
 
 // Fetch the items' data when the component is mounted
 onMounted(() => {
+  document.title = import.meta.env.VITE_PAGE_NAME + ' | Product Settings';
   if (authenticated.value) {
     itemsStore.getItemsBackoffice()
   } else {
@@ -72,7 +73,7 @@ const apiUrl = import.meta.env.VITE_API_URL
                   <td class="border-t-2 p-3">{{ item.ItemOrder }}</td>
                   <td class="border-t-2">
                     <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
-                      <button class="p-3 rounded-full customcolor">
+                      <button class="px-4 py-2 rounded-full customcolor h-[44px]">
                         {{ $t('change') }}
                       </button>
                     </router-link>

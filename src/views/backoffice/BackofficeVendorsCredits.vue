@@ -12,6 +12,7 @@ const store = vendorsStore()
 
 // Fetch the vendors' data when the component is mounted
 onMounted(() => {
+  document.title = import.meta.env.VITE_PAGE_NAME + ' | Credits';
   if (keycloak.keycloak?.authenticated) {
     store.getVendors()
   } else {
