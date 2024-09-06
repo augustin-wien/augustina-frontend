@@ -87,9 +87,7 @@ const apiUrl = import.meta.env.VITE_API_URL
     <template #footer>
       <footer>
         <router-link to="/backoffice/newproduct">
-          <button
-            className="p-3 rounded-full customcolor absolute fixed bottom-10 right-10 h-16 w-16"
-          >
+          <button className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">
             {{ $t('new') }}
           </button>
         </router-link>
