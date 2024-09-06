@@ -373,15 +373,16 @@ const router = createRouter({
   ]
 })
 
+//Change tab names 
 router.afterEach((to) => {
   const settingsStore = useSettingsStore()
 
   // Use next tick to handle router history correctly
   // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
-  if (to.meta.title) {
-    document.title = settingsStore.settings.NewspaperName + ' | ' + to.meta?.title
-  } else {
+  if (to.meta.title == undefined) {
     document.title = settingsStore.settings.NewspaperName
+  } else {
+    document.title = settingsStore.settings.NewspaperName  + ' | ' + to.meta?.title
   }
 })
 
