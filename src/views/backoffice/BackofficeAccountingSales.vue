@@ -29,8 +29,6 @@ const settingsStore = useSettingsStore()
 const authenticated = computed(() => keycloakStore.authenticated)
 
 onMounted(() => {
-  document.title = import.meta.env.VITE_PAGE_NAME + ' | Sales'
-
   if (authenticated.value) {
     store.getSales(startDate.value, endDate.value)
     itemsStore.getItemsBackoffice()

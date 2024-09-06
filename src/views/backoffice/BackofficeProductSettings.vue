@@ -14,8 +14,6 @@ const authenticated = computed(() => keycloakStore.authenticated)
 
 // Fetch the items' data when the component is mounted
 onMounted(() => {
-  document.title = import.meta.env.VITE_PAGE_NAME + ' | Product Settings'
-
   if (authenticated.value) {
     itemsStore.getItemsBackoffice()
   } else {
