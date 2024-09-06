@@ -73,6 +73,7 @@ const translateItem = (payment: Payment) => {
 const authenticated = computed(() => keycloakStore.authenticated)
 
 onMounted(() => {
+  document.title = import.meta.env.VITE_PAGE_NAME + ' | Accounting';
   if (authenticated.value) {
     itemsStore.getItemsBackoffice().then(() => {
       store.getPayments(startDate.value, endDate.value)
