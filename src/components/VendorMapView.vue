@@ -41,8 +41,8 @@ function onMapReady(instance: any) {
     map.value.on('dblclick', function (event: any) {
       alert('Latitude: ' + event.latlng.lat + ' \n Longitude: ' + event.latlng.lng)
     })
-
-    if (props.enableSearch) {
+    console.log(props.enableSearch)
+    if (props.enableSearch == 1) {
       map.value.addControl(searchControl)
 
       map.value.on('geosearch/showlocation', function (event: any) {
