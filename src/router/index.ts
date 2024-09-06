@@ -374,16 +374,16 @@ const router = createRouter({
 })
 
 router.afterEach((to) => {
-    const settingsStore = useSettingsStore()
-    // Use next tick to handle router history correctly
-    // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
-    if(to.meta.title) {
-      document.title = settingsStore.settings.NewspaperName + ' | ' + to.meta?.title
-    }
-    else {
-      document.title = settingsStore.settings.NewspaperName
-    }
-});
+  const settingsStore = useSettingsStore()
+
+  // Use next tick to handle router history correctly
+  // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
+  if (to.meta.title) {
+    document.title = settingsStore.settings.NewspaperName + ' | ' + to.meta?.title
+  } else {
+    document.title = settingsStore.settings.NewspaperName
+  }
+})
 
 // Check if the user is authenticated
 router.beforeEach(async (to: any) => {

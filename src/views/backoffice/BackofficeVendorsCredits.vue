@@ -12,8 +12,6 @@ const store = vendorsStore()
 
 // Fetch the vendors' data when the component is mounted
 onMounted(() => {
-
-
   if (keycloak.keycloak?.authenticated) {
     store.getVendors()
   } else {
