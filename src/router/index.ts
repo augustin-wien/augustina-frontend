@@ -373,7 +373,7 @@ const router = createRouter({
   ]
 })
 
-//Change tab names 
+//Change tab names
 router.afterEach((to) => {
   const settingsStore = useSettingsStore()
 
@@ -382,7 +382,7 @@ router.afterEach((to) => {
   if (to.meta.title == undefined) {
     document.title = settingsStore.settings.NewspaperName
   } else {
-    document.title = settingsStore.settings.NewspaperName  + ' | ' + to.meta?.title
+    document.title = settingsStore.settings.NewspaperName + ' | ' + to.meta?.title
   }
 })
 
