@@ -53,15 +53,20 @@ onMounted(() => {
             </div>
           </div>
 
-          <RouterLink :to="{ name: 'Shop' }"
-            class="grid grid-rows-2 h-[13vh] w-full customcolor roundedcorner items-center place-items-center">
+          <RouterLink
+            :to="{ name: 'Shop' }"
+            class="grid grid-rows-2 h-[13vh] w-full customcolor roundedcorner items-center place-items-center"
+          >
             <div
-              class="w-full h-full text-2xl text-center font-semibold text-white bg-black rounded-full place-self-center flex items-center justify-center">
+              class="w-full h-full text-2xl text-center font-semibold text-white bg-black rounded-full place-self-center flex items-center justify-center"
+            >
               <p class="text-center">1x {{ shopStore.getName(settStore.settings.MainItem) }}</p>
             </div>
-            <div className="text-center w-full rounded-full text-2xl font-semibold relative flex justify-center">
-              <div>{{ $t("shop") }}</div>
-              <IconCross class="absolute customfill rotate-45 right-0 place-self-center mr-2"/>
+            <div
+              className="text-center w-full rounded-full text-2xl font-semibold relative flex justify-center"
+            >
+              <div>{{ $t('shop') }}</div>
+              <IconCross class="absolute customfill rotate-45 right-0 place-self-center mr-2" />
             </div>
           </RouterLink>
           <div className="w-full row-span-2 flex items-center justify-center">
@@ -69,10 +74,11 @@ onMounted(() => {
           </div>
         </div>
 
-
         <div className="place-items-center w-full flex">
           <RouterLink class="text-center h-[76px] grow" :to="{ name: 'Tippingpage' }">
-            <button class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold">
+            <button
+              class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold"
+            >
               {{ $t('next') }}
             </button>
           </RouterLink>
