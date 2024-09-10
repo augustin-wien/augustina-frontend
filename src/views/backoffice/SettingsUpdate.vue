@@ -18,17 +18,28 @@ onMounted(() => {
     storeItems.getItems()
     settingsStore.getSettingsFromApi()
     updatedSettings.value = settingsStore.settings
+    settingsStore.getStyleCss()
   } else {
     watch(authenticated, () => {
       storeItems.getItems()
       settingsStore.getSettingsFromApi()
       updatedSettings.value = settingsStore.settings
+      settingsStore.getStyleCss()
     })
   }
 })
 
 const settings = computed(() => settingsStore.settings)
 const items = computed(() => storeItems.items)
+const styles = ref('')
+styles.value = settingsStore.styles
+const settingsStyles = computed(() => settingsStore.styles)
+
+watch(settingsStyles, (newVal) => {
+  if (newVal) {
+    styles.value = newVal
+  }
+})
 
 watch(settings, (newVal) => {
   if (newVal) {
@@ -87,6 +98,14 @@ const updateLogo = (event: any) => {
   // This logic will execute when a file is selected in the file input
   updatedSettings.value.Logo = event.target.files[0]
   newLogo.value = URL.createObjectURL(event.target.files[0])
+}
+
+const updateStyles = () => {
+  // This logic will execute when the "Bestätigen" button is clicked
+  settingsStore.updateStyleCss(styles.value).then(() => {
+    showToast('success', 'Einstellungen erfolgreich aktualisiert')
+    router.push({ name: 'Backoffice Settings' })
+  })
 }
 
 const newLogo = ref('')
@@ -375,16 +394,37 @@ const url = import.meta.env.VITE_API_URL
                 <button
                   id="saveSettings"
                   type="submit"
-                  class="px-4 py-2 mt-2 rounded-full customcolor h-[44px]"
+                  class="px-4 py-2 ps-2 mt-2 rounded-full customcolor h-[44px]"
                   @click="updateSettings()"
                 >
                   {{ $t('confirmation') }}
                 </button>
               </div>
             </div>
+            <div class="styles_form">
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="styles">
+                {{ $t('Custom styles') }}:</label
+              >
+              <textarea
+                id="styles"
+                v-model="styles"
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="textarea"
+              />
+              <div class="flex place-content-center">
+                <button
+                  id="saveSettings"
+                  type="submit"
+                  class="px-4 py-2 ps-2 mt-2 rounded-full customcolor h-[44px]"
+                  @click="updateStyles()"
+                >
+                  {{ $t('saveCustomCss') }}
+                </button>
+              </div>
+            </div>
           </div>
-          <Toast v-if="toast" :toast="toast" />
         </div>
+        <Toast v-if="toast" :toast="toast" />
       </div>
     </template>
   </component>

@@ -3,6 +3,17 @@ import { useSettingsStore } from '@/stores/settings'
 
 const settStore = useSettingsStore()
 settStore.getSettingsFromApi()
+
+//load custom css from backend
+const cssUrl = import.meta.env.VITE_API_URL.replace('/api', '') + 'public/style.css'
+
+const link = document.createElement('link')
+link.href = cssUrl
+link.type = 'text/css'
+link.rel = 'stylesheet'
+link.media = 'screen,print'
+
+document.getElementsByTagName('head')[0].appendChild(link)
 </script>
 
 <template>

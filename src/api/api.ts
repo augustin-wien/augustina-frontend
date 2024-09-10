@@ -17,7 +17,8 @@ import {
   VENDORS_LOCATION_URL,
   VENDOR_ME_API_URL,
   PAYMENT_STATISTICS_API_URL,
-  PDF_DOWNLOAD_API_URL
+  PDF_DOWNLOAD_API_URL,
+  STYLES_URL
 } from './endpoints'
 
 export const apiInstance = axios.create({
@@ -155,6 +156,21 @@ export async function patchSettings(updatedSettings: Settings) {
       'Content-Type': 'multipart/form-data'
     }
   })
+}
+
+// patch styles
+export async function patchSettingsStyles(styles: string) {
+  return apiInstance.put(`${SETTINGS_API_URL}css/`, styles, {
+    headers: {
+      accept: 'application/json',
+      'Content-Type': 'text/css'
+    }
+  })
+}
+
+// get styles to load it dynamically
+export async function getStyles(rev: number) {
+  return apiInstance.get(`${STYLES_URL}?rev=${rev}`)
 }
 
 //payments list

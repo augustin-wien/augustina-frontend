@@ -164,5 +164,6 @@
   "isPDFLicenseItem": "Ist das Produkt ein PDF Lizenzartikel?",
   "pdf item": "PDF Datei",
 
-  "maintenance": "Die Webseite steht derzeit unter Wartungsarbeiten. Wir entschuldigen uns für die Unannehmlichkeiten. Bitte versuche es in den nächsten Tagen erneut."
+  "maintenance": "Die Webseite steht derzeit unter Wartungsarbeiten. Wir entschuldigen uns für die Unannehmlichkeiten. Bitte versuche es in den nächsten Tagen erneut.",
+  "saveCustomCss": "Eigenes CSS speichern"
 }

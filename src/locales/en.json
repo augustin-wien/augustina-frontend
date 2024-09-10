@@ -159,5 +159,6 @@
   "isPDFLicenseItem": "Is PDF license item",
   "pdf item": "PDF item",
 
-  "maintenance": "This page is currently under maintenance. We are sorry for the inconveniences. Please try again within the next days."
+  "maintenance": "This page is currently under maintenance. We are sorry for the inconveniences. Please try again within the next days.",
+  "saveCustomCss": "Save custom css"
 }
