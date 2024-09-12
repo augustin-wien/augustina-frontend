@@ -12,7 +12,7 @@ settStore.getSettingsFromApi()
       <header class="relative place-items-center h-1/6">
         <select
           v-model="$i18n.locale"
-          class="h-[55px] w-[55px] absolute font-semibold border-0 top-0 right-0 text-gray-500  bg-white text-center mt-4 mr-4 pl-2 text-sm"
+          class="h-[55px] w-[55px] absolute font-semibold border-0 top-0 right-0 text-gray-500 bg-white text-center mt-4 mr-4 pl-2 text-sm"
         >
           <option value="en">EN</option>
           <option value="de">DE</option>

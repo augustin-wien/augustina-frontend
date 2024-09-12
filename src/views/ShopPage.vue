@@ -131,7 +131,10 @@ const checkIfItemSelected = () => {
                   v-if="item.ID != settings.MainItem"
                   class="flex w-full p-1 pt-2 relative border-t-4 border"
                 >
-                  <div class="flex-none grid grid-rows-1 place-content-start mr-2 item-left" v-if="item.Image">
+                  <div
+                    v-if="item.Image"
+                    class="flex-none grid grid-rows-1 place-content-start mr-2 item-left"
+                  >
                     <div class="pb-1">
                       <RouterLink :to="{ name: 'Item Available', query: { item: item.ID } }">
                         <div

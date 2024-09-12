@@ -50,4 +50,3 @@ onMounted(() => {
     </template>
   </component>
 </template>
-

@@ -195,7 +195,7 @@ onMounted(() => {
           align-items: center;
         "
       >
-      <WaitingAnimation />
+        <WaitingAnimation />
       </div>
     </div>
   </div>
