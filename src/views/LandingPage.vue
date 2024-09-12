@@ -42,7 +42,7 @@ onMounted(() => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template v-if="settStore.settings.MainItemPrice" #main>
-      <div className="grid grid-rows-5 h-full place-items-center w-full">
+      <div id="landing-page" className="grid grid-rows-5 h-full place-items-center w-full">
         <div class="row-span-4 grid grid-rows-5 h-full w-full">
           <div className="text-center font-semibold text-2xl pt-5">
             {{ $t('buyItem') }}
