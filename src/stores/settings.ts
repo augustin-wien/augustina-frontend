@@ -33,7 +33,7 @@ export interface Settings {
 export const useSettingsStore = defineStore('settings', {
   state: () => {
     return {
-      settings: {} as Settings,
+      settings: {Color:"#000"} as Settings,
       settingsLoaded: false,
       imgUrl: ''
     }
