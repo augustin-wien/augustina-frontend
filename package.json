@@ -21,6 +21,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/vue-fontawesome": "^3.0.3",
+    "@sentry/vue": "^8.30.0",
     "@stripe/stripe-js": "^1.54.1",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "@vue-stripe/vue-stripe": "^4.5.0",
