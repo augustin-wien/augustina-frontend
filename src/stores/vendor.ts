@@ -44,7 +44,7 @@ export const useVendorStore = defineStore('vendor', {
           this.vendorid = typeof vendorId == 'string' ? vendorId : vendorId[0]
 
           //testcase
-          this.vendorLink = 'https://tailwindcss.com/docs/position'
+          //this.vendorLink = 'https://tailwindcss.com/docs/position'
 
           if (this.vendorName !== '') {
             router.push(`/v/${vendorId}/landing-page`)
@@ -85,7 +85,6 @@ export interface Vendor {
   OnlineMap: boolean
   HasSmartphone: boolean
   HasBankAccount: boolean
-  VerificationLink: string
 
   OpenPayments:
     | [

@@ -38,8 +38,7 @@ const newVendor = ref<Vendor>({
   HasBankAccount: false,
   OpenPayments: null,
   AccountProofUrl: null,
-  IsDeleted: false,
-  VerificationLink: ''
+  IsDeleted: false
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)
@@ -320,7 +319,7 @@ const importCSV = async () => {
                   >
                   <input
                     id="verification"
-                    v-model="newVendor.VerificationLink"
+                    v-model="newVendor.AccountProofUrl"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="verification"
                   />
