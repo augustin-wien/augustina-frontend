@@ -203,9 +203,9 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price"
-                >{{ $t('Item background color') }}</label
-              >
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price">{{
+                $t('Item background color')
+              }}</label>
               <div class="flex flex-row">
                 <input
                   id=""
@@ -215,9 +215,9 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price"
-                >{{ $t('Item text color') }}</label
-              >
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price">{{
+                $t('Item text color')
+              }}</label>
               <div class="flex flex-row">
                 <input
                   id=""
