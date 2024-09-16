@@ -4,18 +4,23 @@ import { computed, onMounted, ref, watch } from 'vue'
 import keycloak from '@/keycloak/keycloak'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Vendor } from '@/stores/vendor'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const store = vendorsStore()
 
 // Fetch the vendors' data when the component is mounted
-keycloak.keycloak.onAuthSuccess = () => {
-  store.getVendors()
-}
-
-// Fetch the vendors' data when the component is mounted
 onMounted(() => {
-  if (keycloak.keycloak.authenticated) {
+  if (keycloak.keycloak?.authenticated) {
     store.getVendors()
+  } else {
+    if (keycloak.keycloak) {
+      // Fetch the vendors' data when the component is mounted
+      keycloak.keycloak.onAuthSuccess = () => {
+        store.getVendors()
+      }
+    }
   }
 })
 
@@ -69,9 +74,9 @@ const exportTable = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center">
+      <div class="flex space-between justify-between content-center items-center pt-3">
+        <h1 className="font-bold text-2xl">{{ $t('openCredits') }}</h1>
         <div>
-          <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('openCredits') }}</h1>
           <span>
             <input
               id="searchInput"
@@ -80,15 +85,12 @@ const exportTable = () => {
               :placeholder="$t('IDNumber')"
               class="border-2 border-gray-400 rounded-md p-2 ml-2"
             />
-            <button class="p-3 rounded-full bg-lime-600 text-white ml-2">
+            <button class="py-2 px-4 rounded-full customcolor ml-2 h-[44px]">
               {{ $t('search') }}
             </button>
           </span>
         </div>
-        <button
-          class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
-          @click="exportTable"
-        >
+        <button class="py-2 px-4 rounded-full customcolor h-[44px] mr-6" @click="exportTable">
           {{ $t('export') }}
         </button>
       </div>
@@ -96,9 +98,9 @@ const exportTable = () => {
 
     <template #main>
       <div v-if="vendors" class="main">
-        <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-center text-2xl space-y-3 space-x-3 page-content space-x-2 mt-5">
-            <div className="table-auto border-spacing-4 border-collapse">
+        <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-xl space-y-3 page-content space-x-2">
+            <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
                   <th className="p-3">{{ $t('IDNumber') }}</th>
@@ -116,7 +118,7 @@ const exportTable = () => {
                   <td className="border-t-2 p-3">{{ formatDate(vendor.LastPayout) }}</td>
                   <router-link v-if="vendor?.ID" :to="`/backoffice/credits/payout/${vendor.ID}`">
                     <button
-                      className="p-3 rounded-full bg-lime-600 text-white"
+                      className="p-3 rounded-full customcolor"
                       :disabled="vendor.Balance === 0"
                     >
                       {{ $t('payNow') }}
@@ -124,7 +126,7 @@ const exportTable = () => {
                   </router-link>
                 </tr>
               </tbody>
-            </div>
+            </table>
           </div>
         </div>
       </div>
@@ -138,5 +140,10 @@ button[disabled] {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

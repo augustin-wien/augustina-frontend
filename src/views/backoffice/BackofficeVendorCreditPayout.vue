@@ -10,6 +10,10 @@ import { formatCredit, formatDate } from '@/utils/utils'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
+import { useSettingsStore } from '@/stores/settings'
+import IconCross from '@/components/icons/IconCross.vue'
+
+const settingsStore = useSettingsStore()
 
 const keycloakStore = useKeycloakStore()
 
@@ -111,6 +115,7 @@ const payoutVendor = async () => {
       router.push('/backoffice/credits')
     })
     .catch((error) => {
+      // eslint-disable-next-line no-console
       console.log(error)
 
       if (error?.message && error?.response?.data?.error?.message) {
@@ -163,14 +168,14 @@ const getItemName = (itemID: number) => {
     <template #main>
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div v-if="vendor" className="text-center text-2xl space-y-3 space-x-3">
+          <div v-if="vendor" className="text-xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
               <h1 class="text-2xl font-bold"></h1>
               <button
-                class="px-2 rounded-full bg-red-600 text-white font-bold"
+                class="rounded-full bg-red-600 text-white font-bold"
                 @click="router.push('/backoffice/credits')"
               >
-                X
+                <IconCross />
               </button>
             </div>
             <div>
@@ -204,7 +209,7 @@ const getItemName = (itemID: number) => {
                     v-if="vendor.Balance > 0"
                     type="submit"
                     value="Bestätigen"
-                    className="p-3 m-3 rounded-full bg-lime-600 text-white"
+                    className="p-3 m-3 rounded-full customcolor"
                     :onClick="payoutVendor"
                     :disabled="vendor.Balance === 0"
                   >
@@ -214,7 +219,7 @@ const getItemName = (itemID: number) => {
                     v-else
                     type="submit"
                     value="Bestätigen"
-                    className="p-3 m-3 rounded-full bg-lime-600 text-white"
+                    className="p-3 m-3 rounded-full customcolor"
                     disabled
                   >
                     {{ $t('noCredits') }}
@@ -240,5 +245,9 @@ button[disabled] {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
+}
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

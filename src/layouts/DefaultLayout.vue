@@ -1,8 +1,20 @@
 <script setup lang="ts">
+import WaitingAnimation from '@/components/WaitingAnimation.vue'
 import { useSettingsStore } from '@/stores/settings'
 
 const settStore = useSettingsStore()
 settStore.getSettingsFromApi()
+
+//load custom css from backend
+const cssUrl = import.meta.env.VITE_API_URL.replace('/api', '') + 'public/style.css'
+
+const link = document.createElement('link')
+link.href = cssUrl
+link.type = 'text/css'
+link.rel = 'stylesheet'
+link.media = 'screen,print'
+
+document.getElementsByTagName('head')[0].appendChild(link)
 </script>
 
 <template>
@@ -11,7 +23,7 @@ settStore.getSettingsFromApi()
       <header class="relative place-items-center h-1/6">
         <select
           v-model="$i18n.locale"
-          class="h-[55px] w-[55px] absolute font-semibold border-2 top-0 right-0 border-gray-300 rounded-full text-gray-300 text-center mt-4 mr-4 pl-2 text-sm"
+          class="h-[55px] w-[55px] absolute font-semibold border-0 top-0 right-0 text-gray-500 bg-white text-center mt-4 mr-4 pl-2 text-sm"
         >
           <option value="en">EN</option>
           <option value="de">DE</option>
@@ -19,7 +31,7 @@ settStore.getSettingsFromApi()
         <slot name="header">
           <img
             v-if="settStore.imgUrl"
-            alt="Augustin logo"
+            alt="Newspaper logo"
             className="logo mx-auto my-1 scale-75"
             :src="settStore.imgUrl"
           />
@@ -27,7 +39,7 @@ settStore.getSettingsFromApi()
       </header>
       <div class="h-5/6 main-container px-8">
         <slot name="main">
-          <h1>Default Content</h1>
+          <WaitingAnimation />
         </slot>
       </div>
     </main>

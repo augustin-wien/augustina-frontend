@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
-import type { Vendor } from '@/stores/vendor'
 import { useSettingsStore } from '@/stores/settings'
 import { computed, watch } from 'vue'
 import router from '@/router'
@@ -20,6 +19,7 @@ onMounted(async () => {
     try {
       store.fetchVendorMe()
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Fehler beim API-Aufruf:', error)
     }
   } else {
@@ -30,6 +30,7 @@ onMounted(async () => {
         try {
           store.fetchVendorMe()
         } catch (error) {
+          // eslint-disable-next-line no-console
           console.error('Fehler beim API-Aufruf:', error)
         }
       }

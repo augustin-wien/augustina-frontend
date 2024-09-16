@@ -4,7 +4,7 @@ import keycloak from '@/keycloak/keycloak'
 import { ref } from 'vue'
 
 function logout() {
-  keycloak.keycloak.logout()
+  keycloak.keycloak?.logout()
 }
 
 const message = ref('Press the button to call the backend')
@@ -12,7 +12,6 @@ const message = ref('Press the button to call the backend')
 function get() {
   getAuthHello().then((response: any) => {
     message.value = response.data
-    console.log(response)
   })
 }
 </script>
@@ -20,7 +19,7 @@ function get() {
 <template>
   <header>
     <img
-      alt="Augustin logo"
+      alt="Newspaper logo"
       className="logo mx-auto my-5"
       src="@/assets/logo.svg"
       width="270"

@@ -4,6 +4,11 @@ import router from '@/router'
 import type { Item } from '@/stores/items'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { useSettingsStore } from '@/stores/settings'
+import IconCross from '@/components/icons/IconCross.vue'
+
+const settingsStore = useSettingsStore()
+
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -18,7 +23,7 @@ onMounted(() => {
     itemsStore.getItems()
     itemsStore.getItemsBackoffice()
   } else {
-    watch(authenticated, (val: boolean) => {
+    watch(authenticated, () => {
       itemsStore.getItems()
       itemsStore.getItemsBackoffice()
     })
@@ -35,8 +40,6 @@ const route = useRoute()
 const idParams = computed(() => Number(route.params.ID))
 
 function getItem() {
-  console.log('idParams', idParams.value, items.value)
-
   if (!isNaN(idParams.value)) {
     const i = items.value.find((item) => item.ID === idParams.value)
     //@ts-ignore
@@ -75,6 +78,7 @@ const updateItem = async () => {
         showToast('error', 'Produkt konnte nicht aktualisiert werden' + err)
       })
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error creating item:', error)
     showToast('error', 'Produkt konnte nicht angelegt werden')
   }
@@ -95,6 +99,7 @@ const deleteItem = async () => {
       router.push({ name: 'Backoffice Product Settings' })
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error deleting item:', error)
     showToast('error', 'Produkt konnte nicht gelöscht werden')
   }
@@ -138,13 +143,13 @@ const previewImage = (image: string | Blob | MediaSource) => {
     <template v-if="updatedItem" #main>
       <div class="main">
         <div v-if="item" class="w-full mx-auto mt-4">
-          <div class="flex place-content-center justify-between">
+          <div class="flex place-content-center justify-between mb-4">
             <h1 class="text-2xl font-bold">{{ item.Name }} {{ $t('change') }}</h1>
             <button
-              class="px-2 rounded-full bg-red-600 text-white font-bold"
+              class="rounded-full bg-red-600 text-white font-bold"
               @click="router.push('/backoffice/productsettings')"
             >
-              X
+              <IconCross />
             </button>
           </div>
 
@@ -174,8 +179,20 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description"
+                >{{ $t('Item order (higher moves the item up)') }}:</label
+              >
+              <div class="flex flex-row">
+                <input
+                  id="description"
+                  v-model="updatedItem.ItemOrder"
+                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  required
+                />
+              </div>
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price"
-                >{{ $t('price') }}:</label
+                >{{ $t('price') }} (Cent):</label
               >
               <div class="flex flex-row">
                 <input
@@ -232,8 +249,8 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   class="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
                 >
                   <option :value="undefined">-- {{ $t('none') }} --</option>
-                  <option v-for="item in licenseItems" :key="item.ID" :value="item.ID">
-                    {{ item.Name }}
+                  <option v-for="elItem in licenseItems" :key="elItem.ID" :value="elItem.ID">
+                    {{ elItem.Name }}
                   </option>
                 </select>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="pdf">{{
@@ -291,14 +308,14 @@ const previewImage = (image: string | Blob | MediaSource) => {
             <div class="flex place-content-center justify-between">
               <button
                 type="submit"
-                class="p-3 rounded-full bg-red-600 text-white"
+                class="py-2 px-4 h-[44px] rounded-full bg-red-600 text-white"
                 @click="showDeleteModalF"
               >
                 {{ $t('delete') }}
               </button>
               <button
                 type="submit"
-                class="p-3 rounded-full bg-lime-600 text-white"
+                class="py-2 px-4 h-[44px] rounded-full customcolor"
                 @click="updateItem"
               >
                 {{ $t('confirmation') }}
@@ -396,5 +413,10 @@ td {
 
 .productImage {
   width: 100% !important;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

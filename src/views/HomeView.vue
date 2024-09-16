@@ -1,7 +1,4 @@
-<script setup lang="ts">
-const apiUrl = import.meta.env.VITE_API_URL as string
-console.log(apiUrl)
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <component :is="$route.meta.layout || 'div'">

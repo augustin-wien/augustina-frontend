@@ -2,6 +2,7 @@
   "buyItem": "Zeitung kaufen bei",
   "newspaper": "Zeitung",
   "next": "Weiter",
+  "shop": "Mehr Produkte",
 
   "donation": "Spende",
   "includes": "enthält",
@@ -13,7 +14,7 @@
   "agreement": "Mit Kauf akzeptiere ich die ",
   "terms": "AGBs",
 
-  "symbol": "Zeige bitte das Symbol ",
+  "symbol": "Zeige bitte das Symbol an ",
   "bought": "Gekauft am: ",
   "at": " um",
 
@@ -23,6 +24,7 @@
 
   "customdonation": "Spende eingeben",
 
+  "invalid confirmation": "Ungültige Zahlungsbestätigung",
   "invalid": "Die gescannte ID ist nicht gültig",
   "gotovendor": "Gehe bitte zu einer Verkäuferin oder einem Verkäufer",
   "augustin": "Zum Augustin",
@@ -59,7 +61,7 @@
   "description": "Beschreibung",
   "price": "Preis",
   "measure": "Aktion",
-  "change": "Ändern",
+  "change": "Bearbeiten",
   "new": "Neu",
   "newGendered": "Neue/n",
 
@@ -73,11 +75,22 @@
   "color": "Farbe",
   "fontColor": "Schriftfarbe",
   "maximum": "Maximale Bestellsumme",
-
+  "AGB URL": "AGB URL",
+  "URL for maintenance": "URL bei Wartungsarbeiten",
+  "Logo path": "Pfad zum Logo",
+  "LicenseID-not-found-URL": "Ausweisnummer nicht gefunden URL",
+  "Email ending domain": "E-Mail Endung",
+  "Webshop is closed": "Webshop ist geschlossen",
+  "Map center latitude": "Kartenmitte Breitengrad",
+  "Map center longitude": "Kartenmitte Längengrad",
+  "Map center": "Koordinaten der Kartenmitte",
+  "false": "Nein",
+  "true": "Ja",
   "yes": "Ja",
   "no": "Nein",
   "confirmation": "Bestätigen",
   "delete": "Löschen",
+  "save": "Speichern",
 
   "payout": "Für folgende Zahlungen auszahlen",
   "confirmPayout": "Auszahlung bestätigen",
@@ -88,7 +101,7 @@
 
   "firstName": "Vorname",
   "lastName": "Nachname",
-  "licenseId": "Lizenznummer",
+  "LicenseId": "Ausweisnummer",
   "language": "Sprache",
   "telephone": "Telefonnummer",
   "address": "Adresse",
@@ -109,6 +122,7 @@
   "openCredits": "Offene Beträge",
   "search": "Suchen",
   "IDNumber": "Ausweisnummer",
+  "SearchPlaceholder": "Suche nach Name oder ID",
   "payNow": "Auszahlen",
   "deactivated": "Deaktiviert",
 
@@ -151,5 +165,10 @@
   "licenseGroup": "Lizenzgruppe",
   "donation_only": "Nur Spende ist nicht möglich",
   "isPDFLicenseItem": "Ist das Produkt ein PDF Lizenzartikel?",
-  "pdf item": "PDF Datei"
+  "pdf item": "PDF Datei",
+  "Download": "Download",
+  "have fun": "Viel Spaß beim Lesen!",
+
+  "maintenance": "Die Webseite steht derzeit unter Wartungsarbeiten. Wir entschuldigen uns für die Unannehmlichkeiten. Bitte versuche es in den nächsten Tagen erneut.",
+  "saveCustomCss": "Eigenes CSS speichern"
 }

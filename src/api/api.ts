@@ -17,7 +17,8 @@ import {
   VENDORS_LOCATION_URL,
   VENDOR_ME_API_URL,
   PAYMENT_STATISTICS_API_URL,
-  PDF_DOWNLOAD_API_URL
+  PDF_DOWNLOAD_API_URL,
+  STYLES_URL
 } from './endpoints'
 
 export const apiInstance = axios.create({
@@ -26,7 +27,7 @@ export const apiInstance = axios.create({
 
 apiInstance.interceptors.request.use(
   (config) => {
-    if (keycloak && keycloak.keycloak.authenticated) {
+    if (keycloak && keycloak.keycloak?.authenticated) {
       config.headers.Authorization = `Bearer ${keycloak.keycloak.token}`
     }
 
@@ -43,7 +44,7 @@ apiInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response.status === 401) {
-      keycloak.keycloak.login()
+      keycloak.keycloak?.login()
     }
 
     return Promise.reject(error)
@@ -131,6 +132,16 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('FontColor', updatedSettings.FontColor)
   formData.append('Logo', updatedSettings.Logo)
   formData.append('MainItem', updatedSettings.MainItem.toString())
+  formData.append('AGBUrl', updatedSettings.AGBUrl)
+  formData.append('MaintainanceModeHelpUrl', updatedSettings.MaintainanceModeHelpUrl)
+  formData.append('QRCodeLogoImgUrl', updatedSettings.QRCodeLogoImgUrl)
+  formData.append('QRCodeUrl', updatedSettings.QRCodeUrl)
+  formData.append('VendorNotFoundHelpUrl', updatedSettings.VendorNotFoundHelpUrl)
+  formData.append('VendorEmailPostfix', updatedSettings.VendorEmailPostfix)
+  formData.append('WebshopIsClosed', updatedSettings.WebshopIsClosed.toString())
+  formData.append('NewspaperName', updatedSettings.NewspaperName)
+  formData.append('MapCenterLat', updatedSettings.MapCenterLat.toString())
+  formData.append('MapCenterLong', updatedSettings.MapCenterLong.toString())
 
   formData.append(
     'OrgaCoversTransactionCosts',
@@ -145,6 +156,21 @@ export async function patchSettings(updatedSettings: Settings) {
       'Content-Type': 'multipart/form-data'
     }
   })
+}
+
+// patch styles
+export async function patchSettingsStyles(styles: string) {
+  return apiInstance.put(`${SETTINGS_API_URL}css/`, styles, {
+    headers: {
+      accept: 'application/json',
+      'Content-Type': 'text/css'
+    }
+  })
+}
+
+// get styles to load it dynamically
+export async function getStyles(rev: number) {
+  return apiInstance.get(`${STYLES_URL}?rev=${rev}`)
 }
 
 //payments list
@@ -197,4 +223,34 @@ export async function pdfDownload(linkId: string) {
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
+}
+
+// image Download
+
+export async function getBase64ImageFromUrl(url: string) {
+  const response = await axios.get(url, { responseType: 'blob' })
+  if (response.status == 200) {
+    const base64data = await blobToData(response.data)
+    return base64data
+  } else return undefined
+}
+
+function blobToData(blob: Blob): Promise<string | undefined> {
+  const result = new Promise<string | undefined>((resolve) => {
+    const reader = new FileReader()
+
+    reader.onloadend = () => {
+      const result = reader.result
+
+      if (result && result !== null && typeof result === 'string') {
+        resolve(result)
+      }
+
+      resolve(undefined)
+    }
+
+    reader.readAsDataURL(blob)
+  })
+
+  return result
 }

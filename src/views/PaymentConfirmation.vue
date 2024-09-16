@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useSettingsStore } from '@/stores/settings'
-import { usePaymentStore } from '@/stores/payment'
-import { useItemsStore } from '@/stores/items'
-import { usePDFDownloadStore } from '@/stores/pdfDownload'
 import IconCheckmark from '@/components/icons/IconCheckmark.vue'
 import IconCross from '@/components/icons/IconCross.vue'
+import { useItemsStore } from '@/stores/items'
+import { usePaymentStore } from '@/stores/payment'
+import { usePDFDownloadStore } from '@/stores/pdfDownload'
+import { useSettingsStore } from '@/stores/settings'
+import { computed, onMounted, ref } from 'vue'
 
 const paymentStore = usePaymentStore()
 const settStore = useSettingsStore()
@@ -27,6 +27,43 @@ const price = computed(() =>
 const downloadLinks = computed(() => paymentStore.verification?.PDFDownloadLinks)
 
 const purchasedItems = computed(() => paymentStore.verification?.PurchasedItems)
+
+// Define the computed property that checks the condition
+const hasSingleDigitalItem = computed(() => {
+  // Get the list of purchased items
+  const items = purchasedItems.value
+
+  // Check if the list length is exactly one
+  if (items?.length === 1) {
+    // Get the first item in the list
+    const item = items[0]
+
+    // Get the attribute licenseItem of the item
+    const itemLicenseItem = itemLicenseItemAttribute(item.Item)
+
+    // Check if the item name has license item
+    return itemLicenseItem !== null
+  }
+
+  if (items?.length === 2) {
+    // Iterate over the list of purchased items
+    for (const item of items) {
+      // Get the attribute licenseItem of the item
+      const itemLicenseItem = itemLicenseItemAttribute(item.Item)
+
+      // Return false if null
+      if (itemLicenseItem !== null) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  // Return false if the list length is not one or two
+  return false
+})
+
 const time = ref('not')
 
 function currentTime() {
@@ -56,6 +93,12 @@ const itemName = (id: number) => {
   return item?.Name
 }
 
+const itemLicenseItemAttribute = (id: number) => {
+  const item = itemsStore.items?.find((item) => item.ID == id)
+
+  return item?.LicenseItem
+}
+
 const downloadPDF = (link: string) => {
   PDFDownloadStore.downloadPDF(link)
   // TODO: Implement validation without triggering spam protection in the browser
@@ -80,12 +123,23 @@ const apiUrl = import.meta.env.VITE_API_URL
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <div className="grid grid-rows-6 h-full place-items-center w-full">
-        <div className="h-full w-full text-center grid grid-rows-2 font-semibold text-xl">
-          <div>{{ $t('symbol') }}</div>
-          <div>{{ paymentStore.firstName }}</div>
+        <div
+          v-if="!hasSingleDigitalItem"
+          className="h-full w-full text-center grid grid-rows-2 font-semibold text-xl"
+        >
+          <div v-if="!isConfirmed">
+            <div>{{ $t('symbol') }}</div>
+            <div>{{ paymentStore.firstName }}</div>
+          </div>
+          <div v-else>
+            <div>{{ $t('invalid confirmation') }}</div>
+          </div>
+        </div>
+        <div v-else className="h-full w-full text-center grid grid-rows-2 font-semibold text-xl">
+          <div>{{ $t('have fun') }}</div>
         </div>
         <div v-if="!isConfirmed" class="row-span-4 font-bold w-fit h-full relative">
-          <div class="flex justify-center mb-4">
+          <div v-if="!hasSingleDigitalItem" class="flex justify-center mb-4">
             <div
               v-if="!isConfirmed"
               class="rounded-full text-6xl absolute h-12 w-12 fill-white right-0 top-0 place-items-center grid"
@@ -136,8 +190,10 @@ const apiUrl = import.meta.env.VITE_API_URL
             <IconCross />
           </div>
         </div>
-
-        <div class="grid grid-rows-2 place-items-center">
+        <div
+          v-if="!hasSingleDigitalItem != !isConfirmed"
+          class="grid grid-rows-2 place-items-center"
+        >
           <div>
             <span class="date text-l">{{ currentDate() }} </span
             ><span class="time text-l"> {{ $t('at') }} {{ time }}</span>

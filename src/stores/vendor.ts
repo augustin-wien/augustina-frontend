@@ -55,9 +55,10 @@ export const useVendorStore = defineStore('vendor', {
 
 //define interface to store data from backend properly
 export interface Vendor {
+  ID: number
+  AccountProofUrl: string | null
   Email: string
   FirstName: string
-  ID: number
   KeycloakID: string
   LastName: string
   LastPayout: string | null
@@ -65,6 +66,7 @@ export interface Vendor {
   UrlID: string
   Balance: number
   IsDisabled: boolean
+  IsDeleted: boolean
   Longitude: number
   Latitude: number
   Address: string
@@ -79,6 +81,7 @@ export interface Vendor {
   OnlineMap: boolean
   HasSmartphone: boolean
   HasBankAccount: boolean
+
   OpenPayments:
     | [
         {
@@ -131,6 +134,7 @@ export const vendorsStore = defineStore('vendors', {
         this.vendors = data.data
         //@ts-ignore
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error)
       }
     },
@@ -141,6 +145,7 @@ export const vendorsStore = defineStore('vendors', {
           this.getVendors()
         })
         .catch((error) => {
+          // eslint-disable-next-line no-console
           console.error('Error creating vendor:', error)
         })
     },
@@ -200,6 +205,7 @@ export const vendorsStore = defineStore('vendors', {
           this.getVendors()
         })
         .catch((error) => {
+          // eslint-disable-next-line no-console
           console.error('Error deleting vendor:', error)
         })
     },
@@ -209,6 +215,7 @@ export const vendorsStore = defineStore('vendors', {
         this.vendor = data.data
         return data.data
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error)
       }
     },
@@ -219,6 +226,7 @@ export const vendorsStore = defineStore('vendors', {
           this.vendor = response.data
         })
         .catch((error) => {
+          // eslint-disable-next-line no-console
           console.error(error)
         })
     }

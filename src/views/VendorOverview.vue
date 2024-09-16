@@ -34,7 +34,7 @@ const formatTime = (date: string) => {
   return `${formattedDate} - ${formattedTime}`
 }
 
-watch(vendorMe as any, (newValue) => {
+watch(vendorMe as any, () => {
   generateQRCode(vendorMe.value)
 })
 
@@ -47,6 +47,7 @@ onMounted(async () => {
         generateQRCode(vendorMe.value)
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Fehler beim API-Aufruf:', error)
     }
   } else {
@@ -62,8 +63,10 @@ onMounted(async () => {
           failure.value = true
 
           if (error instanceof Error) {
+            // eslint-disable-next-line no-console
             console.error('Fehler beim API-Aufruf:', error)
           } else {
+            // eslint-disable-next-line no-console
             console.error('Fehler beim API-Aufruf:', error as Error)
           }
         }
@@ -78,7 +81,7 @@ const generateQRCode = async (vendorMe: Vendor) => {
     width: 100,
     height: 100,
     type: 'svg',
-    data: `https://shop.augustin.or.at/v/${vendorMe?.LicenseID}`,
+    data: `${import.meta.env.VITE_FRONTEND_URL}/v/${vendorMe?.LicenseID}`,
 
     dotsOptions: {
       color: '#000',
@@ -178,7 +181,7 @@ const customColor = computed(() => {
             </router-link>
             <button
               class="p-2 rounded-full customcolor text-white"
-              @click="keycloak.keycloak.logout"
+              @click="keycloak.keycloak?.logout()"
             >
               <font-awesome-icon :icon="faArrowRightFromBracket" />
               <p class="text-base leading-4">{{ $t('Logout') }}</p>

@@ -4,6 +4,9 @@ import { computed, onMounted, watch } from 'vue'
 import { formatCredit } from '@/utils/utils'
 import { useKeycloakStore } from '@/stores/keycloak'
 import type { Item } from '@/stores/items'
+import { useSettingsStore } from '@/stores/settings'
+
+const settingsStore = useSettingsStore()
 
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
@@ -39,8 +42,8 @@ const apiUrl = import.meta.env.VITE_API_URL
     >
     <template #main>
       <div class="main w-full">
-        <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-center text-2xl space-y-3 space-x-3">
+        <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-xl space-y-3 space-x-3">
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
@@ -48,6 +51,7 @@ const apiUrl = import.meta.env.VITE_API_URL
                   <th class="p-3">{{ $t('name') }}</th>
                   <th class="p-3">{{ $t('description') }}</th>
                   <th class="p-3">{{ $t('price') }}</th>
+                  <th class="p-3">{{ $t('order') }}</th>
                   <th class="p-3">{{ $t('measure') }}</th>
                 </tr>
               </thead>
@@ -65,9 +69,10 @@ const apiUrl = import.meta.env.VITE_API_URL
                   <td class="border-t-2 p-3 font-bold">{{ $t(item.Name) }}</td>
                   <td class="border-t-2 p-3">{{ $t(item.Description) }}</td>
                   <td class="border-t-2 p-3">{{ formatCredit(item.Price) }} Euro</td>
-                  <td>
+                  <td class="border-t-2 p-3">{{ item.ItemOrder }}</td>
+                  <td class="border-t-2">
                     <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
-                      <button class="p-3 rounded-full bg-lime-600 text-white">
+                      <button class="px-4 py-2 rounded-full customcolor h-[44px]">
                         {{ $t('change') }}
                       </button>
                     </router-link>
@@ -82,9 +87,7 @@ const apiUrl = import.meta.env.VITE_API_URL
     <template #footer>
       <footer>
         <router-link to="/backoffice/newproduct">
-          <button
-            className="p-3 rounded-full bg-lime-600 text-white absolute fixed bottom-10 right-10 h-16 w-16"
-          >
+          <button className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">
             {{ $t('new') }}
           </button>
         </router-link>
@@ -93,4 +96,9 @@ const apiUrl = import.meta.env.VITE_API_URL
   </component>
 </template>
 
-<style scoped></style>
+<style scoped>
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
+}
+</style>
