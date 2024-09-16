@@ -38,7 +38,7 @@ const hasSingleDigitalItem = computed(() => {
     // Get the first item in the list
     const item = items[0]
 
-    // Get the attribute licenseItem of the item 
+    // Get the attribute licenseItem of the item
     const itemLicenseItem = itemLicenseItemAttribute(item.Item)
 
     // Check if the item name has license item
@@ -48,12 +48,12 @@ const hasSingleDigitalItem = computed(() => {
   if (items?.length === 2) {
     // Iterate over the list of purchased items
     for (const item of items) {
-        // Get the attribute licenseItem of the item 
-        const itemLicenseItem = itemLicenseItemAttribute(item.Item)
+      // Get the attribute licenseItem of the item
+      const itemLicenseItem = itemLicenseItemAttribute(item.Item)
 
-        // Return false if null
-        if (itemLicenseItem !== null) {
-          return true
+      // Return false if null
+      if (itemLicenseItem !== null) {
+        return true
       }
     }
 
@@ -63,7 +63,6 @@ const hasSingleDigitalItem = computed(() => {
   // Return false if the list length is not one or two
   return false
 })
-
 
 const time = ref('not')
 
@@ -191,7 +190,10 @@ const apiUrl = import.meta.env.VITE_API_URL
             <IconCross />
           </div>
         </div>
-        <div v-if="!hasSingleDigitalItem != !isConfirmed " class="grid grid-rows-2 place-items-center">
+        <div
+          v-if="!hasSingleDigitalItem != !isConfirmed"
+          class="grid grid-rows-2 place-items-center"
+        >
           <div>
             <span class="date text-l">{{ currentDate() }} </span
             ><span class="time text-l"> {{ $t('at') }} {{ time }}</span>
