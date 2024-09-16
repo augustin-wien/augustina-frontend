@@ -10,7 +10,6 @@ import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { faCreditCard, faArrowAltCircleRight, faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useSettingsStore } from '@/stores/settings'
-import { getBase64ImageFromUrl } from '@/api/api'
 
 // Initialize the vendor store
 const store = vendorsStore()
@@ -57,7 +56,6 @@ const generateQRCode = async (vendor: Vendor) => {
   //  fetch image
   const image: string | undefined = ''
   const logoUrl = settingsStore.settings.QRCodeLogoImgUrl
-  console.log(logoUrl)
 
   // if (logoUrl && logoUrl !== '') {
   //   const result = await getBase64ImageFromUrl(settingsStore.settings.QRCodeLogoImgUrl)
