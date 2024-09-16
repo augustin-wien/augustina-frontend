@@ -15,6 +15,7 @@ export interface Item {
   PDF: string | null
   ItemColor: string | null
   ItemOrder: number
+  ItemTextColor: string | null
 }
 
 export const useItemsStore = defineStore('items', {

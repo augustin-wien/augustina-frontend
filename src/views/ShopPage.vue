@@ -155,19 +155,26 @@ const checkIfItemSelected = () => {
 
                         <div
                           :class="{
-                            'bg-black': String(item.Name) !== 'Digitale Zeitung',
-                            'bg-yellow': String(item.Name) === 'Digitale Zeitung',
                             'h-16': true,
                             'w-full': true,
                             'rounded-full': true,
                             'text-center': true,
-                            'text-white': String(item.Name) !== 'Digitale Zeitung',
-                            'text-black': String(item.Name) === 'Digitale Zeitung',
                             'font-semibold': true,
                             'text-xl': true,
                             flex: true,
                             'justify-center': true,
-                            'items-center': true
+                            'items-center': true,
+                            'text-black': item.ItemTextColor
+                              ? item.ItemTextColor === 'black'
+                              : !item.LicenseItem,
+                            'text-white': item.ItemTextColor
+                              ? item.ItemTextColor === 'white'
+                              : item.LicenseItem
+                          }"
+                          :style="{
+                            'background-color':
+                              item.ItemColor || (item.LicenseItem ? '#ffee00' : '#000000'),
+                            color: item.ItemTextColor || (item.LicenseItem ? '#000000' : '#ffffff')
                           }"
                         >
                           {{ item.Name }} {{ item.Price / 100 }}€
