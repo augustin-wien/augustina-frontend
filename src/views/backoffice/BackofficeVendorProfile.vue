@@ -118,6 +118,10 @@ const formatCredit = (credit: number) => {
                   <th className="p-3">{{ $t('bankAccount') }}:</th>
                   <td className="p-3">{{ $t(vendor.HasBankAccount ? 'yes' : 'no') }}</td>
                 </tr>
+                <tr>
+                  <th className="p-3">{{ $t('verificationLink') }}</th>
+                  <td className="p-3">{{ vendor.AccountProofUrl }}</td>
+                </tr>
               </tbody>
               <div class="map-wrapper">
                 <div
