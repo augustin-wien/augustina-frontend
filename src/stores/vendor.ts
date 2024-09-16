@@ -16,7 +16,8 @@ export const useVendorStore = defineStore('vendor', {
   state: () => {
     return {
       vendorid: '',
-      vendorName: ''
+      vendorName: '',
+      vendorLink: ''
     }
   },
   actions: {
@@ -41,6 +42,7 @@ export const useVendorStore = defineStore('vendor', {
 
           this.vendorName = response.FirstName
           this.vendorid = typeof vendorId == 'string' ? vendorId : vendorId[0]
+          this.vendorLink = response.AccountProofUrl
 
           if (this.vendorName !== '') {
             router.push(`/v/${vendorId}/landing-page`)

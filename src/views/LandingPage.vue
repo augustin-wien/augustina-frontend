@@ -6,6 +6,7 @@ import { RouterLink, useRouter } from 'vue-router'
 import { useVendorStore } from '@/stores/vendor'
 import { useShopStore } from '@/stores/ShopStore'
 import IconCross from '@/components/icons/IconCross.vue'
+import IconAvatar from '@/components/icons/IconAvatar.vue'
 
 const router = useRouter()
 const shopStore = useShopStore()
@@ -13,6 +14,10 @@ const vendorStore = useVendorStore()
 const settStore = useSettingsStore()
 const fetch = settStore.getSettingsFromApi
 const price = computed(() => settStore.settings.MainItemPrice / 100)
+
+const checkVendor = () => {
+  window.location.href = vendorStore.vendorLink
+}
 
 onMounted(() => {
   fetch().then(() => {
@@ -47,8 +52,15 @@ onMounted(() => {
           <div className="text-center font-semibold text-2xl pt-5">
             {{ $t('buyItem') }}
           </div>
-          <div class="flex place-content-center">
-            <div class="text-center min-w-fit h-4/5 text-5xl rounded-full text-black font-bold">
+          <div class="flex relative place-content-center">
+            <div
+              v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
+              class="customcolor rounded-full w-[60px] h-[60px] absolute right-2 top-[0.5rem]"
+              @click="checkVendor"
+            >
+              <IconAvatar class="customfill" />
+            </div>
+            <div class="customfont w-1/2 text-center text-black font-bold">
               {{ vendorStore.vendorName }}
             </div>
           </div>
@@ -102,5 +114,9 @@ onMounted(() => {
 
 .roundedcorner {
   border-radius: calc(13vh / 4);
+}
+
+.customfont {
+  font-size: calc(3rem - (v-bind(vendorStore.vendorName.length) * 0.07rem));
 }
 </style>

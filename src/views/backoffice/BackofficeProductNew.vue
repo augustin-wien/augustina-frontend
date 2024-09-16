@@ -4,6 +4,7 @@ import { useItemsStore } from '@/stores/items'
 import type { Item } from '@/stores/items'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
+import IconCross from '@/components/icons/IconCross.vue'
 
 const store = useItemsStore()
 
@@ -76,13 +77,13 @@ const updateImage = (event: any) => {
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ $t('newProduct') }}</h1>
             <button
-              class="px-2 rounded-full font-bold"
+              class="bg-red-600 rounded-full font-bold"
               @click="router.push('/backoffice/productsettings')"
             >
-              X
+              <IconCross />
             </button>
           </div>
-          <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="submitItem">
+          <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4" @submit.prevent="submitItem">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
                 >{{ $t('name') }}:</label

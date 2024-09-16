@@ -6,6 +6,7 @@ import type { Vendor } from '@/stores/vendor'
 import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
 import VendorMapView from '@/components/VendorMapView.vue'
+import IconCross from '@/components/icons/IconCross.vue'
 
 const store = vendorsStore()
 const settingsStore = useSettingsStore()
@@ -209,15 +210,15 @@ const importCSV = async () => {
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ $t('newGendered') }} {{ $t('vendorSingular') }}</h1>
             <button
-              class="px-2 rounded-full font-bold"
+              class="rounded-full font-bold bg-red-600"
               @click="router.push('/backoffice/vendorsummary')"
             >
-              X
+              <IconCross />
             </button>
           </div>
           <Toast v-if="toast" :toast="toast" class="fixed top-20 right-5" />
           <form
-            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+            class="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4"
             @submit.prevent="submitVendor"
           >
             <div class="mb-4 justify-between grid grid-cols-2 gap-5">
@@ -312,6 +313,15 @@ const importCSV = async () => {
                     v-model="newVendor.Location"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
+                  />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
+                    >{{ $t('verificationLink') }}:</label
+                  >
+                  <input
+                    id="verification"
+                    v-model="newVendor.AccountProofUrl"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="verification"
                   />
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
