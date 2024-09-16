@@ -114,3 +114,7 @@ The delimiter is a `;` and the first line is the header. The header is not used 
 PLZ;Station/Supermarkt;Adresse;Arbeitszeit;Nummer;Ausweis Nr.;Vorname;Nachname;Sprache
 1230;Billa Plus;Schönestr 6;G;;A-123;Augustin;Augustina;engl/deutsch
 ```
+
+
+## Sentry / Glitchtip
+The frontend is configured to send errors to [Glitchtip](https://glitchtip.com/). If there is no sentry dsn defined via the env variable `VITE_SENTRY_DSN`, the errors will be ignored. To use sentry, set the env variable `VITE_SENTRY_DSN` to the dsn of your sentry project.
