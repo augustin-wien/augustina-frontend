@@ -5,7 +5,6 @@ import { useItemsStore } from '@/stores/items'
 import { usePaymentStore } from '@/stores/payment'
 import { usePDFDownloadStore } from '@/stores/pdfDownload'
 import { useSettingsStore } from '@/stores/settings'
-import { is } from 'node_modules/cypress/types/bluebird'
 import { computed, onMounted, ref } from 'vue'
 
 const paymentStore = usePaymentStore()
@@ -42,7 +41,7 @@ const hasSingleDigitalItem = computed(() => {
     // Get the attribute licenseItem of the item 
     const itemLicenseItem = itemLicenseItemAttribute(item.Item)
 
-    // Check if the item name is "Digitale Zeitung"
+    // Check if the item name has license item
     return itemLicenseItem !== null
   }
 
@@ -52,7 +51,7 @@ const hasSingleDigitalItem = computed(() => {
         // Get the attribute licenseItem of the item 
         const itemLicenseItem = itemLicenseItemAttribute(item.Item)
 
-        // Return false if the item name is neither "Digitale Zeitung" nor "Spende"
+        // Return false if null
         if (itemLicenseItem !== null) {
           return true
       }
@@ -60,31 +59,11 @@ const hasSingleDigitalItem = computed(() => {
 
     return false
   }
+
   // Return false if the list length is not one or two
   return false
 })
 
-const digitalitemExists = computed(() => {
-  // Get the list of purchased items and set it to an empty array if it is null
-  const items = purchasedItems.value ?? []
-
-  if (items?.length > 2) {
-
-    // Iterate over the list of purchased items
-    for (const item of items) {
-      // Get the attribute licenseItem of the item 
-      const itemLicenseItem = itemLicenseItemAttribute(item.Item)
-
-      // Return true if the item name is "Digitale Zeitung"
-      if (itemLicenseItem !== null) {
-        return true
-      }
-    }
-  }
-
-  // Return false if the item name is not "Digitale Zeitung"
-  return false
-})
 
 const time = ref('not')
 
