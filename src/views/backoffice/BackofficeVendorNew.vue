@@ -37,7 +37,8 @@ const newVendor = ref<Vendor>({
   HasBankAccount: false,
   OpenPayments: null,
   AccountProofUrl: null,
-  IsDeleted: false
+  IsDeleted: false,
+  VerificationLink: ''
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)
@@ -312,6 +313,15 @@ const importCSV = async () => {
                     v-model="newVendor.Location"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
+                  />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
+                    >{{ $t('verificationLink')}}:</label
+                  >
+                  <input
+                    id="verification"
+                    v-model="newVendor.VerificationLink"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="verification"
                   />
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
