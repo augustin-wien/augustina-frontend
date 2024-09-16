@@ -54,7 +54,7 @@ onMounted(() => {
           </div>
           <div class="flex relative place-content-center">
             <div
-              v-if="vendorStore.vendorLink != ''"
+              v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
               class="customcolor rounded-full w-[60px] h-[60px] absolute right-3"
               @click="checkVendor"
             >

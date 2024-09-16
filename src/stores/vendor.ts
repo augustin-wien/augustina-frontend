@@ -42,9 +42,7 @@ export const useVendorStore = defineStore('vendor', {
 
           this.vendorName = response.FirstName
           this.vendorid = typeof vendorId == 'string' ? vendorId : vendorId[0]
-
-          //testcase
-          //this.vendorLink = 'https://tailwindcss.com/docs/position'
+          this.vendorLink = response.AccountProofUrl
 
           if (this.vendorName !== '') {
             router.push(`/v/${vendorId}/landing-page`)
