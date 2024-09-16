@@ -14,10 +14,10 @@ const vendorStore = useVendorStore()
 const settStore = useSettingsStore()
 const fetch = settStore.getSettingsFromApi
 const price = computed(() => settStore.settings.MainItemPrice / 100)
-const checkVendor = (() => {
+
+const checkVendor = () => {
   window.location.href = vendorStore.vendorLink
 }
-)
 
 onMounted(() => {
   fetch().then(() => {
@@ -53,21 +53,30 @@ onMounted(() => {
             {{ $t('buyItem') }}
           </div>
           <div class="flex relative place-content-center">
-            <div v-if="vendorStore.vendorLink != ''" class="customcolor rounded-full w-[60px] h-[60px] absolute right-3" @click="checkVendor">
-              <IconAvatar class="customfill"/>
+            <div
+              v-if="vendorStore.vendorLink != ''"
+              class="customcolor rounded-full w-[60px] h-[60px] absolute right-3"
+              @click="checkVendor"
+            >
+              <IconAvatar class="customfill" />
             </div>
             <div class="text-center min-w-fit h-4/5 text-5xl rounded-full text-black font-bold">
               {{ vendorStore.vendorName }}
             </div>
           </div>
 
-          <RouterLink :to="{ name: 'Shop' }"
-            class="grid grid-rows-2 h-[13vh] w-full customcolor roundedcorner items-center place-items-center">
+          <RouterLink
+            :to="{ name: 'Shop' }"
+            class="grid grid-rows-2 h-[13vh] w-full customcolor roundedcorner items-center place-items-center"
+          >
             <div
-              class="w-full h-full text-2xl text-center font-semibold text-white bg-black rounded-full place-self-center flex items-center justify-center">
+              class="w-full h-full text-2xl text-center font-semibold text-white bg-black rounded-full place-self-center flex items-center justify-center"
+            >
               <p class="text-center">1x {{ shopStore.getName(settStore.settings.MainItem) }}</p>
             </div>
-            <div className="text-center w-full rounded-full text-2xl font-semibold relative flex justify-center">
+            <div
+              className="text-center w-full rounded-full text-2xl font-semibold relative flex justify-center"
+            >
               <div>{{ $t('shop') }}</div>
               <IconCross class="absolute customfill rotate-45 right-0 place-self-center mr-2" />
             </div>
@@ -79,7 +88,9 @@ onMounted(() => {
 
         <div className="place-items-center w-full flex">
           <RouterLink class="text-center h-[76px] grow" :to="{ name: 'Tippingpage' }">
-            <button class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold">
+            <button
+              class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold"
+            >
               {{ $t('next') }}
             </button>
           </RouterLink>

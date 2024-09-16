@@ -353,7 +353,7 @@ const updateLocation = (newLocation: any) => {
                     />
                   </div>
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
-                    >{{ $t('verificationLink')}}:</label
+                    >{{ $t('verificationLink') }}:</label
                   >
                   <input
                     id="verification"
