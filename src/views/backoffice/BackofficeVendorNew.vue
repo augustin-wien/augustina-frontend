@@ -213,7 +213,7 @@ const importCSV = async () => {
               class="rounded-full font-bold bg-red-600"
               @click="router.push('/backoffice/vendorsummary')"
             >
-              <IconCross/>
+              <IconCross />
             </button>
           </div>
           <Toast v-if="toast" :toast="toast" class="fixed top-20 right-5" />

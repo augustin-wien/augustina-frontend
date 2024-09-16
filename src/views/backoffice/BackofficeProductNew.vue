@@ -80,7 +80,7 @@ const updateImage = (event: any) => {
               class="bg-red-600 rounded-full font-bold"
               @click="router.push('/backoffice/productsettings')"
             >
-              <IconCross/>
+              <IconCross />
             </button>
           </div>
           <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4" @submit.prevent="submitItem">
