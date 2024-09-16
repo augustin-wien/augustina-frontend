@@ -55,12 +55,12 @@ onMounted(() => {
           <div class="flex relative place-content-center">
             <div
               v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
-              class="customcolor rounded-full w-[60px] h-[60px] absolute right-3"
+              class="customcolor rounded-full w-[60px] h-[60px] absolute right-2 top-[0.5rem]"
               @click="checkVendor"
             >
               <IconAvatar class="customfill" />
             </div>
-            <div class="text-center min-w-fit h-4/5 text-5xl rounded-full text-black font-bold">
+            <div class="customfont w-1/2 text-center text-black font-bold">
               {{ vendorStore.vendorName }}
             </div>
           </div>
@@ -114,5 +114,9 @@ onMounted(() => {
 
 .roundedcorner {
   border-radius: calc(13vh / 4);
+}
+
+.customfont {
+  font-size: calc(3rem - (v-bind(vendorStore.vendorName.length) * 0.07rem));
 }
 </style>
