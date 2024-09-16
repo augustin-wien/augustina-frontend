@@ -163,13 +163,7 @@ const checkIfItemSelected = () => {
                             'text-xl': true,
                             flex: true,
                             'justify-center': true,
-                            'items-center': true,
-                            'text-black': item.ItemTextColor
-                              ? item.ItemTextColor === 'black'
-                              : !item.LicenseItem,
-                            'text-white': item.ItemTextColor
-                              ? item.ItemTextColor === 'white'
-                              : item.LicenseItem
+                            'items-center': true
                           }"
                           :style="{
                             'background-color':
