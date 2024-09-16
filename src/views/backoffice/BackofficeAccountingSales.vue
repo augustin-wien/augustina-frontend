@@ -7,6 +7,7 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { useItemsStore } from '@/stores/items'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Payment } from '@/stores/payments'
+import { useSettingsStore } from '@/stores/settings'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -23,6 +24,7 @@ const keycloakStore = useKeycloakStore()
 const store = usePaymentsStore()
 const itemsStore = useItemsStore()
 const items = computed(() => itemsStore.itemsBackoffice)
+const settingsStore = useSettingsStore()
 
 const authenticated = computed(() => keycloakStore.authenticated)
 
@@ -61,7 +63,7 @@ const formatTime = (time: string) => {
 const payments = computed(() => store.payments)
 
 const translateSender = (receiver: string) => {
-  return receiver == 'Orga' ? 'Augustin' : receiver
+  return receiver == 'Orga' ? settingsStore.settings.NewspaperName : receiver
 }
 
 const getItemName = (itemID: number) => {
@@ -101,9 +103,9 @@ const exportTable = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center">
+      <div class="flex space-between mt-3 justify-between content-center items-center">
+        <h1 className="font-bold text-2xl">{{ $t('inbox') }}</h1>
         <div>
-          <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('inbox') }}</h1>
           <VueDatePicker
             v-model="date"
             range
@@ -114,10 +116,7 @@ const exportTable = () => {
             @range-end="onRangeEnd"
           />
         </div>
-        <button
-          class="rounded-full bg-lime-600 ml-2 text-white hover:bg-lime-700 px-4 py-2 h-10 mr-5"
-          @click="exportTable"
-        >
+        <button class="py-2 px-4 rounded-full customcolor mr-6 h-[44px]" @click="exportTable">
           {{ $t('export') }}
         </button>
       </div>
@@ -125,8 +124,8 @@ const exportTable = () => {
 
     <template v-if="authenticated && items.length > 0" #main>
       <div class="main">
-        <div class="mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-center text-2xl space-y-3 space-x-3 ">
+        <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div className="text-xl space-y-3 space-x-3 ">
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
@@ -153,3 +152,10 @@ const exportTable = () => {
     </template>
   </component>
 </template>
+
+<style scoped>
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
+}
+</style>

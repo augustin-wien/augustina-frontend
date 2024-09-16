@@ -13,6 +13,8 @@ export interface Item {
   LicenseGroup: string | null
   IsPDFItem: boolean
   PDF: string | null
+  ItemColor: string | null
+  ItemOrder: number
 }
 
 export const useItemsStore = defineStore('items', {
@@ -35,7 +37,7 @@ export const useItemsStore = defineStore('items', {
         const data = await fetchItems()
         this.items = data.data
       } catch (error) {
-        /* eslint-disable no-console */
+        // eslint-disable-next-line no-console
         console.log(error)
       }
     },
@@ -44,7 +46,7 @@ export const useItemsStore = defineStore('items', {
         const data = await fetchItemsBackoffice()
         this.itemsBackoffice = data.data
       } catch (error) {
-        /* eslint-disable no-console */
+        // eslint-disable-next-line no-console
         console.log(error)
       }
     },
@@ -62,7 +64,7 @@ export const useItemsStore = defineStore('items', {
           this.getItems()
         })
         .catch((error) => {
-          /* eslint-disable no-console */
+          // eslint-disable-next-line no-console
           console.log('Error deleting item:', error)
         })
     }

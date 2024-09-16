@@ -5,6 +5,14 @@ import { useRoute } from 'vue-router'
 import { useKeycloakStore } from '@/stores/keycloak'
 import router from '@/router'
 import { storeToRefs } from 'pinia'
+import { useSettingsStore } from '@/stores/settings'
+import IconCross from '@/components/icons/IconCross.vue'
+
+const settingsStore = useSettingsStore()
+
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import VendorMapView from '@/components/VendorMapView.vue'
 
 const keycloakStore = useKeycloakStore()
 
@@ -26,22 +34,27 @@ const formatCredit = (credit: number) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('vendorSingular') }} Profil</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">
+        <button @click="router.push('/backoffice/vendorsummary')">
+          <font-awesome-icon :icon="faArrowLeft" />
+        </button>
+        {{ $t('vendorSingular') }} Profil {{ vendor.LicenseID }}
+      </h1>
     </template>
     <template #main>
       <div v-if="vendor" class="main">
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div className="text-center text-2xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
-              <h1 class="text-2xl font-bold">{{ vendor.LicenseID }}</h1>
+              <span />
               <button
-                class="px-2 rounded-full bg-red-600 text-white font-bold"
+                class="rounded-full bg-red-600 text-white font-bold"
                 @click="router.push('/backoffice/vendorsummary')"
               >
-                X
+                <IconCross />
               </button>
             </div>
-            <div className="table-auto border-spacing-4 border-collapse">
+            <div className="table-auto border-spacing-4 border-collapse profile-wrapper">
               <tbody className="text-sm text-left">
                 <tr>
                   <th className="p-3">{{ $t('firstName') }}:</th>
@@ -52,8 +65,8 @@ const formatCredit = (credit: number) => {
                 <tr>
                   <th className="p-3">{{ $t('LicenseId') }}:</th>
                   <td className="p-3">{{ vendor.LicenseID }}</td>
-                  <th className="p-3">{{ $t('accountDeactivated') }}:</th>
-                  <td className="p-3">{{ vendor.IsDisabled ? $t('yes') : $t('no') }}</td>
+                  <th className="p-3">{{ $t('accountDeactivation') }}:</th>
+                  <td className="p-3">{{ $t(vendor.IsDisabled ? 'yes' : 'no') }}</td>
                 </tr>
                 <tr>
                   <th className="p-3">{{ $t('lastPayout') }}:</th>
@@ -97,19 +110,34 @@ const formatCredit = (credit: number) => {
                   <th className="p-3">{{ $t('workingTime') }}:</th>
                   <td className="p-3">{{ vendor.WorkingTime }}</td>
                   <th className="p-3">Online Karte:</th>
-                  <td className="p-3">{{ vendor.OnlineMap ? $t('yes') : $t('no') }}</td>
+                  <td className="p-3">{{ $t(vendor.OnlineMap ? 'yes' : 'no') }}</td>
                 </tr>
                 <tr>
                   <th className="p-3">Smartphone:</th>
-                  <td className="p-3">{{ vendor.HasSmartphone }}</td>
+                  <td className="p-3">{{ $t(vendor.HasSmartphone ? 'yes' : 'no') }}</td>
                   <th className="p-3">{{ $t('bankAccount') }}:</th>
-                  <td className="p-3">{{ vendor.HasBankAccount ? $t('yes') : $t('no') }}</td>
+                  <td className="p-3">{{ $t(vendor.HasBankAccount ? 'yes' : 'no') }}</td>
                 </tr>
               </tbody>
+              <div class="map-wrapper">
+                <div
+                  v-if="
+                    vendor.Latitude &&
+                    vendor.Longitude &&
+                    vendor.Latitude != 0.1 &&
+                    vendor.Longitude != 0.1
+                  "
+                  class="map"
+                >
+                  <VendorMapView :vendors="[vendor]" :enable-search="false" />
+                </div>
+              </div>
             </div>
-            <div v-if="vendor">
+            <div v-if="vendor" class="flex place-content-center">
               <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
-                <button class="p-2 rounded-full bg-lime-600 text-white mr-2">
+                <button
+                  class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center"
+                >
                   {{ $t('change') }}
                 </button>
               </router-link>
@@ -128,5 +156,19 @@ tr {
 
 td {
   padding: 10px;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
+}
+
+.profile-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.map-wrapper {
+  width: 100%;
+  max-width: 500px;
 }
 </style>

@@ -19,7 +19,7 @@ onMounted(async () => {
     try {
       store.fetchVendorMe()
     } catch (error) {
-      /* eslint-disable no-console */
+      // eslint-disable-next-line no-console
       console.error('Fehler beim API-Aufruf:', error)
     }
   } else {
@@ -30,7 +30,7 @@ onMounted(async () => {
         try {
           store.fetchVendorMe()
         } catch (error) {
-          /* eslint-disable no-console */
+          // eslint-disable-next-line no-console
           console.error('Fehler beim API-Aufruf:', error)
         }
       }

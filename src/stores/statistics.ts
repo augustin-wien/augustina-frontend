@@ -39,7 +39,7 @@ export const useStatisticsStore = defineStore('statistics', {
         this.statistics = data.data
         //@ts-ignore
       } catch (error) {
-        /* eslint-disable no-console */
+        // eslint-disable-next-line no-console
         console.log(error)
       }
     }

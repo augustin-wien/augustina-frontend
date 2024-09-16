@@ -21,8 +21,9 @@ onMounted(() => {
   }
 
   pdfStore.validatePDFDownload(pdfId.value).catch((error) => {
-    /* eslint-disable no-console */
+    // eslint-disable-next-line no-console
     console.log('PDF is invalid')
+    // eslint-disable-next-line no-console
     console.log(error)
     router.push({ name: 'Error invalid link' })
   })

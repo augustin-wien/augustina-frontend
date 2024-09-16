@@ -4,6 +4,7 @@ import Default from '@/layouts/DefaultLayout.vue'
 import VendorLayoutVue from '@/layouts/VendorLayout.vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { createRouter, createWebHistory } from 'vue-router'
+import { useSettingsStore } from '@/stores/settings'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -128,7 +129,8 @@ const router = createRouter({
       name: 'Backoffice Credit',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Credits'
       },
       component: () => import('@/views/backoffice/BackofficeVendorsCredits.vue')
     },
@@ -138,7 +140,8 @@ const router = createRouter({
       name: 'Credit Payout',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Payout'
       },
       props: true,
       component: () => import('@/views/backoffice/BackofficeVendorCreditPayout.vue')
@@ -148,7 +151,8 @@ const router = createRouter({
       name: 'Backoffice Accounting',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Accounting'
       },
       component: () => import('@/views/backoffice/BackofficeAccountingPayments.vue')
     },
@@ -157,7 +161,8 @@ const router = createRouter({
       name: 'Backoffice Logs',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Payouts'
       },
       component: () => import('@/views/backoffice/BackofficeAccountingPayouts.vue')
     },
@@ -166,7 +171,8 @@ const router = createRouter({
       name: 'Backoffice Inbox',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Sales'
       },
       component: () => import('@/views/backoffice/BackofficeAccountingSales.vue')
     },
@@ -175,7 +181,8 @@ const router = createRouter({
       name: 'Vendor Summary',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Vendors'
       },
       component: () => import('@/views/backoffice/BackofficeVendorsSummary.vue')
     },
@@ -184,7 +191,8 @@ const router = createRouter({
       name: 'New Vendor',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'New Vendor'
       },
       component: () => import('@/views/backoffice/BackofficeVendorNew.vue')
     },
@@ -193,7 +201,8 @@ const router = createRouter({
       name: 'Vendor Profile',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Vendor Profile'
       },
       component: () => import('@/views/backoffice/BackofficeVendorProfile.vue')
     },
@@ -202,7 +211,8 @@ const router = createRouter({
       name: 'Update Vendor Profile',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Update Vendor Profile'
       },
       component: () => import('@/views/backoffice/BackofficeVendorUpdate.vue')
     },
@@ -211,7 +221,8 @@ const router = createRouter({
       name: 'Backoffice Settings',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Settings'
       },
       component: () => import('@/views/backoffice/BackofficeSettings.vue')
     },
@@ -220,9 +231,10 @@ const router = createRouter({
       name: 'Update Backoffice Settings',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Update Settings'
       },
-      component: () => import('@/views/backoffice/BackofficeSettingsUpdate.vue')
+      component: () => import('@/views/backoffice/SettingsUpdate.vue')
     },
 
     {
@@ -230,7 +242,8 @@ const router = createRouter({
       name: 'Backoffice Product Settings',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Products'
       },
       component: () => import('@/views/backoffice/BackofficeProductSettings.vue')
     },
@@ -239,7 +252,8 @@ const router = createRouter({
       name: 'New Product',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'New Product'
       },
       component: () => import('@/views/backoffice/BackofficeProductNew.vue')
     },
@@ -248,7 +262,8 @@ const router = createRouter({
       name: 'Map',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Map'
       },
       component: () => import('@/views/backoffice/MapView.vue')
     },
@@ -257,7 +272,8 @@ const router = createRouter({
       name: 'Statistics',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Settings'
       },
       component: () => import('@/views/backoffice/Statistics.vue')
     },
@@ -266,7 +282,8 @@ const router = createRouter({
       name: 'Update Product',
       meta: {
         layout: BackofficeDefault,
-        requiresAuth: true
+        requiresAuth: true,
+        title: 'Product Settings'
       },
       component: () => import('@/views/backoffice/BackofficeProductUpdate.vue')
     },
@@ -338,11 +355,11 @@ const router = createRouter({
       component: () => import('@/views/VendorViewProfil.vue')
     },
     {
-      path: '/qr-code',
-      name: 'QR Code',
-      component: () => import('@/views/QRCode.vue'),
+      path: '/:pathMatch(.*)*',
+      name: 'all',
+      component: () => import('@/views/GoToVendor.vue'),
       meta: {
-        layout: VendorLayoutVue
+        layout: Default
       }
     },
     {
@@ -352,20 +369,27 @@ const router = createRouter({
       meta: {
         layout: Default
       }
-    },
-    {
-      path: '/:pathMatch(.*)*',
-      name: 'all',
-      component: () => import('@/views/GoToVendor.vue'),
-      meta: {
-        layout: Default
-      }
     }
   ]
 })
 
+//Change tab names
+router.afterEach((to) => {
+  const settingsStore = useSettingsStore()
+
+  // Use next tick to handle router history correctly
+  // see: https://github.com/vuejs/vue-router/issues/914#issuecomment-384477609
+  if (settingsStore.settings.NewspaperName == undefined) {
+    document.title = 'Augustina'
+  } else if (to.meta.title == undefined) {
+    document.title = settingsStore.settings.NewspaperName
+  } else {
+    document.title = settingsStore.settings.NewspaperName + ' | ' + to.meta?.title
+  }
+})
+
 // Check if the user is authenticated
-router.beforeEach(async (to: any, _from: any) => {
+router.beforeEach(async (to: any) => {
   if (
     to.meta.requiresAuth &&
     !isAuthenticated() &&
@@ -377,10 +401,6 @@ router.beforeEach(async (to: any, _from: any) => {
     // redirect the user to the login page
     // return { name: '404' }
   }
-  // Condition to toggle Lite-Mode
-  else if (import.meta.env.VITE_TOGGLE === 'true' && to.name === 'Version choice') {
-    return { name: 'Tippingpage' }
-  }
 })
 
 // Check if the user is authenticated
@@ -389,20 +409,20 @@ async function isAuthenticated() {
     try {
       await initKeycloak()
     } catch (error) {
-      /* eslint-disable no-console */
+      // eslint-disable-next-line no-console
       console.log('init keycloak failed', error)
     }
 
     const keycloakStore = useKeycloakStore()
-    keycloakStore.setAuthenticated(keycloak.keycloak.authenticated)
+    keycloakStore.setAuthenticated(keycloak.keycloak?.authenticated)
 
-    if (keycloak.keycloak.tokenParsed) {
+    if (keycloak.keycloak?.tokenParsed) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
 
-    return keycloak.keycloak.authenticated
+    return keycloak.keycloak?.authenticated
   } else {
-    return keycloak.keycloak.authenticated
+    return keycloak.keycloak?.authenticated
   }
 }
 

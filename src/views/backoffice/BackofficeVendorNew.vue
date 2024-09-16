@@ -1,14 +1,17 @@
 <script lang="ts" setup>
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
+import { useSettingsStore } from '@/stores/settings'
 import type { Vendor } from '@/stores/vendor'
 import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
+import VendorMapView from '@/components/VendorMapView.vue'
 
 const store = vendorsStore()
+const settingsStore = useSettingsStore()
 
 const newVendor = ref<Vendor>({
-  Email: '@augustin.or.at',
+  Email: settingsStore.settings.VendorEmailPostfix,
   FirstName: '',
   ID: 0,
   KeycloakID: '',
@@ -18,12 +21,12 @@ const newVendor = ref<Vendor>({
   UrlID: '',
   Balance: 0,
   IsDisabled: false,
-  Longitude: 0,
-  Latitude: 0,
+  Longitude: settingsStore.settings.MapCenterLong,
+  Latitude: settingsStore.settings.MapCenterLat,
   Address: '',
   PLZ: '',
   Location: '',
-  WorkingTime: '',
+  WorkingTime: 'G',
   Language: '',
   Comment: '',
   Telephone: '',
@@ -32,7 +35,9 @@ const newVendor = ref<Vendor>({
   OnlineMap: false,
   HasSmartphone: false,
   HasBankAccount: false,
-  OpenPayments: null
+  OpenPayments: null,
+  AccountProofUrl: null,
+  IsDeleted: false
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)
@@ -42,7 +47,10 @@ const importingVendorsCount = ref(0)
 const submitVendor = async () => {
   if (!newVendor.value) return
 
-  if (!newVendor.value.Email || newVendor.value.Email === '@augustin.or.at') {
+  if (
+    !newVendor.value.Email ||
+    newVendor.value.Email === '@' + import.meta.env.VITE_VENDOR_EMAIL_POSTFIX
+  ) {
     showToast('error', 'Email muss angegeben werden')
     return
   }
@@ -75,7 +83,7 @@ const submitVendor = async () => {
       router.push(`/backoffice/userprofile/${res.data}`)
     })
   } catch (err: any) {
-    /* eslint-disable no-console */
+    // eslint-disable-next-line no-console
     console.error('Error creating vendor:', err)
 
     showToast(
@@ -95,6 +103,13 @@ const showToast = (type: string, message: string) => {
   }, 5000)
 }
 
+const updateLocation = (newLocation: any) => {
+  if (newVendor.value) {
+    newVendor.value.Longitude = newLocation.location.x
+    newVendor.value.Latitude = newLocation.location.y
+  }
+}
+
 const importCSV = async () => {
   //  create file dialog
   const input = document.createElement('input')
@@ -106,9 +121,8 @@ const importCSV = async () => {
     const text = await file.text()
     const lines = text.split('\n')
 
-    let vendors: Array<Vendor> = lines.map((line: any, i: number) => {
+    const vendors: Array<Vendor> = lines.map((line: any, i: number) => {
       if (i === 0) return null
-      if (line == '') return null
 
       //@ts-ignore
       const [
@@ -131,24 +145,24 @@ const importCSV = async () => {
         HasBankAccount
       ] = line.split(';')
 
-      const Email = `${LicenseID}@augustin.or.at`
+      const Email = `${LicenseID}${settingsStore.settings.VendorEmailPostfix}`
       return {
-        Email,
+        PLZ,
+        Location,
+        Address,
+        Longitude: Longitude === '' ? 0.1 : parseFloat(Longitude),
+        Latitude: Latitude === '' ? 0.1 : parseFloat(Latitude),
+        WorkingTime: WorkingTime === '' ? 'G' : WorkingTime,
         LicenseID,
         FirstName,
         LastName,
-        LastPayout: null,
-        UrlID: '',
-        IsDisabled: false,
-        Latitude: Latitude ? parseFloat(Latitude) : 0.0,
-        Longitude: Longitude ? parseFloat(Longitude) : 0.0,
-        PLZ,
-        Location,
-        Language,
         Telephone,
+        Language,
         RegistrationDate,
         VendorSince,
         Comment,
+        LastPayout: null,
+        UrlID: '',
         OnlineMap: OnlineMap === 'Ja' || OnlineMap === 'ja' || OnlineMap === 'yes' ? true : false,
         HasSmartphone:
           HasSmartphone === 'Ja' || HasSmartphone === 'ja' || HasSmartphone === 'yes'
@@ -158,22 +172,19 @@ const importCSV = async () => {
           HasBankAccount === 'Ja' || HasBankAccount === 'ja' || HasBankAccount === 'yes'
             ? true
             : false,
-        Address,
-        WorkingTime
+        IsDisabled: false,
+        Email
       }
     })
 
     try {
-      // filter null values
-      vendors = vendors.filter((v) => v)
-
       importing.value = true
       importingVendorsCount.value = vendors.length
       await store.createVendors(vendors)
       showToast('success', 'VerkäuferInnen erfolgreich angelegt')
       importing.value = false
     } catch (err) {
-      /* eslint-disable no-console */
+      // eslint-disable-next-line no-console
       console.error('Error creating vendors:', err)
       showToast('error', 'VerkäuferInnen konnten nicht angelegt werden')
       importing.value = false
@@ -198,7 +209,7 @@ const importCSV = async () => {
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ $t('newGendered') }} {{ $t('vendorSingular') }}</h1>
             <button
-              class="px-2 rounded-full bg-red-600 text-white font-bold"
+              class="px-2 rounded-full font-bold"
               @click="router.push('/backoffice/vendorsummary')"
             >
               X
@@ -315,8 +326,8 @@ const importCSV = async () => {
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -345,12 +356,14 @@ const importCSV = async () => {
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
                     >{{ $t('workingTime') }}:</label
                   >
-                  <input
-                    id="workingTime"
+                  <select
                     v-model="newVendor.WorkingTime"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
+                  >
+                    <option value="G" selected>{{ $t('(G) all day') }}</option>
+                    <option value="V">{{ $t('(v) mornings') }}</option>
+                    <option value="N">{{ $t('(N) afternoons') }}</option>
+                  </select>
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                     for="registrationDate"
@@ -383,8 +396,8 @@ const importCSV = async () => {
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -402,8 +415,8 @@ const importCSV = async () => {
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -414,13 +427,13 @@ const importCSV = async () => {
                   <div class="flex flex-row">
                     <span class="p-2">
                       <select
-                        id="hasBankAccount"
-                        v-model="newVendor.HasBankAccount"
+                        id="hasSmartphone"
+                        v-model="newVendor.HasSmartphone"
                         class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                       >
-                        <option value="true">{{ $t('yes') }}</option>
-                        <option value="false">{{ $t('no') }}</option>
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
                       </select>
                     </span>
                   </div>
@@ -435,10 +448,11 @@ const importCSV = async () => {
                   ></textarea>
                 </span>
               </div>
+              <VendorMapView :vendors="[newVendor]" enable-search @new-location="updateLocation" />
             </div>
 
             <div class="flex place-content-center">
-              <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">
+              <button type="submit" class="p-3 rounded-full customcolor">
                 {{ $t('create') }}
               </button>
             </div>
@@ -452,7 +466,7 @@ const importCSV = async () => {
       </div>
       <footer>
         <button
-          className="p-3 rounded-full bg-lime-600 text-white fixed bottom-10 right-10 h-20 w-20"
+          className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-20 w-20"
           @click="importCSV"
         >
           CSV import
@@ -469,5 +483,10 @@ tr {
 
 td {
   padding: 10px;
+}
+
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

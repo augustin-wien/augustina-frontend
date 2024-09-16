@@ -32,7 +32,7 @@ const submitItem = async () => {
       })
   } catch (err: any) {
     showToast('error', 'Produkt konnte nicht angelegt werden' + err)
-    /* eslint-disable no-console */
+    // eslint-disable-next-line no-console
     console.error('Error creating item:', err)
   }
 }
@@ -76,7 +76,7 @@ const updateImage = (event: any) => {
           <div class="flex place-content-center justify-between">
             <h1 class="text-2xl font-bold">{{ $t('newProduct') }}</h1>
             <button
-              class="px-2 rounded-full bg-red-600 text-white font-bold"
+              class="px-2 rounded-full font-bold"
               @click="router.push('/backoffice/productsettings')"
             >
               X
@@ -131,10 +131,7 @@ const updateImage = (event: any) => {
             </div>
 
             <div class="flex justify-between">
-              <button
-                class="p-3 rounded-full mr-3 bg-red-600 bg-lime-600 text-white"
-                @click="cancel"
-              >
+              <button class="p-3 rounded-full mr-3 bg-red-600 text-white" @click="cancel">
                 {{ $t('cancel') }}
               </button>
               <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">
