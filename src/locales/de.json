@@ -163,6 +163,8 @@
 
   "isLicenseItem": "Ist das Produkt ein digitaler Lizenzartikel?",
   "licenseItem": "Lizenzartikel",
+  "Item background color": "Artikel Hintergrundfarbe",
+  "Item text color": "Artikel Schriftfarbe",
   "licenseGroup": "Lizenzgruppe",
   "donation_only": "Nur Spende ist nicht möglich",
   "isPDFLicenseItem": "Ist das Produkt ein PDF Lizenzartikel?",
