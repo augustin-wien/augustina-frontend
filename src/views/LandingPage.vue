@@ -52,10 +52,10 @@ onMounted(() => {
           <div className="text-center font-semibold text-2xl pt-5">
             {{ $t('buyItem') }}
           </div>
-          <div class="flex relative place-content-center">
+          <div class="flex relative items-center justify-center">
             <div
               v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
-              class="customcolor rounded-full w-[60px] h-[60px] absolute right-2 top-[0.5rem]"
+              class="customcolor rounded-full w-[60px] h-[60px] absolute right-0 justify-self-center"
               @click="checkVendor"
             >
               <IconAvatar class="customfill" />
