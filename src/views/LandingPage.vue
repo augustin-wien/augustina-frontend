@@ -55,7 +55,7 @@ onMounted(() => {
           <div class="flex relative place-content-center items-center justify-center">
             <div
               v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
-              class="customcolor rounded-full w-[60px] h-[60px] absolute right-0  justify-self-center"
+              class="customcolor rounded-full w-[60px] h-[60px] absolute right-0 justify-self-center"
               @click="checkVendor"
             >
               <IconAvatar class="customfill" />
@@ -117,7 +117,7 @@ onMounted(() => {
 }
 
 .customfont {
-  font-size: calc(3rem - (v-bind(vendorStore.vendorName.length) * 0.07rem)); 
+  font-size: calc(3rem - (v-bind(vendorStore.vendorName.length) * 0.07rem));
   line-height: calc(2.5rem - (v-bind(vendorStore.vendorName.length) * 0.03rem));
 }
 </style>
