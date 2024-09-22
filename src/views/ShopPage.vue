@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { RouterLink, useRouter } from 'vue-router'
+import Toast from '@/components/ToastMessage.vue'
 import { useShopStore } from '@/stores/ShopStore'
 import { useSettingsStore } from '@/stores/settings'
 import { ref } from 'vue'
-import Toast from '@/components/ToastMessage.vue'
+import { RouterLink, useRouter } from 'vue-router'
 
 const shopStore = useShopStore()
 const settStore = useSettingsStore()
@@ -152,8 +152,24 @@ const checkIfItemSelected = () => {
                         >
                           i
                         </button>
+
                         <div
-                          class="bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center"
+                          :class="{
+                            'h-16': true,
+                            'w-full': true,
+                            'rounded-full': true,
+                            'text-center': true,
+                            'font-semibold': true,
+                            'text-xl': true,
+                            flex: true,
+                            'justify-center': true,
+                            'items-center': true
+                          }"
+                          :style="{
+                            'background-color':
+                              item.ItemColor || (item.LicenseItem ? '#ffee00' : '#000000'),
+                            color: item.ItemTextColor || (item.LicenseItem ? '#000000' : '#ffffff')
+                          }"
                         >
                           {{ item.Name }} {{ item.Price / 100 }}€
                         </div>
@@ -207,5 +223,9 @@ const checkIfItemSelected = () => {
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
   color: v-bind(settStore.settings.FontColor);
+}
+
+.bg-yellow {
+  background-color: #ffee00;
 }
 </style>

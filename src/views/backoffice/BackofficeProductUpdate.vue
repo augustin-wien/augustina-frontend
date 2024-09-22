@@ -203,6 +203,30 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price">{{
+                $t('Item background color')
+              }}</label>
+              <div class="flex flex-row">
+                <input
+                  id=""
+                  v-model="updatedItem.ItemColor"
+                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="color"
+                  required
+                />
+              </div>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price">{{
+                $t('Item text color')
+              }}</label>
+              <div class="flex flex-row">
+                <input
+                  id=""
+                  v-model="updatedItem.ItemTextColor"
+                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="color"
+                  required
+                />
+              </div>
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
                 >{{ $t('image') }}:</label
               >
