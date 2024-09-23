@@ -119,12 +119,12 @@ onMounted(() => {
 .customfont {
   font-size: max(
     calc(3rem - (v-bind(vendorStore.vendorName.length) * 0.1rem)),
-    calc(2rem - (v-bind(vendorStore.vendorName.length) * 0.02rem)),
+    calc(2rem - (v-bind(vendorStore.vendorName.length) * 0.025rem)),
     0.7rem
   );
   line-height: max(
     calc(3rem - (v-bind(vendorStore.vendorName.length) * 0.09rem)),
-    calc(2rem - (v-bind(vendorStore.vendorName.length) * 0.018rem)),
+    calc(2rem - (v-bind(vendorStore.vendorName.length) * 0.025rem)),
     0.7rem
   );
 }
