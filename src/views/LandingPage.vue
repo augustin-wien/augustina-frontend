@@ -52,15 +52,15 @@ onMounted(() => {
           <div className="text-center font-semibold text-2xl pt-5">
             {{ $t('buyItem') }}
           </div>
-          <div class="flex relative place-content-center">
+          <div class="flex relative items-center justify-center">
             <div
               v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
-              class="customcolor rounded-full w-[60px] h-[60px] absolute right-2 top-[0.5rem]"
+              class="customcolor rounded-full avataricon absolute right-0 justify-self-center"
               @click="checkVendor"
             >
               <IconAvatar class="customfill" />
             </div>
-            <div class="customfont w-1/2 text-center text-black font-bold">
+            <div class="customfont w-3/5 text-center text-black font-bold">
               {{ vendorStore.vendorName }}
             </div>
           </div>
@@ -117,6 +117,20 @@ onMounted(() => {
 }
 
 .customfont {
-  font-size: calc(3rem - (v-bind(vendorStore.vendorName.length) * 0.07rem));
+  font-size: max(
+    calc(3rem - (v-bind(vendorStore.vendorName.length) * 0.1rem)),
+    calc(2rem - (v-bind(vendorStore.vendorName.length) * 0.025rem)),
+    0.7rem
+  );
+  line-height: max(
+    calc(3rem - (v-bind(vendorStore.vendorName.length) * 0.09rem)),
+    calc(2rem - (v-bind(vendorStore.vendorName.length) * 0.025rem)),
+    0.7rem
+  );
+}
+
+.avataricon {
+  width: min(13vw, 60px);
+  height: min(13vw, 60px);
 }
 </style>
