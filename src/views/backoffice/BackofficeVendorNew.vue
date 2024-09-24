@@ -7,6 +7,7 @@ import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
 import VendorMapView from '@/components/VendorMapView.vue'
 import IconCross from '@/components/icons/IconCross.vue'
+import { transformToFloat } from '@/utils/utils'
 
 const store = vendorsStore()
 const settingsStore = useSettingsStore()
@@ -151,8 +152,8 @@ const importCSV = async () => {
         PLZ,
         Location,
         Address,
-        Longitude: Longitude === '' ? 0.1 : parseFloat(Longitude),
-        Latitude: Latitude === '' ? 0.1 : parseFloat(Latitude),
+        Longitude: Longitude === '' ? 0.1 : transformToFloat(Longitude),
+        Latitude: Latitude === '' ? 0.1 : transformToFloat(Latitude),
         WorkingTime: WorkingTime === '' ? 'G' : WorkingTime,
         LicenseID,
         FirstName,
@@ -314,37 +315,6 @@ const importCSV = async () => {
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                   />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
-                    >{{ $t('verificationLink') }}:</label
-                  >
-                  <input
-                    id="verification"
-                    v-model="newVendor.AccountProofUrl"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="verification"
-                  />
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                    for="accountDisabled"
-                    >{{ $t('accountDeactivation') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <span class="p-2">
-                      <select
-                        id="accountDisabled"
-                        v-model="newVendor.IsDisabled"
-                        class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                      >
-                        <option :value="true">{{ $t('yes') }}</option>
-                        <option :value="false">{{ $t('no') }}</option>
-                      </select>
-                    </span>
-                  </div>
-                </span>
-              </div>
-              <div class="row">
-                <span class="col">
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="longitude"
                     >{{ $t('longitude') }}:</label
                   >
@@ -363,6 +333,10 @@ const importCSV = async () => {
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                   />
+                </span>
+              </div>
+              <div class="row">
+                <span class="col">
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
                     >{{ $t('workingTime') }}:</label
                   >
@@ -447,6 +421,33 @@ const importCSV = async () => {
                       </select>
                     </span>
                   </div>
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
+                    >{{ $t('verificationLink') }}:</label
+                  >
+                  <input
+                    id="verification"
+                    v-model="newVendor.AccountProofUrl"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="verification"
+                  />
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                    for="accountDisabled"
+                    >{{ $t('accountDeactivation') }}:</label
+                  >
+                  <div class="flex flex-row">
+                    <span class="p-2">
+                      <select
+                        id="accountDisabled"
+                        v-model="newVendor.IsDisabled"
+                        class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required
+                      >
+                        <option :value="true">{{ $t('yes') }}</option>
+                        <option :value="false">{{ $t('no') }}</option>
+                      </select>
+                    </span>
+                  </div>
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
                     >{{ $t('comment') }}:</label
                   >
@@ -458,7 +459,11 @@ const importCSV = async () => {
                   ></textarea>
                 </span>
               </div>
-              <VendorMapView :vendors="[newVendor]" enable-search @new-location="updateLocation" />
+              <VendorMapView
+                :vendors="[newVendor]"
+                :enable-search="1"
+                @new-location="updateLocation"
+              />
             </div>
 
             <div class="flex place-content-center">
