@@ -29,7 +29,11 @@ export function exportAsCsv(data: any[], fileName: string) {
   document.body.removeChild(anchor)
 }
 
-export function transformToFloat(num: number) {
+export function transformToFloat(num: number|string): number {
+
+  if (typeof num === 'string') {
+    return parseFloat(num.replace(',', '.'))
+  } 
   if (Number.isInteger(num)) {
     return parseFloat(num.toString())
   } else {
