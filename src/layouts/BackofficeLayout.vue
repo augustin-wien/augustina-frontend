@@ -151,7 +151,7 @@ onMounted(() => {
 
             <p class="text-base leading-4">{{ $t('Logout') }}</p>
           </button>
-          <div class="customcolor mt-10">
+          <div class="customcolor mt-10 user-loggedin">
             <p v-if="keycloakStore.username">
               {{ keycloakStore.username }} {{ $t('userLoggedIn') }}
             </p>
@@ -252,6 +252,9 @@ footer {
 }
 .logo.mx-auto.my-5 {
   min-height: 70px;
+}
+.user-loggedin {
+  max-width: 270px;
 }
 </style>
 
