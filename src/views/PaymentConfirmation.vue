@@ -42,7 +42,7 @@ const hasSingleDigitalItem = computed(() => {
     const itemLicenseItem = itemLicenseItemAttribute(item.Item)
 
     // Check if the item name has license item
-    return itemLicenseItem !== null
+    return itemLicenseItem !== null && itemLicenseItem !== undefined
   }
 
   if (items?.length === 2) {
@@ -52,7 +52,7 @@ const hasSingleDigitalItem = computed(() => {
       const itemLicenseItem = itemLicenseItemAttribute(item.Item)
 
       // Return false if null
-      if (itemLicenseItem !== null) {
+      if (itemLicenseItem !== null && itemLicenseItem !== undefined) {
         return true
       }
     }
@@ -95,6 +95,7 @@ const itemName = (id: number) => {
 
 const itemLicenseItemAttribute = (id: number) => {
   const item = itemsStore.items?.find((item) => item.ID == id)
+  console.log(item?.LicenseItem)
 
   return item?.LicenseItem
 }
