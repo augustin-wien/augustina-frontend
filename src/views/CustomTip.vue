@@ -74,15 +74,16 @@ const roundValue = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div className="h-full grid grid-rows-5 place-items-center">
+      <div id="custom-tip-page" className="h-full grid grid-rows-5 place-items-center">
         <div className="text-center font-semibold text-3xl row-span-2">
           {{ $t('customdonation') }}
         </div>
         <div className="grid grid-cols-5 w-full h-full">
-          <button @click="decrement()">
+          <button @click="decrement()" id="decrement-btn">
             <div class="button-down customcolor"></div>
           </button>
           <div
+            id="donation-input-wrapper"
             class="col-span-3 grid grid-cols-3 customcolor bg-opacity-0 text-white rounded-3xl border-spacing-7 place-items-center"
           >
             <input
@@ -93,7 +94,7 @@ const roundValue = () => {
             />
             <p className="text-6xl font-semibold text-left">€</p>
           </div>
-          <button @click="increment">
+          <button id="increment-btn" @click="increment">
             <div class="button-up customcolor ml-3"></div>
           </button>
         </div>
@@ -101,6 +102,7 @@ const roundValue = () => {
         <div className="flex place-items-center w-full">
           <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
             <button
+              id="next-button"
               class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
               @click="roundValue"
             >

@@ -13,7 +13,7 @@ const shopStore = useShopStore()
 const vendorStore = useVendorStore()
 const settStore = useSettingsStore()
 const fetch = settStore.getSettingsFromApi
-const price = computed(() => settStore.settings.MainItemPrice / 100)
+const price = computed(() => (settStore.settings.MainItemPrice / 100).toFixed(2))
 
 const checkVendor = () => {
   window.location.href = vendorStore.vendorLink
@@ -49,7 +49,7 @@ onMounted(() => {
     <template v-if="settStore.settings.MainItemPrice" #main>
       <div id="landing-page" className="grid grid-rows-5 h-full place-items-center w-full">
         <div class="row-span-4 grid grid-rows-5 h-full w-full">
-          <div className="text-center font-semibold text-2xl pt-5">
+          <div id="title" className="text-center font-semibold text-2xl pt-5">
             {{ $t('buyItem') }}
           </div>
           <div class="flex relative items-center justify-center">
@@ -58,23 +58,27 @@ onMounted(() => {
               class="customcolor rounded-full avataricon absolute right-0 justify-self-center"
               @click="checkVendor"
             >
-              <IconAvatar class="customfill" />
+              <IconAvatar class="customfill vendor-icon" />
             </div>
-            <div class="customfont w-3/5 text-center text-black font-bold">
+            <div id="vendor-name" class="customfont w-3/5 text-center text-black font-bold">
               {{ vendorStore.vendorName }}
             </div>
           </div>
 
           <RouterLink
+            id="landing-page-shop"
             :to="{ name: 'Shop' }"
             class="grid grid-rows-2 h-[13vh] w-full customcolor roundedcorner items-center place-items-center"
           >
             <div
               class="w-full h-full text-2xl text-center font-semibold text-white bg-black rounded-full place-self-center flex items-center justify-center"
             >
-              <p class="text-center">1x {{ shopStore.getName(settStore.settings.MainItem) }}</p>
+              <p id="main-item-name" class="text-center">
+                1x {{ shopStore.getName(settStore.settings.MainItem) }}
+              </p>
             </div>
             <div
+              id="more-items-btn"
               className="text-center w-full rounded-full text-2xl font-semibold relative flex justify-center"
             >
               <div>{{ $t('shop') }}</div>
@@ -82,13 +86,14 @@ onMounted(() => {
             </div>
           </RouterLink>
           <div className="w-full row-span-2 flex items-center justify-center">
-            <p className="text-center text-8xl font-semibold ">{{ price }}€</p>
+            <p id="price" className="text-center text-8xl font-semibold">{{ price }}€</p>
           </div>
         </div>
 
         <div className="place-items-center w-full flex">
           <RouterLink class="text-center h-[76px] grow" :to="{ name: 'Tippingpage' }">
             <button
+              id="next-btn"
               class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold"
             >
               {{ $t('next') }}

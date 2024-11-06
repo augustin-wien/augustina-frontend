@@ -47,12 +47,13 @@ const checkIfItemSelected = () => {
     <template #main>
       <div id="shop-page" className="h-full grid grid-rows-5 place-items-center w-full">
         <div class="row-span-4 w-full h-full">
-          <div className="text-center font-semibold text-3xl py-4">
+          <div id="page-title" className="text-center font-semibold text-3xl py-4">
             {{ $t('product') }}
           </div>
           <div class="h-5/6 pb-3">
             <Toast v-if="toast" :toast="toast" />
             <ul
+              id="items-list"
               class="list-image-none overflow-y-auto w-full h-full border-4 border-gray-200 rounded-3xl"
             >
               <li class="item">
@@ -208,10 +209,11 @@ const checkIfItemSelected = () => {
         </div>
         <div className="place-items-center row-span-1 w-full flex">
           <button
+            id="next-button"
             class="text-center h-[76px] grow customcolor rounded-full p-5 text-white text-3xl w-full font-semibold"
             @click="checkIfItemSelected"
           >
-            Weiter
+            {{ $t('next') }}
           </button>
         </div>
       </div>

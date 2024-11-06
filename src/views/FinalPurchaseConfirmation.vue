@@ -47,27 +47,32 @@ const hasLicenseItem = computed(() => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div class="h-full w-full grid grid-rows-5 place-items-center">
-        <div class="text-center font-semibold text-3xl">
+      <div id="confirmation-page" class="h-full w-full grid grid-rows-5 place-items-center">
+        <div id="page-title" class="text-center font-semibold text-3xl">
           {{ $t('confirm') }}
         </div>
         <div class="row-span-3 w-full h-full">
-          <div class="overflow-y-auto h-5/6 border-4 border-gray-200 rounded-3xl">
+          <div
+            id="final-order-content"
+            class="overflow-y-auto h-5/6 border-4 border-gray-200 rounded-3xl"
+          >
             <div class="w-full items-center py-4">
-              <p class="text-center text-8xl font-semibold">{{ shopStore.calculateSum() }}€</p>
+              <p id="final-price" class="text-center text-8xl font-semibold">
+                {{ shopStore.calculateSum().toFixed(2) }}€
+              </p>
               <p className="text-center text">
                 {{ $t('includes') }} {{ shopStore.donationInEuro }}€
                 {{ $t('donation') }}
               </p>
             </div>
             <div class="w-full">
-              <div v-for="item in shopStore.amount" :key="item.item">
+              <div v-for="item in shopStore.amount" :key="item.item" class="final-item">
                 <div
                   v-if="item.quantity > 0 && item.item != shopStore.donationItem"
                   class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-4"
                 >
                   {{ item.quantity }}x {{ shopStore.getName(item.item) }}
-                  {{ shopStore.getPriceInEuro(item.item) }}€
+                  {{ shopStore.getPriceInEuro(item.item).toFixed(2) }}€
                 </div>
               </div>
             </div>
@@ -105,12 +110,14 @@ const hasLicenseItem = computed(() => {
             v-if="
               shopStore.amount.length == 1 && shopStore.amount[0].item == shopStore.donationItem
             "
+            id="donation-only"
             class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full"
           >
             {{ $t('donation_only') }}
           </button>
           <button
             v-else
+            id="next-btn"
             class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full"
             :style="paymentStore.agbChecked ? 'background-color:' + settStore.settings.Color : ''"
             @click="checkAgb"
