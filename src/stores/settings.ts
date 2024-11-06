@@ -24,6 +24,7 @@ export interface Settings {
   WebshopIsClosed: boolean
   MapCenterLat: number
   MapCenterLong: number
+  UseVendorLicenseIdInShop: boolean
   Keycloak: {
     Realm: string
     URL: string

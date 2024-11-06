@@ -69,7 +69,8 @@ const updatedSettings = ref<Settings>({
   VendorEmailPostfix: '',
   MapCenterLat: 0.1,
   MapCenterLong: 0.1,
-  Keycloak: null
+  Keycloak: null,
+  UseVendorLicenseIdInShop: false,
 })
 
 const updateSettings = async () => {
@@ -244,6 +245,32 @@ const url = import.meta.env.VITE_API_URL
                     v-model="updatedSettings.OrgaCoversTransactionCosts"
                     type="radio"
                     name="RefundFees"
+                    :value="false"
+                  />
+                </span>
+              </div>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                >{{ $t('Use the license id instead of the name in the shop') }}:</label
+              >
+              <div class="">
+                <span class="me-4">
+                  <label class="me-1" for="UseVendorLicenseIdInShop">{{ $t('yes') }}</label>
+                  <input
+                    id="UseVendorLicenseIdInShop"
+                    v-model="updatedSettings.UseVendorLicenseIdInShop"
+                    type="radio"
+                    checked
+                    name="UseVendorLicenseIdInShop"
+                    :value="true"
+                  />
+                </span>
+                <span class="me-4">
+                  <label class="me-1" for="UseVendorLicenseIdInShop">{{ $t('no') }}</label>
+                  <input
+                    id="UseVendorLicenseIdInShop"
+                    v-model="updatedSettings.UseVendorLicenseIdInShop"
+                    type="radio"
+                    name="UseVendorLicenseIdInShop"
                     :value="false"
                   />
                 </span>
