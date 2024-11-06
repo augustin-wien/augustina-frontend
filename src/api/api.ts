@@ -142,6 +142,7 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('NewspaperName', updatedSettings.NewspaperName)
   formData.append('MapCenterLat', updatedSettings.MapCenterLat.toString())
   formData.append('MapCenterLong', updatedSettings.MapCenterLong.toString())
+  formData.append('UseVendorLicenseIdInShop', updatedSettings.UseVendorLicenseIdInShop.toString())
 
   formData.append(
     'OrgaCoversTransactionCosts',

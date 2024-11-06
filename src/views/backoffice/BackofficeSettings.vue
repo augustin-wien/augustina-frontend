@@ -111,6 +111,14 @@ const url = import.meta.env.VITE_API_URL
                       {{ settings.MaintainanceModeHelpUrl }}
                     </td>
                   </tr>
+                  <tr>
+                    <th className="p-3">
+                      {{ $t('Use the license id instead of the name in the shop') }}
+                    </th>
+                    <td className="p-3">
+                      {{ $t(settings.UseVendorLicenseIdInShop ? 'True' : 'False') }}
+                    </td>
+                  </tr>
 
                   <tr>
                     <th className="p-3">{{ $t('Logo path') }}</th>
