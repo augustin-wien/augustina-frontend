@@ -112,9 +112,11 @@ const url = import.meta.env.VITE_API_URL
                     </td>
                   </tr>
                   <tr>
-                    <th className="p-3">{{ $t('Use the license id instead of the name in the shop') }}</th>
+                    <th className="p-3">
+                      {{ $t('Use the license id instead of the name in the shop') }}
+                    </th>
                     <td className="p-3">
-                      {{ $t(settings.UseVendorLicenseIdInShop?'True':'False') }}
+                      {{ $t(settings.UseVendorLicenseIdInShop ? 'True' : 'False') }}
                     </td>
                   </tr>
 

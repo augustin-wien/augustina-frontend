@@ -70,7 +70,7 @@ const updatedSettings = ref<Settings>({
   MapCenterLat: 0.1,
   MapCenterLong: 0.1,
   Keycloak: null,
-  UseVendorLicenseIdInShop: false,
+  UseVendorLicenseIdInShop: false
 })
 
 const updateSettings = async () => {
