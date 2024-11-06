@@ -95,8 +95,6 @@ const itemName = (id: number) => {
 
 const itemLicenseItemAttribute = (id: number) => {
   const item = itemsStore.items?.find((item) => item.ID == id)
-  console.log(item?.LicenseItem)
-
   return item?.LicenseItem
 }
 
@@ -123,7 +121,10 @@ const apiUrl = import.meta.env.VITE_API_URL
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div className="grid grid-rows-6 h-full place-items-center w-full">
+      <div
+        id="payment-confirmation-page"
+        className="grid grid-rows-6 h-full place-items-center w-full"
+      >
         <div
           v-if="!hasSingleDigitalItem"
           className="h-full w-full text-center grid grid-rows-2 font-semibold text-xl"

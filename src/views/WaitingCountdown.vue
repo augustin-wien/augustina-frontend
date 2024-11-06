@@ -6,7 +6,6 @@ import { useSettingsStore } from '@/stores/settings'
 import { onMounted } from 'vue'
 
 const paymentStore = usePaymentStore()
-const settStore = useSettingsStore()
 const sleep = (delay: number) => new Promise((resolve) => setTimeout(resolve, delay))
 let verified = false
 let counter = 0
@@ -46,7 +45,7 @@ onMounted(() => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <WaitingAnimation />
+      <WaitingAnimation id="waiting-animation" />
     </template>
   </component>
 </template>

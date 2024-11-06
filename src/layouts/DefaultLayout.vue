@@ -60,6 +60,9 @@ document.getElementsByTagName('head')[0].appendChild(link)
   max-height: 80px;
   width: auto;
 }
+header {
+  width: 100%;
+}
 </style>
 
 <style>
