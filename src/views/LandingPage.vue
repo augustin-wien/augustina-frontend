@@ -53,15 +53,15 @@ onMounted(() => {
             {{ $t('buyItem') }}
           </div>
           <div class="flex relative items-center justify-center">
+            <div id="vendor-name" class="customfont text-center text-black font-bold">
+              {{ vendorStore.vendorName }}
+            </div>
             <div
               v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
-              class="customcolor rounded-full avataricon absolute right-0 justify-self-center"
+              class="customcolor rounded-full avataricon ml-2 justify-self-center"
               @click="checkVendor"
             >
               <IconAvatar class="customfill vendor-icon" />
-            </div>
-            <div id="vendor-name" class="customfont w-3/5 text-center text-black font-bold">
-              {{ vendorStore.vendorName }}
             </div>
           </div>
 
