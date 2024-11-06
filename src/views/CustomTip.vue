@@ -79,7 +79,7 @@ const roundValue = () => {
           {{ $t('customdonation') }}
         </div>
         <div className="grid grid-cols-5 w-full h-full">
-          <button @click="decrement()" id="decrement-btn">
+          <button id="decrement-btn" @click="decrement()">
             <div class="button-down customcolor"></div>
           </button>
           <div
