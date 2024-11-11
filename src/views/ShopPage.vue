@@ -172,7 +172,7 @@ const checkIfItemSelected = () => {
                             color: item.ItemTextColor || (item.LicenseItem ? '#000000' : '#ffffff')
                           }"
                         >
-                          {{ item.Name }} {{ item.Price / 100 }}€
+                          {{ item.Name }} {{ (item.Price / 100).toFixed(2) }}€
                         </div>
                       </RouterLink>
                     </div>
