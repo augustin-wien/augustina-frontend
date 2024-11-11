@@ -34,7 +34,7 @@
     "file-saver": "^2.0.5",
     "format": "^0.2.2",
     "jspdf": "^2.5.1",
-    "keycloak-js": "^21.1.2",
+    "keycloak-js": "^26.0.5",
     "leaflet": "^1.9.4",
     "leaflet-geosearch": "^4.0.0",
     "npm": "^10.9.0",
