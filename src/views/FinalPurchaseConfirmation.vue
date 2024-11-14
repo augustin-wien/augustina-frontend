@@ -69,7 +69,7 @@ const hasLicenseItem = computed(() => {
               <div v-for="item in shopStore.amount" :key="item.item" class="final-item">
                 <div
                   v-if="item.quantity > 0 && item.item != shopStore.donationItem"
-                  class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-4"
+                  class="text-xl w-full text-center font-semibold text-white bg-black p-3 rounded-full mb-4"
                 >
                   {{ item.quantity }}x {{ shopStore.getName(item.item) }}
                   {{ shopStore.getPriceInEuro(item.item).toFixed(2) }}€

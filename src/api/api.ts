@@ -146,6 +146,7 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('UseVendorLicenseIdInShop', updatedSettings.UseVendorLicenseIdInShop.toString())
   formData.append('Favicon', updatedSettings.Favicon)
   formData.append('QRCodeSettings', updatedSettings.QRCodeSettings)
+  formData.append('QRCodeEnableLogo', updatedSettings.QRCodeEnableLogo.toString())
 
   formData.append(
     'OrgaCoversTransactionCosts',
