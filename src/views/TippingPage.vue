@@ -23,13 +23,13 @@ const fixedDonationClick = (amount: number) => {
     <template #main>
       <div className="h-full w-full grid grid-rows-5 place-items-center">
         <div>
-        <div className="text-center font-semibold text-3xl">
-          {{ $t('donation') }}
+          <div className="text-center font-semibold text-3xl">
+            {{ $t('donation') }}
+          </div>
+          <div className="text-center font-semibold text-xl">
+            {{ $t('for the vendor') }}
+          </div>
         </div>
-        <div className="text-center font-semibold text-xl">
-          {{ $t('for the vendor') }}
-        </div>
-      </div>
 
         <div className="flex place-items-center w-full">
           <button
