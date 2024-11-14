@@ -164,7 +164,7 @@ const apiUrl = import.meta.env.VITE_API_URL
             <div
               v-for="item in purchasedItems"
               :key="item.ID"
-              :class="purchasedItems.length == 1 ? 'col-span-2' : 'col-span-1'"
+              :class="purchasedItems?.length == 1 ? 'col-span-2' : 'col-span-1'"
             >
               <div
                 class="col-span-1 text-s w-full text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
