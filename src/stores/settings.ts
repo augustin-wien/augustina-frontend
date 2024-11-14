@@ -7,6 +7,7 @@ export interface Settings {
   AGBUrl: string
   Color: string
   FontColor: string
+  Favicon: string
   Logo: string
   MainItem: number
   MainItemDescription: string
@@ -19,6 +20,8 @@ export interface Settings {
   OrgaCoversTransactionCosts: boolean
   QRCodeLogoImgUrl: string
   QRCodeUrl: string
+  QRCodeSettings: string
+  QRCodeEnableLogo: boolean
   VendorNotFoundHelpUrl: string
   VendorEmailPostfix: string
   WebshopIsClosed: boolean

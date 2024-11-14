@@ -116,7 +116,7 @@ onMounted(() => {
               <p class="text-base leading-4">{{ $t('menuProducts') }}</p>
             </button>
           </RouterLink>
-          <RouterLink to="/backoffice/settings" class-name="sidemenu-link">
+          <RouterLink to="/backoffice/settings/update" class-name="sidemenu-link">
             <button
               class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
             >

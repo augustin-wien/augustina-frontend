@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import { useFavicon } from '@vueuse/core'
+
+const favicon = import.meta.env.VITE_API_URL + 'img/favicon.png'
+useFavicon(favicon)
 </script>
 
 <template>

@@ -18,7 +18,8 @@ import {
   VENDOR_ME_API_URL,
   PAYMENT_STATISTICS_API_URL,
   PDF_DOWNLOAD_API_URL,
-  STYLES_URL
+  STYLES_URL,
+  BASE_URL
 } from './endpoints'
 
 export const apiInstance = axios.create({
@@ -143,6 +144,8 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('MapCenterLat', updatedSettings.MapCenterLat.toString())
   formData.append('MapCenterLong', updatedSettings.MapCenterLong.toString())
   formData.append('UseVendorLicenseIdInShop', updatedSettings.UseVendorLicenseIdInShop.toString())
+  formData.append('Favicon', updatedSettings.Favicon)
+  formData.append('QRCodeSettings', updatedSettings.QRCodeSettings)
 
   formData.append(
     'OrgaCoversTransactionCosts',
@@ -229,7 +232,15 @@ export async function pdfDownload(linkId: string) {
 // image Download
 
 export async function getBase64ImageFromUrl(url: string) {
-  const response = await axios.get(url, { responseType: 'blob' })
+  let finalUrl = url
+
+  if (url.startsWith('/')) {
+    finalUrl = `${BASE_URL}${url.slice(1)}`
+  } else if (!finalUrl.startsWith('img')) {
+    finalUrl = `${BASE_URL}${url}`
+  }
+
+  const response = await axios.get(finalUrl, { responseType: 'blob' })
   if (response.status == 200) {
     const base64data = await blobToData(response.data)
     return base64data
