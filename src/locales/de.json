@@ -60,10 +60,13 @@
   "name": "Name",
   "description": "Beschreibung",
   "price": "Preis",
+  "order": "Reihenfolge",
   "measure": "Aktion",
   "change": "Bearbeiten",
   "new": "Neu",
   "newGendered": "Neue/n",
+
+  "Item order (higher moves the item up)": "Artikelreihenfolge (hohe Zahl = Artikel weiter oben)",
 
   "vendorSingular": "VerkäuferIn",
 
@@ -79,6 +82,7 @@
   "URL for maintenance": "URL bei Wartungsarbeiten",
   "Logo path": "Pfad zum Logo",
   "LicenseID-not-found-URL": "Ausweisnummer nicht gefunden URL",
+  "Use Logo in QR-Code:": "Logo im QR-Code verwenden",
   "Email ending domain": "E-Mail Endung",
   "Webshop is closed": "Webshop ist geschlossen",
   "Map center latitude": "Kartenmitte Breitengrad",
@@ -137,6 +141,7 @@
 
   "Transaction Costs": "Transaktionskosten",
   "Donation": "Spende",
+  "for the vendor": "für die Verkäufer:in",
 
   "lastTransactions": "Letzte Transaktionen",
   "yourData": "Dein Account",

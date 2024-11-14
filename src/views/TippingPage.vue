@@ -22,9 +22,15 @@ const fixedDonationClick = (amount: number) => {
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <div className="h-full w-full grid grid-rows-5 place-items-center">
-        <div className="text-center font-semibold text-3xl">
-          {{ $t('donation') }}
+        <div>
+          <div className="text-center font-semibold text-3xl">
+            {{ $t('donation') }}
+          </div>
+          <div className="text-center font-semibold text-xl">
+            {{ $t('for the vendor') }}
+          </div>
         </div>
+
         <div className="flex place-items-center w-full">
           <button
             class="customcolor rounded-full p-[18px] text-white text-4xl font font-semibold w-full"

@@ -137,5 +137,6 @@ onMounted(() => {
 .avataricon {
   width: min(13vw, 60px);
   height: min(13vw, 60px);
+  cursor: pointer;
 }
 </style>

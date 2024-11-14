@@ -527,7 +527,7 @@ const url = import.meta.env.VITE_API_URL
                   class="px-4 py-2 ps-2 mt-2 rounded-full customcolor h-[44px]"
                   @click="updateSettings()"
                 >
-                  {{ $t('confirmation') }}
+                  {{ $t('save') }}
                 </button>
               </div>
             </div>

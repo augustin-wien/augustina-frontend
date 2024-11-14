@@ -161,9 +161,13 @@ const apiUrl = import.meta.env.VITE_API_URL
             />
           </div>
           <div class="grid grid-cols-2">
-            <div v-for="item in purchasedItems" :key="item.ID" class="col-span-1">
+            <div
+              v-for="item in purchasedItems"
+              :key="item.ID"
+              :class="purchasedItems?.length == 1 ? 'col-span-2' : 'col-span-1'"
+            >
               <div
-                class="col-span-1 text-s w-full h-[45px] text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
+                class="col-span-1 text-s w-full text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
               >
                 {{ item.Item == 2 ? item.Quantity / 100 + ' €' : item.Quantity + 'x' }}
                 {{ item.Item == 2 ? $t('donation') : itemName(item.Item) }}
@@ -171,7 +175,7 @@ const apiUrl = import.meta.env.VITE_API_URL
             </div>
           </div>
           <div class="w-full row-span-2">
-            <p class="text-center text-3xl font-semibold">{{ price }}€</p>
+            <p class="text-center text-3xl font-semibold">{{ price.toFixed(2) }}€</p>
           </div>
           <div class="w-full row-span-1 mt-1">
             <button
