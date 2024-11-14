@@ -10,6 +10,7 @@ import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { faCreditCard, faArrowAltCircleRight, faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useSettingsStore } from '@/stores/settings'
+import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
 
 // Initialize the vendor store
 const store = vendorsStore()
@@ -51,59 +52,6 @@ const displayVendors = computed(() => {
   return searchQuery.value ? store.filteredVendors : vendors.value
 })
 
-// Function to generate QR code only if the button is clicked
-const generateQRCode = async (vendor: Vendor) => {
-  //  fetch image
-  const image: string | undefined = ''
-  const logoUrl = settingsStore.settings.QRCodeLogoImgUrl
-
-  // if (logoUrl && logoUrl !== '') {
-  //   const result = await getBase64ImageFromUrl(settingsStore.settings.QRCodeLogoImgUrl)
-  //   if (result) image = result
-  // }
-
-  const qrCode = new QRCodeStyling({
-    width: 500,
-    height: 500,
-    type: 'svg',
-    data: `${settingsStore.settings.QRCodeUrl}/v/${vendor.LicenseID}`,
-    image: image,
-
-    dotsOptions: {
-      color: '#000',
-      type: 'dots'
-    },
-    backgroundOptions: {
-      color: '#fff'
-    },
-    imageOptions: {
-      crossOrigin: 'anonymous',
-      margin: 20
-    },
-    cornersSquareOptions: {
-      type: 'dot',
-      color: '#000000'
-    },
-    cornersDotOptions: {
-      type: 'dot',
-      color: '#000000'
-    },
-    qrOptions: {
-      typeNumber: 0,
-      mode: 'Byte',
-      errorCorrectionLevel: 'Q'
-    }
-  })
-
-  const canvas = document.getElementById('canvas')
-
-  if (canvas !== null) {
-    qrCode.append(canvas)
-    qrCode.download({ name: vendor.LicenseID, extension: 'png' })
-    canvas.innerHTML = ''
-  }
-}
-
 const exportTable = () => {
   if (!displayVendors.value || displayVendors.value.length == 0) {
     alert('Nothing to export')
@@ -124,6 +72,9 @@ const exportTable = () => {
   const now = new Date()
   exportAsCsv([header, ...data], `vendors_${now.toLocaleDateString()}`)
 }
+
+const showQRCode = ref(false)
+const selectedVendor = ref<Vendor | null>(null)
 </script>
 
 <template>
@@ -178,7 +129,6 @@ const exportTable = () => {
                   <td className="p-3">{{ formatCredit(vendor.Balance) }}€</td>
 
                   <td class="flex justify-center">
-                    <span id="canvas"></span>
                     <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
                       <button className="p-2 rounded-full h-10 w-10 customcolor mr-2">
                         <font-awesome-icon :icon="faArrowAltCircleRight" />
@@ -197,7 +147,12 @@ const exportTable = () => {
                     </button>
                     <button
                       className="p-2 rounded-full h-10 w-10 customcolor mr-2"
-                      @click="generateQRCode(vendor)"
+                      @click="
+                        () => {
+                          showQRCode = true
+                          selectedVendor = vendor
+                        }
+                      "
                     >
                       <font-awesome-icon :icon="faQrcode" />
                     </button>
@@ -208,7 +163,12 @@ const exportTable = () => {
           </div>
         </div>
       </div>
-
+      <QrCodeGenerator
+        v-if="showQRCode"
+        :show-q-r-code="showQRCode"
+        :vendor="selectedVendor"
+        @close="showQRCode = false"
+      />
       <footer>
         <router-link to="/backoffice/newvendor">
           <button className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">

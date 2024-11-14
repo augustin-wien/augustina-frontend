@@ -49,6 +49,7 @@ watch(settings, (newVal) => {
 
 const updatedSettings = ref<Settings>({
   Logo: '',
+  Favicon: '',
   FontColor: '',
   Color: '',
   MainItem: 1,
@@ -70,7 +71,9 @@ const updatedSettings = ref<Settings>({
   MapCenterLat: 0.1,
   MapCenterLong: 0.1,
   Keycloak: null,
-  UseVendorLicenseIdInShop: false
+  UseVendorLicenseIdInShop: false,
+  QRCodeSettings: '',
+  QRCodeEnableLogo: false
 })
 
 const updateSettings = async () => {
@@ -95,10 +98,26 @@ const showToast = (type: string, message: string) => {
   }, 5000)
 }
 
+const newLogo = ref('')
+const newFavicon = ref('')
+const newQrCodeLogo = ref('')
+
 const updateLogo = (event: any) => {
   // This logic will execute when a file is selected in the file input
   updatedSettings.value.Logo = event.target.files[0]
   newLogo.value = URL.createObjectURL(event.target.files[0])
+}
+
+const updateFavicon = (event: any) => {
+  // This logic will execute when a file is selected in the file input
+  updatedSettings.value.Favicon = event.target.files[0]
+  newFavicon.value = URL.createObjectURL(event.target.files[0])
+}
+
+const updateQRCodeLogo = (event: any) => {
+  // This logic will execute when a file is selected in the file input
+  updatedSettings.value.QRCodeLogoImgUrl = event.target.files[0]
+  newQrCodeLogo.value = URL.createObjectURL(event.target.files[0])
 }
 
 const updateStyles = () => {
@@ -108,8 +127,6 @@ const updateStyles = () => {
     router.push({ name: 'Backoffice Settings' })
   })
 }
-
-const newLogo = ref('')
 
 const url = import.meta.env.VITE_API_URL
 </script>
@@ -177,10 +194,47 @@ const url = import.meta.env.VITE_API_URL
                   />
                   <input
                     id="logo"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    class="appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="file"
                     accept="image/png"
                     @change="updateLogo"
+                  />
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="favicon"
+                  >Favicon:</label
+                >
+                <div class="flex flex-row">
+                  <img
+                    v-if="
+                      (updatedSettings && typeof updatedSettings.Favicon === 'string') ||
+                      !updatedSettings?.Favicon
+                    "
+                    :src="
+                      updatedSettings?.Favicon && updatedSettings?.Favicon !== ''
+                        ? url + updatedSettings.Favicon.slice(1)
+                        : url + 'img/favicon.png'
+                    "
+                    alt="Newspaper favicon"
+                    class="favicon mx-auto my-5"
+                    width="200"
+                    height="auto"
+                  />
+                  <img
+                    v-else
+                    :src="newFavicon"
+                    alt="Newspaper favicon2"
+                    class="favicon mx-auto my-5"
+                    width="200"
+                    height="auto"
+                  />
+                  <input
+                    id="favicon"
+                    class="appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="file"
+                    accept="image/png"
+                    @change="updateFavicon"
                   />
                 </div>
               </div>
@@ -329,17 +383,66 @@ const url = import.meta.env.VITE_API_URL
                   />
                 </div>
               </div>
-              <div>
-                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="qrcodelogourl"
-                  >{{ $t('QR Code Logo path') }}:</label
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                >{{ $t('Use Logo in QR-Code') }}:</label
+              >
+              <div class="">
+                <span class="me-4">
+                  <label class="me-1" for="QRCodeEnableLogo">{{ $t('yes') }}</label>
+                  <input
+                    id="RefundFees"
+                    v-model="updatedSettings.QRCodeEnableLogo"
+                    type="radio"
+                    checked
+                    name="QRCodeEnableLogo"
+                    :value="true"
+                  />
+                </span>
+                <span class="me-4">
+                  <label class="me-1" for="QRCodeEnableLogo">{{ $t('no') }}</label>
+                  <input
+                    id="RefundFees"
+                    v-model="updatedSettings.QRCodeEnableLogo"
+                    type="radio"
+                    name="QRCodeEnableLogo"
+                    :value="false"
+                  />
+                </span>
+              </div>
+              <div v-if="updatedSettings.QRCodeEnableLogo" class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="favicon"
+                  >{{ $t('QR Code Logo') }}:</label
                 >
                 <div class="flex flex-row">
+                  <img
+                    v-if="
+                      (updatedSettings && typeof updatedSettings.QRCodeLogoImgUrl === 'string') ||
+                      !updatedSettings?.QRCodeLogoImgUrl.slice(1)
+                    "
+                    :src="
+                      updatedSettings?.QRCodeLogoImgUrl && updatedSettings?.QRCodeLogoImgUrl !== ''
+                        ? url + updatedSettings.QRCodeLogoImgUrl.slice(1)
+                        : url + 'img/qrcode.png'
+                    "
+                    alt="Newspaper favicon"
+                    class="favicon mx-auto my-5"
+                    width="200"
+                    height="auto"
+                  />
+                  <img
+                    v-else
+                    :src="newQrCodeLogo"
+                    alt="Newspaper favicon2"
+                    class="favicon mx-auto my-5"
+                    width="200"
+                    height="auto"
+                  />
                   <input
-                    id="qrcodelogourl"
-                    v-model="updatedSettings.QRCodeLogoImgUrl"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                    required
+                    id="favicon"
+                    class="appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="file"
+                    accept="image/png"
+                    @change="updateQRCodeLogo"
                   />
                 </div>
               </div>
