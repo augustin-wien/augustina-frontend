@@ -39,7 +39,7 @@ const generateQRCode = async (vendor: Vendor) => {
     },
     imageOptions: {
       crossOrigin: 'anonymous',
-      margin: 20
+      margin: 2
     },
     cornersSquareOptions: {
       type: 'dot',
@@ -52,7 +52,7 @@ const generateQRCode = async (vendor: Vendor) => {
     qrOptions: {
       typeNumber: 0,
       mode: 'Byte',
-      errorCorrectionLevel: 'Q'
+      errorCorrectionLevel: 'H'
     }
   })
 
