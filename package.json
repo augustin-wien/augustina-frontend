@@ -31,7 +31,7 @@
     "@vueuse/core": "^11.2.0",
     "axios": "^1.7.7",
     "caniuse-lite": "^1.0.30001576",
-    "chart.js": "^4.4.1",
+    "chart.js": "^4.4.6",
     "file-saver": "^2.0.5",
     "format": "^0.2.2",
     "jspdf": "^2.5.1",
