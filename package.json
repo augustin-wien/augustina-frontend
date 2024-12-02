@@ -42,7 +42,7 @@
     "pinia": "^2.1.6",
     "qr-code-styling": "^1.6.0-rc.1",
     "vue": "^3.4.29",
-    "vue-i18n": "^9.13.1",
+    "vue-i18n": "^9.14.2",
     "vue-leaflet-markercluster": "^0.6.1",
     "vue-router": "^4.3.3"
   },
