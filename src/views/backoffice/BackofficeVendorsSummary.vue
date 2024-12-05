@@ -118,11 +118,16 @@ const selectedVendor = ref<Vendor | null>(null)
                 </tr>
               </thead>
               <tbody className="text-sm p-3">
-                <tr v-for="vendor in displayVendors" :key="vendor.ID" class="border-t-2">
+                <tr
+                  v-for="vendor in displayVendors"
+                  :key="vendor.ID"
+                  :class="vendor.IsDisabled ? 'disabled-vendor border-t-2' : 'border-t-2'"
+                >
                   <td className="p-3">
-                    <router-link :to="`/backoffice/userprofile/${vendor.ID}`">{{
-                      vendor?.LicenseID
-                    }}</router-link>
+                    <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
+                      {{ vendor.IsDisabled ? $t('Disabled') + ': ' : '' }}
+                      {{ vendor?.LicenseID }}
+                    </router-link>
                   </td>
                   <td className="p-3">{{ vendor.FirstName }}</td>
                   <td className="p-3">{{ vendor.LastName }}</td>
@@ -195,7 +200,9 @@ button[disabled] {
   background-color: #cccccc;
   color: #666666;
 }
-
+.disabled-vendor {
+  background-color: #f8d7da;
+}
 .customcolor {
   background-color: v-bind(settingsStore.settings.Color);
   color: v-bind(settingsStore.settings.FontColor);
