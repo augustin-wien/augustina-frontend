@@ -135,6 +135,7 @@
 
   "newProduct": "Neues Produkt",
   "deletionConfirmation": "Willst du das Produkt wirklich löschen?",
+  "vendordeletionConfirmation": "Willst du die Verkäufer:in wirklich löschen?",
 
   "chooseDateRange": "Zeitraum wählen",
   "noImage": "Kein Bild",

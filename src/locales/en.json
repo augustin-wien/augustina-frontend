@@ -125,6 +125,7 @@
 
   "newProduct": "New product",
   "deletionConfirmation": "Do you really want to delete this product?",
+  "vendordeletionConfirmation": "Do you really want to delete this vendor?",
 
   "chooseDateRange": "Choose date range",
   "noImage": "No image",
