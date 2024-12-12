@@ -127,7 +127,6 @@ const updateStyles = () => {
   // This logic will execute when the "Bestätigen" button is clicked
   settingsStore.updateStyleCss(styles.value).then(() => {
     showToast('success', 'Einstellungen erfolgreich aktualisiert')
-    router.push({ name: 'Backoffice Settings' })
   })
 }
 
@@ -573,10 +572,7 @@ const showQrCodeSettings = ref(false)
           v-if="showQrCodeSettings"
           @close="showQrCodeSettings = false"
           @update="updateQRCodeSettings"
-          @save-settings="
-            updateSettings()
-            showQrCodeSettings = false
-          "
+          @save-settings="updateSettings()"
         />
         <Toast v-if="toast" :toast="toast" />
       </div>

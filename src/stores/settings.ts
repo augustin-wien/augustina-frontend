@@ -8,7 +8,7 @@ export interface Settings {
   Color: string
   FontColor: string
   Favicon: string
-  Logo: string
+  Logo: string | File
   MainItem: number
   MainItemDescription: string
   MainItemImage: string
