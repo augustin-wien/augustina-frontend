@@ -201,6 +201,13 @@ onMounted(() => {
   </div>
 </template>
 
+<style>
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
+}
+</style>
+
 <style scoped>
 .main-container {
   padding-left: 8px;

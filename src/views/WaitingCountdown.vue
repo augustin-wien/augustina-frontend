@@ -2,7 +2,6 @@
 import WaitingAnimation from '@/components/WaitingAnimation.vue'
 import router from '@/router'
 import { usePaymentStore } from '@/stores/payment'
-import { useSettingsStore } from '@/stores/settings'
 import { onMounted } from 'vue'
 
 const paymentStore = usePaymentStore()
