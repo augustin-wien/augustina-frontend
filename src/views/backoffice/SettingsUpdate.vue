@@ -590,9 +590,4 @@ tr {
 td {
   padding: 10px;
 }
-
-.customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
-}
 </style>

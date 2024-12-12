@@ -4,9 +4,6 @@ import { computed, onMounted, ref, watch } from 'vue'
 import keycloak from '@/keycloak/keycloak'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Vendor } from '@/stores/vendor'
-import { useSettingsStore } from '@/stores/settings'
-
-const settingsStore = useSettingsStore()
 
 const store = vendorsStore()
 
@@ -142,10 +139,5 @@ button[disabled] {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
-}
-
-.customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

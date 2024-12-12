@@ -9,10 +9,7 @@ import { vendorsStore, type Vendor } from '@/stores/vendor'
 import { formatCredit, formatDate } from '@/utils/utils'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useSettingsStore } from '@/stores/settings'
 import IconCross from '@/components/icons/IconCross.vue'
-
-const settingsStore = useSettingsStore()
 
 const keycloakStore = useKeycloakStore()
 
@@ -246,9 +243,5 @@ button[disabled] {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
-}
-.customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

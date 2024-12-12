@@ -421,7 +421,11 @@ const updateLocation = (newLocation: any) => {
               </div>
             </div>
             <div class="flex justify-between">
-              <button type="submit" class="py-2 px-4 rounded-full" @click="showDeleteModal = true">
+              <button
+                type="submit"
+                class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
+                @click="showDeleteModal = true"
+              >
                 {{ $t('delete') }}
               </button>
               <button
@@ -520,11 +524,5 @@ tr {
 
 td {
   padding: 10px;
-}
-
-.customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
-  font-size: 16px;
 }
 </style>

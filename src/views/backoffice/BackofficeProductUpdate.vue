@@ -4,10 +4,7 @@ import router from '@/router'
 import type { Item } from '@/stores/items'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
-import { useSettingsStore } from '@/stores/settings'
 import IconCross from '@/components/icons/IconCross.vue'
-
-const settingsStore = useSettingsStore()
 
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -437,10 +434,5 @@ td {
 
 .productImage {
   width: 100% !important;
-}
-
-.customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

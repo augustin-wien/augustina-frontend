@@ -152,10 +152,3 @@ const exportTable = () => {
     </template>
   </component>
 </template>
-
-<style scoped>
-.customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
-}
-</style>
