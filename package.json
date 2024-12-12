@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -17,7 +17,7 @@
     "format": "prettier --cache --check src/",
     "format:fix": "prettier --cache --check src/ --write",
     "update-version": "npm version patch --no-git-tag-version && yarn install --silent && npm run create-branch",
-    "create-branch": "node -e \"const { execSync } = require('child_process'); const pkg = require('./package.json'); const branchName = `update-version-v${pkg.version}`; execSync(`git checkout -b ${branchName}`); execSync(`git add package.json yarn.lock`); execSync(`git commit -m 'Update version to ${pkg.version}'`); execSync(`git push origin ${branchName}`); execSync(`gh pr create --title 'Update version to ${pkg.version}' --body 'This PR updates the version to ${pkg.version}.'`);\""
+    "create-branch": "node -e \"const { execSync } = require('child_process'); const pkg = require('./package.json'); const branchName = `update-version-v${pkg.version}`; execSync(`git checkout -b ${branchName}`); execSync(`git add package.json yarn.lock`); execSync(`git commit -m 'Update version to ${pkg.version}'`); execSync(`git push origin ${branchName}`); execSync(`gh pr create --title 'Update version to ${pkg.version}' --body 'This PR updates the version to ${pkg.version}.\n\nThis PR ensures all version updates and dependencies are properly reviewed before merging to the main branch.'`);\""
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
