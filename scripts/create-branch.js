@@ -1,6 +1,5 @@
-import { execSync } from 'child_process';
-import pkg from './package.json';
-
+const { execSync } = require('child_process');
+const pkg = require('../package.json');
 
 const branchName = `update-version-v${pkg.version}`;
 
