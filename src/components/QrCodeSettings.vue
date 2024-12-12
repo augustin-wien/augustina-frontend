@@ -104,12 +104,13 @@ watch(
   { deep: true }
 )
 
+let image: string | undefined = undefined
+
 // Function to generate QR code only if the button is clicked
 const generateQRCode = async (venndorId: string) => {
-  let image: string | undefined = undefined
   const logoUrl = settingsStore.settings.QRCodeLogoImgUrl
 
-  if (logoUrl && logoUrl !== '' && settingsStore.settings.QRCodeEnableLogo) {
+  if (image === undefined && logoUrl && logoUrl !== '' && settingsStore.settings.QRCodeEnableLogo) {
     const result = await getBase64ImageFromUrl(settingsStore.settings.QRCodeLogoImgUrl)
     if (result) image = result
   }

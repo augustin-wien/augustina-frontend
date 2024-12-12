@@ -82,7 +82,7 @@ const updateSettings = async () => {
     // This logic will execute when the "Bestätigen" button is clicked
     await settingsStore.updateSettings(updatedSettings.value).then(() => {
       showToast('success', 'Einstellungen erfolgreich aktualisiert')
-      router.push({ name: 'Backoffice Settings' })
+      showQrCodeSettings.value = false
     })
   } catch (error) {
     // eslint-disable-next-line no-console
