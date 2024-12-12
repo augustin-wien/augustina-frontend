@@ -6,11 +6,21 @@ import IconCross from '@/components/icons/IconCross.vue'
 import QRCodeStyling from 'qr-code-styling'
 import { onMounted, ref, watch } from 'vue'
 import { getBase64ImageFromUrl } from '@/api/api'
+import type {
+  DotsOptions,
+  BackgroundOptions,
+  ImageOptions,
+  QrCodeOptions,
+  CornerSquareOptions,
+  CornersDotOptions
+} from '@/models/qrcode'
 
 const settingsStore = useSettingsStore()
 const props = defineProps(['vendor'])
 const vendor = props.vendor
 const currentQrCode = ref<QRCodeStyling | null>(null)
+
+const emit = defineEmits(['close'])
 
 // Function to generate QR code only if the button is clicked
 const generateQRCode = async (vendor: Vendor) => {
@@ -23,6 +33,50 @@ const generateQRCode = async (vendor: Vendor) => {
     if (result) image = result
   }
 
+  const dotsOptions = ref<DotsOptions | undefined>({
+    color: '#000',
+    type: 'dots',
+    gradient: undefined
+  })
+
+  const backgroundOptions = ref<BackgroundOptions | undefined>({
+    color: '#fff',
+    gradient: undefined
+  })
+
+  const imageOptions = ref<ImageOptions | undefined>({
+    hideBackgroundDots: false,
+    imageSize: 1,
+    crossOrigin: 'anonymous',
+    margin: 2
+  })
+
+  const qrCodeOptions = ref<QrCodeOptions | undefined>({
+    typeNumber: 0,
+    mode: 'Byte',
+    errorCorrectionLevel: 'H'
+  })
+
+  const cornerSquareOptions = ref<CornerSquareOptions | undefined>({
+    type: 'dot',
+    color: '#000'
+  })
+
+  const cornersDotOptions = ref<CornersDotOptions | undefined>({
+    type: 'dot',
+    color: '#000'
+  })
+
+  if (settingsStore.settings) {
+    const parsedSettings = JSON.parse(settingsStore.settings.QRCodeSettings)
+    dotsOptions.value = parsedSettings.dotsOptions
+    backgroundOptions.value = parsedSettings.backgroundOptions
+    imageOptions.value = parsedSettings.imageOptions
+    cornerSquareOptions.value = parsedSettings.cornerSquareOptions
+    cornersDotOptions.value = parsedSettings.cornersDotOptions
+    qrCodeOptions.value = parsedSettings.qrCodeOptions
+  }
+
   const qrCode = new QRCodeStyling({
     width: 500,
     height: 500,
@@ -30,30 +84,12 @@ const generateQRCode = async (vendor: Vendor) => {
     data: `${settingsStore.settings.QRCodeUrl}/v/${vendor.LicenseID}`,
     image: image,
 
-    dotsOptions: {
-      color: '#000',
-      type: 'dots'
-    },
-    backgroundOptions: {
-      color: '#fff'
-    },
-    imageOptions: {
-      crossOrigin: 'anonymous',
-      margin: 2
-    },
-    cornersSquareOptions: {
-      type: 'dot',
-      color: '#000000'
-    },
-    cornersDotOptions: {
-      type: 'dot',
-      color: '#000000'
-    },
-    qrOptions: {
-      typeNumber: 0,
-      mode: 'Byte',
-      errorCorrectionLevel: 'H'
-    }
+    dotsOptions: dotsOptions.value,
+    backgroundOptions: backgroundOptions.value,
+    imageOptions: imageOptions.value,
+    cornersSquareOptions: cornerSquareOptions.value,
+    cornersDotOptions: cornersDotOptions.value,
+    qrOptions: qrCodeOptions.value
   })
 
   const qrWrapper = document.getElementById('qr-wrapper')
@@ -100,7 +136,7 @@ onMounted(() => {
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
         <div class="flex place-content-center justify-between pt-4 pr-4">
           <span />
-          <button class="rounded-full bg-red-600 text-white font-bold" @click="$emit('close')">
+          <button class="rounded-full bg-red-600 text-white font-bold" @click="emit('close')">
             <IconCross />
           </button>
         </div>

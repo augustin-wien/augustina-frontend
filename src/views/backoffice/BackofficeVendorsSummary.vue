@@ -3,7 +3,6 @@
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { ref, computed, onMounted, watch } from 'vue'
-import QRCodeStyling from 'qr-code-styling'
 import keycloak from '@/keycloak/keycloak'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 

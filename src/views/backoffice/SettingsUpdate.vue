@@ -6,6 +6,7 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore, type Settings } from '@/stores/settings'
 import { computed, onMounted, ref, watch } from 'vue'
 import IconCross from '@/components/icons/IconCross.vue'
+import QrCodeSettings from '@/components/QrCodeSettings.vue'
 
 const settingsStore = useSettingsStore()
 const storeItems = useItemsStore()
@@ -102,10 +103,12 @@ const newLogo = ref('')
 const newFavicon = ref('')
 const newQrCodeLogo = ref('')
 
-const updateLogo = (event: any) => {
+const updateLogo = (event: Event) => {
   // This logic will execute when a file is selected in the file input
-  updatedSettings.value.Logo = event.target.files[0]
-  newLogo.value = URL.createObjectURL(event.target.files[0])
+  const target = event.target as HTMLInputElement
+  if (!target?.files) return
+  updatedSettings.value.Logo = target.files[0]
+  newLogo.value = URL.createObjectURL(target.files[0])
 }
 
 const updateFavicon = (event: any) => {
@@ -124,11 +127,16 @@ const updateStyles = () => {
   // This logic will execute when the "Bestätigen" button is clicked
   settingsStore.updateStyleCss(styles.value).then(() => {
     showToast('success', 'Einstellungen erfolgreich aktualisiert')
-    router.push({ name: 'Backoffice Settings' })
   })
 }
 
+const updateQRCodeSettings = (settings: string) => {
+  updatedSettings.value.QRCodeSettings = settings
+}
+
 const url = import.meta.env.VITE_API_URL
+
+const showQrCodeSettings = ref(false)
 </script>
 
 <template>
@@ -137,7 +145,7 @@ const url = import.meta.env.VITE_API_URL
       <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuSettings') }} {{ $t('change') }}</h1>
     </template>
     <template #main>
-      <div class="main">
+      <div v-if="settingsStore.settings" class="main">
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div v-if="settings" class="w-full max-w-l mx-auto">
             <div class="flex place-content-center justify-between">
@@ -446,6 +454,12 @@ const url = import.meta.env.VITE_API_URL
                   />
                 </div>
               </div>
+              <button
+                class="btn px-4 py-2 ps-2 mt-2 rounded-full customcolor"
+                @click="showQrCodeSettings = true"
+              >
+                QR-Code settings
+              </button>
               <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="qrcodeurl"
                   >{{ $t('QR Code url') }}:</label
@@ -554,6 +568,12 @@ const url = import.meta.env.VITE_API_URL
             </div>
           </div>
         </div>
+        <QrCodeSettings
+          v-if="showQrCodeSettings"
+          @close="showQrCodeSettings = false"
+          @update="updateQRCodeSettings"
+          @save-settings="updateSettings()"
+        />
         <Toast v-if="toast" :toast="toast" />
       </div>
     </template>

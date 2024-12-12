@@ -17,6 +17,7 @@ const props = defineProps(['vendors', 'enableSearch'])
 const provider = new OpenStreetMapProvider()
 
 // GeoSearchControl has no types defined
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const searchControl: any = new (GeoSearchControl as any)({
   provider: provider
 })

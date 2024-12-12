@@ -126,7 +126,7 @@ export default [...compat.extends("eslint:recommended", "prettier"),
         "prefer-rest-params": "error",
         "prefer-spread": "error",
 
-        "@typescript-eslint/no-unused-vars": ["warn", {
+        "@typescript-eslint/no-unused-vars": ["error", {
             argsIgnorePattern: "^_",
             varsIgnorePattern: "^_",
         }],
@@ -143,5 +143,6 @@ export default [...compat.extends("eslint:recommended", "prettier"),
         "vue/multi-word-component-names": "off",
         "vue/require-default-prop": "off",
         "vue/prefer-true-attribute-shorthand": "error",
+        "vue/require-explicit-emits": "error",
     },
 }];

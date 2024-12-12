@@ -106,11 +106,6 @@ const deleteVendor = async () => {
 
 const showDeleteModal = ref(false)
 
-const showDeleteModalF = (event: Event) => {
-  event.preventDefault()
-  showDeleteModal.value = true
-}
-
 const showToast = (type: string, message: string) => {
   // Set the toast message
   toast.value = { type, message }

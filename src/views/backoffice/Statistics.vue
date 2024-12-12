@@ -64,8 +64,8 @@ const createCharts = () => {
   }))
 
   // sort by name and exclude transactionCosts
-  quantityData = quantityData.sort((a: any, b: any) => b.value - a.value)
-  quantityData = quantityData.filter((item: any) => item.name != 'transactionCosts')
+  // quantityData = quantityData.sort((a: Statistics, b: Statistics) => b.value - a.value)
+  quantityData = quantityData.filter((item: Statistics) => item.Name != 'transactionCosts')
 
   const amountData = itemsArray.map((item: Statistics) => ({
     id: item.ID,

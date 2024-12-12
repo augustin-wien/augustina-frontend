@@ -57,7 +57,9 @@ onMounted(() => {
             />
             <img
               v-else
-              :src="settings.Logo"
+              :src="
+                typeof settings.Logo == 'string' ? apiUrl + settings.Logo : apiUrl + 'img/logo.png'
+              "
               alt="Newspaper logo"
               class="logo mx-auto my-5"
               width="270"
@@ -200,6 +202,13 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<style>
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
+}
+</style>
 
 <style scoped>
 .main-container {

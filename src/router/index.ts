@@ -217,16 +217,6 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeVendorUpdate.vue')
     },
     {
-      path: '/backoffice/settings',
-      name: 'Backoffice Settings',
-      meta: {
-        layout: BackofficeDefault,
-        requiresAuth: true,
-        title: 'Settings'
-      },
-      component: () => import('@/views/backoffice/BackofficeSettings.vue')
-    },
-    {
       path: '/backoffice/settings/update',
       name: 'Update Backoffice Settings',
       meta: {
