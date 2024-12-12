@@ -57,7 +57,9 @@ onMounted(() => {
             />
             <img
               v-else
-              :src="typeof settings.Logo == 'string' ? apiUrl + settings.Logo : apiUrl + 'img/logo.png'"
+              :src="
+                typeof settings.Logo == 'string' ? apiUrl + settings.Logo : apiUrl + 'img/logo.png'
+              "
               alt="Newspaper logo"
               class="logo mx-auto my-5"
               width="270"
