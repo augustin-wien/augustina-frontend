@@ -106,8 +106,11 @@ export const usePaymentStore = defineStore('payment', {
           this.verification = await agent.VivaWallet.verifyPayment(this.transactionID)
           this.timeStamp = this.verification.TimeStamp
           this.firstName = this.verification.FirstName
-        } catch (error) {
+        } catch (_error) {
           this.failedCount++
+
+          // eslint-disable-next-line no-console
+          console.log('failed to verify payment', _error)
 
           if (this.failedCount > 5) {
             router.push('/failure')

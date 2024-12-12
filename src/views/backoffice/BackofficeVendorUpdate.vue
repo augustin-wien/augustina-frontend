@@ -6,7 +6,6 @@ import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import { useKeycloakStore } from '@/stores/keycloak'
-import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores/settings'
 import IconCross from '@/components/icons/IconCross.vue'
 import VendorMapView from '@/components/VendorMapView.vue'
@@ -21,25 +20,27 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 const store = vendorsStore()
 const keycloakStore = useKeycloakStore()
 
-const updatedVendor = ref<Vendor | null>(null)
+const updatedVendor = ref<Vendor | null>(store.vendor)
 
 const route = useRoute()
 
 onMounted(() => {
   if (keycloakStore.authenticated) {
-    store.getVendor(route.params.ID)
+    store.getVendor(route.params.ID).then(() => {
+      updatedVendor.value = store.vendor
+    })
   } else {
     if (keycloak.keycloak) {
       keycloak.keycloak.onAuthSuccess = () => {
-        store.getVendor(route.params.ID)
+        store.getVendor(route.params.ID).then(() => {
+          updatedVendor.value = store.vendor
+        })
       }
     }
   }
 })
 
-const { vendor } = storeToRefs(store)
-
-watch(vendor, (newVal) => {
+watch(store.vendor, (newVal) => {
   if (newVal) {
     updatedVendor.value = newVal
   }
@@ -127,17 +128,17 @@ const updateLocation = (newLocation: any) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">
+      <h1 v-if="updatedVendor" className="font-bold mt-3 pt-3 text-2xl">
         <button @click="router.push('/backoffice/vendorsummary')">
           <font-awesome-icon :icon="faArrowLeft" />
         </button>
-        {{ $t('vendorSingular') }} {{ vendor.LicenseID }} {{ $t('change') }}
+        {{ $t('vendorSingular') }} {{ updatedVendor.LicenseID }} {{ $t('change') }}
       </h1>
     </template>
-    <template v-if="updatedVendor" #main>
+    <template v-if="updatedVendor !== null" #main>
       <div class="main">
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div v-if="vendor" class="w-full">
+          <div v-if="store.vendor" class="w-full">
             <div class="flex place-content-center justify-between">
               <span></span>
               <button
