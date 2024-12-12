@@ -19,7 +19,7 @@ const vendorMe = computed(() => store.vendor)
 
 onMounted(async () => {
   if (authenticated.value) {
-    generateQRCode(vendorMe.value)
+    if (vendorMe.value) generateQRCode(vendorMe.value)
 
     try {
       store.fetchVendorMe()
@@ -29,12 +29,11 @@ onMounted(async () => {
     }
   } else {
     watch(authenticated, async () => {
-      store.fetchVendorMe()
-      generateQRCode(vendorMe.value)
-
       if (authenticated.value) {
         try {
-          store.fetchVendorMe()
+          store.fetchVendorMe().then(() => {
+            if (vendorMe.value) generateQRCode(vendorMe.value)
+          })
         } catch (error) {
           // eslint-disable-next-line no-console
           console.error('Fehler beim API-Aufruf:', error)

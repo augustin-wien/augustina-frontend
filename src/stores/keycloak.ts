@@ -13,10 +13,10 @@ export const useKeycloakStore = defineStore('keycloakStore', {
     }
   },
   getters: {
-    isAuthenticated(state: any) {
+    isAuthenticated(state: KeycloakState) {
       return state.authenticated
     },
-    getUsername(state: any) {
+    getUsername(state: KeycloakState) {
       return state.username
     }
   },

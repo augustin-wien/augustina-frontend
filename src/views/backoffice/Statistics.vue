@@ -1,7 +1,11 @@
 <script lang="ts" setup>
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
-import { useStatisticsStore } from '@/stores/statistics'
+import {
+  useStatisticsStore,
+  type StatisticsItem,
+  type StatisticsItemMinimal
+} from '@/stores/statistics'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, onMounted, ref } from 'vue'
@@ -55,17 +59,25 @@ const createCharts = () => {
   }
 
   const statisticsData = store.statisticsList
-  const itemsArray = statisticsData.Items || []
+  const itemsArray = statisticsData !== null ? statisticsData : []
 
-  let quantityData = itemsArray.map((item: Statistics) => ({
-    id: item.ID,
-    value: item.SumQuantity,
-    name: item.Name
-  }))
+  let quantityData = itemsArray.map(
+    (item: StatisticsItem) =>
+      ({
+        id: item.ID,
+        value: item.SumQuantity,
+        name: item.Name
+      }) as StatisticsItemMinimal
+  )
 
   // sort by name and exclude transactionCosts
-  // quantityData = quantityData.sort((a: Statistics, b: Statistics) => b.value - a.value)
-  quantityData = quantityData.filter((item: Statistics) => item.Name != 'transactionCosts')
+  quantityData = quantityData.sort(
+    (a: StatisticsItemMinimal, b: StatisticsItemMinimal) => b.value - a.value
+  )
+
+  quantityData = quantityData.filter(
+    (item: StatisticsItemMinimal) => item.name != 'transactionCosts'
+  )
 
   const amountData = itemsArray.map((item: Statistics) => ({
     id: item.ID,

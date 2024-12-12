@@ -112,18 +112,25 @@ export interface VendorCheckResponse {
   name: string
 }
 
+type VendorStoreState = {
+  vendors: Vendor[]
+  vendorsImportedCount: number
+  filteredVendors: Vendor[]
+  vendor: Vendor | null
+}
+
 export const vendorsStore = defineStore('vendors', {
   state: () => {
     return {
       vendors: [] as Vendor[],
-      vendorsImportedCount: Number,
+      vendorsImportedCount: 0,
       filteredVendors: [] as Vendor[],
       vendor: null as Vendor | null
-    }
+    } as VendorStoreState
   },
 
   getters: {
-    getvendors(state: any) {
+    getvendors(state: VendorStoreState) {
       return state.vendors
     }
   },
@@ -225,7 +232,7 @@ export const vendorsStore = defineStore('vendors', {
     async fetchVendorMe() {
       getVendorMe()
         .then((response) => {
-          this.vendor = response.data
+          this.vendor = response.data[0]
         })
         .catch((error) => {
           // eslint-disable-next-line no-console

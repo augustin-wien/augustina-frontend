@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import { ref, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import { useKeycloakStore } from '@/stores/keycloak'
-import { useSettingsStore } from '@/stores/settings'
 import IconCross from '@/components/icons/IconCross.vue'
 import VendorMapView from '@/components/VendorMapView.vue'
 import keycloak from '@/keycloak/keycloak'
 
-const settingsStore = useSettingsStore()
+const { t } = useI18n()
 
 import { transformToFloat } from '@/utils/utils'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
@@ -25,14 +25,16 @@ const updatedVendor = ref<Vendor | null>(store.vendor)
 const route = useRoute()
 
 onMounted(() => {
+  const vendorId = parseInt(route.params.ID.toString())
+
   if (keycloakStore.authenticated) {
-    store.getVendor(route.params.ID).then(() => {
+    store.getVendor(vendorId).then(() => {
       updatedVendor.value = store.vendor
     })
   } else {
     if (keycloak.keycloak) {
       keycloak.keycloak.onAuthSuccess = () => {
-        store.getVendor(route.params.ID).then(() => {
+        store.getVendor(vendorId).then(() => {
           updatedVendor.value = store.vendor
         })
       }
@@ -40,11 +42,14 @@ onMounted(() => {
   }
 })
 
-watch(store.vendor, (newVal) => {
-  if (newVal) {
-    updatedVendor.value = newVal
+watch(
+  () => store.vendor,
+  (newVal: Vendor | null) => {
+    if (newVal && newVal !== null) {
+      updatedVendor.value = newVal
+    }
   }
-})
+)
 
 const toast = ref<{ type: string; message: string } | null>(null)
 
@@ -65,14 +70,14 @@ const updateVendor = async () => {
     if (response) {
       // eslint-disable-next-line no-console
       console.error('Error creating vendor:', response)
-      showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
+      showToast('error', t('The vendor could not be updated'))
     } else {
-      showToast('success', 'VerkäuferIn erfolgreich aktualisiert')
+      showToast('success', t('The vendor has been updated'))
     }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error updating vendor:', error)
-    showToast('error', 'VerkäuferIn konnte nicht aktualisiert werden')
+    showToast('error', t('The vendor could not be updated'))
   }
 }
 
@@ -83,21 +88,21 @@ const deleteVendor = async () => {
 
   // check if vendor has still a balance
   if (updatedVendor.value.Balance > 0) {
-    showToast('error', 'VerkäuferIn hat noch Guthaben und kann nicht gelöscht werden')
+    showToast('error', t('The vendor still has a balance and cannot be deleted'))
     return
   }
 
   try {
-    const response = await store.deleteVendor(updatedVendor.value.ID)
-
-    if (response) {
-      // eslint-disable-next-line no-console
-      console.error('Error deleting vendor:', response)
-      showToast('error', 'VerkäuferIn konnte nicht gelöscht werden')
-    } else {
-      showToast('success', 'VerkäuferIn erfolgreich gelöscht')
-      router.push('/backoffice/vendorsummary')
-    }
+    store
+      .deleteVendor(updatedVendor.value.ID)
+      .catch((error: any) => {
+        // eslint-disable-next-line no-console
+        console.error('Error deleting vendor:', error)
+        showToast('error', t('The vendor could not be deleted'))
+      })
+      .then(() => {
+        router.push('/backoffice/vendorsummary')
+      })
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error deleting vendor:', error)

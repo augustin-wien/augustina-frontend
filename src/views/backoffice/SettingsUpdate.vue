@@ -111,10 +111,12 @@ const updateLogo = (event: Event) => {
   newLogo.value = URL.createObjectURL(target.files[0])
 }
 
-const updateFavicon = (event: any) => {
+const updateFavicon = (event: Event) => {
   // This logic will execute when a file is selected in the file input
-  updatedSettings.value.Favicon = event.target.files[0]
-  newFavicon.value = URL.createObjectURL(event.target.files[0])
+  const target = event.target as HTMLInputElement
+  if (!target || !target.files || target.files === null || target.files.length > 0) return
+  updatedSettings.value.Favicon = target.files[0]
+  newFavicon.value = URL.createObjectURL(target.files[0])
 }
 
 const updateQRCodeLogo = (event: any) => {

@@ -25,8 +25,8 @@ watch(
   }
 )
 
-const onlyForCurrency = ($event: any) => {
-  const keycode = $event.keyCode ? $event.keyCode : $event.which
+const onlyForCurrency = ($event: KeyboardEvent) => {
+  const keycode = $event.keyCode
 
   // only allow number and one dot
   if (

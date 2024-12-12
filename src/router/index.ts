@@ -3,7 +3,7 @@ import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
 import Default from '@/layouts/DefaultLayout.vue'
 import VendorLayoutVue from '@/layouts/VendorLayout.vue'
 import { useKeycloakStore } from '@/stores/keycloak'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
 import { useSettingsStore } from '@/stores/settings'
 
 const router = createRouter({
@@ -379,7 +379,7 @@ router.afterEach((to) => {
 })
 
 // Check if the user is authenticated
-router.beforeEach(async (to: any) => {
+router.beforeEach(async (to: RouteLocationNormalized) => {
   if (
     to.meta.requiresAuth &&
     !isAuthenticated() &&
@@ -404,7 +404,10 @@ async function isAuthenticated() {
     }
 
     const keycloakStore = useKeycloakStore()
-    keycloakStore.setAuthenticated(keycloak.keycloak?.authenticated)
+
+    keycloakStore.setAuthenticated(
+      keycloak.keycloak?.authenticated ? keycloak.keycloak.authenticated : false
+    )
 
     if (keycloak.keycloak?.tokenParsed) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)

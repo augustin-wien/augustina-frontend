@@ -31,6 +31,7 @@ const submitItem = async () => {
           'Produkt konnte nicht angelegt werden. ' + err.response.data.error.message
         )
       })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     showToast('error', 'Produkt konnte nicht angelegt werden' + err)
     // eslint-disable-next-line no-console
