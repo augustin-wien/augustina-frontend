@@ -11,7 +11,8 @@ export function formatDate(date: string) {
 }
 
 // a function to export data as csv
-export function exportAsCsv(data: any[], fileName: string) {
+// eslint-disable-next-line
+export function exportAsCsv(data: Array<any>[], fileName: string) {
   let csv = ''
 
   data.forEach((row) => {
@@ -61,11 +62,11 @@ export function initSentry(app: App, router: Router) {
     })
 
     // Save the original console.error function
-    //@ts-ignore
+    //eslint-disable-next-line
     const originalConsoleError = console.error
 
     // Override console.error
-    //@ts-ignore
+    //eslint-disable-next-line
     console.error = function (...args) {
       // Call the original console.error to log the error in the console
       originalConsoleError.apply(console, args)

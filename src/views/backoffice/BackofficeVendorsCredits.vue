@@ -115,7 +115,9 @@ const exportTable = () => {
                     {{ vendor?.LicenseID }}
                   </td>
                   <td className="border-t-2 p-3">{{ formatCredit(vendor.Balance) }} €</td>
-                  <td className="border-t-2 p-3">{{ formatDate(vendor.LastPayout) }}</td>
+                  <td className="border-t-2 p-3">
+                    {{ vendor.LastPayout ? formatDate(vendor.LastPayout) : '' }}
+                  </td>
                   <router-link v-if="vendor?.ID" :to="`/backoffice/credits/payout/${vendor.ID}`">
                     <button
                       className="p-3 rounded-full customcolor"

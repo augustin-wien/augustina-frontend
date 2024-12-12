@@ -35,7 +35,7 @@ const formatTime = (date: string) => {
 }
 
 watch(vendorMe as any, () => {
-  generateQRCode(vendorMe.value)
+  if (vendorMe.value) generateQRCode(vendorMe.value)
 })
 
 onMounted(async () => {

@@ -7,7 +7,7 @@ export interface Settings {
   AGBUrl: string
   Color: string
   FontColor: string
-  Favicon: string
+  Favicon: string | File
   Logo: string | File
   MainItem: number
   MainItemDescription: string
