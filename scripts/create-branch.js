@@ -1,4 +1,6 @@
+// eslint-disable-next-line no-undef
 const { execSync } = require('child_process');
+// eslint-disable-next-line no-undef
 const pkg = require('../package.json');
 
 const branchName = `update-version-v${pkg.version}`;

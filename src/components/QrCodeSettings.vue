@@ -284,14 +284,24 @@ onMounted(() => {
             </div>
             <div v-if="imageOptions" class="image-options">
               <div class="hide-background-dots">{{ $t('Hide Dots behind the logo') }}</div>
-              <input v-model="imageOptions.hideBackgroundDots" type="checkbox" class="px-5 py-2.5" />
+              <input
+                v-model="imageOptions.hideBackgroundDots"
+                type="checkbox"
+                class="px-5 py-2.5"
+              />
               <div class="image-size">{{ $t('Logo Size') }}</div>
-              <input v-model="imageOptions.imageSize" step="0.1" min="0.1" max="0.7" type="number" class="px-5 py-2.5" />
+              <input
+                v-model="imageOptions.imageSize"
+                step="0.1"
+                min="0.1"
+                max="0.7"
+                type="number"
+                class="px-5 py-2.5"
+              />
               <div class="margin">{{ $t('Logo Margin') }}</div>
               <input v-model="imageOptions.margin" type="number" class="px-5 py-2.5" />
-
+            </div>
           </div>
-        </div>
           <div class="pr-5">
             <div class="preview mb-5 text-xl font-bold text-gray-500 dark:text-gray-400">
               <div class="flex">
