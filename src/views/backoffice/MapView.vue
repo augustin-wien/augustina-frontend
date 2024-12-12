@@ -104,9 +104,4 @@ function onMapReady() {
 .leaflet-container a.leaflet-popup-close-button {
   color: #000;
 }
-
-.customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
-}
 </style>

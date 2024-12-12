@@ -208,21 +208,15 @@ onMounted(() => {
   background-color: v-bind(settingsStore.settings.Color);
   color: v-bind(settingsStore.settings.FontColor);
 }
+.customborder {
+  border-color: v-bind(settingsStore.settings.FontColor);
+}
 </style>
 
 <style scoped>
 .main-container {
   padding-left: 8px;
   margin-left: 300px;
-}
-
-.customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
-}
-
-.customborder {
-  border-color: v-bind(settingsStore.settings.FontColor);
 }
 
 .sidemenu-link {

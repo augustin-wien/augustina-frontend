@@ -8,12 +8,10 @@ import { exportAsCsv, formatCredit } from '@/utils/utils'
 
 import { faCreditCard, faArrowAltCircleRight, faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { useSettingsStore } from '@/stores/settings'
 import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
 
 // Initialize the vendor store
 const store = vendorsStore()
-const settingsStore = useSettingsStore()
 
 // Fetch the vendors' data when the component is mounted
 onMounted(() => {
@@ -201,9 +199,5 @@ button[disabled] {
 }
 .disabled-vendor {
   background-color: #f8d7da;
-}
-.customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
 }
 </style>

@@ -4,9 +4,6 @@ import { computed, onMounted, watch } from 'vue'
 import { formatCredit } from '@/utils/utils'
 import { useKeycloakStore } from '@/stores/keycloak'
 import type { Item } from '@/stores/items'
-import { useSettingsStore } from '@/stores/settings'
-
-const settingsStore = useSettingsStore()
 
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
@@ -95,10 +92,3 @@ const apiUrl = import.meta.env.VITE_API_URL
     </template>
   </component>
 </template>
-
-<style scoped>
-.customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
-}
-</style>
