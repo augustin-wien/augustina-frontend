@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -15,7 +15,9 @@
     "lint": "eslint . ",
     "lint:fix": "eslint .  --fix ",
     "format": "prettier --cache --check src/",
-    "format:fix": "prettier --cache --check src/ --write"
+    "format:fix": "prettier --cache --check src/ --write",
+    "update-version": "npm version patch --no-git-tag-version && npm run create-branch",
+    "create-branch": "node -e \"const { execSync } = require('child_process'); const pkg = require('./package.json'); const branchName = `update-version-v${pkg.version}`; execSync(`git checkout -b ${branchName}`); execSync(`git add package.json`); execSync(`git commit -m 'Update version to ${pkg.version}'`); execSync(`git push origin ${branchName}`); execSync(`gh pr create --title 'Update version to ${pkg.version}' --body 'This PR updates the version to ${pkg.version}.'`);\""
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
