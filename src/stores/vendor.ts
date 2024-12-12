@@ -118,7 +118,7 @@ export const vendorsStore = defineStore('vendors', {
       vendors: [] as Vendor[],
       vendorsImportedCount: Number,
       filteredVendors: [] as Vendor[],
-      vendor: {} as Vendor
+      vendor: null as Vendor | null
     }
   },
 

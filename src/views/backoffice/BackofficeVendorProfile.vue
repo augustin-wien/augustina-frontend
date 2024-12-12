@@ -1,10 +1,9 @@
 <script lang="ts" setup>
 import { vendorsStore } from '@/stores/vendor'
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useKeycloakStore } from '@/stores/keycloak'
 import router from '@/router'
-import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores/settings'
 import IconCross from '@/components/icons/IconCross.vue'
 
@@ -13,16 +12,23 @@ const settingsStore = useSettingsStore()
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VendorMapView from '@/components/VendorMapView.vue'
+import keycloak from '@/keycloak/keycloak'
 
 const keycloakStore = useKeycloakStore()
 
 const vendorStore = vendorsStore()
 const route = useRoute()
-const { vendor } = storeToRefs(vendorStore)
+const vendor = computed(() => vendorStore.vendor)
 
 onMounted(() => {
   if (keycloakStore.authenticated) {
     vendorStore.getVendor(route.params.ID)
+  } else {
+    if (keycloak.keycloak) {
+      keycloak.keycloak.onAuthSuccess = () => {
+        vendorStore.getVendor(route.params.ID)
+      }
+    }
   }
 })
 
@@ -38,7 +44,7 @@ const formatCredit = (credit: number) => {
         <button @click="router.push('/backoffice/vendorsummary')">
           <font-awesome-icon :icon="faArrowLeft" />
         </button>
-        {{ $t('vendorSingular') }} Profil {{ vendor.LicenseID }}
+        {{ $t('vendorSingular') }} Profil {{ vendor?.LicenseID }}
       </h1>
     </template>
     <template #main>

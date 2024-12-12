@@ -25,6 +25,7 @@ export default [...compat.extends("eslint:recommended", "prettier"),
         "eslint.config.mjs",
         "postcss.config.js",
         "tailwind.config.js",
+        "scripts/*.js",
         "*.cy.ts"
     ],
     rules: {

@@ -61,9 +61,11 @@ export function initSentry(app: App, router: Router) {
     })
 
     // Save the original console.error function
+    //@ts-ignore
     const originalConsoleError = console.error
 
     // Override console.error
+    //@ts-ignore
     console.error = function (...args) {
       // Call the original console.error to log the error in the console
       originalConsoleError.apply(console, args)

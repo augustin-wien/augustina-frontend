@@ -9,7 +9,6 @@ import { vendorsStore, type Vendor } from '@/stores/vendor'
 import { formatCredit, formatDate } from '@/utils/utils'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { storeToRefs } from 'pinia'
 import { useSettingsStore } from '@/stores/settings'
 import IconCross from '@/components/icons/IconCross.vue'
 
@@ -56,7 +55,7 @@ const setVendor = () => {
 }
 
 // Compute the 'vendor' property based on the 'ID' parameter
-const { vendor } = storeToRefs(store)
+const vendor = ref<Vendor | null>(setVendor())
 
 watch(vendor, (val: Vendor | null) => {
   if (val) {
