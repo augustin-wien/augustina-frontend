@@ -83,7 +83,6 @@ const updateSettings = async () => {
     await settingsStore.updateSettings(updatedSettings.value).then(() => {
       showToast('success', 'Einstellungen erfolgreich aktualisiert')
       showQrCodeSettings.value = false
-
     })
   } catch (error) {
     // eslint-disable-next-line no-console

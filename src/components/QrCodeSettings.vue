@@ -103,8 +103,8 @@ watch(
   },
   { deep: true }
 )
-let image: string | undefined = undefined
 
+let image: string | undefined = undefined
 
 // Function to generate QR code only if the button is clicked
 const generateQRCode = async (venndorId: string) => {
