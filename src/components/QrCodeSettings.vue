@@ -132,21 +132,17 @@ const generateQRCode = async (venndorId: string) => {
 
   const qrWrapper = document.getElementById('qr-wrapper')
 
-  if (qrWrapper !== null) {
+  if (qrWrapper) {
     qrWrapper.innerHTML = ''
-    qrCode.append(qrWrapper)
+  } else {
+    return
   }
 
-  const canvas = document.getElementById('canvas')
+  qrCode.append(qrWrapper)
 
   currentQrCode.value = qrCode
 
-  if (canvas !== null) {
-    qrCode.append(canvas)
-    canvas.innerHTML = ''
-  }
-
-  return canvas
+  return qrCode
 }
 
 const save = () => {
@@ -163,8 +159,9 @@ async function generateAllQrCodesAsZip(zipName = 'qrCodes.zip', vendors: Vendor[
   const zip = new JSZip()
 
   vendors.forEach(async (vendor: Vendor) => {
-    await generateQRCode(vendor.LicenseID)
-    const raw = await currentQrCode.value?.getRawData()
+    const code = await generateQRCode(vendor.LicenseID)
+    if (!code) return
+    const raw = await code.getRawData()
 
     if (!raw) {
       return

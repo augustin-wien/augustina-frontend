@@ -232,7 +232,8 @@ export const vendorsStore = defineStore('vendors', {
     async fetchVendorMe() {
       getVendorMe()
         .then((response) => {
-          this.vendor = response.data[0]
+          // @ts-ignore
+          this.vendor = response.data
         })
         .catch((error) => {
           // eslint-disable-next-line no-console
