@@ -131,8 +131,9 @@ const generateQRCode = async (venndorId: string) => {
   })
 
   const qrWrapper = document.getElementById('qr-wrapper')
-  if (qrWrapper ){
-    qrWrapper.innerHTML = "";
+
+  if (qrWrapper) {
+    qrWrapper.innerHTML = ''
   } else {
     return
   }
