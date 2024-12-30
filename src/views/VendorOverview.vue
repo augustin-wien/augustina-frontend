@@ -3,7 +3,6 @@ import { ref, onMounted, watch } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
 import keycloak from '@/keycloak/keycloak'
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import QRCodeStyling from 'qr-code-styling'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { computed } from 'vue'
@@ -143,7 +142,7 @@ const customColor = computed(() => {
           <div class="grid grid-cols-2 place-content-between">
             <strong>{{ $t('lastPayout') }}: </strong>{{ vendorMe?.LastPayout }}
           </div>
-          <div class="grid grid-cols-2 place-content-between">
+          <div class="text-align-left">
             <strong>{{ $t('lastTransactions') }}: </strong>
           </div>
 
@@ -173,9 +172,9 @@ const customColor = computed(() => {
           <!--Liste zum scrollen Ende-->
 
           <div :style="customColor" class="flex space-x-4">
-            <router-link to="/me/qrcode">
+            <!-- <router-link to="/me/qrcode">
               <button class="p-2 rounded-full customcolor text-white">QR-Code</button>
-            </router-link>
+            </router-link> -->
             <router-link to="/me/profile">
               <button class="p-2 rounded-full customcolor text-white">Profil</button>
             </router-link>
@@ -183,7 +182,6 @@ const customColor = computed(() => {
               class="p-2 rounded-full customcolor text-white"
               @click="keycloak.keycloak?.logout()"
             >
-              <font-awesome-icon :icon="faArrowRightFromBracket" />
               <p class="text-base leading-4">{{ $t('Logout') }}</p>
             </button>
           </div>
