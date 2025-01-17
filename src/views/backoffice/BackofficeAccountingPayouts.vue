@@ -164,7 +164,7 @@ const exportTable = () => {
                   </td>
                   <td class="border-t-2 p-3">{{ formatCredit(payment.Amount) }} €</td>
                 </tr>
-                <tr>
+                <tr v-if="payments && payments.length > 0">
                   <td class="border-t-2 p-3"></td>
                   <td class="border-t-2 p-3"></td>
                   <td class="border-t-2 p-3"></td>
