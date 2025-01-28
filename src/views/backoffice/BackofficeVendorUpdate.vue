@@ -420,7 +420,7 @@ const updateLocation = (newLocation: any) => {
                 />
               </div>
             </div>
-            <div class="flex flex-row-reverse justify-between">  
+            <div class="flex flex-row-reverse justify-between">
               <button
                 type="submit"
                 class="py-2 px-4 rounded-full customcolor"
