@@ -9,6 +9,7 @@ import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { faCreditCard, faArrowAltCircleRight, faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
+import VendorInfo from '@/components/VendorInfo.vue'
 
 // Initialize the vendor store
 const store = vendorsStore()
@@ -69,9 +70,12 @@ const exportTable = () => {
   const now = new Date()
   exportAsCsv([header, ...data], `vendors_${now.toLocaleDateString()}`)
 }
-
+const delay = (ms:number) => new Promise(resolve => setTimeout(resolve, ms))
 const showQRCode = ref(false)
+const showVendorInfo = ref(false)
 const selectedVendor = ref<Vendor | null>(null)
+const Longitude = ref<number | null>(null)
+const Latitude = ref<number | null>(null)
 </script>
 
 <template>
@@ -81,14 +85,8 @@ const selectedVendor = ref<Vendor | null>(null)
         <h1 className="font-bold text-2xl">{{ $t('menuVendors') }}</h1>
         <div>
           <span>
-            <input
-              id="searchInput"
-              v-model="searchQuery"
-              type="text"
-              :placeholder="$t('SearchPlaceholder')"
-              class="border-2 border-gray-400 rounded-md p-2 ml-2"
-              @keyup.enter="search"
-            />
+            <input id="searchInput" v-model="searchQuery" type="text" :placeholder="$t('SearchPlaceholder')"
+              class="border-2 border-gray-400 rounded-md p-2 ml-2" @keyup.enter="search" />
             <button class="py-2 px-4 rounded-full customcolor ml-2 h-[44px]" @click="search">
               {{ $t('search') }}
             </button>
@@ -115,11 +113,8 @@ const selectedVendor = ref<Vendor | null>(null)
                 </tr>
               </thead>
               <tbody className="text-sm p-3">
-                <tr
-                  v-for="vendor in displayVendors"
-                  :key="vendor.ID"
-                  :class="vendor.IsDisabled ? 'disabled-vendor border-t-2' : 'border-t-2'"
-                >
+                <tr v-for="vendor in displayVendors" :key="vendor.ID"
+                  :class="vendor.IsDisabled ? 'disabled-vendor border-t-2' : 'border-t-2'">
                   <td className="p-3">
                     <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
                       {{ vendor.IsDisabled ? $t('Disabled') + ': ' : '' }}
@@ -131,15 +126,15 @@ const selectedVendor = ref<Vendor | null>(null)
                   <td className="p-3">{{ formatCredit(vendor.Balance) }}€</td>
 
                   <td class="flex justify-center">
-                    <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
-                      <button className="p-2 rounded-full h-10 w-10 customcolor mr-2">
-                        <font-awesome-icon :icon="faArrowAltCircleRight" />
-                      </button>
-                    </router-link>
-                    <router-link
-                      v-if="vendor.Balance !== 0"
-                      :to="`/backoffice/credits/payout/${vendor.ID}`"
-                    >
+                    <button className="p-2 rounded-full h-10 w-10 customcolor mr-2"
+                      @click="() => { 
+                        store.getVendor(vendor.ID)
+                        showVendorInfo = true 
+                        selectedVendor = vendor
+                        }">
+                      <font-awesome-icon :icon="faArrowAltCircleRight" />
+                    </button>
+                    <router-link v-if="vendor.Balance !== 0" :to="`/backoffice/credits/payout/${vendor.ID}`">
                       <button className="p-2 rounded-full customcolor mr-2 h-10 w-10">
                         <font-awesome-icon :icon="faCreditCard" />
                       </button>
@@ -147,15 +142,11 @@ const selectedVendor = ref<Vendor | null>(null)
                     <button v-else disabled className="p-2 rounded-full customcolor mr-2 h-10 w-10">
                       <font-awesome-icon :icon="faCreditCard" />
                     </button>
-                    <button
-                      className="p-2 rounded-full h-10 w-10 customcolor mr-2"
-                      @click="
-                        () => {
-                          showQRCode = true
-                          selectedVendor = vendor
-                        }
-                      "
-                    >
+                    <button className="p-2 rounded-full h-10 w-10 customcolor mr-2" @click="() => {
+                      showQRCode = true
+                      selectedVendor = vendor
+                    }
+                      ">
                       <font-awesome-icon :icon="faQrcode" />
                     </button>
                   </td>
@@ -165,12 +156,9 @@ const selectedVendor = ref<Vendor | null>(null)
           </div>
         </div>
       </div>
-      <QrCodeGenerator
-        v-if="showQRCode"
-        :show-q-r-code="showQRCode"
-        :vendor="selectedVendor"
-        @close="showQRCode = false"
-      />
+      <QrCodeGenerator v-if="showQRCode" :show-q-r-code="showQRCode" :vendor="selectedVendor"
+        @close="showQRCode = false" />
+      <VendorInfo v-if="showVendorInfo" :show-vendorinfo="showVendorInfo" :vendor="selectedVendor" :lat="Latitude" :lon="Longitude" @close="showVendorInfo = false" />
       <footer>
         <router-link to="/backoffice/newvendor">
           <button className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">
@@ -197,6 +185,7 @@ button[disabled] {
   background-color: #cccccc;
   color: #666666;
 }
+
 .disabled-vendor {
   background-color: #f8d7da;
 }
