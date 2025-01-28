@@ -420,20 +420,20 @@ const updateLocation = (newLocation: any) => {
                 />
               </div>
             </div>
-            <div class="flex justify-between">
-              <button
-                type="submit"
-                class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
-                @click="showDeleteModal = true"
-              >
-                {{ $t('delete') }}
-              </button>
+            <div class="flex flex-row-reverse justify-between">  
               <button
                 type="submit"
                 class="py-2 px-4 rounded-full customcolor"
                 @click="updateVendor"
               >
                 {{ $t('confirmation') }}
+              </button>
+              <button
+                type="submit"
+                class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
+                @click="showDeleteModal = true"
+              >
+                {{ $t('delete') }}
               </button>
             </div>
           </form>
