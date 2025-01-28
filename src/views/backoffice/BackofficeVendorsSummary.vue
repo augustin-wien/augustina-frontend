@@ -71,6 +71,9 @@ const exportTable = () => {
   exportAsCsv([header, ...data], `vendors_${now.toLocaleDateString()}`)
 }
 const delay = (ms:number) => new Promise(resolve => setTimeout(resolve, ms))
+
+
+
 const showQRCode = ref(false)
 const showVendorInfo = ref(false)
 const selectedVendor = ref<Vendor | null>(null)
@@ -127,8 +130,8 @@ const Latitude = ref<number | null>(null)
 
                   <td class="flex justify-center">
                     <button className="p-2 rounded-full h-10 w-10 customcolor mr-2"
-                      @click="() => { 
-                        store.getVendor(vendor.ID)
+                      @click="async () => { 
+                        await store.getVendor(vendor.ID)
                         showVendorInfo = true 
                         selectedVendor = vendor
                         }">
