@@ -71,13 +71,9 @@ const exportTable = () => {
   exportAsCsv([header, ...data], `vendors_${now.toLocaleDateString()}`)
 }
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
 const showQRCode = ref(false)
 const showVendorInfo = ref(false)
 const selectedVendor = ref<Vendor | null>(null)
-const Longitude = ref<number | null>(null)
-const Latitude = ref<number | null>(null)
 </script>
 
 <template>
@@ -188,8 +184,6 @@ const Latitude = ref<number | null>(null)
         v-if="showVendorInfo"
         :show-vendorinfo="showVendorInfo"
         :vendor="selectedVendor"
-        :lat="Latitude"
-        :lon="Longitude"
         @close="showVendorInfo = false"
       />
       <footer>

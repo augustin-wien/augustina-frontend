@@ -1,19 +1,12 @@
 <script lang="ts" setup>
 import { useSettingsStore } from '@/stores/settings'
-import type { Vendor } from '@/stores/vendor'
 import IconCross from '@/components/icons/IconCross.vue'
 import VendorMapView from '@/components/VendorMapView.vue'
-import { onMounted, ref, watch } from 'vue'
-import keycloak from '@/keycloak/keycloak'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { vendorsStore } from '@/stores/vendor'
 
-const keycloakStore = useKeycloakStore()
 
 const vendorStore = vendorsStore()
-
-const settingsStore = useSettingsStore()
-const props = defineProps(['vendor', 'lat', 'lon'])
 const vendor = vendorStore.vendor
 
 const emit = defineEmits(['close'])
@@ -25,8 +18,6 @@ const formatCredit = (credit: number | undefined) => {
     return (credit / 100).toFixed(2)
   }
 }
-
-console.log(vendorStore.vendor?.Longitude)
 </script>
 
 <template>
