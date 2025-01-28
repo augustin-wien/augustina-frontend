@@ -51,8 +51,10 @@ const formatCredit = (credit: number) => {
           <div className="text-center text-2xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
               <span />
-              <button class="rounded-full bg-red-600 text-white font-bold"
-                @click="router.push('/backoffice/vendorsummary')">
+              <button
+                class="rounded-full bg-red-600 text-white font-bold"
+                @click="router.push('/backoffice/vendorsummary')"
+              >
                 <IconCross />
               </button>
             </div>
@@ -132,8 +134,15 @@ const formatCredit = (credit: number) => {
                     </table>
                   </td>
                   <td rowspan="10" class="w-96 p-3 align-top relative z-10">
-                    <div v-if="vendor.Latitude && vendor.Longitude && vendor.Latitude != 0.1 && vendor.Longitude != 0.1"
-                      class="map w-full h-full border rounded-lg shadow-md">
+                    <div
+                      v-if="
+                        vendor.Latitude &&
+                        vendor.Longitude &&
+                        vendor.Latitude != 0.1 &&
+                        vendor.Longitude != 0.1
+                      "
+                      class="map w-full h-full border rounded-lg shadow-md"
+                    >
                       <VendorMapView :vendors="[vendor]" :enable-search="false" />
                     </div>
                   </td>
@@ -143,7 +152,9 @@ const formatCredit = (credit: number) => {
           </div>
           <div v-if="vendor" class="flex place-content-center">
             <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
-              <button class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center">
+              <button
+                class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center"
+              >
                 {{ $t('change') }}
               </button>
             </router-link>
