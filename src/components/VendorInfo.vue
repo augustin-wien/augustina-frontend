@@ -1,10 +1,7 @@
 <script lang="ts" setup>
-import { useSettingsStore } from '@/stores/settings'
 import IconCross from '@/components/icons/IconCross.vue'
 import VendorMapView from '@/components/VendorMapView.vue'
-import { useKeycloakStore } from '@/stores/keycloak'
 import { vendorsStore } from '@/stores/vendor'
-
 
 const vendorStore = vendorsStore()
 const vendor = vendorStore.vendor
