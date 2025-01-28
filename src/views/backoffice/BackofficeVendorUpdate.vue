@@ -413,7 +413,8 @@ const updateLocation = (newLocation: any) => {
                 </span>
               </div>
               <div v-if="updatedVendor.Latitude != 0.1 && updatedVendor.Longitude != 0.1">
-                <VendorMapView class="z-0 relative"
+                <VendorMapView
+                  class="z-0 relative"
                   :vendors="[updatedVendor]"
                   :enable-search="1"
                   @new-location="updateLocation"
