@@ -2,19 +2,13 @@
 import IconCross from '@/components/icons/IconCross.vue'
 import VendorMapView from '@/components/VendorMapView.vue'
 import { vendorsStore } from '@/stores/vendor'
+import { formatCredit } from '@/utils/utils'
 
 const vendorStore = vendorsStore()
 const vendor = vendorStore.vendor
 
 const emit = defineEmits(['close'])
 
-const formatCredit = (credit: number | undefined) => {
-  if (credit == undefined) {
-    return ''
-  } else {
-    return (credit / 100).toFixed(2)
-  }
-}
 </script>
 
 <template>
