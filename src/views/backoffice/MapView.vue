@@ -41,6 +41,7 @@ onMounted(() => {
 })
 
 const showVendorInfo = ref(false)
+
 function onMapReady() {
   center.value = [settingsStore.settings.MapCenterLat, settingsStore.settings.MapCenterLong]
 }
@@ -75,14 +76,17 @@ function onMapReady() {
                   <l-popup class="text-center text-black grid">
                     <h2 class="text-xl font-semibold">{{ vendor.firstName }}</h2>
                     <span class="mb-2">{{ vendor.licenseID }}</span>
-                      <button class="rounded-full customcolor py-2 px-4 h-10" @click="
+                    <button
+                      class="rounded-full customcolor py-2 px-4 h-10"
+                      @click="
                         async () => {
                           await store.getVendor(vendor.id)
                           showVendorInfo = true
                         }
-                      ">
-                        {{ $t('info') }}
-                      </button>
+                      "
+                    >
+                      {{ $t('info') }}
+                    </button>
                   </l-popup>
                 </l-marker>
               </li>
