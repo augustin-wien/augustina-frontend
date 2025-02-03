@@ -12,6 +12,10 @@ import { useMapStore } from '@/stores/map'
 import { onMounted, computed, watch, ref } from 'vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
+import { vendorsStore } from '@/stores/vendor'
+import VendorInfo from '@/components/VendorInfo.vue'
+
+const store = vendorsStore()
 
 const settingsStore = useSettingsStore()
 
@@ -36,6 +40,7 @@ onMounted(() => {
   }
 })
 
+const showVendorInfo = ref(false)
 function onMapReady() {
   center.value = [settingsStore.settings.MapCenterLat, settingsStore.settings.MapCenterLong]
 }
@@ -48,7 +53,7 @@ function onMapReady() {
     </template>
     <template v-if="vendors && vendors.length > 0" #main>
       <div class="h-full">
-        <div style="height: 75vh; width: 100%">
+        <div style="height: 75vh; width: 100%" class="z-0 relative">
           <l-map
             v-model:zoom="zoom"
             :center="center"
@@ -70,17 +75,14 @@ function onMapReady() {
                   <l-popup class="text-center text-black grid">
                     <h2 class="text-xl font-semibold">{{ vendor.firstName }}</h2>
                     <span class="mb-2">{{ vendor.licenseID }}</span>
-                    <RouterLink
-                      v-if="vendor.id"
-                      :to="{
-                        name: 'Vendor Profile',
-                        params: { ID: vendor.id }
-                      }"
-                    >
-                      <button class="rounded-full customcolor py-2 px-4 h-10">
-                        {{ $t('edit') }}
+                      <button class="rounded-full customcolor py-2 px-4 h-10" @click="
+                        async () => {
+                          await store.getVendor(vendor.id)
+                          showVendorInfo = true
+                        }
+                      ">
+                        {{ $t('info') }}
                       </button>
-                    </RouterLink>
                   </l-popup>
                 </l-marker>
               </li>
@@ -88,6 +90,11 @@ function onMapReady() {
           </l-map>
         </div>
       </div>
+      <VendorInfo
+        v-if="showVendorInfo"
+        :show-vendorinfo="showVendorInfo"
+        @close="showVendorInfo = false"
+      />
     </template>
   </component>
 </template>
