@@ -47,6 +47,8 @@ const importing = ref(false)
 const importingVendorsCount = ref(0)
 
 const submitVendor = async () => {
+  newVendor.value.Longitude = transformToFloat(newVendor.value.Longitude)
+  newVendor.value.Latitude = transformToFloat(newVendor.value.Latitude)
   if (!newVendor.value) return
 
   if (
