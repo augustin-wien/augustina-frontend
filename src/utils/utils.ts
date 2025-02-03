@@ -6,7 +6,7 @@ export function formatCredit(credit: number | undefined) {
   if (credit == undefined) {
     return 0
   } else {
-    return (credit / 100).toFixed(2).replace('.',',')
+    return (credit / 100).toFixed(2).replace('.', ',')
   }
 }
 export function formatDate(date: string) {

@@ -8,7 +8,6 @@ const vendorStore = vendorsStore()
 const vendor = vendorStore.vendor
 
 const emit = defineEmits(['close'])
-
 </script>
 
 <template>
