@@ -2,8 +2,12 @@ import * as Sentry from '@sentry/vue'
 import type { App } from 'vue'
 import type { Router } from 'vue-router'
 
-export function formatCredit(credit: number) {
-  return (credit / 100).toFixed(2).replace('.', ',')
+export function formatCredit(credit: number | undefined) {
+  if (credit == undefined) {
+    return 0
+  } else {
+    return (credit / 100).toFixed(2).replace('.', ',')
+  }
 }
 export function formatDate(date: string) {
   if (!date || date === '') return ''
