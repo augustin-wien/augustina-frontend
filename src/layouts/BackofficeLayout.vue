@@ -22,7 +22,25 @@ const settingsStore = useSettingsStore()
 settingsStore.getSettingsFromApi()
 const settings = computed(() => settingsStore.settings)
 const authenticated = computed(() => keycloakStore.authenticated)
-const apiUrl = import.meta.env.VITE_API_URL
+// remove the last / from the URL
+const apiUrl = import.meta.env.VITE_API_URL.replace(/\/$/, '')
+
+const logo = computed(() => {
+  if (settings.value.Logo && settings.value.Logo !== '') {
+    // if the logo does not have a / at the beginning, add it
+    if (typeof settings.value.Logo === 'string') {
+      if (!settings.value.Logo.startsWith('/')) {
+        return apiUrl + '/' + settings.value.Logo
+      }
+
+      return apiUrl + settings.value.Logo
+    } else {
+      return apiUrl + '/img/logo.png'
+    }
+  } else {
+    return apiUrl + '/img/logo.png'
+  }
+})
 
 onMounted(() => {
   if (authenticated.value) {
@@ -44,22 +62,7 @@ onMounted(() => {
         >
           <div className="sidemenu-item object-center">
             <img
-              v-if="typeof settings.Logo === 'string'"
-              :src="
-                settings.Logo && settings.Logo !== ''
-                  ? apiUrl + settings.Logo
-                  : apiUrl + 'img/logo.png'
-              "
-              alt="Newspaper logo"
-              class="logo mx-auto my-5"
-              width="270"
-              height="auto"
-            />
-            <img
-              v-else
-              :src="
-                typeof settings.Logo == 'string' ? apiUrl + settings.Logo : apiUrl + 'img/logo.png'
-              "
+              :src="logo"
               alt="Newspaper logo"
               class="logo mx-auto my-5"
               width="270"
