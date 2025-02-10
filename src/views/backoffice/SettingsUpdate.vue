@@ -186,7 +186,7 @@ const showQrCodeSettings = ref(false)
                     "
                     :src="
                       updatedSettings?.Logo && updatedSettings?.Logo !== ''
-                        ? url + updatedSettings.Logo
+                        ? url.replace(/\/$/, '') + updatedSettings.Logo
                         : url + 'img/logo.png'
                     "
                     alt="Newspaper logo"

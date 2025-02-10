@@ -206,5 +206,7 @@
   "Download QR-Code for all vendors": "QR-Code für alle Verkäufer:innen herunterladen",
 
   "maintenance": "Die Webseite steht derzeit unter Wartungsarbeiten. Wir entschuldigen uns für die Unannehmlichkeiten. Bitte versuche es in den nächsten Tagen erneut.",
-  "saveCustomCss": "Eigenes CSS speichern"
+  "saveCustomCss": "Eigenes CSS speichern",
+
+  "info": "Information"
 }
