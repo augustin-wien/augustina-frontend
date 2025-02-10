@@ -26,7 +26,7 @@ const authenticated = computed(() => keycloakStore.authenticated)
 
 const mapStore = useMapStore()
 const vendors = computed(() => mapStore.vendors)
-
+const showVendorInfo = ref(false)
 //Map configuration
 const zoom = ref(12)
 // Todo: Get the center from the settings
