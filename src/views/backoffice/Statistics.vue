@@ -50,14 +50,6 @@ let quantityChart: Chart
 let amountChart: Chart
 
 const createCharts = () => {
-  if (quantityChart) {
-    quantityChart.destroy()
-  }
-
-  if (amountChart) {
-    amountChart.destroy()
-  }
-
   const statisticsData = store.statisticsList
   const itemsArray = statisticsData !== null ? statisticsData : []
 
@@ -72,18 +64,24 @@ const createCharts = () => {
 
   // sort by name and exclude transactionCosts
   quantityData = quantityData.sort(
-    (a: StatisticsItemMinimal, b: StatisticsItemMinimal) => b.value - a.value
+    (a: StatisticsItemMinimal, b: StatisticsItemMinimal) => a.id - b.id
   )
 
   quantityData = quantityData.filter(
-    (item: StatisticsItemMinimal) => item.name != 'transactionCosts'
+    (item: StatisticsItemMinimal) => item.name !== 'Transaktionskosten'
   )
 
-  const amountData = itemsArray.map((item: Statistics) => ({
+  let amountData = itemsArray.map((item: Statistics) => ({
     id: item.ID,
     value: item.SumAmount / 100, // convert to euro
     name: item.Name
   }))
+
+  amountData = amountData.sort((a: StatisticsItemMinimal, b: StatisticsItemMinimal) => a.id - b.id)
+
+  amountData = amountData.filter(
+    (item: StatisticsItemMinimal) => item.name !== 'Transaktionskosten'
+  )
 
   // Create the quantity chart
   const quantityChartElement = document.getElementById('quantity-chart')
@@ -168,6 +166,14 @@ const createCharts = () => {
 
 onMounted(() => {
   // Fetch statistics data
+  if (quantityChart) {
+    quantityChart.destroy()
+  }
+
+  if (amountChart) {
+    amountChart.destroy()
+  }
+
   if (authenticated.value) {
     itemsStore.getItemsBackoffice().then(() => {
       store.getPayments(startDate.value, endDate.value).then(() => {
