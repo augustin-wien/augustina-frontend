@@ -139,7 +139,6 @@ const selectedVendor = ref<Vendor | null>(null)
                         async () => {
                           await store.getVendor(vendor.ID)
                           showVendorInfo = true
-                          selectedVendor = vendor
                         }
                       "
                     >
