@@ -414,26 +414,27 @@ const updateLocation = (newLocation: any) => {
               </div>
               <div v-if="updatedVendor.Latitude != 0.1 && updatedVendor.Longitude != 0.1">
                 <VendorMapView
+                  class="z-0 relative"
                   :vendors="[updatedVendor]"
                   :enable-search="1"
                   @new-location="updateLocation"
                 />
               </div>
             </div>
-            <div class="flex justify-between">
-              <button
-                type="submit"
-                class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
-                @click="showDeleteModal = true"
-              >
-                {{ $t('delete') }}
-              </button>
+            <div class="flex flex-row-reverse justify-between">
               <button
                 type="submit"
                 class="py-2 px-4 rounded-full customcolor"
                 @click="updateVendor"
               >
                 {{ $t('confirmation') }}
+              </button>
+              <button
+                type="submit"
+                class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
+                @click="showDeleteModal = true"
+              >
+                {{ $t('delete') }}
               </button>
             </div>
           </form>
