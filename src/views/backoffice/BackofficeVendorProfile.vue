@@ -85,34 +85,14 @@ const formatCredit = (credit: number) => {
                   <td className="p-3">{{ vendor.Telephone }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">{{ $t('address') }}:</th>
-                  <td className="p-3">{{ vendor.Address }}</td>
-                  <th className="p-3">{{ $t('postCode') }}:</th>
-                  <td className="p-3">{{ vendor.PLZ }}</td>
-                </tr>
-                <tr>
-                  <th className="p-3">{{ $t('longitude') }}:</th>
-                  <td className="p-3">{{ vendor.Longitude }}</td>
-
-                  <th className="p-3">{{ $t('latitude') }}:</th>
-                  <td className="p-3">{{ vendor.Latitude }}</td>
-                </tr>
-                <tr>
-                  <th className="p-3">{{ $t('location') }}:</th>
-                  <td className="p-3">{{ vendor.Location }}</td>
-                  <th className="p-3">{{ $t('language') }}:</th>
-                  <td className="p-3">{{ vendor.Language }}</td>
-                </tr>
-                <tr>
                   <th className="p-3">{{ $t('vendorSince') }}:</th>
                   <td className="p-3">{{ vendor.VendorSince }}</td>
-
                   <th className="p-3">{{ $t('registrationDate') }}:</th>
                   <td className="p-3">{{ vendor.RegistrationDate }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">{{ $t('workingTime') }}:</th>
-                  <td className="p-3">{{ vendor.WorkingTime }}</td>
+                  <th className="p-3">{{ $t('language') }}:</th>
+                  <td className="p-3">{{ vendor.Language }}</td>
                   <th className="p-3">Online Karte:</th>
                   <td className="p-3">{{ $t(vendor.OnlineMap ? 'yes' : 'no') }}</td>
                 </tr>
@@ -125,6 +105,31 @@ const formatCredit = (credit: number) => {
                 <tr>
                   <th className="p-3">{{ $t('verificationLink') }}</th>
                   <td className="p-3">{{ vendor.AccountProofUrl }}</td>
+                </tr>
+                <tr>
+                  <th className="p-3">{{ $t('address') }}:</th>
+                  <td className="p-3">{{ vendor.Address }}</td>
+                  <th className="p-3">{{ $t('postCode') }}:</th>
+                  <td className="p-3">{{ vendor.PLZ }}</td>
+                </tr>
+                <tr>
+                  <th className="p-3">{{ $t('longitude') }}:</th>
+                  <td className="p-3">{{ vendor.Longitude }}</td>
+                  <th className="p-3">{{ $t('latitude') }}:</th>
+                  <td className="p-3">{{ vendor.Latitude }}</td>
+                </tr>
+                <tr>
+                  <th className="p-3">{{ $t('location') }}:</th>
+                  <td className="p-3">{{ vendor.Location }}</td>
+                  <th className="p-3">{{ $t('workingTime') }}:</th>
+                  <td className="p-3">{{ vendor.WorkingTime }}</td>
+                </tr>
+                <tr>
+                  <th className="p-3">{{ $t('comments') }}:</th><!--todo-->
+                  <tr v-for="(comment, index) in vendor.Comments" :key="index">
+                    <td class="p-3" colspan="4">{{ comment }}</td>
+                  </tr>
+                  <td className="p-3">{{ vendor.comment }}</td>
                 </tr>
               </tbody>
               <div class="map-wrapper">
