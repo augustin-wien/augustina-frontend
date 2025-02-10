@@ -125,7 +125,7 @@ const formatCredit = (credit: number) => {
                   <td className="p-3">{{ vendor.WorkingTime }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">{{ $t('comments') }}:</th><!--todo-->
+                  <th className="p-3">{{ $t('comment') }}:</th><!--todo-->
                   <tr v-for="(comment, index) in vendor.Comments" :key="index">
                     <td class="p-3" colspan="4">{{ comment }}</td>
                   </tr>
