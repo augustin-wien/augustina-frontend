@@ -235,62 +235,6 @@ const updateAddress = (newAdress: any) => {
                       <option :value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
-                    >{{ $t('address') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="adress"
-                      v-model="updatedVendor.Address"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
-                    >{{ $t('postCode') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="plz"
-                      v-model="updatedVendor.PLZ"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >{{ $t('location') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="location"
-                      v-model.number="updatedVendor.Location"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >{{ $t('longitude') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="location"
-                      v-model.number="updatedVendor.Longitude"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >{{ $t('latitude') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="location"
-                      v-model.number="updatedVendor.Latitude"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
                 </span>
               </div>
               <div class="row">
@@ -321,21 +265,6 @@ const updateAddress = (newAdress: any) => {
                       <option :value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
-                  <!--
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                    >{{ $t('workingTime') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <select
-                      v-model="updatedVendor.WorkingTime"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    >
-                      <option value="G" selected>{{ $t('(G) all day') }}</option>
-                      <option value="V">{{ $t('(v) mornings') }}</option>
-                      <option value="N">{{ $t('(N) afternoons') }}</option>
-                    </select>
-                  </div>
-                 -->
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
                     >{{ $t('language') }}:</label
                   >
@@ -577,81 +506,95 @@ const updateAddress = (newAdress: any) => {
                   </button>
                 </div>
                 <!-- Modal body -->
-                <toast v-if="showAddressModal">
-                  <form @submit.prevent="updateAddress">
-                    <div class="p-4">
-                      <h3 class="font-bold mb-2">Edit Address</h3>
-                      <div class="mb-2">
-                        <label for="name" class="block text-gray-700 text-sm font-bold mb-2"
-                          >Name</label
-                        >
-                        <input
-                          id="name"
-                          v-model="updatedVendor.Name"
-                          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          type="text"
-                        />
-                      </div>
-                      <div class="mb-2">
-                        <label for="address" class="block text-gray-700 text-sm font-bold mb-2"
-                          >Address</label
-                        >
-                        <input
-                          id="address"
-                          v-model="updatedVendor.Address"
-                          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          type="text"
-                        />
-                      </div>
-                      <div class="mb-2">
-                        <label for="longitude" class="block text-gray-700 text-sm font-bold mb-2"
-                          >Longitude</label
-                        >
-                        <input
-                          id="longitude"
-                          v-model="updatedVendor.Longitude"
-                          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          type="number"
-                          step="0.0001"
-                        />
-                      </div>
-                      <div class="mb-2">
-                        <label for="latitude" class="block text-gray-700 text-sm font-bold mb-2"
-                          >Latitude</label
-                        >
-                        <input
-                          id="latitude"
-                          v-model="updatedVendor.Latitude"
-                          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          type="number"
-                          step="0.0001"
-                        />
-                      </div>
-                      <div class="mb-2">
-                        <label for="plz" class="block text-gray-700 text-sm font-bold mb-2"
-                          >ZIP</label
-                        >
-                        <input
-                          id="plz"
-                          v-model="updatedVendor.PLZ"
-                          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          type="text"
-                        />
-                      </div>
-                      <div class="mb-2">
-                        <label for="workingTime" class="block text-gray-700 text-sm font-bold mb-2"
-                          >Working Time</label
-                        >
-                        <input
-                          id="workingTime"
+
+                <form @submit.prevent="updateAddress">
+                  <div class="p-4">
+                    <div class="mb-2">
+                      <label for="name" class="block text-gray-700 text-sm font-bold mb-2"
+                        >Name</label
+                      >
+                      <input
+                        id="name"
+                        v-model="updatedVendor.Name"
+                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                      />
+                    </div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
+                      >{{ $t('address') }}:</label
+                    >
+                    <div class="flex flex-row">
+                      <input
+                        id="adress"
+                        v-model="updatedVendor.Address"
+                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                      />
+                    </div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
+                      >{{ $t('postCode') }}:</label
+                    >
+                    <div class="flex flex-row">
+                      <input
+                        id="plz"
+                        v-model="updatedVendor.PLZ"
+                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                      />
+                    </div>
+
+                    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+                      >{{ $t('location') }}:</label
+                    >
+                    <div class="flex flex-row">
+                      <input
+                        id="location"
+                        v-model.number="updatedVendor.Location"
+                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                      />
+                    </div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+                      >{{ $t('longitude') }}:</label
+                    >
+                    <div class="flex flex-row">
+                      <input
+                        id="location"
+                        v-model.number="updatedVendor.Longitude"
+                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                      />
+                    </div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
+                      >{{ $t('latitude') }}:</label
+                    >
+                    <div class="flex flex-row">
+                      <input
+                        id="location"
+                        v-model.number="updatedVendor.Latitude"
+                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                      />
+                    </div>
+                    <div class="mb-2">
+                      <label
+                        class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                        for="workingTime"
+                        >{{ $t('workingTime') }}:</label
+                      >
+                      <div class="flex flex-row">
+                        <select
                           v-model="updatedVendor.WorkingTime"
                           class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                          type="text"
-                        />
+                        >
+                          <option value="G" selected>{{ $t('(G) all day') }}</option>
+                          <option value="V">{{ $t('(v) mornings') }}</option>
+                          <option value="N">{{ $t('(N) afternoons') }}</option>
+                        </select>
                       </div>
                     </div>
-                  </form>
-                </toast>
+                  </div>
+                </form>
 
                 <!-- Modal footer -->
                 <div
