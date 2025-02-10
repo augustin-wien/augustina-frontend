@@ -2,8 +2,6 @@
 // deactivate eslint for this file
 /* eslint-disable */
 import { RandomInput } from "../../../src/utils/utils";
-const tempLicenceID = "fl-245"
-const basicLicenceId = "fl-123"
 
 describe('Go to backoffice', () => {
   it('visits the app root url', () => {

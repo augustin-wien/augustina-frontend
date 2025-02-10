@@ -83,8 +83,8 @@ const submitVendor = async () => {
   }
 
   try {
-    await store.createVendorPromise(newVendor.value as Vendor).then((res: any) => {
-      router.push(`/backoffice/userprofile/${res.data}`)
+    await store.createVendorPromise(newVendor.value as Vendor).then(() => {
+      router.push(`/backoffice/vendorsummary/`)
     })
   } catch (err: any) {
     // eslint-disable-next-line no-console
