@@ -49,7 +49,6 @@ onMounted(() => {
   }
 })
 
-
 function onMapReady(instance: any) {
   if (instance) {
     map.value = instance
