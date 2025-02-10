@@ -47,6 +47,8 @@ const importing = ref(false)
 const importingVendorsCount = ref(0)
 
 const submitVendor = async () => {
+  newVendor.value.Longitude = transformToFloat(newVendor.value.Longitude)
+  newVendor.value.Latitude = transformToFloat(newVendor.value.Latitude)
   if (!newVendor.value) return
 
   if (
@@ -81,8 +83,8 @@ const submitVendor = async () => {
   }
 
   try {
-    await store.createVendorPromise(newVendor.value as Vendor).then((res: any) => {
-      router.push(`/backoffice/userprofile/${res.data}`)
+    await store.createVendorPromise(newVendor.value as Vendor).then(() => {
+      router.push(`/backoffice/vendorsummary/`)
     })
   } catch (err: any) {
     // eslint-disable-next-line no-console
