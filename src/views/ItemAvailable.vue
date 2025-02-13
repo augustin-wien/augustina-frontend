@@ -28,7 +28,7 @@ const url = import.meta.env.VITE_API_URL
           <div
             class="item-price rounded-full absolute h-12 w-12 right-0 top-0 place-items-center grid text-lg text-white font-semibold customcolor"
           >
-            {{ item.Price / 100 }}€
+            {{ (item.Price / 100).toFixed(2) }}€
           </div>
           <img
             :alt="item.Description"
