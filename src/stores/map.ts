@@ -23,6 +23,11 @@ export const useMapStore = defineStore('mapStore', {
         const data = await getLocations()
         const vendors_data = data.data
 
+        if (!vendors_data) {
+          this.vendors = []
+          return
+        }
+
         //filter out vendors with no location
         this.vendors = vendors_data.filter(
           (vendor: VendorLocation) => vendor.latitude && vendor.longitude

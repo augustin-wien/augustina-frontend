@@ -66,10 +66,10 @@ function onMapReady(instance: any) {
 
 <template>
   <component :is="$route.meta.layout || 'div'" v-if="authenticated">
-    <template v-if="vendors && vendors.length > 0" #header>
+    <template v-if="vendors" #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuMap') }}</h1>
     </template>
-    <template v-if="vendors && vendors.length > 0" #main>
+    <template v-if="vendors" #main>
       <div class="h-full">
         <div style="height: 75vh; width: 100%" class="z-0 relative">
           <l-map
