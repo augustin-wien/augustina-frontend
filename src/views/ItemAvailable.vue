@@ -21,10 +21,12 @@ const url = import.meta.env.VITE_API_URL
       <option value="de">DE</option>
     </select>
     <template #main>
-      <div class="h-full w-full grid grid-rows-5 place-items-center">
-        <div class="w-44 h-44 flex-none place-content-center rounded-2xl row-span-2 relative">
+      <div class="item-avaiable-page h-full w-full grid grid-rows-5 place-items-center">
+        <div
+          class="item-header w-44 h-44 flex-none place-content-center rounded-2xl row-span-2 relative"
+        >
           <div
-            class="rounded-full absolute h-12 w-12 right-0 top-0 place-items-center grid text-lg text-white font-semibold customcolor"
+            class="item-price rounded-full absolute h-12 w-12 right-0 top-0 place-items-center grid text-lg text-white font-semibold customcolor"
           >
             {{ item.Price / 100 }}€
           </div>
@@ -34,19 +36,19 @@ const url = import.meta.env.VITE_API_URL
             :src="url + item.Image"
           />
         </div>
-        <div class="text-center font-semibold text-3xl py-4">
+        <div class="item-name text-center font-semibold text-3xl py-4">
           {{ item.Name }}
         </div>
-        <div class="text-center text-l row-span-1 place-items-center">
+        <div class="item-description text-center text-l row-span-1 place-items-center">
           {{ item.Description }}
         </div>
-        <div class="text-center text-l row-span-2 place-items-center">
+        <div class="item-additional-information text-center text-l row-span-2 place-items-center">
           {{ $t('information') }}
         </div>
-        <div className="place-items-center w-full flex">
-          <RouterLink class="h-[76px] w-[76px] mx-auto" :to="{ name: 'Shop' }">
+        <div className="item-actions place-items-center w-full flex">
+          <RouterLink class="back-link h-[76px] w-[76px] mx-auto" :to="{ name: 'Shop' }">
             <button
-              class="customcolor fill-white rounded-full h-full w-full place-items-center grid"
+              class="back-button customcolor fill-white rounded-full h-full w-full place-items-center grid"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
