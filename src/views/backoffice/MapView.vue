@@ -12,6 +12,8 @@ import { useMapStore } from '@/stores/map'
 import { onMounted, computed, watch, ref } from 'vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
+import 'leaflet-geosearch/dist/geosearch.css'
 import { vendorsStore } from '@/stores/vendor'
 import VendorInfo from '@/components/VendorInfo.vue'
 
@@ -24,11 +26,18 @@ const authenticated = computed(() => keycloakStore.authenticated)
 
 const mapStore = useMapStore()
 const vendors = computed(() => mapStore.vendors)
-
+const showVendorInfo = ref(false)
 //Map configuration
 const zoom = ref(12)
 // Todo: Get the center from the settings
 const center: Ref<PointExpression> = ref([48.2083, 16.3731])
+const map: Ref<any> = ref(null)
+const provider = new OpenStreetMapProvider()
+const emit = defineEmits(['newLocation'])
+
+const searchControl: any = new (GeoSearchControl as any)({
+  provider: provider
+})
 
 onMounted(() => {
   if (authenticated.value) {
@@ -40,10 +49,18 @@ onMounted(() => {
   }
 })
 
-const showVendorInfo = ref(false)
+function onMapReady(instance: any) {
+  if (instance) {
+    map.value = instance
+  }
 
-function onMapReady() {
   center.value = [settingsStore.settings.MapCenterLat, settingsStore.settings.MapCenterLong]
+
+  map.value.addControl(searchControl)
+
+  map.value.on('geosearch/showlocation', function (event: any) {
+    emit('newLocation', event)
+  })
 }
 </script>
 
@@ -60,6 +77,7 @@ function onMapReady() {
             :center="center"
             use-global-leaflet
             :max-zoom="18"
+            :enable-search="1"
             @ready="onMapReady"
           >
             <l-tile-layer
