@@ -9,6 +9,7 @@ import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { faCreditCard, faArrowAltCircleRight, faQrcode } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
+import VendorInfo from '@/components/VendorInfo.vue'
 
 // Initialize the vendor store
 const store = vendorsStore()
@@ -71,6 +72,7 @@ const exportTable = () => {
 }
 
 const showQRCode = ref(false)
+const showVendorInfo = ref(false)
 const selectedVendor = ref<Vendor | null>(null)
 </script>
 
@@ -131,11 +133,17 @@ const selectedVendor = ref<Vendor | null>(null)
                   <td className="p-3">{{ formatCredit(vendor.Balance) }}€</td>
 
                   <td class="flex justify-center">
-                    <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
-                      <button className="p-2 rounded-full h-10 w-10 customcolor mr-2">
-                        <font-awesome-icon :icon="faArrowAltCircleRight" />
-                      </button>
-                    </router-link>
+                    <button
+                      className="p-2 rounded-full h-10 w-10 customcolor mr-2"
+                      @click="
+                        async () => {
+                          await store.getVendor(vendor.ID)
+                          showVendorInfo = true
+                        }
+                      "
+                    >
+                      <font-awesome-icon :icon="faArrowAltCircleRight" />
+                    </button>
                     <router-link
                       v-if="vendor.Balance !== 0"
                       :to="`/backoffice/credits/payout/${vendor.ID}`"
@@ -171,6 +179,12 @@ const selectedVendor = ref<Vendor | null>(null)
         :vendor="selectedVendor"
         @close="showQRCode = false"
       />
+      <VendorInfo
+        v-if="showVendorInfo"
+        :show-vendorinfo="showVendorInfo"
+        :vendor="selectedVendor"
+        @close="showVendorInfo = false"
+      />
       <footer>
         <router-link to="/backoffice/newvendor">
           <button className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">
@@ -197,6 +211,7 @@ button[disabled] {
   background-color: #cccccc;
   color: #666666;
 }
+
 .disabled-vendor {
   background-color: #f8d7da;
 }

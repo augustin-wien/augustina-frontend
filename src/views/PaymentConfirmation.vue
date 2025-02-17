@@ -127,31 +127,34 @@ const apiUrl = import.meta.env.VITE_API_URL
       >
         <div
           v-if="!hasSingleDigitalItem"
-          className="h-full w-full text-center grid grid-rows-2 font-semibold text-xl"
+          class="confirmation-wrapper h-full w-full text-center grid grid-rows-2 font-semibold text-xl"
         >
-          <div v-if="!isConfirmed">
-            <div>{{ $t('symbol') }}</div>
-            <div>{{ paymentStore.firstName }}</div>
+          <div v-if="!isConfirmed" class="confirmation-header">
+            <div class="confirmation-label">{{ $t('symbol') }}</div>
+            <div class="vendor-name">{{ paymentStore.firstName }}</div>
           </div>
-          <div v-else>
+          <div v-else class="invalid-confirmation-wrapper">
             <div>{{ $t('invalid confirmation') }}</div>
           </div>
         </div>
-        <div v-else className="h-full w-full text-center grid grid-rows-2 font-semibold text-xl">
+        <div
+          v-else
+          className="greetings-label h-full w-full text-center grid grid-rows-2 font-semibold text-xl"
+        >
           <div>{{ $t('have fun') }}</div>
         </div>
         <div v-if="!isConfirmed" class="row-span-4 font-bold w-fit h-full relative">
-          <div v-if="!hasSingleDigitalItem" class="flex justify-center mb-4">
+          <div v-if="!hasSingleDigitalItem" class="check-mark-wrapper flex justify-center mb-4">
             <div
               v-if="!isConfirmed"
-              class="rounded-full text-6xl absolute h-12 w-12 fill-white right-0 top-0 place-items-center grid"
+              class="check-mark-confirmed rounded-full text-6xl absolute h-12 w-12 fill-white right-0 top-0 place-items-center grid"
               :class="{ 'bg-red-600': isConfirmed, 'bg-green-600': !isConfirmed }"
             >
               <IconCheckmark v-if="!isConfirmed" />
             </div>
             <img
               v-if="!isConfirmed"
-              class="rounded-full h-44 w-44 object-cover customborder border-4"
+              class="check-mark-main-item-image rounded-full h-44 w-44 object-cover customborder border-4"
               alt="Titelblatt"
               :src="
                 settStore.settings.MainItemImage
@@ -160,28 +163,28 @@ const apiUrl = import.meta.env.VITE_API_URL
               "
             />
           </div>
-          <div class="grid grid-cols-2">
+          <div class="purchased-items-wrapper grid grid-cols-2">
             <div
               v-for="item in purchasedItems"
               :key="item.ID"
               :class="purchasedItems?.length == 1 ? 'col-span-2' : 'col-span-1'"
             >
               <div
-                class="col-span-1 text-s w-full text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
+                class="purchased-item col-span-1 text-s w-full text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
               >
                 {{ item.Item == 2 ? item.Quantity / 100 + ' €' : item.Quantity + 'x' }}
                 {{ item.Item == 2 ? $t('donation') : itemName(item.Item) }}
               </div>
             </div>
           </div>
-          <div class="w-full row-span-2">
-            <p class="text-center text-3xl font-semibold">{{ price.toFixed(2) }}€</p>
+          <div class="price-wrapper w-full row-span-2">
+            <p class="price text-center text-3xl font-semibold">{{ price.toFixed(2) }}€</p>
           </div>
           <div class="w-full row-span-1 mt-1">
             <button
               v-for="downloadLink in downloadLinks"
               :key="downloadLink.ItemID"
-              class="bg-gray-500 rounded-full text-center p-5 customfont text-sm font font-semibold w-full"
+              class="digital-item-download-button bg-gray-500 rounded-full text-center p-5 customfont text-sm font font-semibold w-full"
               :style="'background-color:' + settStore.settings.Color"
               @click="downloadPDF(downloadLink.Link)"
             >
@@ -191,7 +194,7 @@ const apiUrl = import.meta.env.VITE_API_URL
         </div>
         <div v-else class="text-6xl row-span-4 font-bold w-fit h-full relative">
           <div
-            class="bg-red-600 rounded-full h-44 w-44 fill-white right-0 top-0 place-items-center grid"
+            class="check-mark-failed bg-red-600 rounded-full h-44 w-44 fill-white right-0 top-0 place-items-center grid"
           >
             <IconCross />
           </div>

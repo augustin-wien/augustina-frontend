@@ -12,6 +12,12 @@ import { useMapStore } from '@/stores/map'
 import { onMounted, computed, watch, ref } from 'vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
+import 'leaflet-geosearch/dist/geosearch.css'
+import { vendorsStore } from '@/stores/vendor'
+import VendorInfo from '@/components/VendorInfo.vue'
+
+const store = vendorsStore()
 
 const settingsStore = useSettingsStore()
 
@@ -20,11 +26,18 @@ const authenticated = computed(() => keycloakStore.authenticated)
 
 const mapStore = useMapStore()
 const vendors = computed(() => mapStore.vendors)
-
+const showVendorInfo = ref(false)
 //Map configuration
 const zoom = ref(12)
 // Todo: Get the center from the settings
 const center: Ref<PointExpression> = ref([48.2083, 16.3731])
+const map: Ref<any> = ref(null)
+const provider = new OpenStreetMapProvider()
+const emit = defineEmits(['newLocation'])
+
+const searchControl: any = new (GeoSearchControl as any)({
+  provider: provider
+})
 
 onMounted(() => {
   if (authenticated.value) {
@@ -36,24 +49,35 @@ onMounted(() => {
   }
 })
 
-function onMapReady() {
+function onMapReady(instance: any) {
+  if (instance) {
+    map.value = instance
+  }
+
   center.value = [settingsStore.settings.MapCenterLat, settingsStore.settings.MapCenterLong]
+
+  map.value.addControl(searchControl)
+
+  map.value.on('geosearch/showlocation', function (event: any) {
+    emit('newLocation', event)
+  })
 }
 </script>
 
 <template>
   <component :is="$route.meta.layout || 'div'" v-if="authenticated">
-    <template v-if="vendors && vendors.length > 0" #header>
+    <template v-if="vendors" #header>
       <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuMap') }}</h1>
     </template>
-    <template v-if="vendors && vendors.length > 0" #main>
+    <template v-if="vendors" #main>
       <div class="h-full">
-        <div style="height: 75vh; width: 100%">
+        <div style="height: 75vh; width: 100%" class="z-0 relative">
           <l-map
             v-model:zoom="zoom"
             :center="center"
             use-global-leaflet
             :max-zoom="18"
+            :enable-search="1"
             @ready="onMapReady"
           >
             <l-tile-layer
@@ -70,17 +94,17 @@ function onMapReady() {
                   <l-popup class="text-center text-black grid">
                     <h2 class="text-xl font-semibold">{{ vendor.firstName }}</h2>
                     <span class="mb-2">{{ vendor.licenseID }}</span>
-                    <RouterLink
-                      v-if="vendor.id"
-                      :to="{
-                        name: 'Vendor Profile',
-                        params: { ID: vendor.id }
-                      }"
+                    <button
+                      class="rounded-full customcolor py-2 px-4 h-10"
+                      @click="
+                        async () => {
+                          await store.getVendor(vendor.id)
+                          showVendorInfo = true
+                        }
+                      "
                     >
-                      <button class="rounded-full customcolor py-2 px-4 h-10">
-                        {{ $t('edit') }}
-                      </button>
-                    </RouterLink>
+                      {{ $t('info') }}
+                    </button>
                   </l-popup>
                 </l-marker>
               </li>
@@ -88,6 +112,11 @@ function onMapReady() {
           </l-map>
         </div>
       </div>
+      <VendorInfo
+        v-if="showVendorInfo"
+        :show-vendorinfo="showVendorInfo"
+        @close="showVendorInfo = false"
+      />
     </template>
   </component>
 </template>

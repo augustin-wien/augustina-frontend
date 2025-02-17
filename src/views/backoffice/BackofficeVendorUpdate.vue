@@ -385,6 +385,13 @@ const updateAddress = (newAdress: any) => {
               >
                 {{ $t('confirmation') }}
               </button>
+              <button
+                type="submit"
+                class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
+                @click="showDeleteModal = true"
+              >
+                {{ $t('delete') }}
+              </button>
             </div>
           </form>
         </div>

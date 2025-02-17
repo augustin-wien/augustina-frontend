@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { STYLES_URL } from '@/api/endpoints'
 import WaitingAnimation from '@/components/WaitingAnimation.vue'
 import { useSettingsStore } from '@/stores/settings'
 
@@ -6,17 +7,14 @@ const settStore = useSettingsStore()
 settStore.getSettingsFromApi()
 
 //load custom css from backend
-if (import.meta?.env?.VITE_API_URL) {
-  const cssUrl = import.meta.env.VITE_API_URL.replace('/api', '') + 'public/style.css'
+const cssUrl = STYLES_URL
+const link = document.createElement('link')
+link.href = cssUrl
+link.type = 'text/css'
+link.rel = 'stylesheet'
+link.media = 'screen,print'
 
-  const link = document.createElement('link')
-  link.href = cssUrl
-  link.type = 'text/css'
-  link.rel = 'stylesheet'
-  link.media = 'screen,print'
-
-  document.getElementsByTagName('head')[0].appendChild(link)
-}
+document.getElementsByTagName('head')[0].appendChild(link)
 </script>
 
 <template>

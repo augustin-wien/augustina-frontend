@@ -58,7 +58,7 @@ const formatCredit = (credit: number) => {
                 <IconCross />
               </button>
             </div>
-            <div className="table-auto border-spacing-4 border-collapse profile-wrapper">
+            <table className="table-auto border-spacing-4 border-collapse profile-wrapper">
               <tbody className="text-sm text-left">
                 <tr>
                   <th className="p-3">{{ $t('firstName') }}:</th>
@@ -133,29 +133,16 @@ const formatCredit = (credit: number) => {
                   </td>
                 </tr>
               </tbody>
-              <div class="map-wrapper">
-                <div
-                  v-if="
-                    vendor.Latitude &&
-                    vendor.Longitude &&
-                    vendor.Latitude != 0.1 &&
-                    vendor.Longitude != 0.1
-                  "
-                  class="map"
-                >
-                  <VendorMapView :vendors="[vendor]" :enable-search="false" />
-                </div>
-              </div>
-            </div>
-            <div v-if="vendor" class="flex place-content-center">
-              <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
-                <button
-                  class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center"
-                >
-                  {{ $t('change') }}
-                </button>
-              </router-link>
-            </div>
+            </table>
+          </div>
+          <div v-if="vendor" class="flex place-content-center">
+            <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
+              <button
+                class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center"
+              >
+                {{ $t('change') }}
+              </button>
+            </router-link>
           </div>
         </div>
       </div>
@@ -176,6 +163,7 @@ td {
   display: flex;
   justify-content: space-between;
 }
+
 .map-wrapper {
   width: 100%;
   max-width: 500px;

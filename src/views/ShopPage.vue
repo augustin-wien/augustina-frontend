@@ -92,7 +92,7 @@ const checkIfItemSelected = () => {
                           i
                         </button>
                         <div
-                          class="bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center"
+                          class="item-name bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center"
                         >
                           {{ shopStore.getItembyId(settings.MainItem).Name }}
                           {{ (shopStore.getItembyId(settings.MainItem).Price / 100).toFixed(2) }}€
