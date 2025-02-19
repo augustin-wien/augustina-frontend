@@ -8,7 +8,15 @@ import {
   patchVendor,
   removeVendor,
   checkVendorId,
-  getVendorMe
+  getVendorMe,
+  patchVendorLocation,
+  postVendorLocation,
+  deleteVendorLocation,
+  fetchVendorLocations,
+  fetchVendorComments,
+  postVendorComment,
+  patchVendorComment,
+  deleteVendorComment
 } from '@/api/api'
 import router from '@/router'
 
@@ -69,14 +77,9 @@ export interface Vendor {
   Balance: number
   IsDisabled: boolean
   IsDeleted: boolean
-  Longitude: number
-  Latitude: number
-  Address: string
-  PLZ: string
-  Location: string
-  WorkingTime: string
   Language: string
-  Comment: string
+  Comments: VendorComment[]
+  Locations: VendorLocation[]
   Telephone: string
   RegistrationDate: string
   VendorSince: string
@@ -108,6 +111,25 @@ export interface Vendor {
     | null
 }
 
+export interface VendorLocation {
+  id: number
+  name: string
+  address: string
+  longitude: number
+  latitude: number
+  zip: string
+  workingTime: string
+}
+
+export interface VendorComment {
+  id: number
+  vendorid: number
+  comment: string
+  warning: boolean
+  resolved_at: Date | null
+  created_at: Date
+}
+
 export interface VendorCheckResponse {
   name: string
 }
@@ -117,6 +139,8 @@ type VendorStoreState = {
   vendorsImportedCount: number
   filteredVendors: Vendor[]
   vendor: Vendor | null
+  vendorLocations: VendorLocation[] | null
+  vendorComments: VendorComment[] | null
 }
 
 export const vendorsStore = defineStore('vendors', {
@@ -239,6 +263,88 @@ export const vendorsStore = defineStore('vendors', {
           // eslint-disable-next-line no-console
           console.error(error)
         })
+    },
+    async updateVendorLocation(updatedLocation: VendorLocation, vendorId: number) {
+      try {
+        await patchVendorLocation(vendorId, updatedLocation.id, updatedLocation)
+        await fetchVendorLocations(vendorId).then((response) => {
+          this.vendorLocations = response.data
+          return
+        })
+      } catch (error) {
+        return error
+      }
+    },
+    async createVendorLocation(newLocation: VendorLocation, vendorId: number) {
+      try {
+        await postVendorLocation(vendorId, newLocation)
+        await fetchVendorLocations(vendorId).then((response) => {
+          this.vendorLocations = response.data
+          return
+        })
+      } catch (error) {
+        return error
+      }
+    },
+    async deleteVendorLocation(vendorId: number, locationId: number) {
+      try {
+        await deleteVendorLocation(vendorId, locationId)
+        await fetchVendorLocations(vendorId).then((response) => {
+          this.vendorLocations = response.data
+        })
+        return
+      } catch (error) {
+        return error
+      }
+    },
+    async getVendorLocations(vendorId: number) {
+      try {
+        await fetchVendorLocations(vendorId).then((response) => {
+          this.vendorLocations = response.data
+        })
+
+        return
+      } catch (error) {
+        return error
+      }
+    },
+    async getVendorComments(vendorId: number) {
+      try {
+        await fetchVendorComments(vendorId).then((response) => {
+          this.vendorComments = response.data
+        })
+
+        return
+      } catch (error) {
+        return error
+      }
+    },
+    async createVendorComment(newComment: VendorComment, vendorId: number) {
+      try {
+        await postVendorComment(vendorId, newComment)
+        return
+      } catch (error) {
+        return error
+      }
+    },
+    async updateVendorComment(updatedComment: VendorComment, vendorId: number) {
+      try {
+        await patchVendorComment(vendorId, updatedComment.id, updatedComment)
+        return
+      } catch (error) {
+        return error
+      }
+    },
+    async deleteVendorComment(vendorId: number, commentId: number) {
+      try {
+        await deleteVendorComment(vendorId, commentId)
+        await fetchVendorComments(vendorId).then((response) => {
+          this.vendorComments = response.data
+        })
+        return
+      } catch (error) {
+        return error
+      }
     }
   }
 })

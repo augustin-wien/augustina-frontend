@@ -66,12 +66,6 @@ const customColor = computed(() => {
             <div class="grid grid-cols-2 place-content-between">
               <strong> {{ $t('telephone') }}: </strong>{{ vendorMe?.Telephone }}
             </div>
-            <div class="grid grid-cols-2 place-content-between">
-              <strong>{{ $t('location') }}: </strong>{{ vendorMe?.Location }}
-            </div>
-            <div class="grid grid-cols-2 place-content-between">
-              <strong>{{ $t('postCode') }}:</strong> {{ vendorMe?.PLZ }}
-            </div>
           </div>
           <button
             :style="customColor"

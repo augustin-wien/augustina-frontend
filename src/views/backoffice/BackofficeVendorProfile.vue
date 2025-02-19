@@ -7,7 +7,7 @@ import router from '@/router'
 import IconCross from '@/components/icons/IconCross.vue'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import VendorMapView from '@/components/VendorMapView.vue'
+// import VendorMapView from '@/components/VendorMapView.vue'
 import keycloak from '@/keycloak/keycloak'
 
 const keycloakStore = useKeycloakStore()
@@ -58,7 +58,7 @@ const formatCredit = (credit: number) => {
                 <IconCross />
               </button>
             </div>
-            <table className="table-auto border-spacing-4 border-collapse profile-wrapper">
+            <div className="table-auto border-spacing-4 border-collapse profile-wrapper">
               <tbody className="text-sm text-left">
                 <tr>
                   <th className="p-3">{{ $t('firstName') }}:</th>
@@ -107,33 +107,15 @@ const formatCredit = (credit: number) => {
                   <td className="p-3">{{ vendor.AccountProofUrl }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">{{ $t('address') }}:</th>
-                  <td className="p-3">{{ vendor.Address }}</td>
-                  <th className="p-3">{{ $t('postCode') }}:</th>
-                  <td className="p-3">{{ vendor.PLZ }}</td>
-                </tr>
-                <tr>
-                  <th className="p-3">{{ $t('longitude') }}:</th>
-                  <td className="p-3">{{ vendor.Longitude }}</td>
-                  <th className="p-3">{{ $t('latitude') }}:</th>
-                  <td className="p-3">{{ vendor.Latitude }}</td>
-                </tr>
-                <tr>
-                  <th className="p-3">{{ $t('location') }}:</th>
-                  <td className="p-3">{{ vendor.Location }}</td>
-                  <th className="p-3">{{ $t('workingTime') }}:</th>
-                  <td className="p-3">{{ vendor.WorkingTime }}</td>
-                </tr>
-                <tr>
                   <th className="p-3">{{ $t('comment') }}:</th>
                   <td class="p-3" colspan="4">
-                    <div v-for="(comment, index) in vendor.Comment" :key="index">
+                    <div v-for="(comment, index) in vendor.Comments" :key="index">
                       {{ comment }}
                     </div>
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </div>
           </div>
           <div v-if="vendor" class="flex place-content-center">
             <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">

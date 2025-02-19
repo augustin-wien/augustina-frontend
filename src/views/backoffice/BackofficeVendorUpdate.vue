@@ -1,21 +1,21 @@
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { vendorsStore } from '@/stores/vendor'
-import type { Vendor } from '@/stores/vendor'
+import type { Vendor, VendorComment, VendorLocation } from '@/stores/vendor'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import { useKeycloakStore } from '@/stores/keycloak'
-import IconCross from '@/components/icons/IconCross.vue'
 import VendorMapView from '@/components/VendorMapView.vue'
+import AddressModal from '@/components/AddressModal.vue'
 import keycloak from '@/keycloak/keycloak'
 
 const { t } = useI18n()
 
-import { transformToFloat } from '@/utils/utils'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import CommentsModal from '@/components/CommentsModal.vue'
 
 const store = vendorsStore()
 const keycloakStore = useKeycloakStore()
@@ -24,6 +24,9 @@ const updatedVendor = ref<Vendor | null>(store.vendor)
 
 const route = useRoute()
 
+const vendorLocations = computed(() => store.vendorLocations)
+const vendorComments = computed(() => store.vendorComments)
+
 onMounted(() => {
   const vendorId = parseInt(route.params.ID.toString())
 
@@ -31,11 +34,16 @@ onMounted(() => {
     store.getVendor(vendorId).then(() => {
       updatedVendor.value = store.vendor
     })
+
+    store.getVendorLocations(vendorId)
+    store.getVendorComments(vendorId)
   } else {
     if (keycloak.keycloak) {
       keycloak.keycloak.onAuthSuccess = () => {
         store.getVendor(vendorId).then(() => {
           updatedVendor.value = store.vendor
+          store.getVendorLocations(vendorId)
+          store.getVendorComments(vendorId)
         })
       }
     }
@@ -59,10 +67,6 @@ const updateVendor = async () => {
   if (!newVendor) {
     return
   }
-
-  // fix for int bug
-  newVendor.Longitude = transformToFloat(newVendor.Longitude)
-  newVendor.Latitude = transformToFloat(newVendor.Latitude)
 
   try {
     const response = await store.updateVendor(newVendor as Vendor)
@@ -123,23 +127,107 @@ const showToast = (type: string, message: string) => {
   }, 5000)
 }
 
-const updateLocation = (newLocation: any) => {
-  if (updatedVendor.value) {
-    updatedVendor.value.Longitude = newLocation.location.x
-    updatedVendor.value.Latitude = newLocation.location.y
+const isEditLocation = ref(false)
+
+const updateLocation = (newLocation: VendorLocation) => {
+  if (updatedVendor.value && updatedVendor.value !== null && updatedVendor.value.ID) {
+    if (!updatedVendor.value.Locations) {
+      updatedVendor.value.Locations = []
+    }
+
+    // check if we are editing a location
+    if (isEditLocation.value) {
+      updatedVendor.value.Locations = updatedVendor.value.Locations.map((location) => {
+        if (location.id === newLocation.id && updatedVendor.value !== null) {
+          store.updateVendorLocation(newLocation, updatedVendor.value.ID)
+          return newLocation
+        }
+
+        if (updatedVendor.value !== null) {
+          store.createVendorLocation(newLocation, updatedVendor.value.ID)
+        }
+
+        return location
+      })
+    } else {
+      store.createVendorLocation(newLocation, updatedVendor.value.ID)
+
+      updatedVendor.value.Locations.push(newLocation)
+    }
   }
+
+  isEditLocation.value = false
+  showAddressModal.value = false
 }
 
-const updateAddress = (newAdress: any) => {
-  if (updatedVendor.value) {
-    updatedVendor.value.Name = newAdress.Name
-    updatedVendor.value.Address = newAdress.Address
-    updatedVendor.value.Longitude = newAdress.Longitude
-    updatedVendor.value.Latitude = newAdress.Latitude
-    updatedVendor.value.PLZ = newAdress.PLZ
-    updatedVendor.value.WorkingTime = newAdress.WorkingTime
-  }
+const editLocation = (location: VendorLocation) => {
+  selectedLocation.value = [location]
+  showAddressModal.value = true
+  isEditLocation.value = true
+  console.log(location)
 }
+
+const selectedLocation = ref<Array<VendorLocation> | null>(null)
+
+const editComment = (comment: any) => {
+  selectedComment.value = comment
+  isNewComment.value = false
+  showCommentsDialog.value = true
+}
+
+const showCommentsDialog = ref(false)
+const selectedComment = ref<VendorComment | null>(null)
+const isNewComment = ref(false)
+
+const addNewComment = () => {
+  selectedComment.value = {
+    id: 0,
+    comment: '',
+    created_at: new Date(),
+    warning: false,
+    resolved_at: null,
+    vendorid: updatedVendor.value?.ID || 0
+  }
+
+  isNewComment.value = true
+
+  showCommentsDialog.value = true
+}
+
+const saveComment = (comment: VendorComment) => {
+  console.log(comment)
+
+  if (updatedVendor.value && updatedVendor.value !== null) {
+    if (isNewComment.value) {
+      store.createVendorComment(comment, updatedVendor.value.ID).then(() => {
+        //@ts-expect-error this is already checked
+        store.getVendorComments(updatedVendor.value.ID)
+      })
+    } else {
+      store.updateVendorComment(comment, updatedVendor.value.ID).then(() => {
+        //@ts-expect-error this is already checked
+        store.getVendorComments(updatedVendor.value.ID)
+      })
+    }
+  }
+
+  isNewComment.value = false
+  showCommentsDialog.value = false
+}
+const deleteComment = (comment: VendorComment) => {
+  if (updatedVendor.value && updatedVendor.value !== null) {
+  store.deleteVendorComment(updatedVendor.value.ID, comment.id).then(() => {
+    //@ts-expect-error this is already checked
+    store.getVendorComments(updatedVendor.value.ID)
+  })
+}
+}
+const cancelEditComment = () => {
+  isNewComment.value = false
+  showCommentsDialog.value = false
+  selectedComment.value = null
+}
+
 </script>
 
 <template>
@@ -158,12 +246,6 @@ const updateAddress = (newAdress: any) => {
           <div v-if="store.vendor" class="w-full">
             <div class="flex place-content-center justify-between">
               <span></span>
-              <button
-                class="rounded-full bg-red-600 text-white"
-                @click="router.push('/backoffice/vendorsummary')"
-              >
-                <IconCross />
-              </button>
             </div>
           </div>
 
@@ -197,7 +279,7 @@ const updateAddress = (newAdress: any) => {
                   </div>
 
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
-                    >Email:</label
+                    >{{ $t('E-Mail') }}:</label
                   >
                   <div class="flex flex-row">
                     <input
@@ -235,10 +317,7 @@ const updateAddress = (newAdress: any) => {
                       <option :value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
-                </span>
-              </div>
-              <div class="row">
-                <span class="col">
+
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
                     >{{ $t('telephone') }}:</label
                   >
@@ -251,8 +330,10 @@ const updateAddress = (newAdress: any) => {
                     />
                   </div>
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
-                    >Smartphone:</label
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                    for="hasSmartphone"
+                    >{{ $t('Has a smartphone') }}</label
                   >
                   <div class="flex flex-row">
                     <select
@@ -275,21 +356,6 @@ const updateAddress = (newAdress: any) => {
                       class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       type="text"
                     />
-                  </div>
-
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                    >{{ $t('onlineMap') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <select
-                      id="onlineMap"
-                      v-model="updatedVendor.OnlineMap"
-                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
-                      <option :value="true">{{ $t('yes') }}</option>
-                      <option :value="false">{{ $t('no') }}</option>
-                    </select>
                   </div>
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
                     >{{ $t('bankAccount') }}:</label
@@ -339,35 +405,113 @@ const updateAddress = (newAdress: any) => {
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="verification"
                   />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
-                    >{{ $t('comment') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <textarea
-                      id="comment"
-                      v-model="updatedVendor.Comment"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      rows="5"
-                      type="text"
-                    ></textarea>
-                  </div>
                 </span>
               </div>
-            </div>
-            <button
-              type="submit"
-              class="py-2 px-4 rounded-full customcolor"
-              @click="showAddressModal = true"
-            >
-              {{ $t('address') }}
-            </button>
+              <div class="row">
+                <span class="col">
+                  <div class="flex flex-col">
+                    <div class="flex flex-row justify-between mb-4">
+                      <h2 class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment">
+                        {{ $t('comments') }}
+                      </h2>
+                      <button class="py-2 px-4 rounded-full customcolor" @click="addNewComment()">
+                        {{ $t('Add a comment') }}
+                      </button>
+                    </div>
 
-            <div v-if="updatedVendor.Latitude != 0.1 && updatedVendor.Longitude != 0.1">
-              <VendorMapView
-                :vendors="[updatedVendor]"
-                :enable-search="1"
-                @new-location="updateLocation"
-              />
+                    <div v-if="vendorComments && vendorComments.length > 0">
+                      <div
+                        v-for="comment in vendorComments"
+                        :key="'comment_' + comment.id"
+                        v-key="comment.id"
+                        class="comment flex flex-row justify-between"
+                      >
+
+                      <div :class="'comment-infos' + (comment.warning ? ' text-red-500' : '')">
+                          <div class="comment-title font-bold font-small">{{ new Date(comment.created_at).toLocaleDateString() }}</div>
+
+                          <div class="comment-comment"><span   v-if="comment.warning" class="comment-warning-label font-bold">{{ $t("warning") }}: </span>{{ comment.comment }}</div>
+                          <div v-if="comment.resolved_at && new Date(comment.resolved_at).toLocaleDateString() !== '1.1.1'">
+                            <label class="pr-2 font-bold">{{ $t('Resolved at') }}:</label>
+                            <span>{{ new Date(comment.resolved_at).toLocaleDateString() }}</span>
+                          </div>
+                        </div>
+                        <div class="comment-actions flex flex-col">
+                          <button
+                            class="py-2 px-4 rounded-full customcolor"
+                            @click="editComment(comment)"
+                          >
+                            {{ $t('edit') }}
+                          </button>
+                          <button
+                            class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
+                            @click="store.deleteVendorComment(updatedVendor.ID, comment.id)"
+                          >
+                            {{ $t('delete') }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else>
+                      <p>{{ $t('noComments') }}</p>
+                    </div>
+                  </div>
+                  <div class="locations mt-5">
+                    <div class="flex flex-row justify-between mb-4">
+                      <h2>
+                        <b>{{ $t('vendor locations') }}</b>
+                      </h2>
+                      <button
+                        type="submit"
+                        class="py-2 px-4 rounded-full customcolor"
+                        @click="showAddressModal = true"
+                      >
+                        {{ $t('New Location') }}
+                      </button>
+                    </div>
+                    <div v-if="vendorLocations && vendorLocations.length > 0">
+                      <div
+                        v-for="location in vendorLocations"
+                        :key="'location_' + location.id"
+                        v-key="'loc_' + location.id"
+                        class="location flex justify-between"
+                      >
+                        <div class="location-infos">
+                          <div class="location-title font-bold">{{ location.name }}</div>
+                          <div class="location-address">
+                            {{ location.address }} {{ location.zip }}
+                          </div>
+                          <div v-if="location.workingTime">
+                            <label class="pr-2 font-bold">{{ $t('workingTime') }}:</label>
+                            <span>{{ location.workingTime }}</span>
+                          </div>
+                        </div>
+                        <div class="location-actions flex flex-col">
+                          <button
+                            class="py-2 px-4 rounded-full customcolor"
+                            @click="editLocation(location)"
+                          >
+                            {{ $t('edit') }}
+                          </button>
+                          <button
+                            class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
+                            @click="store.deleteVendorLocation(updatedVendor.ID, location.id)"
+                          >
+                            {{ $t('delete') }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else>
+                      <p>{{ $t('Vendor has no locations yet') }}</p>
+                    </div>
+                  </div>
+                  <VendorMapView
+                    v-if="vendorLocations && vendorLocations.length > 0"
+                    :locations="vendorLocations"
+                  />
+                </span>
+              </div>
             </div>
 
             <div class="flex justify-between">
@@ -384,13 +528,6 @@ const updateAddress = (newAdress: any) => {
                 @click="updateVendor"
               >
                 {{ $t('confirmation') }}
-              </button>
-              <button
-                type="submit"
-                class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
-                @click="showDeleteModal = true"
-              >
-                {{ $t('delete') }}
               </button>
             </div>
           </form>
@@ -469,165 +606,20 @@ const updateAddress = (newAdress: any) => {
             </div>
           </div>
         </div>
-        <!-- Adress modal -->
-        <div v-if="showAddressModal">
-          <div
-            id="addressModal"
-            tabindex="-1"
-            aria-hidden="false"
-            class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden flex items-center justify-center overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-          >
-            <div class="relative w-full max-w-2xl max-h-full">
-              <!-- Modal content -->
-              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <!-- Modal header -->
-                <div
-                  class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600"
-                >
-                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                    {{ updatedVendor.LicenseID }} {{ updatedVendor.FirstName }} {{ $t('address') }}
-                    {{ $t('edit') }}
-                  </h3>
-                  <button
-                    type="button"
-                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    data-modal-hide="addressModal"
-                    @click="showAddressModal = false"
-                  >
-                    <svg
-                      class="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 14"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                      />
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                  </button>
-                </div>
-                <!-- Modal body -->
-
-                <form @submit.prevent="updateAddress">
-                  <div class="p-4">
-                    <div class="mb-2">
-                      <label for="name" class="block text-gray-700 text-sm font-bold mb-2"
-                        >Name</label
-                      >
-                      <input
-                        id="name"
-                        v-model="updatedVendor.Name"
-                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        type="text"
-                      />
-                    </div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
-                      >{{ $t('address') }}:</label
-                    >
-                    <div class="flex flex-row">
-                      <input
-                        id="adress"
-                        v-model="updatedVendor.Address"
-                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        type="text"
-                      />
-                    </div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
-                      >{{ $t('postCode') }}:</label
-                    >
-                    <div class="flex flex-row">
-                      <input
-                        id="plz"
-                        v-model="updatedVendor.PLZ"
-                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        type="text"
-                      />
-                    </div>
-
-                    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                      >{{ $t('location') }}:</label
-                    >
-                    <div class="flex flex-row">
-                      <input
-                        id="location"
-                        v-model.number="updatedVendor.Location"
-                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        type="text"
-                      />
-                    </div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                      >{{ $t('longitude') }}:</label
-                    >
-                    <div class="flex flex-row">
-                      <input
-                        id="location"
-                        v-model.number="updatedVendor.Longitude"
-                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        type="text"
-                      />
-                    </div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                      >{{ $t('latitude') }}:</label
-                    >
-                    <div class="flex flex-row">
-                      <input
-                        id="location"
-                        v-model.number="updatedVendor.Latitude"
-                        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        type="text"
-                      />
-                    </div>
-                    <div class="mb-2">
-                      <label
-                        class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                        for="workingTime"
-                        >{{ $t('workingTime') }}:</label
-                      >
-                      <div class="flex flex-row">
-                        <select
-                          v-model="updatedVendor.WorkingTime"
-                          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        >
-                          <option value="G" selected>{{ $t('(G) all day') }}</option>
-                          <option value="V">{{ $t('(v) mornings') }}</option>
-                          <option value="N">{{ $t('(N) afternoons') }}</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-
-                <!-- Modal footer -->
-                <div
-                  class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-                >
-                  <button
-                    data-modal-hide="defaultModal"
-                    type="submit"
-                    class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    @click="updateAddress"
-                  >
-                    {{ $t('edit') }}
-                  </button>
-                  <button
-                    data-modal-hide="defaultModal"
-                    type="button"
-                    class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                    @click="showAddressModal = false"
-                  >
-                    {{ $t('cancel') }}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AddressModal
+          v-if="showAddressModal"
+          :vendor="updatedVendor"
+          :locations="selectedLocation"
+          @close="showAddressModal = false"
+          @update="updateLocation"
+        ></AddressModal>
+        <CommentsModal
+          v-if="showCommentsDialog"
+          :comment="selectedComment"
+          :vendor="updatedVendor"
+          @close="cancelEditComment"
+          @update="saveComment"
+        ></CommentsModal>
       </div>
     </template>
   </component>
@@ -640,5 +632,17 @@ tr {
 
 td {
   padding: 10px;
+}
+.locations {
+  display: flex;
+  flex-direction: column;
+}
+.location {
+  padding: 10px;
+  display: fle;
+}
+/* even odd styling for locations */
+.location:nth-child(even) {
+  background-color: #f2f2f2;
 }
 </style>

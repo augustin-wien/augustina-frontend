@@ -5,7 +5,6 @@ import { useSettingsStore } from '@/stores/settings'
 import type { Vendor } from '@/stores/vendor'
 import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
-import VendorMapView from '@/components/VendorMapView.vue'
 import IconCross from '@/components/icons/IconCross.vue'
 import { transformToFloat } from '@/utils/utils'
 
@@ -23,15 +22,10 @@ const newVendor = ref<Vendor>({
   UrlID: '',
   Balance: 0,
   IsDisabled: false,
-  Longitude: settingsStore.settings.MapCenterLong,
-  Latitude: settingsStore.settings.MapCenterLat,
-  Address: '',
-  PLZ: '',
-  Location: '',
-  WorkingTime: 'G',
   Language: '',
-  Comment: '',
   Telephone: '',
+  Locations: [],
+  Comments: [],
   RegistrationDate: '2023-10-05',
   VendorSince: '2023-10-05',
   OnlineMap: false,
@@ -47,8 +41,6 @@ const importing = ref(false)
 const importingVendorsCount = ref(0)
 
 const submitVendor = async () => {
-  newVendor.value.Longitude = transformToFloat(newVendor.value.Longitude)
-  newVendor.value.Latitude = transformToFloat(newVendor.value.Latitude)
   if (!newVendor.value) return
 
   if (
@@ -71,14 +63,6 @@ const submitVendor = async () => {
 
   if (!newVendor.value.LicenseID) {
     showToast('error', 'Lizenznummer muss angegeben werden')
-    return
-  }
-
-  if (
-    newVendor.value.WorkingTime.length > 1 ||
-    !['V', 'N', 'G'].includes(newVendor.value.WorkingTime.toUpperCase())
-  ) {
-    showToast('error', 'Die Arbeitszeit muss in der Form V,N oder G angegeben werden')
     return
   }
 
@@ -105,13 +89,6 @@ const showToast = (type: string, message: string) => {
   setTimeout(() => {
     toast.value = null
   }, 5000)
-}
-
-const updateLocation = (newLocation: any) => {
-  if (newVendor.value) {
-    newVendor.value.Longitude = newLocation.location.x
-    newVendor.value.Latitude = newLocation.location.y
-  }
 }
 
 const importCSV = async () => {
@@ -293,48 +270,6 @@ const importCSV = async () => {
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="address"
                     >{{ $t('address') }}:</label
                   >
-                  <input
-                    id="address"
-                    v-model="newVendor.Address"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
-                    >{{ $t('postCode') }}:</label
-                  >
-                  <input
-                    id="plz"
-                    v-model="newVendor.PLZ"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >{{ $t('location') }}:</label
-                  >
-                  <input
-                    id="location"
-                    v-model="newVendor.Location"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="longitude"
-                    >{{ $t('longitude') }}:</label
-                  >
-                  <input
-                    id="longitude"
-                    v-model="newVendor.Longitude"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="latitude"
-                    >{{ $t('latitude') }}:</label
-                  >
-                  <input
-                    id="latitude"
-                    v-model="newVendor.Latitude"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
                 </span>
               </div>
               <div class="row">
@@ -342,14 +277,6 @@ const importCSV = async () => {
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
                     >{{ $t('workingTime') }}:</label
                   >
-                  <select
-                    v-model="newVendor.WorkingTime"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  >
-                    <option value="G" selected>{{ $t('(G) all day') }}</option>
-                    <option value="V">{{ $t('(v) mornings') }}</option>
-                    <option value="N">{{ $t('(N) afternoons') }}</option>
-                  </select>
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                     for="registrationDate"
@@ -450,22 +377,17 @@ const importCSV = async () => {
                       </select>
                     </span>
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
-                    >{{ $t('comment') }}:</label
-                  >
-                  <textarea
-                    id="comment"
-                    v-model="newVendor.Comment"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  ></textarea>
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment">{{
+                    $t('comments')
+                  }}</label>
+                  Todo: add comment
                 </span>
               </div>
-              <VendorMapView
+              <!-- <VendorMapView
                 :vendors="[newVendor]"
                 :enable-search="1"
                 @new-location="updateLocation"
-              />
+              /> -->
             </div>
 
             <div class="flex place-content-center">
@@ -486,7 +408,7 @@ const importCSV = async () => {
           className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-20 w-20"
           @click="importCSV"
         >
-          CSV import
+          {{ $t('CSV import') }}
         </button>
       </footer>
     </template>

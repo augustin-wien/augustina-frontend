@@ -12,7 +12,7 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 import 'leaflet-geosearch/dist/geosearch.css'
 
 const emit = defineEmits(['newLocation'])
-const props = defineProps(['vendors', 'enableSearch'])
+const props = defineProps(['locations', 'enableSearch', 'vendor'])
 
 const provider = new OpenStreetMapProvider()
 
@@ -22,10 +22,11 @@ const searchControl: any = new (GeoSearchControl as any)({
   provider: provider
 })
 
-const vendors = computed(() => props.vendors)
+const locations = computed(() => props.locations)
 
-watch(vendors, () => {
-  center.value = [vendors.value[0].Latitude, vendors.value[0].Longitude]
+watch(locations, () => {
+  if (locations.value.length > 0 && locations.value[0].Latitude && locations.value[0].Longitude)
+  center.value = [locations.value[0].Latitude, locations.value[0].Longitude]
 })
 
 //Map configuration
@@ -36,7 +37,6 @@ const map: Ref<any> = ref(null)
 
 function onMapReady(instance: any) {
   if (instance) {
-    center.value = [vendors.value[0].Latitude, vendors.value[0].Longitude]
     map.value = instance
 
     map.value.on('dblclick', function (event: any) {
@@ -55,7 +55,7 @@ function onMapReady(instance: any) {
 </script>
 
 <template>
-  <div v-if="vendors.length > 0" class="h-full">
+  <div v-if="locations.length > 0" class="h-full w-full">
     <div style="height: 400px; width: 100%">
       <l-map
         v-model:zoom="zoom"
@@ -69,16 +69,15 @@ function onMapReady(instance: any) {
           layer-type="base"
           name="OpenStreetMap"
         ></l-tile-layer>
-        <li v-for="vendor in vendors" :key="vendor.licenseID">
+        <li v-for="location in locations" :key="'location_' + location.Id">
           <l-marker
-            v-if="vendor.Latitude && vendor.Longitude"
-            :lat-lng="[vendor.Latitude, vendor.Longitude]"
+            v-if="location.latitude && location.longitude"
+            :lat-lng="[location.latitude, location.longitude]"
           >
             <l-popup class="text-center text-black grid">
-              <h2 class="text-xl font-semibold">{{ vendor.FirstName }}</h2>
-              <span class="mb-2">{{ vendor.LcenseID }}</span>
+              <span>{{ location.name }}</span>
               <RouterLink
-                v-if="vendor.id"
+                v-if="vendor && vendor.Id"
                 :to="{
                   name: 'Vendor Profile',
                   params: { ID: vendor.Id }

@@ -3,9 +3,19 @@ import IconCross from '@/components/icons/IconCross.vue'
 import VendorMapView from '@/components/VendorMapView.vue'
 import { vendorsStore } from '@/stores/vendor'
 import { formatCredit } from '@/utils/utils'
+import { onMounted, computed } from 'vue'
 
 const vendorStore = vendorsStore()
-const vendor = vendorStore.vendor
+const vendor = computed(() => vendorStore.vendor)
+const vendorLocations = computed(() => vendorStore.vendorLocations)
+const vendorComments = computed(() => vendorStore.vendorComments)
+
+onMounted(() => {
+  if (vendor.value !== null && vendor.value?.ID) {
+    vendorStore.getVendorLocations(vendor.value?.ID)
+    vendorStore.getVendorComments(vendor.value?.ID)
+  }
+})
 
 const emit = defineEmits(['close'])
 </script>
@@ -51,29 +61,10 @@ const emit = defineEmits(['close'])
                           <td className="p-3">{{ formatCredit(vendor?.Balance) }} €</td>
                         </tr>
                         <tr>
-                          <th className="p-3">E-Mail:</th>
+                          <th className="p-3">{{ $t('E-mail') }}</th>
                           <td className="p-3">{{ vendor?.Email }}</td>
                           <th className="p-3">{{ $t('telephone') }}:</th>
                           <td className="p-3">{{ vendor?.Telephone }}</td>
-                        </tr>
-                        <tr>
-                          <th className="p-3">{{ $t('address') }}:</th>
-                          <td className="p-3">{{ vendor?.Address }}</td>
-                          <th className="p-3">{{ $t('postCode') }}:</th>
-                          <td className="p-3">{{ vendor?.PLZ }}</td>
-                        </tr>
-                        <tr>
-                          <th className="p-3">{{ $t('longitude') }}:</th>
-                          <td className="p-3">{{ vendor?.Longitude }}</td>
-
-                          <th className="p-3">{{ $t('latitude') }}:</th>
-                          <td className="p-3">{{ vendor?.Latitude }}</td>
-                        </tr>
-                        <tr>
-                          <th className="p-3">{{ $t('location') }}:</th>
-                          <td className="p-3">{{ vendor?.Location }}</td>
-                          <th className="p-3">{{ $t('language') }}:</th>
-                          <td className="p-3">{{ vendor?.Language }}</td>
                         </tr>
                         <tr>
                           <th className="p-3">{{ $t('vendorSince') }}:</th>
@@ -83,13 +74,7 @@ const emit = defineEmits(['close'])
                           <td className="p-3">{{ vendor?.RegistrationDate }}</td>
                         </tr>
                         <tr>
-                          <th className="p-3">{{ $t('workingTime') }}:</th>
-                          <td className="p-3">{{ vendor?.WorkingTime }}</td>
-                          <th className="p-3">Online Karte:</th>
-                          <td className="p-3">{{ $t(vendor?.OnlineMap ? 'yes' : 'no') }}</td>
-                        </tr>
-                        <tr>
-                          <th className="p-3">Smartphone:</th>
+                          <th className="p-3">{{ $t('Has a smartphone') }}</th>
                           <td className="p-3">{{ $t(vendor?.HasSmartphone ? 'yes' : 'no') }}</td>
                           <th className="p-3">{{ $t('bankAccount') }}:</th>
                           <td className="p-3">{{ $t(vendor?.HasBankAccount ? 'yes' : 'no') }}</td>
@@ -104,18 +89,47 @@ const emit = defineEmits(['close'])
                 </tr>
               </tbody>
             </table>
+            <div class="flex flex-col">
+                    <div class="flex flex-row justify-between mb-4">
+                      <h2 class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment">
+                        {{ $t('comments') }}
+                      </h2>
+                    </div>
+
+                    <div v-if="vendorComments && vendorComments.length > 0">
+                      <div
+                        v-for="comment in vendorComments"
+                        :key="'comment_' + comment.id"
+                        v-key="comment.id"
+                        class="comment flex flex-row justify-between"
+                      >
+
+                      <div :class="'comment-infos' + (comment.warning ? ' text-red-500' : '')">
+                          <div class="comment-title font-bold font-small">{{ new Date(comment.created_at).toLocaleDateString() }}</div>
+
+                          <div class="comment-comment"><span   v-if="comment.warning" class="comment-warning-label font-bold">{{ $t("warning") }}: </span>{{ comment.comment }}</div>
+                          <div v-if="comment.resolved_at && new Date(comment.resolved_at).toLocaleDateString() !== '1.1.1'">
+                            <label class="pr-2 font-bold">{{ $t('Resolved at') }}:</label>
+                            <span>{{ new Date(comment.resolved_at).toLocaleDateString() }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else>
+                      <p>{{ $t('noComments') }}</p>
+                    </div>
+                  </div>
           </div>
           <div class="w-full h-full overflow-hidden">
             <div
-              v-if="
-                vendor?.Latitude &&
-                vendor?.Longitude &&
-                vendor?.Latitude !== 0.1 &&
-                vendor?.Longitude !== 0.1
-              "
+              v-if="vendorStore?.vendorLocations && vendorStore?.vendorLocations?.length > 0"
               class="w-full h-full"
             >
-              <VendorMapView :vendors="[vendor]" :enable-search="false" />
+              <VendorMapView
+                v-if="vendorStore?.vendorLocations && vendorStore?.vendorLocations.length > 0"
+                :locations="vendorStore?.vendorLocations"
+                :enable-search="false"
+              />
             </div>
           </div>
         </div>
