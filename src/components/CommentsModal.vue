@@ -8,26 +8,25 @@ const emit = defineEmits(['close', 'update'])
 const updatedComment = ref<VendorComment | null>(null)
 
 const created_at = ref(new Date().toISOString().split('T')[0])
-const resolved_at = ref<string | null>(null) 
+const resolved_at = ref<string | null>(null)
 
 const updateComment = () => {
-
   if (!updatedComment.value) return
 
-  if (resolved_at.value)
-  updatedComment.value.resolved_at = new Date(resolved_at.value)
+  if (resolved_at.value) updatedComment.value.resolved_at = new Date(resolved_at.value)
   emit('update', updatedComment.value)
 }
 
 onMounted(() => {
   if (props.comment) {
-    
     updatedComment.value = props.comment
     if (!updatedComment.value) return
     created_at.value = new Date(updatedComment.value.created_at).toLocaleDateString('de-DE')
-    if (updatedComment.value.resolved_at && new Date(updatedComment.value.resolved_at).toISOString().split('T')[0] !== "0001-01-01")
-    resolved_at.value = new Date(updatedComment.value.resolved_at).toISOString().split('T')[0]
-
+    if (
+      updatedComment.value.resolved_at &&
+      new Date(updatedComment.value.resolved_at).toISOString().split('T')[0] !== '0001-01-01'
+    )
+      resolved_at.value = new Date(updatedComment.value.resolved_at).toISOString().split('T')[0]
   }
 })
 </script>
@@ -104,7 +103,6 @@ onMounted(() => {
               class="p-4 me-2 border border-gray-200 rounded-lg dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300"
             />
           </div>
-
         </div>
         <!-- Modal footer -->
         <div

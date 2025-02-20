@@ -268,6 +268,7 @@ export const vendorsStore = defineStore('vendors', {
     async updateVendorLocation(updatedLocation: VendorLocation, vendorId: number) {
       try {
         await patchVendorLocation(vendorId, updatedLocation.id, updatedLocation)
+
         await fetchVendorLocations(vendorId).then((response) => {
           this.vendorLocations = response.data
           return
@@ -279,6 +280,7 @@ export const vendorsStore = defineStore('vendors', {
     async createVendorLocation(newLocation: VendorLocation, vendorId: number) {
       try {
         await postVendorLocation(vendorId, newLocation)
+
         await fetchVendorLocations(vendorId).then((response) => {
           this.vendorLocations = response.data
           return
@@ -290,9 +292,11 @@ export const vendorsStore = defineStore('vendors', {
     async deleteVendorLocation(vendorId: number, locationId: number) {
       try {
         await deleteVendorLocation(vendorId, locationId)
+
         await fetchVendorLocations(vendorId).then((response) => {
           this.vendorLocations = response.data
         })
+
         return
       } catch (error) {
         return error
@@ -339,9 +343,11 @@ export const vendorsStore = defineStore('vendors', {
     async deleteVendorComment(vendorId: number, commentId: number) {
       try {
         await deleteVendorComment(vendorId, commentId)
+
         await fetchVendorComments(vendorId).then((response) => {
           this.vendorComments = response.data
         })
+
         return
       } catch (error) {
         return error

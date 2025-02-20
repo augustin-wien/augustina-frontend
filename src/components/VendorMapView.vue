@@ -26,7 +26,7 @@ const locations = computed(() => props.locations)
 
 watch(locations, () => {
   if (locations.value.length > 0 && locations.value[0].Latitude && locations.value[0].Longitude)
-  center.value = [locations.value[0].Latitude, locations.value[0].Longitude]
+    center.value = [locations.value[0].Latitude, locations.value[0].Longitude]
 })
 
 //Map configuration
@@ -78,7 +78,10 @@ function onMapReady(instance: any) {
               <span class="font-bold">{{ location.name }}</span>
               <span>{{ location.address }}</span>
               <span>{{ location.zip }}</span>
-              <span><span class="font-bold mr-1">{{ $t('workingTime') }}:</span>{{ location.working_time }}</span>
+              <span
+                ><span class="font-bold mr-1">{{ $t('workingTime') }}:</span
+                >{{ location.working_time }}</span
+              >
               <RouterLink
                 v-if="vendor && vendor.Id"
                 :to="{

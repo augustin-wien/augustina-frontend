@@ -7,7 +7,6 @@ import { onMounted, computed } from 'vue'
 
 const vendorStore = vendorsStore()
 const vendor = computed(() => vendorStore.vendor)
-const vendorLocations = computed(() => vendorStore.vendorLocations)
 const vendorComments = computed(() => vendorStore.vendorComments)
 
 onMounted(() => {
@@ -94,35 +93,45 @@ const emit = defineEmits(['close'])
               </tbody>
             </table>
             <div class="flex flex-col">
-                    <div class="flex flex-row justify-between mb-4">
-                      <h2 class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment">
-                        {{ $t('comments') }}
-                      </h2>
+              <div class="flex flex-row justify-between mb-4">
+                <h2 class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment">
+                  {{ $t('comments') }}
+                </h2>
+              </div>
+
+              <div v-if="vendorComments && vendorComments.length > 0">
+                <div
+                  v-for="comment in vendorComments"
+                  :key="'comment_' + comment.id"
+                  v-key="comment.id"
+                  class="comment flex flex-row justify-between"
+                >
+                  <div :class="'comment-infos' + (comment.warning ? ' text-red-500' : '')">
+                    <div class="comment-title font-bold font-small">
+                      {{ new Date(comment.created_at).toLocaleDateString() }}
                     </div>
 
-                    <div v-if="vendorComments && vendorComments.length > 0">
-                      <div
-                        v-for="comment in vendorComments"
-                        :key="'comment_' + comment.id"
-                        v-key="comment.id"
-                        class="comment flex flex-row justify-between"
-                      >
-
-                      <div :class="'comment-infos' + (comment.warning ? ' text-red-500' : '')">
-                          <div class="comment-title font-bold font-small">{{ new Date(comment.created_at).toLocaleDateString() }}</div>
-
-                          <div class="comment-comment"><span   v-if="comment.warning" class="comment-warning-label font-bold">{{ $t("warning") }}: </span>{{ comment.comment }}</div>
-                          <div v-if="comment.resolved_at && new Date(comment.resolved_at).toLocaleDateString() !== '1.1.1'">
-                            <label class="pr-2 font-bold">{{ $t('Resolved at') }}:</label>
-                            <span>{{ new Date(comment.resolved_at).toLocaleDateString() }}</span>
-                          </div>
-                        </div>
-                      </div>
+                    <div class="comment-comment">
+                      <span v-if="comment.warning" class="comment-warning-label font-bold"
+                        >{{ $t('warning') }}: </span
+                      >{{ comment.comment }}
                     </div>
-                    <div v-else>
-                      <p>{{ $t('noComments') }}</p>
+                    <div
+                      v-if="
+                        comment.resolved_at &&
+                        new Date(comment.resolved_at).toLocaleDateString() !== '1.1.1'
+                      "
+                    >
+                      <label class="pr-2 font-bold">{{ $t('Resolved at') }}:</label>
+                      <span>{{ new Date(comment.resolved_at).toLocaleDateString() }}</span>
                     </div>
                   </div>
+                </div>
+              </div>
+              <div v-else>
+                <p>{{ $t('noComments') }}</p>
+              </div>
+            </div>
           </div>
           <div class="w-full h-full overflow-hidden">
             <div

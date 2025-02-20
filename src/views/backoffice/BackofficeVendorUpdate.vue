@@ -164,7 +164,6 @@ const editLocation = (location: VendorLocation) => {
   selectedLocation.value = [location]
   showAddressModal.value = true
   isEditLocation.value = true
-  console.log(location)
 }
 
 const selectedLocation = ref<Array<VendorLocation> | null>(null)
@@ -195,8 +194,6 @@ const addNewComment = () => {
 }
 
 const saveComment = (comment: VendorComment) => {
-  console.log(comment)
-
   if (updatedVendor.value && updatedVendor.value !== null) {
     if (isNewComment.value) {
       store.createVendorComment(comment, updatedVendor.value.ID).then(() => {
@@ -214,20 +211,12 @@ const saveComment = (comment: VendorComment) => {
   isNewComment.value = false
   showCommentsDialog.value = false
 }
-const deleteComment = (comment: VendorComment) => {
-  if (updatedVendor.value && updatedVendor.value !== null) {
-  store.deleteVendorComment(updatedVendor.value.ID, comment.id).then(() => {
-    //@ts-expect-error this is already checked
-    store.getVendorComments(updatedVendor.value.ID)
-  })
-}
-}
+
 const cancelEditComment = () => {
   isNewComment.value = false
   showCommentsDialog.value = false
   selectedComment.value = null
 }
-
 </script>
 
 <template>
@@ -433,12 +422,22 @@ const cancelEditComment = () => {
                         v-key="comment.id"
                         class="comment flex flex-row justify-between"
                       >
+                        <div :class="'comment-infos' + (comment.warning ? ' text-red-500' : '')">
+                          <div class="comment-title font-bold font-small">
+                            {{ new Date(comment.created_at).toLocaleDateString() }}
+                          </div>
 
-                      <div :class="'comment-infos' + (comment.warning ? ' text-red-500' : '')">
-                          <div class="comment-title font-bold font-small">{{ new Date(comment.created_at).toLocaleDateString() }}</div>
-
-                          <div class="comment-comment"><span   v-if="comment.warning" class="comment-warning-label font-bold">{{ $t("warning") }}: </span>{{ comment.comment }}</div>
-                          <div v-if="comment.resolved_at && new Date(comment.resolved_at).toLocaleDateString() !== '1.1.1'">
+                          <div class="comment-comment">
+                            <span v-if="comment.warning" class="comment-warning-label font-bold"
+                              >{{ $t('warning') }}: </span
+                            >{{ comment.comment }}
+                          </div>
+                          <div
+                            v-if="
+                              comment.resolved_at &&
+                              new Date(comment.resolved_at).toLocaleDateString() !== '1.1.1'
+                            "
+                          >
                             <label class="pr-2 font-bold">{{ $t('Resolved at') }}:</label>
                             <span>{{ new Date(comment.resolved_at).toLocaleDateString() }}</span>
                           </div>
