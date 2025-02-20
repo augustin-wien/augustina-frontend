@@ -26,14 +26,15 @@ const newVendor = ref<Vendor>({
   Telephone: '',
   Locations: [],
   Comments: [],
-  RegistrationDate: '2023-10-05',
-  VendorSince: '2023-10-05',
+  RegistrationDate: new Date().toISOString().split('T')[0],
+  VendorSince: new Date().toISOString().split('T')[0],
   OnlineMap: false,
   HasSmartphone: false,
   HasBankAccount: false,
   OpenPayments: null,
   AccountProofUrl: null,
-  IsDeleted: false
+  IsDeleted: false,
+  Debt: ''
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)
@@ -123,7 +124,8 @@ const importCSV = async () => {
         Comment,
         OnlineMap,
         HasSmartphone,
-        HasBankAccount
+        HasBankAccount,
+        Debt
       ] = line.split(';')
 
       const Email = `${LicenseID}${settingsStore.settings.VendorEmailPostfix}`
@@ -154,7 +156,8 @@ const importCSV = async () => {
             ? true
             : false,
         IsDisabled: false,
-        Email
+        Email,
+        Debt
       }
     })
 
@@ -270,13 +273,19 @@ const importCSV = async () => {
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="address"
                     >{{ $t('address') }}:</label
                   >
+                  <div class="hint font-bold">
+                    <p>
+                      {{
+                        $t(
+                          'You will only be able to add comments and locations for the vendor once the vendor has been created.'
+                        )
+                      }}
+                    </p>
+                  </div>
                 </span>
               </div>
               <div class="row">
                 <span class="col">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                    >{{ $t('workingTime') }}:</label
-                  >
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                     for="registrationDate"
@@ -298,23 +307,6 @@ const importCSV = async () => {
                     type="date"
                   />
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                    >{{ $t('onlineMap') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <span class="p-2">
-                      <select
-                        id="onlineMap"
-                        v-model="newVendor.OnlineMap"
-                        class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required
-                      >
-                        <option :value="true">{{ $t('yes') }}</option>
-                        <option :value="false">{{ $t('no') }}</option>
-                      </select>
-                    </span>
-                  </div>
-
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                     for="hasBankAccount"
@@ -333,8 +325,10 @@ const importCSV = async () => {
                       </select>
                     </span>
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
-                    >Smartphone:</label
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                    for="hasSmartphone"
+                    >{{ $t('Has a smartphone') }}</label
                   >
 
                   <div class="flex flex-row">
@@ -357,7 +351,7 @@ const importCSV = async () => {
                     id="verification"
                     v-model="newVendor.AccountProofUrl"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="verification"
+                    type="text"
                   />
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
@@ -377,17 +371,17 @@ const importCSV = async () => {
                       </select>
                     </span>
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment">{{
-                    $t('comments')
-                  }}</label>
-                  Todo: add comment
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="debt"
+                    >{{ $t('debt') }}:</label
+                  >
+                  <input
+                    id="debt"
+                    v-model="newVendor.Debt"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                  />
                 </span>
               </div>
-              <!-- <VendorMapView
-                :vendors="[newVendor]"
-                :enable-search="1"
-                @new-location="updateLocation"
-              /> -->
             </div>
 
             <div class="flex place-content-center">
