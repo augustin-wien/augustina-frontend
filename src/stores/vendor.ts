@@ -86,6 +86,7 @@ export interface Vendor {
   OnlineMap: boolean
   HasSmartphone: boolean
   HasBankAccount: boolean
+  Debt: string
 
   OpenPayments:
     | [
@@ -118,7 +119,7 @@ export interface VendorLocation {
   longitude: number
   latitude: number
   zip: string
-  workingTime: string
+  working_time: string
 }
 
 export interface VendorComment {

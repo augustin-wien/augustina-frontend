@@ -17,7 +17,7 @@ const newAddress: Ref<VendorLocation> = ref({
   zip: '',
   longitude: settingsStore.settings?.MapCenterLong || 0.0,
   latitude: settingsStore.settings?.MapCenterLat || 0.0,
-  workingTime: 'G'
+  working_time: 'G'
 })
 
 onMounted(() => {
@@ -145,7 +145,7 @@ const updateLocation = (event: any) => {
                 >
                 <div class="flex flex-row">
                   <select
-                    v-model="newAddress.workingTime"
+                    v-model="newAddress.working_time"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   >
                     <option value="G" selected>{{ $t('(G) all day') }}</option>

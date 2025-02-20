@@ -329,23 +329,6 @@ const cancelEditComment = () => {
                       type="text"
                     />
                   </div>
-
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                    for="hasSmartphone"
-                    >{{ $t('Has a smartphone') }}</label
-                  >
-                  <div class="flex flex-row">
-                    <select
-                      id="hasSmartphone"
-                      v-model="updatedVendor.HasSmartphone"
-                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
-                      <option :value="true">{{ $t('yes') }}</option>
-                      <option :value="false">{{ $t('no') }}</option>
-                    </select>
-                  </div>
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
                     >{{ $t('language') }}:</label
                   >
@@ -357,21 +340,6 @@ const cancelEditComment = () => {
                       type="text"
                     />
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                    >{{ $t('bankAccount') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <select
-                      id="bankAccount"
-                      v-model="updatedVendor.HasBankAccount"
-                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
-                      <option :value="true">{{ $t('yes') }}</option>
-                      <option :value="false">{{ $t('no') }}</option>
-                    </select>
-                  </div>
-
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                     for="registrationDate"
@@ -396,12 +364,51 @@ const cancelEditComment = () => {
                       type="text"
                     />
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                    for="hasSmartphone"
+                    >{{ $t('Has a smartphone') }}</label
+                  >
+                  <div class="flex flex-row">
+                    <select
+                      id="hasSmartphone"
+                      v-model="updatedVendor.HasSmartphone"
+                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      required
+                    >
+                      <option :value="true">{{ $t('yes') }}</option>
+                      <option :value="false">{{ $t('no') }}</option>
+                    </select>
+                  </div>
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
+                    >{{ $t('bankAccount') }}:</label
+                  >
+                  <div class="flex flex-row">
+                    <select
+                      id="bankAccount"
+                      v-model="updatedVendor.HasBankAccount"
+                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      required
+                    >
+                      <option :value="true">{{ $t('yes') }}</option>
+                      <option :value="false">{{ $t('no') }}</option>
+                    </select>
+                  </div>
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="verification"
                     >{{ $t('verificationLink') }}:</label
                   >
                   <input
                     id="verification"
                     v-model="updatedVendor.AccountProofUrl"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="verification"
+                  />
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="debt"
+                    >{{ $t('debt') }}:</label
+                  >
+                  <input
+                    id="debt"
+                    v-model="updatedVendor.Debt"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="verification"
                   />
@@ -481,9 +488,9 @@ const cancelEditComment = () => {
                           <div class="location-address">
                             {{ location.address }} {{ location.zip }}
                           </div>
-                          <div v-if="location.workingTime">
+                          <div v-if="location.working_time">
                             <label class="pr-2 font-bold">{{ $t('workingTime') }}:</label>
-                            <span>{{ location.workingTime }}</span>
+                            <span>{{ location.working_time }}</span>
                           </div>
                         </div>
                         <div class="location-actions flex flex-col">

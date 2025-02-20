@@ -75,7 +75,10 @@ function onMapReady(instance: any) {
             :lat-lng="[location.latitude, location.longitude]"
           >
             <l-popup class="text-center text-black grid">
-              <span>{{ location.name }}</span>
+              <span class="font-bold">{{ location.name }}</span>
+              <span>{{ location.address }}</span>
+              <span>{{ location.zip }}</span>
+              <span><span class="font-bold mr-1">{{ $t('workingTime') }}:</span>{{ location.working_time }}</span>
               <RouterLink
                 v-if="vendor && vendor.Id"
                 :to="{

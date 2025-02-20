@@ -79,7 +79,11 @@ const emit = defineEmits(['close'])
                           <th className="p-3">{{ $t('bankAccount') }}:</th>
                           <td className="p-3">{{ $t(vendor?.HasBankAccount ? 'yes' : 'no') }}</td>
                         </tr>
-                        <tr>
+                        <tr v-if="vendor?.Debt">
+                          <th className="p-3">{{ $t('debt') }}</th>
+                          <td className="p-3">{{ vendor?.Debt }}</td>
+                        </tr>
+                        <tr v-if="vendor?.AccountProofUrl">
                           <th className="p-3">{{ $t('verificationLink') }}</th>
                           <td className="p-3">{{ vendor?.AccountProofUrl }}</td>
                         </tr>
