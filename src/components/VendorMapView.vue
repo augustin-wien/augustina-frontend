@@ -23,16 +23,23 @@ const searchControl: any = new (GeoSearchControl as any)({
 })
 
 const locations = computed(() => props.locations)
+const center: Ref<PointExpression> = ref([48.2083, 16.3731])
+
+const centerMap = () => {
+  if (locations.value.length > 0 && locations.value[0].latitude && locations.value[0].longitude) {
+    center.value = [locations.value[0].latitude, locations.value[0].longitude]
+  }
+}
+
+centerMap()
 
 watch(locations, () => {
-  if (locations.value.length > 0 && locations.value[0].Latitude && locations.value[0].Longitude)
-    center.value = [locations.value[0].Latitude, locations.value[0].Longitude]
+  centerMap()
 })
 
 //Map configuration
 const zoom = ref(12)
 // Todo: Get the center from the settings
-const center: Ref<PointExpression> = ref([48.2083, 16.3731])
 const map: Ref<any> = ref(null)
 
 function onMapReady(instance: any) {
