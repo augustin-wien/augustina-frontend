@@ -121,8 +121,8 @@
   "workingTime": "Arbeitszeit",
   "registrationDate": "Registriert seit",
   "vendorSince": "VerkäuferIn seit",
-  "bankAccount": "Bankverbindung",
-  "comment": "Kommentar",
+  "bankAccount": "Hat ein Bankkonto",
+  "comments": "Kommentare",
   "onlineMap": "Online Karte",
   "verificationLink": "Verfizierungsdokument",
 
@@ -208,5 +208,27 @@
   "maintenance": "Die Webseite steht derzeit unter Wartungsarbeiten. Wir entschuldigen uns für die Unannehmlichkeiten. Bitte versuche es in den nächsten Tagen erneut.",
   "saveCustomCss": "Eigenes CSS speichern",
 
-  "info": "Information"
+  "info": "Information",
+
+  "New Location": "Neuer Standort",
+  "licenseId": "Ausweisnummer",
+  "location name": "Standortname",
+  "(G) all day": "(G) ganztägig",
+  "(v) mornings": "(v) Vormittag",
+  "(N) afternoons": "(n) Nachmittag",
+  "The vendor has been updated": "Der Verkäufer:in wurde aktualisiert",
+  "vendor locations": "VerkäuferIn Standorte",
+  "warning": "Warnung",
+  "Add a comment": "Kommentar hinzufügen",
+  "E-Mail": "E-Mail",
+  "Has a smartphone": "Hat ein Smartphone",
+  "noComments": "Keine Kommentare vorhanden",
+  "Created at": "Erstellt am",
+  "Resolved at": "Erledigt am",
+  "Warning": "Warnung",
+  "Comment": "Kommentar",
+  "Enter your comment here": "Gib deinen Kommentar hier ein",
+  "Vendor has no locations yet": "Verkäufer:in hat noch keine Standorte",
+  "debt": "Schulden",
+  "You will only be able to add comments and locations for the vendor once the vendor has been created.": "Du kannst erst Kommentare und Standorte hinzufügen, wenn der Verkäufer:in erstellt wurde."
 }

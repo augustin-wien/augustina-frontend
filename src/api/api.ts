@@ -267,3 +267,67 @@ function blobToData(blob: Blob): Promise<string | undefined> {
 
   return result
 }
+
+// Locations API
+
+export async function fetchVendorLocations(vendorId: number) {
+  return apiInstance.get(`${VENDORS_API_URL}${vendorId}/locations/`)
+}
+
+export async function postVendorLocation(vendorId: number, location: any) {
+  return apiInstance.post(`${VENDORS_API_URL}${vendorId}/locations/`, JSON.stringify(location), {
+    headers: {
+      accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+}
+
+export async function patchVendorLocation(vendorId: number, locationId: number, location: any) {
+  return apiInstance.patch(
+    `${VENDORS_API_URL}${vendorId}/locations/${locationId}/`,
+    JSON.stringify(location),
+    {
+      headers: {
+        accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+  )
+}
+
+export async function deleteVendorLocation(vendorId: number, locationId: number) {
+  return apiInstance.delete(`${VENDORS_API_URL}${vendorId}/locations/${locationId}/`)
+}
+
+// Comments API
+
+export async function fetchVendorComments(vendorId: number) {
+  return apiInstance.get(`${VENDORS_API_URL}${vendorId}/comments/`)
+}
+
+export async function postVendorComment(vendorId: number, comment: any) {
+  return apiInstance.post(`${VENDORS_API_URL}${vendorId}/comments/`, JSON.stringify(comment), {
+    headers: {
+      accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+}
+
+export async function patchVendorComment(vendorId: number, commentId: number, comment: any) {
+  return apiInstance.patch(
+    `${VENDORS_API_URL}${vendorId}/comments/${commentId}/`,
+    JSON.stringify(comment),
+    {
+      headers: {
+        accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+  )
+}
+
+export async function deleteVendorComment(vendorId: number, commentId: number) {
+  return apiInstance.delete(`${VENDORS_API_URL}${vendorId}/comments/${commentId}/`)
+}
