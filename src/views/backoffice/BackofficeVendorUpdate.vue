@@ -1,21 +1,21 @@
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { vendorsStore } from '@/stores/vendor'
-import type { Vendor } from '@/stores/vendor'
+import type { Vendor, VendorComment, VendorLocation } from '@/stores/vendor'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import { useKeycloakStore } from '@/stores/keycloak'
-import IconCross from '@/components/icons/IconCross.vue'
 import VendorMapView from '@/components/VendorMapView.vue'
+import AddressModal from '@/components/AddressModal.vue'
 import keycloak from '@/keycloak/keycloak'
 
 const { t } = useI18n()
 
-import { transformToFloat } from '@/utils/utils'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import CommentsModal from '@/components/CommentsModal.vue'
 
 const store = vendorsStore()
 const keycloakStore = useKeycloakStore()
@@ -24,6 +24,9 @@ const updatedVendor = ref<Vendor | null>(store.vendor)
 
 const route = useRoute()
 
+const vendorLocations = computed(() => store.vendorLocations)
+const vendorComments = computed(() => store.vendorComments)
+
 onMounted(() => {
   const vendorId = parseInt(route.params.ID.toString())
 
@@ -31,11 +34,16 @@ onMounted(() => {
     store.getVendor(vendorId).then(() => {
       updatedVendor.value = store.vendor
     })
+
+    store.getVendorLocations(vendorId)
+    store.getVendorComments(vendorId)
   } else {
     if (keycloak.keycloak) {
       keycloak.keycloak.onAuthSuccess = () => {
         store.getVendor(vendorId).then(() => {
           updatedVendor.value = store.vendor
+          store.getVendorLocations(vendorId)
+          store.getVendorComments(vendorId)
         })
       }
     }
@@ -59,10 +67,6 @@ const updateVendor = async () => {
   if (!newVendor) {
     return
   }
-
-  // fix for int bug
-  newVendor.Longitude = transformToFloat(newVendor.Longitude)
-  newVendor.Latitude = transformToFloat(newVendor.Latitude)
 
   try {
     const response = await store.updateVendor(newVendor as Vendor)
@@ -111,6 +115,7 @@ const deleteVendor = async () => {
 }
 
 const showDeleteModal = ref(false)
+const showAddressModal = ref(false)
 
 const showToast = (type: string, message: string) => {
   // Set the toast message
@@ -122,18 +127,95 @@ const showToast = (type: string, message: string) => {
   }, 5000)
 }
 
-const updateLocation = (newLocation: any) => {
-  if (updatedVendor.value) {
-    updatedVendor.value.Longitude = newLocation.location.x
-    updatedVendor.value.Latitude = newLocation.location.y
+const isEditLocation = ref(false)
+
+const updateLocation = (newLocation: VendorLocation) => {
+  if (updatedVendor.value && updatedVendor.value !== null && updatedVendor.value.ID) {
+    if (!updatedVendor.value.Locations) {
+      updatedVendor.value.Locations = []
+    }
+
+    // check if we are editing a location
+    if (isEditLocation.value) {
+      updatedVendor.value.Locations = updatedVendor.value.Locations.map((location) => {
+        if (location.id === newLocation.id && updatedVendor.value !== null) {
+          store.updateVendorLocation(newLocation, updatedVendor.value.ID)
+          return newLocation
+        }
+
+        if (updatedVendor.value !== null) {
+          store.createVendorLocation(newLocation, updatedVendor.value.ID)
+        }
+
+        return location
+      })
+    } else {
+      store.createVendorLocation(newLocation, updatedVendor.value.ID)
+
+      updatedVendor.value.Locations.push(newLocation)
+    }
   }
+
+  isEditLocation.value = false
+  showAddressModal.value = false
 }
 
-const updateMarker = (newLocation: any) => {
-  if (updatedVendor.value) {
-    updatedVendor.value.Longitude = newLocation.lng
-    updatedVendor.value.Latitude = newLocation.lat
+const editLocation = (location: VendorLocation) => {
+  selectedLocation.value = [location]
+  showAddressModal.value = true
+  isEditLocation.value = true
+}
+
+const selectedLocation = ref<Array<VendorLocation> | null>(null)
+
+const editComment = (comment: any) => {
+  selectedComment.value = comment
+  isNewComment.value = false
+  showCommentsDialog.value = true
+}
+
+const showCommentsDialog = ref(false)
+const selectedComment = ref<VendorComment | null>(null)
+const isNewComment = ref(false)
+
+const addNewComment = () => {
+  selectedComment.value = {
+    id: 0,
+    comment: '',
+    created_at: new Date(),
+    warning: false,
+    resolved_at: null,
+    vendorid: updatedVendor.value?.ID || 0
   }
+
+  isNewComment.value = true
+
+  showCommentsDialog.value = true
+}
+
+const saveComment = (comment: VendorComment) => {
+  if (updatedVendor.value && updatedVendor.value !== null) {
+    if (isNewComment.value) {
+      store.createVendorComment(comment, updatedVendor.value.ID).then(() => {
+        //@ts-expect-error this is already checked
+        store.getVendorComments(updatedVendor.value.ID)
+      })
+    } else {
+      store.updateVendorComment(comment, updatedVendor.value.ID).then(() => {
+        //@ts-expect-error this is already checked
+        store.getVendorComments(updatedVendor.value.ID)
+      })
+    }
+  }
+
+  isNewComment.value = false
+  showCommentsDialog.value = false
+}
+
+const cancelEditComment = () => {
+  isNewComment.value = false
+  showCommentsDialog.value = false
+  selectedComment.value = null
 }
 </script>
 
@@ -153,12 +235,6 @@ const updateMarker = (newLocation: any) => {
           <div v-if="store.vendor" class="w-full">
             <div class="flex place-content-center justify-between">
               <span></span>
-              <button
-                class="rounded-full bg-red-600 text-white"
-                @click="router.push('/backoffice/vendorsummary')"
-              >
-                <IconCross />
-              </button>
             </div>
           </div>
 
@@ -192,7 +268,7 @@ const updateMarker = (newLocation: any) => {
                   </div>
 
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
-                    >Email:</label
+                    >{{ $t('E-Mail') }}:</label
                   >
                   <div class="flex flex-row">
                     <input
@@ -230,66 +306,7 @@ const updateMarker = (newLocation: any) => {
                       <option :value="false">{{ $t('no') }}</option>
                     </select>
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
-                    >{{ $t('address') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="adress"
-                      v-model="updatedVendor.Address"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
-                    >{{ $t('postCode') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="plz"
-                      v-model="updatedVendor.PLZ"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
 
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >{{ $t('location') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="location"
-                      v-model.number="updatedVendor.Location"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >{{ $t('longitude') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="location"
-                      v-model.number="updatedVendor.Longitude"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                    >{{ $t('latitude') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="location"
-                      v-model.number="updatedVendor.Latitude"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-                </span>
-              </div>
-              <div class="row">
-                <span class="col">
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
                     >{{ $t('telephone') }}:</label
                   >
@@ -301,36 +318,6 @@ const updateMarker = (newLocation: any) => {
                       type="text"
                     />
                   </div>
-
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="hasSmartphone"
-                    >Smartphone:</label
-                  >
-                  <div class="flex flex-row">
-                    <select
-                      id="hasSmartphone"
-                      v-model="updatedVendor.HasSmartphone"
-                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
-                      <option :value="true">{{ $t('yes') }}</option>
-                      <option :value="false">{{ $t('no') }}</option>
-                    </select>
-                  </div>
-
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                    >{{ $t('workingTime') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <select
-                      v-model="updatedVendor.WorkingTime"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    >
-                      <option value="G" selected>{{ $t('(G) all day') }}</option>
-                      <option value="V">{{ $t('(v) mornings') }}</option>
-                      <option value="N">{{ $t('(N) afternoons') }}</option>
-                    </select>
-                  </div>
-
                   <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
                     >{{ $t('language') }}:</label
                   >
@@ -342,36 +329,6 @@ const updateMarker = (newLocation: any) => {
                       type="text"
                     />
                   </div>
-
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                    >{{ $t('onlineMap') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <select
-                      id="onlineMap"
-                      v-model="updatedVendor.OnlineMap"
-                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
-                      <option :value="true">{{ $t('yes') }}</option>
-                      <option :value="false">{{ $t('no') }}</option>
-                    </select>
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                    >{{ $t('bankAccount') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <select
-                      id="bankAccount"
-                      v-model="updatedVendor.HasBankAccount"
-                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
-                      <option :value="true">{{ $t('yes') }}</option>
-                      <option :value="false">{{ $t('no') }}</option>
-                    </select>
-                  </div>
-
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                     for="registrationDate"
@@ -396,7 +353,37 @@ const updateMarker = (newLocation: any) => {
                       type="text"
                     />
                   </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                    for="hasSmartphone"
+                    >{{ $t('Has a smartphone') }}</label
+                  >
+                  <div class="flex flex-row">
+                    <select
+                      id="hasSmartphone"
+                      v-model="updatedVendor.HasSmartphone"
+                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      required
+                    >
+                      <option :value="true">{{ $t('yes') }}</option>
+                      <option :value="false">{{ $t('no') }}</option>
+                    </select>
+                  </div>
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
+                    >{{ $t('bankAccount') }}:</label
+                  >
+                  <div class="flex flex-row">
+                    <select
+                      id="bankAccount"
+                      v-model="updatedVendor.HasBankAccount"
+                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      required
+                    >
+                      <option :value="true">{{ $t('yes') }}</option>
+                      <option :value="false">{{ $t('no') }}</option>
+                    </select>
+                  </div>
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="verification"
                     >{{ $t('verificationLink') }}:</label
                   >
                   <input
@@ -405,45 +392,148 @@ const updateMarker = (newLocation: any) => {
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="verification"
                   />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment"
-                    >{{ $t('comment') }}:</label
+                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="debt"
+                    >{{ $t('debt') }}:</label
                   >
-                  <div class="flex flex-row">
-                    <textarea
-                      id="comment"
-                      v-model="updatedVendor.Comment"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      rows="5"
-                      type="text"
-                    ></textarea>
-                  </div>
+                  <input
+                    id="debt"
+                    v-model="updatedVendor.Debt"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="verification"
+                  />
                 </span>
               </div>
-              <div v-if="updatedVendor.Latitude != 0.1 && updatedVendor.Longitude != 0.1">
-                <VendorMapView
-                  class="z-0 relative"
-                  :vendors="[updatedVendor]"
-                  :enable-search="1"
-                  :new-coords="1"
-                  @new-location="updateLocation"
-                  @edit-marker="updateMarker"
-                />
+              <div class="row">
+                <span class="col">
+                  <div class="flex flex-col">
+                    <div class="flex flex-row justify-between mb-4">
+                      <h2 class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment">
+                        {{ $t('comments') }}
+                      </h2>
+                      <button class="py-2 px-4 rounded-full customcolor" @click="addNewComment()">
+                        {{ $t('Add a comment') }}
+                      </button>
+                    </div>
+
+                    <div v-if="vendorComments && vendorComments.length > 0">
+                      <div
+                        v-for="comment in vendorComments"
+                        :key="'comment_' + comment.id"
+                        v-key="comment.id"
+                        class="comment flex flex-row justify-between"
+                      >
+                        <div :class="'comment-infos' + (comment.warning ? ' text-red-500' : '')">
+                          <div class="comment-title font-bold font-small">
+                            {{ new Date(comment.created_at).toLocaleDateString() }}
+                          </div>
+
+                          <div class="comment-comment">
+                            <span v-if="comment.warning" class="comment-warning-label font-bold"
+                              >{{ $t('warning') }}: </span
+                            >{{ comment.comment }}
+                          </div>
+                          <div
+                            v-if="
+                              comment.resolved_at &&
+                              new Date(comment.resolved_at).toLocaleDateString() !== '1.1.1'
+                            "
+                          >
+                            <label class="pr-2 font-bold">{{ $t('Resolved at') }}:</label>
+                            <span>{{ new Date(comment.resolved_at).toLocaleDateString() }}</span>
+                          </div>
+                        </div>
+                        <div class="comment-actions flex flex-col">
+                          <button
+                            class="py-2 px-4 rounded-full customcolor"
+                            @click="editComment(comment)"
+                          >
+                            {{ $t('edit') }}
+                          </button>
+                          <button
+                            class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
+                            @click="store.deleteVendorComment(updatedVendor.ID, comment.id)"
+                          >
+                            {{ $t('delete') }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else>
+                      <p>{{ $t('noComments') }}</p>
+                    </div>
+                  </div>
+                  <div class="locations mt-5">
+                    <div class="flex flex-row justify-between mb-4">
+                      <h2>
+                        <b>{{ $t('vendor locations') }}</b>
+                      </h2>
+                      <button
+                        type="submit"
+                        class="py-2 px-4 rounded-full customcolor"
+                        @click="showAddressModal = true"
+                      >
+                        {{ $t('New Location') }}
+                      </button>
+                    </div>
+                    <div v-if="vendorLocations && vendorLocations.length > 0">
+                      <div
+                        v-for="location in vendorLocations"
+                        :key="'location_' + location.id"
+                        v-key="'loc_' + location.id"
+                        class="location flex justify-between"
+                      >
+                        <div class="location-infos">
+                          <div class="location-title font-bold">{{ location.name }}</div>
+                          <div class="location-address">
+                            {{ location.address }} {{ location.zip }}
+                          </div>
+                          <div v-if="location.working_time">
+                            <label class="pr-2 font-bold">{{ $t('workingTime') }}:</label>
+                            <span>{{ location.working_time }}</span>
+                          </div>
+                        </div>
+                        <div class="location-actions flex flex-col">
+                          <button
+                            class="py-2 px-4 rounded-full customcolor"
+                            @click="editLocation(location)"
+                          >
+                            {{ $t('edit') }}
+                          </button>
+                          <button
+                            class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
+                            @click="store.deleteVendorLocation(updatedVendor.ID, location.id)"
+                          >
+                            {{ $t('delete') }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-else>
+                      <p>{{ $t('Vendor has no locations yet') }}</p>
+                    </div>
+                  </div>
+                  <VendorMapView
+                    v-if="vendorLocations && vendorLocations.length > 0"
+                    :locations="vendorLocations"
+                  />
+                </span>
               </div>
             </div>
-            <div class="flex flex-row-reverse justify-between">
-              <button
-                type="submit"
-                class="py-2 px-4 rounded-full customcolor"
-                @click="updateVendor"
-              >
-                {{ $t('confirmation') }}
-              </button>
+
+            <div class="flex justify-between">
               <button
                 type="submit"
                 class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
                 @click="showDeleteModal = true"
               >
                 {{ $t('delete') }}
+              </button>
+              <button
+                type="submit"
+                class="py-2 px-4 rounded-full customcolor"
+                @click="updateVendor"
+              >
+                {{ $t('confirmation') }}
               </button>
             </div>
           </form>
@@ -522,6 +612,20 @@ const updateMarker = (newLocation: any) => {
             </div>
           </div>
         </div>
+        <AddressModal
+          v-if="showAddressModal"
+          :vendor="updatedVendor"
+          :locations="selectedLocation"
+          @close="showAddressModal = false"
+          @update="updateLocation"
+        ></AddressModal>
+        <CommentsModal
+          v-if="showCommentsDialog"
+          :comment="selectedComment"
+          :vendor="updatedVendor"
+          @close="cancelEditComment"
+          @update="saveComment"
+        ></CommentsModal>
       </div>
     </template>
   </component>
@@ -535,4 +639,14 @@ tr {
 td {
   padding: 10px;
 }
-</style>
+.locations {
+  display: flex;
+  flex-direction: column;
+}
+.location {
+  padding: 10px;
+  display: fle;
+}
+/* even odd styling for locations */
+.location:nth-child(even) {
+  background-color: #f2f2f2;

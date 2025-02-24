@@ -12,7 +12,7 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 import 'leaflet-geosearch/dist/geosearch.css'
 
 const emit = defineEmits(['newLocation', 'editMarker'])
-const props = defineProps(['vendors', 'enableSearch', 'newCoords'])
+const props = defineProps(['locations', 'enableSearch', 'vendor', 'newCoords'])
 
 const provider = new OpenStreetMapProvider()
 
@@ -22,16 +22,24 @@ const searchControl: any = new (GeoSearchControl as any)({
   provider: provider
 })
 
-const vendors = computed(() => props.vendors)
+const locations = computed(() => props.locations)
+const center: Ref<PointExpression> = ref([48.2083, 16.3731])
 
-watch(vendors, () => {
-  center.value = [vendors.value[0].Latitude, vendors.value[0].Longitude]
+const centerMap = () => {
+  if (locations.value.length > 0 && locations.value[0].latitude && locations.value[0].longitude) {
+    center.value = [locations.value[0].latitude, locations.value[0].longitude]
+  }
+}
+
+centerMap()
+
+watch(locations, () => {
+  centerMap()
 })
 
 //Map configuration
 const zoom = ref(12)
 // Todo: Get the center from the settings
-const center: Ref<PointExpression> = ref([48.2083, 16.3731])
 const map: Ref<any> = ref(null)
 const marker: Ref<any> = ref(null)
 const markerCoords = ref(null)
@@ -40,21 +48,7 @@ const newMarker = ref(false)
 
 function onMapReady(instance: any) {
   if (instance) {
-    center.value = [vendors.value[0].Latitude, vendors.value[0].Longitude]
     map.value = instance
-
-    if (props.newCoords == 1) {
-      newMarker.value = true
-
-      marker.value = L.marker([vendors.value[0].Latitude, vendors.value[0].Longitude], {
-        draggable: true
-      }).addTo(map.value)
-
-      marker.value.on('dragend', function () {
-        markerCoords.value = marker.value.getLatLng()
-        emit('editMarker', marker.value.getLatLng())
-      })
-    }
 
     map.value.on('dblclick', function (event: any) {
       alert('Latitude: ' + event.latlng.lat + ' \n Longitude: ' + event.latlng.lng)
@@ -72,7 +66,7 @@ function onMapReady(instance: any) {
 </script>
 
 <template>
-  <div v-if="vendors.length > 0" class="h-full">
+  <div v-if="locations.length > 0" class="h-full w-full">
     <div style="height: 400px; width: 100%">
       <l-map
         v-model:zoom="zoom"
@@ -86,16 +80,21 @@ function onMapReady(instance: any) {
           layer-type="base"
           name="OpenStreetMap"
         ></l-tile-layer>
-        <li v-for="vendor in vendors" :key="vendor.licenseID">
+        <li v-for="location in locations" :key="'location_' + location.Id">
           <l-marker
-            v-if="vendor.Latitude && vendor.Longitude && !newMarker"
-            :lat-lng="[vendor.Latitude, vendor.Longitude]"
+            v-if="location.latitude && location.longitude"
+            :lat-lng="[location.latitude, location.longitude]"
           >
             <l-popup class="text-center text-black grid">
-              <h2 class="text-xl font-semibold">{{ vendor.FirstName }}</h2>
-              <span class="mb-2">{{ vendor.LcenseID }}</span>
+              <span class="font-bold">{{ location.name }}</span>
+              <span>{{ location.address }}</span>
+              <span>{{ location.zip }}</span>
+              <span
+                ><span class="font-bold mr-1">{{ $t('workingTime') }}:</span
+                >{{ location.working_time }}</span
+              >
               <RouterLink
-                v-if="vendor.id"
+                v-if="vendor && vendor.Id"
                 :to="{
                   name: 'Vendor Profile',
                   params: { ID: vendor.Id }
