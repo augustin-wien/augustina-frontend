@@ -43,8 +43,9 @@ const zoom = ref(12)
 const map: Ref<any> = ref(null)
 const marker: Ref<any> = ref(null)
 const markerCoords = ref(null)
-const isDragging = ref(false)
 const newMarker = ref(false)
+
+const vendor = computed(() => props.vendor)
 
 function onMapReady(instance: any) {
   if (instance) {
@@ -59,6 +60,20 @@ function onMapReady(instance: any) {
 
       map.value.on('geosearch/showlocation', function (event: any) {
         emit('newLocation', event)
+      })
+    }
+
+    if (props.newCoords == 1) {
+      map.value.setView([locations.value[0].latitude, locations.value[0].longitude], 10)
+      newMarker.value = true
+
+      marker.value = L.marker([locations.value[0].latitude, locations.value[0].longitude], {
+        draggable: true
+      }).addTo(map.value)
+
+      marker.value.on('dragend', function () {
+        markerCoords.value = marker.value.getLatLng()
+        emit('editMarker', marker.value.getLatLng())
       })
     }
   }
@@ -82,7 +97,7 @@ function onMapReady(instance: any) {
         ></l-tile-layer>
         <li v-for="location in locations" :key="'location_' + location.Id">
           <l-marker
-            v-if="location.latitude && location.longitude"
+            v-if="location.latitude && location.longitude && !newMarker"
             :lat-lng="[location.latitude, location.longitude]"
           >
             <l-popup class="text-center text-black grid">
