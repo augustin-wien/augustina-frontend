@@ -63,6 +63,7 @@ const toast = ref<{ type: string; message: string } | null>(null)
 
 const updateVendor = async () => {
   const newVendor = updatedVendor.value
+
   if (!newVendor) {
     return
   }
@@ -131,6 +132,7 @@ const isEditLocation = ref(false)
 const updateLocation = (newLocation: VendorLocation) => {
   if (updatedVendor.value && updatedVendor.value !== null && updatedVendor.value.ID) {
     store.updateVendorLocation(newLocation, updatedVendor.value.ID)
+
     if (!updatedVendor.value.Locations) {
       updatedVendor.value.Locations = []
     }
@@ -150,7 +152,7 @@ const updateLocation = (newLocation: VendorLocation) => {
         return location
       })
     } else {
-      console.log("else")
+      console.log('else')
       store.createVendorLocation(newLocation, updatedVendor.value.ID)
 
       updatedVendor.value.Locations.push(newLocation)
