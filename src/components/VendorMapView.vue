@@ -11,8 +11,8 @@ import { computed, watch, ref } from 'vue'
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 import 'leaflet-geosearch/dist/geosearch.css'
 
-const emit = defineEmits(['newLocation'])
-const props = defineProps(['vendors', 'enableSearch'])
+const emit = defineEmits(['newLocation','editMarker'])
+const props = defineProps(['vendors', 'enableSearch', 'newCoords'])
 
 const provider = new OpenStreetMapProvider()
 
@@ -33,6 +33,10 @@ const zoom = ref(12)
 // Todo: Get the center from the settings
 const center: Ref<PointExpression> = ref([48.2083, 16.3731])
 const map: Ref<any> = ref(null)
+const marker: Ref<any> = ref(null)
+const markerCoords = ref(null);
+const isDragging = ref(false);
+const newMarker = ref(false)
 
 function onMapReady(instance: any) {
   if (instance) {
@@ -43,6 +47,25 @@ function onMapReady(instance: any) {
       alert('Latitude: ' + event.latlng.lat + ' \n Longitude: ' + event.latlng.lng)
     })
 
+    map.value.on('click', (e: any) => {
+        newMarker.value = true
+        if (!isDragging.value) {
+          // Set marker on click
+          if (marker.value) {
+            marker.value.setLatLng(e.latlng);
+          } else {
+            marker.value = L.marker(e.latlng, { draggable: false }).addTo(map.value);
+            marker.value.on("dragend", function () {
+              markerCoords.value = marker.value.getLatLng();
+              vendors.value[0].Latitude = marker.value.getLat()
+              vendors.value[0].Longitude = marker.value.getLon()
+            });
+            
+          }
+        }
+        emit('newLocation', e)
+      })
+
     if (props.enableSearch == 1) {
       map.value.addControl(searchControl)
 
@@ -52,6 +75,13 @@ function onMapReady(instance: any) {
     }
   }
 }
+
+const toggleEditMode = () => {
+      if (marker.value) {
+        isDragging.value = !isDragging.value;
+        marker.value.dragging[isDragging.value ? "enable" : "disable"]();
+      }
+    };
 </script>
 
 <template>
@@ -71,7 +101,7 @@ function onMapReady(instance: any) {
         ></l-tile-layer>
         <li v-for="vendor in vendors" :key="vendor.licenseID">
           <l-marker
-            v-if="vendor.Latitude && vendor.Longitude"
+            v-if="vendor.Latitude && vendor.Longitude && !newMarker"
             :lat-lng="[vendor.Latitude, vendor.Longitude]"
           >
             <l-popup class="text-center text-black grid">
@@ -92,6 +122,9 @@ function onMapReady(instance: any) {
           </l-marker>
         </li>
       </l-map>
+      <button @click="toggleEditMode()">
+      {{ isDragging ? "Set Marker by Clicking" : "Drag Marker" }}
+    </button>
     </div>
   </div>
 </template>
