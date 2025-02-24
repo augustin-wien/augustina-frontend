@@ -152,7 +152,6 @@ const updateLocation = (newLocation: VendorLocation) => {
         return location
       })
     } else {
-      console.log('else')
       store.createVendorLocation(newLocation, updatedVendor.value.ID)
 
       updatedVendor.value.Locations.push(newLocation)

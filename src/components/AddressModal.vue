@@ -37,7 +37,6 @@ const updateLocation = (event: any) => {
 }
 
 const editMarker = (newLocation: any) => {
-  console.log(newLocation)
   newAddress.value.latitude = newLocation.lat
   newAddress.value.longitude = newLocation.lng
 }
