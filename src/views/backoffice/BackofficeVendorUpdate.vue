@@ -129,24 +129,21 @@ const showToast = (type: string, message: string) => {
 const isEditLocation = ref(false)
 
 const updateLocation = (newLocation: VendorLocation) => {
-  console.log(updatedVendor.value)
   if (updatedVendor.value && updatedVendor.value !== null && updatedVendor.value.ID) {
+    store.updateVendorLocation(newLocation, updatedVendor.value.ID)
     if (!updatedVendor.value.Locations) {
       updatedVendor.value.Locations = []
-      console.log("init")
     }
 
     // check if we are editing a location
     if (isEditLocation.value) {
       updatedVendor.value.Locations = updatedVendor.value.Locations.map((location) => {
         if (location.id === newLocation.id && updatedVendor.value !== null) {
-          console.log("update")
           store.updateVendorLocation(newLocation, updatedVendor.value.ID)
           return newLocation
         }
 
         if (updatedVendor.value !== null) {
-          console.log("create")
           store.createVendorLocation(newLocation, updatedVendor.value.ID)
         }
 
