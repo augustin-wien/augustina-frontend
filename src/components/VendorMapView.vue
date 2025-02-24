@@ -11,7 +11,7 @@ import { computed, watch, ref } from 'vue'
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 import 'leaflet-geosearch/dist/geosearch.css'
 
-const emit = defineEmits(['newLocation','editMarker'])
+const emit = defineEmits(['newLocation', 'editMarker'])
 const props = defineProps(['vendors', 'enableSearch', 'newCoords'])
 
 const provider = new OpenStreetMapProvider()
@@ -34,24 +34,26 @@ const zoom = ref(12)
 const center: Ref<PointExpression> = ref([48.2083, 16.3731])
 const map: Ref<any> = ref(null)
 const marker: Ref<any> = ref(null)
-const markerCoords = ref(null);
-const isDragging = ref(false);
+const markerCoords = ref(null)
+const isDragging = ref(false)
 const newMarker = ref(false)
 
 function onMapReady(instance: any) {
   if (instance) {
-    
-
     center.value = [vendors.value[0].Latitude, vendors.value[0].Longitude]
     map.value = instance
-  
-    if(props.newCoords == 1){
+
+    if (props.newCoords == 1) {
       newMarker.value = true
-      marker.value = L.marker([vendors.value[0].Latitude, vendors.value[0].Longitude], { draggable: true }).addTo(map.value);
-      marker.value.on("dragend", function () {
-              markerCoords.value = marker.value.getLatLng();
-              emit('editMarker', marker.value.getLatLng())
-            });
+
+      marker.value = L.marker([vendors.value[0].Latitude, vendors.value[0].Longitude], {
+        draggable: true
+      }).addTo(map.value)
+
+      marker.value.on('dragend', function () {
+        markerCoords.value = marker.value.getLatLng()
+        emit('editMarker', marker.value.getLatLng())
+      })
     }
 
     map.value.on('dblclick', function (event: any) {
@@ -67,11 +69,6 @@ function onMapReady(instance: any) {
     }
   }
 }
-
-const toggleEditMode = () => {
-      isDragging.value = !isDragging.value;
-      marker.value.dragging[isDragging.value ? "enable" : "disable"]();
-    };
 </script>
 
 <template>
