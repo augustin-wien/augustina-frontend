@@ -128,6 +128,13 @@ const updateLocation = (newLocation: any) => {
     updatedVendor.value.Latitude = newLocation.location.y
   }
 }
+
+const updateMarker = (newLocation: any) => {
+  if (updatedVendor.value) {
+    updatedVendor.value.Longitude = newLocation.lng
+    updatedVendor.value.Latitude = newLocation.lat
+  }
+}
 </script>
 
 <template>
@@ -417,7 +424,9 @@ const updateLocation = (newLocation: any) => {
                   class="z-0 relative"
                   :vendors="[updatedVendor]"
                   :enable-search="1"
+                  :new-coords="1"
                   @new-location="updateLocation"
+                  @edit-marker="updateMarker"
                 />
               </div>
             </div>

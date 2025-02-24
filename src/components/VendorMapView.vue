@@ -40,31 +40,23 @@ const newMarker = ref(false)
 
 function onMapReady(instance: any) {
   if (instance) {
+    
+
     center.value = [vendors.value[0].Latitude, vendors.value[0].Longitude]
     map.value = instance
+  
+    if(props.newCoords == 1){
+      newMarker.value = true
+      marker.value = L.marker([vendors.value[0].Latitude, vendors.value[0].Longitude], { draggable: true }).addTo(map.value);
+      marker.value.on("dragend", function () {
+              markerCoords.value = marker.value.getLatLng();
+              emit('editMarker', marker.value.getLatLng())
+            });
+    }
 
     map.value.on('dblclick', function (event: any) {
       alert('Latitude: ' + event.latlng.lat + ' \n Longitude: ' + event.latlng.lng)
     })
-
-    map.value.on('click', (e: any) => {
-        newMarker.value = true
-        if (!isDragging.value) {
-          // Set marker on click
-          if (marker.value) {
-            marker.value.setLatLng(e.latlng);
-          } else {
-            marker.value = L.marker(e.latlng, { draggable: false }).addTo(map.value);
-            marker.value.on("dragend", function () {
-              markerCoords.value = marker.value.getLatLng();
-              vendors.value[0].Latitude = marker.value.getLat()
-              vendors.value[0].Longitude = marker.value.getLon()
-            });
-            
-          }
-        }
-        emit('newLocation', e)
-      })
 
     if (props.enableSearch == 1) {
       map.value.addControl(searchControl)
@@ -77,10 +69,8 @@ function onMapReady(instance: any) {
 }
 
 const toggleEditMode = () => {
-      if (marker.value) {
-        isDragging.value = !isDragging.value;
-        marker.value.dragging[isDragging.value ? "enable" : "disable"]();
-      }
+      isDragging.value = !isDragging.value;
+      marker.value.dragging[isDragging.value ? "enable" : "disable"]();
     };
 </script>
 
@@ -122,9 +112,6 @@ const toggleEditMode = () => {
           </l-marker>
         </li>
       </l-map>
-      <button @click="toggleEditMode()">
-      {{ isDragging ? "Set Marker by Clicking" : "Drag Marker" }}
-    </button>
     </div>
   </div>
 </template>
