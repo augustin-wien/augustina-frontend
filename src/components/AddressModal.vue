@@ -35,6 +35,11 @@ const updateLocation = (event: any) => {
   newAddress.value.longitude = event.location.x
   newAddress.value.address = event.location.label
 }
+
+const editMarker = (newLocation: any) => {
+  newAddress.value.latitude = newLocation.lat
+  newAddress.value.longitude = newLocation.lng
+}
 </script>
 
 <template>
@@ -160,7 +165,9 @@ const updateLocation = (event: any) => {
             v-if="newAddress && newAddress.latitude && newAddress.longitude"
             :enable-search="1"
             :locations="[newAddress]"
+            :new-coords="1"
             @new-location="updateLocation"
+            @edit-marker="editMarker"
           />
         </div>
 
