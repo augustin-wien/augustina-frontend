@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import { STYLES_URL } from '@/api/endpoints'
 import WaitingAnimation from '@/components/WaitingAnimation.vue'
 import { useSettingsStore } from '@/stores/settings'
@@ -13,8 +15,27 @@ link.href = cssUrl
 link.type = 'text/css'
 link.rel = 'stylesheet'
 link.media = 'screen,print'
+const apiUrl = import.meta.env.VITE_API_URL.replace(/\/$/, '')
 
+const settings = computed(() => settStore.settings)
 document.getElementsByTagName('head')[0].appendChild(link)
+
+const logo = computed(() => {
+  if (settings.value.Logo && settings.value.Logo !== '') {
+    // if the logo does not have a / at the beginning, add it
+    if (typeof settings.value.Logo === 'string') {
+      if (!settings.value.Logo.startsWith('/')) {
+        return apiUrl + '/' + settings.value.Logo
+      }
+
+      return apiUrl + settings.value.Logo
+    } else {
+      return apiUrl + '/img/logo.png'
+    }
+  } else {
+    return apiUrl + '/img/logo.png'
+  }
+})
 </script>
 
 <template>
@@ -30,10 +51,10 @@ document.getElementsByTagName('head')[0].appendChild(link)
         </select>
         <slot name="header">
           <img
-            v-if="settStore.imgUrl"
+            v-if="logo"
             alt="Newspaper logo"
             className="logo mx-auto my-1 scale-75"
-            :src="settStore.imgUrl"
+            :src="logo"
           />
         </slot>
       </header>
