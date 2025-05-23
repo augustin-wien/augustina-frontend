@@ -31,10 +31,17 @@ const centerMap = () => {
   }
 }
 
+const updateMarkerPosition = () => {
+  if (marker.value) {
+    marker.value.setLatLng([locations.value[0].latitude, locations.value[0].longitude])
+  }
+}
+
 centerMap()
 
 watch(locations, () => {
   centerMap()
+  updateMarkerPosition()
 })
 
 //Map configuration
@@ -95,7 +102,8 @@ function onMapReady(instance: any) {
           layer-type="base"
           name="OpenStreetMap"
         ></l-tile-layer>
-        <li v-for="location in locations" :key="'location_' + location.Id">
+        <li v-for="location in props.locations" :key="'location_' + location.Id">
+          123
           <l-marker
             v-if="location.latitude && location.longitude && !newMarker"
             :lat-lng="[location.latitude, location.longitude]"
