@@ -133,6 +133,7 @@ const updateLocation = (newLocation: VendorLocation) => {
   if (updatedVendor.value && updatedVendor.value !== null && updatedVendor.value.ID) {
     if (!updatedVendor.value.Locations) {
       updatedVendor.value.Locations = []
+      store.updateVendorLocation(newLocation, updatedVendor.value.ID)
     }
 
     // check if we are editing a location
