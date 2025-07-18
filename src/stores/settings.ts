@@ -28,6 +28,8 @@ export interface Settings {
   MapCenterLat: number
   MapCenterLong: number
   UseVendorLicenseIdInShop: boolean
+  UseTipInsteadOfDonation: boolean
+  edges?: any
   Keycloak: {
     Realm: string
     URL: string
@@ -60,7 +62,14 @@ export const useSettingsStore = defineStore('settings', {
 
       fetchSettings()
         .then((data) => {
-          this.settings = data.data
+          console.log('Settings fetched from API:', data.data.Settings.edges.MainItem)
+          this.settings = data.data.Settings
+          this.settings.Keycloak = data.data.Keycloak
+          this.settings.MainItem = data.data.Settings.edges.MainItem.id
+          this.settings.MainItemDescription = data.data.Settings.edges.MainItem.Description
+          this.settings.MainItemImage = data.data.Settings.edges.MainItem.Image
+          this.settings.MainItemName = data.data.Settings.edges.MainItem.Name
+          this.settings.MainItemPrice = data.data.Settings.edges.MainItem.Price
           this.imgUrl = import.meta.env.VITE_API_URL + this.settings.Logo
           this.settingsLoaded = true
         })

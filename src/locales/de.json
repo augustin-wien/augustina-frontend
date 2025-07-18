@@ -23,6 +23,7 @@
   "return": "Start",
 
   "customdonation": "Spende eingeben",
+  "customtip": "Trinkgeld eingeben",
 
   "invalid confirmation": "Ungültige Zahlungsbestätigung",
   "invalid": "Die gescannte ID ist nicht gültig",
@@ -90,6 +91,7 @@
   "Map center longitude": "Kartenmitte Längengrad",
   "Map center": "Koordinaten der Kartenmitte",
   "Use the license id instead of the name in the shop": "Verwende die Ausweisnummer anstatt des Namens im Shop",
+  "Use tip instead of donation in the shop": "Verwende Trinkgeld anstatt Spende im Shop",
   "false": "Nein",
   "true": "Ja",
   "yes": "Ja",
@@ -144,6 +146,7 @@
 
   "Transaction Costs": "Transaktionskosten",
   "Donation": "Spende",
+  "tip": "Trinkgeld",
   "for the vendor": "für die Verkäufer:in",
 
   "lastTransactions": "Letzte Transaktionen",

@@ -74,7 +74,8 @@ const updatedSettings = ref<Settings>({
   Keycloak: null,
   UseVendorLicenseIdInShop: false,
   QRCodeSettings: '',
-  QRCodeEnableLogo: false
+  QRCodeEnableLogo: false,
+  UseTipInsteadOfDonation: false,
 })
 
 const updateSettings = async () => {
@@ -335,6 +336,32 @@ const showQrCodeSettings = ref(false)
                     v-model="updatedSettings.UseVendorLicenseIdInShop"
                     type="radio"
                     name="UseVendorLicenseIdInShop"
+                    :value="false"
+                  />
+                </span>
+              </div>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                >{{ $t('Use tip instead of donation in the shop') }}:</label
+              >
+              <div class="">
+                <span class="me-4">
+                  <label class="me-1" for="UseTipInsteadOfDonation">{{ $t('yes') }}</label>
+                  <input
+                    id="UseTipInsteadOfDonation"
+                    v-model="updatedSettings.UseTipInsteadOfDonation"
+                    type="radio"
+                    checked
+                    name="UseTipInsteadOfDonation"
+                    :value="true"
+                  />
+                </span>
+                <span class="me-4">
+                  <label class="me-1" for="UseTipInsteadOfDonation">{{ $t('no') }}</label>
+                  <input
+                    id="UseTipInsteadOfDonation"
+                    v-model="updatedSettings.UseTipInsteadOfDonation"
+                    type="radio"
+                    name="UseTipInsteadOfDonation"
                     :value="false"
                   />
                 </span>

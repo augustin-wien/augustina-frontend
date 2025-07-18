@@ -76,7 +76,7 @@ const roundValue = () => {
     <template #main>
       <div id="custom-tip-page" className="h-full grid grid-rows-5 place-items-center">
         <div className="text-center font-semibold text-3xl row-span-2">
-          {{ $t('customdonation') }}
+          {{ settStore.settings.UseTipInsteadOfDonation ? $t('customtip') : $t('customdonation') }}
         </div>
         <div className="grid grid-cols-5 w-full h-full">
           <button id="decrement-btn" @click="decrement()">

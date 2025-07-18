@@ -24,7 +24,8 @@ const fixedDonationClick = (amount: number) => {
       <div className="h-full w-full grid grid-rows-5 place-items-center">
         <div>
           <div className="text-center font-semibold text-3xl">
-            {{ $t('donation') }}
+          {{ settStore.settings.UseTipInsteadOfDonation ? $t('tip') : $t('donation') }}
+
           </div>
           <div className="text-center font-semibold text-xl">
             {{ $t('for the vendor') }}
