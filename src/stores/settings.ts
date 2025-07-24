@@ -62,7 +62,6 @@ export const useSettingsStore = defineStore('settings', {
 
       fetchSettings()
         .then((data) => {
-          console.log('Settings fetched from API:', data.data.Settings.edges.MainItem)
           this.settings = data.data.Settings
           this.settings.Keycloak = data.data.Keycloak
           this.settings.MainItem = data.data.Settings.edges.MainItem.id

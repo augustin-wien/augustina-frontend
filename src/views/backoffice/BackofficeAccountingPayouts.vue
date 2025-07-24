@@ -164,11 +164,11 @@ const exportTable = () => {
                   </td>
                   <td class="border-t-2 p-3">{{ formatCredit(payment.Amount) }} €</td>
                 </tr>
-                <tr v-if="payments && payments.length > 0">
+                <tr v-if="payments && payments.length > 0" class="border-t-4">
+                  <td class="border-t-2 p-3 font-bold">{{ $t('total') }}</td>
                   <td class="border-t-2 p-3"></td>
                   <td class="border-t-2 p-3"></td>
-                  <td class="border-t-2 p-3"></td>
-                  <td v-for="item in items" :key="`td_total_${item.ID}`" class="border-t-2 p-3">
+                  <td v-for="item in items" :key="`td_total_${item.ID}`" class="border-t-2 p-3 font-bold">
                     {{
                       formatCredit(
                         payments.reduce(
@@ -179,7 +179,7 @@ const exportTable = () => {
                     }}
                     €
                   </td>
-                  <td class="border-t-2 p-3">
+                  <td class="border-t-2 p-3 font-bold">
                     {{ formatCredit(payments.reduce((acc, payment) => acc + payment.Amount, 0)) }} €
                   </td>
                 </tr>

@@ -13,13 +13,17 @@ export interface PaymentsForPayout {
   To: string | null
   Vendor: string
 }
+export interface PaymentsForPayoutResponse {
+  payments: Payment[]
+  balance: number
+}
 
 export const usePayoutStore = defineStore('payout', {
   state: () => {
     // Define the initial state of the store
     return {
       payout: {} as Payout, // Initialize 'payout' as an empty Payout object
-      paymentsForPayout: <Array<Payment>>[]
+      paymentsForPayout: {} as PaymentsForPayoutResponse
     }
   },
   actions: {
@@ -38,6 +42,8 @@ export const usePayoutStore = defineStore('payout', {
       })
     },
     async getPaymentsForPayout(vendorLicenseID: string) {
+      this.paymentsForPayout = {} as PaymentsForPayoutResponse
+
       try {
         const data = await getPaymentsForPayout({
           From: null,

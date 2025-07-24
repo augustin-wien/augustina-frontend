@@ -25,13 +25,15 @@ type PaymentsForPayout = {
 }
 
 type PaymentsStoreState = {
-  payments: PaymentsForPayout
+  payments: Payment[]
+  vendorPayments: PaymentsForPayout
 }
 
 export const usePaymentsStore = defineStore('payments', {
   state: () => {
     return {
-      payments: { payments: [], balance: 0 }
+      payments: [] as Payment[],
+      vendorPayments: { payments: [], balance: 0 } as PaymentsForPayout
     } as PaymentsStoreState
   },
   getters: {

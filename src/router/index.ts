@@ -382,7 +382,7 @@ router.afterEach((to) => {
 router.beforeEach(async (to: RouteLocationNormalized) => {
   if (
     to.meta.requiresAuth &&
-    !isAuthenticated() &&
+    !isAuthenticated(to) &&
     // ❗️ Avoid an infinite redirect
     to.name !== '404'
   ) {
@@ -394,7 +394,7 @@ router.beforeEach(async (to: RouteLocationNormalized) => {
 })
 
 // Check if the user is authenticated
-async function isAuthenticated() {
+async function isAuthenticated(to: RouteLocationNormalized) {
   if (!keycloak.initailizedKeycloak) {
     try {
       await initKeycloak()
@@ -412,6 +412,17 @@ async function isAuthenticated() {
     if (keycloak.keycloak?.tokenParsed) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
+
+
+    if (keycloak.keycloak?.tokenParsed?.groups.includes('vendor')) {
+      if (!to.path.startsWith('/me')) {
+        router.push('/me')
+      }
+    } else if (keycloak.keycloak?.tokenParsed?.groups.includes('backoffice')) {
+      if (to.path.startsWith('/me')) {
+        router.push('/backoffice/vendorsummary')
+      }
+    } 
 
     return keycloak.keycloak?.authenticated
   } else {
