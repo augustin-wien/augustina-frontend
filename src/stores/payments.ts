@@ -19,14 +19,19 @@ export interface Payment {
   IsPayoutFor: Array<Payment>
 }
 
-type PaymentsStoreState = {
+type PaymentsForPayout = {
   payments: Payment[]
+  balance: number
+}
+
+type PaymentsStoreState = {
+  payments: PaymentsForPayout
 }
 
 export const usePaymentsStore = defineStore('payments', {
   state: () => {
     return {
-      payments: [] as Payment[]
+      payments: { payments: [], balance: 0 }
     } as PaymentsStoreState
   },
   getters: {

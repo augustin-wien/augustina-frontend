@@ -139,8 +139,11 @@ const customColor = computed(() => {
               €</span
             >
           </div>
-          <div class="grid grid-cols-2 place-content-between">
-            <strong>{{ $t('lastPayout') }}: </strong>{{ vendorMe?.LastPayout }}
+          <div class="grid grid-cols-1 place-content-between">
+            <strong>{{ $t('lastPayout') }}: </strong>
+            <div>
+              {{ vendorMe?.LastPayout && vendorMe.LastPayout !=="0001-01-01T00:00:00Z" ?formatTime(vendorMe?.LastPayout):$t('N/A') }}
+            </div>
           </div>
           <div class="text-align-left">
             <strong>{{ $t('lastTransactions') }}: </strong>
@@ -176,10 +179,10 @@ const customColor = computed(() => {
               <button class="p-2 rounded-full customcolor text-white">QR-Code</button>
             </router-link> -->
             <router-link to="/me/profile">
-              <button class="p-2 rounded-full customcolor text-white">Profil</button>
+              <button class="p-3 rounded-full customcolor text-white">Profil</button>
             </router-link>
             <button
-              class="p-2 rounded-full customcolor text-white"
+              class="p-3 rounded-full customcolor text-white"
               @click="keycloak.keycloak?.logout()"
             >
               <p class="text-base leading-4">{{ $t('Logout') }}</p>
