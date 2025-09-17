@@ -45,7 +45,7 @@ const onlyForCurrency = ($event: KeyboardEvent) => {
     // Check total number of digits
     const totalDigits = currentTip.replace('.', '').length
 
-    if (totalDigits >= 3 || (parts[0].length > 0 && parseInt(parts[0]) > 9)) {
+    if (totalDigits >= 3 || (parts && parts[0] && parts[0].length > 0 && parseInt(parts[0]) > 9)) {
       $event.preventDefault()
       return
     }
@@ -54,7 +54,7 @@ const onlyForCurrency = ($event: KeyboardEvent) => {
       const decimalPart = parts[1]
 
       // prevent more than two decimal places
-      if (decimalPart.length >= 2) {
+      if (decimalPart && decimalPart.length >= 2) {
         $event.preventDefault()
         return
       }

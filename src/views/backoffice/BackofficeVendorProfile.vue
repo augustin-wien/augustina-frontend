@@ -17,6 +17,10 @@ const route = useRoute()
 const vendor = computed(() => vendorStore.vendor)
 
 onMounted(() => {
+  if (!route?.params?.ID) {
+    return
+  }
+
   const vendorId = parseInt(route.params.ID.toString())
 
   if (keycloakStore.authenticated) {

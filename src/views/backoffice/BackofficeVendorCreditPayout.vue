@@ -73,6 +73,11 @@ const authenticated = computed(() => keycloakStore.authenticated)
 onMounted(() => {
   if (authenticated.value) {
     itemsStore.getItemsBackoffice()
+
+    if (!route?.params?.ID) {
+      return
+    }
+
     const vendorId = parseInt(route.params.ID.toString())
 
     store.getVendor(vendorId)

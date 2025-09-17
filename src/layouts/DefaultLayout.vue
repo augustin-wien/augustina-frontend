@@ -18,7 +18,7 @@ link.media = 'screen,print'
 const apiUrl = import.meta.env.VITE_API_URL.replace(/\/$/, '')
 
 const settings = computed(() => settStore.settings)
-document.getElementsByTagName('head')[0].appendChild(link)
+document.getElementsByTagName('head')[0]?.appendChild(link)
 
 const logo = computed(() => {
   if (settings.value.Logo && settings.value.Logo !== '') {

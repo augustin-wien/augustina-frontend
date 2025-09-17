@@ -23,7 +23,7 @@ const checkIfItemSelected = () => {
     let sum = 0
 
     for (let i = 0; i < shopStore.amount.length; i++) {
-      sum += shopStore.amount[i].quantity
+      sum += shopStore.amount[i]?.quantity || 0
     }
 
     if (sum > 0) router.push({ name: 'Tippingpage' })

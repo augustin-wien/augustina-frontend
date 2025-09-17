@@ -109,6 +109,7 @@ const updateLogo = (event: Event) => {
   const target = event.target as HTMLInputElement
   if (!target?.files) return
   updatedSettings.value.Logo = target.files[0]
+  if (target.files[0] === undefined) return
   newLogo.value = URL.createObjectURL(target.files[0])
 }
 
@@ -117,6 +118,7 @@ const updateFavicon = (event: Event) => {
   const target = event.target as HTMLInputElement
   if (!target || !target.files || target.files === null || target.files.length > 0) return
   updatedSettings.value.Favicon = target.files[0]
+  if (target.files[0] === undefined) return
   newFavicon.value = URL.createObjectURL(target.files[0])
 }
 

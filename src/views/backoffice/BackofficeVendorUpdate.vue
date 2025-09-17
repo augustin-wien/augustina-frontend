@@ -28,7 +28,12 @@ const vendorLocations = computed(() => store.vendorLocations)
 const vendorComments = computed(() => store.vendorComments)
 
 onMounted(() => {
-  const vendorId = parseInt(route.params.ID.toString())
+  if (!route?.params?.ID) {
+
+    return
+  }
+
+  const vendorId = parseInt(route?.params?.ID.toString())
 
   if (keycloakStore.authenticated) {
     store.getVendor(vendorId).then(() => {
