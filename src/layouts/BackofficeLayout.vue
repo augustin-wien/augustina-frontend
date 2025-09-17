@@ -56,9 +56,9 @@ onMounted(() => {
 <template>
   <div>
     <div v-if="authenticated" className="backoffice-layout h-screen flex ">
-      <div class="h-full flex-none w-100">
+      <div class="h-full flex-none">
         <div
-          className="sidemenu fixed t-0 l-0 h-full w-100 flex-none flex flex-col justify-start items-start pr-5 pl-4 border-gray-600 border-b space-y-3 pb-5 customcolor"
+          className="sidemenu t-0 l-0 h-full flex-none flex flex-col justify-start items-start pr-5 pl-4 border-gray-600 border-b space-y-3 pb-5 customcolor"
         >
           <div className="sidemenu-item object-center">
             <img
@@ -172,8 +172,8 @@ onMounted(() => {
         </div>
       </div>
 
-      <div className="main-container grow h-full flex">
-        <div class="header-slot fixed flex-none">
+      <div className="main-container grow h-full flex flex-col">
+        <div class="header-slot w-full flex-none pl-3">
           <slot name="header"> </slot>
         </div>
         <div class="main-slot grow">
@@ -217,23 +217,13 @@ onMounted(() => {
 </style>
 
 <style scoped>
-.main-container {
-  padding-left: 8px;
-  margin-left: 300px;
-}
-
 .sidemenu-link {
   text-align: left;
 }
 
 .header-slot {
   text-align: left;
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  padding-left: 50px;
   border-radius: 5px;
-  background: #fff;
-  width: 100%;
   z-index: 50;
   max-width: calc(100vw - 300px);
   min-height: 80px;
@@ -241,7 +231,6 @@ onMounted(() => {
 .main-slot {
   text-align: left;
   border-radius: 5px;
-  margin-top: 70px;
   width: 100%;
   padding: 50px;
   background-color: #f2f2f2;
