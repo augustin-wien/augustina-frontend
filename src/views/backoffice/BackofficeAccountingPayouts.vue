@@ -168,7 +168,11 @@ const exportTable = () => {
                   <td class="border-t-2 p-3 font-bold">{{ $t('total') }}</td>
                   <td class="border-t-2 p-3"></td>
                   <td class="border-t-2 p-3"></td>
-                  <td v-for="item in items" :key="`td_total_${item.ID}`" class="border-t-2 p-3 font-bold">
+                  <td
+                    v-for="item in items"
+                    :key="`td_total_${item.ID}`"
+                    class="border-t-2 p-3 font-bold"
+                  >
                     {{
                       formatCredit(
                         payments.reduce(

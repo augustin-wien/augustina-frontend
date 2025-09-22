@@ -49,6 +49,7 @@ export const useVendorStore = defineStore('vendor', {
           }
 
           this.vendorName = response.FirstName
+          // @ts-ignore
           this.vendorid = typeof vendorId == 'string' ? vendorId : vendorId[0]
           this.vendorLink = response.AccountProofUrl
 
@@ -191,7 +192,7 @@ export const vendorsStore = defineStore('vendors', {
       for (let i = 0; i < vendors.length; i++) {
         const vendor = vendors[i]
 
-        if (vendor !== null) {
+        if (vendor !== null && vendor !== undefined) {
           if (
             vendor.LicenseID === '' ||
             vendor.LicenseID === null ||

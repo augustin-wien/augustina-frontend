@@ -1,5 +1,6 @@
 ignores: ["autoprefixer",
     "postcss", "tailwindcss",
+    "@tailwindcss/postcss",
     "@vue/eslint-config-prettier",
     "@typescript-eslint/eslint-plugin",
     "@typescript-eslint/parser",

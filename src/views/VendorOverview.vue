@@ -142,7 +142,11 @@ const customColor = computed(() => {
           <div class="grid grid-cols-1 place-content-between">
             <strong>{{ $t('lastPayout') }}: </strong>
             <div>
-              {{ vendorMe?.LastPayout && vendorMe.LastPayout !=="0001-01-01T00:00:00Z" ?formatTime(vendorMe?.LastPayout):$t('N/A') }}
+              {{
+                vendorMe?.LastPayout && vendorMe.LastPayout !== '0001-01-01T00:00:00Z'
+                  ? formatTime(vendorMe?.LastPayout)
+                  : $t('N/A')
+              }}
             </div>
           </div>
           <div class="text-align-left">

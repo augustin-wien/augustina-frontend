@@ -413,7 +413,6 @@ async function isAuthenticated(to: RouteLocationNormalized) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
 
-
     if (keycloak.keycloak?.tokenParsed?.groups.includes('vendor')) {
       if (!to.path.startsWith('/me')) {
         router.push('/me')
@@ -422,7 +421,7 @@ async function isAuthenticated(to: RouteLocationNormalized) {
       if (to.path.startsWith('/me')) {
         router.push('/backoffice/vendorsummary')
       }
-    } 
+    }
 
     return keycloak.keycloak?.authenticated
   } else {

@@ -1,6 +1,6 @@
 // https://on.cypress.io/api
 // deactivate eslint for this file
-/* eslint-disable */
+ 
 import { RandomInput } from "../../../src/utils/utils";
 
 describe('Go to backoffice', () => {

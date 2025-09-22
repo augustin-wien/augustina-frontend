@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
 import { includeIgnoreFile } from "@eslint/compat";
+import cypress from "eslint-plugin-cypress";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -81,8 +82,7 @@ export default [...compat.extends("eslint:recommended", "prettier"),
 }, ...compat.extends(
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:vue/vue3-recommended",
-    "plugin:cypress/recommended",
+    "plugin:vue/recommended",
     "prettier",
 ).map(config => ({
     ...config,
@@ -92,6 +92,7 @@ export default [...compat.extends("eslint:recommended", "prettier"),
 
     plugins: {
         "@typescript-eslint": typescriptEslint,
+        cypress: cypress,
     },
 
     languageOptions: {
@@ -136,9 +137,9 @@ export default [...compat.extends("eslint:recommended", "prettier"),
         "@typescript-eslint/no-explicit-any": "warn",
         "no-console": "warn",
 
-        "vue/component-tags-order": ["error", {
-            order: ["script", "template", "style"],
-        }],
+        // "vue/component-tags-order": ["error", {
+        //     order: ["script", "template", "style"],
+        // }],
 
         "vue/padding-line-between-blocks": "error",
         "vue/multi-word-component-names": "off",

@@ -15,9 +15,9 @@ onMounted(() => {
   const tmpId = $route.params.id
 
   if (Array.isArray(tmpId)) {
-    pdfId.value = tmpId[0]
+    pdfId.value = tmpId[0] || ''
   } else {
-    pdfId.value = tmpId
+    pdfId.value = tmpId || ''
   }
 
   pdfStore.validatePDFDownload(pdfId.value).catch((error) => {

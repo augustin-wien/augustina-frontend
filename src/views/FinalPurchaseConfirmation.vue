@@ -28,6 +28,7 @@ onMounted(() => {
   const sum = shopStore.calculateSum()
 
   if (isNaN(sum) || sum == 0) {
+    console.log(sum, JSON.stringify(shopStore.items))
     // when the sum is still 0 or NaN, then something is wrong with the items in the shop
     router.push({ name: 'Shop' })
   }
@@ -108,7 +109,9 @@ const hasLicenseItem = computed(() => {
         <div class="place-items-center w-full">
           <button
             v-if="
-              shopStore.amount.length == 1 && shopStore.amount[0].item == shopStore.donationItem
+              shopStore.amount.length == 1 &&
+              shopStore.amount[0] &&
+              shopStore.amount[0].item == shopStore.donationItem
             "
             id="donation-only"
             class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full"

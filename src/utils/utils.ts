@@ -119,7 +119,6 @@ export function initSentry(app: App, router: Router) {
       app,
       dsn: import.meta.env.VITE_SENTRY_DSN,
       integrations: [Sentry.browserTracingIntegration({ router }), Sentry.replayIntegration()],
-      trackComponents: true,
 
       // Set tracesSampleRate to 1.0 to capture 100%
       // of transactions for tracing.

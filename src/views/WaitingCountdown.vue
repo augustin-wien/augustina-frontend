@@ -34,6 +34,7 @@ onMounted(() => {
     return
   }
 
+  // @ts-ignore
   const vars = params[1].split('&')
   const queries = vars[1] + '&' + vars[0]
   paymentStore.transactionID = queries

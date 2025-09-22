@@ -1,6 +1,6 @@
 // https://on.cypress.io/api
 // deactivate eslint for this file
-/* eslint-disable */
+ 
 
 const tempLicenceID = "fl-245"
 const basicLicenceId = "fl-123"
