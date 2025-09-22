@@ -75,7 +75,7 @@ const updatedSettings = ref<Settings>({
   UseVendorLicenseIdInShop: false,
   QRCodeSettings: '',
   QRCodeEnableLogo: false,
-  UseTipInsteadOfDonation: false,
+  UseTipInsteadOfDonation: false
 })
 
 const updateSettings = async () => {

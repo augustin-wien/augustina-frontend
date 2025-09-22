@@ -190,7 +190,9 @@ const getItemName = (itemID: number) => {
             <div className="container">
               <div className="mx-3">
                 <div className="col text-lg underline">{{ $t('menuCredits') }}</div>
-                <div className="col text-md">{{ formatCredit(paymentsForPayout.balance) }} Euro</div>
+                <div className="col text-md">
+                  {{ formatCredit(paymentsForPayout.balance) }} Euro
+                </div>
               </div>
               <div v-if="vendor.Balance > 0">
                 <div>{{ $t('payout') }}:</div>

@@ -29,7 +29,6 @@ const vendorComments = computed(() => store.vendorComments)
 
 onMounted(() => {
   if (!route?.params?.ID) {
-
     return
   }
 

@@ -26,7 +26,8 @@ onMounted(() => {
       updatedComment.value.resolved_at &&
       new Date(updatedComment.value.resolved_at).toISOString().split('T')[0] !== '0001-01-01'
     )
-      resolved_at.value = new Date(updatedComment.value.resolved_at).toISOString().split('T')[0] || null
+      resolved_at.value =
+        new Date(updatedComment.value.resolved_at).toISOString().split('T')[0] || null
   }
 })
 </script>

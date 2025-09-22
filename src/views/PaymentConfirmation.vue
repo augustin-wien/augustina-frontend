@@ -38,7 +38,7 @@ const hasSingleDigitalItem = computed(() => {
     // Get the first item in the list
     const item = items[0]
 
-   if (!item) return false
+    if (!item) return false
     // Get the attribute licenseItem of the item
     const itemLicenseItem = itemLicenseItemAttribute(item.Item)
 
