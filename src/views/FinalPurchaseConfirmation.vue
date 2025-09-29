@@ -30,7 +30,10 @@ onMounted(() => {
   if (isNaN(sum) || sum == 0) {
     console.log(sum, JSON.stringify(shopStore.amount), JSON.stringify(shopStore.items))
     // when the sum is still 0 or NaN, then something is wrong with the items in the shop
-    router.push({ name: 'Shop' })
+    shopStore.resetCart()
+    shopStore.addItem(settStore.settings.MainItem)
+    shopStore.calculateSum()
+    
   }
 })
 

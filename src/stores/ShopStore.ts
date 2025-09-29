@@ -40,6 +40,9 @@ export const useShopStore = defineStore('shop', {
           })
       })
     },
+    resetCart() {
+      this.amount = []
+    },
     addItem(id: number) {
       const item = this.items.find((item) => item.ID == id)
 
