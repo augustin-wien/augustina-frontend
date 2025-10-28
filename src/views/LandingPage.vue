@@ -31,8 +31,14 @@ onMounted(() => {
 
         if (shopStore.items.length == 0) {
           router.push({ name: 'Error' })
-        } else if (shopStore.amount.length == 0) {
+        } else if (shopStore.amount.length == 0 && !settStore.settings.ShopLanding) {
           shopStore.addItem(settStore.settings.MainItem)
+        }
+
+        console.log(settStore.settings.ShopLanding)
+
+        if (settStore.settings.ShopLanding) {
+          router.push('/v/' + vendorStore.vendorid + '/shop')
         }
       })
       .catch(() => {
@@ -56,6 +62,7 @@ onMounted(() => {
             <div id="vendor-name" class="customfont text-center text-black font-bold">
               {{ vendorStore.vendorName }}
             </div>
+            {{ settStore.settings.ShopLanding }}
             <div
               v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
               class="customcolor rounded-full avataricon ml-2 justify-self-center"

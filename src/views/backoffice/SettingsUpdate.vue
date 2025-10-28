@@ -75,7 +75,9 @@ const updatedSettings = ref<Settings>({
   UseVendorLicenseIdInShop: false,
   QRCodeSettings: '',
   QRCodeEnableLogo: false,
-  UseTipInsteadOfDonation: false
+  UseTipInsteadOfDonation: false,
+  ShopLanding: false,
+  DigitalItemsUrl: ''
 })
 
 const updateSettings = async () => {
@@ -369,6 +371,32 @@ const showQrCodeSettings = ref(false)
                 </span>
               </div>
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+                >{{ $t('Shop page as landing page') }}:</label
+              >
+              <div class="">
+                <span class="me-4">
+                  <label class="me-1" for="ShopLanding">{{ $t('yes') }}</label>
+                  <input
+                    id="ShopLanding"
+                    v-model="updatedSettings.ShopLanding"
+                    type="radio"
+                    checked
+                    name="ShopLanding"
+                    :value="true"
+                  />
+                </span>
+                <span class="me-4">
+                  <label class="me-1" for="ShopLanding">{{ $t('no') }}</label>
+                  <input
+                    id="ShopLanding"
+                    v-model="updatedSettings.ShopLanding"
+                    type="radio"
+                    name="ShopLanding"
+                    :value="false"
+                  />
+                </span>
+              </div>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
                 >{{ $t('Webshop closed') }}:</label
               >
               <div class="">
@@ -416,6 +444,20 @@ const showQrCodeSettings = ref(false)
                   <input
                     id="maintainanceurl"
                     v-model="updatedSettings.MaintainanceModeHelpUrl"
+                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    type="text"
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="digitalitemsurl"
+                  >{{ $t('URL for digital items') }}:</label
+                >
+                <div class="flex flex-row">
+                  <input
+                    id="digitalitemsurl"
+                    v-model="updatedSettings.DigitalItemsUrl"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     type="text"
                     required

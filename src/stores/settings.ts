@@ -29,6 +29,8 @@ export interface Settings {
   MapCenterLong: number
   UseVendorLicenseIdInShop: boolean
   UseTipInsteadOfDonation: boolean
+  ShopLanding: boolean
+  DigitalItemsUrl: string
   edges?: any
   Keycloak: {
     Realm: string
