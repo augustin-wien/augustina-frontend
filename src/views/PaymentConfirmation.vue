@@ -202,6 +202,7 @@ const apiUrl = import.meta.env.VITE_API_URL
                   <div
                     v-if="isLicenseItem(item.Item)"
                     class="check-mark-success bg-green-600 rounded-full h-15 w-15 fill-white right-0 top-0 place-items-center grid"
+                    :style="'background-color:' + settStore.settings.Color"
                   >
                     <IconDigitalIssue />
                   </div>
