@@ -20,8 +20,6 @@ describe('Go to backoffice', () => {
     cy.get("#email").clear()
     cy.get("#email").type(RandomInput.getRandomEmail());
     cy.get('#licenseID').type(RandomInput.getRandomId())
-    cy.get('#longitude').clear().type(RandomInput.getRandomLongitude())
-    cy.get('#latitude').clear().type(RandomInput.getRandomLatitude())
     cy.get("button").contains("Anlegen").click()
   })
 })

@@ -251,6 +251,12 @@ footer {
 .user-loggedin {
   max-width: 270px;
 }
+.sidemenu button {
+  cursor: pointer;
+}
+.sidemenu button:hover {
+  text-decoration: underline;
+}
 </style>
 
 <style lang="scss">

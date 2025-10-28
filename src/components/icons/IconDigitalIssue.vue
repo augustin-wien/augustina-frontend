@@ -1,0 +1,41 @@
+<template>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    style="isolation: isolate"
+    viewBox="0 0 30 30"
+    width="30"
+    height="30"
+  >
+    <g>
+      <g>
+        <g>
+          <g>
+            <path
+              d=" M 1.247 9.427 C 9.13 2.189 20.874 2.193 28.753 9.427 M 5.662 14.521 C 11.386 9.571 18.619 9.576 24.338 14.521 M 10.416 19.275 C 13.649 17.145 16.351 17.145 19.584 19.275"
+              fill="none"
+              vector-effect="non-scaling-stroke"
+              stroke-width="2"
+              stroke="rgb(255,255,255)"
+              stroke-linejoin="miter"
+              stroke-linecap="round"
+              stroke-miterlimit="4"
+            />
+            <circle
+              vector-effect="non-scaling-stroke"
+              cx="14.99999895005018"
+              cy="25.39568735371112"
+              r="1.6043126462889008"
+              fill="rgb(255,255,255)"
+              stroke-width="1"
+              stroke="rgb(255,255,255)"
+              stroke-linejoin="miter"
+              stroke-linecap="butt"
+              stroke-miterlimit="4"
+            />
+          </g>
+        </g>
+      </g>
+    </g>
+  </svg>
+</template>
