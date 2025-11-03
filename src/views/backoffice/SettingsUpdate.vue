@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import toast from '@/components/ToastMessage.vue'
-import router from '@/router'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore, type Settings } from '@/stores/settings'
 import { computed, onMounted, ref, watch } from 'vue'
-import IconCross from '@/components/icons/IconCross.vue'
 import QrCodeSettings from '@/components/QrCodeSettings.vue'
 
 const settingsStore = useSettingsStore()
@@ -149,21 +147,12 @@ const showQrCodeSettings = ref(false)
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuSettings') }} {{ $t('change') }}</h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuSettings') }}</h1>
     </template>
     <template #main>
       <div v-if="settingsStore.settings" class="main">
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div v-if="settings" class="w-full max-w-l mx-auto">
-            <div class="flex place-content-center justify-between">
-              <span />
-              <button
-                class="rounded-full bg-red-600 text-white"
-                @click="router.push('/backoffice/settings')"
-              >
-                <IconCross />
-              </button>
-            </div>
             <div class="form">
               <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="newspapername"
