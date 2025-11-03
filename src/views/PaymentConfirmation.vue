@@ -177,7 +177,9 @@ const apiUrl = import.meta.env.VITE_API_URL
               v-for="item in purchasedItems"
               :key="item.ID"
               :class="
-                purchasedItems?.length == 1 || item.Item == DONATION_ITEM_ID || item.Quantity % 2 == 0
+                purchasedItems?.length == 1 ||
+                item.Item == DONATION_ITEM_ID ||
+                item.Quantity % 2 == 0
                   ? 'item col-span-2 grid grid-cols-2'
                   : 'item col-span-1'
               "
@@ -250,7 +252,11 @@ const apiUrl = import.meta.env.VITE_API_URL
                   settStore.settings.FontColor
                 "
               >
-                {{ $t('accessDigitalItem', { itemName: digitalItems[0]?.Item ? itemDetails(digitalItems[0].Item)?.Name : '' }) }}
+                {{
+                  $t('accessDigitalItem', {
+                    itemName: digitalItems[0]?.Item ? itemDetails(digitalItems[0].Item)?.Name : ''
+                  })
+                }}
               </button>
             </a>
           </div>
