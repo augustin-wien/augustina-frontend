@@ -30,10 +30,12 @@ const downloadLinks = computed(() => paymentStore.verification?.PDFDownloadLinks
 const purchasedItems = computed(() => {
   const items = paymentStore.verification?.PurchasedItems
   if (!items) return []
+
   // Use a shallow copy to avoid mutating the original array and convert booleans to numbers for arithmetic
   const tmp_items = [...items].sort(
     (a, b) => Number(isLicenseItem(a.Item)) - Number(isLicenseItem(b.Item))
   )
+
   // duplicate items with quantity > 1
   const result: typeof tmp_items = []
 
