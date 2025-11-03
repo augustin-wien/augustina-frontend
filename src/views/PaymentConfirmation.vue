@@ -8,6 +8,8 @@ import { usePDFDownloadStore } from '@/stores/pdfDownload'
 import { useSettingsStore } from '@/stores/settings'
 import { computed, onMounted, ref } from 'vue'
 
+const DONATION_ITEM_ID = 2
+
 const paymentStore = usePaymentStore()
 const settStore = useSettingsStore()
 const itemsStore = useItemsStore()
@@ -40,7 +42,7 @@ const purchasedItems = computed(() => {
   const result: typeof tmp_items = []
 
   tmp_items.forEach((item) => {
-    if (item.Item == 2) {
+    if (item.Item == DONATION_ITEM_ID) {
       // donation item, only one entry
       result.push({ ...item })
       return
@@ -175,7 +177,9 @@ const apiUrl = import.meta.env.VITE_API_URL
               v-for="item in purchasedItems"
               :key="item.ID"
               :class="
-                purchasedItems?.length == 1 || item.Item == 2 || item.Quantity % 2 == 0
+                purchasedItems?.length == 1 ||
+                item.Item == DONATION_ITEM_ID ||
+                item.Quantity % 2 == 0
                   ? 'item col-span-2 grid grid-cols-2'
                   : 'item col-span-1'
               "
@@ -183,7 +187,7 @@ const apiUrl = import.meta.env.VITE_API_URL
               <div
                 v-for="(_, element) in Array(item.Quantity)"
                 :key="element"
-                :class="`item-content relative p-2  ${item.Item == 2 && element > 0 ? 'hidden' : ''} ${item.Item == 2 ? ' col-span-2' : ''}`"
+                :class="`item-content relative p-2  ${item.Item == DONATION_ITEM_ID && element > 0 ? 'hidden' : ''} ${item.Item == DONATION_ITEM_ID ? ' col-span-2' : ''}`"
               >
                 <img
                   v-if="itemDetails(item.Item)?.Image"
@@ -191,7 +195,7 @@ const apiUrl = import.meta.env.VITE_API_URL
                   :src="apiUrl + itemDetails(item.Item)?.Image"
                 />
                 <div
-                  v-if="item.Item == 2"
+                  v-if="item.Item == DONATION_ITEM_ID"
                   class="item-donation-label-wrapper col-span-2 text-s w-full text-center font-semibold text-white bg-gray-500 p-3 rounded-full mb-3"
                 >
                   <div class="item-donation-label col-span-2">
@@ -211,7 +215,7 @@ const apiUrl = import.meta.env.VITE_API_URL
                     <IconDigitalIssue />
                   </div>
                   <div
-                    v-else-if="!isLicenseItem(item.Item) && item.Item !== 2"
+                    v-else-if="!isLicenseItem(item.Item) && item.Item !== DONATION_ITEM_ID"
                     class="check-mark-success bg-green-600 rounded-full h-15 w-15 fill-white right-0 top-0 place-items-center grid"
                   >
                     <IconCheckmark />
@@ -248,8 +252,11 @@ const apiUrl = import.meta.env.VITE_API_URL
                   settStore.settings.FontColor
                 "
               >
-                {{ $t('Access your') }} {{ digitalItems[0]?.Item? itemDetails(digitalItems[0]?.Item)?.Name: '' }}
-                {{ $t('here.') }}
+                {{
+                  $t('accessDigitalItem', {
+                    itemName: digitalItems[0]?.Item ? itemDetails(digitalItems[0].Item)?.Name : ''
+                  })
+                }}
               </button>
             </a>
           </div>
