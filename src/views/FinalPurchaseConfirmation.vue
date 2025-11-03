@@ -63,7 +63,7 @@ const hasLicenseItem = computed(() => {
               </p>
               <p className="text-center text">
                 {{ $t('includes') }} {{ shopStore.donationInEuro }}€
-                {{ $t('donation') }}
+                {{ settStore.settings.UseTipInsteadOfDonation ? $t('customtip') : $t('customdonation') }}
               </p>
             </div>
             <div class="w-full">

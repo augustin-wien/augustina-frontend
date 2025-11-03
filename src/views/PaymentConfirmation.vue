@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import IconCheckmark from '@/components/icons/IconCheckmark.vue'
+import IconDigitalIssue from '@/components/icons/IconDigitalIssue.vue'
 import IconCross from '@/components/icons/IconCross.vue'
 import { useItemsStore } from '@/stores/items'
 import { usePaymentStore } from '@/stores/payment'
@@ -26,7 +27,38 @@ const price = computed(() =>
 
 const downloadLinks = computed(() => paymentStore.verification?.PDFDownloadLinks)
 
-const purchasedItems = computed(() => paymentStore.verification?.PurchasedItems)
+const purchasedItems = computed(() => {
+  const items = paymentStore.verification?.PurchasedItems
+  if (!items) return []
+  // Use a shallow copy to avoid mutating the original array and convert booleans to numbers for arithmetic
+  const tmp_items = [...items].sort((a, b) => Number(isLicenseItem(a.Item)) - Number(isLicenseItem(b.Item)))
+  // duplicate items with quantity > 1
+  const result: typeof tmp_items = []
+
+  tmp_items.forEach((item) => {
+    if (item.Item == 2) {
+      // donation item, only one entry
+      result.push({ ...item })
+      return
+    }
+
+    for (let i = 0; i < item.Quantity; i++) {
+      result.push({ ...item, Quantity: 1 })
+    }
+  })
+
+  return result
+})
+
+const digitalItems = computed(() => {
+  const items = purchasedItems.value
+  if (!items) return []
+
+  return items.filter((item) => {
+    const itemDetails = itemsStore.items?.find((i) => i.ID == item.Item)
+    return itemDetails && itemDetails.LicenseItem
+  })
+})
 
 // Define the computed property that checks the condition
 const hasSingleDigitalItem = computed(() => {
@@ -99,6 +131,36 @@ const itemLicenseItemAttribute = (id: number) => {
   return item?.LicenseItem
 }
 
+const isLicenseItem = (id: number) => {
+  const item = itemsStore.items?.find((item) => item.ID == id)
+  return item?.LicenseItem != null && item?.LicenseItem != undefined
+}
+
+const itemDetails = (id: number) => {
+  const item = itemsStore.items?.find((item) => item.ID == id)
+  return item
+}
+
+const hasDigitalItemWithoutPDF = computed(() => {
+  const items = purchasedItems.value
+
+  if (!items) return false
+
+  for (const item of items) {
+    const itemDetails = itemsStore.items?.find((i) => i.ID == item.Item)
+
+    if (
+      itemDetails &&
+      itemDetails.LicenseItem &&
+      !downloadLinks.value?.some((link) => link.ItemID == item.Item)
+    ) {
+      return true
+    }
+  }
+
+  return false
+})
+
 const downloadPDF = (link: string) => {
   PDFDownloadStore.downloadPDF(link)
   // TODO: Implement validation without triggering spam protection in the browser
@@ -127,59 +189,82 @@ const apiUrl = import.meta.env.VITE_API_URL
         className="grid grid-rows-6 h-full place-items-center w-full"
       >
         <div
-          v-if="!hasSingleDigitalItem"
-          class="confirmation-wrapper h-full w-full text-center grid grid-rows-2 font-semibold text-xl"
+          class="confirmation-wrapper h-full w-full text-center grid grid-rows-3"
         >
-          <div v-if="!isConfirmed" class="confirmation-header">
-            <div class="confirmation-label">{{ $t('symbol') }}</div>
-            <div class="vendor-name">{{ paymentStore.firstName }}</div>
+ <div
+          class="confirmation-validation text-sm"
+        >
+          <div>
+            <span class="date">{{ currentDate() }} {{ time }}</span>
+          </div>
+
+        </div>
+          <div v-if="!isConfirmed" class="confirmation-header font-semibold text-x">
+            <h1 class="confirmation-title font-bold font-semibold text-xl">
+              {{ $t('payment confirmation') }}
+            </h1>
+            <div class="confirmation-hint text-sm mt-2">
+              <div class="confirmation-label">{{ $t('symbol') }}</div>
+              <div class="vendor-name">{{ paymentStore.firstName }}</div>
+            </div>
           </div>
           <div v-else class="invalid-confirmation-wrapper">
             <div>{{ $t('invalid confirmation') }}</div>
           </div>
         </div>
-        <div
-          v-else
-          className="greetings-label h-full w-full text-center grid grid-rows-2 font-semibold text-xl"
-        >
-          <div>{{ $t('have fun') }}</div>
-        </div>
         <div v-if="!isConfirmed" class="row-span-4 font-bold w-fit h-full relative">
-          <div v-if="!hasSingleDigitalItem" class="check-mark-wrapper flex justify-center mb-4">
-            <div
-              v-if="!isConfirmed"
-              class="check-mark-confirmed rounded-full text-6xl absolute h-12 w-12 fill-white right-0 top-0 place-items-center grid"
-              :class="{ 'bg-red-600': isConfirmed, 'bg-green-600': !isConfirmed }"
-            >
-              <IconCheckmark v-if="!isConfirmed" />
-            </div>
-            <img
-              v-if="!isConfirmed"
-              class="check-mark-main-item-image rounded-full h-44 w-44 object-cover customborder border-4"
-              alt="Titelblatt"
-              :src="
-                settStore.settings.MainItemImage
-                  ? apiUrl + settStore.settings.MainItemImage
-                  : '/Titelseite.jpg'
-              "
-            />
-          </div>
           <div class="purchased-items-wrapper grid grid-cols-2">
             <div
               v-for="item in purchasedItems"
               :key="item.ID"
-              :class="purchasedItems?.length == 1 ? 'col-span-2' : 'col-span-1'"
+              :class="
+                purchasedItems?.length == 1 || item.Item == 2 || item.Quantity % 2 == 0
+                  ? 'item col-span-2 grid grid-cols-2'
+                  : 'item col-span-1'
+              "
             >
               <div
-                class="purchased-item col-span-1 text-s w-full text-center font-semibold text-white bg-black p-3 rounded-full mb-3"
+                v-for="(_, element) in Array(item.Quantity)"
+                :key="element"
+                :class="`item-content relative p-2  ${item.Item == 2 && element > 0 ? 'hidden' : ''} ${item.Item == 2 ? ' col-span-2' : ''}`"
               >
-                {{ item.Item == 2 ? item.Quantity / 100 + ' €' : item.Quantity + 'x' }}
-                {{ item.Item == 2 ? $t('donation') : itemName(item.Item) }}
+                <img
+                  v-if="itemDetails(item.Item)?.Image"
+                  class="item-image"
+                  :src="apiUrl + itemDetails(item.Item)?.Image"
+                />
+                <div
+                  v-if="item.Item == 2"
+                  class="item-donation-label-wrapper col-span-2 text-s w-full text-center font-semibold text-white bg-gray-500 p-3 rounded-full mb-3"
+                >
+                  <div class="item-donation-label col-span-2">
+                    {{ item.Quantity / 100 + ' €' }}
+                    {{ settStore.settings.UseTipInsteadOfDonation ? $t('customtip') : $t('customdonation') }}
+                  </div>
+                </div>
+                <div class="item-confirmation-icon">
+                  <div
+                    v-if="isLicenseItem(item.Item)"
+                    class="check-mark-success bg-white border-2 rounded-full h-15 w-15 fill-white right-0 top-0 place-items-center grid"
+                  >
+                    <IconDigitalIssue />
+                  </div>
+                  <div
+                    v-else-if="!isLicenseItem(item.Item) && item.Item !== 2"
+                    class="check-mark-success bg-green-600 rounded-full h-15 w-15 fill-white right-0 top-0 place-items-center grid"
+                  >
+                    <IconCheckmark />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div class="price-wrapper w-full row-span-2">
             <p class="price text-center text-3xl font-semibold">{{ price.toFixed(2) }}€</p>
+
+          </div>
+          <div class="timestamp-wrapper text-center w-full row-span-1">
+            {{ $t('bought') }} {{ formatTime(paymentStore.timeStamp) }}
           </div>
           <div class="w-full row-span-1 mt-1">
             <button
@@ -192,6 +277,21 @@ const apiUrl = import.meta.env.VITE_API_URL
               {{ $t('Download') + ' ' + itemName(downloadLink.ItemID) }}
             </button>
           </div>
+          <div v-if="hasDigitalItemWithoutPDF" class="digitial-item-link mt-3">
+            <a :href="settStore.settings.DigitalItemsUrl" target="_blank" rel="noopener noreferrer">
+              <button
+                class="digital-item-download-button bg-gray-500 rounded-full text-center p-5 customfont text-sm font font-semibold w-full cursor-pointer"
+                :style="
+                  'background-color:' +
+                  settStore.settings.Color +
+                  '; color: ' +
+                  settStore.settings.FontColor
+                "
+              >
+                {{ $t('Access your') }} {{ itemDetails((digitalItems[0]?.Item))?.Name }} {{ $t('here.') }}
+              </button>
+            </a>
+          </div>
         </div>
         <div v-else class="text-6xl row-span-4 font-bold w-fit h-full relative">
           <div
@@ -200,19 +300,25 @@ const apiUrl = import.meta.env.VITE_API_URL
             <IconCross />
           </div>
         </div>
-        <div
-          v-if="!hasSingleDigitalItem != !isConfirmed"
-          class="grid grid-rows-2 place-items-center"
-        >
-          <div>
-            <span class="date text-l">{{ currentDate() }} </span
-            ><span class="time text-l"> {{ $t('at') }} {{ time }}</span>
-          </div>
-          <span class="date text-l"
-            >{{ $t('bought') }} {{ formatTime(paymentStore.timeStamp) }}</span
-          >
-        </div>
       </div>
     </template>
   </component>
 </template>
+
+<style scoped>
+.item-image {
+  margin-bottom: 10px;
+  /* all images should have the same size */
+  object-fit: cover;
+  height: 150px;
+  width: 120px;
+}
+.item {
+  position: relative;
+}
+.item-confirmation-icon {
+  position: absolute;
+  top: 30px;
+  right: 10px;
+}
+</style>
