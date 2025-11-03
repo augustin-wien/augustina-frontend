@@ -237,5 +237,8 @@
   "Enter your comment here": "Gib deinen Kommentar hier ein",
   "Vendor has no locations yet": "Verkäufer:in hat noch keine Standorte",
   "debt": "Schulden",
-  "You will only be able to add comments and locations for the vendor once the vendor has been created.": "Du kannst erst Kommentare und Standorte hinzufügen, wenn der Verkäufer:in erstellt wurde."
+  "You will only be able to add comments and locations for the vendor once the vendor has been created.": "Du kannst erst Kommentare und Standorte hinzufügen, wenn der Verkäufer:in erstellt wurde.",
+  "Access your": "Greife auf deine",
+  "here.": "hier zu.",
+  "accessDigitalItem": "Greife hier auf deine {itemName} zu"
 }
