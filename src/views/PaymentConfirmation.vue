@@ -248,7 +248,7 @@ const apiUrl = import.meta.env.VITE_API_URL
                   settStore.settings.FontColor
                 "
               >
-                {{ $t('Access your') }} {{ itemDetails(digitalItems[0]?.Item)?.Name }}
+                {{ $t('Access your') }} {{ digitalItems[0]?.Item? itemDetails(digitalItems[0]?.Item)?.Name: '' }}
                 {{ $t('here.') }}
               </button>
             </a>
