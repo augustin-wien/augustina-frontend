@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import toast from '@/components/ToastMessage.vue'
-import router from '@/router'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore, type Settings } from '@/stores/settings'
 import { computed, onMounted, ref, watch } from 'vue'
-import IconCross from '@/components/icons/IconCross.vue'
 import QrCodeSettings from '@/components/QrCodeSettings.vue'
 
 const settingsStore = useSettingsStore()

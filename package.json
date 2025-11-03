@@ -16,6 +16,7 @@
     "lint:fix": "eslint .  --fix ",
     "format": "prettier --cache --check src/",
     "format:fix": "prettier --cache --check src/ --write",
+    "lintformat:fix": "yarn lint:fix && yarn format:fix",
     "depcheck": "depcheck",
     "update-version": "npm version patch --no-git-tag-version && yarn install --silent && node ./scripts/create-branch.js"
   },

@@ -31,7 +31,9 @@ const purchasedItems = computed(() => {
   const items = paymentStore.verification?.PurchasedItems
   if (!items) return []
   // Use a shallow copy to avoid mutating the original array and convert booleans to numbers for arithmetic
-  const tmp_items = [...items].sort((a, b) => Number(isLicenseItem(a.Item)) - Number(isLicenseItem(b.Item)))
+  const tmp_items = [...items].sort(
+    (a, b) => Number(isLicenseItem(a.Item)) - Number(isLicenseItem(b.Item))
+  )
   // duplicate items with quantity > 1
   const result: typeof tmp_items = []
 
@@ -58,43 +60,6 @@ const digitalItems = computed(() => {
     const itemDetails = itemsStore.items?.find((i) => i.ID == item.Item)
     return itemDetails && itemDetails.LicenseItem
   })
-})
-
-// Define the computed property that checks the condition
-const hasSingleDigitalItem = computed(() => {
-  // Get the list of purchased items
-  const items = purchasedItems.value
-
-  // Check if the list length is exactly one
-  if (items?.length === 1) {
-    // Get the first item in the list
-    const item = items[0]
-
-    if (!item) return false
-    // Get the attribute licenseItem of the item
-    const itemLicenseItem = itemLicenseItemAttribute(item.Item)
-
-    // Check if the item name has license item
-    return itemLicenseItem !== null && itemLicenseItem !== undefined
-  }
-
-  if (items?.length === 2) {
-    // Iterate over the list of purchased items
-    for (const item of items) {
-      // Get the attribute licenseItem of the item
-      const itemLicenseItem = itemLicenseItemAttribute(item.Item)
-
-      // Return false if null
-      if (itemLicenseItem !== null && itemLicenseItem !== undefined) {
-        return true
-      }
-    }
-
-    return false
-  }
-
-  // Return false if the list length is not one or two
-  return false
 })
 
 const time = ref('not')
@@ -124,11 +89,6 @@ const itemName = (id: number) => {
   const item = itemsStore.items?.find((item) => item.ID == id)
 
   return item?.Name
-}
-
-const itemLicenseItemAttribute = (id: number) => {
-  const item = itemsStore.items?.find((item) => item.ID == id)
-  return item?.LicenseItem
 }
 
 const isLicenseItem = (id: number) => {
@@ -188,17 +148,12 @@ const apiUrl = import.meta.env.VITE_API_URL
         id="payment-confirmation-page"
         className="grid grid-rows-6 h-full place-items-center w-full"
       >
-        <div
-          class="confirmation-wrapper h-full w-full text-center grid grid-rows-3"
-        >
- <div
-          class="confirmation-validation text-sm"
-        >
-          <div>
-            <span class="date">{{ currentDate() }} {{ time }}</span>
+        <div class="confirmation-wrapper h-full w-full text-center grid grid-rows-3">
+          <div class="confirmation-validation text-sm">
+            <div>
+              <span class="date">{{ currentDate() }} {{ time }}</span>
+            </div>
           </div>
-
-        </div>
           <div v-if="!isConfirmed" class="confirmation-header font-semibold text-x">
             <h1 class="confirmation-title font-bold font-semibold text-xl">
               {{ $t('payment confirmation') }}
@@ -239,7 +194,11 @@ const apiUrl = import.meta.env.VITE_API_URL
                 >
                   <div class="item-donation-label col-span-2">
                     {{ item.Quantity / 100 + ' €' }}
-                    {{ settStore.settings.UseTipInsteadOfDonation ? $t('customtip') : $t('customdonation') }}
+                    {{
+                      settStore.settings.UseTipInsteadOfDonation
+                        ? $t('customtip')
+                        : $t('customdonation')
+                    }}
                   </div>
                 </div>
                 <div class="item-confirmation-icon">
@@ -261,7 +220,6 @@ const apiUrl = import.meta.env.VITE_API_URL
           </div>
           <div class="price-wrapper w-full row-span-2">
             <p class="price text-center text-3xl font-semibold">{{ price.toFixed(2) }}€</p>
-
           </div>
           <div class="timestamp-wrapper text-center w-full row-span-1">
             {{ $t('bought') }} {{ formatTime(paymentStore.timeStamp) }}
@@ -288,7 +246,8 @@ const apiUrl = import.meta.env.VITE_API_URL
                   settStore.settings.FontColor
                 "
               >
-                {{ $t('Access your') }} {{ itemDetails((digitalItems[0]?.Item))?.Name }} {{ $t('here.') }}
+                {{ $t('Access your') }} {{ itemDetails(digitalItems[0]?.Item)?.Name }}
+                {{ $t('here.') }}
               </button>
             </a>
           </div>
