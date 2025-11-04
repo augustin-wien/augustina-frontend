@@ -53,6 +53,9 @@ const purchasedItems = computed(() => {
     }
   })
 
+  // donation should be at the end
+  result.sort((a, b) => (a.Item == DONATION_ITEM_ID ? 1 : 0) - (b.Item == DONATION_ITEM_ID ? 1 : 0))  
+
   return result
 })
 
