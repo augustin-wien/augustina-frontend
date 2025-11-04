@@ -22,6 +22,10 @@ const checkVendor = () => {
 onMounted(() => {
   fetch().then(() => {
     shopStore.reset()
+    
+    if (settStore.settings.ShopLanding) {
+      router.push('/v/' + vendorStore.vendorid + '/shop')
+    }
 
     shopStore
       .getItems()
@@ -37,9 +41,7 @@ onMounted(() => {
 
         console.log(settStore.settings.ShopLanding)
 
-        if (settStore.settings.ShopLanding) {
-          router.push('/v/' + vendorStore.vendorid + '/shop')
-        }
+
       })
       .catch(() => {
         router.push({ name: 'Error' })
