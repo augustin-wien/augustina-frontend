@@ -29,7 +29,7 @@ export interface Settings {
   MapCenterLong: number
   UseVendorLicenseIdInShop: boolean
   UseTipInsteadOfDonation: boolean
-  ShopLanding: boolean
+  ShopLanding: boolean | undefined
   DigitalItemsUrl: string
   edges?: any
   Keycloak: {
@@ -41,7 +41,7 @@ export interface Settings {
 export const useSettingsStore = defineStore('settings', {
   state: () => {
     return {
-      settings: { Color: '#000' } as Settings,
+      settings: { Color: '#000', ShopLanding: undefined } as Settings,
       settingsLoaded: false,
       imgUrl: '',
       styleRev: 0,

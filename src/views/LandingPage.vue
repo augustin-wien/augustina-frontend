@@ -12,7 +12,6 @@ const router = useRouter()
 const shopStore = useShopStore()
 const vendorStore = useVendorStore()
 const settStore = useSettingsStore()
-const fetch = settStore.getSettingsFromApi
 const price = computed(() => (settStore.settings.MainItemPrice / 100).toFixed(2))
 
 const checkVendor = () => {
@@ -20,18 +19,18 @@ const checkVendor = () => {
 }
 
 onMounted(() => {
-  fetch().then(() => {
+  settStore.getSettingsFromApi().then(() => {
     shopStore.reset()
-    
-    if (settStore.settings.ShopLanding) {
-      router.push('/v/' + vendorStore.vendorid + '/shop')
-    }
 
     shopStore
       .getItems()
       .then(() => {
         usePaymentStore().setPrice(settStore.settings.MainItemPrice)
         usePaymentStore().setPricePerPaper(settStore.settings.MainItemPrice)
+
+        if (settStore.settings.ShopLanding) {
+          router.push('/v/' + vendorStore.vendorid + '/shop')
+        }
 
         if (shopStore.items.length == 0) {
           router.push({ name: 'Error' })
@@ -54,7 +53,7 @@ onMounted(() => {
 
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <template v-if="settStore.settings.MainItemPrice" #main>
+    <template v-if="settStore.settings.MainItemPrice && settStore.settings.ShopLanding != undefined && !settStore.settings.ShopLanding" #main>
       <div id="landing-page" className="grid grid-rows-5 h-full place-items-center w-full">
         <div class="row-span-4 grid grid-rows-5 h-full w-full">
           <div id="title" className="text-center font-semibold text-2xl pt-5">
