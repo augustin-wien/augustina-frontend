@@ -2,11 +2,18 @@
 import Toast from '@/components/ToastMessage.vue'
 import { useShopStore } from '@/stores/ShopStore'
 import { useSettingsStore } from '@/stores/settings'
+import { useVendorStore } from '@/stores/vendor'
 import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
 const shopStore = useShopStore()
 const settStore = useSettingsStore()
+const vendorStore = useVendorStore()
+
+const checkVendor = () => {
+  window.location.href = vendorStore.vendorLink
+}
+
 const settings = settStore.settings
 const items = shopStore.items
 const router = useRouter()
@@ -45,11 +52,31 @@ const checkIfItemSelected = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div id="shop-page" className="h-full grid grid-rows-5 place-items-center w-full">
+      <div id="shop-page" className="h-full grid grid-rows-5 w-full">
         <div class="row-span-4 w-full h-full">
-          <div id="page-title" className="text-center font-semibold text-3xl py-4">
-            {{ $t('product') }}
+          <div class="shop-header">
+            <div id="page-title" className="text-center font-semibold text-xl">
+              {{ $t('buyItem') }}
+            </div>
+            <div class="flex relative items-center justify-center">
+              <div
+                id="vendor-name"
+                class="customfont text-center text-black font-bold text-3xl mb-4"
+              >
+                {{ vendorStore.vendorName }}
+              </div>
+              <div
+                v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
+                class="customcolor rounded-full avataricon ml-2 justify-self-center"
+                @click="checkVendor"
+              >
+                <IconAvatar class="customfill vendor-icon" />
+              </div>
+            </div>
           </div>
+          <!-- <div class="shop-hint text-sm mb-2 mt-4 px-4">
+              {{ $t('product') }}
+         </div> -->
           <div class="h-5/6 pb-3">
             <Toast v-if="toast" :toast="toast" />
             <ul
@@ -130,7 +157,7 @@ const checkIfItemSelected = () => {
               <li v-for="item in items" :key="item.ID" class="item">
                 <div
                   v-if="item.ID != settings.MainItem"
-                  class="flex w-full p-1 pt-2 relative border-t-4 border"
+                  class="flex w-full p-1 pt-2 relative border-t-4"
                 >
                   <div
                     v-if="item.Image"

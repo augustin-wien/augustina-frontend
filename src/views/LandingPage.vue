@@ -38,9 +38,6 @@ onMounted(() => {
           shopStore.addItem(settStore.settings.MainItem)
         }
 
-        console.log(settStore.settings.ShopLanding)
-
-
       })
       .catch(() => {
         router.push({ name: 'Error' })
@@ -53,7 +50,14 @@ onMounted(() => {
 
 <template>
   <component :is="$route.meta.layout || 'div'">
-    <template v-if="settStore.settings.MainItemPrice && settStore.settings.ShopLanding != undefined && !settStore.settings.ShopLanding" #main>
+    <template
+      v-if="
+        settStore.settings.MainItemPrice &&
+        settStore.settings.ShopLanding != undefined &&
+        !settStore.settings.ShopLanding
+      "
+      #main
+    >
       <div id="landing-page" className="grid grid-rows-5 h-full place-items-center w-full">
         <div class="row-span-4 grid grid-rows-5 h-full w-full">
           <div id="title" className="text-center font-semibold text-2xl pt-5">
@@ -63,7 +67,6 @@ onMounted(() => {
             <div id="vendor-name" class="customfont text-center text-black font-bold">
               {{ vendorStore.vendorName }}
             </div>
-            {{ settStore.settings.ShopLanding }}
             <div
               v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
               class="customcolor rounded-full avataricon ml-2 justify-self-center"
