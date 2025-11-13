@@ -27,6 +27,7 @@ onMounted(() => {
       const vid = Array.isArray(route.params.vendorid)
         ? route.params.vendorid[0]
         : route.params.vendorid
+
       if (vid) vendorStore.vendorid = String(vid)
     }
 

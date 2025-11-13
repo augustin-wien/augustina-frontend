@@ -702,4 +702,7 @@ tr {
 td {
   padding: 10px;
 }
+#styles {
+  min-height: 300px;
+}
 </style>
