@@ -148,10 +148,12 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('QRCodeSettings', updatedSettings.QRCodeSettings)
   formData.append('QRCodeEnableLogo', updatedSettings.QRCodeEnableLogo.toString())
   formData.append('UseTipInsteadOfDonation', updatedSettings.UseTipInsteadOfDonation.toString())
+
   formData.append(
     'ShopLanding',
     updatedSettings.ShopLanding ? updatedSettings.ShopLanding.toString() : 'false'
   )
+
   formData.append('DigitalItemsUrl', updatedSettings.DigitalItemsUrl)
 
   formData.append(

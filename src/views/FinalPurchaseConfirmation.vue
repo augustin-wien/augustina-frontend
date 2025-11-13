@@ -48,7 +48,16 @@ const hasLicenseItem = computed(() => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div id="confirmation-page" class="h-full w-full grid grid-rows-5 place-items-center">
+      <div
+        v-if="hasLicenseItem && (!paymentStore.email || paymentStore.email == '')"
+        id="confirmation-page-email-settings"
+      >
+        <EmailModal
+          v-if="!paymentStore.email || paymentStore.email == ''"
+          :licence-item="hasLicenseItem"
+        />
+      </div>
+      <div v-else id="confirmation-page" class="h-full w-full grid grid-rows-5 place-items-center">
         <div id="page-title" class="text-center font-semibold text-3xl">
           {{ $t('confirm') }}
         </div>
@@ -93,12 +102,7 @@ const hasLicenseItem = computed(() => {
                 </button></label
               >
             </div>
-            <div v-if="hasLicenseItem">
-              <EmailModal
-                v-if="!paymentStore.email || paymentStore.email == ''"
-                :licence-item="hasLicenseItem"
-              />
-            </div>
+
             <div class="w-full">
               <div v-if="hasLicenseItem != null" class="text-small text-center mb-3">
                 {{ `${$t('for')} ${paymentStore.email}` }}

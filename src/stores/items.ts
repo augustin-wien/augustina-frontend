@@ -8,6 +8,7 @@ export interface Item {
   Image: 'string' | null | undefined
   Name: 'string'
   Price: number
+  Disabled: boolean
   IsLicenseItem: boolean
   LicenseItem: number | null
   LicenseGroup: string | null
