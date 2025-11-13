@@ -221,6 +221,23 @@ onMounted(() => {
   text-align: left;
 }
 
+/* Make the left side menu fixed (non-scrolling) and let the main content scroll */
+.sidemenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 300px; /* fixed width for sidebar */
+  overflow-y: auto; /* allow sidebar inner scrolling if items overflow */
+  z-index: 40;
+}
+
+.main-container {
+  margin-left: 300px; /* space for fixed sidebar */
+  height: 100vh;
+  overflow: auto; /* main area scrolls independently */
+}
+
 .header-slot {
   text-align: left;
   border-radius: 5px;

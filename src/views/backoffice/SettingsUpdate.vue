@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import toast from '@/components/ToastMessage.vue'
+import Toast from '@/components/ToastMessage.vue'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore, type Settings } from '@/stores/settings'
@@ -77,6 +77,9 @@ const updatedSettings = ref<Settings>({
   ShopLanding: false,
   DigitalItemsUrl: ''
 })
+
+// toast state for small success/error hints
+const toast = ref<{ type: string; message: string } | null>(null)
 
 const updateSettings = async () => {
   try {

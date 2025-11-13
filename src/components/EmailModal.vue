@@ -31,15 +31,11 @@ const validate = () => {
 </script>
 
 <template>
-  <!-- Main modal -->
-  <div
-    id="popup-modal"
-    tabindex="-1"
-    class="overflow-y-auto overflow-x-hidden m-auto bg-gray-700 bg-opacity-80 fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 flex h-full"
-  >
-    <div class="relative p-4 w-full max-w-md max-h-full">
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <div class="p-4 md:p-5 text-center">
+  <!-- Inline email form rendered as a full page section (not a card/modal) -->
+  <div class="email-page w-full">
+    <div class="email-page-inner w-full max-w-5xl mx-auto">
+      <div class="email-page-content p-6 md:p-8">
+        <div class="max-w-3xl mx-auto">
           <svg
             class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
             aria-hidden="true"
@@ -48,7 +44,7 @@ const validate = () => {
             viewBox="0 0 20 20"
           >
             <path
-              stroke="currentColor"
+              :stroke="settStore.settings.Color"
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
@@ -56,44 +52,28 @@ const validate = () => {
             />
           </svg>
 
-          <h3 class="mb-5 text-lg font-normal">
+          <h2 class="mb-4 text-2xl font-semibold text-center">
             {{ `${$t('Your item')} ${props.licenceItem.Name} ${$t('needs an email address.')}` }}
-          </h3>
-          <div class="text-left mb-4">
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Email</label
-            >
+          </h2>
+
+          <div class="text-left mb-4 max-w-xl mx-auto">
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
             <div v-if="error">
-              <span class="text-red-500 text-xs italic">{{
-                $t('Please enter a valid email address.')
-              }}</span>
+              <span class="text-red-500 text-xs italic">{{ $t('Please enter a valid email address.') }}</span>
             </div>
             <input
               id="email"
               v-model="email"
               type="text"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Augustus@example.com"
               required
             />
           </div>
-          <RouterLink class="h-[56px] w-[56px]" :to="{ name: 'Shop' }">
-            <button
-              data-modal-hide="popup-modal"
-              type="button"
-              class="text-gray-500 rounded-full bg-white hover:bg-gray-100 mr-3 focus:ring-4 focus:outline-none focus:ring-gray-200 border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-            >
-              {{ $t('Back') }}
-            </button>
-          </RouterLink>
-          <button
-            data-modal-hide="popup-modal"
-            type="button"
-            class="customcolor rounded-full text-white bg-black-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium text-sm inline-flex items-center px-5 py-2.5 text-center me-2"
-            @click="validate"
-          >
-            {{ $t('Save') }}
-          </button>
+
+          <div class="flex gap-4 justify-center mt-6">
+            <button type="button" class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full" @click="validate">{{ $t('Save') }}</button>
+          </div>
         </div>
       </div>
     </div>
@@ -103,5 +83,29 @@ const validate = () => {
 <style scoped>
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
+}
+
+/* Make the email form appear like a normal page card below the page header */
+.email-page {
+  width: 100%;
+  padding: 2rem 1rem; /* page-like spacing so it sits below the header */
+}
+
+.email-page-inner {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.email-page-content {
+  background: transparent; /* don't look like a card */
+}
+
+.email-page h2 {
+  font-weight: 600;
+}
+
+.email-page .customcolor {
+  color: #fff;
 }
 </style>
