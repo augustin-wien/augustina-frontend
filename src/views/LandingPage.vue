@@ -29,6 +29,10 @@ onMounted(() => {
         : route.params.vendorid
 
       if (vid) vendorStore.vendorid = String(vid)
+
+      if (settStore.settings.ShopLanding) {
+          router.push('/v/' + vendorStore.vendorid + '/shop')
+      }
     }
 
     shopStore.reset()
