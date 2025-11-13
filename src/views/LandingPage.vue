@@ -2,13 +2,14 @@
 import { usePaymentStore } from '@/stores/payment'
 import { useSettingsStore } from '@/stores/settings'
 import { computed, onMounted } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useRouter, useRoute } from 'vue-router'
 import { useVendorStore } from '@/stores/vendor'
 import { useShopStore } from '@/stores/ShopStore'
 import IconCross from '@/components/icons/IconCross.vue'
 import IconAvatar from '@/components/icons/IconAvatar.vue'
 
 const router = useRouter()
+const route = useRoute()
 const shopStore = useShopStore()
 const vendorStore = useVendorStore()
 const settStore = useSettingsStore()
@@ -20,6 +21,13 @@ const checkVendor = () => {
 
 onMounted(() => {
   settStore.getSettingsFromApi().then(() => {
+    // ensure we have a vendor id (in case of direct reload); prefer store value but fall back to route param
+    if (!vendorStore.vendorid && route.params && route.params.vendorid) {
+      // route.params.vendorid may be string or array; normalize to string
+      const vid = Array.isArray(route.params.vendorid) ? route.params.vendorid[0] : route.params.vendorid
+      if (vid) vendorStore.vendorid = String(vid)
+    }
+
     shopStore.reset()
 
     shopStore

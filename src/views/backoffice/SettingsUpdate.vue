@@ -145,6 +145,8 @@ const updateQRCodeSettings = (settings: string) => {
 const url = import.meta.env.VITE_API_URL
 
 const showQrCodeSettings = ref(false)
+// UI tab for settings page: 'general' or 'styles'
+const currentTab = ref<'general' | 'styles'>('general')
 </script>
 
 <template>
@@ -156,7 +158,23 @@ const showQrCodeSettings = ref(false)
       <div v-if="settingsStore.settings" class="main">
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
           <div v-if="settings" class="w-full max-w-l mx-auto">
-            <div class="form">
+            <!-- Tabs: General settings and Custom CSS -->
+            <div class="mb-4 flex gap-2">
+              <button
+                :class="currentTab === 'general' ? 'px-4 py-2 bg-black text-white' : 'px-4 py-2 border'"
+                @click="currentTab = 'general'"
+              >
+                {{ $t('General') }}
+              </button>
+              <button
+                :class="currentTab === 'styles' ? 'px-4 py-2 bg-black text-white' : 'px-4 py-2 border'"
+                @click="currentTab = 'styles'"
+              >
+                {{ $t('Custom styles') }}
+              </button>
+            </div>
+
+            <div v-show="currentTab === 'general'" class="form">
               <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="newspapername"
                   >{{ $t('Newspaper name') }}:</label
@@ -610,7 +628,7 @@ const showQrCodeSettings = ref(false)
                 </button>
               </div>
             </div>
-            <div class="styles_form">
+            <div v-show="currentTab === 'styles'" class="styles_form">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="styles">
                 {{ $t('Custom styles') }}:</label
               >
@@ -632,7 +650,34 @@ const showQrCodeSettings = ref(false)
               </div>
             </div>
           </div>
+  </div>
+
+  <!-- Sticky save bar: always visible at bottom, shows action for current tab -->
+        <div class="fixed bottom-4 left-0 right-0 flex justify-center z-50 pointer-events-none">
+          <div class="w-full max-w-l px-4 pointer-events-auto">
+            <div class="flex justify-end gap-4">
+              <button
+                v-if="currentTab === 'general'"
+                id="saveSettingsSticky"
+                type="button"
+                class="px-4 py-2 rounded-full customcolor h-[44px]"
+                @click="updateSettings()"
+              >
+                {{ $t('save') }}
+              </button>
+              <button
+                v-else
+                id="saveStylesSticky"
+                type="button"
+                class="px-4 py-2 rounded-full customcolor h-[44px]"
+                @click="updateStyles()"
+              >
+                {{ $t('saveCustomCss') }}
+              </button>
+            </div>
+          </div>
         </div>
+
         <QrCodeSettings
           v-if="showQrCodeSettings"
           @close="showQrCodeSettings = false"
