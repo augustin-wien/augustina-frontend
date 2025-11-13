@@ -59,11 +59,7 @@ const apiUrl = import.meta.env.VITE_API_URL
                 </tr>
               </thead>
               <tbody className="text-sm p-3">
-                <tr
-                  v-for="item in items"
-                  :key="item.ID"
-                  :class="{ 'disabled-row': item.Disabled }"
-                >
+                <tr v-for="item in items" :key="item.ID" :class="{ 'disabled-row': item.Disabled }">
                   <td class="border-t-2 p-3">
                     <img
                       :src="item.Image ? apiUrl + item.Image : ''"
