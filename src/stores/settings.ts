@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { fetchSettings, patchSettings, patchSettingsStyles, getStyles } from '@/api/api'
+import { isLabeledStatement } from 'typescript'
 
 //define interface to store data from backend properly
 export interface Settings {
@@ -43,6 +44,7 @@ export const useSettingsStore = defineStore('settings', {
     return {
       settings: { Color: '#000', ShopLanding: undefined } as Settings,
       settingsLoaded: false,
+      isLoading: false,
       imgUrl: '',
       styleRev: 0,
       styleCurrent: -1,
@@ -58,7 +60,7 @@ export const useSettingsStore = defineStore('settings', {
 
   actions: {
     async getSettingsFromApi() {
-      if (this.settingsLoaded) {
+      if (this.settingsLoaded || this.isLoading) {
         return
       }
 
@@ -73,6 +75,7 @@ export const useSettingsStore = defineStore('settings', {
           this.settings.MainItemPrice = data.data.Settings.edges.MainItem.Price
           this.imgUrl = import.meta.env.VITE_API_URL + this.settings.Logo
           this.settingsLoaded = true
+          this.isLoading = false
         })
         .catch((error) => {
           // eslint-disable-next-line no-console

@@ -20,6 +20,10 @@ const checkVendor = () => {
 }
 
 onMounted(() => {
+  if (settStore.settings.ShopLanding) {
+      router.push('/v/' + vendorStore.vendorid + '/shop')
+  }
+
   settStore.getSettingsFromApi().then(() => {
     // ensure we have a vendor id (in case of direct reload); prefer store value but fall back to route param
     if (!vendorStore.vendorid && route.params && route.params.vendorid) {
