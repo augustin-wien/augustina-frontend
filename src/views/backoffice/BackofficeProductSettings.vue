@@ -22,11 +22,17 @@ onMounted(() => {
 
 const items = computed(() => {
   const tmpItems = JSON.parse(JSON.stringify(itemsStore.itemsBackoffice))
-  // Sort items by is license item and remove donation and transaction costs
+  // Sort items by is license item first, then put disabled items to the bottom
   const filter = ['donation', 'transactionCosts']
   return tmpItems
-    .sort((a: Item, b: Item) => Number(a.IsLicenseItem) - Number(b.IsLicenseItem))
     .filter((item: Item) => !filter.includes(item.Name))
+    .sort((a: Item, b: Item) => {
+      // license items first (keep existing behaviour)
+      const licenseDiff = Number(a.IsLicenseItem) - Number(b.IsLicenseItem)
+      if (licenseDiff !== 0) return licenseDiff
+      // then enabled items before disabled ones
+      return Number(a.Disabled || false) - Number(b.Disabled || false)
+    })
 })
 
 const apiUrl = import.meta.env.VITE_API_URL
@@ -53,7 +59,11 @@ const apiUrl = import.meta.env.VITE_API_URL
                 </tr>
               </thead>
               <tbody className="text-sm p-3">
-                <tr v-for="(item, ID) in items" :key="ID">
+                <tr
+                  v-for="item in items"
+                  :key="item.ID"
+                  :class="{ 'disabled-row': item.Disabled }"
+                >
                   <td class="border-t-2 p-3">
                     <img
                       :src="item.Image ? apiUrl + item.Image : ''"
@@ -92,3 +102,13 @@ const apiUrl = import.meta.env.VITE_API_URL
     </template>
   </component>
 </template>
+
+<style scoped>
+.disabled-row {
+  color: #6b7280; /* gray-500 */
+}
+.disabled-row td {
+  /* slightly muted background for visual separation */
+  background-color: rgba(229, 231, 235, 0.4);
+}
+</style>

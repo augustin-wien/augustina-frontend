@@ -4,7 +4,6 @@ import router from '@/router'
 import type { Item } from '@/stores/items'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
-import IconCross from '@/components/icons/IconCross.vue'
 
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -133,23 +132,11 @@ const previewImage = (image: string | Blob | MediaSource) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">
-        {{ $t('menuProducts') }} {{ $t('menuSettings') }}
-      </h1>
+      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ item?.Name }} {{ $t('change') }}</h1>
     </template>
     <template v-if="updatedItem" #main>
       <div class="main">
         <div v-if="item" class="w-full mx-auto mt-4">
-          <div class="flex place-content-center justify-between mb-4">
-            <h1 class="text-2xl font-bold">{{ item.Name }} {{ $t('change') }}</h1>
-            <button
-              class="rounded-full bg-red-600 text-white font-bold"
-              @click="router.push('/backoffice/productsettings')"
-            >
-              <IconCross />
-            </button>
-          </div>
-
           <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
@@ -224,6 +211,23 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   required
                 />
               </div>
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image">{{
+                $t('isDisabled')
+              }}</label>
+              <label class="inline-flex items-center cursor-pointer mt-4">
+                <input
+                  id="isDisabled"
+                  v-model="updatedItem.Disabled"
+                  class="sr-only peer"
+                  type="checkbox"
+                />
+                <div
+                  class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                ></div>
+                <span class="ms-3 text-sm font-medium">{{
+                  updatedItem.Disabled ? $t('yes') : $t('no')
+                }}</span>
+              </label>
               <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
                 >{{ $t('image') }}:</label
               >
@@ -434,5 +438,6 @@ td {
 
 .productImage {
   width: 100% !important;
+  max-width: 300px;
 }
 </style>
