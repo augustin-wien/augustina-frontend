@@ -24,7 +24,9 @@ onMounted(() => {
     // ensure we have a vendor id (in case of direct reload); prefer store value but fall back to route param
     if (!vendorStore.vendorid && route.params && route.params.vendorid) {
       // route.params.vendorid may be string or array; normalize to string
-      const vid = Array.isArray(route.params.vendorid) ? route.params.vendorid[0] : route.params.vendorid
+      const vid = Array.isArray(route.params.vendorid)
+        ? route.params.vendorid[0]
+        : route.params.vendorid
       if (vid) vendorStore.vendorid = String(vid)
     }
 
@@ -45,7 +47,6 @@ onMounted(() => {
         } else if (shopStore.amount.length == 0 && !settStore.settings.ShopLanding) {
           shopStore.addItem(settStore.settings.MainItem)
         }
-
       })
       .catch(() => {
         router.push({ name: 'Error' })

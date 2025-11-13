@@ -161,13 +161,17 @@ const currentTab = ref<'general' | 'styles'>('general')
             <!-- Tabs: General settings and Custom CSS -->
             <div class="mb-4 flex gap-2">
               <button
-                :class="currentTab === 'general' ? 'px-4 py-2 bg-black text-white' : 'px-4 py-2 border'"
+                :class="
+                  currentTab === 'general' ? 'px-4 py-2 bg-black text-white' : 'px-4 py-2 border'
+                "
                 @click="currentTab = 'general'"
               >
                 {{ $t('General') }}
               </button>
               <button
-                :class="currentTab === 'styles' ? 'px-4 py-2 bg-black text-white' : 'px-4 py-2 border'"
+                :class="
+                  currentTab === 'styles' ? 'px-4 py-2 bg-black text-white' : 'px-4 py-2 border'
+                "
                 @click="currentTab = 'styles'"
               >
                 {{ $t('Custom styles') }}
@@ -650,9 +654,9 @@ const currentTab = ref<'general' | 'styles'>('general')
               </div>
             </div>
           </div>
-  </div>
+        </div>
 
-  <!-- Sticky save bar: always visible at bottom, shows action for current tab -->
+        <!-- Sticky save bar: always visible at bottom, shows action for current tab -->
         <div class="fixed bottom-4 left-0 right-0 flex justify-center z-50 pointer-events-none">
           <div class="w-full max-w-l px-4 pointer-events-auto">
             <div class="flex justify-end gap-4">

@@ -57,9 +57,13 @@ const validate = () => {
           </h2>
 
           <div class="text-left mb-4 max-w-xl mx-auto">
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Email</label
+            >
             <div v-if="error">
-              <span class="text-red-500 text-xs italic">{{ $t('Please enter a valid email address.') }}</span>
+              <span class="text-red-500 text-xs italic">{{
+                $t('Please enter a valid email address.')
+              }}</span>
             </div>
             <input
               id="email"
@@ -72,7 +76,13 @@ const validate = () => {
           </div>
 
           <div class="flex gap-4 justify-center mt-6">
-            <button type="button" class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full" @click="validate">{{ $t('Save') }}</button>
+            <button
+              type="button"
+              class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
+              @click="validate"
+            >
+              {{ $t('Save') }}
+            </button>
           </div>
         </div>
       </div>
