@@ -72,15 +72,6 @@ onMounted(() => {
             class="sidemenu t-0 left-0 top-0 z-40 overflow-y-auto border-r border-gray-200 dark:border-slate-700 w-[300px]"
             :class="{ open: mobileMenuOpen }"
           >
-            <!-- mobile hamburger button -->
-
-            <!-- overlay for mobile when menu is open -->
-            <div
-              v-if="mobileMenuOpen"
-              class="mobile-overlay md:hidden fixed inset-0 bg-black/40 z-30"
-              @click="mobileMenuOpen = false"
-            ></div>
-
             <div
               class="sidemenu-inner t-0 l-0 h-full flex-none flex flex-col justify-start items-start pr-5 pl-4 border-gray-600 border-b space-y-3 pb-5 customcolor"
             >
@@ -195,6 +186,13 @@ onMounted(() => {
               </select>
             </div>
           </div>
+
+          <!-- overlay for mobile when menu is open -->
+          <div
+            v-if="mobileMenuOpen"
+            class="mobile-overlay md:hidden fixed inset-0 bg-black/40 z-30"
+            @click="mobileMenuOpen = false"
+          ></div>
 
           <div class="main-container grow h-full flex flex-col">
             <div class="header-slot w-full flex-none pl-3">
