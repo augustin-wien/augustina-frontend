@@ -19,6 +19,7 @@ import {
   PAYMENT_STATISTICS_API_URL,
   PDF_DOWNLOAD_API_URL,
   STYLES_URL,
+  MAIL_TEMPLATES_API,
   BASE_URL
 } from './endpoints'
 
@@ -184,6 +185,34 @@ export async function patchSettingsStyles(styles: string) {
 // get styles to load it dynamically
 export async function getStyles(rev: number) {
   return apiInstance.get(`${STYLES_URL}?rev=${rev}`)
+}
+
+// Mail templates API
+export async function fetchMailTemplates() {
+  return apiInstance.get(`${MAIL_TEMPLATES_API}`)
+}
+
+export async function getMailTemplate(name: string) {
+  return apiInstance.get(`${MAIL_TEMPLATES_API}${encodeURIComponent(name)}/`)
+}
+
+export async function createOrUpdateMailTemplate(template: { name: string; subject: string; body: string }) {
+  // backend expects capitalized keys (Name/Subject/Body)
+  const payload = {
+    Name: template.name,
+    Subject: template.subject,
+    Body: template.body
+  }
+  return apiInstance.post(MAIL_TEMPLATES_API, JSON.stringify(payload), {
+    headers: {
+      accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+}
+
+export async function deleteMailTemplate(name: string) {
+  return apiInstance.delete(`${MAIL_TEMPLATES_API}${encodeURIComponent(name)}/`)
 }
 
 //payments list

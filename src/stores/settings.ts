@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { fetchSettings, patchSettings, patchSettingsStyles, getStyles } from '@/api/api'
-import { isLabeledStatement } from 'typescript'
 
 //define interface to store data from backend properly
 export interface Settings {

@@ -21,7 +21,7 @@ const checkVendor = () => {
 
 onMounted(() => {
   if (settStore.settings.ShopLanding) {
-      router.push('/v/' + vendorStore.vendorid + '/shop')
+    router.push('/v/' + vendorStore.vendorid + '/shop')
   }
 
   settStore.getSettingsFromApi().then(() => {
@@ -35,7 +35,7 @@ onMounted(() => {
       if (vid) vendorStore.vendorid = String(vid)
 
       if (settStore.settings.ShopLanding) {
-          router.push('/v/' + vendorStore.vendorid + '/shop')
+        router.push('/v/' + vendorStore.vendorid + '/shop')
       }
     }
 
