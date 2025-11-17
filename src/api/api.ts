@@ -196,13 +196,18 @@ export async function getMailTemplate(name: string) {
   return apiInstance.get(`${MAIL_TEMPLATES_API}${encodeURIComponent(name)}/`)
 }
 
-export async function createOrUpdateMailTemplate(template: { name: string; subject: string; body: string }) {
+export async function createOrUpdateMailTemplate(template: {
+  name: string
+  subject: string
+  body: string
+}) {
   // backend expects capitalized keys (Name/Subject/Body)
   const payload = {
     Name: template.name,
     Subject: template.subject,
     Body: template.body
   }
+
   return apiInstance.post(MAIL_TEMPLATES_API, JSON.stringify(payload), {
     headers: {
       accept: 'application/json',

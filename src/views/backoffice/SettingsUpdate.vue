@@ -111,11 +111,6 @@ const saveGeneralFromParent = () => {
   if (comp && comp.saveSettings) comp.saveSettings()
 }
 
-const saveStylesFromParent = () => {
-  const comp = stylesRef.value
-  if (comp && comp.saveStyles) comp.saveStyles()
-}
-
 // UI tab for settings page: 'general', 'styles' or 'qrcode'
 const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('general')
 </script>
@@ -157,7 +152,9 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
               </button>
               <button
                 :class="
-                  currentTab === 'mailtemplates' ? 'px-4 py-2 bg-black text-white' : 'px-4 py-2 border'
+                  currentTab === 'mailtemplates'
+                    ? 'px-4 py-2 bg-black text-white'
+                    : 'px-4 py-2 border'
                 "
                 @click="currentTab = 'mailtemplates'"
               >
@@ -184,7 +181,6 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
             />
           </div>
         </div>
-
 
         <QrCodeSettings
           v-show="currentTab === 'qrcode'"

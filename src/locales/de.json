@@ -252,8 +252,7 @@
   "You will only be able to add comments and locations for the vendor once the vendor has been created.": "Du kannst erst Kommentare und Standorte hinzufügen, wenn der Verkäufer:in erstellt wurde.",
   "Access your": "Greife auf deine",
   "here.": "hier zu.",
-  "accessDigitalItem": "Greife hier auf deine {itemName} zu"
-  ,
+  "accessDigitalItem": "Greife hier auf deine {itemName} zu",
   "Mail Templates": "E-Mail Vorlagen",
   "Name": "Name",
   "Subject": "Betreff",
@@ -264,13 +263,11 @@
   "Failed to load templates": "Vorlagen konnten nicht geladen werden",
   "Failed to fetch template": "Vorlage konnte nicht geladen werden",
   "Error deleting template": "Fehler beim Löschen der Vorlage",
-  "Clear": "Zurücksetzen"
-  ,
+  "Clear": "Zurücksetzen",
   "Test": "Test senden",
   "Test email": "Test E-Mail",
   "Test email sent": "Test-E-Mail gesendet",
   "Error sending test email": "Fehler beim Senden der Test-E-Mail",
-  "No template selected": "Keine Vorlage ausgewählt"
-  ,
+  "No template selected": "Keine Vorlage ausgewählt",
   "Provide at least one recipient": "Bitte mindestens einen Empfänger angeben"
 }

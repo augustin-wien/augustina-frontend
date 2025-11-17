@@ -44,12 +44,12 @@ defineExpose({ saveStyles })
       </button>
     </div>
     <button
-                id="saveStylesSticky"
-                type="button"
-                class="px-4 py-2 rounded-full customcolor h-[44px]"
-                @click="saveStyles()"
-              >
-                {{ $t('saveCustomCss') }}
-              </button>
+      id="saveStylesSticky"
+      type="button"
+      class="px-4 py-2 rounded-full customcolor h-[44px]"
+      @click="saveStyles()"
+    >
+      {{ $t('saveCustomCss') }}
+    </button>
   </div>
 </template>

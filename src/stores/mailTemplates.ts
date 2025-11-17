@@ -32,8 +32,8 @@ export const useMailTemplatesStore = defineStore('mailTemplates', () => {
         templates.value = res.data as MailTemplateResponse[]
       }
 
-    //   replace current with loaded template if exists
-      const existing = templates.value.find(t => t.Name === current.value.name)
+      //   replace current with loaded template if exists
+      const existing = templates.value.find((t) => t.Name === current.value.name)
 
       if (existing) {
         current.value = {
@@ -137,8 +137,7 @@ export const useMailTemplatesStore = defineStore('mailTemplates', () => {
     selectTemplate,
     newTemplate,
     saveTemplate,
-    deleteTemplate
-    ,
+    deleteTemplate,
     sendTemplate
   }
 })

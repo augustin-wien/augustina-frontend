@@ -34,10 +34,6 @@ const selectTemplate = async (name: string) => {
   }
 }
 
-const newTemplate = () => {
-  mailStore.newTemplate()
-}
-
 const saveTemplate = async () => {
   try {
     await mailStore.saveTemplate()
@@ -85,19 +81,6 @@ const testTemplate = async () => {
   }
 }
 
-const removeTemplate = async (name: string) => {
-  if (!confirm(`Delete template ${name}?`)) return
-
-  try {
-    await mailStore.deleteTemplate(name)
-    emits('saved', 'Template deleted')
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('Error deleting template', err)
-    emits('error', 'Error deleting template')
-  }
-}
-
 const templates = computed(() => mailStore.templates)
 
 onMounted(() => {
@@ -114,22 +97,41 @@ onMounted(() => {
         </div>
         <ul class="list-disc pl-5">
           <li v-for="t in templates" :key="'temp_' + t.ID" class="mb-1">
-            <button class="cursor-pointer rounded px-2 py-1 bg-green-600 text-white" @click="selectTemplate(t.Name)">{{ t.Name }}</button>
+            <button
+              class="cursor-pointer rounded px-2 py-1 bg-green-600 text-white"
+              @click="selectTemplate(t.Name)"
+            >
+              {{ t.Name }}
+            </button>
           </li>
         </ul>
       </div>
       <div class="col-span-2">
-        <div v-if="mailStore.current && mailStore.current.name" class="bg-white p-4 rounded shadow-md">
+        <div
+          v-if="mailStore.current && mailStore.current.name"
+          class="bg-white p-4 rounded shadow-md"
+        >
           <label class="block text-sm font-bold mb-1">{{ $t('Name') }}</label>
-          <input v-model="mailStore.current.name" class="w-full border rounded py-2 px-3 mb-2 bg-gray-200" disabled />
+          <input
+            v-model="mailStore.current.name"
+            class="w-full border rounded py-2 px-3 mb-2 bg-gray-200"
+            disabled
+          />
           <label class="block text-sm font-bold mb-1">{{ $t('Subject') }}</label>
           <input v-model="mailStore.current.subject" class="w-full border rounded py-2 px-3 mb-2" />
           <label class="block text-sm font-bold mb-1">{{ $t('Body') }}</label>
-          <textarea v-model="mailStore.current.body" class="w-full border rounded py-2 px-3 h-52 mb-2"></textarea>
+          <textarea
+            v-model="mailStore.current.body"
+            class="w-full border rounded py-2 px-3 h-52 mb-2"
+          ></textarea>
 
           <label class="block text-sm font-bold mb-1 mt-2">{{ $t('Test email') }}</label>
           <div class="flex gap-2 mb-2">
-            <input v-model="testEmail" placeholder="example@domain.tld" class="w-full border rounded py-2 px-3" />
+            <input
+              v-model="testEmail"
+              placeholder="example@domain.tld"
+              class="w-full border rounded py-2 px-3"
+            />
             <button
               type="button"
               class="px-4 py-2 rounded bg-blue-600 text-white"
@@ -149,7 +151,6 @@ onMounted(() => {
             </button>
           </div>
         </div>
-
       </div>
     </div>
   </div>

@@ -10,6 +10,7 @@ Cypress.Commands.add('mount', (component: any, options = {}) => {
   // provide a minimal $t implementation so components using i18n work in tests
   global.config = global.config || {}
   global.config.globalProperties = global.config.globalProperties || {}
+
   if (!global.config.globalProperties.$t) {
     global.config.globalProperties.$t = (key: string) => key
   }

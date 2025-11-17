@@ -1,11 +1,10 @@
 <script setup lang="ts">
-
-import { ref, defineProps, defineEmits, defineExpose } from 'vue'
+import { ref, defineProps, defineEmits, defineExpose, watch } from 'vue'
 import { useSettingsStore, type Settings } from '@/stores/settings'
 
 const props = defineProps<{
   updatedSettings: Settings
-  items: any[]
+  items: { ID: number; Name: string }[]
   url: string
 }>()
 
@@ -13,15 +12,27 @@ const emits = defineEmits(['open-qrcode', 'saved', 'error'])
 
 const settingsStore = useSettingsStore()
 
+// local copy of the prop to avoid mutating props directly
+const localSettings = ref<Settings>({ ...props.updatedSettings })
+
 const newLogo = ref('')
 const newFavicon = ref('')
 const newQrCodeLogo = ref('')
+
+// keep local copy in sync when parent updates prop
+watch(
+  () => props.updatedSettings,
+  (val) => {
+    if (val) localSettings.value = { ...val }
+  },
+  { deep: true }
+)
 
 const updateLogo = (event: Event) => {
   const target = event.target as HTMLInputElement
   const file = target?.files ? target.files[0] : undefined
   if (!file) return
-  props.updatedSettings.Logo = file as any
+  localSettings.value.Logo = file as File
   newLogo.value = URL.createObjectURL(file)
 }
 
@@ -29,7 +40,7 @@ const updateFavicon = (event: Event) => {
   const target = event.target as HTMLInputElement
   const file = target?.files ? target.files[0] : undefined
   if (!file) return
-  props.updatedSettings.Favicon = file as any
+  localSettings.value.Favicon = file as File
   newFavicon.value = URL.createObjectURL(file)
 }
 
@@ -37,13 +48,14 @@ const updateQRCodeLogo = (event: Event) => {
   const target = event.target as HTMLInputElement
   const file = target?.files ? target.files[0] : undefined
   if (!file) return
-  props.updatedSettings.QRCodeLogoImgUrl = file as any
+  // store file as a string-compatible value for the form; backend expects a file or url
+  localSettings.value.QRCodeLogoImgUrl = file as unknown as string
   newQrCodeLogo.value = URL.createObjectURL(file)
 }
 
 const saveSettings = async () => {
   try {
-    await settingsStore.updateSettings(props.updatedSettings as Settings)
+    await settingsStore.updateSettings(localSettings.value as Settings)
     emits('saved', 'Einstellungen erfolgreich aktualisiert')
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -58,9 +70,17 @@ defineExpose({ saveSettings })
 <template>
   <div class="form">
     <div>
-      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="newspapername">{{ $t('Newspaper name') }}:</label>
+      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="newspapername"
+        >{{ $t('Newspaper name') }}:</label
+      >
       <div class="flex flex-row">
-        <input id="newspapername" v-model="props.updatedSettings.NewspaperName" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" required />
+        <input
+          id="newspapername"
+          v-model="localSettings.NewspaperName"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="text"
+          required
+        />
       </div>
     </div>
 
@@ -68,9 +88,33 @@ defineExpose({ saveSettings })
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="logo">Logo:</label>
       <div class="flex flex-col">
-        <img v-if="(props.updatedSettings && typeof props.updatedSettings.Logo === 'string') || !props.updatedSettings?.Logo" :src="props.updatedSettings?.Logo && props.updatedSettings?.Logo !== '' ? props.url.replace(/\/$/, '') + props.updatedSettings.Logo : props.url + 'img/logo.png'" alt="Newspaper logo" class="logo my-5" width="200" height="auto" />
-        <img v-else :src="newLogo" alt="Newspaper logo2" class="logo my-5" width="200" height="auto" />
-        <input id="logo" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="file" accept="image/png" @change="updateLogo" />
+        <img
+          v-if="(localSettings && typeof localSettings.Logo === 'string') || !localSettings?.Logo"
+          :src="
+            localSettings?.Logo && localSettings?.Logo !== ''
+              ? props.url.replace(/\/$/, '') + localSettings.Logo
+              : props.url + 'img/logo.png'
+          "
+          alt="Newspaper logo"
+          class="logo my-5"
+          width="200"
+          height="auto"
+        />
+        <img
+          v-else
+          :src="newLogo"
+          alt="Newspaper logo2"
+          class="logo my-5"
+          width="200"
+          height="auto"
+        />
+        <input
+          id="logo"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="file"
+          accept="image/png"
+          @change="updateLogo"
+        />
       </div>
     </div>
 
@@ -78,53 +122,146 @@ defineExpose({ saveSettings })
     <div class="mb-4">
       <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="favicon">Favicon:</label>
       <div class="flex flex-col">
-        <img v-if="(props.updatedSettings && typeof props.updatedSettings.Favicon === 'string') || !props.updatedSettings?.Favicon" :src="props.updatedSettings?.Favicon && props.updatedSettings?.Favicon !== '' ? props.url + props.updatedSettings.Favicon.slice(1) : props.url + 'img/favicon.png'" alt="Newspaper favicon" class="favicon my-5" width="200" height="auto" />
-        <img v-else :src="newFavicon" alt="Newspaper favicon2" class="favicon my-5" width="200" height="auto" />
-        <input id="favicon" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="file" accept="image/png" @change="updateFavicon" />
+        <img
+          v-if="
+            (localSettings && typeof localSettings.Favicon === 'string') || !localSettings?.Favicon
+          "
+          :src="
+            localSettings?.Favicon && localSettings?.Favicon !== ''
+              ? props.url + localSettings.Favicon.slice(1)
+              : props.url + 'img/favicon.png'
+          "
+          alt="Newspaper favicon"
+          class="favicon my-5"
+          width="200"
+          height="auto"
+        />
+        <img
+          v-else
+          :src="newFavicon"
+          alt="Newspaper favicon2"
+          class="favicon my-5"
+          width="200"
+          height="auto"
+        />
+        <input
+          id="favicon"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="file"
+          accept="image/png"
+          @change="updateFavicon"
+        />
       </div>
     </div>
 
     <!-- Colors and main item etc. -->
-     <div class="mt-4 grid grid-cols-2 gap-4">
+    <div class="mt-4 grid grid-cols-2 gap-4">
       <div>
-    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="color">{{ $t('color') }}:</label>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="color"
+          >{{ $t('color') }}:</label
+        >
+        <div class="flex flex-row">
+          <input
+            id="color"
+            v-model="localSettings.Color"
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            required
+          />
+        </div>
+      </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="color"
+          >{{ $t('fontColor') }}:</label
+        >
+        <div class="flex flex-row">
+          <input
+            id="color"
+            v-model="localSettings.FontColor"
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            required
+          />
+        </div>
+      </div>
+    </div>
+    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="mainItem"
+      >{{ $t('mainProduct') }}:</label
+    >
     <div class="flex flex-row">
-      <input id="color" v-model="props.updatedSettings.Color" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" required />
-    </div>
-    </div>
-<div>
-    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="color">{{ $t('fontColor') }}:</label>
-    <div class="flex flex-row">
-      <input id="color" v-model="props.updatedSettings.FontColor" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" required />
-    </div>
-    </div>
-    </div>
-    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="mainItem">{{ $t('mainProduct') }}:</label>
-    <div class="flex flex-row">
-      <select id="mainItem" v-model="props.updatedSettings.MainItem" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+      <select
+        id="mainItem"
+        v-model="localSettings.MainItem"
+        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        required
+      >
         <option v-for="item in props.items" :key="item.ID" :value="item.ID">{{ item.Name }}</option>
       </select>
     </div>
 
     <!-- QR code logo -->
     <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="qrcodelogo">{{ $t('QR Code logo') }}:</label>
+      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="qrcodelogo"
+        >{{ $t('QR Code logo') }}:</label
+      >
       <div class="flex flex-col">
-        <img v-if="(props.updatedSettings && typeof props.updatedSettings.QRCodeLogoImgUrl === 'string') || !props.updatedSettings?.QRCodeLogoImgUrl" :src="props.updatedSettings?.QRCodeLogoImgUrl && props.updatedSettings?.QRCodeLogoImgUrl !== '' ? props.url + props.updatedSettings.QRCodeLogoImgUrl : props.url + 'img/qrcode.png'" alt="QR code logo" class="favicon  my-5" width="200" height="auto" />
-        <img v-else :src="newQrCodeLogo" alt="QR code logo2" class="favicon  my-5" width="200" height="auto" />
-        <input id="qrcodelogo" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="file" accept="image/png" @change="updateQRCodeLogo" />
+        <img
+          v-if="
+            (localSettings && typeof localSettings.QRCodeLogoImgUrl === 'string') ||
+            !localSettings?.QRCodeLogoImgUrl
+          "
+          :src="
+            localSettings?.QRCodeLogoImgUrl && localSettings?.QRCodeLogoImgUrl !== ''
+              ? props.url + localSettings.QRCodeLogoImgUrl
+              : props.url + 'img/qrcode.png'
+          "
+          alt="QR code logo"
+          class="favicon my-5"
+          width="200"
+          height="auto"
+        />
+        <img
+          v-else
+          :src="newQrCodeLogo"
+          alt="QR code logo2"
+          class="favicon my-5"
+          width="200"
+          height="auto"
+        />
+        <input
+          id="qrcodelogo"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="file"
+          accept="image/png"
+          @change="updateQRCodeLogo"
+        />
       </div>
     </div>
 
     <div>
-      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="qrcodeurl">{{ $t('QR Code url') }}:</label>
+      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="qrcodeurl"
+        >{{ $t('QR Code url') }}:</label
+      >
       <div class="flex flex-row">
-        <input id="qrcodeurl" v-model="props.updatedSettings.QRCodeUrl" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" required />
+        <input
+          id="qrcodeurl"
+          v-model="localSettings.QRCodeUrl"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="text"
+          required
+        />
       </div>
     </div>
 
     <div class="flex place-content-center">
-      <button id="saveSettings" type="submit" class="px-4 py-2 ps-2 mt-2 rounded-full customcolor h-[44px]" @click="saveSettings()">{{ $t('save') }}</button>
+      <button
+        id="saveSettings"
+        type="submit"
+        class="px-4 py-2 ps-2 mt-2 rounded-full customcolor h-[44px]"
+        @click="saveSettings()"
+      >
+        {{ $t('save') }}
+      </button>
     </div>
   </div>
 </template>
