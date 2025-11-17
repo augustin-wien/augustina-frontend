@@ -4,6 +4,7 @@ ignores: ["autoprefixer",
     "@vue/eslint-config-prettier",
     "@typescript-eslint/eslint-plugin",
     "@typescript-eslint/parser",
+    "@cypress/vue",
     "eslint-plugin-vue",
     "eslint-plugin-cypress",
     "vue-eslint-parser"]

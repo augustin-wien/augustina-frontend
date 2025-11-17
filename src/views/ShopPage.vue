@@ -25,9 +25,8 @@ type ToastMessage = {
 }
 const toast = ref<ToastMessage | null>(null)
 
-onMounted(() =>{
-      shopStore
-      .getItems()
+onMounted(() => {
+  shopStore.getItems()
 })
 
 const checkIfItemSelected = () => {
