@@ -3,7 +3,7 @@ import Toast from '@/components/ToastMessage.vue'
 import { useShopStore } from '@/stores/ShopStore'
 import { useSettingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
 const shopStore = useShopStore()
@@ -24,6 +24,10 @@ type ToastMessage = {
   type: string
 }
 const toast = ref<ToastMessage | null>(null)
+
+onMounted(() => {
+  shopStore.getItems()
+})
 
 const checkIfItemSelected = () => {
   if (shopStore.amount.length > 0) {
