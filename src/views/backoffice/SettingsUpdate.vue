@@ -36,13 +36,8 @@ const items = computed(() => storeItems.items)
 
 const styles = ref('')
 styles.value = settingsStore.styles
-const settingsStyles = computed(() => settingsStore.styles)
 
-watch(settingsStyles, (newVal) => {
-  if (newVal) {
-    styles.value = newVal
-  }
-})
+settingsStore.getStyleCss()
 
 watch(settings, (newVal) => {
   if (newVal) {

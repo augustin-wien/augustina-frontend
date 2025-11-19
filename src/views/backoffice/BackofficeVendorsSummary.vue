@@ -166,6 +166,13 @@ const selectedVendor = ref<Vendor | null>(null)
                     >
                       <font-awesome-icon :icon="faQrcode" />
                     </button>
+                    <router-link
+                      :to="{ path: '/backoffice/payments', query: { vendor: vendor.LicenseID } }"
+                    >
+                      <button className="p-2 rounded-full customcolor mr-2 h-10">
+                        {{ $t('bank statement') }}
+                      </button>
+                    </router-link>
                   </td>
                 </tr>
               </tbody>

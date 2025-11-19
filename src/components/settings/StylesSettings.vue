@@ -1,12 +1,18 @@
 <script setup lang="ts">
-import { ref, defineEmits, defineExpose } from 'vue'
+import { ref, defineEmits, defineExpose, watch } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
+import { set } from '@vueuse/core'
 
 const emits = defineEmits(['saved', 'error'])
 
 const settingsStore = useSettingsStore()
-
 const stylesLocal = ref(settingsStore.styles || '')
+
+watch(settingsStore.styles, (newVal: any) => {
+  if (newVal) {
+    set(stylesLocal, newVal)
+  }
+})
 
 const saveStyles = async () => {
   try {
