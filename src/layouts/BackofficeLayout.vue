@@ -75,115 +75,111 @@ onMounted(() => {
             <div
               class="sidemenu-inner t-0 l-0 h-full flex-none flex flex-col justify-start items-start pr-5 pl-4 border-gray-600 border-b space-y-3 pb-5 customcolor"
             >
-              <div class="sidemenu-item object-center">
-                <img
-                  :src="logo"
-                  alt="Newspaper logo"
-                  class="logo mx-auto my-5"
-                  width="270"
-                  height="auto"
-                />
+              <div class="sidemenu-item object-center logo-container w-full p-3">
+                <img :src="logo" alt="Newspaper logo" class="logo mx-auto" width="auto" />
               </div>
-              <RouterLink to="/backoffice/vendorsummary">
-                <button
-                  class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                >
-                  <font-awesome-icon :icon="faUserGroup" />
-                  <p class="text-base leading-4">{{ $t('menuVendors') }}</p>
-                </button>
-              </RouterLink>
-              <RouterLink to="/backoffice/credits" class-name="sidemenu-link">
-                <button
-                  class="flex justifyy-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                >
-                  <font-awesome-icon :icon="faBagShopping" />
-                  <p class="text-base leading-4">{{ $t('menuCredits') }}</p>
-                </button>
-              </RouterLink>
-              <RouterLink to="/backoffice/payouts" class-name="sidemenu-link">
+              <div class="sidemenu-item flex flex-col w-full space-y-2">
+                <RouterLink to="/backoffice/vendorsummary">
+                  <button
+                    class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faUserGroup" />
+                    <p class="text-base leading-4">{{ $t('menuVendors') }}</p>
+                  </button>
+                </RouterLink>
+                <RouterLink to="/backoffice/credits" class-name="sidemenu-link">
+                  <button
+                    class="flex justifyy-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faBagShopping" />
+                    <p class="text-base leading-4">{{ $t('menuCredits') }}</p>
+                  </button>
+                </RouterLink>
+                <RouterLink to="/backoffice/payouts" class-name="sidemenu-link">
+                  <button
+                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faFileLines" />
+
+                    <p class="text-base leading-4">{{ $t('menuPayouts') }}</p>
+                  </button>
+                </RouterLink>
+                <RouterLink to="/backoffice/sales" class-name="sidemenu-link">
+                  <button
+                    class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faDungeon" />
+
+                    <p class="text-base leading-4">{{ $t('menuSales') }}</p>
+                  </button>
+                </RouterLink>
+                <RouterLink to="/backoffice/payments" class-name="sidemenu-link">
+                  <button
+                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faBagShopping" />
+
+                    <p class="text-base leading-4">{{ $t('menuAccounting') }}</p>
+                  </button>
+                </RouterLink>
+                <RouterLink to="/backoffice/productsettings" class-name="sidemenu-link">
+                  <button
+                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faSplotch" />
+
+                    <p class="text-base leading-4">{{ $t('menuProducts') }}</p>
+                  </button>
+                </RouterLink>
+                <RouterLink to="/backoffice/settings/update" class-name="sidemenu-link">
+                  <button
+                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faSliders" />
+
+                    <p class="text-base leading-4">{{ $t('menuSettings') }}</p>
+                  </button>
+                </RouterLink>
+                <RouterLink to="/backoffice/map" class-name="sidemenu-link">
+                  <button
+                    class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faMapLocation" />
+
+                    <p class="text-base leading-4">{{ $t('menuMap') }}</p>
+                  </button>
+                </RouterLink>
+                <RouterLink to="/backoffice/statistics" class-name="sidemenu-link">
+                  <button
+                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faAreaChart" />
+
+                    <p class="text-base leading-4">{{ $t('menuStatistics') }}</p>
+                  </button>
+                </RouterLink>
                 <button
                   class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  @click="keycloak.keycloak?.logout()"
                 >
-                  <font-awesome-icon :icon="faFileLines" />
+                  <font-awesome-icon :icon="faArrowRightFromBracket" />
 
-                  <p class="text-base leading-4">{{ $t('menuPayouts') }}</p>
+                  <p class="text-base leading-4">{{ $t('Logout') }}</p>
                 </button>
-              </RouterLink>
-              <RouterLink to="/backoffice/sales" class-name="sidemenu-link">
-                <button
-                  class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                <div class="customcolor mt-10 user-loggedin">
+                  <p v-if="keycloakStore.username">
+                    {{ keycloakStore.username }} {{ $t('userLoggedIn') }}
+                  </p>
+                  <p v-else>{{ $t('userNotLoggedIn') }}</p>
+                </div>
+                <select
+                  v-model="$i18n.locale"
+                  class="h-[40px] w-[70px] customcolor border-2 customborder font-semibold rounded-full text-center mt-4 mr-4 pl-2 text-sm"
                 >
-                  <font-awesome-icon :icon="faDungeon" />
-
-                  <p class="text-base leading-4">{{ $t('menuSales') }}</p>
-                </button>
-              </RouterLink>
-              <RouterLink to="/backoffice/payments" class-name="sidemenu-link">
-                <button
-                  class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                >
-                  <font-awesome-icon :icon="faBagShopping" />
-
-                  <p class="text-base leading-4">{{ $t('menuAccounting') }}</p>
-                </button>
-              </RouterLink>
-              <RouterLink to="/backoffice/productsettings" class-name="sidemenu-link">
-                <button
-                  class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                >
-                  <font-awesome-icon :icon="faSplotch" />
-
-                  <p class="text-base leading-4">{{ $t('menuProducts') }}</p>
-                </button>
-              </RouterLink>
-              <RouterLink to="/backoffice/settings/update" class-name="sidemenu-link">
-                <button
-                  class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                >
-                  <font-awesome-icon :icon="faSliders" />
-
-                  <p class="text-base leading-4">{{ $t('menuSettings') }}</p>
-                </button>
-              </RouterLink>
-              <RouterLink to="/backoffice/map" class-name="sidemenu-link">
-                <button
-                  class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                >
-                  <font-awesome-icon :icon="faMapLocation" />
-
-                  <p class="text-base leading-4">{{ $t('menuMap') }}</p>
-                </button>
-              </RouterLink>
-              <RouterLink to="/backoffice/statistics" class-name="sidemenu-link">
-                <button
-                  class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                >
-                  <font-awesome-icon :icon="faAreaChart" />
-
-                  <p class="text-base leading-4">{{ $t('menuStatistics') }}</p>
-                </button>
-              </RouterLink>
-              <button
-                class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                @click="keycloak.keycloak?.logout()"
-              >
-                <font-awesome-icon :icon="faArrowRightFromBracket" />
-
-                <p class="text-base leading-4">{{ $t('Logout') }}</p>
-              </button>
-              <div class="customcolor mt-10 user-loggedin">
-                <p v-if="keycloakStore.username">
-                  {{ keycloakStore.username }} {{ $t('userLoggedIn') }}
-                </p>
-                <p v-else>{{ $t('userNotLoggedIn') }}</p>
+                  <option value="en">EN</option>
+                  <option value="de">DE</option>
+                </select>
               </div>
-              <select
-                v-model="$i18n.locale"
-                class="h-[40px] w-[70px] customcolor border-2 customborder font-semibold rounded-full text-center mt-4 mr-4 pl-2 text-sm"
-              >
-                <option value="en">EN</option>
-                <option value="de">DE</option>
-              </select>
             </div>
           </div>
 
@@ -287,9 +283,6 @@ footer {
   margin-top: 50px;
   padding-top: 50px;
 }
-.logo.mx-auto.my-5 {
-  min-height: 70px;
-}
 .user-loggedin {
   max-width: 270px;
 }
@@ -298,6 +291,16 @@ footer {
 }
 .sidemenu button:hover {
   text-decoration: underline;
+}
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+.logo-container img {
+  max-width: 80%;
+  height: auto;
 }
 
 /* Mobile: hide sidebar by default, slide in when open
