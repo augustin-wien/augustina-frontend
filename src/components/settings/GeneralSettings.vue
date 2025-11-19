@@ -198,6 +198,141 @@ defineExpose({ saveSettings })
         <option v-for="item in props.items" :key="item.ID" :value="item.ID">{{ item.Name }}</option>
       </select>
     </div>
+    <div>
+      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="maxOrder"
+        >{{ $t('Max order amount') }}:</label
+      >
+      <input
+        id="maxOrder"
+        v-model.number="localSettings.MaxOrderAmount"
+        type="number"
+        class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
+      />
+    </div>
+    <div class="mt-4 grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+          >{{ $t('Webshop closed') }}:</label
+        >
+        <input v-model="localSettings.WebshopIsClosed" type="checkbox" class="ml-2" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+          >{{ $t('Orga covers transaction costs') }}:</label
+        >
+        <input v-model="localSettings.OrgaCoversTransactionCosts" type="checkbox" class="ml-2" />
+      </div>
+    </div>
+
+    <div class="mt-4 grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="agb"
+          >{{ $t('AGB URL') }}:</label
+        >
+        <div class="flex gap-2">
+          <input
+            id="agb"
+            v-model="localSettings.AGBUrl"
+            class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
+            type="text"
+          />
+          <button type="button" class="px-3 rounded bg-gray-200" @click="settingsStore.toAGB()">
+            {{ $t('Open') }}
+          </button>
+        </div>
+      </div>
+      <div class="">
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="maintainance"
+          >{{ $t('Maintainance mode help URL') }}:</label
+        >
+        <input
+          id="maintainance"
+          v-model="localSettings.MaintainanceModeHelpUrl"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <div class="mt-4 grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorpostfix"
+          >{{ $t('Vendor email postfix') }}:</label
+        >
+        <input
+          id="vendorpostfix"
+          v-model="localSettings.VendorEmailPostfix"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
+          type="text"
+        />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="digitalUrl"
+          >{{ $t('Digital items URL') }}:</label
+        >
+        <input
+          id="digitalUrl"
+          v-model="localSettings.DigitalItemsUrl"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <div class="mt-4 grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+          >{{ $t('Map center lat') }}:</label
+        >
+        <input
+          v-model.number="localSettings.MapCenterLat"
+          type="number"
+          step="0.000001"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
+        />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+          >{{ $t('Map center long') }}:</label
+        >
+        <input
+          v-model.number="localSettings.MapCenterLong"
+          type="number"
+          step="0.000001"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
+        />
+      </div>
+    </div>
+
+    <div class="mt-4 grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+          >{{ $t('Use the license id instead of the name in the shop') }}:</label
+        >
+        <input v-model="localSettings.UseVendorLicenseIdInShop" type="checkbox" class="ml-2" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+          >{{ $t('Show QR code logo') }}:</label
+        >
+        <input v-model="localSettings.QRCodeEnableLogo" type="checkbox" class="ml-2" />
+      </div>
+    </div>
+
+    <div class="mt-4 grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+          >{{ $t('Use tip instead of donation in the shop') }}:</label
+        >
+        <input v-model="localSettings.UseTipInsteadOfDonation" type="checkbox" class="ml-2" />
+      </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+          >{{ $t('Shop page as landing page') }}:</label
+        >
+        <input v-model="localSettings.ShopLanding" type="checkbox" class="ml-2" />
+      </div>
+    </div>
 
     <!-- QR code logo -->
     <div class="mb-4">

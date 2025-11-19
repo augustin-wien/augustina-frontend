@@ -5,6 +5,8 @@ import { usePaymentsStore, type Payment } from '@/stores/payments'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { vendorsStore } from '@/stores/vendor'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { useSettingsStore } from '@/stores/settings'
 
@@ -25,17 +27,23 @@ const startDate = ref<Date>(yesterday)
 const endDate = ref<Date>(tomorrow)
 const date = ref<Array<Date>>([startDate.value, endDate.value])
 const store = usePaymentsStore()
+const vendorStore = vendorsStore()
+const vendors = computed(() => vendorStore.vendors)
 
 //fetch paymentlist data once component is mounted
 
+const route = useRoute()
+
+const vendorFilter = computed(() => (route.query.vendor ? (route.query.vendor as string) : ''))
+
 const onRangeStart = (value: Date) => {
   startDate.value = value // Update the startDate variable
-  store.getPayments(startDate.value, endDate.value)
+  store.getPayments(startDate.value, endDate.value, vendorFilter.value)
 }
 
 const onRangeEnd = (value: Date) => {
   endDate.value = value // Update the endDate variable
-  store.getPayments(startDate.value, endDate.value)
+  store.getPayments(startDate.value, endDate.value, vendorFilter.value)
 }
 
 const formatTime = (time: string) => {
@@ -75,16 +83,27 @@ const authenticated = computed(() => keycloakStore.authenticated)
 onMounted(() => {
   if (authenticated.value) {
     itemsStore.getItemsBackoffice().then(() => {
-      store.getPayments(startDate.value, endDate.value)
+      store.getPayments(startDate.value, endDate.value, vendorFilter.value)
     })
+
+    // ensure vendors loaded so we can link to profiles
+    if (!vendorStore.vendors || vendorStore.vendors.length === 0) {
+      vendorStore.getVendors()
+    }
   } else {
     watch(authenticated, () => {
       itemsStore.getItemsBackoffice().then(() => {
-        store.getPayments(startDate.value, endDate.value)
+        store.getPayments(startDate.value, endDate.value, vendorFilter.value)
       })
     })
   }
 })
+
+const findVendorIdByLicense = (licenseID: string | undefined | null) => {
+  if (!licenseID) return null
+  const v = vendors.value.find((x: any) => x.LicenseID === licenseID)
+  return v ? v.ID : null
+}
 
 const exportTable = () => {
   if (!payments.value || payments.value.length == 0) {
@@ -115,7 +134,9 @@ const exportTable = () => {
   <component :is="$route.meta.layout || 'div'">
     <template #header>
       <div class="flex space-between justify-between content-center items-center mt-3">
-        <h1 className="font-bold text-2xl">{{ $t('menuAccounting') }}</h1>
+        <h1 className="font-bold text-2xl">
+          {{ $t('bank statement') }}<span v-if="vendorFilter"> - {{ vendorFilter }}</span>
+        </h1>
         <div>
           <span>
             <VueDatePicker
@@ -129,9 +150,21 @@ const exportTable = () => {
             />
           </span>
         </div>
-        <button class="py-2 px-4 rounded-full customcolor ml-2 h-[44px] mr-6" @click="exportTable">
-          {{ $t('export') }}
-        </button>
+        <div class="flex items-center space-x-2">
+          <router-link
+            v-if="vendorFilter && findVendorIdByLicense(vendorFilter)"
+            :to="`/backoffice/userprofile/${findVendorIdByLicense(vendorFilter)}/update`"
+          >
+            <button class="py-2 px-4 rounded-full customcolor h-[44px]">Profil</button>
+          </router-link>
+
+          <button
+            class="py-2 px-4 rounded-full customcolor ml-2 h-[44px] mr-6"
+            @click="exportTable"
+          >
+            {{ $t('export') }}
+          </button>
+        </div>
       </div>
     </template>
     <template #main>

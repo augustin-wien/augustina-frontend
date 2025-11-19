@@ -87,7 +87,6 @@ export const useMailTemplatesStore = defineStore('mailTemplates', () => {
         }
       })
 
-      console.log('Mail template saved:', payload)
       await loadList()
     } finally {
       loading.value = false

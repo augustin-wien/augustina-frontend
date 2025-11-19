@@ -17,6 +17,10 @@ import type {
   QrCodeOptions
 } from '@/models/qrcode'
 
+const props = defineProps({
+  inline: { type: Boolean, default: false }
+})
+
 const emit = defineEmits(['close', 'saveSettings'])
 
 const settingsStore = useSettingsStore()
@@ -224,25 +228,129 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    id="qrcode-modal"
-    tabindex="-1"
-    class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
-  >
-    <div class="relative p-4 w-full modal-content max-h-full">
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <div class="flex place-content-center justify-between pt-4 pr-4">
-          <span />
-          <button class="rounded-full bg-red-600 text-white font-bold" @click="$emit('close')">
-            <IconCross />
-          </button>
+  <div>
+    <template v-if="!props.inline">
+      <div
+        id="qrcode-modal"
+        tabindex="-1"
+        class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+      >
+        <div class="relative p-4 w-full modal-content max-h-full">
+          <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="flex place-content-center justify-between pt-4 pr-4">
+              <span />
+              <button class="rounded-full bg-red-600 text-white font-bold" @click="$emit('close')">
+                <IconCross />
+              </button>
+            </div>
+            <h2 class="text-center">{{ $t('QR-Code settings') }}</h2>
+            <div class="p-5 wrapper">
+              <div class="options pl-5">
+                <div v-if="qrCodeOptions" class="qr-code-options">
+                  <div class>{{ $t('Error Correction Level') }}</div>
+                  <select v-model="qrCodeOptions.errorCorrectionLevel" class="px-5 py-2.5">
+                    <option value="L">L</option>
+                    <option value="M">M</option>
+                    <option value="Q">Q</option>
+                    <option value="H">H</option>
+                  </select>
+                </div>
+                <div v-if="dotsOptions" class="dots-options">
+                  <div class="color">{{ $t('Dots Color') }}</div>
+                  <input v-model="dotsOptions.color" type="color" class="px-5 py-2.5" />
+                  <div class="type">{{ $t('Dots Type') }}</div>
+                  <select v-model="dotsOptions.type" class="px-5 py-2.5">
+                    <option value="dots">{{ $t('Dots') }}</option>
+                    <option value="rounded">{{ $t('Rounded') }}</option>
+                    <option value="classy">{{ $t('Classy') }}</option>
+                    <option value="classy-rounded">{{ $t('Classy-Rounded') }}</option>
+                    <option value="square">{{ $t('Square') }}</option>
+                    <option value="extra-rounded">{{ $t('Extra-Rounded') }}</option>
+                  </select>
+                </div>
+                <div v-if="backgroundOptions" class="background-options">
+                  <div class="color">Background Color</div>
+                  <input v-model="backgroundOptions.color" type="color" class="px-5 py-2.5" />
+                </div>
+                <div v-if="cornerSquareOptions" class="corner-square-options">
+                  <div class="type">{{ $t('Corner Square Type') }}</div>
+                  <select v-model="cornerSquareOptions.type" class="px-5 py-2.5">
+                    <option value="square">{{ $t('Square') }}</option>
+                    <option value="dot">{{ $t('Dot') }}</option>
+                  </select>
+                </div>
+                <div v-if="cornersDotOptions" class="corner-dots-options">
+                  <div class="type">{{ $t('Corner Dots Type') }}</div>
+                  <select v-model="cornersDotOptions.type" class="px-5 py-2.5">
+                    <option value="square">{{ $t('Square') }}</option>
+                    <option value="dot">{{ $t('Dot') }}</option>
+                  </select>
+                </div>
+                <div v-if="imageOptions" class="image-options">
+                  <div class="hide-background-dots">{{ $t('Hide Dots behind the logo') }}</div>
+                  <input
+                    v-model="imageOptions.hideBackgroundDots"
+                    type="checkbox"
+                    class="px-5 py-2.5"
+                  />
+                  <div class="image-size">{{ $t('Logo Size') }}</div>
+                  <input
+                    v-model="imageOptions.imageSize"
+                    step="0.1"
+                    min="0.1"
+                    max="0.7"
+                    type="number"
+                    class="px-5 py-2.5"
+                  />
+                  <div class="margin">{{ $t('Logo Margin') }}</div>
+                  <input v-model="imageOptions.margin" type="number" class="px-5 py-2.5" />
+                </div>
+              </div>
+              <div class="pr-5">
+                <div class="preview mb-5 text-xl font-bold text-gray-500 dark:text-gray-400">
+                  <div class="flex">
+                    <h2 class="pr-4">{{ `${$t('Test QR-Code')}` }}</h2>
+                    <button
+                      type="button"
+                      class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                      @click="save()"
+                    >
+                      {{ $t('Download test QR-Code') }}
+                    </button>
+                  </div>
+                  <div id="qr-wrapper"></div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center p-4">
+              <button
+                type="button"
+                class="text-white mr-4 customcolor focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                @click="saveAll()"
+              >
+                {{ $t('Download QR-Code for all vendors') }}
+              </button>
+              <button
+                type="button"
+                class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+                @click="saveSettings()"
+              >
+                {{ $t('Save QR-Code settings') }}
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
+    </template>
+
+    <template v-else>
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-4">
         <h2 class="text-center">{{ $t('QR-Code settings') }}</h2>
         <div class="p-5 wrapper">
           <div class="options pl-5">
             <div v-if="qrCodeOptions" class="qr-code-options">
               <div class>{{ $t('Error Correction Level') }}</div>
-              <select v-model="qrCodeOptions.errorCorrectionLevel" class="px-5 py-2.5">
+              <select v-model="qrCodeOptions.errorCorrectionLevel" class="px-5 py-2.5 border">
                 <option value="L">L</option>
                 <option value="M">M</option>
                 <option value="Q">Q</option>
@@ -251,9 +359,9 @@ onMounted(() => {
             </div>
             <div v-if="dotsOptions" class="dots-options">
               <div class="color">{{ $t('Dots Color') }}</div>
-              <input v-model="dotsOptions.color" type="color" class="px-5 py-2.5" />
+              <input v-model="dotsOptions.color" type="color" class="px-5 py-2.5 border" />
               <div class="type">{{ $t('Dots Type') }}</div>
-              <select v-model="dotsOptions.type" class="px-5 py-2.5">
+              <select v-model="dotsOptions.type" class="px-5 py-2.5 border">
                 <option value="dots">{{ $t('Dots') }}</option>
                 <option value="rounded">{{ $t('Rounded') }}</option>
                 <option value="classy">{{ $t('Classy') }}</option>
@@ -263,19 +371,19 @@ onMounted(() => {
               </select>
             </div>
             <div v-if="backgroundOptions" class="background-options">
-              <div class="color">Background Color</div>
-              <input v-model="backgroundOptions.color" type="color" class="px-5 py-2.5" />
+              <div class="color">{{ $t('Background Color') }}</div>
+              <input v-model="backgroundOptions.color" type="color" class="px-5 py-2.5 border" />
             </div>
             <div v-if="cornerSquareOptions" class="corner-square-options">
               <div class="type">{{ $t('Corner Square Type') }}</div>
-              <select v-model="cornerSquareOptions.type" class="px-5 py-2.5">
+              <select v-model="cornerSquareOptions.type" class="px-5 py-2.5 border">
                 <option value="square">{{ $t('Square') }}</option>
                 <option value="dot">{{ $t('Dot') }}</option>
               </select>
             </div>
             <div v-if="cornersDotOptions" class="corner-dots-options">
               <div class="type">{{ $t('Corner Dots Type') }}</div>
-              <select v-model="cornersDotOptions.type" class="px-5 py-2.5">
+              <select v-model="cornersDotOptions.type" class="px-5 py-2.5 border">
                 <option value="square">{{ $t('Square') }}</option>
                 <option value="dot">{{ $t('Dot') }}</option>
               </select>
@@ -294,10 +402,10 @@ onMounted(() => {
                 min="0.1"
                 max="0.7"
                 type="number"
-                class="px-5 py-2.5"
+                class="px-5 py-2.5 border"
               />
               <div class="margin">{{ $t('Logo Margin') }}</div>
-              <input v-model="imageOptions.margin" type="number" class="px-5 py-2.5" />
+              <input v-model="imageOptions.margin" type="number" class="px-5 py-2.5 border" />
             </div>
           </div>
           <div class="pr-5">
@@ -333,7 +441,7 @@ onMounted(() => {
           </button>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 

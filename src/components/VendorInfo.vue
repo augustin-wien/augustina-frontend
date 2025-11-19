@@ -146,7 +146,16 @@ const emit = defineEmits(['close'])
             </div>
           </div>
         </div>
-        <div class="flex justify-center items-center py-4">
+        <div class="flex justify-center items-center py-4 space-x-3">
+          <router-link :to="{ path: '/backoffice/payments', query: { vendor: vendor?.LicenseID } }">
+            <button
+              v-if="vendor?.LicenseID"
+              class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center"
+            >
+              {{ $t('bank statement') }}
+            </button>
+          </router-link>
+
           <router-link :to="`/backoffice/userprofile/${vendor?.ID}/update`">
             <button
               class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center"
