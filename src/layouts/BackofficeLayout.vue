@@ -75,15 +75,15 @@ onMounted(() => {
             <div
               class="sidemenu-inner t-0 l-0 h-full flex-none flex flex-col justify-start items-start pr-5 pl-4 border-gray-600 border-b space-y-3 pb-5 customcolor"
             >
-              <div class="sidemenu-item object-center">
+              <div class="sidemenu-item object-center logo-container w-full p-3">
                 <img
                   :src="logo"
                   alt="Newspaper logo"
-                  class="logo mx-auto my-5"
-                  width="270"
-                  height="auto"
+                  class="logo mx-auto"
+                  width="auto"
                 />
               </div>
+            <div class="sidemenu-item flex flex-col w-full space-y-2">
               <RouterLink to="/backoffice/vendorsummary">
                 <button
                   class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
@@ -184,6 +184,7 @@ onMounted(() => {
                 <option value="en">EN</option>
                 <option value="de">DE</option>
               </select>
+            </div>
             </div>
           </div>
 
@@ -287,9 +288,6 @@ footer {
   margin-top: 50px;
   padding-top: 50px;
 }
-.logo.mx-auto.my-5 {
-  min-height: 70px;
-}
 .user-loggedin {
   max-width: 270px;
 }
@@ -298,6 +296,16 @@ footer {
 }
 .sidemenu button:hover {
   text-decoration: underline;
+}
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+}
+.logo-container img{
+  max-width: 80%;
+  height: auto;
 }
 
 /* Mobile: hide sidebar by default, slide in when open
