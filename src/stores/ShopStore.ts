@@ -11,6 +11,8 @@ export const useShopStore = defineStore('shop', {
   state: () => {
     return {
       items: [] as Item[],
+      // cached promise for in-flight or completed items fetch
+      itemsPromise: null as Promise<Item[]> | null,
       amount: [] as Amount[],
       donationItem: 2
     }
@@ -27,18 +29,31 @@ export const useShopStore = defineStore('shop', {
   },
   actions: {
     async getItems() {
-      return new Promise((resolve, reject) => {
-        fetchItems()
-          .then((data) => {
-            this.items = data.data
-            resolve(this.items)
-          })
-          .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.log(error)
-            reject(error)
-          })
-      })
+      // If items already loaded, return them immediately
+      if (this.items && this.items.length > 0) {
+        return Promise.resolve(this.items)
+      }
+
+      // If a fetch is already in progress or completed, reuse the promise
+      if (this.itemsPromise) {
+        return this.itemsPromise
+      }
+
+      // Start fetch and cache the promise so subsequent callers reuse it
+      this.itemsPromise = fetchItems()
+        .then((data) => {
+          this.items = data.data
+          return this.items
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.log(error)
+          // clear the cached promise on error so callers can retry
+          this.itemsPromise = null
+          throw error
+        })
+
+      return this.itemsPromise
     },
     addItem(id: number) {
       const item = this.items.find((item) => item.ID == id)
