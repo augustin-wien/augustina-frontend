@@ -124,10 +124,17 @@ const checkIfItemSelected = () => {
                         </button>
                         <div
                           class="item-name bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center"
-                                                    :style="{
+                          :style="{
                             'background-color':
-                              shopStore.getItembyId(settings.MainItem).ItemColor || (shopStore.getItembyId(settings.MainItem).LicenseItem ? '#ffee00' : '#000000'),
-                            color: shopStore.getItembyId(settings.MainItem).ItemTextColor || (shopStore.getItembyId(settings.MainItem).LicenseItem ? '#000000' : '#ffffff')
+                              shopStore.getItembyId(settings.MainItem).ItemColor ||
+                              (shopStore.getItembyId(settings.MainItem).LicenseItem
+                                ? '#ffee00'
+                                : '#000000'),
+                            color:
+                              shopStore.getItembyId(settings.MainItem).ItemTextColor ||
+                              (shopStore.getItembyId(settings.MainItem).LicenseItem
+                                ? '#000000'
+                                : '#ffffff')
                           }"
                         >
                           {{ shopStore.getItembyId(settings.MainItem).Name }}
@@ -183,7 +190,7 @@ const checkIfItemSelected = () => {
                   </div>
                   <div className="place-items-center grow h-full grid grid-rows-2 item-right">
                     <div class="w-full h-full py-1 relative">
-                          {{ item.ItemColor}}123
+                      {{ item.ItemColor }}123
 
                       <RouterLink :to="{ name: 'Item Available', query: { item: item.ID } }">
                         <button
@@ -205,8 +212,7 @@ const checkIfItemSelected = () => {
                             'items-center': true
                           }"
                           :style="{
-                            'background-color':
-                              item.ItemColor? item.ItemColor: '#000000',
+                            'background-color': item.ItemColor ? item.ItemColor : '#000000',
                             color: item.ItemTextColor ? item.ItemTextColor : '#ffffff'
                           }"
                         >

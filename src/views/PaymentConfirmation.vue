@@ -147,11 +147,7 @@ const downloadPDF = (link: string) => {
 UpdateTime()
 const apiUrl = import.meta.env.VITE_API_URL
 
-
 const email = localStorage.getItem('email') || ''
-
-
-
 </script>
 
 <template>
@@ -251,7 +247,11 @@ const email = localStorage.getItem('email') || ''
             </button>
           </div>
           <div v-if="hasDigitalItemWithoutPDF" class="digitial-item-link mt-3">
-            <a :href="settStore.settings.DigitalItemsUrl+'?email='+email" target="_blank" rel="noopener noreferrer">
+            <a
+              :href="settStore.settings.DigitalItemsUrl + '?email=' + email"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <button
                 class="digital-item-download-button bg-gray-500 rounded-full text-center p-5 customfont text-sm font font-semibold w-full cursor-pointer"
                 :style="
