@@ -125,11 +125,11 @@ const checkIfItemSelected = () => {
                           i
                         </button>
                         <div
-v-if="mainItem" 
+                          v-if="mainItem"
                           class="item-name bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center"
                           :style="{
                             'background-color': mainItem.ItemColor ? mainItem.ItemColor : '#000000',
-                            'color': mainItem.ItemTextColor ? mainItem.ItemTextColor : '#ffffff'
+                            color: mainItem.ItemTextColor ? mainItem.ItemTextColor : '#ffffff'
                           }"
                         >
                           {{ mainItem ? mainItem.Name : '' }}
