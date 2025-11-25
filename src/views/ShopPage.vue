@@ -124,6 +124,11 @@ const checkIfItemSelected = () => {
                         </button>
                         <div
                           class="item-name bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center"
+                                                    :style="{
+                            'background-color':
+                              shopStore.getItembyId(settings.MainItem).ItemColor || (shopStore.getItembyId(settings.MainItem).LicenseItem ? '#ffee00' : '#000000'),
+                            color: shopStore.getItembyId(settings.MainItem).ItemTextColor || (shopStore.getItembyId(settings.MainItem).LicenseItem ? '#000000' : '#ffffff')
+                          }"
                         >
                           {{ shopStore.getItembyId(settings.MainItem).Name }}
                           {{ (shopStore.getItembyId(settings.MainItem).Price / 100).toFixed(2) }}€
@@ -178,6 +183,8 @@ const checkIfItemSelected = () => {
                   </div>
                   <div className="place-items-center grow h-full grid grid-rows-2 item-right">
                     <div class="w-full h-full py-1 relative">
+                          {{ item.ItemColor}}123
+
                       <RouterLink :to="{ name: 'Item Available', query: { item: item.ID } }">
                         <button
                           class="bg-gray-500 absolute rounded-full text-center w-6 text-white font-bold top-0 right-0"
@@ -199,8 +206,8 @@ const checkIfItemSelected = () => {
                           }"
                           :style="{
                             'background-color':
-                              item.ItemColor || (item.LicenseItem ? '#ffee00' : '#000000'),
-                            color: item.ItemTextColor || (item.LicenseItem ? '#000000' : '#ffffff')
+                              item.ItemColor? item.ItemColor: '#000000',
+                            color: item.ItemTextColor ? item.ItemTextColor : '#ffffff'
                           }"
                         >
                           {{ item.Name }} {{ (item.Price / 100).toFixed(2) }}€

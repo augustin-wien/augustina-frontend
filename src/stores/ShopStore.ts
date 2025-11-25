@@ -122,6 +122,9 @@ export const useShopStore = defineStore('shop', {
         ID: 0,
         Image: '',
         Name: '',
+        ItemColor: '',
+        ItemTextColor: '',
+        IsLicenseItem: false,
         Price: 0
       }
     },
