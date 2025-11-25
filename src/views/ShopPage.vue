@@ -3,7 +3,7 @@ import Toast from '@/components/ToastMessage.vue'
 import { useShopStore } from '@/stores/ShopStore'
 import { useSettingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
 const shopStore = useShopStore()
@@ -28,6 +28,8 @@ const toast = ref<ToastMessage | null>(null)
 onMounted(() => {
   shopStore.getItems()
 })
+
+const mainItem = computed(() => shopStore.getItembyId(settings.MainItem))
 
 const checkIfItemSelected = () => {
   if (shopStore.amount.length > 0) {
@@ -123,22 +125,15 @@ const checkIfItemSelected = () => {
                           i
                         </button>
                         <div
+v-if="mainItem" 
                           class="item-name bg-black h-16 w-full rounded-full text-center text-white font-semibold text-xl flex justify-center items-center"
                           :style="{
-                            'background-color':
-                              shopStore.getItembyId(settings.MainItem).ItemColor ||
-                              (shopStore.getItembyId(settings.MainItem).LicenseItem
-                                ? '#ffee00'
-                                : '#000000'),
-                            color:
-                              shopStore.getItembyId(settings.MainItem).ItemTextColor ||
-                              (shopStore.getItembyId(settings.MainItem).LicenseItem
-                                ? '#000000'
-                                : '#ffffff')
+                            'background-color': mainItem.ItemColor ? mainItem.ItemColor : '#000000',
+                            'color': mainItem.ItemTextColor ? mainItem.ItemTextColor : '#ffffff'
                           }"
                         >
-                          {{ shopStore.getItembyId(settings.MainItem).Name }}
-                          {{ (shopStore.getItembyId(settings.MainItem).Price / 100).toFixed(2) }}€
+                          {{ mainItem ? mainItem.Name : '' }}
+                          {{ mainItem ? (mainItem.Price / 100).toFixed(2) : '' }}€
                         </div>
                       </RouterLink>
                     </div>
@@ -190,8 +185,6 @@ const checkIfItemSelected = () => {
                   </div>
                   <div className="place-items-center grow h-full grid grid-rows-2 item-right">
                     <div class="w-full h-full py-1 relative">
-                      {{ item.ItemColor }}123
-
                       <RouterLink :to="{ name: 'Item Available', query: { item: item.ID } }">
                         <button
                           class="bg-gray-500 absolute rounded-full text-center w-6 text-white font-bold top-0 right-0"
