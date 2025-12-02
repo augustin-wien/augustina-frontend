@@ -20,6 +20,7 @@
   "failed": "Transaction failed",
   "tryagain": "Try again",
   "return": "Home",
+  "Order Code": "Order Code",
 
   "customdonation": "Enter your donation",
 
@@ -32,6 +33,7 @@
   "menuCredits": "Credits",
   "menuPayouts": "Payouts",
   "menuSales": "Sales",
+  "menuUnverifiedOrders": "Unverified Orders",
   "menuAccounting": "Accounting",
   "menuProducts": "Products",
   "menuSettings": "Settings",

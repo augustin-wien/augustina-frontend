@@ -131,7 +131,7 @@ const payoutVendor = async () => {
     })
 }
 
-const toast = ref<unknown | null>(null)
+const toast = ref<{ type: string; message: string } | null>(null)
 
 const showToast = (type: string, message: string) => {
   toast.value = { type, message }
@@ -235,7 +235,8 @@ const getItemName = (itemID: number) => {
           </div>
         </div>
       </div>
-      <Toast v-if="toast" :toast="toast" />
+      <Toast v-if="toast" :toast="toast" @close="toast=null"/>
+
     </template>
   </component>
 </template>

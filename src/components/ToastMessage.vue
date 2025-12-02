@@ -1,51 +1,47 @@
-<script lang="ts">
-export default {
-  props: {
-    toast: {
-      type: Object,
-      default: null
-    }
-  },
-  computed: {
-    toastClasses() {
-      if (this.toast.type === 'success') {
-        return 'flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x divide-gray-200 rounded-lg shadow dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800'
-      } else if (this.toast.type === 'error') {
-        return 'flex items-center w-full max-w-xs p-4 space-x-4 text-red-500 bg-white divide-x divide-gray-200 rounded-lg shadow dark:text-red-400 dark:divide-red-700 space-x dark:bg-red-800'
-      } else {
-        return '' // Add more conditions if needed
-      }
-    }
-  }
-}
+<script setup lang="ts">
+import { useSettingsStore } from '@/stores/settings'
+import { computed } from 'vue'
+import IconCross from '@/components/icons/IconCross.vue'
+
+const props = defineProps<{
+  toast: {
+    message: string
+    type: string
+  } | null
+}>()
+
+const emit = defineEmits(['close'])
+
+const settingsStore = useSettingsStore()
+
+const isError = computed(() => props.toast?.type === 'error')
 </script>
 
 <template>
-  <div v-if="toast" :class="toastClasses" class="toast">
-    <svg
-      class="w-5 h-5 text-blue-600 dark:text-blue-500 rotate-45"
-      aria-hidden="true"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 18 20"
-    >
-      <path
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="m9 17 8 2L9 1 1 19l8-2Zm0 0V9"
-      />
-    </svg>
-    <div class="pl-4 text-sm font-normal">{{ toast.message }}</div>
+  <div
+    v-if="toast"
+    class="toast shadow-lg rounded-full px-6 py-3 flex items-center justify-between gap-4"
+    :class="isError ? 'bg-rose-700 text-white' : 'customcolor'"
+  >
+    <div class="text-lg font-semibold">{{ toast.message }}</div>
+    <button class="flex-shrink-0" @click="emit('close')">
+      <IconCross class="w-6 h-6" />
+    </button>
   </div>
 </template>
 
-<style>
+<style scoped>
+.customcolor {
+  background-color: v-bind(settingsStore.settings.Color);
+  color: v-bind(settingsStore.settings.FontColor);
+}
 .toast {
   position: fixed;
-  top: 5px;
-  right: 5px;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 9999;
+  min-width: 300px;
+  max-width: 90%;
 }
 </style>

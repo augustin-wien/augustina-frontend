@@ -113,7 +113,7 @@ export const usePaymentStore = defineStore('payment', {
           console.log('failed to verify payment', _error)
 
           if (this.failedCount > 5) {
-            router.push('/failure')
+            router.push({ path: '/failure', query: { orderCode: this.transactionID } })
           }
 
           return false
@@ -126,7 +126,7 @@ export const usePaymentStore = defineStore('payment', {
         this.failedCount++
 
         if (this.failedCount > 5) {
-          router.push('/failure')
+          router.push({ path: '/failure', query: { orderCode: this.transactionID } })
         }
 
         return false

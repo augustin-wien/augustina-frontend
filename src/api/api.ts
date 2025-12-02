@@ -20,7 +20,8 @@ import {
   PDF_DOWNLOAD_API_URL,
   STYLES_URL,
   MAIL_TEMPLATES_API,
-  BASE_URL
+  BASE_URL,
+  ORDERS_UNVERIFIED_API_URL
 } from './endpoints'
 
 export const apiInstance = axios.create({
@@ -373,3 +374,8 @@ export async function patchVendorComment(vendorId: number, commentId: number, co
 export async function deleteVendorComment(vendorId: number, commentId: number) {
   return apiInstance.delete(`${VENDORS_API_URL}${vendorId}/comments/${commentId}/`)
 }
+
+export async function fetchUnverifiedOrders() {
+  return apiInstance.get(ORDERS_UNVERIFIED_API_URL)
+}
+
