@@ -188,8 +188,7 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
           @saved="showToast('success', $event)"
           @error="showToast('error', $event)"
         />
-        <Toast v-if="toast" :toast="toast" @close="toast=null"/>
-
+        <Toast v-if="toast" :toast="toast" @close="toast = null" />
       </div>
     </template>
   </component>

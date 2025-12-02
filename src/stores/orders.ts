@@ -20,8 +20,7 @@ export const useOrdersStore = defineStore('orders', {
     },
     async verifyOrder(orderCode: string) {
       try {
-
-        await agent.VivaWallet.verifyPayment("s=" + orderCode+"&t=manual")
+        await agent.VivaWallet.verifyPayment('s=' + orderCode + '&t=manual')
         await this.getUnverifiedOrders()
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -30,4 +29,3 @@ export const useOrdersStore = defineStore('orders', {
     }
   }
 })
-

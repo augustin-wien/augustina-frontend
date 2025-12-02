@@ -235,8 +235,7 @@ const getItemName = (itemID: number) => {
           </div>
         </div>
       </div>
-      <Toast v-if="toast" :toast="toast" @close="toast=null"/>
-
+      <Toast v-if="toast" :toast="toast" @close="toast = null" />
     </template>
   </component>
 </template>

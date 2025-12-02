@@ -378,4 +378,3 @@ export async function deleteVendorComment(vendorId: number, commentId: number) {
 export async function fetchUnverifiedOrders() {
   return apiInstance.get(ORDERS_UNVERIFIED_API_URL)
 }
-

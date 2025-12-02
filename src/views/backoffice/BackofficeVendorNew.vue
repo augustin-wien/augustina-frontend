@@ -199,7 +199,7 @@ const importCSV = async () => {
               <IconCross />
             </button>
           </div>
-          <Toast v-if="toast" :toast="toast" @close="toast=null"/>
+          <Toast v-if="toast" :toast="toast" @close="toast = null" />
           <form
             class="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4"
             @submit.prevent="submitVendor"
@@ -389,7 +389,7 @@ const importCSV = async () => {
                 {{ $t('create') }}
               </button>
             </div>
-            <Toast v-if="toast" :toast="toast" @close="toast=null"/>
+            <Toast v-if="toast" :toast="toast" @close="toast = null" />
           </form>
         </div>
         <div v-else>

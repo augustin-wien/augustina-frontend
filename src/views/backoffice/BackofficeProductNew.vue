@@ -141,7 +141,7 @@ const updateImage = (event: any) => {
               </button>
             </div>
           </form>
-          <Toast v-if="toast" :toast="toast" @close="toast=null"/>
+          <Toast v-if="toast" :toast="toast" @close="toast = null" />
         </div>
       </div>
     </template>

@@ -6,7 +6,6 @@ import { onMounted, ref } from 'vue'
 import Toast from '@/components/ToastMessage.vue'
 import { useI18n } from 'vue-i18n'
 
-
 const paymentStore = usePaymentStore()
 const settStore = useSettingsStore()
 const route = useRoute()
@@ -27,7 +26,6 @@ const retry = () => {
     if (paymentStore.verification) {
       window.location.href = '/confirmation'
     } else {
-
       // show toast message or indication to the user
       toast.value = {
         message: t('Trouble verifying payment, please try again.'),
@@ -43,7 +41,6 @@ type ToastMessage = {
 }
 const toast = ref<ToastMessage | null>(null)
 
-
 const currentTime = new Date().toLocaleString()
 </script>
 
@@ -51,7 +48,7 @@ const currentTime = new Date().toLocaleString()
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <div className="h-full w-full grid grid-rows-5 font-semibold text-2xl">
-         <Toast v-if="toast" :toast="toast" @close="toast=null"/>
+        <Toast v-if="toast" :toast="toast" @close="toast = null" />
         <div class="text-center">
           {{ $t('failed') }}
         </div>
@@ -65,7 +62,7 @@ const currentTime = new Date().toLocaleString()
           />
         </div>
         <div class="text-center text-lg">
-          {{$t('Order Code')}}: {{ paymentStore.transactionID }}
+          {{ $t('Order Code') }}: {{ paymentStore.transactionID }}
           <div class="text-sm mt-2">
             {{ currentTime }}
           </div>

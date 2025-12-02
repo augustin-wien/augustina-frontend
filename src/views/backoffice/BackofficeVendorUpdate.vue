@@ -545,7 +545,7 @@ const cancelEditComment = () => {
             </div>
           </form>
         </div>
-        <Toast v-if="toast" :toast="toast" @close="toast=null"/>
+        <Toast v-if="toast" :toast="toast" @close="toast = null" />
 
         <!-- delete modal -->
         <div v-if="showDeleteModal">
