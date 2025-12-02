@@ -113,6 +113,15 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuSales') }}</p>
                   </button>
                 </RouterLink>
+                <RouterLink to="/backoffice/unverified-orders" class-name="sidemenu-link">
+                  <button
+                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faFileLines" />
+
+                    <p class="text-base leading-4">{{ $t('menuUnverifiedOrders') }}</p>
+                  </button>
+                </RouterLink>
                 <RouterLink to="/backoffice/payments" class-name="sidemenu-link">
                   <button
                     class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"

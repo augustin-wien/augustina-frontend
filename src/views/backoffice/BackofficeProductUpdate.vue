@@ -347,7 +347,8 @@ const previewImage = (image: string | Blob | MediaSource) => {
               </button>
             </div>
           </div>
-          <Toast v-if="toast" :toast="toast" />
+          <Toast v-if="toast" :toast="toast" @close="toast = null" />
+
           <!-- delete modal -->
           <div v-if="showDeleteModal">
             <div

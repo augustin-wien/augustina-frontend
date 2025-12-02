@@ -177,6 +177,16 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeAccountingSales.vue')
     },
     {
+      path: '/backoffice/unverified-orders',
+      name: 'Backoffice Unverified Orders',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Unverified Orders'
+      },
+      component: () => import('@/views/backoffice/BackofficeUnverifiedOrders.vue')
+    },
+    {
       path: '/backoffice/vendorsummary',
       name: 'Vendor Summary',
       meta: {

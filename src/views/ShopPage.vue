@@ -84,7 +84,7 @@ const checkIfItemSelected = () => {
               {{ $t('product') }}
          </div> -->
           <div class="h-5/6 pb-3">
-            <Toast v-if="toast" :toast="toast" />
+            <Toast v-if="toast" :toast="toast" @close="toast = null" />
             <ul
               id="items-list"
               class="list-image-none overflow-y-auto w-full h-full border-4 border-gray-200 rounded-3xl"

@@ -20,8 +20,10 @@
   "at": " um",
 
   "failed": "Transaktion fehlgeschlagen",
-  "tryagain": "Erneut versuchen:",
+  "tryagain": "Erneut versuchen",
   "return": "Start",
+  "Order Code": "Bestellnummer",
+  "Trouble verifying payment, please try again.": "Probleme bei der Zahlungsüberprüfung, bitte versuchen Sie es erneut.",
 
   "customdonation": "Spende eingeben",
   "customtip": "Trinkgeld eingeben",
@@ -36,6 +38,7 @@
   "menuCredits": "Guthaben",
   "menuPayouts": "Auszahlungen",
   "menuSales": "Verkäufe",
+  "menuUnverifiedOrders": "Unbestätigte Bestellungen",
   "menuAccounting": "Buchhaltung",
   "menuProducts": "Produkte",
   "menuSettings": "Einstellungen",
