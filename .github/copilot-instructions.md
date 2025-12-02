@@ -5,7 +5,7 @@ This repository contains the frontend for the Augustina bargeldlos (cashless) pr
 ## Project Overview
 
 Augustina is a cashless payment system for street newspaper vendors. The frontend provides:
-- Customer-facing payment flow (QR code scanning, item selection, payment processing via Vivawallet)
+- Customer-facing payment flow (QR code scanning, item selection, payment processing via VivaWallet)
 - Vendor profile management
 - Back-office administration dashboard
 - Map-based vendor location views
@@ -170,4 +170,4 @@ const props = defineProps<{
 1. This project uses Vue 3 Composition API exclusively - do not use Options API in new code
 2. Always run `yarn lint` and `yarn format` before committing
 3. The backend repository is at https://github.com/augustin-wien/augustina-backend/
-4. For local development with Vivawallet, manual URL adjustment is required (see README)
+4. For local development with VivaWallet, manual URL adjustment is required (see README)
