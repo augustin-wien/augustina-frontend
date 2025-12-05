@@ -7,7 +7,8 @@ import {
   VIVAWALLET_TRANSACTION_ORDER,
   SETTINGS_API_URL,
   VIVAWALLET_TRANSACTION_VERIFICATION,
-  VENDOR_CHECK_ID
+  VENDOR_CHECK_ID,
+  ORDERS_UNVERIFIED_API_URL
 } from '@/api/endpoints'
 import { apiInstance } from './api'
 import type { orderItem } from '@/stores/payment'
@@ -44,6 +45,20 @@ const VivaWallet = {
     apiInstance
       .get(VIVAWALLET_TRANSACTION_VERIFICATION + '?' + vivaTransactionID, {
         headers: { 'Content-Type': 'application/json' }
+      })
+      .then(sleep(100))
+      .then(responseBody),
+  verifyAdminPayment: (orderCode: string): Promise<VivaWalletVerification> =>
+    apiInstance
+      .get(ORDERS_UNVERIFIED_API_URL + 'code/' + orderCode + '/verify/', {
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(sleep(100))
+      .then(responseBody),
+  addTransactionID: (orderCode: string, transactionID: string): Promise<any> =>
+    apiInstance
+      .post(ORDERS_UNVERIFIED_API_URL + 'code/' + orderCode + '/transactionID/', {
+        transactionID: transactionID
       })
       .then(sleep(100))
       .then(responseBody)
