@@ -44,12 +44,28 @@ const getVendorLicenseId = (order: any) => {
 
 const handleVerify = async (orderCode: string) => {
   try {
-    await ordersStore.verifyOrder(orderCode)
+    await ordersStore.verifyAdminPayment(orderCode)
     toast.value = { message: 'Order verified successfully', type: 'success' }
     await ordersStore.getUnverifiedOrders()
-  } catch (error) {
+  } catch (error: any) {
     console.error('Verification failed', error)
-    toast.value = { message: 'Verification failed', type: 'error' }
+    const message = error.response?.data?.error?.message || 'Verification failed'
+    toast.value = { message: message, type: 'error' }
+  }
+}
+
+const handleAddTransactionID = async (orderCode: string) => {
+  const transactionID = prompt('Please enter the Transaction ID:')
+
+  if (transactionID) {
+    try {
+      await ordersStore.addTransactionID(orderCode, transactionID)
+      toast.value = { message: 'Transaction ID added successfully', type: 'success' }
+    } catch (error: any) {
+      console.error('Failed to add Transaction ID', error)
+      const message = error.response?.data?.error?.message || 'Failed to add Transaction ID'
+      toast.value = { message: message, type: 'error' }
+    }
   }
 }
 </script>
@@ -70,6 +86,7 @@ const handleVerify = async (orderCode: string) => {
               <tr>
                 <th scope="col" class="py-3 px-6">Order ID</th>
                 <th scope="col" class="py-3 px-6">Vendor License ID</th>
+                <th scope="col" class="py-3 px-6">Transaction ID</th>
                 <th scope="col" class="py-3 px-6">Date</th>
                 <th scope="col" class="py-3 px-6">Amount</th>
                 <th scope="col" class="py-3 px-6">Customer Email</th>
@@ -84,6 +101,7 @@ const handleVerify = async (orderCode: string) => {
               >
                 <td class="py-4 px-6">{{ order.OrderCode }}</td>
                 <td class="py-4 px-6">{{ getVendorLicenseId(order) }}</td>
+                <td class="py-4 px-6">{{ order.TransactionID || 'N/A' }}</td>
                 <td class="py-4 px-6">{{ new Date(order.Timestamp).toLocaleString() }}</td>
                 <td class="py-4 px-6">{{ (calculateTotal(order.Entries) / 100).toFixed(2) }} €</td>
                 <td class="py-4 px-6">{{ order.CustomerEmail }}</td>
@@ -93,6 +111,12 @@ const handleVerify = async (orderCode: string) => {
                     @click="handleVerify(order.OrderCode)"
                   >
                     Verify
+                  </button>
+                  <button
+                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-4"
+                    @click="handleAddTransactionID(order.OrderCode)"
+                  >
+                    Add Transaction ID
                   </button>
                 </td>
               </tr>
