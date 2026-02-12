@@ -6,6 +6,7 @@ import js from "@eslint/js";
 import { FlatCompat } from "@eslint/eslintrc";
 import { includeIgnoreFile } from "@eslint/compat";
 import cypress from "eslint-plugin-cypress";
+import pluginVue from "eslint-plugin-vue";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -79,10 +80,10 @@ export default [...compat.extends("eslint:recommended", "prettier"),
         "no-nested-ternary": "error",
         curly: ["error", "multi-line"],
     },
-}, ...compat.extends(
+}, ...pluginVue.configs['flat/recommended'],
+...compat.extends(
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:vue/recommended",
     "prettier",
 ).map(config => ({
     ...config,
