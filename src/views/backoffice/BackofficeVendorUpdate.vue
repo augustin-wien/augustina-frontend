@@ -13,7 +13,7 @@ import keycloak from '@/keycloak/keycloak'
 
 const { t } = useI18n()
 
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import CommentsModal from '@/components/CommentsModal.vue'
 
@@ -420,19 +420,28 @@ const cancelEditComment = () => {
                       </button>
                     </div>
 
-                    <div v-if="vendorComments && vendorComments.length > 0">
+                    <div
+                      v-if="vendorComments && vendorComments.length > 0"
+                      class="max-h-64 overflow-y-auto pr-1"
+                    >
                       <div
                         v-for="comment in vendorComments"
                         :key="'comment_' + comment.id"
-                        v-key="comment.id"
-                        class="comment flex flex-row justify-between"
+                        class="comment flex flex-row justify-between border border-gray-200 dark:border-gray-600 rounded p-2 mb-2 bg-gray-50 dark:bg-gray-800"
                       >
-                        <div :class="'comment-infos' + (comment.warning ? ' text-red-500' : '')">
-                          <div class="comment-title font-bold font-small">
+                        <div
+                          :class="
+                            'comment-infos w-full' +
+                            (comment.warning ? ' text-red-600 dark:text-red-400' : '')
+                          "
+                        >
+                          <div
+                            class="comment-title font-bold text-xs mb-1 text-gray-500 dark:text-gray-400"
+                          >
                             {{ new Date(comment.created_at).toLocaleDateString() }}
                           </div>
 
-                          <div class="comment-comment">
+                          <div class="comment-comment text-sm break-words">
                             <span v-if="comment.warning" class="comment-warning-label font-bold"
                               >{{ $t('warning') }}: </span
                             >{{ comment.comment }}
@@ -442,24 +451,29 @@ const cancelEditComment = () => {
                               comment.resolved_at &&
                               new Date(comment.resolved_at).toLocaleDateString() !== '1.1.1'
                             "
+                            class="text-xs mt-1 text-gray-500 dark:text-gray-400"
                           >
                             <label class="pr-2 font-bold">{{ $t('Resolved at') }}:</label>
                             <span>{{ new Date(comment.resolved_at).toLocaleDateString() }}</span>
                           </div>
                         </div>
-                        <div class="comment-actions flex flex-col">
+                        <div class="comment-actions flex flex-row items-center ml-2 space-x-2">
                           <button
-                            class="py-2 px-4 rounded-full customcolor"
-                            @click="editComment(comment)"
+                            type="button"
+                            class="customcolor hover:text-blue-800 p-2"
+                            :title="$t('edit')"
+                            @click.prevent="editComment(comment)"
                           >
-                            {{ $t('edit') }}
+                            <font-awesome-icon :icon="faPen" />
                           </button>
                           <button
                             id="delete-vendor-comment"
-                            class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
-                            @click="store.deleteVendorComment(updatedVendor.ID, comment.id)"
+                            type="button"
+                            class="text-red-600 hover:text-red-800 p-2"
+                            :title="$t('delete')"
+                            @click.prevent="store.deleteVendorComment(updatedVendor.ID, comment.id)"
                           >
-                            {{ $t('delete') }}
+                            <font-awesome-icon :icon="faTrash" />
                           </button>
                         </div>
                       </div>
@@ -486,30 +500,41 @@ const cancelEditComment = () => {
                         v-for="location in vendorLocations"
                         :key="'location_' + location.id"
                         v-key="'loc_' + location.id"
-                        class="location flex justify-between"
+                        class="location flex justify-between border border-gray-200 dark:border-gray-600 rounded p-2 mb-2 bg-gray-50 dark:bg-gray-800"
                       >
-                        <div class="location-infos">
-                          <div class="location-title font-bold">{{ location.name }}</div>
-                          <div class="location-address">
+                        <div class="location-infos w-full">
+                          <div class="location-title font-bold text-gray-700 dark:text-gray-200">
+                            {{ location.name }}
+                          </div>
+                          <div class="location-address text-sm text-gray-600 dark:text-gray-400">
                             {{ location.address }} {{ location.zip }}
                           </div>
-                          <div v-if="location.working_time">
+                          <div
+                            v-if="location.working_time"
+                            class="text-xs mt-1 text-gray-500 dark:text-gray-400"
+                          >
                             <label class="pr-2 font-bold">{{ $t('workingTime') }}:</label>
                             <span>{{ location.working_time }}</span>
                           </div>
                         </div>
-                        <div class="location-actions flex flex-col">
+                        <div class="location-actions flex flex-row items-center space-x-2 ml-2">
                           <button
-                            class="py-2 px-4 rounded-full customcolor"
-                            @click="editLocation(location)"
+                            type="button"
+                            class="customcolor hover:text-blue-800 p-2"
+                            :title="$t('edit')"
+                            @click.prevent="editLocation(location)"
                           >
-                            {{ $t('edit') }}
+                            <font-awesome-icon :icon="faPen" />
                           </button>
                           <button
-                            class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
-                            @click="store.deleteVendorLocation(updatedVendor.ID, location.id)"
+                            type="button"
+                            class="text-red-600 hover:text-red-800 p-2"
+                            :title="$t('delete')"
+                            @click.prevent="
+                              store.deleteVendorLocation(updatedVendor.ID, location.id)
+                            "
                           >
-                            {{ $t('delete') }}
+                            <font-awesome-icon :icon="faTrash" />
                           </button>
                         </div>
                       </div>
@@ -651,13 +676,5 @@ td {
 .locations {
   display: flex;
   flex-direction: column;
-}
-.location {
-  padding: 10px;
-  display: fle;
-}
-/* even odd styling for locations */
-.location:nth-child(even) {
-  background-color: #f2f2f2;
 }
 </style>
