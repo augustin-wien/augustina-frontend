@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, defineExpose, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useSettingsStore, type Settings } from '@/stores/settings'
 
 const props = defineProps<{

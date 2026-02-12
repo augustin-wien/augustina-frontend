@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineEmits, defineExpose, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import { set } from '@vueuse/core'
 
