@@ -42,7 +42,7 @@ const onDateUpdate = (value: Date[]) => {
   if (value && value[0] && value[1]) {
     startDate.value = value[0]
     endDate.value = value[1]
-    store.getPayments(startDate.value, endDate.value, vendorFilter.value)
+    store.getPayments(startDate.value, endDate.value, `vendor=${vendorFilter.value}`)
   }
 }
 
