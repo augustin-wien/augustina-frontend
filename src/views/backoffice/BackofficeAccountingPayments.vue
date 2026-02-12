@@ -9,7 +9,9 @@ import { useRoute } from 'vue-router'
 import { vendorsStore } from '@/stores/vendor'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { useSettingsStore } from '@/stores/settings'
+import { useI18n } from 'vue-i18n'
 
+const { locale } = useI18n()
 const settingsStore = useSettingsStore()
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
@@ -36,14 +38,12 @@ const route = useRoute()
 
 const vendorFilter = computed(() => (route.query.vendor ? (route.query.vendor as string) : ''))
 
-const onRangeStart = (value: Date) => {
-  startDate.value = value // Update the startDate variable
-  store.getPayments(startDate.value, endDate.value, vendorFilter.value)
-}
-
-const onRangeEnd = (value: Date) => {
-  endDate.value = value // Update the endDate variable
-  store.getPayments(startDate.value, endDate.value, vendorFilter.value)
+const onDateUpdate = (value: Date[]) => {
+  if (value && value[0] && value[1]) {
+    startDate.value = value[0]
+    endDate.value = value[1]
+    store.getPayments(startDate.value, endDate.value, vendorFilter.value)
+  }
 }
 
 const formatTime = (time: string) => {
@@ -145,8 +145,8 @@ const exportTable = () => {
               :enable-time-picker="false"
               :placeholder="$t('chooseDateRange')"
               class="max-w-md"
-              @range-start="onRangeStart"
-              @range-end="onRangeEnd"
+              :locale="locale"
+              @update:model-value="onDateUpdate"
             />
           </span>
         </div>
