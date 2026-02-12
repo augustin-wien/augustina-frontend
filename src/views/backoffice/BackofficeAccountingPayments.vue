@@ -83,7 +83,7 @@ const authenticated = computed(() => keycloakStore.authenticated)
 onMounted(() => {
   if (authenticated.value) {
     itemsStore.getItemsBackoffice().then(() => {
-      store.getPayments(startDate.value, endDate.value, vendorFilter.value)
+      store.getPayments(startDate.value, endDate.value, `vendor=${vendorFilter.value}`)
     })
 
     // ensure vendors loaded so we can link to profiles
@@ -93,7 +93,7 @@ onMounted(() => {
   } else {
     watch(authenticated, () => {
       itemsStore.getItemsBackoffice().then(() => {
-        store.getPayments(startDate.value, endDate.value, vendorFilter.value)
+        store.getPayments(startDate.value, endDate.value, `vendor=${vendorFilter.value}`)
       })
     })
   }
