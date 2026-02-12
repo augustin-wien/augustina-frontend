@@ -99,19 +99,25 @@ const emit = defineEmits(['close'])
                 </h2>
               </div>
 
-              <div v-if="vendorComments && vendorComments.length > 0">
+              <div
+                v-if="vendorComments && vendorComments.length > 0"
+                class="max-h-64 overflow-y-auto pr-1"
+              >
                 <div
                   v-for="comment in vendorComments"
                   :key="'comment_' + comment.id"
-                  v-key="comment.id"
-                  class="comment flex flex-row justify-between"
+                  class="comment flex flex-row justify-between border border-gray-200 dark:border-gray-600 rounded p-2 mb-2 bg-gray-50 dark:bg-gray-800"
                 >
-                  <div :class="'comment-infos' + (comment.warning ? ' text-red-500' : '')">
-                    <div class="comment-title font-bold font-small">
+                  <div
+                    :class="
+                      'comment-infos w-full' + (comment.warning ? ' text-red-600 dark:text-red-400' : '')
+                    "
+                  >
+                    <div class="comment-title font-bold text-xs mb-1 text-gray-500 dark:text-gray-400">
                       {{ new Date(comment.created_at).toLocaleDateString() }}
                     </div>
 
-                    <div class="comment-comment">
+                    <div class="comment-comment text-sm break-words">
                       <span v-if="comment.warning" class="comment-warning-label font-bold"
                         >{{ $t('warning') }}: </span
                       >{{ comment.comment }}
@@ -121,6 +127,7 @@ const emit = defineEmits(['close'])
                         comment.resolved_at &&
                         new Date(comment.resolved_at).toLocaleDateString() !== '1.1.1'
                       "
+                      class="text-xs mt-1 text-gray-500 dark:text-gray-400"
                     >
                       <label class="pr-2 font-bold">{{ $t('Resolved at') }}:</label>
                       <span>{{ new Date(comment.resolved_at).toLocaleDateString() }}</span>
