@@ -110,10 +110,13 @@ const emit = defineEmits(['close'])
                 >
                   <div
                     :class="
-                      'comment-infos w-full' + (comment.warning ? ' text-red-600 dark:text-red-400' : '')
+                      'comment-infos w-full' +
+                      (comment.warning ? ' text-red-600 dark:text-red-400' : '')
                     "
                   >
-                    <div class="comment-title font-bold text-xs mb-1 text-gray-500 dark:text-gray-400">
+                    <div
+                      class="comment-title font-bold text-xs mb-1 text-gray-500 dark:text-gray-400"
+                    >
                       {{ new Date(comment.created_at).toLocaleDateString() }}
                     </div>
 

@@ -530,7 +530,9 @@ const cancelEditComment = () => {
                             type="button"
                             class="text-red-600 hover:text-red-800 p-2"
                             :title="$t('delete')"
-                            @click.prevent="store.deleteVendorLocation(updatedVendor.ID, location.id)"
+                            @click.prevent="
+                              store.deleteVendorLocation(updatedVendor.ID, location.id)
+                            "
                           >
                             <font-awesome-icon :icon="faTrash" />
                           </button>
