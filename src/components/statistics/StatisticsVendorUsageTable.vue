@@ -73,6 +73,8 @@ const exportTable = () => {
         </tr>
       </tbody>
     </table>
-    <p v-if="data" class="text-sm text-gray-600 mt-2">Gesamtanzahl Verkäufer: {{ data.TotalVendors }}</p>
+    <p v-if="data" class="text-sm text-gray-600 mt-2">
+      Gesamtanzahl Verkäufer: {{ data.TotalVendors }}
+    </p>
   </div>
 </template>
