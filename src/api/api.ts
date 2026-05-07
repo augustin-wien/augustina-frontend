@@ -21,7 +21,8 @@ import {
   STYLES_URL,
   MAIL_TEMPLATES_API,
   BASE_URL,
-  ORDERS_UNVERIFIED_API_URL
+  ORDERS_UNVERIFIED_API_URL,
+  VENDOR_STATISTICS_API_URL
 } from './endpoints'
 
 export const apiInstance = axios.create({
@@ -256,6 +257,12 @@ export async function fetchStatistics(startDate: Date, endDate: Date, filter: st
     `${PAYMENT_STATISTICS_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}${
       filter ? '&' + filter : ''
     }`
+  )
+}
+
+export async function fetchVendorUsageStatistics(startDate: Date, endDate: Date) {
+  return apiInstance.get(
+    `${VENDOR_STATISTICS_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
   )
 }
 

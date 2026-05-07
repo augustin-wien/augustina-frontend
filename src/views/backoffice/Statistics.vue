@@ -1,16 +1,22 @@
 <script lang="ts" setup>
+import StatisticsAmountChart from '@/components/statistics/StatisticsAmountChart.vue'
+import StatisticsAmountTable from '@/components/statistics/StatisticsAmountTable.vue'
+import StatisticsQuantityChart from '@/components/statistics/StatisticsQuantityChart.vue'
+import StatisticsQuantityTable from '@/components/statistics/StatisticsQuantityTable.vue'
+import StatisticsVendorUsageChart from '@/components/statistics/StatisticsVendorUsageChart.vue'
+import StatisticsVendorUsageTable from '@/components/statistics/StatisticsVendorUsageTable.vue'
 import { useItemsStore } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
 import {
   useStatisticsStore,
   type StatisticsItem,
-  type StatisticsItemMinimal
+  type StatisticsItemMinimal,
+  type VendorUsageStatistics
 } from '@/stores/statistics'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, onMounted, ref } from 'vue'
 import { type Statistics } from '@/stores/statistics'
-import Chart from 'chart.js/auto'
 
 const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
@@ -31,37 +37,28 @@ const date = ref<Array<Date>>([startDate.value, endDate.value])
 const onRangeStart = (value: Date) => {
   startDate.value = value
 
-  store.getPayments(startDate.value, endDate.value).then(() => {
-    createCharts()
-  })
+  if (startDate.value && endDate.value) {
+    loadStatistics()
+  }
 }
 
 const onRangeEnd = (value: Date) => {
   endDate.value = value
 
-  store.getPayments(startDate.value, endDate.value).then(() => {
-    createCharts()
-  })
+  if (startDate.value && endDate.value) {
+    loadStatistics()
+  }
 }
 
 const authenticated = computed(() => keycloakStore.authenticated)
+const viewMode = ref<'chart' | 'table' | 'both'>('chart')
+const showCharts = computed(() => viewMode.value === 'chart' || viewMode.value === 'both')
+const showTable = computed(() => viewMode.value === 'table' || viewMode.value === 'both')
 
-let quantityChart: Chart
-let amountChart: Chart
+const statisticsData = computed(() => store.statisticsList ?? [])
 
-const createCharts = () => {
-  if (quantityChart) {
-    quantityChart.destroy()
-  }
-
-  if (amountChart) {
-    amountChart.destroy()
-  }
-
-  const statisticsData = store.statisticsList
-  const itemsArray = statisticsData !== null ? statisticsData : []
-
-  let quantityData = itemsArray.map(
+const quantityData = computed<StatisticsItemMinimal[]>(() => {
+  const data = statisticsData.value.map(
     (item: StatisticsItem) =>
       ({
         id: item.ID,
@@ -70,110 +67,34 @@ const createCharts = () => {
       }) as StatisticsItemMinimal
   )
 
-  // sort by name and exclude transactionCosts
-  quantityData = quantityData.sort(
-    (a: StatisticsItemMinimal, b: StatisticsItemMinimal) => b.value - a.value
-  )
+  return data
+    .filter((item: StatisticsItemMinimal) => item.name !== 'transactionCosts')
+    .sort((a: StatisticsItemMinimal, b: StatisticsItemMinimal) => b.value - a.value)
+})
 
-  quantityData = quantityData.filter(
-    (item: StatisticsItemMinimal) => item.name != 'transactionCosts'
-  )
-
-  const amountData = itemsArray.map((item: Statistics) => ({
+const amountData = computed<StatisticsItemMinimal[]>(() => {
+  const data = statisticsData.value.map((item: Statistics) => ({
     id: item.ID,
-    value: item.SumAmount / 100, // convert to euro
+    value: item.SumAmount / 100,
     name: item.Name
   }))
 
-  // Create the quantity chart
-  const quantityChartElement = document.getElementById('quantity-chart')
+  return data.sort((a: StatisticsItemMinimal, b: StatisticsItemMinimal) => b.value - a.value)
+})
 
-  const quantityChartCtx = quantityChartElement
-    ? (quantityChartElement as HTMLCanvasElement).getContext('2d')
-    : null
+const vendorUsageData = computed<VendorUsageStatistics | null>(() => store.vendorUsageStats)
 
-  if (quantityChartCtx) {
-    quantityChart = new Chart(quantityChartCtx, {
-      type: 'bar',
-      data: {
-        labels: quantityData.map((item: { name: string }) => item.name),
-        datasets: [
-          {
-            label: 'Menge',
-            data: quantityData.map((item: { value: number }) => item.value),
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Anzahl verkaufter Produkte',
-              padding: {
-                top: 10,
-                bottom: 10
-              }
-            }
-          }
-        }
-      }
-    })
-  }
-
-  // Create the amount chart
-  const amountChartElement = document.getElementById('amount-chart')
-
-  const amountChartCtx = amountChartElement
-    ? (amountChartElement as HTMLCanvasElement).getContext('2d')
-    : null
-
-  if (amountChartCtx) {
-    amountChart = new Chart(amountChartCtx, {
-      type: 'bar',
-      data: {
-        labels: amountData.map((item: { name: string }) => item.name),
-        datasets: [
-          {
-            label: 'Geldbetrag',
-            data: amountData.map((item: { value: number }) => item.value),
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-          }
-        ]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: 'Eingenommener Betrag in €',
-              padding: {
-                top: 10,
-                bottom: 10
-              }
-            }
-          }
-        }
-      }
-    })
-  }
+const loadStatistics = async () => {
+  await Promise.all([
+    store.getPayments(startDate.value, endDate.value),
+    store.getVendorUsage(startDate.value, endDate.value)
+  ])
 }
 
 onMounted(() => {
-  // Fetch statistics data
+  // Fetch items data, but don't load statistics until dates are explicitly selected
   if (authenticated.value) {
-    itemsStore.getItemsBackoffice().then(() => {
-      store.getPayments(startDate.value, endDate.value).then(() => {
-        createCharts()
-      })
-    })
+    itemsStore.getItemsBackoffice()
   }
 })
 </script>
@@ -196,14 +117,53 @@ onMounted(() => {
             />
           </div>
         </div>
+        <div class="flex gap-2">
+          <button
+            class="py-2 px-3 rounded border"
+            :class="viewMode === 'chart' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
+            @click="viewMode = 'chart'"
+          >
+            Diagramm
+          </button>
+          <button
+            class="py-2 px-3 rounded border"
+            :class="viewMode === 'table' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
+            @click="viewMode = 'table'"
+          >
+            Tabelle
+          </button>
+          <button
+            class="py-2 px-3 rounded border"
+            :class="viewMode === 'both' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
+            @click="viewMode = 'both'"
+          >
+            Beides
+          </button>
+        </div>
       </div>
     </template>
     <template #main>
       <div class="main">
         <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className=" space-y-3 space-x-3">
-            <canvas id="quantity-chart" width="300" height="150"></canvas>
-            <canvas id="amount-chart" width="300" height="150"></canvas>
+          <div v-if="showCharts" class="space-y-6">
+            <div>
+              <h2 class="font-semibold mb-2">Verkaufte Menge pro Produkt</h2>
+              <StatisticsQuantityChart :data="quantityData" />
+            </div>
+            <div>
+              <h2 class="font-semibold mb-2">Eingenommener Betrag pro Produkt (€)</h2>
+              <StatisticsAmountChart :data="amountData" />
+            </div>
+            <div>
+              <h2 class="font-semibold mb-2">Anteil nutzender Verkäufer</h2>
+              <StatisticsVendorUsageChart :data="vendorUsageData" />
+            </div>
+          </div>
+
+          <div v-if="showTable" class="space-y-8 mt-2">
+            <StatisticsQuantityTable :data="quantityData" />
+            <StatisticsAmountTable :data="amountData" />
+            <StatisticsVendorUsageTable :data="vendorUsageData" />
           </div>
         </div>
       </div>
