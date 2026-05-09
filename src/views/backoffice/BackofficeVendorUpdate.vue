@@ -222,8 +222,55 @@ const cancelEditComment = () => {
   showCommentsDialog.value = false
   selectedComment.value = null
 }
-</script>
 
+const formatWorkingTime = (workingTime: any) => {
+  if (!workingTime) return t('noLocations')
+
+  if (typeof workingTime === 'string') {
+    switch (workingTime.toLowerCase()) {
+      case 'v':
+        return `${t('everyday')}: 08:00 - 12:00`
+      case 'n':
+        return `${t('everyday')}: 13:00 - 17:00`
+      case 'g':
+        return t('open 24/7')
+      default:
+        return workingTime
+    }
+  }
+
+  const mode = workingTime.mode
+  if (mode === 'whole_week') return t('open 24/7')
+
+  if (mode === 'everyday' && workingTime.everyday) {
+    const times = workingTime.everyday
+    if (times.length === 0) return t('closed')
+    if (times[0]?.full_day) return t('full day')
+    return `${t('everyday')}: ${times
+      .map((range: any) => (range.full_day ? t('full day') : `${range.from}-${range.to}`))
+      .join(', ')}`
+  }
+
+  if (mode === 'by_day' && workingTime.week_days) {
+    const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+    return days
+      .filter((day) => workingTime.week_days[day])
+      .map((day) => {
+        const ranges = workingTime.week_days[day] || []
+        if (ranges.length === 0) {
+          return `${t(day)}: ${t('closed')}`
+        }
+        const formattedRanges = ranges
+          .map((range: any) => (range.full_day ? t('full day') : `${range.from}-${range.to}`))
+          .join(', ')
+        return `${t(day)}: ${formattedRanges}`
+      })
+      .join(' · ')
+  }
+
+  return mode || t('workingTime')
+}
+</script>
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
@@ -514,7 +561,7 @@ const cancelEditComment = () => {
                             class="text-xs mt-1 text-gray-500 dark:text-gray-400"
                           >
                             <label class="pr-2 font-bold">{{ $t('workingTime') }}:</label>
-                            <span>{{ location.working_time }}</span>
+                            <span>{{ formatWorkingTime(location.working_time) }}</span>
                           </div>
                         </div>
                         <div class="location-actions flex flex-row items-center space-x-2 ml-2">

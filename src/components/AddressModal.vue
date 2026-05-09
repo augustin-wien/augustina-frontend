@@ -1,14 +1,38 @@
 <script setup lang="ts">
 import type { VendorLocation } from '@/stores/vendor'
-import { onMounted, ref, type Ref } from 'vue'
+import { computed, onMounted, ref, type Ref } from 'vue'
 import VendorMapView from '@/components/VendorMapView.vue'
 import { useSettingsStore } from '@/stores/settings'
 
 const settingsStore = useSettingsStore()
-
 const props = defineProps(['vendor', 'locations'])
 const updatedVendor = ref(props.vendor)
 const emit = defineEmits(['close', 'update'])
+
+const createDefaultWorkingTime = () => ({
+  mode: 'everyday',
+  everyday: [{ from: '09:00', to: '17:00' }]
+})
+
+const normalizeWorkingTime = (workingTime: VendorLocation['working_time']) => {
+  if (!workingTime || typeof workingTime === 'string') {
+    switch (workingTime) {
+      case 'G':
+      case 'g':
+        return { mode: 'whole_week', whole_week: true }
+      case 'V':
+      case 'v':
+        return { mode: 'everyday', everyday: [{ from: '08:00', to: '12:00' }] }
+      case 'N':
+      case 'n':
+        return { mode: 'everyday', everyday: [{ from: '13:00', to: '17:00' }] }
+      default:
+        return createDefaultWorkingTime()
+    }
+  }
+
+  return workingTime
+}
 
 const newAddress: Ref<VendorLocation> = ref({
   id: 0,
@@ -17,17 +41,122 @@ const newAddress: Ref<VendorLocation> = ref({
   zip: '',
   longitude: settingsStore.settings?.MapCenterLong || 0.0,
   latitude: settingsStore.settings?.MapCenterLat || 0.0,
-  working_time: 'G'
+  working_time: createDefaultWorkingTime()
 })
 
 onMounted(() => {
   if (props.locations && props.locations.length > 0) {
-    newAddress.value = props.locations[0]
+    newAddress.value = {
+      ...props.locations[0],
+      working_time: normalizeWorkingTime(props.locations[0].working_time)
+    }
   }
 })
 
 const updateAddress = () => {
   emit('update', newAddress.value)
+}
+
+const workingTimeMode = computed({
+  get: () => {
+    const workingTime = newAddress.value.working_time
+
+    if (!workingTime || typeof workingTime === 'string') {
+      return 'everyday'
+    }
+
+    return workingTime.mode || 'everyday'
+  },
+  set: (value: string) => {
+    if (!newAddress.value.working_time || typeof newAddress.value.working_time === 'string') {
+      newAddress.value.working_time = createDefaultWorkingTime()
+    }
+
+    switch (value) {
+      case 'everyday':
+        newAddress.value.working_time = {
+          mode: 'everyday',
+          everyday: [{ from: '09:00', to: '17:00' }]
+        }
+
+        break
+      case 'by_day':
+        newAddress.value.working_time = {
+          mode: 'by_day',
+          week_days: {
+            mon: [{ from: '09:00', to: '17:00' }],
+            tue: [{ from: '09:00', to: '17:00' }],
+            wed: [{ from: '09:00', to: '17:00' }],
+            thu: [{ from: '09:00', to: '17:00' }],
+            fri: [{ from: '09:00', to: '17:00' }],
+            sat: [{ full_day: true }],
+            sun: [{ full_day: true }]
+          }
+        }
+
+        break
+      case 'whole_week':
+        newAddress.value.working_time = {
+          mode: 'whole_week',
+          whole_week: true
+        }
+
+        break
+    }
+  }
+})
+
+const dayOptions = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const
+
+const everydayRanges = computed(() => {
+  const workingTime = newAddress.value.working_time
+
+  if (!workingTime || typeof workingTime === 'string' || !workingTime.everyday) {
+    return []
+  }
+
+  return workingTime.everyday
+})
+
+const everydayClosed = computed(() => everydayRanges.value.length === 0)
+
+const getDayRanges = (day: (typeof dayOptions)[number]) => {
+  const workingTime = newAddress.value.working_time
+
+  if (!workingTime || typeof workingTime === 'string' || !workingTime.week_days) {
+    return []
+  }
+
+  return Array.isArray(workingTime.week_days[day]) ? workingTime.week_days[day] : []
+}
+
+const setEverydayClosed = (closed: boolean) => {
+  if (!newAddress.value.working_time || typeof newAddress.value.working_time === 'string') {
+    newAddress.value.working_time = createDefaultWorkingTime()
+  }
+
+  newAddress.value.working_time.mode = 'everyday'
+  newAddress.value.working_time.everyday = closed ? [] : [{ from: '09:00', to: '17:00' }]
+  newAddress.value.working_time.week_days = undefined
+  newAddress.value.working_time.whole_week = undefined
+}
+
+const isDayClosed = (day: (typeof dayOptions)[number]) => getDayRanges(day).length === 0
+
+const setDayClosed = (day: (typeof dayOptions)[number], closed: boolean) => {
+  if (!newAddress.value.working_time || typeof newAddress.value.working_time === 'string') {
+    newAddress.value.working_time = createDefaultWorkingTime()
+  }
+
+  newAddress.value.working_time.mode = 'by_day'
+
+  if (!newAddress.value.working_time.week_days) {
+    newAddress.value.working_time.week_days = {}
+  }
+
+  newAddress.value.working_time.week_days[day] = closed ? [] : [{ from: '09:00', to: '17:00' }]
+  newAddress.value.working_time.everyday = undefined
+  newAddress.value.working_time.whole_week = undefined
 }
 
 const updateLocation = (event: any) => {
@@ -43,7 +172,6 @@ const editMarker = (newLocation: any) => {
 </script>
 
 <template>
-  <!-- Adress modal -->
   <div
     v-if="updatedVendor"
     id="addressModal"
@@ -52,9 +180,7 @@ const editMarker = (newLocation: any) => {
     class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden flex items-center justify-center overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
   >
     <div class="relative w-full max-h-full">
-      <!-- Modal content -->
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <!-- Modal header -->
         <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
           <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
             {{ updatedVendor.LicenseID }} {{ updatedVendor.FirstName }} {{ $t('address') }}
@@ -84,14 +210,14 @@ const editMarker = (newLocation: any) => {
             <span class="sr-only">Close modal</span>
           </button>
         </div>
-        <!-- Modal body -->
+
         <div class="modal-body">
           <form class="w-full" @submit.prevent="updateAddress">
             <div class="p-4">
               <div class="mb-2">
-                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">{{
-                  $t('location name')
-                }}</label>
+                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">
+                  {{ $t('location name') }}
+                </label>
                 <input
                   id="name"
                   v-model="newAddress.name"
@@ -99,9 +225,10 @@ const editMarker = (newLocation: any) => {
                   type="text"
                 />
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress"
-                >{{ $t('address') }}:</label
-              >
+
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="adress">
+                {{ $t('address') }}:
+              </label>
               <div class="flex flex-row">
                 <input
                   id="adress"
@@ -110,9 +237,10 @@ const editMarker = (newLocation: any) => {
                   type="text"
                 />
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz"
-                >{{ $t('postCode') }}:</label
-              >
+
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="plz">
+                {{ $t('postCode') }}:
+              </label>
               <div class="flex flex-row">
                 <input
                   id="plz"
@@ -122,45 +250,135 @@ const editMarker = (newLocation: any) => {
                 />
               </div>
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                >{{ $t('longitude') }}:</label
-              >
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location-long">
+                {{ $t('longitude') }}:
+              </label>
               <div class="flex flex-row">
                 <input
-                  id="location"
+                  id="location-long"
                   v-model.number="newAddress.longitude"
                   class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="text"
                 />
               </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location"
-                >{{ $t('latitude') }}:</label
-              >
+
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="location-lat">
+                {{ $t('latitude') }}:
+              </label>
               <div class="flex flex-row">
                 <input
-                  id="location"
+                  id="location-lat"
                   v-model.number="newAddress.latitude"
                   class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="text"
                 />
               </div>
+
               <div class="mb-2">
-                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                  >{{ $t('workingTime') }}:</label
-                >
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime">
+                  {{ $t('workingTime') }}:
+                </label>
                 <div class="flex flex-row">
                   <select
-                    v-model="newAddress.working_time"
+                    id="workingTime"
+                    v-model="workingTimeMode"
                     class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   >
-                    <option value="G" selected>{{ $t('(G) all day') }}</option>
-                    <option value="V">{{ $t('(v) mornings') }}</option>
-                    <option value="N">{{ $t('(N) afternoons') }}</option>
+                    <option value="everyday">{{ $t('everyday') }}</option>
+                    <option value="by_day">{{ $t('by day') }}</option>
+                    <option value="whole_week">{{ $t('whole week') }}</option>
                   </select>
                 </div>
               </div>
+
+              <div v-if="workingTimeMode === 'everyday'" class="mb-4 p-4 bg-gray-50 rounded">
+                <h4 class="font-bold text-sm mb-2">{{ $t('everyday') }}</h4>
+                <label class="mb-3 flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <input
+                    type="checkbox"
+                    class="rounded"
+                    :checked="everydayClosed"
+                    @change="setEverydayClosed(($event.target as HTMLInputElement).checked)"
+                  />
+                  <span>{{ $t('closed') }}</span>
+                </label>
+                <div class="space-y-2">
+                  <div
+v-for="(range, idx) in everydayRanges"
+                    v-if="!everydayClosed"
+                    :key="'everyday_' + idx"
+                    class="flex gap-2 items-center"
+                  >
+                    <label class="flex items-center">
+                      <input v-model="range.full_day" type="checkbox" class="rounded" />
+                      <span class="ml-2 text-sm">{{ $t('full day') }}</span>
+                    </label>
+                    <input
+                      v-if="!range.full_day"
+                      v-model="range.from"
+                      type="time"
+                      class="border rounded px-2 py-1"
+                      placeholder="09:00"
+                    />
+                    <span v-if="!range.full_day" class="text-sm">-</span>
+                    <input
+                      v-if="!range.full_day"
+                      v-model="range.to"
+                      type="time"
+                      class="border rounded px-2 py-1"
+                      placeholder="17:00"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="workingTimeMode === 'by_day'" class="mb-4 p-4 bg-gray-50 rounded">
+                <h4 class="font-bold text-sm mb-2">{{ $t('by day') }}</h4>
+                <div class="space-y-3">
+                  <div v-for="day in dayOptions" :key="'day_' + day">
+                    <div class="flex items-center justify-between gap-3">
+                      <label class="font-semibold text-sm capitalize">{{ $t(day) }}</label>
+                      <label class="flex items-center gap-2 text-sm">
+                        <input
+                          type="checkbox"
+                          class="rounded"
+                          :checked="isDayClosed(day)"
+                          @change="setDayClosed(day, ($event.target as HTMLInputElement).checked)"
+                        />
+                        <span>{{ $t('closed') }}</span>
+                      </label>
+                    </div>
+                    <div v-if="!isDayClosed(day)" class="flex gap-2 items-center mt-2">
+                      <div v-for="(range, idx) in getDayRanges(day)" :key="'range_' + idx" class="flex gap-2 items-center">
+                        <label class="flex items-center">
+                          <input v-model="range.full_day" type="checkbox" class="rounded" />
+                          <span class="ml-2 text-sm">{{ $t('full day') }}</span>
+                        </label>
+                        <input
+                          v-if="!range.full_day"
+                          v-model="range.from"
+                          type="time"
+                          class="border rounded px-2 py-1"
+                        />
+                        <span v-if="!range.full_day" class="text-sm">-</span>
+                        <input
+                          v-if="!range.full_day"
+                          v-model="range.to"
+                          type="time"
+                          class="border rounded px-2 py-1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="workingTimeMode === 'whole_week'" class="mb-4 p-4 bg-gray-50 rounded">
+                <p class="text-sm text-gray-600">{{ $t('open 24/7') }}</p>
+              </div>
             </div>
           </form>
+
           <VendorMapView
             v-if="newAddress && newAddress.latitude && newAddress.longitude"
             :enable-search="1"
@@ -171,7 +389,6 @@ const editMarker = (newLocation: any) => {
           />
         </div>
 
-        <!-- Modal footer -->
         <div
           class="flex justify-between w-full p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
         >

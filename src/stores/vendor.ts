@@ -120,7 +120,12 @@ export interface VendorLocation {
   longitude: number
   latitude: number
   zip: string
-  working_time: string
+  working_time: string | {
+    mode?: string
+    everyday?: Array<{ from?: string; to?: string; full_day?: boolean }>
+    week_days?: { [key: string]: Array<{ from?: string; to?: string; full_day?: boolean }> }
+    whole_week?: boolean
+  }
 }
 
 export interface VendorComment {
