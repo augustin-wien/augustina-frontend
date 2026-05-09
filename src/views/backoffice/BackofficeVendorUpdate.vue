@@ -257,12 +257,15 @@ const formatWorkingTime = (workingTime: any) => {
       .filter((day) => workingTime.week_days[day])
       .map((day) => {
         const ranges = workingTime.week_days[day] || []
+
         if (ranges.length === 0) {
           return `${t(day)}: ${t('closed')}`
         }
+
         const formattedRanges = ranges
           .map((range: any) => (range.full_day ? t('full day') : `${range.from}-${range.to}`))
           .join(', ')
+
         return `${t(day)}: ${formattedRanges}`
       })
       .join(' · ')
@@ -271,6 +274,7 @@ const formatWorkingTime = (workingTime: any) => {
   return mode || t('workingTime')
 }
 </script>
+
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
