@@ -26,7 +26,8 @@ type WorkingTimeValue =
       whole_week?: boolean
     }
 
-const formatDayLabel = (day: string) => t(day as 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')
+const formatDayLabel = (day: string) =>
+  t(day as 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun')
 
 const formatTimeRange = (range: WorkingTimeRange) => {
   if (range?.full_day) {
@@ -234,7 +235,9 @@ const emit = defineEmits(['close'])
                         {{ location.address }}, {{ location.zip }}
                       </div>
                     </div>
-                    <span class="rounded-full bg-slate-900 px-2 py-1 text-[11px] font-semibold text-white dark:bg-white dark:text-slate-900">
+                    <span
+                      class="rounded-full bg-slate-900 px-2 py-1 text-[11px] font-semibold text-white dark:bg-white dark:text-slate-900"
+                    >
                       {{ formatWorkingTimeMode(location.working_time) }}
                     </span>
                   </div>

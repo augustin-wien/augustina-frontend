@@ -309,25 +309,25 @@ const editMarker = (newLocation: any) => {
                       :key="'everyday_' + idx"
                       class="flex gap-2 items-center"
                     >
-                    <label class="flex items-center">
-                      <input v-model="range.full_day" type="checkbox" class="rounded" />
-                      <span class="ml-2 text-sm">{{ $t('full day') }}</span>
-                    </label>
-                    <input
-                      v-if="!range.full_day"
-                      v-model="range.from"
-                      type="time"
-                      class="border rounded px-2 py-1"
-                      placeholder="09:00"
-                    />
-                    <span v-if="!range.full_day" class="text-sm">-</span>
-                    <input
-                      v-if="!range.full_day"
-                      v-model="range.to"
-                      type="time"
-                      class="border rounded px-2 py-1"
-                      placeholder="17:00"
-                    />
+                      <label class="flex items-center">
+                        <input v-model="range.full_day" type="checkbox" class="rounded" />
+                        <span class="ml-2 text-sm">{{ $t('full day') }}</span>
+                      </label>
+                      <input
+                        v-if="!range.full_day"
+                        v-model="range.from"
+                        type="time"
+                        class="border rounded px-2 py-1"
+                        placeholder="09:00"
+                      />
+                      <span v-if="!range.full_day" class="text-sm">-</span>
+                      <input
+                        v-if="!range.full_day"
+                        v-model="range.to"
+                        type="time"
+                        class="border rounded px-2 py-1"
+                        placeholder="17:00"
+                      />
                     </div>
                   </template>
                 </div>
@@ -350,7 +350,11 @@ const editMarker = (newLocation: any) => {
                       </label>
                     </div>
                     <div v-if="!isDayClosed(day)" class="flex gap-2 items-center mt-2">
-                      <div v-for="(range, idx) in getDayRanges(day)" :key="'range_' + idx" class="flex gap-2 items-center">
+                      <div
+                        v-for="(range, idx) in getDayRanges(day)"
+                        :key="'range_' + idx"
+                        class="flex gap-2 items-center"
+                      >
                         <label class="flex items-center">
                           <input v-model="range.full_day" type="checkbox" class="rounded" />
                           <span class="ml-2 text-sm">{{ $t('full day') }}</span>
