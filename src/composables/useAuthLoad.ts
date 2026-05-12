@@ -9,5 +9,11 @@ import { useKeycloakStore } from '@/stores/keycloak'
 export function useAuthLoad(load: () => void | Promise<void>) {
   const keycloakStore = useKeycloakStore()
   const authenticated = computed(() => keycloakStore.authenticated)
-  watch(authenticated, (val) => { if (val) load() }, { immediate: true })
+  watch(
+    authenticated,
+    (val) => {
+      if (val) load()
+    },
+    { immediate: true }
+  )
 }

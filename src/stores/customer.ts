@@ -45,8 +45,8 @@ export const useCustomerStore = defineStore('customer', () => {
     try {
       const response = await fetchCustomers()
       customers.value = response.data
-    } catch (error) {
-      console.error('Error fetching customers:', error)
+    } catch {
+      // silently ignore; callers handle empty state
     }
   }
 
@@ -54,8 +54,8 @@ export const useCustomerStore = defineStore('customer', () => {
     try {
       const response = await getCustomer(id)
       customer.value = response.data
-    } catch (error) {
-      console.error('Error fetching customer:', error)
+    } catch {
+      // silently ignore
     }
   }
 
@@ -80,8 +80,7 @@ export const useCustomerStore = defineStore('customer', () => {
     try {
       const response = await fetchCustomerAbonements(customerId)
       abonements.value = response.data ?? []
-    } catch (error) {
-      console.error('Error fetching abonements:', error)
+    } catch {
       abonements.value = []
     }
   }
@@ -91,8 +90,8 @@ export const useCustomerStore = defineStore('customer', () => {
       const response = await fetchActiveAbonements()
       const items: Array<{ customer: Customer }> = response.data ?? []
       activeCustomerIds.value = new Set(items.map((entry) => entry.customer.id))
-    } catch (error) {
-      console.error('Error fetching active abonements:', error)
+    } catch {
+      // silently ignore
     }
   }
 

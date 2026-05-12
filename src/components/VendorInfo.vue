@@ -302,13 +302,17 @@ const emit = defineEmits(['close'])
           </router-link>
 
           <router-link :to="`/backoffice/userprofile/${vendor?.ID}/comments`">
-            <button class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor flex items-center">
+            <button
+              class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor flex items-center"
+            >
               {{ $t('comments') }}
             </button>
           </router-link>
 
           <router-link :to="`/backoffice/userprofile/${vendor?.ID}/update`">
-            <button class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor flex items-center">
+            <button
+              class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor flex items-center"
+            >
               {{ $t('change') }}
             </button>
           </router-link>

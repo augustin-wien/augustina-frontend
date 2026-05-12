@@ -81,6 +81,7 @@ useAuthLoad(() => {
   itemsStore.getItemsBackoffice().then(() => {
     store.getPayments(startDate.value, endDate.value, `vendor=${vendorFilter.value}`)
   })
+
   if (!vendorStore.vendors || vendorStore.vendors.length === 0) {
     vendorStore.getVendors()
   }

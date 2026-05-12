@@ -28,9 +28,11 @@ const vendorComments = computed(() => store.vendorComments)
 useAuthLoad(() => {
   if (!route?.params?.ID) return
   const vendorId = parseInt(route.params.ID.toString())
+
   store.getVendor(vendorId).then(() => {
     updatedVendor.value = store.vendor
   })
+
   store.getVendorLocations(vendorId)
   store.getVendorComments(vendorId)
 })
@@ -275,35 +277,81 @@ const formatWorkingTime = (workingTime: any) => {
               <div class="grid grid-cols-2 gap-x-4 gap-y-3 content-start">
                 <div>
                   <label class="field-label" for="firstName">{{ $t('firstName') }}:</label>
-                  <input id="firstName" v-model="updatedVendor.FirstName" class="field-input" type="text" required />
+                  <input
+                    id="firstName"
+                    v-model="updatedVendor.FirstName"
+                    class="field-input"
+                    type="text"
+                    required
+                  />
                 </div>
                 <div>
                   <label class="field-label" for="lastName">{{ $t('lastName') }}:</label>
-                  <input id="lastName" v-model="updatedVendor.LastName" class="field-input" type="text" required />
+                  <input
+                    id="lastName"
+                    v-model="updatedVendor.LastName"
+                    class="field-input"
+                    type="text"
+                    required
+                  />
                 </div>
                 <div>
                   <label class="field-label" for="email">{{ $t('E-Mail') }}:</label>
-                  <input id="email" v-model="updatedVendor.Email" class="field-input" type="email" required />
+                  <input
+                    id="email"
+                    v-model="updatedVendor.Email"
+                    class="field-input"
+                    type="email"
+                    required
+                  />
                 </div>
                 <div>
                   <label class="field-label" for="licenseID">{{ $t('licenseId') }}:</label>
-                  <input id="licenseID" v-model="updatedVendor.LicenseID" class="field-input" type="text" required />
+                  <input
+                    id="licenseID"
+                    v-model="updatedVendor.LicenseID"
+                    class="field-input"
+                    type="text"
+                    required
+                  />
                 </div>
                 <div>
                   <label class="field-label" for="telephone">{{ $t('telephone') }}:</label>
-                  <input id="telephone" v-model="updatedVendor.Telephone" class="field-input" type="text" />
+                  <input
+                    id="telephone"
+                    v-model="updatedVendor.Telephone"
+                    class="field-input"
+                    type="text"
+                  />
                 </div>
                 <div>
                   <label class="field-label" for="language">{{ $t('language') }}:</label>
-                  <input id="language" v-model="updatedVendor.Language" class="field-input" type="text" />
+                  <input
+                    id="language"
+                    v-model="updatedVendor.Language"
+                    class="field-input"
+                    type="text"
+                  />
                 </div>
                 <div>
-                  <label class="field-label" for="registrationDate">{{ $t('registrationDate') }}:</label>
-                  <input id="registrationDate" v-model="updatedVendor.RegistrationDate" class="field-input" type="text" />
+                  <label class="field-label" for="registrationDate"
+                    >{{ $t('registrationDate') }}:</label
+                  >
+                  <input
+                    id="registrationDate"
+                    v-model="updatedVendor.RegistrationDate"
+                    class="field-input"
+                    type="text"
+                  />
                 </div>
                 <div>
                   <label class="field-label" for="vendorSince">{{ $t('vendorSince') }}:</label>
-                  <input id="vendorSince" v-model="updatedVendor.VendorSince" class="field-input" type="text" />
+                  <input
+                    id="vendorSince"
+                    v-model="updatedVendor.VendorSince"
+                    class="field-input"
+                    type="text"
+                  />
                 </div>
                 <div>
                   <label class="field-label" for="isDisabled">{{ $t('deactivated') }}:</label>
@@ -313,22 +361,39 @@ const formatWorkingTime = (workingTime: any) => {
                   </select>
                 </div>
                 <div>
-                  <label class="field-label" for="hasSmartphone">{{ $t('Has a smartphone') }}:</label>
-                  <select id="hasSmartphone" v-model="updatedVendor.HasSmartphone" class="field-select">
+                  <label class="field-label" for="hasSmartphone"
+                    >{{ $t('Has a smartphone') }}:</label
+                  >
+                  <select
+                    id="hasSmartphone"
+                    v-model="updatedVendor.HasSmartphone"
+                    class="field-select"
+                  >
                     <option :value="true">{{ $t('yes') }}</option>
                     <option :value="false">{{ $t('no') }}</option>
                   </select>
                 </div>
                 <div>
                   <label class="field-label" for="bankAccount">{{ $t('bankAccount') }}:</label>
-                  <select id="bankAccount" v-model="updatedVendor.HasBankAccount" class="field-select">
+                  <select
+                    id="bankAccount"
+                    v-model="updatedVendor.HasBankAccount"
+                    class="field-select"
+                  >
                     <option :value="true">{{ $t('yes') }}</option>
                     <option :value="false">{{ $t('no') }}</option>
                   </select>
                 </div>
                 <div>
-                  <label class="field-label" for="verification">{{ $t('verificationLink') }}:</label>
-                  <input id="verification" v-model="updatedVendor.AccountProofUrl" class="field-input" type="url" />
+                  <label class="field-label" for="verification"
+                    >{{ $t('verificationLink') }}:</label
+                  >
+                  <input
+                    id="verification"
+                    v-model="updatedVendor.AccountProofUrl"
+                    class="field-input"
+                    type="url"
+                  />
                 </div>
                 <div class="col-span-2">
                   <label class="field-label" for="debt">{{ $t('debt') }}:</label>
@@ -367,11 +432,16 @@ const formatWorkingTime = (workingTime: any) => {
                     class="border border-gray-200 dark:border-gray-600 rounded p-2 bg-gray-50 dark:bg-gray-800 flex justify-between"
                   >
                     <div>
-                      <div class="font-bold text-gray-700 dark:text-gray-200">{{ location.name }}</div>
+                      <div class="font-bold text-gray-700 dark:text-gray-200">
+                        {{ location.name }}
+                      </div>
                       <div class="text-sm text-gray-600 dark:text-gray-400">
                         {{ location.address }} {{ location.zip }}
                       </div>
-                      <div v-if="location.working_time" class="text-xs mt-1 text-gray-500 dark:text-gray-400">
+                      <div
+                        v-if="location.working_time"
+                        class="text-xs mt-1 text-gray-500 dark:text-gray-400"
+                      >
                         <span class="font-bold pr-1">{{ $t('workingTime') }}:</span>
                         <span>{{ formatWorkingTime(location.working_time) }}</span>
                       </div>
@@ -436,7 +506,9 @@ const formatWorkingTime = (workingTime: any) => {
                         {{ comment.comment }}
                       </div>
                       <div
-                        v-if="comment.resolved_at && new Date(comment.resolved_at).getFullYear() > 1"
+                        v-if="
+                          comment.resolved_at && new Date(comment.resolved_at).getFullYear() > 1
+                        "
                         class="text-xs mt-1 text-gray-500 dark:text-gray-400"
                       >
                         <span class="font-bold pr-2">{{ $t('Resolved at') }}:</span>
@@ -464,7 +536,9 @@ const formatWorkingTime = (workingTime: any) => {
                     </div>
                   </div>
                 </div>
-                <p v-else class="text-sm text-gray-600 dark:text-gray-400">{{ $t('noComments') }}</p>
+                <p v-else class="text-sm text-gray-600 dark:text-gray-400">
+                  {{ $t('noComments') }}
+                </p>
               </div>
             </div>
 

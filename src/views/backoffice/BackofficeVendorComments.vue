@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { vendorsStore } from '@/stores/vendor'
 import type { VendorComment } from '@/stores/vendor'
 import { useAuthLoad } from '@/composables/useAuthLoad'
@@ -10,7 +9,6 @@ import CommentsModal from '@/components/CommentsModal.vue'
 import { faArrowLeft, faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-const { t } = useI18n()
 const route = useRoute()
 const store = vendorsStore()
 
@@ -37,6 +35,7 @@ const addNewComment = () => {
     resolved_at: null,
     vendorid: vendor.value?.ID || 0
   }
+
   isNewComment.value = true
   showCommentsDialog.value = true
 }

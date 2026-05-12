@@ -45,9 +45,11 @@ function showToast(type: string, message: string) {
 function addLicenseGroup() {
   if (!selectedLicenseGroup.value) return
   const groups = form.value.licensegroups ?? []
+
   if (!groups.includes(selectedLicenseGroup.value)) {
     form.value.licensegroups = [...groups, selectedLicenseGroup.value]
   }
+
   selectedLicenseGroup.value = ''
 }
 
@@ -59,11 +61,14 @@ useAuthLoad(async () => {
   const response = await fetchLicenseGroups()
   availableLicenseGroups.value = response.data ?? []
   await itemsStore.getItemsBackoffice()
+
   if (!isNew.value && customerId.value) {
     await store.getCustomerById(customerId.value)
+
     if (store.customer) {
       form.value = { ...store.customer }
     }
+
     await store.getAbonementsByCustomer(customerId.value)
   }
 })
@@ -85,6 +90,7 @@ async function save() {
 
 async function confirmDeleteCustomer() {
   if (!customerId.value) return
+
   try {
     await store.deleteCustomer(customerId.value)
     router.push('/backoffice/customers')
@@ -101,6 +107,7 @@ function openNewAbonement() {
     to_date: new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString().slice(0, 10),
     status: 'active'
   }
+
   showAbonementModal.value = true
 }
 
@@ -110,11 +117,13 @@ function openEditAbonement(a: Abonement) {
     from_date: a.from_date.slice(0, 10),
     to_date: a.to_date.slice(0, 10)
   }
+
   showAbonementModal.value = true
 }
 
 async function saveAbonement() {
   if (!editingAbonement.value || !customerId.value) return
+
   try {
     if (editingAbonement.value.id) {
       await store.updateAbonement(editingAbonement.value.id, editingAbonement.value)
@@ -123,6 +132,7 @@ async function saveAbonement() {
       await store.createAbonement(editingAbonement.value)
       showToast('success', 'Abonement created')
     }
+
     await store.getAbonementsByCustomer(customerId.value)
     showAbonementModal.value = false
   } catch {
@@ -132,6 +142,7 @@ async function saveAbonement() {
 
 async function confirmDeleteAbonement(id: number) {
   if (!customerId.value) return
+
   try {
     await store.deleteAbonement(id)
     await store.getAbonementsByCustomer(customerId.value)
@@ -151,7 +162,10 @@ function formatDate(dateStr: string) {
   <component :is="$route.meta.layout || 'div'">
     <template #header>
       <div class="flex items-center gap-3 pt-3">
-        <button class="p-2 rounded-full customcolor h-10 w-10" @click="router.push('/backoffice/customers')">
+        <button
+          class="p-2 rounded-full customcolor h-10 w-10"
+          @click="router.push('/backoffice/customers')"
+        >
           <font-awesome-icon :icon="faArrowLeft" />
         </button>
         <h1 class="font-bold text-2xl">
@@ -168,12 +182,26 @@ function formatDate(dateStr: string) {
         <h2 class="font-semibold text-lg mb-4">{{ $t('customerDetails') }}</h2>
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-medium mb-1" for="firstname">{{ $t('firstName') }}</label>
-            <input id="firstname" v-model="form.firstname" type="text" class="border rounded p-2 w-full" />
+            <label class="block text-sm font-medium mb-1" for="firstname">{{
+              $t('firstName')
+            }}</label>
+            <input
+              id="firstname"
+              v-model="form.firstname"
+              type="text"
+              class="border rounded p-2 w-full"
+            />
           </div>
           <div>
-            <label class="block text-sm font-medium mb-1" for="lastname">{{ $t('lastName') }}</label>
-            <input id="lastname" v-model="form.lastname" type="text" class="border rounded p-2 w-full" />
+            <label class="block text-sm font-medium mb-1" for="lastname">{{
+              $t('lastName')
+            }}</label>
+            <input
+              id="lastname"
+              v-model="form.lastname"
+              type="text"
+              class="border rounded p-2 w-full"
+            />
           </div>
           <div>
             <label class="block text-sm font-medium mb-1" for="email">{{ $t('email') }}</label>
@@ -181,7 +209,12 @@ function formatDate(dateStr: string) {
           </div>
           <div>
             <label class="block text-sm font-medium mb-1" for="keycloakid">Keycloak ID</label>
-            <input id="keycloakid" v-model="form.keycloakid" type="text" class="border rounded p-2 w-full" />
+            <input
+              id="keycloakid"
+              v-model="form.keycloakid"
+              type="text"
+              class="border rounded p-2 w-full"
+            />
           </div>
           <div class="col-span-2">
             <label class="block text-sm font-medium mb-1">{{ $t('licenseGroups') }}</label>
@@ -289,12 +322,15 @@ function formatDate(dateStr: string) {
       </div>
 
       <!-- Abonement modal -->
-      <div v-if="showAbonementModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div
+        v-if="showAbonementModal"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      >
         <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
           <h3 class="font-bold text-lg mb-4">
             {{ editingAbonement?.id ? $t('editAbonement') : $t('newAbonement') }}
           </h3>
-          <div class="space-y-3" v-if="editingAbonement">
+          <div v-if="editingAbonement" class="space-y-3">
             <div>
               <label class="block text-sm font-medium mb-1">{{ $t('item') }}</label>
               <select v-model="editingAbonement.item_id" class="border rounded p-2 w-full">
@@ -304,11 +340,19 @@ function formatDate(dateStr: string) {
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-sm font-medium mb-1">{{ $t('fromDate') }}</label>
-                <input v-model="editingAbonement.from_date" type="date" class="border rounded p-2 w-full" />
+                <input
+                  v-model="editingAbonement.from_date"
+                  type="date"
+                  class="border rounded p-2 w-full"
+                />
               </div>
               <div>
                 <label class="block text-sm font-medium mb-1">{{ $t('toDate') }}</label>
-                <input v-model="editingAbonement.to_date" type="date" class="border rounded p-2 w-full" />
+                <input
+                  v-model="editingAbonement.to_date"
+                  type="date"
+                  class="border rounded p-2 w-full"
+                />
               </div>
             </div>
             <div>
@@ -332,7 +376,10 @@ function formatDate(dateStr: string) {
       </div>
 
       <!-- Delete abonement confirmation -->
-      <div v-if="showDeleteAbonementId" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div
+        v-if="showDeleteAbonementId"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      >
         <div class="bg-white rounded-lg p-6 w-full max-w-sm shadow-xl">
           <p class="mb-4">{{ $t('deleteAbonementConfirmation') }}</p>
           <div class="flex justify-end gap-3">
@@ -350,14 +397,20 @@ function formatDate(dateStr: string) {
       </div>
 
       <!-- Delete customer confirmation -->
-      <div v-if="showDeleteCustomerModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div
+        v-if="showDeleteCustomerModal"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      >
         <div class="bg-white rounded-lg p-6 w-full max-w-sm shadow-xl">
           <p class="mb-4">{{ $t('deleteCustomerConfirmation') }}</p>
           <div class="flex justify-end gap-3">
             <button class="py-2 px-4 rounded-full border" @click="showDeleteCustomerModal = false">
               {{ $t('cancel') }}
             </button>
-            <button class="py-2 px-4 rounded-full bg-red-600 text-white" @click="confirmDeleteCustomer">
+            <button
+              class="py-2 px-4 rounded-full bg-red-600 text-white"
+              @click="confirmDeleteCustomer"
+            >
               {{ $t('delete') }}
             </button>
           </div>

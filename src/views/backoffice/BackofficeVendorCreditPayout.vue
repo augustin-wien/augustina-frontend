@@ -69,12 +69,15 @@ const amount = ref<number>(0.0)
 
 useAuthLoad(() => {
   itemsStore.getItemsBackoffice()
+
   if (route?.params?.ID) {
     store.getVendor(parseInt(route.params.ID.toString()))
   }
+
   if (vendor.value) {
     amount.value = vendor.value.Balance / 100
   }
+
   if (vendors.value.length === 0) {
     store.getVendors().then(() => {
       vendor.value = setVendor()

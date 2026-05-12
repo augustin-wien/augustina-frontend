@@ -59,6 +59,7 @@ const cancel = (e: Event) => {
 
 const showToast = (type: string, message: string) => {
   toast.value = { type, message }
+
   setTimeout(() => {
     toast.value = null
   }, 5000)
@@ -73,9 +74,7 @@ const updateImage = (event: any) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 class="font-bold mt-3 pt-3 text-2xl">
-        {{ $t('newProduct') }} {{ $t('create') }}
-      </h1>
+      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('newProduct') }} {{ $t('create') }}</h1>
     </template>
     <template #main>
       <div class="main">
@@ -101,7 +100,9 @@ const updateImage = (event: any) => {
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               >
-                <option v-for="type in ITEM_TYPES" :key="type" :value="type">{{ $t('itemType_' + type) }}</option>
+                <option v-for="type in ITEM_TYPES" :key="type" :value="type">
+                  {{ $t('itemType_' + type) }}
+                </option>
               </select>
 
               <!-- Name -->

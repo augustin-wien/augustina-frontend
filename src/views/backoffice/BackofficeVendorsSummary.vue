@@ -6,7 +6,12 @@ import { ref, computed, watch } from 'vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 
-import { faCreditCard, faArrowAltCircleRight, faQrcode, faComment } from '@fortawesome/free-solid-svg-icons'
+import {
+  faCreditCard,
+  faArrowAltCircleRight,
+  faQrcode,
+  faComment
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
 import VendorInfo from '@/components/VendorInfo.vue'
