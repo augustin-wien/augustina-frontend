@@ -2,11 +2,11 @@
 // Import necessary dependencies and types
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
-import { ref, computed, onMounted, watch } from 'vue'
-import keycloak from '@/keycloak/keycloak'
+import { ref, computed, watch } from 'vue'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 
-import { faCreditCard, faArrowAltCircleRight, faQrcode } from '@fortawesome/free-solid-svg-icons'
+import { faCreditCard, faArrowAltCircleRight, faQrcode, faComment } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
 import VendorInfo from '@/components/VendorInfo.vue'
@@ -14,18 +14,7 @@ import VendorInfo from '@/components/VendorInfo.vue'
 // Initialize the vendor store
 const store = vendorsStore()
 
-// Fetch the vendors' data when the component is mounted
-onMounted(() => {
-  if (keycloak.keycloak) {
-    if (keycloak.keycloak.authenticated) {
-      store.getVendors()
-    } else {
-      keycloak.keycloak.onAuthSuccess = () => {
-        store.getVendors()
-      }
-    }
-  }
-})
+useAuthLoad(() => store.getVendors())
 
 // Create a computed property for vendors data
 const vendors = computed(() => store.vendors)
@@ -171,6 +160,11 @@ const selectedVendor = ref<Vendor | null>(null)
                     >
                       <button className="p-2 rounded-full customcolor mr-2 h-10">
                         {{ $t('bank statement') }}
+                      </button>
+                    </router-link>
+                    <router-link :to="`/backoffice/userprofile/${vendor.ID}/comments`">
+                      <button className="p-2 rounded-full h-10 w-10 customcolor mr-2">
+                        <font-awesome-icon :icon="faComment" />
                       </button>
                     </router-link>
                   </td>

@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import Toast from '@/components/ToastMessage.vue'
 import { useItemsStore } from '@/stores/items'
-import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore, type Settings } from '@/stores/settings'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 import QrCodeSettings from '@/components/QrCodeSettings.vue'
 import GeneralSettings from '@/components/settings/GeneralSettings.vue'
 import StylesSettings from '@/components/settings/StylesSettings.vue'
@@ -11,39 +11,12 @@ import MailTemplatesSettings from '@/components/settings/MailTemplatesSettings.v
 
 const settingsStore = useSettingsStore()
 const storeItems = useItemsStore()
-const keycloakStore = useKeycloakStore()
-
-const authenticated = computed(() => keycloakStore.authenticated)
-
-onMounted(() => {
-  if (authenticated.value) {
-    storeItems.getItems()
-    settingsStore.getSettingsFromApi()
-    updatedSettings.value = settingsStore.settings
-    settingsStore.getStyleCss()
-  } else {
-    watch(authenticated, () => {
-      storeItems.getItems()
-      settingsStore.getSettingsFromApi()
-      updatedSettings.value = settingsStore.settings
-      settingsStore.getStyleCss()
-    })
-  }
-})
 
 const settings = computed(() => settingsStore.settings)
 const items = computed(() => storeItems.items)
 
 const styles = ref('')
 styles.value = settingsStore.styles
-
-settingsStore.getStyleCss()
-
-watch(settings, (newVal) => {
-  if (newVal) {
-    updatedSettings.value = newVal
-  }
-})
 
 const updatedSettings = ref<Settings>({
   Logo: '',
@@ -75,6 +48,19 @@ const updatedSettings = ref<Settings>({
   UseTipInsteadOfDonation: false,
   ShopLanding: false,
   DigitalItemsUrl: ''
+})
+
+useAuthLoad(() => {
+  storeItems.getItems()
+  settingsStore.getSettingsFromApi()
+  updatedSettings.value = settingsStore.settings
+  settingsStore.getStyleCss()
+})
+
+watch(settings, (newVal) => {
+  if (newVal) {
+    updatedSettings.value = newVal
+  }
 })
 
 // toast state for small success/error hints

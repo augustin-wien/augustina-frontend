@@ -9,8 +9,9 @@ import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
 import 'vue-leaflet-markercluster/dist/style.css'
 import { useMapStore } from '@/stores/map'
-import { onMounted, computed, watch, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 import { useSettingsStore } from '@/stores/settings'
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 import 'leaflet-geosearch/dist/geosearch.css'
@@ -39,15 +40,7 @@ const searchControl: any = new (GeoSearchControl as any)({
   provider: provider
 })
 
-onMounted(() => {
-  if (authenticated.value) {
-    mapStore.getLocations()
-  } else {
-    watch(authenticated, () => {
-      mapStore.getLocations()
-    })
-  }
-})
+useAuthLoad(() => mapStore.getLocations())
 
 function onMapReady(instance: any) {
   if (instance) {

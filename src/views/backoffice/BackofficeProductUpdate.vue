@@ -2,10 +2,12 @@
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import type { Item } from '@/stores/items'
-import { useItemsStore } from '@/stores/items'
+import { useItemsStore, ITEM_TYPES } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const itemsStore = useItemsStore()
@@ -14,17 +16,16 @@ const authenticated = computed(() => keycloakStore.authenticated)
 
 const updatedItem = ref<Item | null>()
 
-onMounted(() => {
-  if (authenticated.value) {
-    itemsStore.getItems()
-    itemsStore.getItemsBackoffice()
-  } else {
-    watch(authenticated, () => {
+watch(
+  authenticated,
+  (val) => {
+    if (val) {
       itemsStore.getItems()
       itemsStore.getItemsBackoffice()
-    })
-  }
-})
+    }
+  },
+  { immediate: true }
+)
 
 const items = computed(() => itemsStore.itemsBackoffice)
 
@@ -132,295 +133,155 @@ const previewImage = (image: string | Blob | MediaSource) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ item?.Name }} {{ $t('change') }}</h1>
+      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ item?.Name }}</h1>
     </template>
+
     <template v-if="updatedItem" #main>
-      <div class="main">
-        <div v-if="item" class="w-full mx-auto mt-4">
-          <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
-                >{{ $t('name') }}:</label
-              >
-              <div class="flex flex-row">
-                <input
-                  id="Name"
-                  v-model="updatedItem.Name"
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="text"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description"
-                >{{ $t('description') }}:</label
-              >
-              <div class="flex flex-row">
-                <input
-                  id="description"
-                  v-model="updatedItem.Description"
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="text"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description"
-                >{{ $t('Item order (higher moves the item up)') }}:</label
-              >
-              <div class="flex flex-row">
-                <input
-                  id="description"
-                  v-model="updatedItem.ItemOrder"
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="text"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price"
-                >{{ $t('price') }} (Cent):</label
-              >
-              <div class="flex flex-row">
-                <input
-                  id="price"
-                  v-model="updatedItem.Price"
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="number"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price">{{
-                $t('Item background color')
-              }}</label>
-              <div class="flex flex-row">
-                <input
-                  id=""
-                  v-model="updatedItem.ItemColor"
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="color"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price">{{
-                $t('Item text color')
-              }}</label>
-              <div class="flex flex-row">
-                <input
-                  id=""
-                  v-model="updatedItem.ItemTextColor"
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  type="color"
-                  required
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image">{{
-                $t('isDisabled')
-              }}</label>
-              <label class="inline-flex items-center cursor-pointer mt-4">
-                <input
-                  id="isDisabled"
-                  v-model="updatedItem.Disabled"
-                  class="sr-only peer"
-                  type="checkbox"
-                />
-                <div
-                  class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-                ></div>
-                <span class="ms-3 text-sm font-medium">{{
-                  updatedItem.Disabled ? $t('yes') : $t('no')
-                }}</span>
-              </label>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
-                >{{ $t('image') }}:</label
-              >
-              <div class="flex flex-col">
-                <img
-                  v-if="item.Image"
-                  :src="previewImage(item.Image)"
-                  alt="item image"
-                  class="productImage"
-                  width="100%"
-                  height="auto"
-                />
-                <input
-                  id="image"
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  accept="image/png, image/jpeg"
-                  type="file"
-                  @change="updateImage"
-                />
-              </div>
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image">{{
-                $t('isLicenseItem')
-              }}</label>
-              <label class="inline-flex items-center cursor-pointer mt-4">
-                <input
-                  id="isLicenseItem"
-                  v-model="updatedItem.IsLicenseItem"
-                  class="sr-only peer"
-                  type="checkbox"
-                />
-                <div
-                  class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-                ></div>
-                <span class="ms-3 text-sm font-medium">{{
-                  updatedItem.IsLicenseItem ? $t('yes') : $t('no')
-                }}</span>
-              </label>
-              <div v-if="!updatedItem.IsLicenseItem">
-                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
-                  >{{ $t('licenseItem') }}:</label
-                >
-                <select
-                  v-model="updatedItem.LicenseItem"
-                  class="w-full h-10 pl-3 pr-6 text-base placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
-                >
-                  <option :value="undefined">-- {{ $t('none') }} --</option>
-                  <option v-for="elItem in licenseItems" :key="elItem.ID" :value="elItem.ID">
-                    {{ elItem.Name }}
-                  </option>
+      <div v-if="item" class="mt-4 pb-10">
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+
+          <!-- Left column: Basic info -->
+          <section class="bg-white shadow-sm rounded-lg p-6">
+            <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">{{ $t('name') }} &amp; {{ $t('itemType') }}</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="field-label" for="itemType">{{ $t('itemType') }}</label>
+                <select id="itemType" v-model="updatedItem.Type" class="field-input">
+                  <option v-for="t in ITEM_TYPES" :key="t" :value="t">{{ $t(`itemType_${t}`) }}</option>
                 </select>
-                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="pdf">{{
-                  $t('isPDFLicenseItem')
-                }}</label>
-                <label
-                  v-if="updatedItem.LicenseItem !== undefined"
-                  class="inline-flex items-center cursor-pointer mt-4"
-                >
-                  <input
-                    id="isLicenseItem"
-                    v-model="updatedItem.IsPDFItem"
-                    class="sr-only peer"
-                    type="checkbox"
-                  />
-                  <div
-                    class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-                  ></div>
-                  <span class="ms-3 text-sm font-medium">{{
-                    updatedItem.IsPDFItem ? $t('yes') : $t('no')
-                  }}</span>
+              </div>
+              <div>
+                <label class="field-label" for="itemName">{{ $t('name') }}</label>
+                <input id="itemName" v-model="updatedItem.Name" type="text" class="field-input" required />
+              </div>
+              <div>
+                <label class="field-label" for="description">{{ $t('description') }}</label>
+                <input id="description" v-model="updatedItem.Description" type="text" class="field-input" />
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="field-label" for="price">{{ $t('price') }} (Cent)</label>
+                  <input id="price" v-model="updatedItem.Price" type="number" class="field-input" required />
+                </div>
+                <div>
+                  <label class="field-label" for="itemOrder">{{ $t('order') }}</label>
+                  <input id="itemOrder" v-model="updatedItem.ItemOrder" type="number" class="field-input" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Right column: Appearance + Visibility + License -->
+          <div class="space-y-4">
+
+            <!-- Section: Appearance -->
+            <section class="bg-white shadow-sm rounded-lg p-6">
+              <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">{{ $t('image') }} &amp; {{ $t('color') }}</h2>
+              <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="field-label" for="itemColor">{{ $t('Item background color') }}</label>
+                    <input id="itemColor" v-model="updatedItem.ItemColor" type="color" class="h-10 w-full rounded border cursor-pointer" />
+                  </div>
+                  <div>
+                    <label class="field-label" for="itemTextColor">{{ $t('Item text color') }}</label>
+                    <input id="itemTextColor" v-model="updatedItem.ItemTextColor" type="color" class="h-10 w-full rounded border cursor-pointer" />
+                  </div>
+                </div>
+                <div>
+                  <label class="field-label">{{ $t('image') }}</label>
+                  <img v-if="item.Image" :src="previewImage(item.Image)" alt="item image" class="mb-2 rounded max-h-40 object-contain" />
+                  <input id="image" type="file" accept="image/png, image/jpeg" class="field-input" @change="updateImage" />
+                </div>
+              </div>
+            </section>
+
+            <!-- Section: Visibility -->
+            <section class="bg-white shadow-sm rounded-lg p-6">
+              <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">{{ $t('isDisabled') }}</h2>
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input id="isDisabled" v-model="updatedItem.Disabled" type="checkbox" class="sr-only peer" />
+                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+                <span class="text-sm">{{ updatedItem.Disabled ? $t('yes') : $t('no') }}</span>
+              </label>
+            </section>
+
+            <!-- Section: Digital license -->
+            <section class="bg-white shadow-sm rounded-lg p-6">
+              <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">{{ $t('licenseItem') }}</h2>
+              <div class="space-y-4">
+                <label class="flex items-center gap-3 cursor-pointer">
+                  <input id="isLicenseItem" v-model="updatedItem.IsLicenseItem" type="checkbox" class="sr-only peer" />
+                  <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+                  <span class="text-sm font-medium">{{ $t('isLicenseItem') }}</span>
                 </label>
-                <div v-if="updatedItem.LicenseItem !== undefined && !updatedItem.IsPDFItem">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
-                    >{{ $t('licenseGroup') }}:</label
-                  >
-                  <input
-                    id="licenseGroup"
-                    v-model="updatedItem.LicenseGroup"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="text"
-                  />
-                </div>
-                <label
-                  v-if="updatedItem.LicenseItem !== undefined && updatedItem.IsPDFItem"
-                  class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                  for="pdf"
-                  >{{ $t('pdf item') }}:</label
-                >
-                <div
-                  v-if="updatedItem.LicenseItem !== undefined && updatedItem.IsPDFItem"
-                  class="flex flex-col"
-                >
-                  <input
-                    id="pdf"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    accept=".pdf"
-                    type="file"
-                    @change="updatePDF"
-                  />
-                </div>
-              </div>
-            </div>
 
-            <div class="flex place-content-center justify-between">
-              <button
-                type="submit"
-                class="py-2 px-4 h-[44px] rounded-full bg-red-600 text-white"
-                @click="showDeleteModalF"
-              >
-                {{ $t('delete') }}
-              </button>
-              <button
-                type="submit"
-                class="py-2 px-4 h-[44px] rounded-full customcolor"
-                @click="updateItem"
-              >
-                {{ $t('confirmation') }}
-              </button>
-            </div>
-          </div>
-          <Toast v-if="toast" :toast="toast" @close="toast = null" />
+                <template v-if="!updatedItem.IsLicenseItem">
+                  <div>
+                    <label class="field-label" for="licenseItem">{{ $t('licenseItem') }}</label>
+                    <div class="flex gap-2 items-center">
+                      <select id="licenseItem" v-model="updatedItem.LicenseItem" class="field-input flex-1">
+                        <option :value="undefined">-- {{ $t('none') }} --</option>
+                        <option v-for="elItem in licenseItems" :key="elItem.ID" :value="elItem.ID">{{ elItem.Name }}</option>
+                      </select>
+                      <router-link v-if="updatedItem.LicenseItem" :to="`/backoffice/productsettings/update/${updatedItem.LicenseItem}`">
+                        <button type="button" class="p-2 rounded-full customcolor h-10 w-10 flex-shrink-0" :title="$t('edit')">
+                          <font-awesome-icon :icon="faPen" />
+                        </button>
+                      </router-link>
+                    </div>
+                  </div>
 
-          <!-- delete modal -->
-          <div v-if="showDeleteModal">
-            <div
-              id="defaultModal"
-              tabindex="-1"
-              aria-hidden="false"
-              class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden flex items-center justify-center overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-            >
-              <div class="relative w-full max-w-2xl max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                  <!-- Modal header -->
-                  <div
-                    class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600"
-                  >
-                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                      {{ updatedItem.Name }} {{ $t('delete') }}
-                    </h3>
-                    <button
-                      type="button"
-                      class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                      data-modal-hide="defaultModal"
-                      @click="showDeleteModal = false"
-                    >
-                      <svg
-                        class="w-3 h-3"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 14 14"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                        />
-                      </svg>
-                      <span class="sr-only">Close modal</span>
-                    </button>
-                  </div>
-                  <!-- Modal body -->
-                  <div class="p-6 space-y-6">
-                    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                      {{ $t('deletionConfirmation') }}
-                    </p>
-                  </div>
-                  <!-- Modal footer -->
-                  <div
-                    class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-                  >
-                    <button
-                      data-modal-hide="defaultModal"
-                      type="button"
-                      class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                      @click="deleteItem"
-                    >
-                      {{ $t('delete') }}
-                    </button>
-                    <button
-                      data-modal-hide="defaultModal"
-                      type="button"
-                      class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                      @click="showDeleteModal = false"
-                    >
-                      {{ $t('cancel') }}
-                    </button>
-                  </div>
-                </div>
+                  <template v-if="updatedItem.LicenseItem !== undefined">
+                    <label class="flex items-center gap-3 cursor-pointer">
+                      <input id="isPDFItem" v-model="updatedItem.IsPDFItem" type="checkbox" class="sr-only peer" />
+                      <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"></div>
+                      <span class="text-sm font-medium">{{ $t('isPDFLicenseItem') }}</span>
+                    </label>
+
+                    <div v-if="!updatedItem.IsPDFItem">
+                      <label class="field-label" for="licenseGroup">{{ $t('licenseGroup') }}</label>
+                      <input id="licenseGroup" v-model="updatedItem.LicenseGroup" type="text" class="field-input" />
+                    </div>
+
+                    <div v-if="updatedItem.IsPDFItem">
+                      <label class="field-label" for="pdf">{{ $t('pdf item') }}</label>
+                      <input id="pdf" type="file" accept=".pdf" class="field-input" @change="updatePDF" />
+                    </div>
+                  </template>
+                </template>
               </div>
-            </div>
+            </section>
+
+          </div><!-- end right column -->
+        </div><!-- end grid -->
+
+        <!-- Action buttons -->
+        <div class="flex justify-between pt-4">
+          <button type="button" class="py-2 px-6 rounded-full bg-red-600 text-white" @click="showDeleteModalF">
+            {{ $t('delete') }}
+          </button>
+          <button type="button" class="py-2 px-6 rounded-full customcolor" @click="updateItem">
+            {{ $t('save') }}
+          </button>
+        </div>
+
+        <Toast v-if="toast" :toast="toast" @close="toast = null" />
+      </div>
+
+      <!-- Delete confirmation modal -->
+      <div v-if="showDeleteModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+          <h3 class="text-lg font-semibold mb-3">{{ updatedItem.Name }} {{ $t('delete') }}</h3>
+          <p class="text-gray-500 mb-6">{{ $t('deletionConfirmation') }}</p>
+          <div class="flex justify-end gap-3">
+            <button type="button" class="py-2 px-5 rounded-lg border text-gray-600" @click="showDeleteModal = false">
+              {{ $t('cancel') }}
+            </button>
+            <button type="button" class="py-2 px-5 rounded-lg bg-red-600 text-white" @click="deleteItem">
+              {{ $t('delete') }}
+            </button>
           </div>
         </div>
       </div>
@@ -429,16 +290,25 @@ const previewImage = (image: string | Blob | MediaSource) => {
 </template>
 
 <style scoped>
-tr {
-  padding: 10px;
+.field-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.25rem;
 }
 
-td {
-  padding: 10px;
+.field-input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #374151;
+  outline: none;
 }
 
-.productImage {
-  width: 100% !important;
-  max-width: 300px;
+.field-input:focus {
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
 }
 </style>

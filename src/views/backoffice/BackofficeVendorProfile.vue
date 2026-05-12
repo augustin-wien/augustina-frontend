@@ -1,37 +1,20 @@
 <script lang="ts" setup>
 import { vendorsStore } from '@/stores/vendor'
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useKeycloakStore } from '@/stores/keycloak'
 import router from '@/router'
 import IconCross from '@/components/icons/IconCross.vue'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-// import VendorMapView from '@/components/VendorMapView.vue'
-import keycloak from '@/keycloak/keycloak'
-
-const keycloakStore = useKeycloakStore()
+import { useAuthLoad } from '@/composables/useAuthLoad'
 
 const vendorStore = vendorsStore()
 const route = useRoute()
 const vendor = computed(() => vendorStore.vendor)
 
-onMounted(() => {
-  if (!route?.params?.ID) {
-    return
-  }
-
-  const vendorId = parseInt(route.params.ID.toString())
-
-  if (keycloakStore.authenticated) {
-    vendorStore.getVendor(vendorId)
-  } else {
-    if (keycloak.keycloak) {
-      keycloak.keycloak.onAuthSuccess = () => {
-        vendorStore.getVendor(vendorId)
-      }
-    }
-  }
+useAuthLoad(() => {
+  if (!route?.params?.ID) return
+  vendorStore.getVendor(parseInt(route.params.ID.toString()))
 })
 
 const formatCredit = (credit: number) => {

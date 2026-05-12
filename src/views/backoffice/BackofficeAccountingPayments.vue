@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { useItemsStore } from '@/stores/items'
-import { useKeycloakStore } from '@/stores/keycloak'
 import { usePaymentsStore, type Payment } from '@/stores/payments'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 import { useRoute } from 'vue-router'
 import { vendorsStore } from '@/stores/vendor'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
@@ -13,7 +13,6 @@ import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n()
 const settingsStore = useSettingsStore()
-const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
 const items = computed(() => itemsStore.itemsBackoffice)
 
@@ -78,24 +77,12 @@ const translateItem = (payment: Payment) => {
   return ''
 }
 
-const authenticated = computed(() => keycloakStore.authenticated)
-
-onMounted(() => {
-  if (authenticated.value) {
-    itemsStore.getItemsBackoffice().then(() => {
-      store.getPayments(startDate.value, endDate.value, `vendor=${vendorFilter.value}`)
-    })
-
-    // ensure vendors loaded so we can link to profiles
-    if (!vendorStore.vendors || vendorStore.vendors.length === 0) {
-      vendorStore.getVendors()
-    }
-  } else {
-    watch(authenticated, () => {
-      itemsStore.getItemsBackoffice().then(() => {
-        store.getPayments(startDate.value, endDate.value, `vendor=${vendorFilter.value}`)
-      })
-    })
+useAuthLoad(() => {
+  itemsStore.getItemsBackoffice().then(() => {
+    store.getPayments(startDate.value, endDate.value, `vendor=${vendorFilter.value}`)
+  })
+  if (!vendorStore.vendors || vendorStore.vendors.length === 0) {
+    vendorStore.getVendors()
   }
 })
 

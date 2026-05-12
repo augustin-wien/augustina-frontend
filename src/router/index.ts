@@ -227,6 +227,16 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeVendorUpdate.vue')
     },
     {
+      path: '/backoffice/userprofile/:ID/comments',
+      name: 'Vendor Comments',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Vendor Comments'
+      },
+      component: () => import('@/views/backoffice/BackofficeVendorComments.vue')
+    },
+    {
       path: '/backoffice/settings/update',
       name: 'Update Backoffice Settings',
       meta: {
@@ -266,6 +276,26 @@ const router = createRouter({
         title: 'Map'
       },
       component: () => import('@/views/backoffice/MapView.vue')
+    },
+    {
+      path: '/backoffice/customers',
+      name: 'Customers',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Customers'
+      },
+      component: () => import('@/views/backoffice/BackofficeCustomersSummary.vue')
+    },
+    {
+      path: '/backoffice/customers/:ID',
+      name: 'Customer Detail',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Customer'
+      },
+      component: () => import('@/views/backoffice/BackofficeCustomerUpdate.vue')
     },
     {
       path: '/backoffice/statistics',
@@ -390,16 +420,8 @@ router.afterEach((to) => {
 
 // Check if the user is authenticated
 router.beforeEach(async (to: RouteLocationNormalized) => {
-  if (
-    to.meta.requiresAuth &&
-    !isAuthenticated(to) &&
-    // ❗️ Avoid an infinite redirect
-    to.name !== '404'
-  ) {
-    // Redirect happens before the first page load,
-    //so we need to wait for the router to be ready
-    // redirect the user to the login page
-    // return { name: '404' }
+  if (to.meta.requiresAuth && to.name !== '404') {
+    await isAuthenticated(to)
   }
 })
 

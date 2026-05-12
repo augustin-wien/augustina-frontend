@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { usePaymentsStore } from '@/stores/payments'
-import { useKeycloakStore } from '@/stores/keycloak'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 import { useItemsStore } from '@/stores/items'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Payment } from '@/stores/payments'
 import { useSettingsStore } from '@/stores/settings'
+import { useKeycloakStore } from '@/stores/keycloak'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -20,24 +21,15 @@ const tomorrow = startOfDay(new Date(new Date().setDate(new Date().getDate() + 1
 const startDate = ref<Date>(yesterday)
 const endDate = ref(tomorrow)
 const date = ref([startDate.value, endDate.value])
-const keycloakStore = useKeycloakStore()
 const store = usePaymentsStore()
 const itemsStore = useItemsStore()
 const items = computed(() => itemsStore.itemsBackoffice)
 const settingsStore = useSettingsStore()
+const authenticated = computed(() => useKeycloakStore().authenticated)
 
-const authenticated = computed(() => keycloakStore.authenticated)
-
-onMounted(() => {
-  if (authenticated.value) {
-    store.getSales(startDate.value, endDate.value)
-    itemsStore.getItemsBackoffice()
-  } else {
-    watch(authenticated, (val: boolean) => {
-      if (val) store.getSales(startDate.value, endDate.value)
-      itemsStore.getItemsBackoffice()
-    })
-  }
+useAuthLoad(() => {
+  store.getSales(startDate.value, endDate.value)
+  itemsStore.getItemsBackoffice()
 })
 
 //fetch paymentlist data once component is mounted

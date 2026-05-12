@@ -11,6 +11,7 @@ import {
   faSliders,
   faSplotch,
   faUserGroup,
+  faUsers,
   faMapLocation,
   faAreaChart
 } from '@fortawesome/free-solid-svg-icons'
@@ -79,6 +80,14 @@ onMounted(() => {
                 <img :src="logo" alt="Newspaper logo" class="logo mx-auto" width="auto" />
               </div>
               <div class="sidemenu-item flex flex-col w-full space-y-2">
+                <RouterLink to="/backoffice/customers">
+                  <button
+                    class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faUsers" />
+                    <p class="text-base leading-4">{{ $t('menuCustomers') }}</p>
+                  </button>
+                </RouterLink>
                 <RouterLink to="/backoffice/vendorsummary">
                   <button
                     class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"

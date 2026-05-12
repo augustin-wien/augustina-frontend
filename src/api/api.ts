@@ -22,7 +22,9 @@ import {
   MAIL_TEMPLATES_API,
   BASE_URL,
   ORDERS_UNVERIFIED_API_URL,
-  VENDOR_STATISTICS_API_URL
+  VENDOR_STATISTICS_API_URL,
+  CUSTOMERS_API_URL,
+  ABONEMENTS_API_URL
 } from './endpoints'
 
 export const apiInstance = axios.create({
@@ -112,6 +114,10 @@ export async function fetchItems() {
 
 export async function fetchItemsBackoffice() {
   return apiInstance.get<Item[]>(`${ITEMS_BACKOFFICE_API_URL}`)
+}
+
+export async function fetchLicenseGroups() {
+  return apiInstance.get<string[]>(`${ITEMS_API_URL}licensegroups/`)
 }
 export async function postItems(newItem: Item) {
   return apiInstance.postForm(ITEMS_API_URL, newItem)
@@ -384,4 +390,58 @@ export async function deleteVendorComment(vendorId: number, commentId: number) {
 
 export async function fetchUnverifiedOrders() {
   return apiInstance.get(ORDERS_UNVERIFIED_API_URL)
+}
+
+// Customers API
+export async function fetchCustomers() {
+  return apiInstance.get(CUSTOMERS_API_URL)
+}
+
+export async function getCustomer(customerId: number) {
+  return apiInstance.get(`${CUSTOMERS_API_URL}${customerId}/`)
+}
+
+export async function postCustomer(customer: object) {
+  return apiInstance.post(CUSTOMERS_API_URL, JSON.stringify(customer), {
+    headers: { accept: 'application/json', 'Content-Type': 'application/json' }
+  })
+}
+
+export async function putCustomer(customerId: number, customer: object) {
+  return apiInstance.put(`${CUSTOMERS_API_URL}${customerId}/`, JSON.stringify(customer), {
+    headers: { accept: 'application/json', 'Content-Type': 'application/json' }
+  })
+}
+
+export async function removeCustomer(customerId: number) {
+  return apiInstance.delete(`${CUSTOMERS_API_URL}${customerId}/`)
+}
+
+export async function fetchCustomerAbonements(customerId: number) {
+  return apiInstance.get(`${CUSTOMERS_API_URL}${customerId}/abonements/`)
+}
+
+// Abonements API
+export async function fetchAbonements() {
+  return apiInstance.get(ABONEMENTS_API_URL)
+}
+
+export async function fetchActiveAbonements() {
+  return apiInstance.get(`${ABONEMENTS_API_URL}active/`)
+}
+
+export async function postAbonement(abonement: object) {
+  return apiInstance.post(ABONEMENTS_API_URL, JSON.stringify(abonement), {
+    headers: { accept: 'application/json', 'Content-Type': 'application/json' }
+  })
+}
+
+export async function putAbonement(abonementId: number, abonement: object) {
+  return apiInstance.put(`${ABONEMENTS_API_URL}${abonementId}/`, JSON.stringify(abonement), {
+    headers: { accept: 'application/json', 'Content-Type': 'application/json' }
+  })
+}
+
+export async function removeAbonement(abonementId: number) {
+  return apiInstance.delete(`${ABONEMENTS_API_URL}${abonementId}/`)
 }

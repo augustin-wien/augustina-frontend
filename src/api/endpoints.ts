@@ -18,3 +18,5 @@ export const VENDOR_STATISTICS_API_URL = `${BASE_URL}api/vendors/statistics/`
 export const PDF_DOWNLOAD_API_URL = `${BASE_URL}api/pdf/`
 export const STYLES_URL = `${BASE_URL}public/style.css`
 export const MAIL_TEMPLATES_API = `${BASE_URL}api/mail-templates/`
+export const CUSTOMERS_API_URL = `${BASE_URL}api/customers/`
+export const ABONEMENTS_API_URL = `${BASE_URL}api/abonements/`

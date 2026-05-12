@@ -2,16 +2,14 @@
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import { useItemsStore } from '@/stores/items'
-import { useKeycloakStore } from '@/stores/keycloak'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 import type { Payment } from '@/stores/payments'
 import { usePayoutStore } from '@/stores/payout'
 import { vendorsStore, type Vendor } from '@/stores/vendor'
 import { formatCredit, formatDate } from '@/utils/utils'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import IconCross from '@/components/icons/IconCross.vue'
-
-const keycloakStore = useKeycloakStore()
 
 const store = vendorsStore()
 const payoutStore = usePayoutStore()
@@ -68,37 +66,19 @@ watch(store.vendors, () => {
 
 // Initialize a reactive property 'amount' for input data
 const amount = ref<number>(0.0)
-const authenticated = computed(() => keycloakStore.authenticated)
 
-onMounted(() => {
-  if (authenticated.value) {
-    itemsStore.getItemsBackoffice()
-
-    if (!route?.params?.ID) {
-      return
-    }
-
-    const vendorId = parseInt(route.params.ID.toString())
-
-    store.getVendor(vendorId)
+useAuthLoad(() => {
+  itemsStore.getItemsBackoffice()
+  if (route?.params?.ID) {
+    store.getVendor(parseInt(route.params.ID.toString()))
   }
-
   if (vendor.value) {
     amount.value = vendor.value.Balance / 100
   }
-
   if (vendors.value.length === 0) {
-    if (authenticated.value) {
-      store.getVendors().then(() => {
-        vendor.value = setVendor()
-      })
-    } else {
-      watch(authenticated, () => {
-        store.getVendors().then(() => {
-          vendor.value = setVendor()
-        })
-      })
-    }
+    store.getVendors().then(() => {
+      vendor.value = setVendor()
+    })
   }
 })
 
