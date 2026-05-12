@@ -100,9 +100,12 @@ async function confirmDeleteCustomer() {
 }
 
 function openNewAbonement() {
+  const firstItem = items.value[0]
+  if (!firstItem) return
+
   editingAbonement.value = {
     customer_id: customerId.value ?? 0,
-    item_id: items.value[0]?.ID ?? 0,
+    item_id: firstItem.ID,
     from_date: new Date().toISOString().slice(0, 10),
     to_date: new Date(Date.now() + 365 * 24 * 3600 * 1000).toISOString().slice(0, 10),
     status: 'active'
