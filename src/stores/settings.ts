@@ -31,6 +31,7 @@ export interface Settings {
   UseTipInsteadOfDonation: boolean
   ShopLanding: boolean | undefined
   DigitalItemsUrl: string
+  AbonementUrl: string
   edges?: any
   Keycloak: {
     Realm: string

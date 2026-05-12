@@ -34,8 +34,11 @@ const purchasedItems = computed(() => {
   if (!items) return []
 
   // Use a shallow copy to avoid mutating the original array and convert booleans to numbers for arithmetic
+  // Digital license items (non-abonement) go last; abonement items sort normally
   const tmp_items = [...items].sort(
-    (a, b) => Number(isLicenseItem(a.Item)) - Number(isLicenseItem(b.Item))
+    (a, b) =>
+      Number(isLicenseItem(a.Item) && !isAbonementItem(a.Item)) -
+      Number(isLicenseItem(b.Item) && !isAbonementItem(b.Item))
   )
 
   // duplicate items with quantity > 1
@@ -65,7 +68,7 @@ const digitalItems = computed(() => {
 
   return items.filter((item) => {
     const itemDetails = itemsStore.items?.find((i) => i.ID == item.Item)
-    return itemDetails && itemDetails.LicenseItem
+    return itemDetails && itemDetails.LicenseItem && itemDetails.Type !== 'abonement'
   })
 })
 
@@ -103,6 +106,15 @@ const isLicenseItem = (id: number) => {
   return item?.LicenseItem != null && item?.LicenseItem != undefined
 }
 
+const isAbonementItem = (id: number) => {
+  const item = itemsStore.items?.find((item) => item.ID == id)
+  return item?.Type === 'abonement'
+}
+
+const hasAbonementPurchase = computed(() =>
+  purchasedItems.value.some((item) => isAbonementItem(item.Item))
+)
+
 const itemDetails = (id: number) => {
   const item = itemsStore.items?.find((item) => item.ID == id)
   return item
@@ -119,6 +131,7 @@ const hasDigitalItemWithoutPDF = computed(() => {
     if (
       itemDetails &&
       itemDetails.LicenseItem &&
+      itemDetails.Type !== 'abonement' &&
       !downloadLinks.value?.some((link) => link.ItemID == item.Item)
     ) {
       return true
@@ -214,13 +227,13 @@ const email = localStorage.getItem('email') || ''
                 </div>
                 <div class="item-confirmation-icon">
                   <div
-                    v-if="isLicenseItem(item.Item)"
+                    v-if="isLicenseItem(item.Item) || isAbonementItem(item.Item)"
                     class="check-mark-success bg-white border-2 rounded-full h-15 w-15 fill-white right-0 top-0 place-items-center grid"
                   >
                     <IconDigitalIssue />
                   </div>
                   <div
-                    v-else-if="!isLicenseItem(item.Item) && item.Item !== DONATION_ITEM_ID"
+                    v-else-if="item.Item !== DONATION_ITEM_ID"
                     class="check-mark-success bg-green-600 rounded-full h-15 w-15 fill-white right-0 top-0 place-items-center grid"
                   >
                     <IconCheckmark />
@@ -266,6 +279,25 @@ const email = localStorage.getItem('email') || ''
                     itemName: digitalItems[0]?.Item ? itemDetails(digitalItems[0].Item)?.Name : ''
                   })
                 }}
+              </button>
+            </a>
+          </div>
+          <div v-if="hasAbonementPurchase && settStore.settings.AbonementUrl" class="abonement-link mt-3">
+            <a
+              :href="settStore.settings.AbonementUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button
+                class="abonement-button rounded-full text-center p-5 customfont text-sm font-semibold w-full cursor-pointer"
+                :style="
+                  'background-color:' +
+                  settStore.settings.Color +
+                  '; color: ' +
+                  settStore.settings.FontColor
+                "
+              >
+                {{ $t('viewAbonement') }}
               </button>
             </a>
           </div>

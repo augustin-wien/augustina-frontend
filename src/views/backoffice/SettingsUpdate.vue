@@ -47,7 +47,8 @@ const updatedSettings = ref<Settings>({
   QRCodeEnableLogo: false,
   UseTipInsteadOfDonation: false,
   ShopLanding: false,
-  DigitalItemsUrl: ''
+  DigitalItemsUrl: '',
+  AbonementUrl: ''
 })
 
 useAuthLoad(() => {
