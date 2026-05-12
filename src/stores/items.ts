@@ -2,6 +2,18 @@ import { defineStore } from 'pinia'
 import { fetchItemsBackoffice, fetchItems, postItems, patchItem, removeItem } from '@/api/api'
 
 //define interface to store data from backend properly
+export const ITEM_TYPES = [
+  'normal_item',
+  'issue',
+  'online_issue',
+  'abonement',
+  'donation',
+  'transaction_costs',
+  'license_item'
+] as const
+
+export type ItemType = (typeof ITEM_TYPES)[number]
+
 export interface Item {
   Description: 'string'
   ID: number
@@ -17,6 +29,8 @@ export interface Item {
   ItemColor: string | null
   ItemOrder: number
   ItemTextColor: string | null
+  Type: ItemType | string
+  LicenseCost?: number
 }
 
 export const useItemsStore = defineStore('items', {

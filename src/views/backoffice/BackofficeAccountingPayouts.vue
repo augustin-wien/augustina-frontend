@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { usePaymentsStore } from '@/stores/payments'
-import { useKeycloakStore } from '@/stores/keycloak'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 import { useItemsStore } from '@/stores/items'
 import { type Payment } from '@/stores/payments'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
@@ -21,7 +21,6 @@ const startDate = ref<Date>(yesterday)
 const endDate = ref(tomorrow)
 const date = ref([startDate.value, endDate.value])
 const paymentStore = usePaymentsStore()
-const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
 const settingsStore = useSettingsStore()
 
@@ -51,19 +50,11 @@ const translateSender = (receiver: string) => {
   return receiver == 'Orga' ? settingsStore.settings.NewspaperName : receiver
 }
 
-const authenticated = computed(() => keycloakStore.authenticated)
 const items = computed(() => itemsStore.itemsBackoffice)
 
-onMounted(() => {
-  if (authenticated.value) {
-    paymentStore.getPayouts(startDate.value, endDate.value)
-    itemsStore.getItemsBackoffice()
-  } else {
-    watch(authenticated, () => {
-      paymentStore.getPayouts(startDate.value, endDate.value)
-      itemsStore.getItemsBackoffice()
-    })
-  }
+useAuthLoad(() => {
+  paymentStore.getPayouts(startDate.value, endDate.value)
+  itemsStore.getItemsBackoffice()
 })
 
 const sumItemsForOrder = (payment: any, itemID: number) => {

@@ -1,25 +1,13 @@
 <script lang="ts" setup>
 import { vendorsStore } from '@/stores/vendor'
-import { computed, onMounted, ref, watch } from 'vue'
-import keycloak from '@/keycloak/keycloak'
+import { computed, ref, watch } from 'vue'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Vendor } from '@/stores/vendor'
 
 const store = vendorsStore()
 
-// Fetch the vendors' data when the component is mounted
-onMounted(() => {
-  if (keycloak.keycloak?.authenticated) {
-    store.getVendors()
-  } else {
-    if (keycloak.keycloak) {
-      // Fetch the vendors' data when the component is mounted
-      keycloak.keycloak.onAuthSuccess = () => {
-        store.getVendors()
-      }
-    }
-  }
-})
+useAuthLoad(() => store.getVendors())
 
 function formatDate(date: string) {
   if (!date || date === '') return ''

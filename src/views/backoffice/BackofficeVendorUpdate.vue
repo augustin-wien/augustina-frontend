@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor, VendorComment, VendorLocation } from '@/stores/vendor'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
-import { useKeycloakStore } from '@/stores/keycloak'
 import VendorMapView from '@/components/VendorMapView.vue'
 import AddressModal from '@/components/AddressModal.vue'
-import keycloak from '@/keycloak/keycloak'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 
 const { t } = useI18n()
 
@@ -18,7 +17,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import CommentsModal from '@/components/CommentsModal.vue'
 
 const store = vendorsStore()
-const keycloakStore = useKeycloakStore()
 
 const updatedVendor = ref<Vendor | null>(store.vendor)
 
@@ -27,31 +25,16 @@ const route = useRoute()
 const vendorLocations = computed(() => store.vendorLocations)
 const vendorComments = computed(() => store.vendorComments)
 
-onMounted(() => {
-  if (!route?.params?.ID) {
-    return
-  }
+useAuthLoad(() => {
+  if (!route?.params?.ID) return
+  const vendorId = parseInt(route.params.ID.toString())
 
-  const vendorId = parseInt(route?.params?.ID.toString())
+  store.getVendor(vendorId).then(() => {
+    updatedVendor.value = store.vendor
+  })
 
-  if (keycloakStore.authenticated) {
-    store.getVendor(vendorId).then(() => {
-      updatedVendor.value = store.vendor
-    })
-
-    store.getVendorLocations(vendorId)
-    store.getVendorComments(vendorId)
-  } else {
-    if (keycloak.keycloak) {
-      keycloak.keycloak.onAuthSuccess = () => {
-        store.getVendor(vendorId).then(() => {
-          updatedVendor.value = store.vendor
-          store.getVendorLocations(vendorId)
-          store.getVendorComments(vendorId)
-        })
-      }
-    }
-  }
+  store.getVendorLocations(vendorId)
+  store.getVendorComments(vendorId)
 })
 
 watch(
@@ -222,12 +205,63 @@ const cancelEditComment = () => {
   showCommentsDialog.value = false
   selectedComment.value = null
 }
+
+const formatWorkingTime = (workingTime: any) => {
+  if (!workingTime) return t('noLocations')
+
+  if (typeof workingTime === 'string') {
+    switch (workingTime.toLowerCase()) {
+      case 'v':
+        return `${t('everyday')}: 08:00 - 12:00`
+      case 'n':
+        return `${t('everyday')}: 13:00 - 17:00`
+      case 'g':
+        return t('open 24/7')
+      default:
+        return workingTime
+    }
+  }
+
+  const mode = workingTime.mode
+  if (mode === 'whole_week') return t('open 24/7')
+
+  if (mode === 'everyday' && workingTime.everyday) {
+    const times = workingTime.everyday
+    if (times.length === 0) return t('closed')
+    if (times[0]?.full_day) return t('full day')
+    return `${t('everyday')}: ${times
+      .map((range: any) => (range.full_day ? t('full day') : `${range.from}-${range.to}`))
+      .join(', ')}`
+  }
+
+  if (mode === 'by_day' && workingTime.week_days) {
+    const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+    return days
+      .filter((day) => workingTime.week_days[day])
+      .map((day) => {
+        const ranges = workingTime.week_days[day] || []
+
+        if (ranges.length === 0) {
+          return `${t(day)}: ${t('closed')}`
+        }
+
+        const formattedRanges = ranges
+          .map((range: any) => (range.full_day ? t('full day') : `${range.from}-${range.to}`))
+          .join(', ')
+
+        return `${t(day)}: ${formattedRanges}`
+      })
+      .join(' · ')
+  }
+
+  return mode || t('workingTime')
+}
 </script>
 
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 v-if="updatedVendor" className="font-bold mt-3 pt-3 text-2xl">
+      <h1 v-if="updatedVendor" class="font-bold mt-3 pt-3 text-2xl">
         <button @click="router.push('/backoffice/vendorsummary')">
           <font-awesome-icon :icon="faArrowLeft" />
         </button>
@@ -237,334 +271,287 @@ const cancelEditComment = () => {
     <template v-if="updatedVendor !== null" #main>
       <div class="main">
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div v-if="store.vendor" class="w-full">
-            <div class="flex place-content-center justify-between">
-              <span></span>
-            </div>
-          </div>
-
           <form @submit.prevent="updateVendor">
-            <div class="mb-4 justify-between grid grid-cols-2 gap-5">
-              <div class="row">
-                <span class="col">
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="firstName"
-                    >{{ $t('firstName') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="firstName"
-                      v-model="updatedVendor.FirstName"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      required
-                    />
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="lastName"
-                    >{{ $t('lastName') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="lastName"
-                      v-model="updatedVendor.LastName"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      required
-                    />
-                  </div>
-
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="email"
-                    >{{ $t('E-Mail') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="email"
-                      v-model="updatedVendor.Email"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="email"
-                      required
-                    />
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseID"
-                    >{{ $t('licenseId') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="licenseID"
-                      v-model="updatedVendor.LicenseID"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                      required
-                    />
-                  </div>
-
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="workingTime"
-                    >{{ $t('deactivated') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <select
-                      id="onlineMap"
-                      v-model="updatedVendor.IsDisabled"
-                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
-                      <option :value="true">{{ $t('yes') }}</option>
-                      <option :value="false">{{ $t('no') }}</option>
-                    </select>
-                  </div>
-
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="telephone"
-                    >{{ $t('telephone') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="telephone"
-                      v-model="updatedVendor.Telephone"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="language"
-                    >{{ $t('language') }}:</label
-                  >
-                  <div class="flex flex-row">
-                    <input
-                      id="language"
-                      v-model="updatedVendor.Language"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                    for="registrationDate"
+            <!-- Top row: form fields (left) + map (right) -->
+            <div class="grid grid-cols-2 gap-6 mb-6">
+              <div class="grid grid-cols-2 gap-x-4 gap-y-3 content-start">
+                <div>
+                  <label class="field-label" for="firstName">{{ $t('firstName') }}:</label>
+                  <input
+                    id="firstName"
+                    v-model="updatedVendor.FirstName"
+                    class="field-input"
+                    type="text"
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="field-label" for="lastName">{{ $t('lastName') }}:</label>
+                  <input
+                    id="lastName"
+                    v-model="updatedVendor.LastName"
+                    class="field-input"
+                    type="text"
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="field-label" for="email">{{ $t('E-Mail') }}:</label>
+                  <input
+                    id="email"
+                    v-model="updatedVendor.Email"
+                    class="field-input"
+                    type="email"
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="field-label" for="licenseID">{{ $t('licenseId') }}:</label>
+                  <input
+                    id="licenseID"
+                    v-model="updatedVendor.LicenseID"
+                    class="field-input"
+                    type="text"
+                    required
+                  />
+                </div>
+                <div>
+                  <label class="field-label" for="telephone">{{ $t('telephone') }}:</label>
+                  <input
+                    id="telephone"
+                    v-model="updatedVendor.Telephone"
+                    class="field-input"
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <label class="field-label" for="language">{{ $t('language') }}:</label>
+                  <input
+                    id="language"
+                    v-model="updatedVendor.Language"
+                    class="field-input"
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <label class="field-label" for="registrationDate"
                     >{{ $t('registrationDate') }}:</label
                   >
-                  <div class="flex flex-row">
-                    <input
-                      id="registrationDate"
-                      v-model="updatedVendor.RegistrationDate"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorSince"
-                    >{{ $t('vendorSince') }}:</label
+                  <input
+                    id="registrationDate"
+                    v-model="updatedVendor.RegistrationDate"
+                    class="field-input"
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <label class="field-label" for="vendorSince">{{ $t('vendorSince') }}:</label>
+                  <input
+                    id="vendorSince"
+                    v-model="updatedVendor.VendorSince"
+                    class="field-input"
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <label class="field-label" for="isDisabled">{{ $t('deactivated') }}:</label>
+                  <select id="isDisabled" v-model="updatedVendor.IsDisabled" class="field-select">
+                    <option :value="true">{{ $t('yes') }}</option>
+                    <option :value="false">{{ $t('no') }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="field-label" for="hasSmartphone"
+                    >{{ $t('Has a smartphone') }}:</label
                   >
-                  <div class="flex flex-row">
-                    <input
-                      id="vendorSince"
-                      v-model="updatedVendor.VendorSince"
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      type="text"
-                    />
-                  </div>
-                  <label
-                    class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-                    for="hasSmartphone"
-                    >{{ $t('Has a smartphone') }}</label
+                  <select
+                    id="hasSmartphone"
+                    v-model="updatedVendor.HasSmartphone"
+                    class="field-select"
                   >
-                  <div class="flex flex-row">
-                    <select
-                      id="hasSmartphone"
-                      v-model="updatedVendor.HasSmartphone"
-                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
-                      <option :value="true">{{ $t('yes') }}</option>
-                      <option :value="false">{{ $t('no') }}</option>
-                    </select>
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="onlineMap"
-                    >{{ $t('bankAccount') }}:</label
+                    <option :value="true">{{ $t('yes') }}</option>
+                    <option :value="false">{{ $t('no') }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="field-label" for="bankAccount">{{ $t('bankAccount') }}:</label>
+                  <select
+                    id="bankAccount"
+                    v-model="updatedVendor.HasBankAccount"
+                    class="field-select"
                   >
-                  <div class="flex flex-row">
-                    <select
-                      id="bankAccount"
-                      v-model="updatedVendor.HasBankAccount"
-                      class="appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
-                      <option :value="true">{{ $t('yes') }}</option>
-                      <option :value="false">{{ $t('no') }}</option>
-                    </select>
-                  </div>
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="verification"
+                    <option :value="true">{{ $t('yes') }}</option>
+                    <option :value="false">{{ $t('no') }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="field-label" for="verification"
                     >{{ $t('verificationLink') }}:</label
                   >
                   <input
                     id="verification"
                     v-model="updatedVendor.AccountProofUrl"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="verification"
+                    class="field-input"
+                    type="url"
                   />
-                  <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="debt"
-                    >{{ $t('debt') }}:</label
-                  >
-                  <input
-                    id="debt"
-                    v-model="updatedVendor.Debt"
-                    class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    type="verification"
-                  />
-                </span>
+                </div>
+                <div class="col-span-2">
+                  <label class="field-label" for="debt">{{ $t('debt') }}:</label>
+                  <input id="debt" v-model="updatedVendor.Debt" class="field-input" type="text" />
+                </div>
               </div>
-              <div class="row">
-                <span class="col">
-                  <div class="flex flex-col">
-                    <div class="flex flex-row justify-between mb-4">
-                      <h2 class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="comment">
-                        {{ $t('comments') }}
-                      </h2>
-                      <button class="py-2 px-4 rounded-full customcolor" @click="addNewComment()">
-                        {{ $t('Add a comment') }}
-                      </button>
-                    </div>
 
-                    <div
-                      v-if="vendorComments && vendorComments.length > 0"
-                      class="max-h-64 overflow-y-auto pr-1"
-                    >
+              <div class="min-h-48 overflow-hidden">
+                <VendorMapView
+                  v-if="vendorLocations && vendorLocations.length > 0"
+                  :locations="vendorLocations"
+                />
+              </div>
+            </div>
+
+            <!-- Bottom row: locations (left) + comments (right) -->
+            <div class="grid grid-cols-2 gap-6 mb-6">
+              <div>
+                <div class="flex justify-between items-center mb-2">
+                  <h2 class="text-gray-700 text-sm font-bold">{{ $t('vendor locations') }}</h2>
+                  <button
+                    type="button"
+                    class="py-2 px-4 rounded-full customcolor"
+                    @click="showAddressModal = true"
+                  >
+                    {{ $t('New Location') }}
+                  </button>
+                </div>
+                <div
+                  v-if="vendorLocations && vendorLocations.length > 0"
+                  class="space-y-2 max-h-48 overflow-y-auto pr-1"
+                >
+                  <div
+                    v-for="location in vendorLocations"
+                    :key="'location_' + location.id"
+                    class="border border-gray-200 dark:border-gray-600 rounded p-2 bg-gray-50 dark:bg-gray-800 flex justify-between"
+                  >
+                    <div>
+                      <div class="font-bold text-gray-700 dark:text-gray-200">
+                        {{ location.name }}
+                      </div>
+                      <div class="text-sm text-gray-600 dark:text-gray-400">
+                        {{ location.address }} {{ location.zip }}
+                      </div>
                       <div
-                        v-for="comment in vendorComments"
-                        :key="'comment_' + comment.id"
-                        class="comment flex flex-row justify-between border border-gray-200 dark:border-gray-600 rounded p-2 mb-2 bg-gray-50 dark:bg-gray-800"
+                        v-if="location.working_time"
+                        class="text-xs mt-1 text-gray-500 dark:text-gray-400"
                       >
-                        <div
-                          :class="
-                            'comment-infos w-full' +
-                            (comment.warning ? ' text-red-600 dark:text-red-400' : '')
-                          "
-                        >
-                          <div
-                            class="comment-title font-bold text-xs mb-1 text-gray-500 dark:text-gray-400"
-                          >
-                            {{ new Date(comment.created_at).toLocaleDateString() }}
-                          </div>
-
-                          <div class="comment-comment text-sm break-words">
-                            <span v-if="comment.warning" class="comment-warning-label font-bold"
-                              >{{ $t('warning') }}: </span
-                            >{{ comment.comment }}
-                          </div>
-                          <div
-                            v-if="
-                              comment.resolved_at &&
-                              new Date(comment.resolved_at).toLocaleDateString() !== '1.1.1'
-                            "
-                            class="text-xs mt-1 text-gray-500 dark:text-gray-400"
-                          >
-                            <label class="pr-2 font-bold">{{ $t('Resolved at') }}:</label>
-                            <span>{{ new Date(comment.resolved_at).toLocaleDateString() }}</span>
-                          </div>
-                        </div>
-                        <div class="comment-actions flex flex-row items-center ml-2 space-x-2">
-                          <button
-                            type="button"
-                            class="customcolor hover:text-blue-800 p-2"
-                            :title="$t('edit')"
-                            @click.prevent="editComment(comment)"
-                          >
-                            <font-awesome-icon :icon="faPen" />
-                          </button>
-                          <button
-                            id="delete-vendor-comment"
-                            type="button"
-                            class="text-red-600 hover:text-red-800 p-2"
-                            :title="$t('delete')"
-                            @click.prevent="store.deleteVendorComment(updatedVendor.ID, comment.id)"
-                          >
-                            <font-awesome-icon :icon="faTrash" />
-                          </button>
-                        </div>
+                        <span class="font-bold pr-1">{{ $t('workingTime') }}:</span>
+                        <span>{{ formatWorkingTime(location.working_time) }}</span>
                       </div>
                     </div>
-                    <div v-else>
-                      <p>{{ $t('noComments') }}</p>
-                    </div>
-                  </div>
-                  <div class="locations mt-5">
-                    <div class="flex flex-row justify-between mb-4">
-                      <h2>
-                        <b>{{ $t('vendor locations') }}</b>
-                      </h2>
+                    <div class="flex items-center space-x-2 ml-2">
                       <button
-                        type="submit"
-                        class="py-2 px-4 rounded-full customcolor"
-                        @click="showAddressModal = true"
+                        type="button"
+                        class="customcolor p-2"
+                        :title="$t('edit')"
+                        @click.prevent="editLocation(location)"
                       >
-                        {{ $t('New Location') }}
+                        <font-awesome-icon :icon="faPen" />
+                      </button>
+                      <button
+                        type="button"
+                        class="text-red-600 hover:text-red-800 p-2"
+                        :title="$t('delete')"
+                        @click.prevent="store.deleteVendorLocation(updatedVendor.ID, location.id)"
+                      >
+                        <font-awesome-icon :icon="faTrash" />
                       </button>
                     </div>
-                    <div v-if="vendorLocations && vendorLocations.length > 0">
+                  </div>
+                </div>
+                <p v-else class="text-sm text-gray-600 dark:text-gray-400">
+                  {{ $t('Vendor has no locations yet') }}
+                </p>
+              </div>
+
+              <div>
+                <div class="flex justify-between items-center mb-2">
+                  <router-link
+                    :to="`/backoffice/userprofile/${updatedVendor.ID}/comments`"
+                    class="text-gray-700 text-sm font-bold hover:underline"
+                  >
+                    {{ $t('comments') }} →
+                  </router-link>
+                  <button
+                    type="button"
+                    class="py-2 px-4 rounded-full customcolor"
+                    @click="addNewComment()"
+                  >
+                    {{ $t('Add a comment') }}
+                  </button>
+                </div>
+                <div
+                  v-if="vendorComments && vendorComments.length > 0"
+                  class="space-y-2 max-h-48 overflow-y-auto pr-1"
+                >
+                  <div
+                    v-for="comment in vendorComments"
+                    :key="'comment_' + comment.id"
+                    class="border border-gray-200 dark:border-gray-600 rounded p-2 bg-gray-50 dark:bg-gray-800 flex justify-between"
+                    :class="{ 'text-red-600 dark:text-red-400': comment.warning }"
+                  >
+                    <div class="w-full">
+                      <div class="font-bold text-xs mb-1 text-gray-500 dark:text-gray-400">
+                        {{ new Date(comment.created_at).toLocaleDateString() }}
+                      </div>
+                      <div class="text-sm break-words">
+                        <span v-if="comment.warning" class="font-bold">{{ $t('warning') }}: </span>
+                        {{ comment.comment }}
+                      </div>
                       <div
-                        v-for="location in vendorLocations"
-                        :key="'location_' + location.id"
-                        v-key="'loc_' + location.id"
-                        class="location flex justify-between border border-gray-200 dark:border-gray-600 rounded p-2 mb-2 bg-gray-50 dark:bg-gray-800"
+                        v-if="
+                          comment.resolved_at && new Date(comment.resolved_at).getFullYear() > 1
+                        "
+                        class="text-xs mt-1 text-gray-500 dark:text-gray-400"
                       >
-                        <div class="location-infos w-full">
-                          <div class="location-title font-bold text-gray-700 dark:text-gray-200">
-                            {{ location.name }}
-                          </div>
-                          <div class="location-address text-sm text-gray-600 dark:text-gray-400">
-                            {{ location.address }} {{ location.zip }}
-                          </div>
-                          <div
-                            v-if="location.working_time"
-                            class="text-xs mt-1 text-gray-500 dark:text-gray-400"
-                          >
-                            <label class="pr-2 font-bold">{{ $t('workingTime') }}:</label>
-                            <span>{{ location.working_time }}</span>
-                          </div>
-                        </div>
-                        <div class="location-actions flex flex-row items-center space-x-2 ml-2">
-                          <button
-                            type="button"
-                            class="customcolor hover:text-blue-800 p-2"
-                            :title="$t('edit')"
-                            @click.prevent="editLocation(location)"
-                          >
-                            <font-awesome-icon :icon="faPen" />
-                          </button>
-                          <button
-                            type="button"
-                            class="text-red-600 hover:text-red-800 p-2"
-                            :title="$t('delete')"
-                            @click.prevent="
-                              store.deleteVendorLocation(updatedVendor.ID, location.id)
-                            "
-                          >
-                            <font-awesome-icon :icon="faTrash" />
-                          </button>
-                        </div>
+                        <span class="font-bold pr-2">{{ $t('Resolved at') }}:</span>
+                        <span>{{ new Date(comment.resolved_at).toLocaleDateString() }}</span>
                       </div>
                     </div>
-                    <div v-else>
-                      <p>{{ $t('Vendor has no locations yet') }}</p>
+                    <div class="flex items-center space-x-2 ml-2">
+                      <button
+                        type="button"
+                        class="customcolor p-2"
+                        :title="$t('edit')"
+                        @click.prevent="editComment(comment)"
+                      >
+                        <font-awesome-icon :icon="faPen" />
+                      </button>
+                      <button
+                        id="delete-vendor-comment"
+                        type="button"
+                        class="text-red-600 hover:text-red-800 p-2"
+                        :title="$t('delete')"
+                        @click.prevent="store.deleteVendorComment(updatedVendor.ID, comment.id)"
+                      >
+                        <font-awesome-icon :icon="faTrash" />
+                      </button>
                     </div>
                   </div>
-                  <VendorMapView
-                    v-if="vendorLocations && vendorLocations.length > 0"
-                    :locations="vendorLocations"
-                  />
-                </span>
+                </div>
+                <p v-else class="text-sm text-gray-600 dark:text-gray-400">
+                  {{ $t('noComments') }}
+                </p>
               </div>
             </div>
 
             <div class="flex justify-between">
               <button
                 id="delete-vendor"
-                type="submit"
+                type="button"
                 class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
                 @click="showDeleteModal = true"
               >
                 {{ $t('delete') }}
               </button>
-              <button
-                type="submit"
-                class="py-2 px-4 rounded-full customcolor"
-                @click="updateVendor"
-              >
+              <button type="submit" class="py-2 px-4 rounded-full customcolor">
                 {{ $t('confirmation') }}
               </button>
             </div>
@@ -666,15 +653,15 @@ const cancelEditComment = () => {
 </template>
 
 <style scoped>
-tr {
-  padding: 10px;
-}
+@reference "tailwindcss";
 
-td {
-  padding: 10px;
+.field-label {
+  @apply block text-gray-700 text-sm font-bold mb-1;
 }
-.locations {
-  display: flex;
-  flex-direction: column;
+.field-input {
+  @apply w-full appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:outline-none;
+}
+.field-select {
+  @apply appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:outline-none;
 }
 </style>

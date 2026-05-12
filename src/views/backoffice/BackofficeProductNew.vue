@@ -1,26 +1,41 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { useItemsStore } from '@/stores/items'
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useItemsStore, ITEM_TYPES } from '@/stores/items'
 import type { Item } from '@/stores/items'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import IconCross from '@/components/icons/IconCross.vue'
+
+const { t } = useI18n()
 
 const store = useItemsStore()
 
 const newItem = ref({
   Description: '',
   ID: 0,
-  Image: '',
+  Image: '' as any,
   Name: '',
-  Price: 0
+  Price: 0,
+  Type: 'normal_item',
+  LicenseCost: 50,
+  LicenseGroup: ''
 })
+
+const needsLicense = computed(
+  () => newItem.value.Type === 'online_issue' || newItem.value.Type === 'abonement'
+)
 
 const toast = ref<{ type: string; message: string } | null>(null)
 
 const submitItem = async () => {
+  if (needsLicense.value && (!newItem.value.LicenseCost || newItem.value.LicenseCost <= 0)) {
+    showToast('error', t('licenseCostRequired'))
+    return
+  }
+
   try {
-    store
+    await store
       .createItem(newItem.value as Item)
       .then(() => {
         router.push({ name: 'Backoffice Product Settings' })
@@ -28,13 +43,11 @@ const submitItem = async () => {
       .catch((err) => {
         showToast(
           'error',
-          'Produkt konnte nicht angelegt werden. ' + err.response.data.error.message
+          'Produkt konnte nicht angelegt werden. ' + err?.response?.data?.error?.message
         )
       })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    showToast('error', 'Produkt konnte nicht angelegt werden' + err)
-    // eslint-disable-next-line no-console
+    showToast('error', 'Produkt konnte nicht angelegt werden: ' + err)
     console.error('Error creating item:', err)
   }
 }
@@ -45,10 +58,8 @@ const cancel = (e: Event) => {
 }
 
 const showToast = (type: string, message: string) => {
-  // Set the toast message
   toast.value = { type, message }
 
-  // Clear the toast after a delay (e.g., 5 seconds)
   setTimeout(() => {
     toast.value = null
   }, 5000)
@@ -56,22 +67,15 @@ const showToast = (type: string, message: string) => {
 
 const updateImage = (event: any) => {
   const file = event.target.files[0]
-  const reader = new FileReader()
-  reader.readAsDataURL(file)
-
-  reader.onload = () => {
-    newItem.value.Image = reader.result as string
-  }
+  newItem.value.Image = file
 }
 </script>
 
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">
-        {{ $t('newProduct') }} {{ $t('create') }}
-      </h1></template
-    >
+      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('newProduct') }} {{ $t('create') }}</h1>
+    </template>
     <template #main>
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4">
@@ -86,21 +90,37 @@ const updateImage = (event: any) => {
           </div>
           <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4" @submit.prevent="submitItem">
             <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Name"
-                >{{ $t('name') }}:</label
+              <!-- Item type -->
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="itemType">
+                {{ $t('itemType') }}:
+              </label>
+              <select
+                id="itemType"
+                v-model="newItem.Type"
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                required
               >
+                <option v-for="type in ITEM_TYPES" :key="type" :value="type">
+                  {{ $t('itemType_' + type) }}
+                </option>
+              </select>
+
+              <!-- Name -->
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="name">
+                {{ $t('name') }}:
+              </label>
               <input
                 id="name"
                 v-model="newItem.Name"
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
-                hint="Name des Produkts"
                 required
               />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="Description"
-                >{{ $t('description') }}:</label
-              >
+              <!-- Description -->
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description">
+                {{ $t('description') }}:
+              </label>
               <input
                 id="description"
                 v-model="newItem.Description"
@@ -109,20 +129,52 @@ const updateImage = (event: any) => {
                 required
               />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price"
-                >{{ $t('price') }}:</label
-              >
+              <!-- Price -->
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price">
+                {{ $t('price') }} (Cent):
+              </label>
               <input
                 id="price"
                 v-model="newItem.Price"
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="number"
+                min="1"
                 required
               />
 
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image"
-                >{{ $t('image') }}:</label
-              >
+              <!-- License group (for online_issue / abonement) -->
+              <template v-if="needsLicense">
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseGroup">
+                  {{ $t('licenseGroup') }}:
+                </label>
+                <input
+                  id="licenseGroup"
+                  v-model="newItem.LicenseGroup"
+                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  placeholder="z.B. digital_edition"
+                />
+
+                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseCost">
+                  {{ $t('licenseCost') }} (Cent):
+                </label>
+                <input
+                  id="licenseCost"
+                  v-model="newItem.LicenseCost"
+                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="number"
+                  min="1"
+                  required
+                />
+                <p class="text-xs text-gray-500 mt-1">
+                  {{ $t('licenseCostHint') }}
+                </p>
+              </template>
+
+              <!-- Image -->
+              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image">
+                {{ $t('image') }}:
+              </label>
               <input
                 id="image"
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -147,12 +199,3 @@ const updateImage = (event: any) => {
     </template>
   </component>
 </template>
-
-<style>
-tr {
-  padding: 10px;
-}
-td {
-  padding: 10px;
-}
-</style>

@@ -1,26 +1,13 @@
 <script setup lang="ts">
 import { useOrdersStore } from '@/stores/orders'
-import { useKeycloakStore } from '@/stores/keycloak'
-import { onMounted, computed, watch, ref } from 'vue'
+import { computed, ref } from 'vue'
 import ToastMessage from '@/components/ToastMessage.vue'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 
 const ordersStore = useOrdersStore()
-const keycloakStore = useKeycloakStore()
-
-const authenticated = computed(() => keycloakStore.authenticated)
 const toast = ref<{ message: string; type: string } | null>(null)
 
-onMounted(() => {
-  if (authenticated.value) {
-    ordersStore.getUnverifiedOrders()
-  } else {
-    watch(authenticated, (newVal) => {
-      if (newVal) {
-        ordersStore.getUnverifiedOrders()
-      }
-    })
-  }
-})
+useAuthLoad(() => ordersStore.getUnverifiedOrders())
 
 const unverifiedOrders = computed(() => ordersStore.unverifiedOrders)
 

@@ -1,23 +1,14 @@
 <script lang="ts" setup>
 import { useItemsStore } from '@/stores/items'
-import { computed, onMounted, watch } from 'vue'
+import { computed } from 'vue'
 import { formatCredit } from '@/utils/utils'
-import { useKeycloakStore } from '@/stores/keycloak'
 import type { Item } from '@/stores/items'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 
-const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
-const authenticated = computed(() => keycloakStore.authenticated)
 
-// Fetch the items' data when the component is mounted
-onMounted(() => {
-  if (authenticated.value) {
-    itemsStore.getItemsBackoffice()
-  } else {
-    watch(authenticated, () => {
-      itemsStore.getItemsBackoffice()
-    })
-  }
+useAuthLoad(() => {
+  itemsStore.getItemsBackoffice()
 })
 
 const items = computed(() => {

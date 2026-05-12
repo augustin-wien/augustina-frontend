@@ -6,7 +6,7 @@ import StatisticsQuantityTable from '@/components/statistics/StatisticsQuantityT
 import StatisticsVendorUsageChart from '@/components/statistics/StatisticsVendorUsageChart.vue'
 import StatisticsVendorUsageTable from '@/components/statistics/StatisticsVendorUsageTable.vue'
 import { useItemsStore } from '@/stores/items'
-import { useKeycloakStore } from '@/stores/keycloak'
+import { useAuthLoad } from '@/composables/useAuthLoad'
 import {
   useStatisticsStore,
   type StatisticsItem,
@@ -15,10 +15,9 @@ import {
 } from '@/stores/statistics'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { type Statistics } from '@/stores/statistics'
 
-const keycloakStore = useKeycloakStore()
 const itemsStore = useItemsStore()
 const store = useStatisticsStore()
 
@@ -50,7 +49,6 @@ const onRangeEnd = (value: Date) => {
   }
 }
 
-const authenticated = computed(() => keycloakStore.authenticated)
 const viewMode = ref<'chart' | 'table' | 'both'>('chart')
 const showCharts = computed(() => viewMode.value === 'chart' || viewMode.value === 'both')
 const showTable = computed(() => viewMode.value === 'table' || viewMode.value === 'both')
@@ -91,12 +89,7 @@ const loadStatistics = async () => {
   ])
 }
 
-onMounted(() => {
-  // Fetch items data, but don't load statistics until dates are explicitly selected
-  if (authenticated.value) {
-    itemsStore.getItemsBackoffice()
-  }
-})
+useAuthLoad(() => itemsStore.getItemsBackoffice())
 </script>
 
 <template>
