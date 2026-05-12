@@ -421,7 +421,7 @@ router.afterEach((to) => {
 // Check if the user is authenticated
 router.beforeEach(async (to: RouteLocationNormalized) => {
   if (to.meta.requiresAuth && to.name !== '404') {
-    await isAuthenticated(to)
+    return await isAuthenticated(to)
   }
 })
 
@@ -437,9 +437,7 @@ async function isAuthenticated(to: RouteLocationNormalized) {
 
     const keycloakStore = useKeycloakStore()
 
-    keycloakStore.setAuthenticated(
-      keycloak.keycloak?.authenticated ? keycloak.keycloak.authenticated : false
-    )
+    keycloakStore.setAuthenticated(keycloak.keycloak?.authenticated ?? false)
 
     if (keycloak.keycloak?.tokenParsed) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
@@ -447,18 +445,16 @@ async function isAuthenticated(to: RouteLocationNormalized) {
 
     if (keycloak.keycloak?.tokenParsed?.groups.includes('vendor')) {
       if (!to.path.startsWith('/me')) {
-        router.push('/me')
+        return { name: 'My Info' }
       }
     } else if (keycloak.keycloak?.tokenParsed?.groups.includes('backoffice')) {
       if (to.path.startsWith('/me')) {
-        router.push('/backoffice/vendorsummary')
+        return { name: 'Backoffice' }
       }
     }
-
-    return keycloak.keycloak?.authenticated
-  } else {
-    return keycloak.keycloak?.authenticated
   }
+
+  return keycloak.keycloak?.authenticated ?? false
 }
 
 export default router
