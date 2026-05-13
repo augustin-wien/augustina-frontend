@@ -245,5 +245,7 @@
   "noComments": "No comments",
   "addComment": "Add a comment...",
   "add": "Add",
-  "posNoItems": "No sellable items available."
+  "posNoItems": "No sellable items available.",
+  "Branding": "Branding",
+  "Webshop": "Webshop"
 }

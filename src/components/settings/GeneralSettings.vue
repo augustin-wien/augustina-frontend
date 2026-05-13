@@ -12,14 +12,12 @@ const emits = defineEmits(['open-qrcode', 'saved', 'error'])
 
 const settingsStore = useSettingsStore()
 
-// local copy of the prop to avoid mutating props directly
 const localSettings = ref<Settings>({ ...props.updatedSettings })
 
 const newLogo = ref('')
 const newFavicon = ref('')
 const newQrCodeLogo = ref('')
 
-// keep local copy in sync when parent updates prop
 watch(
   () => props.updatedSettings,
   (val) => {
@@ -29,26 +27,22 @@ watch(
 )
 
 const updateLogo = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const file = target?.files ? target.files[0] : undefined
+  const file = (event.target as HTMLInputElement)?.files?.[0]
   if (!file) return
   localSettings.value.Logo = file as File
   newLogo.value = URL.createObjectURL(file)
 }
 
 const updateFavicon = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const file = target?.files ? target.files[0] : undefined
+  const file = (event.target as HTMLInputElement)?.files?.[0]
   if (!file) return
   localSettings.value.Favicon = file as File
   newFavicon.value = URL.createObjectURL(file)
 }
 
 const updateQRCodeLogo = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  const file = target?.files ? target.files[0] : undefined
+  const file = (event.target as HTMLInputElement)?.files?.[0]
   if (!file) return
-  // store file as a string-compatible value for the form; backend expects a file or url
   localSettings.value.QRCodeLogoImgUrl = file as unknown as string
   newQrCodeLogo.value = URL.createObjectURL(file)
 }
@@ -68,352 +62,190 @@ defineExpose({ saveSettings })
 </script>
 
 <template>
-  <div class="form">
-    <div>
-      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="newspapername"
-        >{{ $t('Newspaper name') }}:</label
-      >
-      <div class="flex flex-row">
-        <input
-          id="newspapername"
-          v-model="localSettings.NewspaperName"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          required
-        />
-      </div>
-    </div>
+  <div class="space-y-6">
 
-    <!-- Logo -->
-    <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="logo">Logo:</label>
-      <div class="flex flex-col">
-        <img
-          v-if="(localSettings && typeof localSettings.Logo === 'string') || !localSettings?.Logo"
-          :src="
-            localSettings?.Logo && localSettings?.Logo !== ''
-              ? props.url.replace(/\/$/, '') + localSettings.Logo
-              : props.url + 'img/logo.png'
-          "
-          alt="Newspaper logo"
-          class="logo my-5"
-          width="200"
-          height="auto"
-        />
-        <img
-          v-else
-          :src="newLogo"
-          alt="Newspaper logo2"
-          class="logo my-5"
-          width="200"
-          height="auto"
-        />
-        <input
-          id="logo"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="file"
-          accept="image/png"
-          @change="updateLogo"
-        />
-      </div>
-    </div>
-
-    <!-- Favicon -->
-    <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="favicon">Favicon:</label>
-      <div class="flex flex-col">
-        <img
-          v-if="
-            (localSettings && typeof localSettings.Favicon === 'string') || !localSettings?.Favicon
-          "
-          :src="
-            localSettings?.Favicon && localSettings?.Favicon !== ''
-              ? props.url + localSettings.Favicon.slice(1)
-              : props.url + 'img/favicon.png'
-          "
-          alt="Newspaper favicon"
-          class="favicon my-5"
-          width="200"
-          height="auto"
-        />
-        <img
-          v-else
-          :src="newFavicon"
-          alt="Newspaper favicon2"
-          class="favicon my-5"
-          width="200"
-          height="auto"
-        />
-        <input
-          id="favicon"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="file"
-          accept="image/png"
-          @change="updateFavicon"
-        />
-      </div>
-    </div>
-
-    <!-- Colors and main item etc. -->
-    <div class="mt-4 grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="color"
-          >{{ $t('color') }}:</label
-        >
-        <div class="flex flex-row">
+    <!-- Branding -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('Branding') }}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Newspaper name -->
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Newspaper name') }}</label>
           <input
-            id="color"
-            v-model="localSettings.Color"
-            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            v-model="localSettings.NewspaperName"
             type="text"
+            class="w-full border rounded px-3 py-2 text-gray-700"
             required
           />
         </div>
-      </div>
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="color"
-          >{{ $t('fontColor') }}:</label
-        >
-        <div class="flex flex-row">
-          <input
-            id="color"
-            v-model="localSettings.FontColor"
-            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            required
+        <!-- Color -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('color') }}</label>
+          <input v-model="localSettings.Color" type="text" class="w-full border rounded px-3 py-2 text-gray-700" required />
+        </div>
+        <!-- Font color -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('fontColor') }}</label>
+          <input v-model="localSettings.FontColor" type="text" class="w-full border rounded px-3 py-2 text-gray-700" required />
+        </div>
+        <!-- Logo -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Logo</label>
+          <img
+            v-if="typeof localSettings.Logo === 'string' || !localSettings.Logo"
+            :src="localSettings.Logo ? props.url.replace(/\/$/, '') + localSettings.Logo : props.url + 'img/logo.png'"
+            alt="Logo"
+            class="mb-2 h-16 object-contain"
           />
+          <img v-else :src="newLogo" alt="Logo preview" class="mb-2 h-16 object-contain" />
+          <input type="file" accept="image/png" class="w-full border rounded px-3 py-1 text-sm text-gray-700" @change="updateLogo" />
+        </div>
+        <!-- Favicon -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Favicon</label>
+          <img
+            v-if="typeof localSettings.Favicon === 'string' || !localSettings.Favicon"
+            :src="localSettings.Favicon ? props.url + localSettings.Favicon.slice(1) : props.url + 'img/favicon.png'"
+            alt="Favicon"
+            class="mb-2 h-16 object-contain"
+          />
+          <img v-else :src="newFavicon" alt="Favicon preview" class="mb-2 h-16 object-contain" />
+          <input type="file" accept="image/png" class="w-full border rounded px-3 py-1 text-sm text-gray-700" @change="updateFavicon" />
         </div>
       </div>
     </div>
-    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="mainItem"
-      >{{ $t('mainProduct') }}:</label
-    >
-    <div class="flex flex-row">
-      <select
-        id="mainItem"
-        v-model="localSettings.MainItem"
-        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        required
-      >
-        <option v-for="item in props.items" :key="item.ID" :value="item.ID">{{ item.Name }}</option>
-      </select>
-    </div>
-    <div>
-      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="maxOrder"
-        >{{ $t('Max order amount') }}:</label
-      >
-      <input
-        id="maxOrder"
-        v-model.number="localSettings.MaxOrderAmount"
-        type="number"
-        class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
-      />
-    </div>
-    <div class="mt-4 grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-          >{{ $t('Webshop closed') }}:</label
-        >
-        <input v-model="localSettings.WebshopIsClosed" type="checkbox" class="ml-2" />
-      </div>
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-          >{{ $t('Orga covers transaction costs') }}:</label
-        >
-        <input v-model="localSettings.OrgaCoversTransactionCosts" type="checkbox" class="ml-2" />
-      </div>
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-          >{{ $t('settingsPOSEnabled') }}:</label
-        >
-        <input v-model="localSettings.POSEnabled" type="checkbox" class="ml-2" />
-      </div>
-    </div>
 
-    <div class="mt-4 grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="agb"
-          >{{ $t('AGB URL') }}:</label
-        >
-        <div class="flex gap-2">
-          <input
-            id="agb"
-            v-model="localSettings.AGBUrl"
-            class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
-            type="text"
-          />
-          <button type="button" class="px-3 rounded bg-gray-200" @click="settingsStore.toAGB()">
-            {{ $t('Open') }}
-          </button>
+    <!-- Webshop -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('Webshop') }}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('mainProduct') }}</label>
+          <select v-model="localSettings.MainItem" class="w-full border rounded px-3 py-2 text-gray-700" required>
+            <option v-for="item in props.items" :key="item.ID" :value="item.ID">{{ item.Name }}</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Max order amount') }}</label>
+          <input v-model.number="localSettings.MaxOrderAmount" type="number" class="w-full border rounded px-3 py-2 text-gray-700" />
         </div>
       </div>
-      <div class="">
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="maintainance"
-          >{{ $t('Maintainance mode help URL') }}:</label
-        >
-        <input
-          id="maintainance"
-          v-model="localSettings.MaintainanceModeHelpUrl"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
-          type="text"
-        />
+      <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-4">
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input v-model="localSettings.WebshopIsClosed" type="checkbox" />
+          {{ $t('Webshop closed') }}
+        </label>
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input v-model="localSettings.ShopLanding" type="checkbox" />
+          {{ $t('Shop page as landing page') }}
+        </label>
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input v-model="localSettings.UseTipInsteadOfDonation" type="checkbox" />
+          {{ $t('Use tip instead of donation in the shop') }}
+        </label>
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input v-model="localSettings.OrgaCoversTransactionCosts" type="checkbox" />
+          {{ $t('Orga covers transaction costs') }}
+        </label>
+        <label class="flex items-center gap-2 text-sm cursor-pointer">
+          <input v-model="localSettings.UseVendorLicenseIdInShop" type="checkbox" />
+          {{ $t('Use the license id instead of the name in the shop') }}
+        </label>
       </div>
     </div>
 
-    <div class="mt-4 grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="vendorpostfix"
-          >{{ $t('Vendor email postfix') }}:</label
-        >
-        <input
-          id="vendorpostfix"
-          v-model="localSettings.VendorEmailPostfix"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
-          type="text"
-        />
-      </div>
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="digitalUrl"
-          >{{ $t('Digital items URL') }}:</label
-        >
-        <input
-          id="digitalUrl"
-          v-model="localSettings.DigitalItemsUrl"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
-          type="text"
-        />
-      </div>
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="abonementUrl"
-          >{{ $t('Abonement URL') }}:</label
-        >
-        <input
-          id="abonementUrl"
-          v-model="localSettings.AbonementUrl"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
-          type="text"
-        />
+    <!-- Point of Sale -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('menuPOS') }}</h2>
+      <label class="flex items-center gap-2 text-sm cursor-pointer">
+        <input v-model="localSettings.POSEnabled" type="checkbox" />
+        {{ $t('settingsPOSEnabled') }}
+      </label>
+    </div>
+
+    <!-- URLs -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">URLs</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('AGB URL') }}</label>
+          <div class="flex gap-2">
+            <input v-model="localSettings.AGBUrl" type="text" class="flex-1 border rounded px-3 py-2 text-gray-700" />
+            <button type="button" class="px-3 rounded bg-gray-100 border text-sm" @click="settingsStore.toAGB()">{{ $t('Open') }}</button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Maintainance mode help URL') }}</label>
+          <input v-model="localSettings.MaintainanceModeHelpUrl" type="text" class="w-full border rounded px-3 py-2 text-gray-700" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Vendor email postfix') }}</label>
+          <input v-model="localSettings.VendorEmailPostfix" type="text" class="w-full border rounded px-3 py-2 text-gray-700" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Digital items URL') }}</label>
+          <input v-model="localSettings.DigitalItemsUrl" type="text" class="w-full border rounded px-3 py-2 text-gray-700" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Abonement URL') }}</label>
+          <input v-model="localSettings.AbonementUrl" type="text" class="w-full border rounded px-3 py-2 text-gray-700" />
+        </div>
       </div>
     </div>
 
-    <div class="mt-4 grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-          >{{ $t('Map center lat') }}:</label
-        >
-        <input
-          v-model.number="localSettings.MapCenterLat"
-          type="number"
-          step="0.000001"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
-        />
-      </div>
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-          >{{ $t('Map center long') }}:</label
-        >
-        <input
-          v-model.number="localSettings.MapCenterLong"
-          type="number"
-          step="0.000001"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
-        />
+    <!-- Map -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('menuMap') }}</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Map center lat') }}</label>
+          <input v-model.number="localSettings.MapCenterLat" type="number" step="0.000001" class="w-full border rounded px-3 py-2 text-gray-700" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Map center long') }}</label>
+          <input v-model.number="localSettings.MapCenterLong" type="number" step="0.000001" class="w-full border rounded px-3 py-2 text-gray-700" />
+        </div>
       </div>
     </div>
 
-    <div class="mt-4 grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-          >{{ $t('Use the license id instead of the name in the shop') }}:</label
-        >
-        <input v-model="localSettings.UseVendorLicenseIdInShop" type="checkbox" class="ml-2" />
-      </div>
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-          >{{ $t('Show QR code logo') }}:</label
-        >
-        <input v-model="localSettings.QRCodeEnableLogo" type="checkbox" class="ml-2" />
-      </div>
-    </div>
-
-    <div class="mt-4 grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-          >{{ $t('Use tip instead of donation in the shop') }}:</label
-        >
-        <input v-model="localSettings.UseTipInsteadOfDonation" type="checkbox" class="ml-2" />
-      </div>
-      <div>
-        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
-          >{{ $t('Shop page as landing page') }}:</label
-        >
-        <input v-model="localSettings.ShopLanding" type="checkbox" class="ml-2" />
+    <!-- QR Code -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('QR-Code settings') }}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('QR Code url') }}</label>
+          <input v-model="localSettings.QRCodeUrl" type="text" class="w-full border rounded px-3 py-2 text-gray-700" required />
+        </div>
+        <div class="flex items-end">
+          <label class="flex items-center gap-2 text-sm cursor-pointer">
+            <input v-model="localSettings.QRCodeEnableLogo" type="checkbox" />
+            {{ $t('Show QR code logo') }}
+          </label>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('QR Code logo') }}</label>
+          <img
+            v-if="typeof localSettings.QRCodeLogoImgUrl === 'string' || !localSettings.QRCodeLogoImgUrl"
+            :src="localSettings.QRCodeLogoImgUrl ? props.url + localSettings.QRCodeLogoImgUrl : props.url + 'img/qrcode.png'"
+            alt="QR code logo"
+            class="mb-2 h-16 object-contain"
+          />
+          <img v-else :src="newQrCodeLogo" alt="QR code logo preview" class="mb-2 h-16 object-contain" />
+          <input type="file" accept="image/png" class="w-full border rounded px-3 py-1 text-sm text-gray-700" @change="updateQRCodeLogo" />
+        </div>
       </div>
     </div>
 
-    <!-- QR code logo -->
-    <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="qrcodelogo"
-        >{{ $t('QR Code logo') }}:</label
-      >
-      <div class="flex flex-col">
-        <img
-          v-if="
-            (localSettings && typeof localSettings.QRCodeLogoImgUrl === 'string') ||
-            !localSettings?.QRCodeLogoImgUrl
-          "
-          :src="
-            localSettings?.QRCodeLogoImgUrl && localSettings?.QRCodeLogoImgUrl !== ''
-              ? props.url + localSettings.QRCodeLogoImgUrl
-              : props.url + 'img/qrcode.png'
-          "
-          alt="QR code logo"
-          class="favicon my-5"
-          width="200"
-          height="auto"
-        />
-        <img
-          v-else
-          :src="newQrCodeLogo"
-          alt="QR code logo2"
-          class="favicon my-5"
-          width="200"
-          height="auto"
-        />
-        <input
-          id="qrcodelogo"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="file"
-          accept="image/png"
-          @change="updateQRCodeLogo"
-        />
-      </div>
-    </div>
-
-    <div>
-      <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="qrcodeurl"
-        >{{ $t('QR Code url') }}:</label
-      >
-      <div class="flex flex-row">
-        <input
-          id="qrcodeurl"
-          v-model="localSettings.QRCodeUrl"
-          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          type="text"
-          required
-        />
-      </div>
-    </div>
-
-    <div class="flex place-content-center">
+    <!-- Save -->
+    <div class="flex justify-end">
       <button
-        id="saveSettings"
         type="submit"
-        class="px-4 py-2 ps-2 mt-2 rounded-full customcolor h-[44px]"
+        class="px-6 py-2 rounded-full customcolor font-semibold"
         @click="saveSettings()"
       >
         {{ $t('save') }}
       </button>
     </div>
+
   </div>
 </template>

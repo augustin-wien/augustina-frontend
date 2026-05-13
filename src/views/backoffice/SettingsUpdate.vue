@@ -104,67 +104,44 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
       <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuSettings') }}</h1>
     </template>
     <template #main>
-      <div v-if="settingsStore.settings" class="main">
-        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div v-if="settings" class="w-full max-w-l mx-auto">
-            <!-- Tabs: General settings and Custom CSS -->
-            <div class="mb-4 flex gap-2">
-              <button
-                :class="
-                  currentTab === 'general' ? 'px-4 py-2 bg-black text-white' : 'px-4 py-2 border'
-                "
-                @click="currentTab = 'general'"
-              >
-                {{ $t('General') }}
-              </button>
-              <button
-                :class="
-                  currentTab === 'styles' ? 'px-4 py-2 bg-black text-white' : 'px-4 py-2 border'
-                "
-                @click="currentTab = 'styles'"
-              >
-                {{ $t('Custom styles') }}
-              </button>
-              <button
-                :class="
-                  currentTab === 'qrcode' ? 'px-4 py-2 bg-black text-white' : 'px-4 py-2 border'
-                "
-                @click="currentTab = 'qrcode'"
-              >
-                {{ $t('QR-Code settings') }}
-              </button>
-              <button
-                :class="
-                  currentTab === 'mailtemplates'
-                    ? 'px-4 py-2 bg-black text-white'
-                    : 'px-4 py-2 border'
-                "
-                @click="currentTab = 'mailtemplates'"
-              >
-                {{ $t('Mail Templates') }}
-              </button>
-            </div>
-
-            <GeneralSettings
-              v-show="currentTab === 'general'"
-              ref="generalRef"
-              :updated-settings="updatedSettings"
-              :items="items"
-              :url="url"
-              @open-qrcode="currentTab = 'qrcode'"
-              @saved="showToast('success', $event)"
-              @error="showToast('error', $event)"
-            />
-            <StylesSettings
-              v-show="currentTab === 'styles'"
-              ref="stylesRef"
-              :styles="styles"
-              @saved="showToast('success', $event)"
-              @error="showToast('error', $event)"
-            />
-          </div>
+      <div v-if="settingsStore.settings" class="max-w-4xl">
+        <!-- Tab nav -->
+        <div class="mb-6 flex gap-2 border-b pb-2">
+          <button
+            :class="currentTab === 'general' ? 'px-4 py-2 bg-black text-white rounded-t' : 'px-4 py-2 border rounded-t'"
+            @click="currentTab = 'general'"
+          >{{ $t('General') }}</button>
+          <button
+            :class="currentTab === 'styles' ? 'px-4 py-2 bg-black text-white rounded-t' : 'px-4 py-2 border rounded-t'"
+            @click="currentTab = 'styles'"
+          >{{ $t('Custom styles') }}</button>
+          <button
+            :class="currentTab === 'qrcode' ? 'px-4 py-2 bg-black text-white rounded-t' : 'px-4 py-2 border rounded-t'"
+            @click="currentTab = 'qrcode'"
+          >{{ $t('QR-Code settings') }}</button>
+          <button
+            :class="currentTab === 'mailtemplates' ? 'px-4 py-2 bg-black text-white rounded-t' : 'px-4 py-2 border rounded-t'"
+            @click="currentTab = 'mailtemplates'"
+          >{{ $t('Mail Templates') }}</button>
         </div>
 
+        <GeneralSettings
+          v-show="currentTab === 'general'"
+          ref="generalRef"
+          :updated-settings="updatedSettings"
+          :items="items"
+          :url="url"
+          @open-qrcode="currentTab = 'qrcode'"
+          @saved="showToast('success', $event)"
+          @error="showToast('error', $event)"
+        />
+        <StylesSettings
+          v-show="currentTab === 'styles'"
+          ref="stylesRef"
+          :styles="styles"
+          @saved="showToast('success', $event)"
+          @error="showToast('error', $event)"
+        />
         <QrCodeSettings
           v-show="currentTab === 'qrcode'"
           inline
