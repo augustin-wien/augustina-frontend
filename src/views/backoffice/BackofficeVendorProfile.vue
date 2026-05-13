@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
 import IconCross from '@/components/icons/IconCross.vue'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faCashRegister } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 
@@ -110,6 +110,14 @@ const formatCredit = (credit: number) => {
                 class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center"
               >
                 {{ $t('change') }}
+              </button>
+            </router-link>
+            <router-link :to="`/backoffice/pos/${vendor.LicenseID}`">
+              <button
+                class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center gap-2"
+              >
+                <font-awesome-icon :icon="faCashRegister" />
+                {{ $t('posOpenPOS') }}
               </button>
             </router-link>
           </div>

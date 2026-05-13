@@ -6,6 +6,7 @@ import { useSettingsStore } from '@/stores/settings'
 import {
   faArrowRightFromBracket,
   faBagShopping,
+  faCashRegister,
   faDungeon,
   faFileLines,
   faSliders,
@@ -94,6 +95,14 @@ onMounted(() => {
                   >
                     <font-awesome-icon :icon="faUserGroup" />
                     <p class="text-base leading-4">{{ $t('menuVendors') }}</p>
+                  </button>
+                </RouterLink>
+                <RouterLink to="/backoffice/pos">
+                  <button
+                    class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
+                  >
+                    <font-awesome-icon :icon="faCashRegister" />
+                    <p class="text-base leading-4">{{ $t('menuPOS') }}</p>
                   </button>
                 </RouterLink>
                 <RouterLink to="/backoffice/credits" class-name="sidemenu-link">
