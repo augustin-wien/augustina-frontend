@@ -49,7 +49,11 @@ useAuthLoad(async () => {
 
 const posItems = computed(() =>
   itemsStore.itemsBackoffice.filter(
-    (i: Item) => !i.Disabled && (i.Type === 'normal_item' || i.Type === 'issue')
+    (i: Item) =>
+      !i.Disabled &&
+      !i.IsPDFItem &&
+      !i.LicenseItem &&
+      (i.Type === 'normal_item' || i.Type === 'issue')
   )
 )
 

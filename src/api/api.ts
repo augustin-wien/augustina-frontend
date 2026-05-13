@@ -177,6 +177,7 @@ export async function patchSettings(updatedSettings: Settings) {
 
   formData.append('DigitalItemsUrl', updatedSettings.DigitalItemsUrl)
   formData.append('AbonementUrl', updatedSettings.AbonementUrl)
+  formData.append('POSEnabled', updatedSettings.POSEnabled.toString())
 
   formData.append(
     'OrgaCoversTransactionCosts',
