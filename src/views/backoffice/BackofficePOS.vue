@@ -201,7 +201,13 @@ const commentsOpen = ref(true)
                 class="w-8 h-8 rounded bg-gray-200 font-bold text-lg leading-none"
                 @click="dec(item.ID)"
               >−</button>
-              <span class="w-8 text-center font-semibold">{{ quantities[item.ID] ?? 0 }}</span>
+              <input
+                type="number"
+                min="0"
+                class="w-14 text-center font-semibold border rounded py-1"
+                :value="quantities[item.ID] ?? 0"
+                @change="quantities[item.ID] = Math.max(0, parseInt(($event.target as HTMLInputElement).value) || 0)"
+              />
               <button
                 class="w-8 h-8 rounded bg-gray-200 font-bold text-lg leading-none"
                 @click="inc(item.ID)"
