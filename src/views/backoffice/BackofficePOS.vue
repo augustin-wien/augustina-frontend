@@ -135,6 +135,7 @@ const commentsOpen = ref(true)
 </script>
 
 <template>
+  <component :is="$route.meta.layout || 'div'">
   <template #header>
     <div class="flex items-center gap-4 p-4">
       <button class="text-gray-500 hover:underline text-sm" @click="router.back()">← Back</button>
@@ -283,4 +284,5 @@ const commentsOpen = ref(true)
       </div>
     </div>
   </template>
+  </component>
 </template>

@@ -35,9 +35,10 @@ function openPOS(licenseId: string) {
 </script>
 
 <template>
-  <div slot="header">
+  <component :is="$route.meta.layout || 'div'">
+  <template #header>
     <h1 class="text-2xl font-bold p-4">{{ $t('posTitle') }}</h1>
-  </div>
+  </template>
 
   <template #main>
     <div class="p-4">
@@ -83,4 +84,5 @@ function openPOS(licenseId: string) {
       </table>
     </div>
   </template>
+  </component>
 </template>
