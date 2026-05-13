@@ -282,12 +282,11 @@ const email = localStorage.getItem('email') || ''
               </button>
             </a>
           </div>
-          <div v-if="hasAbonementPurchase && settStore.settings.AbonementUrl" class="abonement-link mt-3">
-            <a
-              :href="settStore.settings.AbonementUrl"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+          <div
+            v-if="hasAbonementPurchase && settStore.settings.AbonementUrl"
+            class="abonement-link mt-3"
+          >
+            <a :href="settStore.settings.AbonementUrl" target="_blank" rel="noopener noreferrer">
               <button
                 class="abonement-button rounded-full text-center p-5 customfont text-sm font-semibold w-full cursor-pointer"
                 :style="
