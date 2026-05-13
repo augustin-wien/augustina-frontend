@@ -55,9 +55,9 @@ export const usePaymentStore = defineStore('payment', {
     },
 
     //AGB
-    checkAgb() {
+    checkAgb(vendorId: string) {
       if (this.agbChecked) {
-        router.push({ name: 'Payment' })
+        router.push({ name: 'Payment', params: { id: vendorId } })
         return true
       }
 

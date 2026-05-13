@@ -277,6 +277,17 @@ defineExpose({ saveSettings })
           type="text"
         />
       </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="abonementUrl"
+          >{{ $t('Abonement URL') }}:</label
+        >
+        <input
+          id="abonementUrl"
+          v-model="localSettings.AbonementUrl"
+          class="appearance-none border rounded w-full py-2 px-3 text-gray-700"
+          type="text"
+        />
+      </div>
     </div>
 
     <div class="mt-4 grid grid-cols-2 gap-4">

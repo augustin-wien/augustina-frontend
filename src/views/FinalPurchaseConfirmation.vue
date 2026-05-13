@@ -3,17 +3,18 @@ import { useShopStore } from '@/stores/ShopStore'
 import { usePaymentStore } from '@/stores/payment'
 import { useSettingsStore } from '@/stores/settings'
 import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import EmailModal from '@/components/EmailModal.vue'
 
 const router = useRouter()
+const route = useRoute()
 const shopStore = useShopStore()
 const settStore = useSettingsStore()
 const paymentStore = usePaymentStore()
 const shake = ref(false)
 
 const checkAgb = () => {
-  const agbsChecked = paymentStore.checkAgb()
+  const agbsChecked = paymentStore.checkAgb(route.params.id as string)
 
   if (!agbsChecked) {
     shake.value = true
@@ -35,13 +36,13 @@ onMounted(() => {
 })
 
 const hasLicenseItem = computed(() => {
-  const item = shopStore.items?.find((item) => item.LicenseItem != null)
-
-  if (item) {
-    if (shopStore.amount.find((i) => i.item == item.ID)) return item
-  }
-
-  return null
+  return (
+    shopStore.items?.find(
+      (item) =>
+        (item.LicenseItem != null || item.Type === 'abonement') &&
+        shopStore.amount.some((i) => i.item == item.ID)
+    ) ?? null
+  )
 })
 </script>
 
