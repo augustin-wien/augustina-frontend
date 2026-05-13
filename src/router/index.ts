@@ -278,6 +278,26 @@ const router = createRouter({
       component: () => import('@/views/backoffice/MapView.vue')
     },
     {
+      path: '/backoffice/pos',
+      name: 'BackofficePOSPickVendor',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'POS'
+      },
+      component: () => import('@/views/backoffice/BackofficePOSPickVendor.vue')
+    },
+    {
+      path: '/backoffice/pos/:id',
+      name: 'BackofficePOS',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'POS'
+      },
+      component: () => import('@/views/backoffice/BackofficePOS.vue')
+    },
+    {
       path: '/backoffice/customers',
       name: 'Customers',
       meta: {

@@ -32,6 +32,7 @@ export interface Settings {
   ShopLanding: boolean | undefined
   DigitalItemsUrl: string
   AbonementUrl: string
+  POSEnabled: boolean
   edges?: any
   Keycloak: {
     Realm: string

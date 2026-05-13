@@ -48,7 +48,8 @@ const updatedSettings = ref<Settings>({
   UseTipInsteadOfDonation: false,
   ShopLanding: false,
   DigitalItemsUrl: '',
-  AbonementUrl: ''
+  AbonementUrl: '',
+  POSEnabled: true
 })
 
 useAuthLoad(() => {

@@ -83,6 +83,18 @@ export async function patchVendor(updatedVendor: Vendor) {
   })
 }
 
+export async function postPOSOrder(
+  licenseId: string,
+  entries: { item: number; quantity: number }[],
+  useBalance: boolean
+) {
+  return apiInstance.post(
+    `${VENDORS_API_URL}${licenseId}/pos-order/`,
+    JSON.stringify({ entries, useBalance }),
+    { headers: { 'Content-Type': 'application/json' } }
+  )
+}
+
 export async function removeVendor(vendorId: number) {
   return apiInstance.delete(`${VENDORS_API_URL}${vendorId}/`)
 }

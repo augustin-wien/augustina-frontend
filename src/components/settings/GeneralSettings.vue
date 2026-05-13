@@ -222,6 +222,12 @@ defineExpose({ saveSettings })
         >
         <input v-model="localSettings.OrgaCoversTransactionCosts" type="checkbox" class="ml-2" />
       </div>
+      <div>
+        <label class="block text-gray-700 text-sm font-bold mb-2 pt-3"
+          >{{ $t('settingsPOSEnabled') }}:</label
+        >
+        <input v-model="localSettings.POSEnabled" type="checkbox" class="ml-2" />
+      </div>
     </div>
 
     <div class="mt-4 grid grid-cols-2 gap-4">
