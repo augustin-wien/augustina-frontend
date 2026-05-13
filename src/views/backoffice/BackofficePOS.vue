@@ -179,6 +179,9 @@ const commentsOpen = ref(true)
 
       <template v-else>
         <!-- Item grid -->
+        <div v-if="posItems.length === 0" class="mb-6 text-sm text-gray-500 italic">
+          {{ $t('posNoItems') }}
+        </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
           <div
             v-for="item in posItems"

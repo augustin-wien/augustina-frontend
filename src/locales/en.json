@@ -244,5 +244,6 @@
   "vendorComments": "Comments",
   "noComments": "No comments",
   "addComment": "Add a comment...",
-  "add": "Add"
+  "add": "Add",
+  "posNoItems": "No sellable items available."
 }

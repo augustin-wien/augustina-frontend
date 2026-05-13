@@ -333,5 +333,6 @@
   "settingsPOSEnabled": "Kassa aktiviert",
   "vendorComments": "Kommentare",
   "addComment": "Kommentar hinzufügen...",
-  "add": "Hinzufügen"
+  "add": "Hinzufügen",
+  "posNoItems": "Keine verkäuflichen Artikel verfügbar."
 }
