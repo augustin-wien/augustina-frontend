@@ -157,6 +157,16 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeAccountingPayments.vue')
     },
     {
+      path: '/backoffice/pos-accounting',
+      name: 'Backoffice POS Accounting',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'POS Accounting'
+      },
+      component: () => import('@/views/backoffice/BackofficePOSAccounting.vue')
+    },
+    {
       path: '/backoffice/payouts',
       name: 'Backoffice Logs',
       meta: {

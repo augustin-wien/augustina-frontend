@@ -95,6 +95,16 @@ export async function postPOSOrder(
   )
 }
 
+export async function fetchPOSOrders(licenseId: string) {
+  return apiInstance.get(`${VENDORS_API_URL}${licenseId}/pos-orders/`)
+}
+
+export async function fetchAllPOSOrders(startDate: Date, endDate: Date) {
+  return apiInstance.get(
+    `${BASE_URL}api/pos-orders/?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
+  )
+}
+
 export async function removeVendor(vendorId: number) {
   return apiInstance.delete(`${VENDORS_API_URL}${vendorId}/`)
 }
