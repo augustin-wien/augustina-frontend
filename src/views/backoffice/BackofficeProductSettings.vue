@@ -4,7 +4,9 @@ import { computed } from 'vue'
 import { formatCredit } from '@/utils/utils'
 import type { Item } from '@/stores/items'
 import { useAuthLoad } from '@/composables/useAuthLoad'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const itemsStore = useItemsStore()
 
 useAuthLoad(() => {
@@ -27,6 +29,43 @@ const items = computed(() => {
 })
 
 const apiUrl = import.meta.env.VITE_API_URL
+
+function exportCSV() {
+  const headers = [
+    t('productId'),
+    t('name'),
+    t('description'),
+    t('price'),
+    t('order'),
+    t('itemType'),
+    t('isDisabled')
+  ]
+
+  const rows = items.value.map((item: Item) => [
+    item.ID,
+    item.Name,
+    item.Description,
+    item.Price,
+    item.ItemOrder,
+    item.Type ?? '',
+    item.Disabled ? t('yes') : t('no')
+  ])
+
+  const csvContent = [headers, ...rows]
+    .map((row) =>
+      row.map((cell: unknown) => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(',')
+    )
+    .join('\n')
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+
+  a.href = url
+  a.download = 'products.csv'
+  a.click()
+  URL.revokeObjectURL(url)
+}
 </script>
 
 <template>
@@ -37,10 +76,16 @@ const apiUrl = import.meta.env.VITE_API_URL
     <template #main>
       <div class="main w-full">
         <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <div class="flex justify-end mb-4">
+            <button class="px-4 py-2 rounded-full customcolor h-[44px]" @click="exportCSV">
+              {{ $t('downloadCSV') }}
+            </button>
+          </div>
           <div className="text-xl space-y-3 space-x-3">
             <table className="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
+                  <th class="p-3">{{ $t('productId') }}</th>
                   <th class="p-3">{{ $t('image') }}</th>
                   <th class="p-3">{{ $t('name') }}</th>
                   <th class="p-3">{{ $t('description') }}</th>
@@ -51,6 +96,7 @@ const apiUrl = import.meta.env.VITE_API_URL
               </thead>
               <tbody className="text-sm p-3">
                 <tr v-for="item in items" :key="item.ID" :class="{ 'disabled-row': item.Disabled }">
+                  <td class="border-t-2 p-3 text-gray-500">{{ item.ID }}</td>
                   <td class="border-t-2 p-3">
                     <img
                       :src="item.Image ? apiUrl + item.Image : ''"

@@ -259,5 +259,6 @@
   "posItemTotals": "Item totals",
   "downloadCSV": "Download CSV",
   "Branding": "Branding",
-  "Webshop": "Webshop"
+  "Webshop": "Webshop",
+  "productId": "ID"
 }

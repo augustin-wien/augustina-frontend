@@ -146,6 +146,15 @@ const previewImage = (image: string | Blob | MediaSource) => {
             </h2>
             <div class="space-y-4">
               <div>
+                <label class="field-label">{{ $t('productId') }}</label>
+                <input
+                  type="text"
+                  :value="updatedItem.ID"
+                  class="field-input bg-gray-100 text-gray-500"
+                  readonly
+                />
+              </div>
+              <div>
                 <label class="field-label" for="itemType">{{ $t('itemType') }}</label>
                 <select id="itemType" v-model="updatedItem.Type" class="field-input">
                   <option v-for="t in ITEM_TYPES" :key="t" :value="t">
