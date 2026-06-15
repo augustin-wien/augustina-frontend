@@ -83,6 +83,28 @@ export async function patchVendor(updatedVendor: Vendor) {
   })
 }
 
+export async function postPOSOrder(
+  licenseId: string,
+  entries: { item: number; quantity: number }[],
+  useBalance: boolean
+) {
+  return apiInstance.post(
+    `${VENDORS_API_URL}${licenseId}/pos-order/`,
+    JSON.stringify({ entries, useBalance }),
+    { headers: { 'Content-Type': 'application/json' } }
+  )
+}
+
+export async function fetchPOSOrders(licenseId: string) {
+  return apiInstance.get(`${VENDORS_API_URL}${licenseId}/pos-orders/`)
+}
+
+export async function fetchAllPOSOrders(startDate: Date, endDate: Date) {
+  return apiInstance.get(
+    `${BASE_URL}api/pos-orders/?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
+  )
+}
+
 export async function removeVendor(vendorId: number) {
   return apiInstance.delete(`${VENDORS_API_URL}${vendorId}/`)
 }
@@ -165,6 +187,7 @@ export async function patchSettings(updatedSettings: Settings) {
 
   formData.append('DigitalItemsUrl', updatedSettings.DigitalItemsUrl)
   formData.append('AbonementUrl', updatedSettings.AbonementUrl)
+  formData.append('POSEnabled', updatedSettings.POSEnabled.toString())
 
   formData.append(
     'OrgaCoversTransactionCosts',

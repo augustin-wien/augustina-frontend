@@ -157,6 +157,16 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeAccountingPayments.vue')
     },
     {
+      path: '/backoffice/pos-accounting',
+      name: 'Backoffice POS Accounting',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'POS Accounting'
+      },
+      component: () => import('@/views/backoffice/BackofficePOSAccounting.vue')
+    },
+    {
       path: '/backoffice/payouts',
       name: 'Backoffice Logs',
       meta: {
@@ -276,6 +286,26 @@ const router = createRouter({
         title: 'Map'
       },
       component: () => import('@/views/backoffice/MapView.vue')
+    },
+    {
+      path: '/backoffice/pos',
+      name: 'BackofficePOSPickVendor',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'POS'
+      },
+      component: () => import('@/views/backoffice/BackofficePOSPickVendor.vue')
+    },
+    {
+      path: '/backoffice/pos/:id',
+      name: 'BackofficePOS',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'POS'
+      },
+      component: () => import('@/views/backoffice/BackofficePOS.vue')
     },
     {
       path: '/backoffice/customers',
@@ -443,11 +473,11 @@ async function isAuthenticated(to: RouteLocationNormalized) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
 
-    if (keycloak.keycloak?.tokenParsed?.groups.includes('vendor')) {
+    if (keycloak.keycloak?.tokenParsed?.groups?.includes('vendor')) {
       if (!to.path.startsWith('/me')) {
         return { name: 'My Info' }
       }
-    } else if (keycloak.keycloak?.tokenParsed?.groups.includes('backoffice')) {
+    } else if (keycloak.keycloak?.tokenParsed?.groups?.includes('backoffice')) {
       if (to.path.startsWith('/me')) {
         return { name: 'Backoffice' }
       }

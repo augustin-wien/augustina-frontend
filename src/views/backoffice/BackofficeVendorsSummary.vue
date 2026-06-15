@@ -7,6 +7,7 @@ import { useAuthLoad } from '@/composables/useAuthLoad'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 
 import {
+  faCashRegister,
   faCreditCard,
   faArrowAltCircleRight,
   faQrcode,
@@ -170,6 +171,11 @@ const selectedVendor = ref<Vendor | null>(null)
                     <router-link :to="`/backoffice/userprofile/${vendor.ID}/comments`">
                       <button className="p-2 rounded-full h-10 w-10 customcolor mr-2">
                         <font-awesome-icon :icon="faComment" />
+                      </button>
+                    </router-link>
+                    <router-link :to="`/backoffice/pos/${vendor.LicenseID}`">
+                      <button className="p-2 rounded-full h-10 w-10 customcolor mr-2">
+                        <font-awesome-icon :icon="faCashRegister" />
                       </button>
                     </router-link>
                   </td>
