@@ -108,21 +108,45 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
         <!-- Tab nav -->
         <div class="mb-6 flex gap-2 border-b pb-2">
           <button
-            :class="currentTab === 'general' ? 'px-4 py-2 bg-black text-white rounded-t' : 'px-4 py-2 border rounded-t'"
+            :class="
+              currentTab === 'general'
+                ? 'px-4 py-2 bg-black text-white rounded-t'
+                : 'px-4 py-2 border rounded-t'
+            "
             @click="currentTab = 'general'"
-          >{{ $t('General') }}</button>
+          >
+            {{ $t('General') }}
+          </button>
           <button
-            :class="currentTab === 'styles' ? 'px-4 py-2 bg-black text-white rounded-t' : 'px-4 py-2 border rounded-t'"
+            :class="
+              currentTab === 'styles'
+                ? 'px-4 py-2 bg-black text-white rounded-t'
+                : 'px-4 py-2 border rounded-t'
+            "
             @click="currentTab = 'styles'"
-          >{{ $t('Custom styles') }}</button>
+          >
+            {{ $t('Custom styles') }}
+          </button>
           <button
-            :class="currentTab === 'qrcode' ? 'px-4 py-2 bg-black text-white rounded-t' : 'px-4 py-2 border rounded-t'"
+            :class="
+              currentTab === 'qrcode'
+                ? 'px-4 py-2 bg-black text-white rounded-t'
+                : 'px-4 py-2 border rounded-t'
+            "
             @click="currentTab = 'qrcode'"
-          >{{ $t('QR-Code settings') }}</button>
+          >
+            {{ $t('QR-Code settings') }}
+          </button>
           <button
-            :class="currentTab === 'mailtemplates' ? 'px-4 py-2 bg-black text-white rounded-t' : 'px-4 py-2 border rounded-t'"
+            :class="
+              currentTab === 'mailtemplates'
+                ? 'px-4 py-2 bg-black text-white rounded-t'
+                : 'px-4 py-2 border rounded-t'
+            "
             @click="currentTab = 'mailtemplates'"
-          >{{ $t('Mail Templates') }}</button>
+          >
+            {{ $t('Mail Templates') }}
+          </button>
         </div>
 
         <GeneralSettings

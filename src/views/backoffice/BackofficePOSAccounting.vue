@@ -41,6 +41,7 @@ const loading = ref(false)
 
 async function load() {
   loading.value = true
+
   try {
     const res = await fetchAllPOSOrders(startDate.value, endDate.value)
     orders.value = res.data ?? []
@@ -53,6 +54,7 @@ const onRangeStart = (value: Date) => {
   startDate.value = value
   load()
 }
+
 const onRangeEnd = (value: Date) => {
   endDate.value = value
   load()
@@ -61,17 +63,23 @@ const onRangeEnd = (value: Date) => {
 useAuthLoad(load)
 
 const totalBalance = computed(() => orders.value.reduce((s, o) => s + o.balanceUsed, 0))
-const totalCash = computed(() => orders.value.reduce((s, o) => s + (o.cashAmount || (!o.balanceUsed ? o.totalAmount : 0)), 0))
-const totalAll = computed(() => orders.value.reduce((s, o) => s + (o.totalAmount || o.balanceUsed), 0))
+const totalCash = computed(() =>
+  orders.value.reduce((s, o) => s + (o.cashAmount || (!o.balanceUsed ? o.totalAmount : 0)), 0)
+)
+const totalAll = computed(() =>
+  orders.value.reduce((s, o) => s + (o.totalAmount || o.balanceUsed), 0)
+)
 const totalOrders = computed(() => orders.value.length)
 
 // Aggregate per-item totals across all orders
 const itemTotals = computed(() => {
   const map = new Map<string, { name: string; quantity: number; amount: number }>()
+
   for (const order of orders.value) {
     for (const item of order.items ?? []) {
       const key = item.itemName || `#${item.itemId}`
       const existing = map.get(key)
+
       if (existing) {
         existing.quantity += item.quantity
         existing.amount += item.amount
@@ -80,42 +88,49 @@ const itemTotals = computed(() => {
       }
     }
   }
+
   return [...map.values()].sort((a, b) => b.amount - a.amount)
 })
 
 function formatDate(ts: string) {
   const d = new Date(ts)
-  return d.toLocaleDateString('de-AT') + ' ' + d.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' })
+  return (
+    d.toLocaleDateString('de-AT') +
+    ' ' +
+    d.toLocaleTimeString('de-AT', { hour: '2-digit', minute: '2-digit' })
+  )
 }
 
 function itemSummary(order: POSOrder) {
   if (!order.items?.length) return '—'
-  return order.items.map(i => `${i.quantity}× ${i.itemName || '#' + i.itemId}`).join(', ')
+  return order.items.map((i) => `${i.quantity}× ${i.itemName || '#' + i.itemId}`).join(', ')
 }
 
 function downloadCSV() {
   const header = ['Datum', 'Verkäufer:in', 'Artikel', 'Guthaben (€)', 'Bar (€)', 'Gesamt (€)']
-  const rows = orders.value.map(o => [
+
+  const rows = orders.value.map((o) => [
     formatDate(o.timestamp),
     `${o.vendorName} (${o.vendorLicenseId})`,
     itemSummary(o),
     o.balanceUsed > 0 ? (o.balanceUsed / 100).toFixed(2) : '',
-    (o.cashAmount > 0 ? o.cashAmount : (!o.balanceUsed ? o.totalAmount : 0)) > 0
+    (o.cashAmount > 0 ? o.cashAmount : !o.balanceUsed ? o.totalAmount : 0) > 0
       ? ((o.cashAmount || o.totalAmount) / 100).toFixed(2)
       : '',
-    ((o.totalAmount || o.balanceUsed) / 100).toFixed(2),
+    ((o.totalAmount || o.balanceUsed) / 100).toFixed(2)
   ])
+
   rows.push([
     'Gesamt',
     '',
     '',
     (totalBalance.value / 100).toFixed(2),
     (totalCash.value / 100).toFixed(2),
-    (totalAll.value / 100).toFixed(2),
+    (totalAll.value / 100).toFixed(2)
   ])
 
   const csv = [header, ...rows]
-    .map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(';'))
+    .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(';'))
     .join('\r\n')
 
   const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' })
@@ -158,7 +173,6 @@ function downloadCSV() {
 
     <template #main>
       <div class="main space-y-4">
-
         <!-- Summary cards -->
         <div v-if="orders.length > 0" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div class="bg-white rounded shadow-sm px-4 py-3">
@@ -213,7 +227,9 @@ function downloadCSV() {
                 <td colspan="6" class="p-4 text-center text-gray-400">…</td>
               </tr>
               <tr v-else-if="orders.length === 0">
-                <td colspan="6" class="p-4 text-center text-gray-400 italic">{{ $t('posNoHistory') }}</td>
+                <td colspan="6" class="p-4 text-center text-gray-400 italic">
+                  {{ $t('posNoHistory') }}
+                </td>
               </tr>
               <tr v-for="(order, idx) in orders" :key="idx" class="hover:bg-gray-50">
                 <td class="p-3 border-t whitespace-nowrap">{{ formatDate(order.timestamp) }}</td>
@@ -233,8 +249,12 @@ function downloadCSV() {
                   {{ order.balanceUsed > 0 ? formatCredit(order.balanceUsed) + ' €' : '—' }}
                 </td>
                 <td class="p-3 border-t text-right text-green-700">
-                  <template v-if="order.cashAmount > 0">{{ formatCredit(order.cashAmount) }} €</template>
-                  <template v-else-if="!order.balanceUsed && order.totalAmount">{{ formatCredit(order.totalAmount) }} €</template>
+                  <template v-if="order.cashAmount > 0"
+                    >{{ formatCredit(order.cashAmount) }} €</template
+                  >
+                  <template v-else-if="!order.balanceUsed && order.totalAmount"
+                    >{{ formatCredit(order.totalAmount) }} €</template
+                  >
                   <template v-else>—</template>
                 </td>
                 <td class="p-3 border-t text-right font-semibold">

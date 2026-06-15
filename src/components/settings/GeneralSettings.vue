@@ -63,14 +63,15 @@ defineExpose({ saveSettings })
 
 <template>
   <div class="space-y-6">
-
     <!-- Branding -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
       <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('Branding') }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Newspaper name -->
         <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Newspaper name') }}</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('Newspaper name')
+          }}</label>
           <input
             v-model="localSettings.NewspaperName"
             type="text"
@@ -81,36 +82,64 @@ defineExpose({ saveSettings })
         <!-- Color -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('color') }}</label>
-          <input v-model="localSettings.Color" type="text" class="w-full border rounded px-3 py-2 text-gray-700" required />
+          <input
+            v-model="localSettings.Color"
+            type="text"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+            required
+          />
         </div>
         <!-- Font color -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('fontColor') }}</label>
-          <input v-model="localSettings.FontColor" type="text" class="w-full border rounded px-3 py-2 text-gray-700" required />
+          <input
+            v-model="localSettings.FontColor"
+            type="text"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+            required
+          />
         </div>
         <!-- Logo -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Logo</label>
           <img
             v-if="typeof localSettings.Logo === 'string' || !localSettings.Logo"
-            :src="localSettings.Logo ? props.url.replace(/\/$/, '') + localSettings.Logo : props.url + 'img/logo.png'"
+            :src="
+              localSettings.Logo
+                ? props.url.replace(/\/$/, '') + localSettings.Logo
+                : props.url + 'img/logo.png'
+            "
             alt="Logo"
             class="mb-2 h-16 object-contain"
           />
           <img v-else :src="newLogo" alt="Logo preview" class="mb-2 h-16 object-contain" />
-          <input type="file" accept="image/png" class="w-full border rounded px-3 py-1 text-sm text-gray-700" @change="updateLogo" />
+          <input
+            type="file"
+            accept="image/png"
+            class="w-full border rounded px-3 py-1 text-sm text-gray-700"
+            @change="updateLogo"
+          />
         </div>
         <!-- Favicon -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Favicon</label>
           <img
             v-if="typeof localSettings.Favicon === 'string' || !localSettings.Favicon"
-            :src="localSettings.Favicon ? props.url + localSettings.Favicon.slice(1) : props.url + 'img/favicon.png'"
+            :src="
+              localSettings.Favicon
+                ? props.url + localSettings.Favicon.slice(1)
+                : props.url + 'img/favicon.png'
+            "
             alt="Favicon"
             class="mb-2 h-16 object-contain"
           />
           <img v-else :src="newFavicon" alt="Favicon preview" class="mb-2 h-16 object-contain" />
-          <input type="file" accept="image/png" class="w-full border rounded px-3 py-1 text-sm text-gray-700" @change="updateFavicon" />
+          <input
+            type="file"
+            accept="image/png"
+            class="w-full border rounded px-3 py-1 text-sm text-gray-700"
+            @change="updateFavicon"
+          />
         </div>
       </div>
     </div>
@@ -120,14 +149,28 @@ defineExpose({ saveSettings })
       <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('Webshop') }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('mainProduct') }}</label>
-          <select v-model="localSettings.MainItem" class="w-full border rounded px-3 py-2 text-gray-700" required>
-            <option v-for="item in props.items" :key="item.ID" :value="item.ID">{{ item.Name }}</option>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('mainProduct')
+          }}</label>
+          <select
+            v-model="localSettings.MainItem"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+            required
+          >
+            <option v-for="item in props.items" :key="item.ID" :value="item.ID">
+              {{ item.Name }}
+            </option>
           </select>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Max order amount') }}</label>
-          <input v-model.number="localSettings.MaxOrderAmount" type="number" class="w-full border rounded px-3 py-2 text-gray-700" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('Max order amount')
+          }}</label>
+          <input
+            v-model.number="localSettings.MaxOrderAmount"
+            type="number"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+          />
         </div>
       </div>
       <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-4">
@@ -170,25 +213,59 @@ defineExpose({ saveSettings })
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('AGB URL') }}</label>
           <div class="flex gap-2">
-            <input v-model="localSettings.AGBUrl" type="text" class="flex-1 border rounded px-3 py-2 text-gray-700" />
-            <button type="button" class="px-3 rounded bg-gray-100 border text-sm" @click="settingsStore.toAGB()">{{ $t('Open') }}</button>
+            <input
+              v-model="localSettings.AGBUrl"
+              type="text"
+              class="flex-1 border rounded px-3 py-2 text-gray-700"
+            />
+            <button
+              type="button"
+              class="px-3 rounded bg-gray-100 border text-sm"
+              @click="settingsStore.toAGB()"
+            >
+              {{ $t('Open') }}
+            </button>
           </div>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Maintainance mode help URL') }}</label>
-          <input v-model="localSettings.MaintainanceModeHelpUrl" type="text" class="w-full border rounded px-3 py-2 text-gray-700" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('Maintainance mode help URL')
+          }}</label>
+          <input
+            v-model="localSettings.MaintainanceModeHelpUrl"
+            type="text"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+          />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Vendor email postfix') }}</label>
-          <input v-model="localSettings.VendorEmailPostfix" type="text" class="w-full border rounded px-3 py-2 text-gray-700" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('Vendor email postfix')
+          }}</label>
+          <input
+            v-model="localSettings.VendorEmailPostfix"
+            type="text"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+          />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Digital items URL') }}</label>
-          <input v-model="localSettings.DigitalItemsUrl" type="text" class="w-full border rounded px-3 py-2 text-gray-700" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('Digital items URL')
+          }}</label>
+          <input
+            v-model="localSettings.DigitalItemsUrl"
+            type="text"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+          />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Abonement URL') }}</label>
-          <input v-model="localSettings.AbonementUrl" type="text" class="w-full border rounded px-3 py-2 text-gray-700" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('Abonement URL')
+          }}</label>
+          <input
+            v-model="localSettings.AbonementUrl"
+            type="text"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+          />
         </div>
       </div>
     </div>
@@ -198,12 +275,26 @@ defineExpose({ saveSettings })
       <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('menuMap') }}</h2>
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Map center lat') }}</label>
-          <input v-model.number="localSettings.MapCenterLat" type="number" step="0.000001" class="w-full border rounded px-3 py-2 text-gray-700" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('Map center lat')
+          }}</label>
+          <input
+            v-model.number="localSettings.MapCenterLat"
+            type="number"
+            step="0.000001"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+          />
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Map center long') }}</label>
-          <input v-model.number="localSettings.MapCenterLong" type="number" step="0.000001" class="w-full border rounded px-3 py-2 text-gray-700" />
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('Map center long')
+          }}</label>
+          <input
+            v-model.number="localSettings.MapCenterLong"
+            type="number"
+            step="0.000001"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+          />
         </div>
       </div>
     </div>
@@ -213,8 +304,15 @@ defineExpose({ saveSettings })
       <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('QR-Code settings') }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('QR Code url') }}</label>
-          <input v-model="localSettings.QRCodeUrl" type="text" class="w-full border rounded px-3 py-2 text-gray-700" required />
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('QR Code url')
+          }}</label>
+          <input
+            v-model="localSettings.QRCodeUrl"
+            type="text"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+            required
+          />
         </div>
         <div class="flex items-end">
           <label class="flex items-center gap-2 text-sm cursor-pointer">
@@ -223,15 +321,33 @@ defineExpose({ saveSettings })
           </label>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('QR Code logo') }}</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('QR Code logo')
+          }}</label>
           <img
-            v-if="typeof localSettings.QRCodeLogoImgUrl === 'string' || !localSettings.QRCodeLogoImgUrl"
-            :src="localSettings.QRCodeLogoImgUrl ? props.url + localSettings.QRCodeLogoImgUrl : props.url + 'img/qrcode.png'"
+            v-if="
+              typeof localSettings.QRCodeLogoImgUrl === 'string' || !localSettings.QRCodeLogoImgUrl
+            "
+            :src="
+              localSettings.QRCodeLogoImgUrl
+                ? props.url + localSettings.QRCodeLogoImgUrl
+                : props.url + 'img/qrcode.png'
+            "
             alt="QR code logo"
             class="mb-2 h-16 object-contain"
           />
-          <img v-else :src="newQrCodeLogo" alt="QR code logo preview" class="mb-2 h-16 object-contain" />
-          <input type="file" accept="image/png" class="w-full border rounded px-3 py-1 text-sm text-gray-700" @change="updateQRCodeLogo" />
+          <img
+            v-else
+            :src="newQrCodeLogo"
+            alt="QR code logo preview"
+            class="mb-2 h-16 object-contain"
+          />
+          <input
+            type="file"
+            accept="image/png"
+            class="w-full border rounded px-3 py-1 text-sm text-gray-700"
+            @change="updateQRCodeLogo"
+          />
         </div>
       </div>
     </div>
@@ -246,6 +362,5 @@ defineExpose({ saveSettings })
         {{ $t('save') }}
       </button>
     </div>
-
   </div>
 </template>

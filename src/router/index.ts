@@ -473,11 +473,11 @@ async function isAuthenticated(to: RouteLocationNormalized) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
 
-    if (keycloak.keycloak?.tokenParsed?.groups.includes('vendor')) {
+    if (keycloak.keycloak?.tokenParsed?.groups?.includes('vendor')) {
       if (!to.path.startsWith('/me')) {
         return { name: 'My Info' }
       }
-    } else if (keycloak.keycloak?.tokenParsed?.groups.includes('backoffice')) {
+    } else if (keycloak.keycloak?.tokenParsed?.groups?.includes('backoffice')) {
       if (to.path.startsWith('/me')) {
         return { name: 'Backoffice' }
       }
