@@ -348,5 +348,6 @@
   "posItemTotals": "Artikel gesamt",
   "downloadCSV": "CSV herunterladen",
   "Branding": "Markenauftritt",
-  "Webshop": "Webshop"
+  "Webshop": "Webshop",
+  "productId": "ID"
 }
