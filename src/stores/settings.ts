@@ -33,6 +33,9 @@ export interface Settings {
   DigitalItemsUrl: string
   AbonementUrl: string
   POSEnabled: boolean
+  WordPressInviteURL: string
+  WordPressInviteAPIKey: string
+  WordPressInviteTTL: number
   edges?: any
   Keycloak: {
     Realm: string

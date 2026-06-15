@@ -188,6 +188,9 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('DigitalItemsUrl', updatedSettings.DigitalItemsUrl)
   formData.append('AbonementUrl', updatedSettings.AbonementUrl)
   formData.append('POSEnabled', updatedSettings.POSEnabled.toString())
+  formData.append('WordPressInviteURL', updatedSettings.WordPressInviteURL ?? '')
+  formData.append('WordPressInviteAPIKey', updatedSettings.WordPressInviteAPIKey ?? '')
+  formData.append('WordPressInviteTTL', (updatedSettings.WordPressInviteTTL ?? 604800).toString())
 
   formData.append(
     'OrgaCoversTransactionCosts',

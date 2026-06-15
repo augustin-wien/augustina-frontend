@@ -49,7 +49,10 @@ const updatedSettings = ref<Settings>({
   ShopLanding: false,
   DigitalItemsUrl: '',
   AbonementUrl: '',
-  POSEnabled: true
+  POSEnabled: true,
+  WordPressInviteURL: '',
+  WordPressInviteAPIKey: '',
+  WordPressInviteTTL: 604800
 })
 
 useAuthLoad(() => {
