@@ -81,7 +81,7 @@ onMounted(() => {
                 <img :src="logo" alt="Newspaper logo" class="logo mx-auto" width="auto" />
               </div>
               <div class="sidemenu-item flex flex-col w-full space-y-2">
-                <RouterLink to="/backoffice/customers">
+                <RouterLink v-if="settings.AbonementUrl" to="/backoffice/customers">
                   <button
                     class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -97,7 +97,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuVendors') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/pos">
+                <RouterLink v-if="settings.POSEnabled" to="/backoffice/pos">
                   <button
                     class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -113,7 +113,11 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuCredits') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/pos-accounting" class-name="sidemenu-link">
+                <RouterLink
+                  v-if="settings.POSEnabled"
+                  to="/backoffice/pos-accounting"
+                  class-name="sidemenu-link"
+                >
                   <button
                     class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
