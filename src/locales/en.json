@@ -265,5 +265,6 @@
   "wpInviteHint": "After a digital item or abonement is purchased, a one-time login link is generated and sent by email. Leave blank to disable.",
   "wpInviteURL": "WordPress API endpoint (e.g. http://host.docker.internal:8088/wp-json/augustin/v1/shop/create-invite)",
   "wpInviteAPIKey": "API key",
-  "wpInviteTTL": "Validity in seconds (e.g. 604800 = 7 days)"
+  "wpInviteTTL": "Validity in seconds (e.g. 604800 = 7 days)",
+  "wpInviteLogin": "Log in directly"
 }

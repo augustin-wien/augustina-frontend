@@ -354,5 +354,6 @@
   "wpInviteHint": "Nach dem Kauf eines digitalen Artikels oder Abonnements wird automatisch ein Einmal-Login-Link generiert und per E-Mail verschickt. Leer lassen um die Funktion zu deaktivieren.",
   "wpInviteURL": "WordPress API-Endpunkt (z.B. http://host.docker.internal:8088/wp-json/augustin/v1/shop/create-invite)",
   "wpInviteAPIKey": "API-Schlüssel",
-  "wpInviteTTL": "Gültigkeit in Sekunden (z.B. 604800 = 7 Tage)"
+  "wpInviteTTL": "Gültigkeit in Sekunden (z.B. 604800 = 7 Tage)",
+  "wpInviteLogin": "Direkt einloggen"
 }

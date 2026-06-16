@@ -300,6 +300,28 @@ const email = localStorage.getItem('email') || ''
               </button>
             </a>
           </div>
+          <div
+            v-if="paymentStore.verification?.InviteURL"
+            class="wp-invite-link mt-3"
+          >
+            <a
+              :href="paymentStore.verification.InviteURL"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button
+                class="wp-invite-button rounded-full text-center p-5 customfont text-sm font-semibold w-full cursor-pointer"
+                :style="
+                  'background-color:' +
+                  settStore.settings.Color +
+                  '; color: ' +
+                  settStore.settings.FontColor
+                "
+              >
+                {{ $t('wpInviteLogin') }}
+              </button>
+            </a>
+          </div>
         </div>
         <div v-else class="text-6xl row-span-4 font-bold w-fit h-full relative">
           <div
