@@ -49,6 +49,7 @@ const updatedSettings = ref<Settings>({
   ShopLanding: false,
   DigitalItemsUrl: '',
   AbonementUrl: '',
+  AbonementEnabled: false,
   POSEnabled: true,
   WordPressInviteURL: '',
   WordPressInviteAPIKey: '',

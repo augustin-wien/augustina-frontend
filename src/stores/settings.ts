@@ -32,6 +32,7 @@ export interface Settings {
   ShopLanding: boolean | undefined
   DigitalItemsUrl: string
   AbonementUrl: string
+  AbonementEnabled: boolean
   POSEnabled: boolean
   WordPressInviteURL: string
   WordPressInviteAPIKey: string

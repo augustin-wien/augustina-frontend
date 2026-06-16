@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useItemsStore, ITEM_TYPES } from '@/stores/items'
 import type { Item } from '@/stores/items'
+import { useSettingsStore } from '@/stores/settings'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import IconCross from '@/components/icons/IconCross.vue'
@@ -10,6 +11,10 @@ import IconCross from '@/components/icons/IconCross.vue'
 const { t } = useI18n()
 
 const store = useItemsStore()
+const settingsStore = useSettingsStore()
+const availableItemTypes = computed(() =>
+  ITEM_TYPES.filter((type) => type !== 'abonement' || settingsStore.settings.AbonementEnabled)
+)
 
 const newItem = ref({
   Description: '',
@@ -100,7 +105,7 @@ const updateImage = (event: any) => {
                 class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 required
               >
-                <option v-for="type in ITEM_TYPES" :key="type" :value="type">
+                <option v-for="type in availableItemTypes" :key="type" :value="type">
                   {{ $t('itemType_' + type) }}
                 </option>
               </select>

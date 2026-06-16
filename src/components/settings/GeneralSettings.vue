@@ -206,6 +206,25 @@ defineExpose({ saveSettings })
       </label>
     </div>
 
+    <!-- Abonement / Subscription -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('abonementModule') }}</h2>
+      <label class="flex items-center gap-2 text-sm cursor-pointer mb-4">
+        <input v-model="localSettings.AbonementEnabled" type="checkbox" />
+        {{ $t('abonementModuleEnabled') }}
+      </label>
+      <div v-if="localSettings.AbonementEnabled">
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{
+          $t('Abonement URL')
+        }}</label>
+        <input
+          v-model="localSettings.AbonementUrl"
+          type="url"
+          class="w-full border rounded px-3 py-2 text-gray-700"
+        />
+      </div>
+    </div>
+
     <!-- URLs -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
       <h2 class="text-base font-semibold text-gray-800 mb-4">URLs</h2>
@@ -253,16 +272,6 @@ defineExpose({ saveSettings })
           }}</label>
           <input
             v-model="localSettings.DigitalItemsUrl"
-            type="text"
-            class="w-full border rounded px-3 py-2 text-gray-700"
-          />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('Abonement URL')
-          }}</label>
-          <input
-            v-model="localSettings.AbonementUrl"
             type="text"
             class="w-full border rounded px-3 py-2 text-gray-700"
           />

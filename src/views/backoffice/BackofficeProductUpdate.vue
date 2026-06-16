@@ -4,6 +4,7 @@ import router from '@/router'
 import type { Item } from '@/stores/items'
 import { useItemsStore, ITEM_TYPES } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { useSettingsStore } from '@/stores/settings'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -12,6 +13,10 @@ import { useRoute } from 'vue-router'
 
 const itemsStore = useItemsStore()
 const keycloakStore = useKeycloakStore()
+const settingsStore = useSettingsStore()
+const availableItemTypes = computed(() =>
+  ITEM_TYPES.filter((type) => type !== 'abonement' || settingsStore.settings.AbonementEnabled)
+)
 const authenticated = computed(() => keycloakStore.authenticated)
 
 const updatedItem = ref<Item | null>()
@@ -157,7 +162,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
               <div>
                 <label class="field-label" for="itemType">{{ $t('itemType') }}</label>
                 <select id="itemType" v-model="updatedItem.Type" class="field-input">
-                  <option v-for="t in ITEM_TYPES" :key="t" :value="t">
+                  <option v-for="t in availableItemTypes" :key="t" :value="t">
                     {{ $t(`itemType_${t}`) }}
                   </option>
                 </select>

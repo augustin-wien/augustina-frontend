@@ -355,5 +355,7 @@
   "wpInviteURL": "WordPress API-Endpunkt (z.B. http://host.docker.internal:8088/wp-json/augustin/v1/shop/create-invite)",
   "wpInviteAPIKey": "API-Schlüssel",
   "wpInviteTTL": "Gültigkeit in Sekunden (z.B. 604800 = 7 Tage)",
-  "wpInviteLogin": "Direkt einloggen"
+  "wpInviteLogin": "Direkt einloggen",
+  "abonementModule": "Abonnement",
+  "abonementModuleEnabled": "Abonnement-Modul aktivieren"
 }
