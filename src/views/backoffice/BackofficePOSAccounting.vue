@@ -63,12 +63,15 @@ const onRangeEnd = (value: Date) => {
 useAuthLoad(load)
 
 const totalBalance = computed(() => orders.value.reduce((s, o) => s + o.balanceUsed, 0))
+
 const totalCash = computed(() =>
   orders.value.reduce((s, o) => s + (o.cashAmount || (!o.balanceUsed ? o.totalAmount : 0)), 0)
 )
+
 const totalAll = computed(() =>
   orders.value.reduce((s, o) => s + (o.totalAmount || o.balanceUsed), 0)
 )
+
 const totalOrders = computed(() => orders.value.length)
 
 // Aggregate per-item totals across all orders
@@ -114,9 +117,12 @@ function downloadCSV() {
     `${o.vendorName} (${o.vendorLicenseId})`,
     itemSummary(o),
     o.balanceUsed > 0 ? (o.balanceUsed / 100).toFixed(2) : '',
-    (o.cashAmount > 0 ? o.cashAmount : !o.balanceUsed ? o.totalAmount : 0) > 0
-      ? ((o.cashAmount || o.totalAmount) / 100).toFixed(2)
-      : '',
+    (() => {
+      let effectiveCash = 0
+      if (o.cashAmount > 0) effectiveCash = o.cashAmount
+      else if (!o.balanceUsed) effectiveCash = o.totalAmount
+      return effectiveCash > 0 ? ((o.cashAmount || o.totalAmount) / 100).toFixed(2) : ''
+    })(),
     ((o.totalAmount || o.balanceUsed) / 100).toFixed(2)
   ])
 
