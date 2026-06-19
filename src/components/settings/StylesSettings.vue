@@ -29,33 +29,14 @@ defineExpose({ saveStyles })
 </script>
 
 <template>
-  <div class="styles_form">
-    <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="styles"
-      >{{ $t('Custom styles') }}:</label
-    >
-    <textarea
-      id="styles"
-      v-model="stylesLocal"
-      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-[300px]"
-      type="textarea"
-    />
-    <div class="flex place-content-center">
-      <button
-        id="saveSettings"
-        type="submit"
-        class="px-4 py-2 ps-2 mt-2 rounded-full customcolor h-[44px]"
-        @click="saveStyles()"
-      >
-        {{ $t('saveCustomCss') }}
-      </button>
+  <div class="space-y-6">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('Custom styles') }}</h2>
+      <textarea
+        id="styles"
+        v-model="stylesLocal"
+        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-[300px]"
+      />
     </div>
-    <button
-      id="saveStylesSticky"
-      type="button"
-      class="px-4 py-2 rounded-full customcolor h-[44px]"
-      @click="saveStyles()"
-    >
-      {{ $t('saveCustomCss') }}
-    </button>
   </div>
 </template>

@@ -14,6 +14,8 @@ const settingsStore = useSettingsStore()
 
 const localSettings = ref<Settings>({ ...props.updatedSettings })
 
+const wpInviteEnabled = ref(!!props.updatedSettings.WordPressInviteURL)
+
 const newLogo = ref('')
 const newFavicon = ref('')
 const newQrCodeLogo = ref('')
@@ -281,11 +283,17 @@ defineExpose({ saveSettings })
 
     <!-- WordPress one-time login -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <h2 class="text-base font-semibold text-gray-800 mb-1">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">
         {{ $t('wpInviteTitle') }}
       </h2>
-      <p class="text-sm text-gray-500 mb-4">{{ $t('wpInviteHint') }}</p>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <label class="flex items-center gap-2 text-sm cursor-pointer mb-4">
+        <input
+          v-model="wpInviteEnabled"
+          type="checkbox"
+        />
+        {{ $t('wpInviteEnabled') }}
+      </label>
+      <div v-if="wpInviteEnabled" class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="md:col-span-2">
           <label class="block text-sm font-medium text-gray-700 mb-1">{{
             $t('wpInviteURL')
@@ -404,15 +412,5 @@ defineExpose({ saveSettings })
       </div>
     </div>
 
-    <!-- Save -->
-    <div class="flex justify-end">
-      <button
-        type="submit"
-        class="px-6 py-2 rounded-full customcolor font-semibold"
-        @click="saveSettings()"
-      >
-        {{ $t('save') }}
-      </button>
-    </div>
   </div>
 </template>

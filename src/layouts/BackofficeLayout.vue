@@ -291,7 +291,7 @@ onMounted(() => {
   margin-left: 300px; /* space for fixed sidebar */
   width: calc(100vw - 300px); /* use the rest of the width beside the sidebar */
   height: 100vh;
-  overflow: auto; /* main area scrolls independently */
+  overflow: hidden; /* container does not scroll; slot scrolls instead */
 }
 
 .header-slot {
@@ -307,7 +307,8 @@ onMounted(() => {
   width: 100%;
   padding: 20px;
   background-color: #f2f2f2;
-  display: inline-table;
+  overflow-y: auto; /* only the content area scrolls */
+  min-height: 0; /* required for flex children to shrink below content size */
 }
 
 footer {
