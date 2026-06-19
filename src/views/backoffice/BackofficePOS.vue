@@ -41,6 +41,7 @@ interface POSOrder {
 const posOrders = ref<POSOrder[]>([])
 const historyPage = ref(1)
 const historyPageSize = 10
+
 const historyTotalPages = computed(() =>
   Math.max(1, Math.ceil(posOrders.value.length / historyPageSize))
 )

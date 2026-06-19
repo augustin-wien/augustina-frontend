@@ -9,6 +9,14 @@ const store = vendorsStore()
 
 useAuthLoad(() => store.getVendors())
 
+const isRecalculating = ref(false)
+
+async function recalculate() {
+  isRecalculating.value = true
+  await store.recalculateBalances()
+  isRecalculating.value = false
+}
+
 function formatDate(date: string) {
   if (!date || date === '') return ''
   return new Date(date).toLocaleString()
@@ -75,6 +83,13 @@ const exportTable = () => {
             </button>
           </span>
         </div>
+        <button
+          class="py-2 px-4 rounded-full customcolor h-[44px]"
+          :disabled="isRecalculating"
+          @click="recalculate"
+        >
+          {{ isRecalculating ? '…' : $t('recalculateBalances') }}
+        </button>
         <button class="py-2 px-4 rounded-full customcolor h-[44px] mr-6" @click="exportTable">
           {{ $t('export') }}
         </button>

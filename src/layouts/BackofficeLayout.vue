@@ -81,7 +81,7 @@ onMounted(() => {
                 <img :src="logo" alt="Newspaper logo" class="logo mx-auto" width="auto" />
               </div>
               <div class="sidemenu-item flex flex-col w-full space-y-2">
-                <RouterLink to="/backoffice/customers">
+                <RouterLink v-if="settings.AbonementEnabled" to="/backoffice/customers">
                   <button
                     class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -97,7 +97,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuVendors') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/pos">
+                <RouterLink v-if="settings.POSEnabled" to="/backoffice/pos">
                   <button
                     class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -113,7 +113,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuCredits') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/pos-accounting" class-name="sidemenu-link">
+                <RouterLink v-if="settings.POSEnabled" to="/backoffice/pos-accounting" class-name="sidemenu-link">
                   <button
                     class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -291,7 +291,7 @@ onMounted(() => {
   margin-left: 300px; /* space for fixed sidebar */
   width: calc(100vw - 300px); /* use the rest of the width beside the sidebar */
   height: 100vh;
-  overflow: auto; /* main area scrolls independently */
+  overflow: hidden; /* container does not scroll; slot scrolls instead */
 }
 
 .header-slot {
@@ -307,7 +307,8 @@ onMounted(() => {
   width: 100%;
   padding: 20px;
   background-color: #f2f2f2;
-  display: inline-table;
+  overflow-y: auto; /* only the content area scrolls */
+  min-height: 0; /* required for flex children to shrink below content size */
 }
 
 footer {

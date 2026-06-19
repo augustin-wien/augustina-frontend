@@ -49,7 +49,11 @@ const updatedSettings = ref<Settings>({
   ShopLanding: false,
   DigitalItemsUrl: '',
   AbonementUrl: '',
-  POSEnabled: true
+  AbonementEnabled: false,
+  POSEnabled: true,
+  WordPressInviteURL: '',
+  WordPressInviteAPIKey: '',
+  WordPressInviteTTL: 604800
 })
 
 useAuthLoad(() => {
@@ -94,6 +98,16 @@ const saveGeneralFromParent = () => {
   if (comp && comp.saveSettings) comp.saveSettings()
 }
 
+const saveCurrentTab = () => {
+  if (currentTab.value === 'general' || currentTab.value === 'qrcode') {
+    saveGeneralFromParent()
+  } else if (currentTab.value === 'styles') {
+    const comp = stylesRef.value
+    if (comp && comp.saveStyles) comp.saveStyles()
+  }
+  // mailtemplates: save is per-template inside the editor
+}
+
 // UI tab for settings page: 'general', 'styles' or 'qrcode'
 const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('general')
 </script>
@@ -104,14 +118,14 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
       <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuSettings') }}</h1>
     </template>
     <template #main>
-      <div v-if="settingsStore.settings" class="max-w-4xl">
+      <div v-if="settingsStore.settings" class="h-full flex flex-col">
         <!-- Tab nav -->
-        <div class="mb-6 flex gap-2 border-b pb-2">
+        <div class="flex-none mb-4 flex gap-2 border-b pb-2">
           <button
             :class="
               currentTab === 'general'
                 ? 'px-4 py-2 bg-black text-white rounded-t'
-                : 'px-4 py-2 border rounded-t'
+                : 'px-4 py-2 bg-white border rounded-t text-gray-700'
             "
             @click="currentTab = 'general'"
           >
@@ -121,7 +135,7 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
             :class="
               currentTab === 'styles'
                 ? 'px-4 py-2 bg-black text-white rounded-t'
-                : 'px-4 py-2 border rounded-t'
+                : 'px-4 py-2 bg-white border rounded-t text-gray-700'
             "
             @click="currentTab = 'styles'"
           >
@@ -131,7 +145,7 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
             :class="
               currentTab === 'qrcode'
                 ? 'px-4 py-2 bg-black text-white rounded-t'
-                : 'px-4 py-2 border rounded-t'
+                : 'px-4 py-2 bg-white border rounded-t text-gray-700'
             "
             @click="currentTab = 'qrcode'"
           >
@@ -141,7 +155,7 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
             :class="
               currentTab === 'mailtemplates'
                 ? 'px-4 py-2 bg-black text-white rounded-t'
-                : 'px-4 py-2 border rounded-t'
+                : 'px-4 py-2 bg-white border rounded-t text-gray-700'
             "
             @click="currentTab = 'mailtemplates'"
           >
@@ -178,6 +192,20 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
           @error="showToast('error', $event)"
         />
         <Toast v-if="toast" :toast="toast" @close="toast = null" />
+      </div>
+
+      <!-- Sticky save footer (hidden on mail templates tab since save is per-template) -->
+      <div
+        v-if="currentTab !== 'mailtemplates'"
+        class="sticky bottom-0 bg-white border-t border-gray-200 px-4 py-3 flex justify-end z-10"
+      >
+        <button
+          type="button"
+          class="px-6 py-2 rounded-full customcolor font-semibold"
+          @click="saveCurrentTab()"
+        >
+          {{ $t('save') }}
+        </button>
       </div>
     </template>
   </component>

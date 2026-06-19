@@ -65,6 +65,10 @@ export function getAuthHello() {
 export async function fetchVendors() {
   return apiInstance.get<Vendor[]>(VENDORS_API_URL)
 }
+
+export async function recalculateVendorBalances() {
+  return apiInstance.post<Vendor[]>(`${VENDORS_API_URL}recalculate-balances/`)
+}
 export async function postVendors(newVendor: Vendor) {
   return apiInstance.post(VENDORS_API_URL, JSON.stringify(newVendor), {
     headers: {
@@ -160,41 +164,35 @@ export async function fetchSettings() {
 
 export async function patchSettings(updatedSettings: Settings) {
   const formData = new FormData()
-  formData.append('Color', updatedSettings.Color)
-  formData.append('FontColor', updatedSettings.FontColor)
+  formData.append('Color', updatedSettings.Color ?? '')
+  formData.append('FontColor', updatedSettings.FontColor ?? '')
   formData.append('Logo', updatedSettings.Logo || '')
-  formData.append('MainItem', updatedSettings.MainItem.toString())
-  formData.append('AGBUrl', updatedSettings.AGBUrl)
-  formData.append('MaintainanceModeHelpUrl', updatedSettings.MaintainanceModeHelpUrl)
-  formData.append('QRCodeLogoImgUrl', updatedSettings.QRCodeLogoImgUrl)
-  formData.append('QRCodeUrl', updatedSettings.QRCodeUrl)
-  formData.append('VendorNotFoundHelpUrl', updatedSettings.VendorNotFoundHelpUrl)
-  formData.append('VendorEmailPostfix', updatedSettings.VendorEmailPostfix)
-  formData.append('WebshopIsClosed', updatedSettings.WebshopIsClosed.toString())
-  formData.append('NewspaperName', updatedSettings.NewspaperName)
-  formData.append('MapCenterLat', updatedSettings.MapCenterLat.toString())
-  formData.append('MapCenterLong', updatedSettings.MapCenterLong.toString())
-  formData.append('UseVendorLicenseIdInShop', updatedSettings.UseVendorLicenseIdInShop.toString())
+  formData.append('MainItem', (updatedSettings.MainItem ?? 1).toString())
+  formData.append('AGBUrl', updatedSettings.AGBUrl ?? '')
+  formData.append('MaintainanceModeHelpUrl', updatedSettings.MaintainanceModeHelpUrl ?? '')
+  formData.append('QRCodeLogoImgUrl', updatedSettings.QRCodeLogoImgUrl ?? '')
+  formData.append('QRCodeUrl', updatedSettings.QRCodeUrl ?? '')
+  formData.append('VendorNotFoundHelpUrl', updatedSettings.VendorNotFoundHelpUrl ?? '')
+  formData.append('VendorEmailPostfix', updatedSettings.VendorEmailPostfix ?? '')
+  formData.append('WebshopIsClosed', (updatedSettings.WebshopIsClosed ?? false).toString())
+  formData.append('NewspaperName', updatedSettings.NewspaperName ?? '')
+  formData.append('MapCenterLat', (updatedSettings.MapCenterLat ?? 0).toString())
+  formData.append('MapCenterLong', (updatedSettings.MapCenterLong ?? 0).toString())
+  formData.append('UseVendorLicenseIdInShop', (updatedSettings.UseVendorLicenseIdInShop ?? false).toString())
   formData.append('Favicon', updatedSettings.Favicon || '')
-  formData.append('QRCodeSettings', updatedSettings.QRCodeSettings)
-  formData.append('QRCodeEnableLogo', updatedSettings.QRCodeEnableLogo.toString())
-  formData.append('UseTipInsteadOfDonation', updatedSettings.UseTipInsteadOfDonation.toString())
-
-  formData.append(
-    'ShopLanding',
-    updatedSettings.ShopLanding ? updatedSettings.ShopLanding.toString() : 'false'
-  )
-
-  formData.append('DigitalItemsUrl', updatedSettings.DigitalItemsUrl)
-  formData.append('AbonementUrl', updatedSettings.AbonementUrl)
-  formData.append('POSEnabled', updatedSettings.POSEnabled.toString())
-
-  formData.append(
-    'OrgaCoversTransactionCosts',
-    updatedSettings.OrgaCoversTransactionCosts.toString()
-  )
-
-  formData.append('MaxOrderAmount', updatedSettings.MaxOrderAmount.toString())
+  formData.append('QRCodeSettings', updatedSettings.QRCodeSettings ?? '')
+  formData.append('QRCodeEnableLogo', (updatedSettings.QRCodeEnableLogo ?? false).toString())
+  formData.append('UseTipInsteadOfDonation', (updatedSettings.UseTipInsteadOfDonation ?? false).toString())
+  formData.append('ShopLanding', (updatedSettings.ShopLanding ?? false).toString())
+  formData.append('DigitalItemsUrl', updatedSettings.DigitalItemsUrl ?? '')
+  formData.append('AbonementUrl', updatedSettings.AbonementUrl ?? '')
+  formData.append('AbonementEnabled', (updatedSettings.AbonementEnabled ?? false).toString())
+  formData.append('POSEnabled', (updatedSettings.POSEnabled ?? true).toString())
+  formData.append('WordPressInviteURL', updatedSettings.WordPressInviteURL ?? '')
+  formData.append('WordPressInviteAPIKey', updatedSettings.WordPressInviteAPIKey ?? '')
+  formData.append('WordPressInviteTTL', (updatedSettings.WordPressInviteTTL ?? 604800).toString())
+  formData.append('OrgaCoversTransactionCosts', (updatedSettings.OrgaCoversTransactionCosts ?? true).toString())
+  formData.append('MaxOrderAmount', (updatedSettings.MaxOrderAmount ?? 0).toString())
 
   return apiInstance.put(`${SETTINGS_API_URL}`, formData, {
     headers: {

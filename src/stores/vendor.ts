@@ -16,7 +16,8 @@ import {
   fetchVendorComments,
   postVendorComment,
   patchVendorComment,
-  deleteVendorComment
+  deleteVendorComment,
+  recalculateVendorBalances
 } from '@/api/api'
 import router from '@/router'
 
@@ -178,6 +179,18 @@ export const vendorsStore = defineStore('vendors', {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error)
+      }
+    },
+
+    async recalculateBalances() {
+      try {
+        const data = await recalculateVendorBalances()
+        //@ts-ignore
+        this.vendors = data.data
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+        await this.getVendors()
       }
     },
 

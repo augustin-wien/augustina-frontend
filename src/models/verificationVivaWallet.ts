@@ -16,4 +16,5 @@ export interface VivaWalletVerification {
   TotalSum: number
   PurchasedItems: PurchesedItem[]
   PDFDownloadLinks: PDFDownloadLinks[]
+  InviteURL: string
 }

@@ -14,6 +14,8 @@ const settingsStore = useSettingsStore()
 
 const localSettings = ref<Settings>({ ...props.updatedSettings })
 
+const wpInviteEnabled = ref(!!props.updatedSettings.WordPressInviteURL)
+
 const newLogo = ref('')
 const newFavicon = ref('')
 const newQrCodeLogo = ref('')
@@ -206,6 +208,25 @@ defineExpose({ saveSettings })
       </label>
     </div>
 
+    <!-- Abonement / Subscription -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('abonementModule') }}</h2>
+      <label class="flex items-center gap-2 text-sm cursor-pointer mb-4">
+        <input v-model="localSettings.AbonementEnabled" type="checkbox" />
+        {{ $t('abonementModuleEnabled') }}
+      </label>
+      <div v-if="localSettings.AbonementEnabled">
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{
+          $t('Abonement URL')
+        }}</label>
+        <input
+          v-model="localSettings.AbonementUrl"
+          type="url"
+          class="w-full border rounded px-3 py-2 text-gray-700"
+        />
+      </div>
+    </div>
+
     <!-- URLs -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
       <h2 class="text-base font-semibold text-gray-800 mb-4">URLs</h2>
@@ -257,13 +278,52 @@ defineExpose({ saveSettings })
             class="w-full border rounded px-3 py-2 text-gray-700"
           />
         </div>
-        <div>
+      </div>
+    </div>
+
+    <!-- WordPress one-time login -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">
+        {{ $t('wpInviteTitle') }}
+      </h2>
+      <label class="flex items-center gap-2 text-sm cursor-pointer mb-4">
+        <input
+          v-model="wpInviteEnabled"
+          type="checkbox"
+        />
+        {{ $t('wpInviteEnabled') }}
+      </label>
+      <div v-if="wpInviteEnabled" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2">
           <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('Abonement URL')
+            $t('wpInviteURL')
           }}</label>
           <input
-            v-model="localSettings.AbonementUrl"
-            type="text"
+            v-model="localSettings.WordPressInviteURL"
+            type="url"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+            placeholder="http://host.docker.internal:8088/wp-json/augustin/v1/shop/create-invite"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('wpInviteAPIKey')
+          }}</label>
+          <input
+            v-model="localSettings.WordPressInviteAPIKey"
+            type="password"
+            autocomplete="new-password"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('wpInviteTTL')
+          }}</label>
+          <input
+            v-model.number="localSettings.WordPressInviteTTL"
+            type="number"
+            min="3600"
             class="w-full border rounded px-3 py-2 text-gray-700"
           />
         </div>
@@ -352,15 +412,5 @@ defineExpose({ saveSettings })
       </div>
     </div>
 
-    <!-- Save -->
-    <div class="flex justify-end">
-      <button
-        type="submit"
-        class="px-6 py-2 rounded-full customcolor font-semibold"
-        @click="saveSettings()"
-      >
-        {{ $t('save') }}
-      </button>
-    </div>
   </div>
 </template>
