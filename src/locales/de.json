@@ -355,7 +355,17 @@
   "wpInviteURL": "WordPress API-Endpunkt (z.B. http://host.docker.internal:8088/wp-json/augustin/v1/shop/create-invite)",
   "wpInviteAPIKey": "API-Schlüssel",
   "wpInviteTTL": "Gültigkeit in Sekunden (z.B. 604800 = 7 Tage)",
+  "selectTemplateHint": "Wähle eine Vorlage aus der Liste aus, um sie zu bearbeiten.",
+  "preview": "Vorschau",
+  "templateVars": "Verfügbare Variablen (anklicken zum Einfügen)",
+  "mailTemplate_welcome": "Willkommen",
+  "mailTemplate_digitalLicenceItemTemplate.html": "Kauf eines digitalen Artikels",
+  "mailTemplate_PDFLicenceItemTemplate.html": "Kauf eines PDF-Artikels",
+  "mailTemplate_abonementConfirmation": "Abonnement-Bestätigung",
+  "mailTemplate_onlineIssuePublished": "Online-Ausgabe erschienen",
+  "wpInviteEnabled": "Einmaliger WordPress-Login aktivieren",
   "wpInviteLogin": "Direkt einloggen",
   "abonementModule": "Abonnement",
-  "abonementModuleEnabled": "Abonnement-Modul aktivieren"
+  "abonementModuleEnabled": "Abonnement-Modul aktivieren",
+  "recalculateBalances": "Beträge neu berechnen"
 }
