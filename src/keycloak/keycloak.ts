@@ -70,9 +70,12 @@ export const initKeycloak = async () => {
     if (!keycloak.keycloak) return
 
     if (!authenticated) {
+      const path = window.location.pathname.endsWith('/')
+        ? window.location.pathname
+        : window.location.pathname + '/'
       keycloak.keycloak.login({
         locale: 'de',
-        redirectUri: window.location.origin + window.location.pathname + '/'
+        redirectUri: window.location.origin + path
       })
     }
   }
