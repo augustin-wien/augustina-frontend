@@ -12,6 +12,7 @@ const { t } = useI18n()
 
 const store = useItemsStore()
 const settingsStore = useSettingsStore()
+
 const availableItemTypes = computed(() =>
   ITEM_TYPES.filter((type) => type !== 'abonement' || settingsStore.settings.AbonementEnabled)
 )

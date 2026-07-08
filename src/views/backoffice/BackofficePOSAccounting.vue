@@ -63,12 +63,15 @@ const onRangeEnd = (value: Date) => {
 useAuthLoad(load)
 
 const totalBalance = computed(() => orders.value.reduce((s, o) => s + o.balanceUsed, 0))
+
 const totalCash = computed(() =>
   orders.value.reduce((s, o) => s + (o.cashAmount || (!o.balanceUsed ? o.totalAmount : 0)), 0)
 )
+
 const totalAll = computed(() =>
   orders.value.reduce((s, o) => s + (o.totalAmount || o.balanceUsed), 0)
 )
+
 const totalOrders = computed(() => orders.value.length)
 
 // Aggregate per-item totals across all orders

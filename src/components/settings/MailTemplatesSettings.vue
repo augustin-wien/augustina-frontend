@@ -132,8 +132,10 @@ const insertVar = (v: string) => {
   mailStore.current.body = body.slice(0, start) + v + body.slice(end)
   const newPos = start + v.length
   savedCursor.value = { start: newPos, end: newPos }
+
   nextTick(() => {
     const el = textareaRef.value
+
     if (el) {
       el.focus()
       el.setSelectionRange(newPos, newPos)
@@ -156,17 +158,20 @@ const DEMO_VALUES: Record<string, string> = {
 
 function renderPreview(body: string): string {
   let s = body
+
   // {{if .X}}...{{else}}...{{end}}
   s = s.replace(
     /\{\{if \.(\w+)\}\}([\s\S]*?)\{\{else\}\}([\s\S]*?)\{\{end\}\}/g,
     (_, varName, ifBlock, elseBlock) =>
       DEMO_VALUES[varName] !== undefined ? ifBlock : elseBlock,
   )
+
   // {{if .X}}...{{end}} (no else)
   s = s.replace(
     /\{\{if \.(\w+)\}\}([\s\S]*?)\{\{end\}\}/g,
     (_, varName, block) => (DEMO_VALUES[varName] !== undefined ? block : ''),
   )
+
   // {{.X}}
   s = s.replace(/\{\{\.(\w+)\}\}/g, (_, varName) => DEMO_VALUES[varName] ?? `[${varName}]`)
   return s
