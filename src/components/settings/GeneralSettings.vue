@@ -287,10 +287,7 @@ defineExpose({ saveSettings })
         {{ $t('wpInviteTitle') }}
       </h2>
       <label class="flex items-center gap-2 text-sm cursor-pointer mb-4">
-        <input
-          v-model="wpInviteEnabled"
-          type="checkbox"
-        />
+        <input v-model="wpInviteEnabled" type="checkbox" />
         {{ $t('wpInviteEnabled') }}
       </label>
       <div v-if="wpInviteEnabled" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -411,6 +408,5 @@ defineExpose({ saveSettings })
         </div>
       </div>
     </div>
-
   </div>
 </template>

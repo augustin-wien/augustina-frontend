@@ -283,7 +283,11 @@ const email = localStorage.getItem('email') || ''
             </a>
           </div>
           <div
-            v-if="hasAbonementPurchase && settStore.settings.AbonementEnabled && settStore.settings.AbonementUrl"
+            v-if="
+              hasAbonementPurchase &&
+              settStore.settings.AbonementEnabled &&
+              settStore.settings.AbonementUrl
+            "
             class="abonement-link mt-3"
           >
             <a :href="settStore.settings.AbonementUrl" target="_blank" rel="noopener noreferrer">
@@ -300,10 +304,7 @@ const email = localStorage.getItem('email') || ''
               </button>
             </a>
           </div>
-          <div
-            v-if="paymentStore.verification?.InviteURL"
-            class="wp-invite-link mt-3"
-          >
+          <div v-if="paymentStore.verification?.InviteURL" class="wp-invite-link mt-3">
             <a
               :href="paymentStore.verification.InviteURL"
               target="_blank"

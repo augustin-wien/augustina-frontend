@@ -88,16 +88,16 @@ const bodyTab = ref<'edit' | 'preview'>('edit')
 const TEMPLATE_VARS: Record<string, { name: string; desc: string }[]> = {
   welcome: [
     { name: '{{.URL}}', desc: 'Link zur Online-Ausgabe' },
-    { name: '{{.EMAIL}}', desc: 'E-Mail-Adresse der Käuferin' },
+    { name: '{{.EMAIL}}', desc: 'E-Mail-Adresse der Käuferin' }
   ],
   'digitalLicenceItemTemplate.html': [
     { name: '{{.URL}}', desc: 'Link zur Online-Ausgabe' },
     { name: '{{.EMAIL}}', desc: 'E-Mail-Adresse der Käuferin' },
-    { name: '{{.InviteURL}}', desc: 'Einmaliger WordPress-Login-Link (optional)' },
+    { name: '{{.InviteURL}}', desc: 'Einmaliger WordPress-Login-Link (optional)' }
   ],
   'PDFLicenceItemTemplate.html': [
     { name: '{{.URL}}', desc: 'Download-Link zum PDF' },
-    { name: '{{.EMAIL}}', desc: 'E-Mail-Adresse der Käuferin' },
+    { name: '{{.EMAIL}}', desc: 'E-Mail-Adresse der Käuferin' }
   ],
   abonementConfirmation: [
     { name: '{{.CustomerName}}', desc: 'Vor- und Nachname der Kundin' },
@@ -105,12 +105,12 @@ const TEMPLATE_VARS: Record<string, { name: string; desc: string }[]> = {
     { name: '{{.FromDate}}', desc: 'Startdatum (YYYY-MM-DD)' },
     { name: '{{.ToDate}}', desc: 'Enddatum (YYYY-MM-DD)' },
     { name: '{{.Status}}', desc: 'Status des Abonnements' },
-    { name: '{{.InviteURL}}', desc: 'Einmaliger WordPress-Login-Link (optional)' },
+    { name: '{{.InviteURL}}', desc: 'Einmaliger WordPress-Login-Link (optional)' }
   ],
   onlineIssuePublished: [
     { name: '{{.IssueName}}', desc: 'Name der Ausgabe' },
-    { name: '{{.ImageURL}}', desc: 'URL zum Titelbild' },
-  ],
+    { name: '{{.ImageURL}}', desc: 'URL zum Titelbild' }
+  ]
 }
 
 const currentVars = computed(() =>
@@ -132,8 +132,10 @@ const insertVar = (v: string) => {
   mailStore.current.body = body.slice(0, start) + v + body.slice(end)
   const newPos = start + v.length
   savedCursor.value = { start: newPos, end: newPos }
+
   nextTick(() => {
     const el = textareaRef.value
+
     if (el) {
       el.focus()
       el.setSelectionRange(newPos, newPos)
@@ -151,29 +153,30 @@ const DEMO_VALUES: Record<string, string> = {
   ToDate: '2026-12-31',
   Status: 'active',
   IssueName: 'Augustin Ausgabe Juni 2026',
-  ImageURL: 'https://placehold.co/600x400?text=Augustin+Cover',
+  ImageURL: 'https://placehold.co/600x400?text=Augustin+Cover'
 }
 
 function renderPreview(body: string): string {
   let s = body
+
   // {{if .X}}...{{else}}...{{end}}
   s = s.replace(
     /\{\{if \.(\w+)\}\}([\s\S]*?)\{\{else\}\}([\s\S]*?)\{\{end\}\}/g,
-    (_, varName, ifBlock, elseBlock) =>
-      DEMO_VALUES[varName] !== undefined ? ifBlock : elseBlock,
+    (_, varName, ifBlock, elseBlock) => (DEMO_VALUES[varName] !== undefined ? ifBlock : elseBlock)
   )
+
   // {{if .X}}...{{end}} (no else)
-  s = s.replace(
-    /\{\{if \.(\w+)\}\}([\s\S]*?)\{\{end\}\}/g,
-    (_, varName, block) => (DEMO_VALUES[varName] !== undefined ? block : ''),
+  s = s.replace(/\{\{if \.(\w+)\}\}([\s\S]*?)\{\{end\}\}/g, (_, varName, block) =>
+    DEMO_VALUES[varName] !== undefined ? block : ''
   )
+
   // {{.X}}
   s = s.replace(/\{\{\.(\w+)\}\}/g, (_, varName) => DEMO_VALUES[varName] ?? `[${varName}]`)
   return s
 }
 
 const previewBody = computed(() =>
-  mailStore.current?.body ? renderPreview(mailStore.current.body) : '',
+  mailStore.current?.body ? renderPreview(mailStore.current.body) : ''
 )
 
 onMounted(() => {
@@ -210,7 +213,10 @@ onMounted(() => {
           <div v-if="mailStore.current && mailStore.current.name">
             <!-- Subject -->
             <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Subject') }}</label>
-            <input v-model="mailStore.current.subject" class="w-full border rounded px-3 py-2 mb-4 text-gray-700" />
+            <input
+              v-model="mailStore.current.subject"
+              class="w-full border rounded px-3 py-2 mb-4 text-gray-700"
+            />
 
             <!-- Body with Edit/Preview tabs -->
             <div class="mb-1 flex items-center justify-between">
@@ -219,15 +225,27 @@ onMounted(() => {
                 <button
                   type="button"
                   class="px-3 py-1 text-xs rounded"
-                  :class="bodyTab === 'edit' ? 'bg-black text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                  :class="
+                    bodyTab === 'edit'
+                      ? 'bg-black text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  "
                   @click="bodyTab = 'edit'"
-                >{{ $t('edit') }}</button>
+                >
+                  {{ $t('edit') }}
+                </button>
                 <button
                   type="button"
                   class="px-3 py-1 text-xs rounded"
-                  :class="bodyTab === 'preview' ? 'bg-black text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                  :class="
+                    bodyTab === 'preview'
+                      ? 'bg-black text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  "
                   @click="bodyTab = 'preview'"
-                >{{ $t('preview') }}</button>
+                >
+                  {{ $t('preview') }}
+                </button>
               </div>
             </div>
             <textarea
@@ -247,8 +265,13 @@ onMounted(() => {
             ></iframe>
 
             <!-- Variable chips -->
-            <div v-if="currentVars.length" class="mb-4 p-3 bg-gray-50 rounded border border-gray-200">
-              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{{ $t('templateVars') }}</p>
+            <div
+              v-if="currentVars.length"
+              class="mb-4 p-3 bg-gray-50 rounded border border-gray-200"
+            >
+              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                {{ $t('templateVars') }}
+              </p>
               <div class="flex flex-wrap gap-2">
                 <button
                   v-for="v in currentVars"
@@ -265,7 +288,9 @@ onMounted(() => {
             </div>
 
             <!-- Test email -->
-            <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Test email') }}</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">{{
+              $t('Test email')
+            }}</label>
             <div class="flex gap-2 mb-4">
               <input
                 v-model="testEmail"
