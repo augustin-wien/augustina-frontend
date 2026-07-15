@@ -63,12 +63,15 @@ const onRangeEnd = (value: Date) => {
 useAuthLoad(load)
 
 const totalBalance = computed(() => orders.value.reduce((s, o) => s + o.balanceUsed, 0))
+
 const totalCash = computed(() =>
   orders.value.reduce((s, o) => s + (o.cashAmount || (!o.balanceUsed ? o.totalAmount : 0)), 0)
 )
+
 const totalAll = computed(() =>
   orders.value.reduce((s, o) => s + (o.totalAmount || o.balanceUsed), 0)
 )
+
 const totalOrders = computed(() => orders.value.length)
 
 // Aggregate per-item totals across all orders
@@ -106,6 +109,14 @@ function itemSummary(order: POSOrder) {
   return order.items.map((i) => `${i.quantity}× ${i.itemName || '#' + i.itemId}`).join(', ')
 }
 
+// Cash paid for an order, in cents: explicit cash amount, otherwise the full
+// total when no balance was used, otherwise nothing.
+function cashPaid(o: POSOrder): number {
+  if (o.cashAmount > 0) return o.cashAmount
+  if (!o.balanceUsed) return o.totalAmount
+  return 0
+}
+
 function downloadCSV() {
   const header = ['Datum', 'Verkäufer:in', 'Artikel', 'Guthaben (€)', 'Bar (€)', 'Gesamt (€)']
 
@@ -114,9 +125,7 @@ function downloadCSV() {
     `${o.vendorName} (${o.vendorLicenseId})`,
     itemSummary(o),
     o.balanceUsed > 0 ? (o.balanceUsed / 100).toFixed(2) : '',
-    (o.cashAmount > 0 ? o.cashAmount : !o.balanceUsed ? o.totalAmount : 0) > 0
-      ? ((o.cashAmount || o.totalAmount) / 100).toFixed(2)
-      : '',
+    cashPaid(o) > 0 ? (cashPaid(o) / 100).toFixed(2) : '',
     ((o.totalAmount || o.balanceUsed) / 100).toFixed(2)
   ])
 

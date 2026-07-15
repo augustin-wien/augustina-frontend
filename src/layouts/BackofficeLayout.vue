@@ -113,7 +113,11 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuCredits') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink v-if="settings.POSEnabled" to="/backoffice/pos-accounting" class-name="sidemenu-link">
+                <RouterLink
+                  v-if="settings.POSEnabled"
+                  to="/backoffice/pos-accounting"
+                  class-name="sidemenu-link"
+                >
                   <button
                     class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >

@@ -14,9 +14,11 @@ import { useRoute } from 'vue-router'
 const itemsStore = useItemsStore()
 const keycloakStore = useKeycloakStore()
 const settingsStore = useSettingsStore()
+
 const availableItemTypes = computed(() =>
   ITEM_TYPES.filter((type) => type !== 'abonement' || settingsStore.settings.AbonementEnabled)
 )
+
 const authenticated = computed(() => keycloakStore.authenticated)
 
 const updatedItem = ref<Item | null>()

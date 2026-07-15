@@ -178,11 +178,21 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('NewspaperName', updatedSettings.NewspaperName ?? '')
   formData.append('MapCenterLat', (updatedSettings.MapCenterLat ?? 0).toString())
   formData.append('MapCenterLong', (updatedSettings.MapCenterLong ?? 0).toString())
-  formData.append('UseVendorLicenseIdInShop', (updatedSettings.UseVendorLicenseIdInShop ?? false).toString())
+
+  formData.append(
+    'UseVendorLicenseIdInShop',
+    (updatedSettings.UseVendorLicenseIdInShop ?? false).toString()
+  )
+
   formData.append('Favicon', updatedSettings.Favicon || '')
   formData.append('QRCodeSettings', updatedSettings.QRCodeSettings ?? '')
   formData.append('QRCodeEnableLogo', (updatedSettings.QRCodeEnableLogo ?? false).toString())
-  formData.append('UseTipInsteadOfDonation', (updatedSettings.UseTipInsteadOfDonation ?? false).toString())
+
+  formData.append(
+    'UseTipInsteadOfDonation',
+    (updatedSettings.UseTipInsteadOfDonation ?? false).toString()
+  )
+
   formData.append('ShopLanding', (updatedSettings.ShopLanding ?? false).toString())
   formData.append('DigitalItemsUrl', updatedSettings.DigitalItemsUrl ?? '')
   formData.append('AbonementUrl', updatedSettings.AbonementUrl ?? '')
@@ -191,7 +201,12 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('WordPressInviteURL', updatedSettings.WordPressInviteURL ?? '')
   formData.append('WordPressInviteAPIKey', updatedSettings.WordPressInviteAPIKey ?? '')
   formData.append('WordPressInviteTTL', (updatedSettings.WordPressInviteTTL ?? 604800).toString())
-  formData.append('OrgaCoversTransactionCosts', (updatedSettings.OrgaCoversTransactionCosts ?? true).toString())
+
+  formData.append(
+    'OrgaCoversTransactionCosts',
+    (updatedSettings.OrgaCoversTransactionCosts ?? true).toString()
+  )
+
   formData.append('MaxOrderAmount', (updatedSettings.MaxOrderAmount ?? 0).toString())
 
   return apiInstance.put(`${SETTINGS_API_URL}`, formData, {
