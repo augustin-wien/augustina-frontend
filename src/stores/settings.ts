@@ -1,6 +1,10 @@
 import { defineStore } from 'pinia'
 import { fetchSettings, patchSettings, patchSettingsStyles, getStyles } from '@/api/api'
 
+// Shared in-flight request so concurrent callers await the same fetch instead
+// of racing (or resolving before the settings are actually loaded).
+let inflightSettingsRequest: Promise<void> | null = null
+
 //define interface to store data from backend properly
 export interface Settings {
   ID: number
@@ -65,11 +69,19 @@ export const useSettingsStore = defineStore('settings', {
 
   actions: {
     async getSettingsFromApi() {
-      if (this.settingsLoaded || this.isLoading) {
+      if (this.settingsLoaded) {
         return
       }
 
-      fetchSettings()
+      // A load is already running: await the same request so callers only
+      // resolve once the settings are actually populated.
+      if (inflightSettingsRequest) {
+        return inflightSettingsRequest
+      }
+
+      this.isLoading = true
+
+      inflightSettingsRequest = fetchSettings()
         .then((data) => {
           this.settings = data.data.Settings
           this.settings.Keycloak = data.data.Keycloak
@@ -80,12 +92,17 @@ export const useSettingsStore = defineStore('settings', {
           this.settings.MainItemPrice = data.data.Settings.edges.MainItem.Price
           this.imgUrl = import.meta.env.VITE_API_URL + this.settings.Logo
           this.settingsLoaded = true
-          this.isLoading = false
         })
         .catch((error) => {
           // eslint-disable-next-line no-console
           console.log('failed to get the settings', error)
         })
+        .finally(() => {
+          this.isLoading = false
+          inflightSettingsRequest = null
+        })
+
+      return inflightSettingsRequest
     },
 
     toAGB() {

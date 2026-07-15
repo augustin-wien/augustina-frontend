@@ -26,11 +26,9 @@ onMounted(() => {
 
   settStore.getSettingsFromApi().then(() => {
     // ensure we have a vendor id (in case of direct reload); prefer store value but fall back to route param
-    if (!vendorStore.vendorid && route.params && route.params.vendorid) {
-      // route.params.vendorid may be string or array; normalize to string
-      const vid = Array.isArray(route.params.vendorid)
-        ? route.params.vendorid[0]
-        : route.params.vendorid
+    if (!vendorStore.vendorid && route.params && route.params.id) {
+      // route.params.id may be string or array; normalize to string
+      const vid = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
 
       if (vid) vendorStore.vendorid = String(vid)
 
