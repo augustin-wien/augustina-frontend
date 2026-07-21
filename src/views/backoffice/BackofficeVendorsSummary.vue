@@ -51,10 +51,11 @@ const exportTable = () => {
     return
   }
 
-  const header = ['Ausweisnummer', 'Vorname', 'Nachname', 'Aktuelles Guthaben']
+  const header = ['ID', 'Ausweisnummer', 'Vorname', 'Nachname', 'Aktuelles Guthaben']
 
   const data = displayVendors.value.map((vendor: Vendor) => {
     return [
+      vendor.ID,
       vendor.LicenseID,
       vendor.FirstName,
       vendor.LastName,
