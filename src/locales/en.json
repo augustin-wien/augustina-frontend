@@ -258,6 +258,8 @@
   "posOrderCount": "Number of sales",
   "posItemTotals": "Item totals",
   "downloadCSV": "Download CSV",
+  "downloadDemoCSV": "Download demo CSV",
+  "CSV import": "CSV import",
   "Branding": "Branding",
   "Webshop": "Webshop",
   "productId": "ID",

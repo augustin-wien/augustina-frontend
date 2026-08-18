@@ -1,0 +1,13 @@
+PLZ;Station/Supermarkt;Adresse;Longitude;Latitude;Arbeitszeit;Ausweis Nr.;Vorname;Nachname;Nummer;Sprache;Registrierungsdatum;VerkäuferIn seit;Kommentar;Auf die Karte?;Hat ein Smartphone?;Hat ein Konto;Schulden
+1010;Billa Stephansplatz;Stephansplatz 4;16.3725;48.2082;Mo-Fr 08:00-12:00;A-201;Marija;Novak;+436641234501;deutsch/kroatisch;2024-01-15;2024-01-15;Stammplatz am Vormittag;Ja;Ja;Ja;0
+1020;Spar Praterstern;Praterstern 1;16.3919;48.2185;Mo-Sa 13:00-18:00;A-202;Ion;Popescu;+436641234502;rumänisch/deutsch;2024-02-01;2024-02-01;;Ja;Nein;Ja;0
+1030;Hofer Landstraße;Landstraßer Hauptstraße 99;16.3947;48.1966;Di,Do 09:00-13:00;A-203;Erzsebet;Kovacs;+436641234503;ungarisch/deutsch;2024-02-12;2024-02-12;Braucht einen Ersatzausweis;Nein;Ja;Nein;15,00
+1040;Billa Wiedner Hauptstraße;Wiedner Hauptstraße 40;16.3661;48.1938;Sa,So 10:00-16:00;A-204;Ahmed;Yilmaz;+436641234504;türkisch/deutsch;2024-03-04;2024-03-04;Verkauft meist am Wochenende;Ja;Ja;Ja;0
+1050;Penny Margaretenplatz;Margaretenplatz 3;16.3578;48.1889;;A-205;Petra;Horvath;+436641234505;deutsch;2024-03-18;2024-03-18;;Ja;Nein;Ja;0
+1060;Spar Mariahilfer Straße;Mariahilfer Straße 77;16.3510;48.1966;Mo-Fr 13:00-17:00;A-206;Dumitru;Ionescu;+436641234506;rumänisch;2024-04-02;2024-04-02;Sprachkurs seit April;Nein;Nein;Nein;7,50
+1070;Billa Neubaugasse;Neubaugasse 25;16.3486;48.2010;Mo-So;A-207;Slavica;Jovanovic;+436641234507;serbisch/deutsch;2024-04-22;2024-04-22;;Ja;Ja;Ja;0
+1080;Hofer Josefstädter Straße;Josefstädter Straße 43;16.3454;48.2107;Mo,Mi,Fr 14:00-18:00;A-208;Miroslav;Kolar;+436641234508;slowakisch/deutsch;2024-05-06;2024-05-06;Nur Nachmittagsschicht möglich;Ja;Nein;Ja;0
+1090;Billa Nußdorfer Straße;Nußdorfer Straße 12;16.3576;48.2245;09:00-17:00;A-209;Fatima;Hassan;+436641234509;arabisch/englisch;2024-05-27;2024-05-27;Dolmetsch bei Terminen nötig;Ja;Ja;Nein;22,00
+1100;Spar Reumannplatz;Reumannplatz 8;16.3762;48.1737;Mo-Fr 07:30-11:30;A-210;Ganna;Shevchenko;+436641234510;ukrainisch/deutsch;2024-06-10;2024-06-10;;Ja;Ja;Ja;0
+1110;Penny Simmeringer Hauptstraße;Simmeringer Hauptstraße 96;16.4218;48.1721;Do-Sa 12:00-20:00;A-211;Rafael;Silva;+436641234511;portugiesisch/englisch;2024-06-24;2024-06-24;Neu im Team;Nein;Ja;Ja;0
+1120;Billa Meidlinger Hauptstraße;Meidlinger Hauptstraße 31;16.3311;48.1794;G;A-212;Anna;Weber;+436641234512;deutsch;2024-07-08;2024-07-08;Vertretung für A-205;Ja;Nein;Ja;0

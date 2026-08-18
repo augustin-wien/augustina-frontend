@@ -6,7 +6,7 @@ import type { Vendor } from '@/stores/vendor'
 import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
 import IconCross from '@/components/icons/IconCross.vue'
-import { transformToFloat } from '@/utils/utils'
+import { downloadVendorCsvTemplate, parseVendorsCsv } from '@/utils/vendorCsv'
 
 const store = vendorsStore()
 const settingsStore = useSettingsStore()
@@ -101,65 +101,8 @@ const importCSV = async () => {
   input.onchange = async (event: any) => {
     const file = event.target.files[0]
     const text = await file.text()
-    const lines = text.split('\n')
 
-    const vendors: Array<Vendor> = lines.map((line: any, i: number) => {
-      if (i === 0) return null
-
-      //@ts-ignore
-      const [
-        PLZ,
-        Location,
-        Address,
-        Longitude,
-        Latitude,
-        WorkingTime,
-        LicenseID,
-        FirstName,
-        LastName,
-        Telephone,
-        Language,
-        RegistrationDate,
-        VendorSince,
-        Comment,
-        OnlineMap,
-        HasSmartphone,
-        HasBankAccount,
-        Debt
-      ] = line.split(';')
-
-      const Email = `${LicenseID}${settingsStore.settings.VendorEmailPostfix}`
-      return {
-        PLZ,
-        Location,
-        Address,
-        Longitude: Longitude === '' ? 0.1 : transformToFloat(Longitude),
-        Latitude: Latitude === '' ? 0.1 : transformToFloat(Latitude),
-        WorkingTime: WorkingTime === '' ? 'G' : WorkingTime,
-        LicenseID,
-        FirstName,
-        LastName,
-        Telephone,
-        Language,
-        RegistrationDate,
-        VendorSince,
-        Comment,
-        LastPayout: null,
-        UrlID: '',
-        OnlineMap: OnlineMap === 'Ja' || OnlineMap === 'ja' || OnlineMap === 'yes' ? true : false,
-        HasSmartphone:
-          HasSmartphone === 'Ja' || HasSmartphone === 'ja' || HasSmartphone === 'yes'
-            ? true
-            : false,
-        HasBankAccount:
-          HasBankAccount === 'Ja' || HasBankAccount === 'ja' || HasBankAccount === 'yes'
-            ? true
-            : false,
-        IsDisabled: false,
-        Email,
-        Debt
-      }
-    })
+    const vendors = parseVendorsCsv(text, settingsStore.settings.VendorEmailPostfix)
 
     try {
       importing.value = true
@@ -397,11 +340,11 @@ const importCSV = async () => {
           {{ $t('menuVendors') }}
         </div>
       </div>
-      <footer>
-        <button
-          className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-20 w-20"
-          @click="importCSV"
-        >
+      <footer class="fixed bottom-10 right-10 flex flex-col items-end gap-3">
+        <button class="p-3 rounded-full customcolor" @click="downloadVendorCsvTemplate">
+          {{ $t('downloadDemoCSV') }}
+        </button>
+        <button class="p-3 rounded-full customcolor h-20 w-20" @click="importCSV">
           {{ $t('CSV import') }}
         </button>
       </footer>
