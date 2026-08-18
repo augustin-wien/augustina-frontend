@@ -250,6 +250,27 @@ defineExpose({ saveSettings })
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('privacyPolicyUrl')
+          }}</label>
+          <div class="flex gap-2">
+            <input
+              v-model="localSettings.PrivacyPolicyUrl"
+              type="text"
+              class="flex-1 border rounded px-3 py-2 text-gray-700"
+            />
+            <button
+              type="button"
+              class="px-3 rounded bg-gray-100 border text-sm"
+              :disabled="!localSettings.PrivacyPolicyUrl"
+              @click="settingsStore.toPrivacyPolicy()"
+            >
+              {{ $t('Open') }}
+            </button>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">{{ $t('privacyPolicyUrlHint') }}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
             $t('Maintainance mode help URL')
           }}</label>
           <input
@@ -322,6 +343,37 @@ defineExpose({ saveSettings })
             type="number"
             min="3600"
             class="w-full border rounded px-3 py-2 text-gray-700"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Matomo -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+      <h2 class="text-base font-semibold text-gray-800 mb-4">
+        {{ $t('matomoTitle') }}
+      </h2>
+      <p class="text-sm text-gray-500 mb-4">{{ $t('matomoHint') }}</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('matomoUrl') }}</label>
+          <input
+            v-model="localSettings.MatomoUrl"
+            type="url"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+            placeholder="https://matomo.example.org/"
+          />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{
+            $t('matomoSiteId')
+          }}</label>
+          <input
+            v-model="localSettings.MatomoSiteId"
+            type="text"
+            inputmode="numeric"
+            class="w-full border rounded px-3 py-2 text-gray-700"
+            placeholder="1"
           />
         </div>
       </div>

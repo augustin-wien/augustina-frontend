@@ -201,6 +201,9 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('WordPressInviteURL', updatedSettings.WordPressInviteURL ?? '')
   formData.append('WordPressInviteAPIKey', updatedSettings.WordPressInviteAPIKey ?? '')
   formData.append('WordPressInviteTTL', (updatedSettings.WordPressInviteTTL ?? 604800).toString())
+  formData.append('PrivacyPolicyUrl', updatedSettings.PrivacyPolicyUrl ?? '')
+  formData.append('MatomoUrl', updatedSettings.MatomoUrl ?? '')
+  formData.append('MatomoSiteId', updatedSettings.MatomoSiteId ?? '')
 
   formData.append(
     'OrgaCoversTransactionCosts',

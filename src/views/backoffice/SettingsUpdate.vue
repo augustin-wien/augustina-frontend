@@ -53,7 +53,10 @@ const updatedSettings = ref<Settings>({
   POSEnabled: true,
   WordPressInviteURL: '',
   WordPressInviteAPIKey: '',
-  WordPressInviteTTL: 604800
+  WordPressInviteTTL: 604800,
+  PrivacyPolicyUrl: '',
+  MatomoUrl: '',
+  MatomoSiteId: ''
 })
 
 useAuthLoad(() => {
@@ -118,7 +121,10 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
       <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuSettings') }}</h1>
     </template>
     <template #main>
-      <div v-if="settingsStore.settings" class="h-full flex flex-col">
+      <!-- min-h-full, not h-full: the tab content has to be allowed to grow past one screen,
+           otherwise it overflows a box locked to the viewport height and the sticky save bar
+           below ends up sitting in the middle of the content instead of at the bottom. -->
+      <div v-if="settingsStore.settings" class="min-h-full flex flex-col">
         <!-- Tab nav -->
         <div class="flex-none mb-4 flex gap-2 border-b pb-2">
           <button

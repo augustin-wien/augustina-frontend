@@ -41,6 +41,9 @@ export interface Settings {
   WordPressInviteURL: string
   WordPressInviteAPIKey: string
   WordPressInviteTTL: number
+  PrivacyPolicyUrl: string
+  MatomoUrl: string
+  MatomoSiteId: string
   edges?: any
   Keycloak: {
     Realm: string
@@ -105,8 +108,31 @@ export const useSettingsStore = defineStore('settings', {
       return inflightSettingsRequest
     },
 
+    // Both urls come from the backoffice settings. Opening them unchecked would run a
+    // "javascript:" url in this origin, and a plain _blank leaves the opened page a handle on
+    // window.opener.
+    openExternalUrl(url: string) {
+      if (!url) return
+
+      let parsed: URL
+
+      try {
+        parsed = new URL(url, window.location.origin)
+      } catch {
+        return
+      }
+
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return
+
+      window.open(parsed.href, '_blank', 'noopener,noreferrer')
+    },
+
     toAGB() {
-      window.open(this.settings.AGBUrl, '_blank')
+      this.openExternalUrl(this.settings.AGBUrl)
+    },
+
+    toPrivacyPolicy() {
+      this.openExternalUrl(this.settings.PrivacyPolicyUrl)
     },
 
     async updateSettings(updatedSettings: Settings) {

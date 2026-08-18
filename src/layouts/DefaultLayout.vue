@@ -3,6 +3,8 @@ import { computed } from 'vue'
 
 import { STYLES_URL } from '@/api/endpoints'
 import WaitingAnimation from '@/components/WaitingAnimation.vue'
+import PrivacyFooter from '@/components/PrivacyFooter.vue'
+import PrivacyNotice from '@/components/PrivacyNotice.vue'
 import { useSettingsStore } from '@/stores/settings'
 
 const settStore = useSettingsStore()
@@ -66,7 +68,9 @@ const logo = computed(() => {
     </main>
     <footer>
       <slot name="footer" />
+      <PrivacyFooter />
     </footer>
+    <PrivacyNotice />
   </div>
 </template>
 
