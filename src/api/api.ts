@@ -162,6 +162,15 @@ export async function fetchSettings() {
   return apiInstance.get(SETTINGS_API_URL)
 }
 
+/**
+ * The public endpoint deliberately withholds credentials such as the WordPress invite api key.
+ * The backoffice needs them to display and re-save them, so it reads the complete settings from
+ * the admin route instead.
+ */
+export async function fetchAdminSettings() {
+  return apiInstance.get(`${SETTINGS_API_URL}admin/`)
+}
+
 export async function patchSettings(updatedSettings: Settings) {
   const formData = new FormData()
   formData.append('Color', updatedSettings.Color ?? '')

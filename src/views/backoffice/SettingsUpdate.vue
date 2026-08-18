@@ -59,11 +59,21 @@ const updatedSettings = ref<Settings>({
   MatomoSiteId: ''
 })
 
-useAuthLoad(() => {
+// The public settings endpoint withholds credentials, so this page loads the full set from the
+// admin route. Until that arrived, saving is blocked: patchSettings posts every field back, so
+// saving a half-loaded form would overwrite the withheld credentials with empty strings.
+const adminSettingsLoaded = ref(false)
+
+useAuthLoad(async () => {
   storeItems.getItems()
-  settingsStore.getSettingsFromApi()
-  updatedSettings.value = settingsStore.settings
   settingsStore.getStyleCss()
+
+  adminSettingsLoaded.value = await settingsStore.getAdminSettingsFromApi()
+  updatedSettings.value = settingsStore.settings
+
+  if (!adminSettingsLoaded.value) {
+    showToast('error', 'Einstellungen konnten nicht vollständig geladen werden')
+  }
 })
 
 watch(settings, (newVal) => {
@@ -207,7 +217,8 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
       >
         <button
           type="button"
-          class="px-6 py-2 rounded-full customcolor font-semibold"
+          class="px-6 py-2 rounded-full customcolor font-semibold disabled:opacity-50"
+          :disabled="!adminSettingsLoaded"
           @click="saveCurrentTab()"
         >
           {{ $t('save') }}
