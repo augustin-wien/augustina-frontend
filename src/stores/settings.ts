@@ -94,11 +94,11 @@ export const useSettingsStore = defineStore('settings', {
         .then((data) => {
           this.settings = data.data.Settings
           this.settings.Keycloak = data.data.Keycloak
-          this.settings.MainItem = data.data.Settings.edges.MainItem.id
-          this.settings.MainItemDescription = data.data.Settings.edges.MainItem.Description
-          this.settings.MainItemImage = data.data.Settings.edges.MainItem.Image
-          this.settings.MainItemName = data.data.Settings.edges.MainItem.Name
-          this.settings.MainItemPrice = data.data.Settings.edges.MainItem.Price
+          this.settings.MainItem = data.data.Settings.Edges.MainItem.id
+          this.settings.MainItemDescription = data.data.Settings.Edges.MainItem.Description
+          this.settings.MainItemImage = data.data.Settings.Edges.MainItem.Image
+          this.settings.MainItemName = data.data.Settings.Edges.MainItem.Name
+          this.settings.MainItemPrice = data.data.Settings.Edges.MainItem.Price
           this.imgUrl = import.meta.env.VITE_API_URL + this.settings.Logo
           this.settingsLoaded = true
         })

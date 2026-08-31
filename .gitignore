@@ -27,3 +27,11 @@ coverage
 *.sln
 *.sw?
 .env
+
+# Generated documentation
+docs/customer-manual.pdf
+docs/screenshots/
+docs/*
+scripts/*.py
+scripts/take-screenshots.js
+scripts/generate-pdf.js
