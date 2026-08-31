@@ -19,6 +19,8 @@ import {
   deleteVendorComment,
   recalculateVendorBalances
 } from '@/api/api'
+import type { VendorCsvRow } from '@/utils/vendorCsv'
+import { buildComment, buildLocation, hasLocation } from '@/utils/vendorCsv'
 import router from '@/router'
 
 export const useVendorStore = defineStore('vendor', {
@@ -208,7 +210,7 @@ export const vendorsStore = defineStore('vendors', {
       return postVendors(newVendor)
     },
 
-    async createVendors(vendors: Array<Vendor>) {
+    async createVendors(vendors: Array<VendorCsvRow>) {
       for (let i = 0; i < vendors.length; i++) {
         const vendor = vendors[i]
 
@@ -225,8 +227,41 @@ export const vendorsStore = defineStore('vendors', {
           const vendorCheck = await checkVendorId(vendor.LicenseID)
 
           if (vendorCheck === null) {
-            await this.createVendorPromise(vendor)
+            const response = await this.createVendorPromise(vendor as unknown as Vendor)
+
+            await this.createImportedVendorDetails(response?.data, vendor)
           }
+        }
+      }
+    },
+
+    /**
+     * Standplatz and Kommentar are separate resources — creating the vendor does not create them,
+     * so the import has to post them once the new vendor id is known. A failure here must not
+     * abort the rest of the import: the vendor itself already exists.
+     */
+    async createImportedVendorDetails(vendorId: unknown, vendor: VendorCsvRow) {
+      if (typeof vendorId !== 'number' || vendorId <= 0) {
+        // eslint-disable-next-line no-console
+        console.error('Vendor import: no vendor id returned for', vendor.LicenseID)
+        return
+      }
+
+      if (hasLocation(vendor)) {
+        try {
+          await postVendorLocation(vendorId, buildLocation(vendor))
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Vendor import: location failed for', vendor.LicenseID, error)
+        }
+      }
+
+      if (vendor.Comment !== '') {
+        try {
+          await postVendorComment(vendorId, buildComment(vendor))
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Vendor import: comment failed for', vendor.LicenseID, error)
         }
       }
     },

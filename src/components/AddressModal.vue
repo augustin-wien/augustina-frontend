@@ -3,36 +3,12 @@ import type { VendorLocation } from '@/stores/vendor'
 import { computed, onMounted, ref, type Ref } from 'vue'
 import VendorMapView from '@/components/VendorMapView.vue'
 import { useSettingsStore } from '@/stores/settings'
+import { createDefaultWorkingTime, normalizeWorkingTime } from '@/utils/workingTime'
 
 const settingsStore = useSettingsStore()
 const props = defineProps(['vendor', 'locations'])
 const updatedVendor = ref(props.vendor)
 const emit = defineEmits(['close', 'update'])
-
-const createDefaultWorkingTime = () => ({
-  mode: 'everyday',
-  everyday: [{ from: '09:00', to: '17:00' }]
-})
-
-const normalizeWorkingTime = (workingTime: VendorLocation['working_time']) => {
-  if (!workingTime || typeof workingTime === 'string') {
-    switch (workingTime) {
-      case 'G':
-      case 'g':
-        return { mode: 'whole_week', whole_week: true }
-      case 'V':
-      case 'v':
-        return { mode: 'everyday', everyday: [{ from: '08:00', to: '12:00' }] }
-      case 'N':
-      case 'n':
-        return { mode: 'everyday', everyday: [{ from: '13:00', to: '17:00' }] }
-      default:
-        return createDefaultWorkingTime()
-    }
-  }
-
-  return workingTime
-}
 
 const newAddress: Ref<VendorLocation> = ref({
   id: 0,

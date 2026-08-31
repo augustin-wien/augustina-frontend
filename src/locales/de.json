@@ -358,6 +358,8 @@
   "privacyPolicy": "Datenschutz",
   "privacyPolicyUrl": "Datenschutz URL",
   "privacyPolicyUrlHint": "Wird im Shop verlinkt. Leer lassen um den Link auszublenden.",
+  "downloadDemoCSV": "Demo-CSV herunterladen",
+  "CSV import": "CSV importieren",
   "Branding": "Markenauftritt",
   "Webshop": "Webshop",
   "productId": "ID",

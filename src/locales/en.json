@@ -269,6 +269,8 @@
   "privacyPolicy": "Privacy policy",
   "privacyPolicyUrl": "Privacy policy URL",
   "privacyPolicyUrlHint": "Linked in the shop. Leave empty to hide the link.",
+  "downloadDemoCSV": "Download demo CSV",
+  "CSV import": "CSV import",
   "Branding": "Branding",
   "Webshop": "Webshop",
   "productId": "ID",
