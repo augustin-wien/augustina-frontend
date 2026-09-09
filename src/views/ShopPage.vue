@@ -14,8 +14,8 @@ const checkVendor = () => {
   window.location.href = vendorStore.vendorLink
 }
 
-const settings = settStore.settings
-const items = shopStore.items
+const settings = computed(() => settStore.settings)
+const items = computed(() => shopStore.items)
 const router = useRouter()
 
 const url = import.meta.env.VITE_API_URL
@@ -29,7 +29,7 @@ onMounted(() => {
   shopStore.getItems()
 })
 
-const mainItem = computed(() => shopStore.getItembyId(settings.MainItem))
+const mainItem = computed(() => shopStore.getItembyId(settings.value.MainItem))
 
 const checkIfItemSelected = () => {
   if (shopStore.amount.length > 0) {
