@@ -44,6 +44,7 @@ export interface Settings {
   AbonementUrl: string
   AbonementEnabled: boolean
   POSEnabled: boolean
+  OdooEnabled?: boolean
   WordPressInviteURL: string
   WordPressInviteAPIKey: string
   WordPressInviteTTL: number

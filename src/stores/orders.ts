@@ -37,6 +37,16 @@ export const useOrdersStore = defineStore('orders', {
         console.log(error)
         throw error
       }
+    },
+    async resendOdooWebhook(orderID: number) {
+      try {
+        await agent.VivaWallet.resendWebhook(orderID)
+        await this.getUnverifiedOrders()
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error)
+        throw error
+      }
     }
   }
 })

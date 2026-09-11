@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { useOrdersStore } from '@/stores/orders'
+import { useSettingsStore } from '@/stores/settings'
 import { computed, ref } from 'vue'
 import ToastMessage from '@/components/ToastMessage.vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 
 const ordersStore = useOrdersStore()
+const settingsStore = useSettingsStore()
 const toast = ref<{ message: string; type: string } | null>(null)
+const odooEnabled = computed(() => !!settingsStore.settings?.OdooEnabled)
 
 useAuthLoad(() => ordersStore.getUnverifiedOrders())
 
@@ -53,6 +56,17 @@ const handleAddTransactionID = async (orderCode: string) => {
       const message = error.response?.data?.error?.message || 'Failed to add Transaction ID'
       toast.value = { message: message, type: 'error' }
     }
+  }
+}
+
+const handleResendToOdoo = async (orderID: number) => {
+  try {
+    await ordersStore.resendOdooWebhook(orderID)
+    toast.value = { message: 'Transaction resend to Odoo triggered successfully', type: 'success' }
+  } catch (error: any) {
+    console.error('Resend to Odoo failed', error)
+    const message = error.response?.data?.error?.message || 'Failed to resend transaction to Odoo'
+    toast.value = { message: message, type: 'error' }
   }
 }
 </script>
@@ -104,6 +118,13 @@ const handleAddTransactionID = async (orderCode: string) => {
                     @click="handleAddTransactionID(order.OrderCode)"
                   >
                     Add Transaction ID
+                  </button>
+                  <button
+                    v-if="odooEnabled"
+                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-4"
+                    @click="handleResendToOdoo(order.ID)"
+                  >
+                    Resend to Odoo
                   </button>
                 </td>
               </tr>
