@@ -65,7 +65,11 @@ const VivaWallet = {
       .then(responseBody),
   resendWebhook: (orderID: number): Promise<any> =>
     apiInstance
-      .post(`${ORDERS_RESEND_API_URL}${orderID}/`, {}, { headers: { 'Content-Type': 'application/json' } })
+      .post(
+        `${ORDERS_RESEND_API_URL}${orderID}/`,
+        {},
+        { headers: { 'Content-Type': 'application/json' } }
+      )
       .then(sleep(100))
       .then(responseBody)
 }
