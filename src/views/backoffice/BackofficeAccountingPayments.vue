@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useItemsStore } from '@/stores/items'
+import { useOrdersStore } from '@/stores/orders'
 import { usePaymentsStore, type Payment } from '@/stores/payments'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -13,8 +14,10 @@ import { useI18n } from 'vue-i18n'
 
 const { locale } = useI18n()
 const settingsStore = useSettingsStore()
+const ordersStore = useOrdersStore()
 const itemsStore = useItemsStore()
 const items = computed(() => itemsStore.itemsBackoffice)
+const odooEnabled = computed(() => !!settingsStore.settings?.OdooEnabled)
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -93,6 +96,17 @@ const findVendorIdByLicense = (licenseID: string | undefined | null) => {
   return v ? v.ID : null
 }
 
+const handleResendToOdoo = async (orderID: number) => {
+  try {
+    await ordersStore.resendOdooWebhook(orderID)
+    alert('Transaction resend to Odoo triggered successfully')
+  } catch (error: any) {
+    console.error('Resend to Odoo failed', error)
+    const message = error.response?.data?.error?.message || 'Failed to resend transaction to Odoo'
+    alert(message)
+  }
+}
+
 const exportTable = () => {
   if (!payments.value || payments.value.length == 0) {
     alert('Nothing to export')
@@ -168,6 +182,7 @@ const exportTable = () => {
                   <th className="p-3">{{ $t('to') }}</th>
                   <th className="p-3">{{ $t('item') }}</th>
                   <th className="p-3">{{ $t('amount') }}</th>
+                  <th v-if="odooEnabled" className="p-3">Action</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
@@ -184,6 +199,14 @@ const exportTable = () => {
                     {{ translateItem(payment) }}
                   </td>
                   <td className="border-t-2 p-3">{{ formatCredit(payment.Amount) }} €</td>
+                  <td v-if="odooEnabled && payment.Order" className="border-t-2 p-3">
+                    <button
+                      class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      @click="handleResendToOdoo(payment.Order)"
+                    >
+                      Resend to Odoo
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>

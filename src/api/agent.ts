@@ -8,7 +8,8 @@ import {
   SETTINGS_API_URL,
   VIVAWALLET_TRANSACTION_VERIFICATION,
   VENDOR_CHECK_ID,
-  ORDERS_UNVERIFIED_API_URL
+  ORDERS_UNVERIFIED_API_URL,
+  ORDERS_RESEND_API_URL
 } from '@/api/endpoints'
 import { apiInstance } from './api'
 import type { orderItem } from '@/stores/payment'
@@ -60,6 +61,11 @@ const VivaWallet = {
       .post(ORDERS_UNVERIFIED_API_URL + 'code/' + orderCode + '/transactionID/', {
         transactionID: transactionID
       })
+      .then(sleep(100))
+      .then(responseBody),
+  resendWebhook: (orderID: number): Promise<any> =>
+    apiInstance
+      .post(`${ORDERS_RESEND_API_URL}${orderID}/`, {}, { headers: { 'Content-Type': 'application/json' } })
       .then(sleep(100))
       .then(responseBody)
 }
