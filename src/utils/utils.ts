@@ -131,6 +131,10 @@ export function initSentry(app: App, router: Router) {
       replaysOnErrorSampleRate: 1.0
     })
 
+    // One frontend build is served behind every paper's shop domain, so tag events by
+    // hostname - otherwise every tenant's errors land in Sentry/GlitchTip indistinguishable.
+    Sentry.setTag('tenant', window.location.hostname)
+
     // Save the original console.error function
     //eslint-disable-next-line
     const originalConsoleError = console.error
@@ -141,8 +145,17 @@ export function initSentry(app: App, router: Router) {
       // Call the original console.error to log the error in the console
       originalConsoleError.apply(console, args)
 
-      // Send the error to Sentry
-      Sentry.captureException(new Error(args.join(' ')))
+      // Many call sites already pass the real Error alongside a message, e.g.
+      // console.error('Error creating vendor:', error). Forward that real error so Sentry
+      // groups by its actual stack trace instead of by the joined string, which differs
+      // per call (order ids, timestamps, ...) and would never group repeats together.
+      const realError = args.find((arg): arg is Error => arg instanceof Error)
+
+      if (realError) {
+        Sentry.captureException(realError)
+      } else {
+        Sentry.captureException(new Error(args.join(' ')))
+      }
     }
   }
 }
