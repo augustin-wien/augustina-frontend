@@ -58,10 +58,16 @@ export const initKeycloak = async () => {
 
     if (!keycloak.keycloak) return
 
-    keycloak.keycloak.updateToken(100).then((refreshed) => {
-      /* eslint-disable no-console */
-      console.log('refreshed', refreshed)
-    })
+    keycloak.keycloak
+      .updateToken(100)
+      .then((refreshed) => {
+        /* eslint-disable no-console */
+        console.log('refreshed', refreshed)
+      })
+      .catch(() => {
+        if (!keycloak.keycloak) return
+        keycloak.keycloak.login({ locale: 'de' })
+      })
   }
 
   keycloak.keycloak.onReady = (authenticated) => {
@@ -83,8 +89,7 @@ export const initKeycloak = async () => {
 
   keycloak.initailizedKeycloak = true
   return keycloak.keycloak.init({
-    onLoad: 'check-sso',
-    flow: 'implicit'
+    onLoad: 'check-sso'
   })
 }
 export default keycloak
