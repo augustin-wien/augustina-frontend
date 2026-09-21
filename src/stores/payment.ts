@@ -3,6 +3,22 @@ import type { VivaWalletResponse } from '@/models/responseVivaWallet'
 import type { VivaWalletVerification } from '@/models/verificationVivaWallet'
 import router from '@/router'
 import agent from '@/api/agent'
+import * as Sentry from '@sentry/vue'
+
+// Called once verifyPayment gives up retrying (failedCount > 5) - a customer paid and
+// the order never confirmed, without this nothing would ever have surfaced it.
+function reportUnverifiedPayment(transactionID: string, failedCount: number, error?: unknown) {
+  Sentry.withScope((scope) => {
+    scope.setTag('error_type', 'payment_verification_failed')
+    scope.setContext('payment', { transactionID, failedCount })
+
+    if (error) {
+      Sentry.captureException(error)
+    } else {
+      Sentry.captureMessage('Payment verification exhausted retries with no timestamp', 'error')
+    }
+  })
+}
 
 export interface orderItem {
   item: number
@@ -113,6 +129,7 @@ export const usePaymentStore = defineStore('payment', {
           console.log('failed to verify payment', _error)
 
           if (this.failedCount > 5) {
+            reportUnverifiedPayment(this.transactionID, this.failedCount, _error)
             router.push({ path: '/failure', query: { orderCode: this.transactionID } })
           }
 
@@ -126,6 +143,7 @@ export const usePaymentStore = defineStore('payment', {
         this.failedCount++
 
         if (this.failedCount > 5) {
+          reportUnverifiedPayment(this.transactionID, this.failedCount)
           router.push({ path: '/failure', query: { orderCode: this.transactionID } })
         }
 
