@@ -247,7 +247,7 @@ onMounted(() => {
             <div class="p-5 wrapper">
               <div class="options pl-5">
                 <div v-if="qrCodeOptions" class="qr-code-options">
-                  <div class>{{ $t('Error Correction Level') }}</div>
+                  <div>{{ $t('Error Correction Level') }}</div>
                   <select v-model="qrCodeOptions.errorCorrectionLevel" class="px-5 py-2.5">
                     <option value="L">L</option>
                     <option value="M">M</option>
@@ -349,7 +349,7 @@ onMounted(() => {
         <div class="p-5 wrapper">
           <div class="options pl-5">
             <div v-if="qrCodeOptions" class="qr-code-options">
-              <div class>{{ $t('Error Correction Level') }}</div>
+              <div>{{ $t('Error Correction Level') }}</div>
               <select v-model="qrCodeOptions.errorCorrectionLevel" class="px-5 py-2.5 border">
                 <option value="L">L</option>
                 <option value="M">M</option>
