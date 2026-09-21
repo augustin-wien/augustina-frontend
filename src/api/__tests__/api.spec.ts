@@ -1,15 +1,24 @@
+import type { AxiosAdapter, InternalAxiosRequestConfig } from 'axios'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { apiInstance } from '@/api/api'
+
+// Named separately from the `scope` variable below - inlining this as `typeof scope`
+// on withScope's parameter makes the vi.hoisted callback's return type reference
+// itself (scope's own type would depend on the object that contains it).
+interface MockScope {
+  setTag: ReturnType<typeof vi.fn>
+  setContext: ReturnType<typeof vi.fn>
+}
 
 // vi.mock is hoisted above every import in this file, so the mock functions it
 // references have to be created through vi.hoisted rather than plain consts.
 const { scope, captureException, withScope } = vi.hoisted(() => {
-  const scope = { setTag: vi.fn(), setContext: vi.fn() }
+  const scope: MockScope = { setTag: vi.fn(), setContext: vi.fn() }
 
   return {
     scope,
     captureException: vi.fn(),
-    withScope: vi.fn((callback: (scope: typeof scope) => void) => callback(scope))
+    withScope: vi.fn((callback: (scope: MockScope) => void) => callback(scope))
   }
 })
 
@@ -48,13 +57,15 @@ describe('apiInstance', () => {
 })
 
 // Minimal axios adapter stub returning a 404, to exercise the "has a response" branch
-// without needing a real server that answers with one.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function notFoundAdapter(config: any) {
-  const error: any = new Error('Request failed with status code 404')
+// without needing a real server that answers with one. Always throws, so nothing ever
+// actually returns an AxiosResponse - the return type still has to say so, since an
+// adapter that only ever throws infers as Promise<void> otherwise.
+const notFoundAdapter: AxiosAdapter = async (config: InternalAxiosRequestConfig) => {
+  const error = Object.assign(new Error('Request failed with status code 404'), {
+    config,
+    response: { status: 404, statusText: 'Not Found', headers: {}, config, data: {} },
+    isAxiosError: true
+  })
 
-  error.config = config
-  error.response = { status: 404, statusText: 'Not Found', headers: {}, config, data: {} }
-  error.isAxiosError = true
   throw error
 }
