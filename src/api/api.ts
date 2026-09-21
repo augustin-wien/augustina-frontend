@@ -4,6 +4,7 @@ import { type PaymentsForPayout, type Payout } from '@/stores/payout'
 import { type Settings } from '@/stores/settings'
 import { type Vendor } from '@/stores/vendor'
 import axios from 'axios'
+import * as Sentry from '@sentry/vue'
 
 import {
   AUTH_API_URL,
@@ -49,8 +50,25 @@ apiInstance.interceptors.response.use(
     return response
   },
   (error) => {
-    if (error.response.status === 401) {
-      keycloak.keycloak?.login()
+    if (error.response) {
+      if (error.response.status === 401) {
+        keycloak.keycloak?.login()
+      }
+    } else {
+      // No response at all: the request never reached the backend (offline, DNS/
+      // connection failure, timeout, CORS). A normal 4xx/5xx already has error.response
+      // and is handled above - this is the "backend unreachable" case, and unlike a
+      // thrown Error it wouldn't otherwise reach Sentry via the console.error override.
+      Sentry.withScope((scope) => {
+        scope.setTag('error_type', 'backend_unreachable')
+
+        scope.setContext('request', {
+          url: error.config?.url,
+          method: error.config?.method
+        })
+
+        Sentry.captureException(error)
+      })
     }
 
     return Promise.reject(error)
