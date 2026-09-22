@@ -5,6 +5,9 @@ import { ref, computed } from 'vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Button from '@/components/ui/Button.vue'
+import Badge from '@/components/ui/Badge.vue'
+import Card from '@/components/ui/Card.vue'
 
 const store = useCustomerStore()
 
@@ -39,42 +42,38 @@ const displayCustomers = computed(() => {
           v-model="searchQuery"
           type="text"
           :placeholder="$t('SearchPlaceholder')"
-          class="border-2 border-gray-400 rounded-md p-2 ml-2"
+          class="aug-input ml-2"
+          style="width: auto"
         />
       </div>
     </template>
 
     <template #main>
       <div class="main">
-        <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <table class="table-auto w-full border-collapse">
+        <Card>
+          <table class="aug-table">
             <thead>
               <tr>
-                <th class="p-3 text-left">{{ $t('firstName') }}</th>
-                <th class="p-3 text-left">{{ $t('lastName') }}</th>
-                <th class="p-3 text-left">{{ $t('email') }}</th>
-                <th class="p-3 text-left">{{ $t('abonements') }}</th>
-                <th class="p-3"></th>
+                <th>{{ $t('firstName') }}</th>
+                <th>{{ $t('lastName') }}</th>
+                <th>{{ $t('email') }}</th>
+                <th>{{ $t('abonements') }}</th>
+                <th></th>
               </tr>
             </thead>
-            <tbody class="text-sm">
-              <tr v-for="c in displayCustomers" :key="c.id" class="border-t-2">
-                <td class="p-3">{{ c.firstname }}</td>
-                <td class="p-3">{{ c.lastname }}</td>
-                <td class="p-3">{{ c.email }}</td>
-                <td class="p-3">
-                  <span
-                    v-if="activeCustomerIds.has(c.id)"
-                    class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-lime-100 text-lime-800"
-                  >
+            <tbody>
+              <tr v-for="c in displayCustomers" :key="c.id">
+                <td>{{ c.firstname }}</td>
+                <td>{{ c.lastname }}</td>
+                <td>{{ c.email }}</td>
+                <td>
+                  <Badge v-if="activeCustomerIds.has(c.id)" variant="success">
                     {{ $t('active') }}
-                  </span>
+                  </Badge>
                 </td>
-                <td class="p-3">
+                <td>
                   <router-link :to="`/backoffice/customers/${c.id}`">
-                    <button class="py-1 px-3 rounded-full customcolor">
-                      {{ $t('edit') }}
-                    </button>
+                    <Button variant="secondary">{{ $t('edit') }}</Button>
                   </router-link>
                 </td>
               </tr>
@@ -85,7 +84,7 @@ const displayCustomers = computed(() => {
               </tr>
             </tbody>
           </table>
-        </div>
+        </Card>
       </div>
       <footer>
         <router-link to="/backoffice/customers/new">
@@ -97,9 +96,3 @@ const displayCustomers = computed(() => {
     </template>
   </component>
 </template>
-
-<style scoped>
-td {
-  padding: 10px;
-}
-</style>
