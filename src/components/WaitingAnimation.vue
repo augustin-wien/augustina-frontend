@@ -1,9 +1,3 @@
-<script setup lang="ts">
-import { useSettingsStore } from '@/stores/settings'
-
-const settings = useSettingsStore()
-</script>
-
 <template>
   <main class="h-full grid grid-rows-6 place-items-center">
     <div class="lds-ellipsis row-span-4">
@@ -29,7 +23,7 @@ const settings = useSettingsStore()
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background-color: v-bind(settings.settings.Color);
+  background-color: var(--color-accent);
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 
@@ -81,9 +75,5 @@ const settings = useSettingsStore()
   100% {
     transform: translate(24px, 0);
   }
-}
-
-.customcolor {
-  background-color: v-bind(settings.settings.Color);
 }
 </style>
