@@ -76,7 +76,7 @@ const selectedVendor = ref<Vendor | null>(null)
   <component :is="$route.meta.layout || 'div'">
     <template #header>
       <div class="flex space-between justify-between content-center items-center pt-3">
-        <h1 className="font-bold text-2xl">{{ $t('menuVendors') }}</h1>
+        <h1 class="font-bold text-2xl">{{ $t('menuVendors') }}</h1>
         <div>
           <span>
             <input
@@ -101,36 +101,36 @@ const selectedVendor = ref<Vendor | null>(null)
     <template #main>
       <div class="main">
         <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-xl space-y-3 space-x-3 page-content">
-            <table className="table-auto w-full border-spacing-4 border-collapse">
+          <div class="text-xl space-y-3 space-x-3 page-content">
+            <table class="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
-                  <th className="p-3">{{ $t('IDNumber') }}</th>
-                  <th className="p-3">{{ $t('firstName') }}</th>
-                  <th className="p-3">{{ $t('lastName') }}</th>
-                  <th className="p-3">{{ $t('currentCredit') }}</th>
-                  <th className="p-3">{{ $t('measure') }}</th>
+                  <th class="p-3">{{ $t('IDNumber') }}</th>
+                  <th class="p-3">{{ $t('firstName') }}</th>
+                  <th class="p-3">{{ $t('lastName') }}</th>
+                  <th class="p-3">{{ $t('currentCredit') }}</th>
+                  <th class="p-3">{{ $t('measure') }}</th>
                 </tr>
               </thead>
-              <tbody className="text-sm p-3">
+              <tbody class="text-sm p-3">
                 <tr
                   v-for="vendor in displayVendors"
                   :key="vendor.ID"
                   :class="vendor.IsDisabled ? 'disabled-vendor border-t-2' : 'border-t-2'"
                 >
-                  <td className="p-3">
+                  <td class="p-3">
                     <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
                       {{ vendor.IsDisabled ? $t('Disabled') + ': ' : '' }}
                       {{ vendor?.LicenseID }}
                     </router-link>
                   </td>
-                  <td className="p-3">{{ vendor.FirstName }}</td>
-                  <td className="p-3">{{ vendor.LastName }}</td>
-                  <td className="p-3">{{ formatCredit(vendor.Balance) }}€</td>
+                  <td class="p-3">{{ vendor.FirstName }}</td>
+                  <td class="p-3">{{ vendor.LastName }}</td>
+                  <td class="p-3">{{ formatCredit(vendor.Balance) }}€</td>
 
                   <td class="flex justify-center">
                     <button
-                      className="p-2 rounded-full h-10 w-10 customcolor mr-2"
+                      class="p-2 rounded-full h-10 w-10 customcolor mr-2"
                       @click="
                         async () => {
                           await store.getVendor(vendor.ID)
@@ -144,15 +144,15 @@ const selectedVendor = ref<Vendor | null>(null)
                       v-if="vendor.Balance !== 0"
                       :to="`/backoffice/credits/payout/${vendor.ID}`"
                     >
-                      <button className="p-2 rounded-full customcolor mr-2 h-10 w-10">
+                      <button class="p-2 rounded-full customcolor mr-2 h-10 w-10">
                         <font-awesome-icon :icon="faCreditCard" />
                       </button>
                     </router-link>
-                    <button v-else disabled className="p-2 rounded-full customcolor mr-2 h-10 w-10">
+                    <button v-else disabled class="p-2 rounded-full customcolor mr-2 h-10 w-10">
                       <font-awesome-icon :icon="faCreditCard" />
                     </button>
                     <button
-                      className="p-2 rounded-full h-10 w-10 customcolor mr-2"
+                      class="p-2 rounded-full h-10 w-10 customcolor mr-2"
                       @click="
                         () => {
                           showQRCode = true
@@ -165,17 +165,17 @@ const selectedVendor = ref<Vendor | null>(null)
                     <router-link
                       :to="{ path: '/backoffice/payments', query: { vendor: vendor.LicenseID } }"
                     >
-                      <button className="p-2 rounded-full customcolor mr-2 h-10">
+                      <button class="p-2 rounded-full customcolor mr-2 h-10">
                         {{ $t('bank statement') }}
                       </button>
                     </router-link>
                     <router-link :to="`/backoffice/userprofile/${vendor.ID}/comments`">
-                      <button className="p-2 rounded-full h-10 w-10 customcolor mr-2">
+                      <button class="p-2 rounded-full h-10 w-10 customcolor mr-2">
                         <font-awesome-icon :icon="faComment" />
                       </button>
                     </router-link>
                     <router-link :to="`/backoffice/pos/${vendor.LicenseID}`">
-                      <button className="p-2 rounded-full h-10 w-10 customcolor mr-2">
+                      <button class="p-2 rounded-full h-10 w-10 customcolor mr-2">
                         <font-awesome-icon :icon="faCashRegister" />
                       </button>
                     </router-link>
@@ -200,7 +200,7 @@ const selectedVendor = ref<Vendor | null>(null)
       />
       <footer>
         <router-link to="/backoffice/newvendor">
-          <button className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">
+          <button class="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">
             {{ $t('new') }}
           </button>
         </router-link>

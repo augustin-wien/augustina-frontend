@@ -39,7 +39,7 @@ onMounted(() => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <main className="h-full grid grid-rows-6 place-items-center">
+      <main class="h-full grid grid-rows-6 place-items-center">
         <WaitingAnimation v-if="errorMessage === ''" />
         <div v-else>
           <div class="text-center font-semibold text-3xl pb-4 text-rose-700 pt-10">

@@ -58,10 +58,10 @@ const checkIfItemSelected = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div id="shop-page" className="h-full grid grid-rows-5 w-full">
+      <div id="shop-page" class="h-full grid grid-rows-5 w-full">
         <div class="row-span-4 w-full h-full">
           <div class="shop-header">
-            <div id="page-title" className="text-center font-semibold text-xl">
+            <div id="page-title" class="text-center font-semibold text-xl">
               {{ $t('buyItem') }}
             </div>
             <div class="flex relative items-center justify-center">
@@ -111,7 +111,7 @@ const checkIfItemSelected = () => {
                       </RouterLink>
                     </div>
                   </div>
-                  <div className="place-items-center grow h-full grid grid-rows-2">
+                  <div class="place-items-center grow h-full grid grid-rows-2">
                     <div class="w-full h-full py-1 relative item-right">
                       <RouterLink
                         :to="{
@@ -137,7 +137,7 @@ const checkIfItemSelected = () => {
                         </div>
                       </RouterLink>
                     </div>
-                    <div className="flex grow h-full pb-2 w-full">
+                    <div class="flex grow h-full pb-2 w-full">
                       <button>
                         <div
                           class="button-down customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
@@ -183,7 +183,7 @@ const checkIfItemSelected = () => {
                       </RouterLink>
                     </div>
                   </div>
-                  <div className="place-items-center grow h-full grid grid-rows-2 item-right">
+                  <div class="place-items-center grow h-full grid grid-rows-2 item-right">
                     <div class="w-full h-full py-1 relative">
                       <RouterLink :to="{ name: 'Item Available', query: { item: item.ID } }">
                         <button
@@ -213,7 +213,7 @@ const checkIfItemSelected = () => {
                         </div>
                       </RouterLink>
                     </div>
-                    <div className="flex grow h-full pb-2 w-full">
+                    <div class="flex grow h-full pb-2 w-full">
                       <button>
                         <div
                           class="button-down customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
@@ -244,7 +244,7 @@ const checkIfItemSelected = () => {
             </ul>
           </div>
         </div>
-        <div className="place-items-center row-span-1 w-full flex">
+        <div class="place-items-center row-span-1 w-full flex">
           <button
             id="next-button"
             class="text-center h-[76px] grow customcolor rounded-full p-5 text-white text-3xl w-full font-semibold"

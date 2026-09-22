@@ -97,7 +97,7 @@ useAuthLoad(() => itemsStore.getItemsBackoffice())
     <template #header>
       <div class="flex space-between justify-between content-center items-center pt-3">
         <div class="grid grid-cols-2">
-          <h1 className="font-bold text-2xl">{{ $t('menuStatistics') }}</h1>
+          <h1 class="font-bold text-2xl">{{ $t('menuStatistics') }}</h1>
           <div>
             <VueDatePicker
               v-model="date"

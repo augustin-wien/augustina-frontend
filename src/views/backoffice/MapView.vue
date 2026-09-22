@@ -60,7 +60,7 @@ function onMapReady(instance: any) {
 <template>
   <component :is="$route.meta.layout || 'div'" v-if="authenticated">
     <template v-if="vendors" #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuMap') }}</h1>
+      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('menuMap') }}</h1>
     </template>
     <template v-if="vendors" #main>
       <div class="h-full">

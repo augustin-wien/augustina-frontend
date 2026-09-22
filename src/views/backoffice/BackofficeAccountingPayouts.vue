@@ -105,7 +105,7 @@ const exportTable = () => {
   <component :is="$route.meta.layout || 'div'">
     <template #header>
       <div class="flex space-between justify-between content-center items-center mt-3">
-        <h1 className="font-bold text-2xl">{{ $t('protocol') }}</h1>
+        <h1 class="font-bold text-2xl">{{ $t('protocol') }}</h1>
         <div>
           <VueDatePicker
             v-model="date"
@@ -126,30 +126,30 @@ const exportTable = () => {
     <template #main>
       <div class="main">
         <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-xl space-y-3 space-x-3">
-            <table className="table-auto border-spacing-4 border-collapse">
+          <div class="text-xl space-y-3 space-x-3">
+            <table class="table-auto border-spacing-4 border-collapse">
               <thead>
                 <tr>
-                  <th className="p-3">{{ $t('date') }}</th>
-                  <th className="p-3">{{ $t('to') }}</th>
-                  <th className="p-3">{{ $t('from') }}</th>
-                  <th v-for="item in items" :key="`th_${item.ID}`" className="p-3">
+                  <th class="p-3">{{ $t('date') }}</th>
+                  <th class="p-3">{{ $t('to') }}</th>
+                  <th class="p-3">{{ $t('from') }}</th>
+                  <th v-for="item in items" :key="`th_${item.ID}`" class="p-3">
                     {{ $t(item.Name) }}
                   </th>
-                  <th className="p-3">{{ $t('total') }}</th>
+                  <th class="p-3">{{ $t('total') }}</th>
                 </tr>
               </thead>
-              <tbody className="text-sm">
+              <tbody class="text-sm">
                 <tr v-for="(payment, id) in payments" :key="id">
-                  <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
-                  <td className="border-t-2 p-3">
+                  <td class="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
+                  <td class="border-t-2 p-3">
                     {{ translateSender(payment.SenderName) }}
                   </td>
-                  <td className="border-t-2 p-3">{{ payment.AuthorizedBy }}</td>
+                  <td class="border-t-2 p-3">{{ payment.AuthorizedBy }}</td>
                   <td
                     v-for="item in items"
                     :key="`td_${payment.ID}_${item.ID}`"
-                    className="border-t-2 p-3"
+                    class="border-t-2 p-3"
                   >
                     {{ formatCredit(sumItemsForOrder(payment, item.ID)) }} €
                   </td>

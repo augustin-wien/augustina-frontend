@@ -52,12 +52,7 @@ const logo = computed(() => {
           <option value="de">DE</option>
         </select>
         <slot name="header">
-          <img
-            v-if="logo"
-            alt="Newspaper logo"
-            className="logo mx-auto my-1 scale-75"
-            :src="logo"
-          />
+          <img v-if="logo" alt="Newspaper logo" class="logo mx-auto my-1 scale-75" :src="logo" />
         </slot>
       </header>
       <div class="h-5/6 main-container px-8">

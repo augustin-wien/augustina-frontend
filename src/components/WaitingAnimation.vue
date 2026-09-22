@@ -5,7 +5,7 @@ const settings = useSettingsStore()
 </script>
 
 <template>
-  <main className="h-full grid grid-rows-6 place-items-center">
+  <main class="h-full grid grid-rows-6 place-items-center">
     <div class="lds-ellipsis row-span-4">
       <div></div>
       <div></div>

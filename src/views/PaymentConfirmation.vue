@@ -166,10 +166,7 @@ const email = localStorage.getItem('email') || ''
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div
-        id="payment-confirmation-page"
-        className="grid grid-rows-6 h-full place-items-center w-full"
-      >
+      <div id="payment-confirmation-page" class="grid grid-rows-6 h-full place-items-center w-full">
         <div class="confirmation-wrapper h-full w-full text-center grid grid-rows-3">
           <div class="confirmation-validation text-sm">
             <div>

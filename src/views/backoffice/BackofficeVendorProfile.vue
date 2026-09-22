@@ -25,7 +25,7 @@ const formatCredit = (credit: number) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">
+      <h1 class="font-bold mt-3 pt-3 text-2xl">
         <button @click="router.push('/backoffice/vendorsummary')">
           <font-awesome-icon :icon="faArrowLeft" />
         </button>
@@ -35,7 +35,7 @@ const formatCredit = (credit: number) => {
     <template #main>
       <div v-if="vendor" class="main">
         <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-center text-2xl space-y-3 space-x-3">
+          <div class="text-center text-2xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
               <span />
               <button
@@ -45,56 +45,56 @@ const formatCredit = (credit: number) => {
                 <IconCross />
               </button>
             </div>
-            <div className="table-auto border-spacing-4 border-collapse profile-wrapper">
-              <tbody className="text-sm text-left">
+            <div class="table-auto border-spacing-4 border-collapse profile-wrapper">
+              <tbody class="text-sm text-left">
                 <tr>
-                  <th className="p-3">{{ $t('firstName') }}:</th>
-                  <td className="p-3">{{ vendor.FirstName }}</td>
-                  <th className="p-3">{{ $t('lastName') }}:</th>
-                  <td className="p-3">{{ vendor.LastName }}</td>
+                  <th class="p-3">{{ $t('firstName') }}:</th>
+                  <td class="p-3">{{ vendor.FirstName }}</td>
+                  <th class="p-3">{{ $t('lastName') }}:</th>
+                  <td class="p-3">{{ vendor.LastName }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">{{ $t('LicenseId') }}:</th>
-                  <td className="p-3">{{ vendor.LicenseID }}</td>
-                  <th className="p-3">{{ $t('accountDeactivation') }}:</th>
-                  <td className="p-3">{{ $t(vendor.IsDisabled ? 'yes' : 'no') }}</td>
+                  <th class="p-3">{{ $t('LicenseId') }}:</th>
+                  <td class="p-3">{{ vendor.LicenseID }}</td>
+                  <th class="p-3">{{ $t('accountDeactivation') }}:</th>
+                  <td class="p-3">{{ $t(vendor.IsDisabled ? 'yes' : 'no') }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">{{ $t('lastPayout') }}:</th>
-                  <td className="p-3">{{ vendor.LastPayout }}</td>
-                  <th className="p-3">{{ $t('currentCredit') }}:</th>
-                  <td className="p-3">{{ formatCredit(vendor.Balance) }} €</td>
+                  <th class="p-3">{{ $t('lastPayout') }}:</th>
+                  <td class="p-3">{{ vendor.LastPayout }}</td>
+                  <th class="p-3">{{ $t('currentCredit') }}:</th>
+                  <td class="p-3">{{ formatCredit(vendor.Balance) }} €</td>
                 </tr>
                 <tr>
-                  <th className="p-3">E-Mail:</th>
-                  <td className="p-3">{{ vendor.Email }}</td>
-                  <th className="p-3">{{ $t('telephone') }}:</th>
-                  <td className="p-3">{{ vendor.Telephone }}</td>
+                  <th class="p-3">E-Mail:</th>
+                  <td class="p-3">{{ vendor.Email }}</td>
+                  <th class="p-3">{{ $t('telephone') }}:</th>
+                  <td class="p-3">{{ vendor.Telephone }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">{{ $t('vendorSince') }}:</th>
-                  <td className="p-3">{{ vendor.VendorSince }}</td>
-                  <th className="p-3">{{ $t('registrationDate') }}:</th>
-                  <td className="p-3">{{ vendor.RegistrationDate }}</td>
+                  <th class="p-3">{{ $t('vendorSince') }}:</th>
+                  <td class="p-3">{{ vendor.VendorSince }}</td>
+                  <th class="p-3">{{ $t('registrationDate') }}:</th>
+                  <td class="p-3">{{ vendor.RegistrationDate }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">{{ $t('language') }}:</th>
-                  <td className="p-3">{{ vendor.Language }}</td>
-                  <th className="p-3">Online Karte:</th>
-                  <td className="p-3">{{ $t(vendor.OnlineMap ? 'yes' : 'no') }}</td>
+                  <th class="p-3">{{ $t('language') }}:</th>
+                  <td class="p-3">{{ vendor.Language }}</td>
+                  <th class="p-3">Online Karte:</th>
+                  <td class="p-3">{{ $t(vendor.OnlineMap ? 'yes' : 'no') }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">Smartphone:</th>
-                  <td className="p-3">{{ $t(vendor.HasSmartphone ? 'yes' : 'no') }}</td>
-                  <th className="p-3">{{ $t('bankAccount') }}:</th>
-                  <td className="p-3">{{ $t(vendor.HasBankAccount ? 'yes' : 'no') }}</td>
+                  <th class="p-3">Smartphone:</th>
+                  <td class="p-3">{{ $t(vendor.HasSmartphone ? 'yes' : 'no') }}</td>
+                  <th class="p-3">{{ $t('bankAccount') }}:</th>
+                  <td class="p-3">{{ $t(vendor.HasBankAccount ? 'yes' : 'no') }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">{{ $t('verificationLink') }}</th>
-                  <td className="p-3">{{ vendor.AccountProofUrl }}</td>
+                  <th class="p-3">{{ $t('verificationLink') }}</th>
+                  <td class="p-3">{{ vendor.AccountProofUrl }}</td>
                 </tr>
                 <tr>
-                  <th className="p-3">{{ $t('comment') }}:</th>
+                  <th class="p-3">{{ $t('comment') }}:</th>
                   <td class="p-3" colspan="4">
                     <div v-for="(comment, index) in vendor.Comments" :key="index">
                       {{ comment }}

@@ -7,16 +7,12 @@ const settStore = useSettingsStore()
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div id="go-to-vendor-page" className="h-full font-semibold grid text-xl">
+      <div id="go-to-vendor-page" class="h-full font-semibold grid text-xl">
         <div class="text-center">
           {{ $t('invalid') }}
         </div>
         <div class="p-10">
-          <img
-            alt="Error Alert"
-            className="alert-img mx-auto my-1"
-            src="@/assets/red-alert-icon.svg"
-          />
+          <img alt="Error Alert" class="alert-img mx-auto my-1" src="@/assets/red-alert-icon.svg" />
         </div>
         <div class="text-center mb-5">
           {{ $t('gotovendor') }}

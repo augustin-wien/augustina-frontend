@@ -125,7 +125,7 @@ const importCSV = async () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">
+      <h1 class="font-bold mt-3 pt-3 text-2xl">
         {{ $t('newGendered') }} {{ $t('vendorSingular') }} {{ $t('create') }}
       </h1>
     </template>

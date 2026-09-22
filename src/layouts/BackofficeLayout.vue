@@ -105,7 +105,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuPOS') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/credits" class-name="sidemenu-link">
+                <RouterLink to="/backoffice/credits" class="sidemenu-link">
                   <button
                     class="flex justifyy-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -116,7 +116,7 @@ onMounted(() => {
                 <RouterLink
                   v-if="settings.POSEnabled"
                   to="/backoffice/pos-accounting"
-                  class-name="sidemenu-link"
+                  class="sidemenu-link"
                 >
                   <button
                     class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
@@ -125,7 +125,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuPOSAccounting') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/payouts" class-name="sidemenu-link">
+                <RouterLink to="/backoffice/payouts" class="sidemenu-link">
                   <button
                     class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -134,7 +134,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuPayouts') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/sales" class-name="sidemenu-link">
+                <RouterLink to="/backoffice/sales" class="sidemenu-link">
                   <button
                     class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -143,7 +143,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuSales') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/unverified-orders" class-name="sidemenu-link">
+                <RouterLink to="/backoffice/unverified-orders" class="sidemenu-link">
                   <button
                     class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -152,7 +152,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuUnverifiedOrders') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/payments" class-name="sidemenu-link">
+                <RouterLink to="/backoffice/payments" class="sidemenu-link">
                   <button
                     class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -161,7 +161,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuAccounting') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/productsettings" class-name="sidemenu-link">
+                <RouterLink to="/backoffice/productsettings" class="sidemenu-link">
                   <button
                     class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -170,7 +170,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuProducts') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/settings/update" class-name="sidemenu-link">
+                <RouterLink to="/backoffice/settings/update" class="sidemenu-link">
                   <button
                     class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -179,7 +179,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuSettings') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/map" class-name="sidemenu-link">
+                <RouterLink to="/backoffice/map" class="sidemenu-link">
                   <button
                     class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >
@@ -188,7 +188,7 @@ onMounted(() => {
                     <p class="text-base leading-4">{{ $t('menuMap') }}</p>
                   </button>
                 </RouterLink>
-                <RouterLink to="/backoffice/statistics" class-name="sidemenu-link">
+                <RouterLink to="/backoffice/statistics" class="sidemenu-link">
                   <button
                     class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
                   >

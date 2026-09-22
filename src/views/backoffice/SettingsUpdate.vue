@@ -129,7 +129,7 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuSettings') }}</h1>
+      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('menuSettings') }}</h1>
     </template>
     <template #main>
       <!-- min-h-full, not h-full: the tab content has to be allowed to grow past one screen,

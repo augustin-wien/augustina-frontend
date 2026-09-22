@@ -68,7 +68,7 @@ const exportTable = () => {
   <component :is="$route.meta.layout || 'div'">
     <template #header>
       <div class="flex space-between justify-between content-center items-center pt-3">
-        <h1 className="font-bold text-2xl">{{ $t('openCredits') }}</h1>
+        <h1 class="font-bold text-2xl">{{ $t('openCredits') }}</h1>
         <div>
           <span>
             <input
@@ -99,30 +99,27 @@ const exportTable = () => {
     <template #main>
       <div v-if="vendors" class="main">
         <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-xl space-y-3 page-content space-x-2">
-            <table className="table-auto w-full border-spacing-4 border-collapse">
+          <div class="text-xl space-y-3 page-content space-x-2">
+            <table class="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
-                  <th className="p-3">{{ $t('IDNumber') }}</th>
-                  <th className="p-3">{{ $t('amount') }}</th>
-                  <th className="p-3">{{ $t('lastPayout') }}</th>
-                  <th className="p-3">{{ $t('measure') }}</th>
+                  <th class="p-3">{{ $t('IDNumber') }}</th>
+                  <th class="p-3">{{ $t('amount') }}</th>
+                  <th class="p-3">{{ $t('lastPayout') }}</th>
+                  <th class="p-3">{{ $t('measure') }}</th>
                 </tr>
               </thead>
-              <tbody className="text-sm  p-3">
+              <tbody class="text-sm p-3">
                 <tr v-for="(vendor, id) in displayVendors" :key="id">
-                  <td className="border-t-2 p-3">
+                  <td class="border-t-2 p-3">
                     {{ vendor?.LicenseID }}
                   </td>
-                  <td className="border-t-2 p-3">{{ formatCredit(vendor.Balance) }} €</td>
-                  <td className="border-t-2 p-3">
+                  <td class="border-t-2 p-3">{{ formatCredit(vendor.Balance) }} €</td>
+                  <td class="border-t-2 p-3">
                     {{ vendor.LastPayout ? formatDate(vendor.LastPayout) : '' }}
                   </td>
                   <router-link v-if="vendor?.ID" :to="`/backoffice/credits/payout/${vendor.ID}`">
-                    <button
-                      className="p-3 rounded-full customcolor"
-                      :disabled="vendor.Balance === 0"
-                    >
+                    <button class="p-3 rounded-full customcolor" :disabled="vendor.Balance === 0">
                       {{ $t('payNow') }}
                     </button>
                   </router-link>

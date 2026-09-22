@@ -23,7 +23,7 @@ const shopStore = useShopStore()
             </div>
           </div>
         </div>
-        <div className="place-items-center w-full flex">
+        <div class="place-items-center w-full flex">
           <RouterLink class="h-[76px] w-[76px] mx-auto" :to="{ name: 'Confirmation' }">
             <button
               class="customcolor fill-white rounded-full h-full w-full place-items-center grid"

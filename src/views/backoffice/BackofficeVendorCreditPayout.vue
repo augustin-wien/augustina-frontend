@@ -148,13 +148,13 @@ const getItemName = (itemID: number) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuPayouts') }}</h1>
+      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('menuPayouts') }}</h1>
     </template>
 
     <template #main>
       <div class="main">
         <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div v-if="vendor" className="text-xl space-y-3 space-x-3">
+          <div v-if="vendor" class="text-xl space-y-3 space-x-3">
             <div class="flex place-content-center justify-between">
               <h1 class="text-2xl font-bold"></h1>
               <button
@@ -170,34 +170,32 @@ const getItemName = (itemID: number) => {
               {{ `${vendor.FirstName} ${vendor.LastName}` }}
             </div>
 
-            <div className="container">
-              <div className="mx-3">
-                <div className="col text-lg underline">{{ $t('menuCredits') }}</div>
-                <div className="col text-md">
-                  {{ formatCredit(paymentsForPayout.balance) }} Euro
-                </div>
+            <div class="container">
+              <div class="mx-3">
+                <div class="col text-lg underline">{{ $t('menuCredits') }}</div>
+                <div class="col text-md">{{ formatCredit(paymentsForPayout.balance) }} Euro</div>
               </div>
               <div v-if="vendor.Balance > 0">
                 <div>{{ $t('payout') }}:</div>
                 <div
                   v-for="payment in paymentsForPayout.payments"
                   :key="payment.ID"
-                  className="grid grid-cols-3"
+                  class="grid grid-cols-3"
                 >
-                  <div className="text-xs">{{ formatDate(payment.Timestamp) }}</div>
-                  <div v-if="items.length > 0" className="text-xs">
+                  <div class="text-xs">{{ formatDate(payment.Timestamp) }}</div>
+                  <div v-if="items.length > 0" class="text-xs">
                     {{ getItemName(payment.Item) }}
                   </div>
-                  <div className="text-xs">{{ formatReceiver(payment) }} Euro</div>
+                  <div class="text-xs">{{ formatReceiver(payment) }} Euro</div>
                 </div>
               </div>
-              <div className="mx-3">
-                <div className="col">
+              <div class="mx-3">
+                <div class="col">
                   <button
                     v-if="vendor.Balance > 0"
                     type="submit"
                     value="Bestätigen"
-                    className="p-3 m-3 rounded-full customcolor"
+                    class="p-3 m-3 rounded-full customcolor"
                     :onClick="payoutVendor"
                     :disabled="vendor.Balance === 0"
                   >
@@ -207,7 +205,7 @@ const getItemName = (itemID: number) => {
                     v-else
                     type="submit"
                     value="Bestätigen"
-                    className="p-3 m-3 rounded-full customcolor"
+                    class="p-3 m-3 rounded-full customcolor"
                     disabled
                   >
                     {{ $t('noCredits') }}

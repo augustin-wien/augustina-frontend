@@ -45,7 +45,7 @@ const url = import.meta.env.VITE_API_URL
         <div class="item-additional-information text-center text-l row-span-2 place-items-center">
           {{ $t('information') }}
         </div>
-        <div className="item-actions place-items-center w-full flex">
+        <div class="item-actions place-items-center w-full flex">
           <RouterLink class="back-link h-[76px] w-[76px] mx-auto" :to="{ name: 'Shop' }">
             <button
               class="back-button customcolor fill-white rounded-full h-full w-full place-items-center grid"

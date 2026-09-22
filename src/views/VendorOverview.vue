@@ -127,9 +127,9 @@ const customColor = computed(() => {
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <!--Main template-->
-      <div v-if="authenticated" className="vendor-overview container mb-8 space-y-2">
-        <div v-if="!failure" className="flex flex-col items-center space-y-4">
-          <h1 className="text-3xl font-bold">{{ $t('yourData') }}</h1>
+      <div v-if="authenticated" class="vendor-overview container mb-8 space-y-2">
+        <div v-if="!failure" class="flex flex-col items-center space-y-4">
+          <h1 class="text-3xl font-bold">{{ $t('yourData') }}</h1>
           <div class="grid grid-cols-2 place-content-between text-2xl">
             <strong>{{ $t('menuCredits') }}: </strong>
             <span v-if="vendorMe?.Balance !== undefined" class="font-bold"

@@ -71,7 +71,7 @@ function exportCSV() {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuProducts') }}</h1></template
+      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('menuProducts') }}</h1></template
     >
     <template #main>
       <div class="main w-full">
@@ -81,8 +81,8 @@ function exportCSV() {
               {{ $t('downloadCSV') }}
             </button>
           </div>
-          <div className="text-xl space-y-3 space-x-3">
-            <table className="table-auto w-full border-spacing-4 border-collapse">
+          <div class="text-xl space-y-3 space-x-3">
+            <table class="table-auto w-full border-spacing-4 border-collapse">
               <thead>
                 <tr>
                   <th class="p-3">{{ $t('productId') }}</th>
@@ -94,7 +94,7 @@ function exportCSV() {
                   <th class="p-3">{{ $t('measure') }}</th>
                 </tr>
               </thead>
-              <tbody className="text-sm p-3">
+              <tbody class="text-sm p-3">
                 <tr v-for="item in items" :key="item.ID" :class="{ 'disabled-row': item.Disabled }">
                   <td class="border-t-2 p-3 text-gray-500">{{ item.ID }}</td>
                   <td class="border-t-2 p-3">
@@ -127,7 +127,7 @@ function exportCSV() {
     <template #footer>
       <footer>
         <router-link to="/backoffice/newproduct">
-          <button className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">
+          <button class="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">
             {{ $t('new') }}
           </button>
         </router-link>
