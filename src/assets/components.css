@@ -64,7 +64,11 @@
   color: var(--color-text-muted);
   cursor: pointer;
 }
-.aug-icon-btn:hover {
+.aug-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.aug-icon-btn:not(:disabled):hover {
   background: var(--color-surface-alt);
   color: var(--color-text);
 }

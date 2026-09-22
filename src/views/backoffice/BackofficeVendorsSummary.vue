@@ -12,13 +12,15 @@ import {
   faArrowAltCircleRight,
   faQrcode,
   faComment,
-  faFileCsv
+  faFileCsv,
+  faFileInvoice
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
 import VendorInfo from '@/components/VendorInfo.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
+import Card from '@/components/ui/Card.vue'
 
 // Initialize the vendor store
 const store = vendorsStore()
@@ -96,93 +98,98 @@ const selectedVendor = ref<Vendor | null>(null)
     </template>
 
     <template #main>
-      <div class="main">
-        <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div class="text-xl space-y-3 space-x-3 page-content">
-            <table class="table-auto w-full border-spacing-4 border-collapse">
-              <thead>
-                <tr>
-                  <th class="p-3">{{ $t('IDNumber') }}</th>
-                  <th class="p-3">{{ $t('firstName') }}</th>
-                  <th class="p-3">{{ $t('lastName') }}</th>
-                  <th class="p-3">{{ $t('currentCredit') }}</th>
-                  <th class="p-3">{{ $t('measure') }}</th>
-                </tr>
-              </thead>
-              <tbody class="text-sm p-3">
-                <tr
-                  v-for="vendor in displayVendors"
-                  :key="vendor.ID"
-                  :class="vendor.IsDisabled ? 'disabled-vendor border-t-2' : 'border-t-2'"
+      <Card class="section">
+        <table class="aug-table">
+          <thead>
+            <tr>
+              <th>{{ $t('IDNumber') }}</th>
+              <th>{{ $t('firstName') }}</th>
+              <th>{{ $t('lastName') }}</th>
+              <th>{{ $t('currentCredit') }}</th>
+              <th>{{ $t('measure') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="vendor in displayVendors"
+              :key="vendor.ID"
+              :class="{ 'disabled-vendor': vendor.IsDisabled }"
+            >
+              <td>
+                <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
+                  {{ vendor.IsDisabled ? $t('Disabled') + ': ' : '' }}
+                  {{ vendor?.LicenseID }}
+                </router-link>
+              </td>
+              <td>{{ vendor.FirstName }}</td>
+              <td>{{ vendor.LastName }}</td>
+              <td>{{ formatCredit(vendor.Balance) }}€</td>
+              <td class="entry-actions">
+                <button
+                  type="button"
+                  class="aug-icon-btn"
+                  aria-label="Profil ansehen"
+                  @click="
+                    async () => {
+                      await store.getVendor(vendor.ID)
+                      showVendorInfo = true
+                    }
+                  "
                 >
-                  <td class="p-3">
-                    <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
-                      {{ vendor.IsDisabled ? $t('Disabled') + ': ' : '' }}
-                      {{ vendor?.LicenseID }}
-                    </router-link>
-                  </td>
-                  <td class="p-3">{{ vendor.FirstName }}</td>
-                  <td class="p-3">{{ vendor.LastName }}</td>
-                  <td class="p-3">{{ formatCredit(vendor.Balance) }}€</td>
-
-                  <td class="flex justify-center">
-                    <button
-                      class="p-2 rounded-full h-10 w-10 customcolor mr-2"
-                      @click="
-                        async () => {
-                          await store.getVendor(vendor.ID)
-                          showVendorInfo = true
-                        }
-                      "
-                    >
-                      <font-awesome-icon :icon="faArrowAltCircleRight" />
-                    </button>
-                    <router-link
-                      v-if="vendor.Balance !== 0"
-                      :to="`/backoffice/credits/payout/${vendor.ID}`"
-                    >
-                      <button class="p-2 rounded-full customcolor mr-2 h-10 w-10">
-                        <font-awesome-icon :icon="faCreditCard" />
-                      </button>
-                    </router-link>
-                    <button v-else disabled class="p-2 rounded-full customcolor mr-2 h-10 w-10">
-                      <font-awesome-icon :icon="faCreditCard" />
-                    </button>
-                    <button
-                      class="p-2 rounded-full h-10 w-10 customcolor mr-2"
-                      @click="
-                        () => {
-                          showQRCode = true
-                          selectedVendor = vendor
-                        }
-                      "
-                    >
-                      <font-awesome-icon :icon="faQrcode" />
-                    </button>
-                    <router-link
-                      :to="{ path: '/backoffice/payments', query: { vendor: vendor.LicenseID } }"
-                    >
-                      <button class="p-2 rounded-full customcolor mr-2 h-10">
-                        {{ $t('bank statement') }}
-                      </button>
-                    </router-link>
-                    <router-link :to="`/backoffice/userprofile/${vendor.ID}/comments`">
-                      <button class="p-2 rounded-full h-10 w-10 customcolor mr-2">
-                        <font-awesome-icon :icon="faComment" />
-                      </button>
-                    </router-link>
-                    <router-link :to="`/backoffice/pos/${vendor.LicenseID}`">
-                      <button class="p-2 rounded-full h-10 w-10 customcolor mr-2">
-                        <font-awesome-icon :icon="faCashRegister" />
-                      </button>
-                    </router-link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+                  <font-awesome-icon :icon="faArrowAltCircleRight" />
+                </button>
+                <router-link
+                  v-if="vendor.Balance !== 0"
+                  :to="`/backoffice/credits/payout/${vendor.ID}`"
+                >
+                  <button type="button" class="aug-icon-btn" aria-label="Guthaben auszahlen">
+                    <font-awesome-icon :icon="faCreditCard" />
+                  </button>
+                </router-link>
+                <button
+                  v-else
+                  type="button"
+                  disabled
+                  class="aug-icon-btn"
+                  aria-label="Guthaben auszahlen"
+                >
+                  <font-awesome-icon :icon="faCreditCard" />
+                </button>
+                <button
+                  type="button"
+                  class="aug-icon-btn"
+                  aria-label="QR-Code"
+                  @click="
+                    () => {
+                      showQRCode = true
+                      selectedVendor = vendor
+                    }
+                  "
+                >
+                  <font-awesome-icon :icon="faQrcode" />
+                </button>
+                <router-link
+                  :to="{ path: '/backoffice/payments', query: { vendor: vendor.LicenseID } }"
+                >
+                  <button type="button" class="aug-icon-btn" :aria-label="$t('bank statement')">
+                    <font-awesome-icon :icon="faFileInvoice" />
+                  </button>
+                </router-link>
+                <router-link :to="`/backoffice/userprofile/${vendor.ID}/comments`">
+                  <button type="button" class="aug-icon-btn" aria-label="Kommentare">
+                    <font-awesome-icon :icon="faComment" />
+                  </button>
+                </router-link>
+                <router-link :to="`/backoffice/pos/${vendor.LicenseID}`">
+                  <button type="button" class="aug-icon-btn" aria-label="Kassa">
+                    <font-awesome-icon :icon="faCashRegister" />
+                  </button>
+                </router-link>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Card>
       <QrCodeGenerator
         v-if="showQRCode"
         :show-q-r-code="showQRCode"
@@ -207,22 +214,11 @@ const selectedVendor = ref<Vendor | null>(null)
 </template>
 
 <style scoped>
-tr {
-  padding: 10px;
+.entry-actions {
+  display: flex;
+  gap: 2px;
 }
-
-td {
-  padding: 10px;
-}
-
-button:disabled,
-button[disabled] {
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
-}
-
 .disabled-vendor {
-  background-color: #f8d7da;
+  background-color: var(--color-danger-bg);
 }
 </style>
