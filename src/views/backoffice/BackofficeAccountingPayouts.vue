@@ -12,6 +12,7 @@ import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
+import Card from '@/components/ui/Card.vue'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -125,65 +126,54 @@ const exportTable = () => {
     </template>
 
     <template #main>
-      <div class="main">
-        <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div class="text-xl space-y-3 space-x-3">
-            <table class="table-auto border-spacing-4 border-collapse">
-              <thead>
-                <tr>
-                  <th class="p-3">{{ $t('date') }}</th>
-                  <th class="p-3">{{ $t('to') }}</th>
-                  <th class="p-3">{{ $t('from') }}</th>
-                  <th v-for="item in items" :key="`th_${item.ID}`" class="p-3">
-                    {{ $t(item.Name) }}
-                  </th>
-                  <th class="p-3">{{ $t('total') }}</th>
-                </tr>
-              </thead>
-              <tbody class="text-sm">
-                <tr v-for="(payment, id) in payments" :key="id">
-                  <td class="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
-                  <td class="border-t-2 p-3">
-                    {{ translateSender(payment.SenderName) }}
-                  </td>
-                  <td class="border-t-2 p-3">{{ payment.AuthorizedBy }}</td>
-                  <td
-                    v-for="item in items"
-                    :key="`td_${payment.ID}_${item.ID}`"
-                    class="border-t-2 p-3"
-                  >
-                    {{ formatCredit(sumItemsForOrder(payment, item.ID)) }} €
-                  </td>
-                  <td class="border-t-2 p-3">{{ formatCredit(payment.Amount) }} €</td>
-                </tr>
-                <tr v-if="payments && payments.length > 0" class="border-t-4">
-                  <td class="border-t-2 p-3 font-bold">{{ $t('total') }}</td>
-                  <td class="border-t-2 p-3"></td>
-                  <td class="border-t-2 p-3"></td>
-                  <td
-                    v-for="item in items"
-                    :key="`td_total_${item.ID}`"
-                    class="border-t-2 p-3 font-bold"
-                  >
-                    {{
-                      formatCredit(
-                        payments.reduce(
-                          (acc, payment) => acc + sumItemsForOrder(payment, item.ID),
-                          0
-                        )
-                      )
-                    }}
-                    €
-                  </td>
-                  <td class="border-t-2 p-3 font-bold">
-                    {{ formatCredit(payments.reduce((acc, payment) => acc + payment.Amount, 0)) }} €
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <Card class="section">
+        <table class="aug-table">
+          <thead>
+            <tr>
+              <th>{{ $t('date') }}</th>
+              <th>{{ $t('to') }}</th>
+              <th>{{ $t('from') }}</th>
+              <th v-for="item in items" :key="`th_${item.ID}`">
+                {{ $t(item.Name) }}
+              </th>
+              <th>{{ $t('total') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(payment, id) in payments" :key="id">
+              <td>{{ formatTime(payment.Timestamp) }}</td>
+              <td>{{ translateSender(payment.SenderName) }}</td>
+              <td>{{ payment.AuthorizedBy }}</td>
+              <td v-for="item in items" :key="`td_${payment.ID}_${item.ID}`">
+                {{ formatCredit(sumItemsForOrder(payment, item.ID)) }} €
+              </td>
+              <td>{{ formatCredit(payment.Amount) }} €</td>
+            </tr>
+            <tr v-if="payments && payments.length > 0" class="totals-row">
+              <td class="font-bold">{{ $t('total') }}</td>
+              <td></td>
+              <td></td>
+              <td v-for="item in items" :key="`td_total_${item.ID}`" class="font-bold">
+                {{
+                  formatCredit(
+                    payments.reduce((acc, payment) => acc + sumItemsForOrder(payment, item.ID), 0)
+                  )
+                }}
+                €
+              </td>
+              <td class="font-bold">
+                {{ formatCredit(payments.reduce((acc, payment) => acc + payment.Amount, 0)) }} €
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Card>
     </template>
   </component>
 </template>
+
+<style scoped>
+.totals-row td {
+  border-top: 2px solid var(--color-border);
+}
+</style>

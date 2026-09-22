@@ -13,6 +13,7 @@ import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
+import Card from '@/components/ui/Card.vue'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -116,32 +117,26 @@ const exportTable = () => {
     </template>
 
     <template v-if="authenticated && items.length > 0" #main>
-      <div class="main">
-        <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div class="text-xl space-y-3 space-x-3">
-            <table class="table-auto w-full border-spacing-4 border-collapse">
-              <thead>
-                <tr>
-                  <th class="p-3">{{ $t('date') }}</th>
-                  <th class="p-3">{{ $t('to') }}</th>
-                  <th class="p-3">{{ $t('item') }}</th>
-                  <th class="p-3">{{ $t('amount') }}</th>
-                </tr>
-              </thead>
-              <tbody class="text-sm">
-                <tr v-for="(payment, id) in payments" :key="id">
-                  <td class="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
-                  <td class="border-t-2 p-3">
-                    {{ translateSender(payment.ReceiverName) }}
-                  </td>
-                  <td class="border-t-2 p-3">{{ $t(getItemName(payment.Item)) }}</td>
-                  <td class="border-t-2 p-3">{{ formatCredit(payment.Amount) }} €</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <Card class="section">
+        <table class="aug-table">
+          <thead>
+            <tr>
+              <th>{{ $t('date') }}</th>
+              <th>{{ $t('to') }}</th>
+              <th>{{ $t('item') }}</th>
+              <th>{{ $t('amount') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(payment, id) in payments" :key="id">
+              <td>{{ formatTime(payment.Timestamp) }}</td>
+              <td>{{ translateSender(payment.ReceiverName) }}</td>
+              <td>{{ $t(getItemName(payment.Item)) }}</td>
+              <td>{{ formatCredit(payment.Amount) }} €</td>
+            </tr>
+          </tbody>
+        </table>
+      </Card>
     </template>
   </component>
 </template>

@@ -15,6 +15,7 @@ import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
+import Card from '@/components/ui/Card.vue'
 
 const { locale } = useI18n()
 const settingsStore = useSettingsStore()
@@ -163,49 +164,57 @@ const exportTable = () => {
       </PageHeader>
     </template>
     <template #main>
-      <div class="main">
-        <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div class="space-y-3 space-x-3">
-            <h1 class="text-xl font-bold">{{ $t('accountingTitle') }}</h1>
-            <table class="table-auto w-full border-spacing-4 border-collapse">
-              <thead>
-                <tr>
-                  <th class="p-3">{{ $t('date') }}</th>
-                  <th class="p-3">{{ $t('from') }}</th>
-                  <th class="p-3">{{ $t('to') }}</th>
-                  <th class="p-3">{{ $t('item') }}</th>
-                  <th class="p-3">{{ $t('amount') }}</th>
-                  <th v-if="odooEnabled" class="p-3">Action</th>
-                </tr>
-              </thead>
-              <tbody class="text-sm">
-                <tr v-for="(payment, id) in payments" :key="id">
-                  <td class="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
-                  <td class="border-t-2 p-3">
-                    {{ translateSender(payment.SenderName) }}
-                  </td>
-                  <td class="border-t-2 p-3">
-                    {{ translateReceiver(payment.ReceiverName)
-                    }}{{ payment.AuthorizedBy ? ' durch ' + payment.AuthorizedBy : '' }}
-                  </td>
-                  <td class="border-t-2 p-3">
-                    {{ translateItem(payment) }}
-                  </td>
-                  <td class="border-t-2 p-3">{{ formatCredit(payment.Amount) }} €</td>
-                  <td v-if="odooEnabled && payment.Order" class="border-t-2 p-3">
-                    <button
-                      class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                      @click="handleResendToOdoo(payment.Order)"
-                    >
-                      Resend to Odoo
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <Card class="section">
+        <h2 class="section-title">{{ $t('accountingTitle') }}</h2>
+        <table class="aug-table">
+          <thead>
+            <tr>
+              <th>{{ $t('date') }}</th>
+              <th>{{ $t('from') }}</th>
+              <th>{{ $t('to') }}</th>
+              <th>{{ $t('item') }}</th>
+              <th>{{ $t('amount') }}</th>
+              <th v-if="odooEnabled">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(payment, id) in payments" :key="id">
+              <td>{{ formatTime(payment.Timestamp) }}</td>
+              <td>{{ translateSender(payment.SenderName) }}</td>
+              <td>
+                {{ translateReceiver(payment.ReceiverName)
+                }}{{ payment.AuthorizedBy ? ' durch ' + payment.AuthorizedBy : '' }}
+              </td>
+              <td>{{ translateItem(payment) }}</td>
+              <td>{{ formatCredit(payment.Amount) }} €</td>
+              <td v-if="odooEnabled && payment.Order">
+                <button type="button" class="link-btn" @click="handleResendToOdoo(payment.Order)">
+                  Resend to Odoo
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Card>
     </template>
   </component>
 </template>
+
+<style scoped>
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.link-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--color-accent);
+  font-weight: 600;
+  cursor: pointer;
+}
+.link-btn:hover {
+  text-decoration: underline;
+}
+</style>
