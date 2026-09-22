@@ -2,6 +2,9 @@
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMailTemplatesStore } from '@/stores/mailTemplates'
+import Card from '@/components/ui/Card.vue'
+import FormField from '@/components/ui/FormField.vue'
+import Button from '@/components/ui/Button.vue'
 
 const emits = defineEmits<{
   (e: 'saved', message: string): void
@@ -185,140 +188,261 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="space-y-6">
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <div class="grid grid-cols-3 gap-6">
-        <!-- Template list -->
-        <div class="col-span-1">
-          <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('Mail Templates') }}</h2>
-          <ul class="space-y-2">
-            <li v-for="t in templates" :key="'temp_' + t.ID">
-              <button
-                class="w-full text-left rounded px-3 py-2 text-sm font-medium transition-colors"
-                :class="
-                  mailStore.current?.name === t.Name
-                    ? 'bg-black text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                "
-                @click="selectTemplate(t.Name)"
-              >
-                {{ $t('mailTemplate_' + t.Name, t.Name) }}
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Editor -->
-        <div class="col-span-2">
-          <div v-if="mailStore.current && mailStore.current.name">
-            <!-- Subject -->
-            <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('Subject') }}</label>
-            <input
-              v-model="mailStore.current.subject"
-              class="w-full border rounded px-3 py-2 mb-4 text-gray-700"
-            />
-
-            <!-- Body with Edit/Preview tabs -->
-            <div class="mb-1 flex items-center justify-between">
-              <label class="text-sm font-medium text-gray-700">{{ $t('Body') }}</label>
-              <div class="flex gap-1">
-                <button
-                  type="button"
-                  class="px-3 py-1 text-xs rounded"
-                  :class="
-                    bodyTab === 'edit'
-                      ? 'bg-black text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  "
-                  @click="bodyTab = 'edit'"
-                >
-                  {{ $t('edit') }}
-                </button>
-                <button
-                  type="button"
-                  class="px-3 py-1 text-xs rounded"
-                  :class="
-                    bodyTab === 'preview'
-                      ? 'bg-black text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  "
-                  @click="bodyTab = 'preview'"
-                >
-                  {{ $t('preview') }}
-                </button>
-              </div>
-            </div>
-            <textarea
-              v-if="bodyTab === 'edit'"
-              ref="textareaRef"
-              v-model="mailStore.current.body"
-              class="w-full border rounded px-3 py-2 h-64 mb-2 text-gray-700 font-mono text-sm"
-              @keyup="saveCursor"
-              @mouseup="saveCursor"
-              @blur="saveCursor"
-            ></textarea>
-            <iframe
-              v-else
-              class="w-full border rounded h-64 mb-2 bg-white"
-              :srcdoc="previewBody"
-              sandbox="allow-same-origin"
-            ></iframe>
-
-            <!-- Variable chips -->
-            <div
-              v-if="currentVars.length"
-              class="mb-4 p-3 bg-gray-50 rounded border border-gray-200"
+  <Card>
+    <div class="settings-grid">
+      <!-- Template list -->
+      <div>
+        <h2 class="section-title">{{ $t('Mail Templates') }}</h2>
+        <ul class="template-list">
+          <li v-for="t in templates" :key="'temp_' + t.ID">
+            <button
+              type="button"
+              class="template-item"
+              :class="{ 'template-item-active': mailStore.current?.name === t.Name }"
+              @click="selectTemplate(t.Name)"
             >
-              <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                {{ $t('templateVars') }}
-              </p>
-              <div class="flex flex-wrap gap-2">
-                <button
-                  v-for="v in currentVars"
-                  :key="v.name"
-                  type="button"
-                  class="group flex items-center gap-1 px-2 py-1 rounded bg-white border border-gray-300 text-xs hover:border-gray-500 transition-colors"
-                  :title="v.desc"
-                  @click="insertVar(v.name)"
-                >
-                  <code class="font-mono text-indigo-700">{{ v.name }}</code>
-                  <span class="text-gray-400 group-hover:text-gray-600">— {{ v.desc }}</span>
-                </button>
-              </div>
-            </div>
+              {{ $t('mailTemplate_' + t.Name, t.Name) }}
+            </button>
+          </li>
+        </ul>
+      </div>
 
-            <!-- Test email -->
-            <label class="block text-sm font-medium text-gray-700 mb-1">{{
-              $t('Test email')
-            }}</label>
-            <div class="flex gap-2 mb-4">
-              <input
-                v-model="testEmail"
-                placeholder="example@domain.tld"
-                class="flex-1 border rounded px-3 py-2 text-gray-700"
-              />
+      <!-- Editor -->
+      <div class="editor-col">
+        <template v-if="mailStore.current && mailStore.current.name">
+          <FormField :label="$t('Subject')">
+            <input v-model="mailStore.current.subject" class="aug-input" />
+          </FormField>
+
+          <div class="body-header">
+            <span class="body-label">{{ $t('Body') }}</span>
+            <div class="view-toggle">
               <button
                 type="button"
-                class="px-4 py-2 rounded bg-blue-600 text-white disabled:opacity-50"
+                class="view-toggle-btn"
+                :class="{ 'view-toggle-btn-active': bodyTab === 'edit' }"
+                @click="bodyTab = 'edit'"
+              >
+                {{ $t('edit') }}
+              </button>
+              <button
+                type="button"
+                class="view-toggle-btn"
+                :class="{ 'view-toggle-btn-active': bodyTab === 'preview' }"
+                @click="bodyTab = 'preview'"
+              >
+                {{ $t('preview') }}
+              </button>
+            </div>
+          </div>
+          <textarea
+            v-if="bodyTab === 'edit'"
+            ref="textareaRef"
+            v-model="mailStore.current.body"
+            class="aug-input body-textarea"
+            @keyup="saveCursor"
+            @mouseup="saveCursor"
+            @blur="saveCursor"
+          ></textarea>
+          <iframe
+            v-else
+            class="body-preview"
+            :srcdoc="previewBody"
+            sandbox="allow-same-origin"
+          ></iframe>
+
+          <!-- Variable chips -->
+          <div v-if="currentVars.length" class="vars-box">
+            <p class="vars-label">{{ $t('templateVars') }}</p>
+            <div class="vars-list">
+              <button
+                v-for="v in currentVars"
+                :key="v.name"
+                type="button"
+                class="var-chip"
+                :title="v.desc"
+                @click="insertVar(v.name)"
+              >
+                <code class="var-chip-code">{{ v.name }}</code>
+                <span class="var-chip-desc">— {{ v.desc }}</span>
+              </button>
+            </div>
+          </div>
+
+          <FormField :label="$t('Test email')">
+            <div class="input-with-action">
+              <input v-model="testEmail" placeholder="example@domain.tld" class="aug-input" />
+              <Button
+                variant="secondary"
                 :disabled="mailStore.loading || !mailStore.current.name"
                 @click="testTemplate"
               >
                 {{ $t('Test') }}
-              </button>
+              </Button>
             </div>
-            <div class="flex justify-end">
-              <button
-                type="button"
-                class="px-6 py-2 rounded-full customcolor font-semibold"
-                @click="saveTemplate()"
-              >
-                {{ $t('save') }}
-              </button>
-            </div>
+          </FormField>
+
+          <div class="save-row">
+            <Button variant="primary" @click="saveTemplate()">{{ $t('save') }}</Button>
           </div>
-          <p v-else class="text-sm text-gray-400 mt-2">{{ $t('selectTemplateHint') }}</p>
-        </div>
+        </template>
+        <p v-else class="empty-hint">{{ $t('selectTemplateHint') }}</p>
       </div>
     </div>
-  </div>
+  </Card>
 </template>
+
+<style scoped>
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.template-item {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.template-item:hover {
+  background: var(--color-surface-alt);
+}
+.template-item-active {
+  background: var(--color-accent-tint);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.editor-col {
+  min-width: 0;
+}
+.body-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 14px 0 6px;
+}
+.body-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+.body-textarea {
+  height: 256px;
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  resize: vertical;
+}
+.body-preview {
+  width: 100%;
+  height: 256px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+}
+.view-toggle-btn {
+  padding: 4px 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.view-toggle-btn-active {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+.vars-box {
+  margin: 14px 0;
+  padding: 12px;
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+.vars-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+.vars-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.var-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  font-size: 12px;
+  cursor: pointer;
+}
+.var-chip:hover {
+  border-color: var(--color-accent);
+}
+.var-chip-code {
+  font-family: ui-monospace, monospace;
+  color: var(--color-accent);
+}
+.var-chip-desc {
+  color: var(--color-text-muted);
+}
+.input-with-action {
+  display: flex;
+  gap: 8px;
+}
+.input-with-action .aug-input {
+  flex: 1;
+}
+.save-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+.empty-hint {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 8px;
+}
+
+@media (max-width: 800px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

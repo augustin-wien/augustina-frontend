@@ -96,9 +96,9 @@ const customColor = computed(() => {
   <component :is="$route.meta.layout || 'div'">
     <template #main>
       <!--Main template-->
-      <div className="vendor-overview container mb-8 space-y-40 pb-3 w-5/6">
-        <div className="flex flex-col items-center space-y-8">
-          <h1 className="text-3xl font-bold">QR-Code</h1>
+      <div class="vendor-overview container mb-8 space-y-40 pb-3 w-5/6">
+        <div class="flex flex-col items-center space-y-8">
+          <h1 class="text-3xl font-bold">QR-Code</h1>
           <div class="content-center">
             <div id="canvas"></div>
             <div>

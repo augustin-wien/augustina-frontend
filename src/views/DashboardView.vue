@@ -20,7 +20,7 @@ function get() {
   <header>
     <img
       alt="Newspaper logo"
-      className="logo mx-auto my-5"
+      class="logo mx-auto my-5"
       src="@/assets/logo.svg"
       width="270"
       height="150"

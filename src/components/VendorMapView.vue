@@ -10,6 +10,7 @@ import 'vue-leaflet-markercluster/dist/style.css'
 import { computed, watch, ref } from 'vue'
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 import 'leaflet-geosearch/dist/geosearch.css'
+import Button from '@/components/ui/Button.vue'
 
 const emit = defineEmits(['newLocation', 'editMarker'])
 const props = defineProps(['locations', 'enableSearch', 'vendor', 'newCoords'])
@@ -123,9 +124,7 @@ function onMapReady(instance: any) {
                   params: { ID: vendor.Id }
                 }"
               >
-                <button class="rounded-full customcolor py-2 px-3 h-10">
-                  {{ $t('edit') }}
-                </button>
+                <Button variant="primary">{{ $t('edit') }}</Button>
               </RouterLink>
             </l-popup>
           </l-marker>
@@ -137,14 +136,14 @@ function onMapReady(instance: any) {
 
 <style scoped>
 .leaflet-popup-content-wrapper {
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .leaflet-popup-tip {
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .leaflet-container a.leaflet-popup-close-button {
-  color: #000;
+  color: var(--color-text);
 }
 </style>

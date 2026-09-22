@@ -21,17 +21,17 @@ const fixedDonationClick = (amount: number) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div className="h-full w-full grid grid-rows-5 place-items-center">
+      <div class="h-full w-full grid grid-rows-5 place-items-center">
         <div>
-          <div className="text-center font-semibold text-3xl">
+          <div class="text-center font-semibold text-3xl">
             {{ settStore.settings.UseTipInsteadOfDonation ? $t('tip') : $t('donation') }}
           </div>
-          <div className="text-center font-semibold text-xl">
+          <div class="text-center font-semibold text-xl">
             {{ $t('for the vendor') }}
           </div>
         </div>
 
-        <div className="flex place-items-center w-full">
+        <div class="flex place-items-center w-full">
           <button
             class="customcolor rounded-full p-[18px] text-white text-4xl font font-semibold w-full"
             @click="fixedDonationClick(2)"
@@ -39,7 +39,7 @@ const fixedDonationClick = (amount: number) => {
             2,00 €
           </button>
         </div>
-        <div className="flex place-items-center w-full">
+        <div class="flex place-items-center w-full">
           <button
             class="customcolor rounded-full p-[18px] text-white text-4xl font font-semibold w-full"
             @click="fixedDonationClick(1)"
@@ -47,14 +47,14 @@ const fixedDonationClick = (amount: number) => {
             1,00 €
           </button>
         </div>
-        <div className="flex place-items-center w-full">
+        <div class="flex place-items-center w-full">
           <button
             class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
           >
             <RouterLink :to="{ name: 'Custom Tip' }">{{ $t('editTip') }}</RouterLink>
           </button>
         </div>
-        <div className="flex place-items-center w-full">
+        <div class="flex place-items-center w-full">
           <button
             class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
             @click="fixedDonationClick(0)"

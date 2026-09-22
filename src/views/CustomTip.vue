@@ -74,11 +74,11 @@ const roundValue = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div id="custom-tip-page" className="h-full grid grid-rows-5 place-items-center">
-        <div className="text-center font-semibold text-3xl row-span-2">
+      <div id="custom-tip-page" class="h-full grid grid-rows-5 place-items-center">
+        <div class="text-center font-semibold text-3xl row-span-2">
           {{ settStore.settings.UseTipInsteadOfDonation ? $t('customtip') : $t('customdonation') }}
         </div>
-        <div className="grid grid-cols-5 w-full h-full">
+        <div class="grid grid-cols-5 w-full h-full">
           <button id="decrement-btn" @click="decrement()">
             <div class="button-down customcolor"></div>
           </button>
@@ -92,14 +92,14 @@ const roundValue = () => {
               class="customcolor col-span-2 text-white text-center text-6xl font-semibold border-2 customborder rounded-3xl w-full h-full"
               @keypress="onlyForCurrency"
             />
-            <p className="text-6xl font-semibold text-left">€</p>
+            <p class="text-6xl font-semibold text-left">€</p>
           </div>
           <button id="increment-btn" @click="increment">
             <div class="button-up customcolor ml-3"></div>
           </button>
         </div>
         <div></div>
-        <div className="flex place-items-center w-full">
+        <div class="flex place-items-center w-full">
           <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
             <button
               id="next-button"

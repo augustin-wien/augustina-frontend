@@ -49,9 +49,9 @@ const customColor = computed(() => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div className="vendor-overview container mb-8 space-y-40 pb-3 w-5/6">
-        <div className="flex flex-col items-center space-y-8">
-          <h1 className="text-3xl font-bold">{{ $t('yourProfile') }}</h1>
+      <div class="vendor-overview container mb-8 space-y-40 pb-3 w-5/6">
+        <div class="flex flex-col items-center space-y-8">
+          <h1 class="text-3xl font-bold">{{ $t('yourProfile') }}</h1>
           <div class="information">
             <div class="grid grid-cols-2 place-content-between">
               <strong>Name:</strong>

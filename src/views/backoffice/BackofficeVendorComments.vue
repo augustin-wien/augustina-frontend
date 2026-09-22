@@ -6,8 +6,11 @@ import type { VendorComment } from '@/stores/vendor'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import router from '@/router'
 import CommentsModal from '@/components/CommentsModal.vue'
-import { faArrowLeft, faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
+import Card from '@/components/ui/Card.vue'
 
 const route = useRoute()
 const store = vendorsStore()
@@ -86,82 +89,70 @@ const formatDate = (date: Date | string | null | undefined): string => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex justify-between items-center mt-3 pt-3">
-        <h1 v-if="vendor" class="font-bold text-2xl">
-          <button @click="router.back()">
-            <font-awesome-icon :icon="faArrowLeft" />
-          </button>
-          {{ vendor.LicenseID }} {{ vendor.FirstName }} {{ vendor.LastName }} –
-          {{ $t('comments') }}
-        </h1>
-        <router-link
-          v-if="vendor"
-          :to="`/backoffice/userprofile/${vendor.ID}/update`"
-          class="py-2 px-4 rounded-full customcolor"
-        >
-          {{ $t('change') }}
+      <PageHeader
+        v-if="vendor"
+        :title="`${vendor.LicenseID} ${vendor.FirstName} ${vendor.LastName} – ${$t('comments')}`"
+        show-back
+        @back="router.back()"
+      >
+        <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
+          <Button variant="secondary">{{ $t('change') }}</Button>
         </router-link>
-      </div>
+      </PageHeader>
     </template>
 
     <template #main>
-      <div class="main">
-        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div class="flex justify-between items-center mb-4">
-            <p class="text-sm text-gray-600 dark:text-gray-400">
-              {{ vendorComments?.length ?? 0 }} {{ $t('comments') }}
-            </p>
-            <button class="py-2 px-4 rounded-full customcolor" @click="addNewComment">
-              {{ $t('Add a comment') }}
-            </button>
-          </div>
+      <Card class="section">
+        <div class="section-header">
+          <p class="comment-count">{{ vendorComments?.length ?? 0 }} {{ $t('comments') }}</p>
+          <Button variant="primary" @click="addNewComment">{{ $t('Add a comment') }}</Button>
+        </div>
 
-          <div v-if="vendorComments && vendorComments.length > 0" class="space-y-3">
-            <div
-              v-for="comment in vendorComments"
-              :key="'comment_' + comment.id"
-              class="border border-gray-200 dark:border-gray-600 rounded p-3 bg-gray-50 dark:bg-gray-800 flex justify-between"
-              :class="{ 'text-red-600 dark:text-red-400': comment.warning }"
-            >
-              <div class="w-full">
-                <div class="font-bold text-xs mb-1 text-gray-500 dark:text-gray-400">
-                  {{ formatDate(comment.created_at) }}
-                </div>
-                <div class="text-sm break-words">
-                  <span v-if="comment.warning" class="font-bold">{{ $t('warning') }}: </span>
-                  {{ comment.comment }}
-                </div>
-                <div
-                  v-if="formatDate(comment.resolved_at?.toString()) !== '–'"
-                  class="text-xs mt-1 text-gray-500 dark:text-gray-400"
-                >
-                  <span class="font-bold pr-2">{{ $t('Resolved at') }}:</span>
-                  <span>{{ formatDate(comment.resolved_at?.toString()) }}</span>
-                </div>
+        <div v-if="vendorComments && vendorComments.length > 0" class="comment-list">
+          <div
+            v-for="comment in vendorComments"
+            :key="'comment_' + comment.id"
+            class="comment-card"
+            :class="{ 'comment-card-warning': comment.warning }"
+          >
+            <div class="comment-body">
+              <div class="comment-date">{{ formatDate(comment.created_at) }}</div>
+              <div class="comment-text">
+                <span v-if="comment.warning" class="comment-warning-label"
+                  >{{ $t('warning') }}:
+                </span>
+                {{ comment.comment }}
               </div>
-              <div class="flex items-center space-x-2 ml-4 shrink-0">
-                <button
-                  type="button"
-                  class="customcolor p-2"
-                  :title="$t('edit')"
-                  @click="editComment(comment)"
-                >
-                  <font-awesome-icon :icon="faPen" />
-                </button>
-                <button
-                  type="button"
-                  class="text-red-600 hover:text-red-800 p-2"
-                  :title="$t('delete')"
-                  @click="deleteComment(comment.id)"
-                >
-                  <font-awesome-icon :icon="faTrash" />
-                </button>
+              <div
+                v-if="formatDate(comment.resolved_at?.toString()) !== '–'"
+                class="comment-resolved"
+              >
+                <span class="font-bold">{{ $t('Resolved at') }}:</span>
+                <span>{{ formatDate(comment.resolved_at?.toString()) }}</span>
               </div>
             </div>
+            <div class="comment-actions">
+              <button
+                type="button"
+                class="aug-icon-btn"
+                :title="$t('edit')"
+                @click="editComment(comment)"
+              >
+                <font-awesome-icon :icon="faPen" />
+              </button>
+              <button
+                type="button"
+                class="aug-icon-btn aug-icon-btn-danger"
+                :title="$t('delete')"
+                @click="deleteComment(comment.id)"
+              >
+                <font-awesome-icon :icon="faTrash" />
+              </button>
+            </div>
           </div>
-          <p v-else class="text-sm text-gray-600 dark:text-gray-400">{{ $t('noComments') }}</p>
         </div>
-      </div>
+        <p v-else class="empty-text">{{ $t('noComments') }}</p>
+      </Card>
 
       <CommentsModal
         v-if="showCommentsDialog && vendor"
@@ -173,3 +164,61 @@ const formatDate = (date: Date | string | null | undefined): string => {
     </template>
   </component>
 </template>
+
+<style scoped>
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.comment-count {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.comment-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+}
+.comment-card-warning {
+  color: var(--color-danger);
+}
+.comment-date {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+.comment-text {
+  font-size: 13.5px;
+  word-break: break-word;
+}
+.comment-warning-label {
+  font-weight: 700;
+}
+.comment-resolved {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.empty-text {
+  font-size: 13.5px;
+  color: var(--color-text-muted);
+}
+</style>

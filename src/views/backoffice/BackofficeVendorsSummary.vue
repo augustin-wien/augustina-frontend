@@ -11,11 +11,16 @@ import {
   faCreditCard,
   faArrowAltCircleRight,
   faQrcode,
-  faComment
+  faComment,
+  faFileCsv,
+  faFileInvoice
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
 import VendorInfo from '@/components/VendorInfo.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
+import Card from '@/components/ui/Card.vue'
 
 // Initialize the vendor store
 const store = vendorsStore()
@@ -75,120 +80,118 @@ const selectedVendor = ref<Vendor | null>(null)
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center pt-3">
-        <h1 className="font-bold text-2xl">{{ $t('menuVendors') }}</h1>
-        <div>
-          <span>
-            <input
-              id="searchInput"
-              v-model="searchQuery"
-              type="text"
-              :placeholder="$t('SearchPlaceholder')"
-              class="border-2 border-gray-400 rounded-md p-2 ml-2"
-              @keyup.enter="search"
-            />
-            <button class="py-2 px-4 rounded-full customcolor ml-2 h-[44px]" @click="search">
-              {{ $t('search') }}
-            </button>
-          </span>
-        </div>
-        <button class="py-2 px-4 rounded-full customcolor h-[44px] mr-6" @click="exportTable">
-          {{ $t('export') }}
-        </button>
-      </div>
+      <PageHeader :title="$t('menuVendors')">
+        <input
+          id="searchInput"
+          v-model="searchQuery"
+          type="text"
+          :placeholder="$t('SearchPlaceholder')"
+          class="aug-input"
+          style="width: auto"
+          @keyup.enter="search"
+        />
+        <Button variant="secondary" @click="search">{{ $t('search') }}</Button>
+        <Button variant="secondary" @click="exportTable">
+          <font-awesome-icon :icon="faFileCsv" /> {{ $t('export') }}
+        </Button>
+      </PageHeader>
     </template>
 
     <template #main>
-      <div class="main">
-        <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-xl space-y-3 space-x-3 page-content">
-            <table className="table-auto w-full border-spacing-4 border-collapse">
-              <thead>
-                <tr>
-                  <th className="p-3">{{ $t('IDNumber') }}</th>
-                  <th className="p-3">{{ $t('firstName') }}</th>
-                  <th className="p-3">{{ $t('lastName') }}</th>
-                  <th className="p-3">{{ $t('currentCredit') }}</th>
-                  <th className="p-3">{{ $t('measure') }}</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm p-3">
-                <tr
-                  v-for="vendor in displayVendors"
-                  :key="vendor.ID"
-                  :class="vendor.IsDisabled ? 'disabled-vendor border-t-2' : 'border-t-2'"
+      <Card class="section">
+        <table class="aug-table">
+          <thead>
+            <tr>
+              <th>{{ $t('IDNumber') }}</th>
+              <th>{{ $t('firstName') }}</th>
+              <th>{{ $t('lastName') }}</th>
+              <th>{{ $t('currentCredit') }}</th>
+              <th>{{ $t('measure') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="vendor in displayVendors"
+              :key="vendor.ID"
+              :class="{ 'disabled-vendor': vendor.IsDisabled }"
+            >
+              <td>
+                <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
+                  {{ vendor.IsDisabled ? $t('Disabled') + ': ' : '' }}
+                  {{ vendor?.LicenseID }}
+                </router-link>
+              </td>
+              <td>{{ vendor.FirstName }}</td>
+              <td>{{ vendor.LastName }}</td>
+              <td>{{ formatCredit(vendor.Balance) }}€</td>
+              <td class="entry-actions">
+                <button
+                  type="button"
+                  class="aug-icon-btn"
+                  aria-label="Profil ansehen"
+                  @click="
+                    async () => {
+                      await store.getVendor(vendor.ID)
+                      showVendorInfo = true
+                    }
+                  "
                 >
-                  <td className="p-3">
-                    <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
-                      {{ vendor.IsDisabled ? $t('Disabled') + ': ' : '' }}
-                      {{ vendor?.LicenseID }}
-                    </router-link>
-                  </td>
-                  <td className="p-3">{{ vendor.FirstName }}</td>
-                  <td className="p-3">{{ vendor.LastName }}</td>
-                  <td className="p-3">{{ formatCredit(vendor.Balance) }}€</td>
-
-                  <td class="flex justify-center">
-                    <button
-                      className="p-2 rounded-full h-10 w-10 customcolor mr-2"
-                      @click="
-                        async () => {
-                          await store.getVendor(vendor.ID)
-                          showVendorInfo = true
-                        }
-                      "
-                    >
-                      <font-awesome-icon :icon="faArrowAltCircleRight" />
-                    </button>
-                    <router-link
-                      v-if="vendor.Balance !== 0"
-                      :to="`/backoffice/credits/payout/${vendor.ID}`"
-                    >
-                      <button className="p-2 rounded-full customcolor mr-2 h-10 w-10">
-                        <font-awesome-icon :icon="faCreditCard" />
-                      </button>
-                    </router-link>
-                    <button v-else disabled className="p-2 rounded-full customcolor mr-2 h-10 w-10">
-                      <font-awesome-icon :icon="faCreditCard" />
-                    </button>
-                    <button
-                      className="p-2 rounded-full h-10 w-10 customcolor mr-2"
-                      @click="
-                        () => {
-                          showQRCode = true
-                          selectedVendor = vendor
-                        }
-                      "
-                    >
-                      <font-awesome-icon :icon="faQrcode" />
-                    </button>
-                    <router-link
-                      :to="{ path: '/backoffice/payments', query: { vendor: vendor.LicenseID } }"
-                    >
-                      <button className="p-2 rounded-full customcolor mr-2 h-10">
-                        {{ $t('bank statement') }}
-                      </button>
-                    </router-link>
-                    <router-link :to="`/backoffice/userprofile/${vendor.ID}/comments`">
-                      <button className="p-2 rounded-full h-10 w-10 customcolor mr-2">
-                        <font-awesome-icon :icon="faComment" />
-                      </button>
-                    </router-link>
-                    <router-link :to="`/backoffice/pos/${vendor.LicenseID}`">
-                      <button className="p-2 rounded-full h-10 w-10 customcolor mr-2">
-                        <font-awesome-icon :icon="faCashRegister" />
-                      </button>
-                    </router-link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+                  <font-awesome-icon :icon="faArrowAltCircleRight" />
+                </button>
+                <router-link
+                  v-if="vendor.Balance !== 0"
+                  :to="`/backoffice/credits/payout/${vendor.ID}`"
+                >
+                  <button type="button" class="aug-icon-btn" aria-label="Guthaben auszahlen">
+                    <font-awesome-icon :icon="faCreditCard" />
+                  </button>
+                </router-link>
+                <button
+                  v-else
+                  type="button"
+                  disabled
+                  class="aug-icon-btn"
+                  aria-label="Guthaben auszahlen"
+                >
+                  <font-awesome-icon :icon="faCreditCard" />
+                </button>
+                <button
+                  type="button"
+                  class="aug-icon-btn"
+                  aria-label="QR-Code"
+                  @click="
+                    () => {
+                      showQRCode = true
+                      selectedVendor = vendor
+                    }
+                  "
+                >
+                  <font-awesome-icon :icon="faQrcode" />
+                </button>
+                <router-link
+                  :to="{ path: '/backoffice/payments', query: { vendor: vendor.LicenseID } }"
+                >
+                  <button type="button" class="aug-icon-btn" :aria-label="$t('bank statement')">
+                    <font-awesome-icon :icon="faFileInvoice" />
+                  </button>
+                </router-link>
+                <router-link :to="`/backoffice/userprofile/${vendor.ID}/comments`">
+                  <button type="button" class="aug-icon-btn" aria-label="Kommentare">
+                    <font-awesome-icon :icon="faComment" />
+                  </button>
+                </router-link>
+                <router-link :to="`/backoffice/pos/${vendor.LicenseID}`">
+                  <button type="button" class="aug-icon-btn" aria-label="Kassa">
+                    <font-awesome-icon :icon="faCashRegister" />
+                  </button>
+                </router-link>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Card>
       <QrCodeGenerator
-        v-if="showQRCode"
-        :show-q-r-code="showQRCode"
+        v-if="showQRCode && selectedVendor"
         :vendor="selectedVendor"
         @close="showQRCode = false"
       />
@@ -200,7 +203,7 @@ const selectedVendor = ref<Vendor | null>(null)
       />
       <footer>
         <router-link to="/backoffice/newvendor">
-          <button className="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">
+          <button class="p-3 rounded-full customcolor fixed bottom-10 right-10 h-16 w-16">
             {{ $t('new') }}
           </button>
         </router-link>
@@ -210,22 +213,11 @@ const selectedVendor = ref<Vendor | null>(null)
 </template>
 
 <style scoped>
-tr {
-  padding: 10px;
+.entry-actions {
+  display: flex;
+  gap: 2px;
 }
-
-td {
-  padding: 10px;
-}
-
-button:disabled,
-button[disabled] {
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
-}
-
 .disabled-vendor {
-  background-color: #f8d7da;
+  background-color: var(--color-danger-bg);
 }
 </style>

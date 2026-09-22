@@ -4,6 +4,11 @@ import { computed, ref, watch } from 'vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Vendor } from '@/stores/vendor'
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
+import Card from '@/components/ui/Card.vue'
 
 const store = vendorsStore()
 
@@ -67,80 +72,52 @@ const exportTable = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center pt-3">
-        <h1 className="font-bold text-2xl">{{ $t('openCredits') }}</h1>
-        <div>
-          <span>
-            <input
-              id="searchInput"
-              v-model="searchQuery"
-              type="text"
-              :placeholder="$t('IDNumber')"
-              class="border-2 border-gray-400 rounded-md p-2 ml-2"
-            />
-            <button class="py-2 px-4 rounded-full customcolor ml-2 h-[44px]">
-              {{ $t('search') }}
-            </button>
-          </span>
-        </div>
-        <button
-          class="py-2 px-4 rounded-full customcolor h-[44px]"
-          :disabled="isRecalculating"
-          @click="recalculate"
-        >
+      <PageHeader :title="$t('openCredits')">
+        <input
+          id="searchInput"
+          v-model="searchQuery"
+          type="text"
+          :placeholder="$t('IDNumber')"
+          class="aug-input"
+          style="width: auto"
+        />
+        <Button variant="secondary" @click="search">{{ $t('search') }}</Button>
+        <Button variant="secondary" :disabled="isRecalculating" @click="recalculate">
           {{ isRecalculating ? '…' : $t('recalculateBalances') }}
-        </button>
-        <button class="py-2 px-4 rounded-full customcolor h-[44px] mr-6" @click="exportTable">
-          {{ $t('export') }}
-        </button>
-      </div>
+        </Button>
+        <Button variant="secondary" @click="exportTable">
+          <font-awesome-icon :icon="faFileCsv" /> {{ $t('export') }}
+        </Button>
+      </PageHeader>
     </template>
 
     <template #main>
-      <div v-if="vendors" class="main">
-        <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-xl space-y-3 page-content space-x-2">
-            <table className="table-auto w-full border-spacing-4 border-collapse">
-              <thead>
-                <tr>
-                  <th className="p-3">{{ $t('IDNumber') }}</th>
-                  <th className="p-3">{{ $t('amount') }}</th>
-                  <th className="p-3">{{ $t('lastPayout') }}</th>
-                  <th className="p-3">{{ $t('measure') }}</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm  p-3">
-                <tr v-for="(vendor, id) in displayVendors" :key="id">
-                  <td className="border-t-2 p-3">
-                    {{ vendor?.LicenseID }}
-                  </td>
-                  <td className="border-t-2 p-3">{{ formatCredit(vendor.Balance) }} €</td>
-                  <td className="border-t-2 p-3">
-                    {{ vendor.LastPayout ? formatDate(vendor.LastPayout) : '' }}
-                  </td>
-                  <router-link v-if="vendor?.ID" :to="`/backoffice/credits/payout/${vendor.ID}`">
-                    <button
-                      className="p-3 rounded-full customcolor"
-                      :disabled="vendor.Balance === 0"
-                    >
-                      {{ $t('payNow') }}
-                    </button>
-                  </router-link>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <Card v-if="vendors" class="section">
+        <table class="aug-table">
+          <thead>
+            <tr>
+              <th>{{ $t('IDNumber') }}</th>
+              <th>{{ $t('amount') }}</th>
+              <th>{{ $t('lastPayout') }}</th>
+              <th>{{ $t('measure') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(vendor, id) in displayVendors" :key="id">
+              <td>{{ vendor?.LicenseID }}</td>
+              <td>{{ formatCredit(vendor.Balance) }} €</td>
+              <td>{{ vendor.LastPayout ? formatDate(vendor.LastPayout) : '' }}</td>
+              <td>
+                <router-link v-if="vendor?.ID" :to="`/backoffice/credits/payout/${vendor.ID}`">
+                  <Button variant="secondary" :disabled="vendor.Balance === 0">
+                    {{ $t('payNow') }}
+                  </Button>
+                </router-link>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Card>
     </template>
   </component>
 </template>
-
-<style scoped>
-button:disabled,
-button[disabled] {
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
-}
-</style>

@@ -71,7 +71,7 @@ const hasLicenseItem = computed(() => {
               <p id="final-price" class="text-center text-8xl font-semibold">
                 {{ shopStore.calculateSum().toFixed(2) }}€
               </p>
-              <p className="text-center text">
+              <p class="text-center text">
                 {{ $t('includes') }} {{ shopStore.donationInEuro }}€
                 {{
                   settStore.settings.UseTipInsteadOfDonation

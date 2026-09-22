@@ -7,6 +7,11 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Card from '@/components/ui/Card.vue'
+import Button from '@/components/ui/Button.vue'
+import FormField from '@/components/ui/FormField.vue'
+import Modal from '@/components/ui/Modal.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -140,176 +145,132 @@ const previewImage = (image: string | Blob | MediaSource) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ item?.Name }}</h1>
+      <PageHeader
+        :title="item?.Name ?? ''"
+        show-back
+        @back="router.push({ name: 'Backoffice Product Settings' })"
+      />
     </template>
 
     <template v-if="updatedItem" #main>
-      <div v-if="item" class="mt-4 pb-10">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+      <div v-if="item" class="product-page">
+        <div class="product-grid">
           <!-- Left column: Basic info -->
-          <section class="bg-white shadow-sm rounded-lg p-6">
-            <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">
-              {{ $t('name') }} &amp; {{ $t('itemType') }}
-            </h2>
-            <div class="space-y-4">
-              <div>
-                <label class="field-label">{{ $t('productId') }}</label>
-                <input
-                  type="text"
-                  :value="updatedItem.ID"
-                  class="field-input bg-gray-100 text-gray-500"
-                  readonly
-                />
-              </div>
-              <div>
-                <label class="field-label" for="itemType">{{ $t('itemType') }}</label>
-                <select id="itemType" v-model="updatedItem.Type" class="field-input">
+          <Card>
+            <h2 class="section-title">{{ $t('name') }} &amp; {{ $t('itemType') }}</h2>
+            <div class="field-stack">
+              <FormField :label="$t('productId')">
+                <input type="text" :value="updatedItem.ID" class="aug-input" readonly />
+              </FormField>
+              <FormField :label="$t('itemType')" for="itemType">
+                <select id="itemType" v-model="updatedItem.Type" class="aug-input">
                   <option v-for="t in availableItemTypes" :key="t" :value="t">
                     {{ $t(`itemType_${t}`) }}
                   </option>
                 </select>
-              </div>
-              <div>
-                <label class="field-label" for="itemName">{{ $t('name') }}</label>
+              </FormField>
+              <FormField :label="$t('name')" for="itemName">
                 <input
                   id="itemName"
                   v-model="updatedItem.Name"
                   type="text"
-                  class="field-input"
+                  class="aug-input"
                   required
                 />
-              </div>
-              <div>
-                <label class="field-label" for="description">{{ $t('description') }}</label>
+              </FormField>
+              <FormField :label="$t('description')" for="description">
                 <input
                   id="description"
                   v-model="updatedItem.Description"
                   type="text"
-                  class="field-input"
+                  class="aug-input"
                 />
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label class="field-label" for="price">{{ $t('price') }} (Cent)</label>
+              </FormField>
+              <div class="field-row-2">
+                <FormField :label="`${$t('price')} (Cent)`" for="price">
                   <input
                     id="price"
                     v-model="updatedItem.Price"
                     type="number"
-                    class="field-input"
+                    class="aug-input"
                     required
                   />
-                </div>
-                <div>
-                  <label class="field-label" for="itemOrder">{{ $t('order') }}</label>
+                </FormField>
+                <FormField :label="$t('order')" for="itemOrder">
                   <input
                     id="itemOrder"
                     v-model="updatedItem.ItemOrder"
                     type="number"
-                    class="field-input"
+                    class="aug-input"
                   />
-                </div>
+                </FormField>
               </div>
             </div>
-          </section>
+          </Card>
 
           <!-- Right column: Appearance + Visibility + License -->
-          <div class="space-y-4">
-            <!-- Section: Appearance -->
-            <section class="bg-white shadow-sm rounded-lg p-6">
-              <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">
-                {{ $t('image') }} &amp; {{ $t('color') }}
-              </h2>
-              <div class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <label class="field-label" for="itemColor">{{
-                      $t('Item background color')
-                    }}</label>
+          <div class="field-stack">
+            <Card>
+              <h2 class="section-title">{{ $t('image') }} &amp; {{ $t('color') }}</h2>
+              <div class="field-stack">
+                <div class="field-row-2">
+                  <FormField :label="$t('Item background color')" for="itemColor">
                     <input
                       id="itemColor"
                       v-model="updatedItem.ItemColor"
                       type="color"
-                      class="h-10 w-full rounded border cursor-pointer"
+                      class="color-input"
                     />
-                  </div>
-                  <div>
-                    <label class="field-label" for="itemTextColor">{{
-                      $t('Item text color')
-                    }}</label>
+                  </FormField>
+                  <FormField :label="$t('Item text color')" for="itemTextColor">
                     <input
                       id="itemTextColor"
                       v-model="updatedItem.ItemTextColor"
                       type="color"
-                      class="h-10 w-full rounded border cursor-pointer"
+                      class="color-input"
                     />
-                  </div>
+                  </FormField>
                 </div>
-                <div>
-                  <label class="field-label">{{ $t('image') }}</label>
+                <FormField :label="$t('image')">
                   <img
                     v-if="item.Image"
                     :src="previewImage(item.Image)"
                     alt="item image"
-                    class="mb-2 rounded max-h-40 object-contain"
+                    class="item-image-preview"
                   />
                   <input
                     id="image"
                     type="file"
                     accept="image/png, image/jpeg"
-                    class="field-input"
+                    class="aug-input"
                     @change="updateImage"
                   />
-                </div>
+                </FormField>
               </div>
-            </section>
+            </Card>
 
-            <!-- Section: Visibility -->
-            <section class="bg-white shadow-sm rounded-lg p-6">
-              <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">
-                {{ $t('isDisabled') }}
-              </h2>
-              <label class="flex items-center gap-3 cursor-pointer">
-                <input
-                  id="isDisabled"
-                  v-model="updatedItem.Disabled"
-                  type="checkbox"
-                  class="sr-only peer"
-                />
-                <div
-                  class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"
-                ></div>
-                <span class="text-sm">{{ updatedItem.Disabled ? $t('yes') : $t('no') }}</span>
+            <Card>
+              <h2 class="section-title">{{ $t('isDisabled') }}</h2>
+              <label class="aug-toggle">
+                <input id="isDisabled" v-model="updatedItem.Disabled" type="checkbox" />
+                <span class="aug-toggle-track"></span>
+                <span>{{ updatedItem.Disabled ? $t('yes') : $t('no') }}</span>
               </label>
-            </section>
+            </Card>
 
-            <!-- Section: Digital license -->
-            <section class="bg-white shadow-sm rounded-lg p-6">
-              <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">
-                {{ $t('licenseItem') }}
-              </h2>
-              <div class="space-y-4">
-                <label class="flex items-center gap-3 cursor-pointer">
-                  <input
-                    id="isLicenseItem"
-                    v-model="updatedItem.IsLicenseItem"
-                    type="checkbox"
-                    class="sr-only peer"
-                  />
-                  <div
-                    class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"
-                  ></div>
-                  <span class="text-sm font-medium">{{ $t('isLicenseItem') }}</span>
+            <Card>
+              <h2 class="section-title">{{ $t('licenseItem') }}</h2>
+              <div class="field-stack">
+                <label class="aug-toggle">
+                  <input id="isLicenseItem" v-model="updatedItem.IsLicenseItem" type="checkbox" />
+                  <span class="aug-toggle-track"></span>
+                  <span>{{ $t('isLicenseItem') }}</span>
                 </label>
 
                 <template v-if="!updatedItem.IsLicenseItem">
-                  <div>
-                    <label class="field-label" for="licenseItem">{{ $t('licenseItem') }}</label>
-                    <div class="flex gap-2 items-center">
-                      <select
-                        id="licenseItem"
-                        v-model="updatedItem.LicenseItem"
-                        class="field-input flex-1"
-                      >
+                  <FormField :label="$t('licenseItem')" for="licenseItem">
+                    <div class="license-item-row">
+                      <select id="licenseItem" v-model="updatedItem.LicenseItem" class="aug-input">
                         <option :value="undefined">-- {{ $t('none') }} --</option>
                         <option v-for="elItem in licenseItems" :key="elItem.ID" :value="elItem.ID">
                           {{ elItem.Name }}
@@ -319,127 +280,140 @@ const previewImage = (image: string | Blob | MediaSource) => {
                         v-if="updatedItem.LicenseItem"
                         :to="`/backoffice/productsettings/update/${updatedItem.LicenseItem}`"
                       >
-                        <button
-                          type="button"
-                          class="p-2 rounded-full customcolor h-10 w-10 flex-shrink-0"
-                          :title="$t('edit')"
-                        >
+                        <button type="button" class="aug-icon-btn" :title="$t('edit')">
                           <font-awesome-icon :icon="faPen" />
                         </button>
                       </router-link>
                     </div>
-                  </div>
+                  </FormField>
 
                   <template v-if="updatedItem.LicenseItem !== undefined">
-                    <label class="flex items-center gap-3 cursor-pointer">
-                      <input
-                        id="isPDFItem"
-                        v-model="updatedItem.IsPDFItem"
-                        type="checkbox"
-                        class="sr-only peer"
-                      />
-                      <div
-                        class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-600 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"
-                      ></div>
-                      <span class="text-sm font-medium">{{ $t('isPDFLicenseItem') }}</span>
+                    <label class="aug-toggle">
+                      <input id="isPDFItem" v-model="updatedItem.IsPDFItem" type="checkbox" />
+                      <span class="aug-toggle-track"></span>
+                      <span>{{ $t('isPDFLicenseItem') }}</span>
                     </label>
 
-                    <div v-if="!updatedItem.IsPDFItem">
-                      <label class="field-label" for="licenseGroup">{{ $t('licenseGroup') }}</label>
+                    <FormField
+                      v-if="!updatedItem.IsPDFItem"
+                      :label="$t('licenseGroup')"
+                      for="licenseGroup"
+                    >
                       <input
                         id="licenseGroup"
                         v-model="updatedItem.LicenseGroup"
                         type="text"
-                        class="field-input"
+                        class="aug-input"
                       />
-                    </div>
+                    </FormField>
 
-                    <div v-if="updatedItem.IsPDFItem">
-                      <label class="field-label" for="pdf">{{ $t('pdf item') }}</label>
+                    <FormField v-if="updatedItem.IsPDFItem" :label="$t('pdf item')" for="pdf">
                       <input
                         id="pdf"
                         type="file"
                         accept=".pdf"
-                        class="field-input"
+                        class="aug-input"
                         @change="updatePDF"
                       />
-                    </div>
+                    </FormField>
                   </template>
                 </template>
               </div>
-            </section>
+            </Card>
           </div>
-          <!-- end right column -->
         </div>
-        <!-- end grid -->
 
-        <!-- Action buttons -->
-        <div class="flex justify-between pt-4">
-          <button
-            type="button"
-            class="py-2 px-6 rounded-full bg-red-600 text-white"
-            @click="showDeleteModalF"
-          >
-            {{ $t('delete') }}
-          </button>
-          <button type="button" class="py-2 px-6 rounded-full customcolor" @click="updateItem">
-            {{ $t('save') }}
-          </button>
+        <div class="form-actions">
+          <Button type="button" variant="danger" @click="showDeleteModalF">{{
+            $t('delete')
+          }}</Button>
+          <Button type="button" variant="primary" @click="updateItem">{{ $t('save') }}</Button>
         </div>
 
         <Toast v-if="toast" :toast="toast" @close="toast = null" />
       </div>
 
-      <!-- Delete confirmation modal -->
-      <div
-        v-if="showDeleteModal"
-        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      <Modal
+        :open="showDeleteModal"
+        size="sm"
+        :title="`${updatedItem.Name} ${$t('delete')}`"
+        @close="showDeleteModal = false"
       >
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-          <h3 class="text-lg font-semibold mb-3">{{ updatedItem.Name }} {{ $t('delete') }}</h3>
-          <p class="text-gray-500 mb-6">{{ $t('deletionConfirmation') }}</p>
-          <div class="flex justify-end gap-3">
-            <button
-              type="button"
-              class="py-2 px-5 rounded-lg border text-gray-600"
-              @click="showDeleteModal = false"
-            >
-              {{ $t('cancel') }}
-            </button>
-            <button
-              type="button"
-              class="py-2 px-5 rounded-lg bg-red-600 text-white"
-              @click="deleteItem"
-            >
-              {{ $t('delete') }}
-            </button>
-          </div>
-        </div>
-      </div>
+        <p>{{ $t('deletionConfirmation') }}</p>
+        <template #footer>
+          <Button variant="ghost" @click="showDeleteModal = false">{{ $t('cancel') }}</Button>
+          <Button variant="danger" @click="deleteItem">{{ $t('delete') }}</Button>
+        </template>
+      </Modal>
     </template>
   </component>
 </template>
 
 <style scoped>
-.field-label {
-  display: block;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 0.25rem;
+.product-page {
+  margin-top: 16px;
+  padding-bottom: 40px;
 }
-
-.field-input {
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.section-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  margin-bottom: 14px;
+}
+.field-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.field-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.color-input {
   width: 100%;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  color: #374151;
-  outline: none;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  padding: 2px;
+}
+.item-image-preview {
+  max-height: 160px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+}
+.license-item-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.license-item-row .aug-input {
+  flex: 1;
+}
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 16px;
 }
 
-.field-input:focus {
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .field-row-2 {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

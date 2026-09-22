@@ -8,6 +8,8 @@ import QrCodeSettings from '@/components/QrCodeSettings.vue'
 import GeneralSettings from '@/components/settings/GeneralSettings.vue'
 import StylesSettings from '@/components/settings/StylesSettings.vue'
 import MailTemplatesSettings from '@/components/settings/MailTemplatesSettings.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
 
 const settingsStore = useSettingsStore()
 const storeItems = useItemsStore()
@@ -129,7 +131,7 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 className="font-bold mt-3 pt-3 text-2xl">{{ $t('menuSettings') }}</h1>
+      <PageHeader :title="$t('menuSettings')" />
     </template>
     <template #main>
       <!-- min-h-full, not h-full: the tab content has to be allowed to grow past one screen,
@@ -137,43 +139,35 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
            below ends up sitting in the middle of the content instead of at the bottom. -->
       <div v-if="settingsStore.settings" class="min-h-full flex flex-col">
         <!-- Tab nav -->
-        <div class="flex-none mb-4 flex gap-2 border-b pb-2">
+        <div class="tab-nav">
           <button
-            :class="
-              currentTab === 'general'
-                ? 'px-4 py-2 bg-black text-white rounded-t'
-                : 'px-4 py-2 bg-white border rounded-t text-gray-700'
-            "
+            type="button"
+            class="tab-btn"
+            :class="{ 'tab-btn-active': currentTab === 'general' }"
             @click="currentTab = 'general'"
           >
             {{ $t('General') }}
           </button>
           <button
-            :class="
-              currentTab === 'styles'
-                ? 'px-4 py-2 bg-black text-white rounded-t'
-                : 'px-4 py-2 bg-white border rounded-t text-gray-700'
-            "
+            type="button"
+            class="tab-btn"
+            :class="{ 'tab-btn-active': currentTab === 'styles' }"
             @click="currentTab = 'styles'"
           >
             {{ $t('Custom styles') }}
           </button>
           <button
-            :class="
-              currentTab === 'qrcode'
-                ? 'px-4 py-2 bg-black text-white rounded-t'
-                : 'px-4 py-2 bg-white border rounded-t text-gray-700'
-            "
+            type="button"
+            class="tab-btn"
+            :class="{ 'tab-btn-active': currentTab === 'qrcode' }"
             @click="currentTab = 'qrcode'"
           >
             {{ $t('QR-Code settings') }}
           </button>
           <button
-            :class="
-              currentTab === 'mailtemplates'
-                ? 'px-4 py-2 bg-black text-white rounded-t'
-                : 'px-4 py-2 bg-white border rounded-t text-gray-700'
-            "
+            type="button"
+            class="tab-btn"
+            :class="{ 'tab-btn-active': currentTab === 'mailtemplates' }"
             @click="currentTab = 'mailtemplates'"
           >
             {{ $t('Mail Templates') }}
@@ -199,7 +193,6 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
         />
         <QrCodeSettings
           v-show="currentTab === 'qrcode'"
-          inline
           @update="updateQRCodeSettings"
           @save-settings="saveGeneralFromParent()"
         />
@@ -212,32 +205,49 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
       </div>
 
       <!-- Sticky save footer (hidden on mail templates tab since save is per-template) -->
-      <div
-        v-if="currentTab !== 'mailtemplates'"
-        class="sticky bottom-0 bg-white border-t border-gray-200 px-4 py-3 flex justify-end z-10"
-      >
-        <button
-          type="button"
-          class="px-6 py-2 rounded-full customcolor font-semibold disabled:opacity-50"
-          :disabled="!adminSettingsLoaded"
-          @click="saveCurrentTab()"
-        >
+      <div v-if="currentTab !== 'mailtemplates'" class="save-footer">
+        <Button variant="primary" :disabled="!adminSettingsLoaded" @click="saveCurrentTab()">
           {{ $t('save') }}
-        </button>
+        </Button>
       </div>
     </template>
   </component>
 </template>
 
 <style scoped>
-tr {
-  padding: 10px;
+.tab-nav {
+  flex: none;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--color-border);
 }
-
-td {
-  padding: 10px;
+.tab-btn {
+  margin-bottom: -1px;
+  padding: 10px 16px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
 }
-#styles {
-  min-height: 300px;
+.tab-btn:hover {
+  color: var(--color-text);
+}
+.tab-btn-active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+.save-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 16px;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
 }
 </style>

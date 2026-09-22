@@ -74,9 +74,9 @@ onMounted(() => {
       "
       #main
     >
-      <div id="landing-page" className="grid grid-rows-5 h-full place-items-center w-full">
+      <div id="landing-page" class="grid grid-rows-5 h-full place-items-center w-full">
         <div class="row-span-4 grid grid-rows-5 h-full w-full">
-          <div id="title" className="text-center font-semibold text-2xl pt-5">
+          <div id="title" class="text-center font-semibold text-2xl pt-5">
             {{ $t('buyItem') }}
           </div>
           <div class="flex relative items-center justify-center">
@@ -106,18 +106,18 @@ onMounted(() => {
             </div>
             <div
               id="more-items-btn"
-              className="text-center w-full rounded-full text-2xl font-semibold relative flex justify-center"
+              class="text-center w-full rounded-full text-2xl font-semibold relative flex justify-center"
             >
               <div>{{ $t('shop') }}</div>
               <IconCross class="absolute customfill rotate-45 right-0 place-self-center mr-2" />
             </div>
           </RouterLink>
-          <div className="w-full row-span-2 flex items-center justify-center">
-            <p id="price" className="text-center text-8xl font-semibold">{{ price }}€</p>
+          <div class="w-full row-span-2 flex items-center justify-center">
+            <p id="price" class="text-center text-8xl font-semibold">{{ price }}€</p>
           </div>
         </div>
 
-        <div className="place-items-center w-full flex">
+        <div class="place-items-center w-full flex">
           <RouterLink class="text-center h-[76px] grow" :to="{ name: 'Tippingpage' }">
             <button
               id="next-btn"

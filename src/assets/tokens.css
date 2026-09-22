@@ -1,0 +1,56 @@
+/*
+ * Design tokens for the backoffice redesign (clean/neutral direction).
+ * --color-accent and --color-accent-fg are overwritten reactively at runtime
+ * from the admin-configurable settings.Color / settings.FontColor — see
+ * src/composables/useAccentColor.ts. The values below are just the fallback
+ * shown before settings finish loading.
+ */
+:root {
+  --color-bg: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-alt: #fbfbfc;
+  --color-border: #e2e5ea;
+  --color-text: #1a1d23;
+  --color-text-muted: #6b7280;
+
+  --color-accent: #f5ab00;
+  --color-accent-fg: #2a1f00;
+  --color-accent-tint: color-mix(in srgb, var(--color-accent) 14%, white);
+
+  --color-success: #157a44;
+  --color-success-bg: #e6f6ec;
+  --color-danger: #c23a3a;
+  --color-danger-bg: #fbeaea;
+  --color-info: #3357c7;
+  --color-info-bg: #eaeffe;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+/* Follows the OS/browser color-scheme preference - no in-app toggle exists (or is needed) since
+   this is the only place a page reads light vs. dark from. --color-accent/--color-accent-fg are
+   deliberately NOT overridden here: they're the admin's configured brand color (see the runtime
+   override note above) and stay the same regardless of theme, same as a real logo wouldn't flip
+   colors depending on the visitor's OS setting. --color-accent-tint recomputes automatically even
+   though it isn't listed here, since color-mix() re-resolves live whenever --color-accent or
+   --color-surface change. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #101317;
+    --color-surface: #181c22;
+    --color-surface-alt: #20252c;
+    --color-border: #2c323b;
+    --color-text: #e7e9ec;
+    --color-text-muted: #9399a6;
+
+    --color-accent-tint: color-mix(in srgb, var(--color-accent) 18%, var(--color-surface));
+
+    --color-success: #3ecf78;
+    --color-success-bg: #113322;
+    --color-danger: #ef5f57;
+    --color-danger-bg: #3a1717;
+    --color-info: #7c9cf0;
+    --color-info-bg: #16213d;
+  }
+}

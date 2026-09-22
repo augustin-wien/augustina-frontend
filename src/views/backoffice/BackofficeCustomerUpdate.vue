@@ -8,8 +8,14 @@ import type { Customer, Abonement } from '@/stores/customer'
 import { useItemsStore } from '@/stores/items'
 import { fetchLicenseGroups } from '@/api/api'
 import Toast from '@/components/ToastMessage.vue'
-import { faArrowLeft, faTrash, faPen, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faPen, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Card from '@/components/ui/Card.vue'
+import Button from '@/components/ui/Button.vue'
+import Badge from '@/components/ui/Badge.vue'
+import FormField from '@/components/ui/FormField.vue'
+import Modal from '@/components/ui/Modal.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const route = useRoute()
 const store = useCustomerStore()
@@ -159,83 +165,59 @@ async function confirmDeleteAbonement(id: number) {
 function formatDate(dateStr: string) {
   return dateStr ? dateStr.slice(0, 10) : ''
 }
+
+function abonementBadgeVariant(status: string) {
+  if (status === 'active') return 'success'
+  if (status === 'cancelled') return 'danger'
+  return 'neutral'
+}
 </script>
 
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex items-center gap-3 pt-3">
-        <button
-          class="p-2 rounded-full customcolor h-10 w-10"
-          @click="router.push('/backoffice/customers')"
-        >
-          <font-awesome-icon :icon="faArrowLeft" />
-        </button>
-        <h1 class="font-bold text-2xl">
-          {{ isNew ? $t('newCustomer') : `${form.firstname} ${form.lastname}` }}
-        </h1>
-      </div>
+      <PageHeader
+        :title="isNew ? $t('newCustomer') : `${form.firstname} ${form.lastname}`"
+        show-back
+        @back="router.push('/backoffice/customers')"
+      />
     </template>
 
     <template #main>
       <Toast v-if="toast" :toast="toast" @close="toast = null" />
 
       <!-- Customer form -->
-      <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-6">
-        <h2 class="font-semibold text-lg mb-4">{{ $t('customerDetails') }}</h2>
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-1" for="firstname">{{
-              $t('firstName')
-            }}</label>
-            <input
-              id="firstname"
-              v-model="form.firstname"
-              type="text"
-              class="border rounded p-2 w-full"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1" for="lastname">{{
-              $t('lastName')
-            }}</label>
-            <input
-              id="lastname"
-              v-model="form.lastname"
-              type="text"
-              class="border rounded p-2 w-full"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1" for="email">{{ $t('email') }}</label>
-            <input id="email" v-model="form.email" type="email" class="border rounded p-2 w-full" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1" for="keycloakid">Keycloak ID</label>
-            <input
-              id="keycloakid"
-              v-model="form.keycloakid"
-              type="text"
-              class="border rounded p-2 w-full"
-            />
-          </div>
-          <div class="col-span-2">
-            <label class="block text-sm font-medium mb-1">{{ $t('licenseGroups') }}</label>
-            <div class="flex flex-wrap gap-2 mb-2">
-              <span
-                v-for="group in form.licensegroups"
-                :key="group"
-                class="inline-flex items-center gap-1 rounded-full bg-slate-900 text-white text-xs px-3 py-1"
-              >
+      <Card class="section">
+        <h2 class="section-title">{{ $t('customerDetails') }}</h2>
+        <div class="field-grid">
+          <FormField :label="$t('firstName')" for="firstname">
+            <input id="firstname" v-model="form.firstname" type="text" class="aug-input" />
+          </FormField>
+          <FormField :label="$t('lastName')" for="lastname">
+            <input id="lastname" v-model="form.lastname" type="text" class="aug-input" />
+          </FormField>
+          <FormField :label="$t('email')" for="email">
+            <input id="email" v-model="form.email" type="email" class="aug-input" />
+          </FormField>
+          <FormField label="Keycloak ID" for="keycloakid">
+            <input id="keycloakid" v-model="form.keycloakid" type="text" class="aug-input" />
+          </FormField>
+          <FormField :label="$t('licenseGroups')" class="field-span-2">
+            <div class="license-chips">
+              <Badge v-for="group in form.licensegroups" :key="group" variant="neutral">
                 {{ group }}
-                <button type="button" class="hover:text-red-300" @click="removeLicenseGroup(group)">
+                <button
+                  type="button"
+                  class="license-chip-remove"
+                  @click="removeLicenseGroup(group)"
+                >
                   <font-awesome-icon :icon="faTimes" />
                 </button>
-              </span>
-              <span v-if="!form.licensegroups?.length" class="text-sm text-gray-400">–</span>
+              </Badge>
+              <span v-if="!form.licensegroups?.length" class="license-chips-empty">–</span>
             </div>
-            <div class="flex gap-2">
-              <select v-model="selectedLicenseGroup" class="border rounded p-2 flex-1">
+            <div class="license-add-row">
+              <select v-model="selectedLicenseGroup" class="aug-input">
                 <option value="">{{ $t('select') }}…</option>
                 <option
                   v-for="group in availableLicenseGroups"
@@ -246,71 +228,57 @@ function formatDate(dateStr: string) {
                   {{ group }}
                 </option>
               </select>
-              <button
-                type="button"
-                class="py-2 px-4 rounded-full customcolor"
+              <Button
+                variant="secondary"
                 :disabled="!selectedLicenseGroup"
                 @click="addLicenseGroup"
               >
                 {{ $t('add') }}
-              </button>
+              </Button>
             </div>
-          </div>
+          </FormField>
         </div>
 
-        <div class="flex justify-between mt-6">
-          <button class="py-2 px-6 rounded-full customcolor" @click="save">
-            {{ $t('save') }}
-          </button>
-          <button
-            v-if="!isNew"
-            class="py-2 px-6 rounded-full bg-red-600 text-white"
-            @click="showDeleteCustomerModal = true"
-          >
+        <div class="form-actions">
+          <Button variant="primary" @click="save">{{ $t('save') }}</Button>
+          <Button v-if="!isNew" variant="danger" @click="showDeleteCustomerModal = true">
             {{ $t('delete') }}
-          </button>
+          </Button>
         </div>
-      </div>
+      </Card>
 
       <!-- Abonements section (only for existing customers) -->
-      <div v-if="!isNew" class="bg-white shadow-md rounded px-8 pt-6 pb-8">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="font-semibold text-lg">{{ $t('abonements') }}</h2>
-          <button class="py-1 px-4 rounded-full customcolor" @click="openNewAbonement">
-            + {{ $t('newAbonement') }}
-          </button>
+      <Card v-if="!isNew" class="section">
+        <div class="section-header">
+          <h2 class="section-title">{{ $t('abonements') }}</h2>
+          <Button variant="secondary" @click="openNewAbonement">+ {{ $t('newAbonement') }}</Button>
         </div>
 
-        <table class="table-auto w-full border-collapse">
+        <table class="aug-table">
           <thead>
             <tr>
-              <th class="p-3 text-left">{{ $t('item') }}</th>
-              <th class="p-3 text-left">{{ $t('fromDate') }}</th>
-              <th class="p-3 text-left">{{ $t('toDate') }}</th>
-              <th class="p-3 text-left">{{ $t('status') }}</th>
-              <th class="p-3"></th>
+              <th>{{ $t('item') }}</th>
+              <th>{{ $t('fromDate') }}</th>
+              <th>{{ $t('toDate') }}</th>
+              <th>{{ $t('status') }}</th>
+              <th></th>
             </tr>
           </thead>
-          <tbody class="text-sm">
-            <tr v-for="a in abonements" :key="a.id" class="border-t-2">
-              <td class="p-3">
-                {{ items.find((i) => i.ID === a.item_id)?.Name ?? a.item_id }}
+          <tbody>
+            <tr v-for="a in abonements" :key="a.id">
+              <td>{{ items.find((i) => i.ID === a.item_id)?.Name ?? a.item_id }}</td>
+              <td>{{ formatDate(a.from_date) }}</td>
+              <td>{{ formatDate(a.to_date) }}</td>
+              <td>
+                <Badge :variant="abonementBadgeVariant(a.status)">{{ a.status }}</Badge>
               </td>
-              <td class="p-3">{{ formatDate(a.from_date) }}</td>
-              <td class="p-3">{{ formatDate(a.to_date) }}</td>
-              <td class="p-3">
-                <span
-                  :class="a.status === 'active' ? 'text-green-700 font-semibold' : 'text-gray-500'"
-                >
-                  {{ a.status }}
-                </span>
-              </td>
-              <td class="p-3 flex gap-2">
-                <button class="p-2 rounded-full customcolor h-8 w-8" @click="openEditAbonement(a)">
+              <td class="entry-actions">
+                <button type="button" class="aug-icon-btn" @click="openEditAbonement(a)">
                   <font-awesome-icon :icon="faPen" />
                 </button>
                 <button
-                  class="p-2 rounded-full bg-red-500 text-white h-8 w-8"
+                  type="button"
+                  class="aug-icon-btn aug-icon-btn-danger"
                   @click="showDeleteAbonementId = a.id"
                 >
                   <font-awesome-icon :icon="faTrash" />
@@ -318,113 +286,161 @@ function formatDate(dateStr: string) {
               </td>
             </tr>
             <tr v-if="abonements.length === 0">
-              <td colspan="5" class="p-4 text-center text-gray-500">{{ $t('noAbonements') }}</td>
+              <td colspan="5" class="entry-empty">{{ $t('noAbonements') }}</td>
             </tr>
           </tbody>
         </table>
-      </div>
+      </Card>
 
-      <!-- Abonement modal -->
-      <div
-        v-if="showAbonementModal"
-        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      <Modal
+        :open="showAbonementModal"
+        :title="editingAbonement?.id ? $t('editAbonement') : $t('newAbonement')"
+        @close="showAbonementModal = false"
       >
-        <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
-          <h3 class="font-bold text-lg mb-4">
-            {{ editingAbonement?.id ? $t('editAbonement') : $t('newAbonement') }}
-          </h3>
-          <div v-if="editingAbonement" class="space-y-3">
-            <div>
-              <label class="block text-sm font-medium mb-1">{{ $t('item') }}</label>
-              <select v-model="editingAbonement.item_id" class="border rounded p-2 w-full">
-                <option v-for="i in items" :key="i.ID" :value="i.ID">{{ i.Name }}</option>
-              </select>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-sm font-medium mb-1">{{ $t('fromDate') }}</label>
-                <input
-                  v-model="editingAbonement.from_date"
-                  type="date"
-                  class="border rounded p-2 w-full"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium mb-1">{{ $t('toDate') }}</label>
-                <input
-                  v-model="editingAbonement.to_date"
-                  type="date"
-                  class="border rounded p-2 w-full"
-                />
-              </div>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">{{ $t('status') }}</label>
-              <select v-model="editingAbonement.status" class="border rounded p-2 w-full">
-                <option value="active">active</option>
-                <option value="inactive">inactive</option>
-                <option value="cancelled">cancelled</option>
-              </select>
-            </div>
+        <div v-if="editingAbonement" class="abonement-form">
+          <FormField :label="$t('item')">
+            <select v-model="editingAbonement.item_id" class="aug-input">
+              <option v-for="i in items" :key="i.ID" :value="i.ID">{{ i.Name }}</option>
+            </select>
+          </FormField>
+          <div class="abonement-dates">
+            <FormField :label="$t('fromDate')">
+              <input v-model="editingAbonement.from_date" type="date" class="aug-input" />
+            </FormField>
+            <FormField :label="$t('toDate')">
+              <input v-model="editingAbonement.to_date" type="date" class="aug-input" />
+            </FormField>
           </div>
-          <div class="flex justify-end gap-3 mt-5">
-            <button class="py-2 px-4 rounded-full border" @click="showAbonementModal = false">
-              {{ $t('cancel') }}
-            </button>
-            <button class="py-2 px-4 rounded-full customcolor" @click="saveAbonement">
-              {{ $t('save') }}
-            </button>
-          </div>
+          <FormField :label="$t('status')">
+            <select v-model="editingAbonement.status" class="aug-input">
+              <option value="active">active</option>
+              <option value="inactive">inactive</option>
+              <option value="cancelled">cancelled</option>
+            </select>
+          </FormField>
         </div>
-      </div>
+        <template #footer>
+          <Button variant="ghost" @click="showAbonementModal = false">{{ $t('cancel') }}</Button>
+          <Button variant="primary" @click="saveAbonement">{{ $t('save') }}</Button>
+        </template>
+      </Modal>
 
-      <!-- Delete abonement confirmation -->
-      <div
-        v-if="showDeleteAbonementId"
-        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      <Modal
+        :open="!!showDeleteAbonementId"
+        size="sm"
+        :title="$t('delete')"
+        @close="showDeleteAbonementId = null"
       >
-        <div class="bg-white rounded-lg p-6 w-full max-w-sm shadow-xl">
-          <p class="mb-4">{{ $t('deleteAbonementConfirmation') }}</p>
-          <div class="flex justify-end gap-3">
-            <button class="py-2 px-4 rounded-full border" @click="showDeleteAbonementId = null">
-              {{ $t('cancel') }}
-            </button>
-            <button
-              class="py-2 px-4 rounded-full bg-red-600 text-white"
-              @click="confirmDeleteAbonement(showDeleteAbonementId!)"
-            >
-              {{ $t('delete') }}
-            </button>
-          </div>
-        </div>
-      </div>
+        <p>{{ $t('deleteAbonementConfirmation') }}</p>
+        <template #footer>
+          <Button variant="ghost" @click="showDeleteAbonementId = null">{{ $t('cancel') }}</Button>
+          <Button variant="danger" @click="confirmDeleteAbonement(showDeleteAbonementId!)">
+            {{ $t('delete') }}
+          </Button>
+        </template>
+      </Modal>
 
-      <!-- Delete customer confirmation -->
-      <div
-        v-if="showDeleteCustomerModal"
-        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      <Modal
+        :open="showDeleteCustomerModal"
+        size="sm"
+        :title="$t('delete')"
+        @close="showDeleteCustomerModal = false"
       >
-        <div class="bg-white rounded-lg p-6 w-full max-w-sm shadow-xl">
-          <p class="mb-4">{{ $t('deleteCustomerConfirmation') }}</p>
-          <div class="flex justify-end gap-3">
-            <button class="py-2 px-4 rounded-full border" @click="showDeleteCustomerModal = false">
-              {{ $t('cancel') }}
-            </button>
-            <button
-              class="py-2 px-4 rounded-full bg-red-600 text-white"
-              @click="confirmDeleteCustomer"
-            >
-              {{ $t('delete') }}
-            </button>
-          </div>
-        </div>
-      </div>
+        <p>{{ $t('deleteCustomerConfirmation') }}</p>
+        <template #footer>
+          <Button variant="ghost" @click="showDeleteCustomerModal = false">
+            {{ $t('cancel') }}
+          </Button>
+          <Button variant="danger" @click="confirmDeleteCustomer">{{ $t('delete') }}</Button>
+        </template>
+      </Modal>
     </template>
   </component>
 </template>
 
 <style scoped>
-td {
-  padding: 10px;
+.section {
+  margin-bottom: 20px;
+}
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.section-header .section-title {
+  margin-bottom: 0;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+}
+.field-span-2 {
+  grid-column: span 2;
+}
+.license-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.license-chips-empty {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+.license-chip-remove {
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  margin-left: 4px;
+  padding: 0;
+}
+.license-add-row {
+  display: flex;
+  gap: 8px;
+}
+.license-add-row .aug-input {
+  flex: 1;
+}
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.entry-actions {
+  display: flex;
+  gap: 2px;
+}
+.entry-empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 16px;
+}
+.abonement-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.abonement-dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .field-grid,
+  .abonement-dates {
+    grid-template-columns: 1fr;
+  }
+  .field-span-2 {
+    grid-column: span 1;
+  }
 }
 </style>

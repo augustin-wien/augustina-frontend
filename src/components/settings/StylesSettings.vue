@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import { set } from '@vueuse/core'
+import Card from '@/components/ui/Card.vue'
 
 const emits = defineEmits(['saved', 'error'])
 
@@ -29,14 +30,21 @@ defineExpose({ saveStyles })
 </script>
 
 <template>
-  <div class="space-y-6">
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('Custom styles') }}</h2>
-      <textarea
-        id="styles"
-        v-model="stylesLocal"
-        class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-[300px]"
-      />
-    </div>
-  </div>
+  <Card>
+    <h2 class="section-title">{{ $t('Custom styles') }}</h2>
+    <textarea id="styles" v-model="stylesLocal" class="aug-input styles-textarea" />
+  </Card>
 </template>
+
+<style scoped>
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.styles-textarea {
+  min-height: 300px;
+  font-family: ui-monospace, monospace;
+  resize: vertical;
+}
+</style>

@@ -15,11 +15,15 @@ import {
 } from '@/stores/statistics'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import { usePreferredDark } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { type Statistics } from '@/stores/statistics'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Card from '@/components/ui/Card.vue'
 
 const itemsStore = useItemsStore()
 const store = useStatisticsStore()
+const isDark = usePreferredDark()
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -95,71 +99,106 @@ useAuthLoad(() => itemsStore.getItemsBackoffice())
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center pt-3">
-        <div class="grid grid-cols-2">
-          <h1 className="font-bold text-2xl">{{ $t('menuStatistics') }}</h1>
-          <div>
-            <VueDatePicker
-              v-model="date"
-              range
-              :enable-time-picker="false"
-              :placeholder="$t('chooseDateRange')"
-              class="max-w-md"
-              @range-start="onRangeStart"
-              @range-end="onRangeEnd"
-            />
-          </div>
-        </div>
-        <div class="flex gap-2">
+      <PageHeader :title="$t('menuStatistics')">
+        <VueDatePicker
+          v-model="date"
+          range
+          :enable-time-picker="false"
+          :placeholder="$t('chooseDateRange')"
+          class="max-w-md"
+          :dark="isDark"
+          @range-start="onRangeStart"
+          @range-end="onRangeEnd"
+        />
+        <div class="view-toggle">
           <button
-            class="py-2 px-3 rounded border"
-            :class="viewMode === 'chart' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
+            type="button"
+            class="view-toggle-btn"
+            :class="{ 'view-toggle-btn-active': viewMode === 'chart' }"
             @click="viewMode = 'chart'"
           >
             Diagramm
           </button>
           <button
-            class="py-2 px-3 rounded border"
-            :class="viewMode === 'table' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
+            type="button"
+            class="view-toggle-btn"
+            :class="{ 'view-toggle-btn-active': viewMode === 'table' }"
             @click="viewMode = 'table'"
           >
             Tabelle
           </button>
           <button
-            class="py-2 px-3 rounded border"
-            :class="viewMode === 'both' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
+            type="button"
+            class="view-toggle-btn"
+            :class="{ 'view-toggle-btn-active': viewMode === 'both' }"
             @click="viewMode = 'both'"
           >
             Beides
           </button>
         </div>
-      </div>
+      </PageHeader>
     </template>
     <template #main>
-      <div class="main">
-        <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div v-if="showCharts" class="space-y-6">
-            <div>
-              <h2 class="font-semibold mb-2">Verkaufte Menge pro Produkt</h2>
-              <StatisticsQuantityChart :data="quantityData" />
-            </div>
-            <div>
-              <h2 class="font-semibold mb-2">Eingenommener Betrag pro Produkt (€)</h2>
-              <StatisticsAmountChart :data="amountData" />
-            </div>
-            <div>
-              <h2 class="font-semibold mb-2">Anteil nutzender Verkäufer</h2>
-              <StatisticsVendorUsageChart :data="vendorUsageData" />
-            </div>
-          </div>
+      <template v-if="showCharts">
+        <Card class="section">
+          <h2 class="section-title">Verkaufte Menge pro Produkt</h2>
+          <StatisticsQuantityChart :data="quantityData" />
+        </Card>
+        <Card class="section">
+          <h2 class="section-title">Eingenommener Betrag pro Produkt (€)</h2>
+          <StatisticsAmountChart :data="amountData" />
+        </Card>
+        <Card class="section">
+          <h2 class="section-title">Anteil nutzender Verkäufer</h2>
+          <StatisticsVendorUsageChart :data="vendorUsageData" />
+        </Card>
+      </template>
 
-          <div v-if="showTable" class="space-y-8 mt-2">
-            <StatisticsQuantityTable :data="quantityData" />
-            <StatisticsAmountTable :data="amountData" />
-            <StatisticsVendorUsageTable :data="vendorUsageData" />
-          </div>
-        </div>
-      </div>
+      <template v-if="showTable">
+        <Card class="section">
+          <StatisticsQuantityTable :data="quantityData" />
+        </Card>
+        <Card class="section">
+          <StatisticsAmountTable :data="amountData" />
+        </Card>
+        <Card class="section">
+          <StatisticsVendorUsageTable :data="vendorUsageData" />
+        </Card>
+      </template>
     </template>
   </component>
 </template>
+
+<style scoped>
+.section {
+  margin-bottom: 20px;
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+}
+.view-toggle-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.view-toggle-btn-active {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+</style>

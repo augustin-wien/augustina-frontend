@@ -7,7 +7,7 @@ const settStore = useSettingsStore()
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div className="h-full font-semibold grid text-xl">
+      <div class="h-full font-semibold grid text-xl">
         <div class="text-center mb-5">
           {{ $t('maintenance') }}
         </div>

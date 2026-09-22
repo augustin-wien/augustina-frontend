@@ -1,0 +1,130 @@
+/*
+ * Shared utility classes for the backoffice component kit (src/components/ui/). Plain classes
+ * rather than wrapper components for native <input>/<select>/<textarea>/<table> elements, since
+ * every page's inputs and tables differ too much in structure to warrant a shared component -
+ * they just need to look consistent.
+ */
+
+.aug-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 14px;
+  font-family: inherit;
+}
+.aug-input::placeholder {
+  color: var(--color-text-muted);
+}
+.aug-input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+  border-color: var(--color-accent);
+}
+
+.aug-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.aug-table th {
+  text-align: left;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  padding: 0 12px 10px;
+  border-bottom: 1px solid var(--color-border);
+}
+.aug-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+.aug-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.aug-table tbody tr:hover {
+  background: var(--color-surface-alt);
+}
+
+/* Dense icon-only actions (edit/delete on a list row, close a modal) - too small/frequent for
+   the full Button component's padding and variant chrome. */
+.aug-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+.aug-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.aug-icon-btn:not(:disabled):hover {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+}
+.aug-icon-btn-danger:hover {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+.aug-icon-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}
+
+/* Toggle switch: <label class="aug-toggle"><input type="checkbox" v-model="x" />
+   <span class="aug-toggle-track"></span><span>Label text</span></label> */
+.aug-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+.aug-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.aug-toggle-track {
+  position: relative;
+  flex-shrink: 0;
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--color-border);
+  transition: background 0.15s ease;
+}
+.aug-toggle-track::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease;
+}
+.aug-toggle input:checked + .aug-toggle-track {
+  background: var(--color-accent);
+}
+.aug-toggle input:checked + .aug-toggle-track::after {
+  transform: translateX(18px);
+}
+.aug-toggle input:focus-visible + .aug-toggle-track {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}

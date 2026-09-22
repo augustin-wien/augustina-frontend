@@ -4,6 +4,7 @@ import { useSettingsStore } from '@/stores/settings'
 import { vendorsStore } from '@/stores/vendor'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const vendorStore = vendorsStore()
 const settingsStore = useSettingsStore()
@@ -47,17 +48,12 @@ function initials(first: string, last: string) {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex justify-between items-center mt-3">
-        <h1 class="font-bold text-2xl">{{ $t('posTitle') }}</h1>
-      </div>
+      <PageHeader :title="$t('posTitle')" />
     </template>
 
     <template #main>
       <div class="max-w-5xl">
-        <div
-          v-if="!posEnabled"
-          class="mb-4 rounded bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 text-sm"
-        >
+        <div v-if="!posEnabled" class="pos-disabled-banner">
           {{ $t('posDisabled') }}
         </div>
 
@@ -66,70 +62,171 @@ function initials(first: string, last: string) {
           v-model="search"
           type="text"
           :placeholder="$t('posPickVendor')"
-          class="mb-6 w-full max-w-sm border rounded-lg px-4 py-2 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+          class="aug-input search-input"
         />
 
         <!-- Loading -->
-        <div v-if="loading" class="flex justify-center py-16">
-          <svg
-            class="animate-spin h-8 w-8 text-blue-500"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
+        <div v-if="loading" class="loading-row">
+          <svg class="spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle
-              class="opacity-25"
+              class="spinner-track"
               cx="12"
               cy="12"
               r="10"
               stroke="currentColor"
               stroke-width="4"
             />
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            <path class="spinner-head" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>
         </div>
 
         <!-- Empty state -->
-        <div v-else-if="vendors.length === 0" class="text-sm text-gray-400 italic">
+        <div v-else-if="vendors.length === 0" class="empty-text">
           {{ $t('noVendorsFound') }}
         </div>
 
         <!-- Vendor cards -->
-        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div v-else class="vendor-grid">
           <button
             v-for="vendor in vendors"
             :key="vendor.ID"
-            class="text-left bg-white rounded-lg shadow-sm border border-gray-100 px-5 py-4 flex items-center gap-4 hover:shadow-md hover:border-blue-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            type="button"
+            class="vendor-card"
             :disabled="!posEnabled"
             @click="openPOS(vendor.LicenseID ?? '')"
           >
-            <!-- Avatar -->
-            <div
-              class="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0"
-            >
+            <div class="vendor-avatar">
               {{ initials(vendor.FirstName, vendor.LastName) }}
             </div>
 
-            <!-- Info -->
-            <div class="min-w-0 flex-1">
-              <div class="font-semibold text-gray-800 truncate">
-                {{ vendor.FirstName }} {{ vendor.LastName }}
-              </div>
-              <div class="text-xs text-gray-400 mt-0.5">{{ vendor.LicenseID }}</div>
+            <div class="vendor-info">
+              <div class="vendor-name">{{ vendor.FirstName }} {{ vendor.LastName }}</div>
+              <div class="vendor-license">{{ vendor.LicenseID }}</div>
               <div
                 v-if="vendor.Balance != null"
-                class="text-xs mt-1"
-                :class="vendor.Balance > 0 ? 'text-blue-600 font-medium' : 'text-gray-400'"
+                class="vendor-balance"
+                :class="{ 'vendor-balance-positive': vendor.Balance > 0 }"
               >
                 {{ $t('posBalance') }}: {{ formatCents(vendor.Balance) }}
               </div>
             </div>
 
-            <!-- Arrow -->
-            <span class="text-gray-300 text-lg shrink-0">›</span>
+            <span class="vendor-arrow">›</span>
           </button>
         </div>
       </div>
     </template>
   </component>
 </template>
+
+<style scoped>
+.pos-disabled-banner {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--color-info-bg);
+  color: var(--color-info);
+  font-size: 13.5px;
+}
+.search-input {
+  max-width: 380px;
+  margin-bottom: 24px;
+}
+.loading-row {
+  display: flex;
+  justify-content: center;
+  padding: 64px 0;
+}
+.spinner {
+  width: 32px;
+  height: 32px;
+  color: var(--color-accent);
+  animation: spin 1s linear infinite;
+}
+.spinner-track {
+  opacity: 0.25;
+}
+.spinner-head {
+  opacity: 0.75;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.empty-text {
+  font-size: 13.5px;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+.vendor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+.vendor-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.vendor-card:not(:disabled):hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.vendor-card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vendor-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+  font-weight: 700;
+  font-size: 13px;
+}
+.vendor-info {
+  min-width: 0;
+  flex: 1;
+}
+.vendor-name {
+  font-weight: 600;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.vendor-license {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+.vendor-balance {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+.vendor-balance-positive {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.vendor-arrow {
+  flex-shrink: 0;
+  font-size: 18px;
+  color: var(--color-text-muted);
+}
+</style>

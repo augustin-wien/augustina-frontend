@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import { usePreferredDark } from '@vueuse/core'
 import { ref, computed } from 'vue'
 import { usePaymentsStore } from '@/stores/payments'
 import { useAuthLoad } from '@/composables/useAuthLoad'
@@ -9,6 +10,11 @@ import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Payment } from '@/stores/payments'
 import { useSettingsStore } from '@/stores/settings'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
+import Card from '@/components/ui/Card.vue'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -21,6 +27,7 @@ const tomorrow = startOfDay(new Date(new Date().setDate(new Date().getDate() + 1
 const startDate = ref<Date>(yesterday)
 const endDate = ref(tomorrow)
 const date = ref([startDate.value, endDate.value])
+const isDark = usePreferredDark()
 const store = usePaymentsStore()
 const itemsStore = useItemsStore()
 const items = computed(() => itemsStore.itemsBackoffice)
@@ -95,52 +102,44 @@ const exportTable = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between mt-3 justify-between content-center items-center">
-        <h1 className="font-bold text-2xl">{{ $t('inbox') }}</h1>
-        <div>
-          <VueDatePicker
-            v-model="date"
-            range
-            :enable-time-picker="false"
-            :placeholder="$t('enterPeriod')"
-            class="max-w-md"
-            @range-start="onRangeStart"
-            @range-end="onRangeEnd"
-          />
-        </div>
-        <button class="py-2 px-4 rounded-full customcolor mr-6 h-[44px]" @click="exportTable">
-          {{ $t('export') }}
-        </button>
-      </div>
+      <PageHeader :title="$t('inbox')">
+        <VueDatePicker
+          v-model="date"
+          range
+          :enable-time-picker="false"
+          :placeholder="$t('enterPeriod')"
+          class="max-w-md"
+          :dark="isDark"
+          @range-start="onRangeStart"
+          @range-end="onRangeEnd"
+        />
+        <Button variant="secondary" @click="exportTable">
+          <font-awesome-icon :icon="faFileCsv" /> {{ $t('export') }}
+        </Button>
+      </PageHeader>
     </template>
 
     <template v-if="authenticated && items.length > 0" #main>
-      <div class="main">
-        <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="text-xl space-y-3 space-x-3 ">
-            <table className="table-auto w-full border-spacing-4 border-collapse">
-              <thead>
-                <tr>
-                  <th className="p-3">{{ $t('date') }}</th>
-                  <th className="p-3">{{ $t('to') }}</th>
-                  <th className="p-3">{{ $t('item') }}</th>
-                  <th className="p-3">{{ $t('amount') }}</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm">
-                <tr v-for="(payment, id) in payments" :key="id">
-                  <td className="border-t-2 p-3">{{ formatTime(payment.Timestamp) }}</td>
-                  <td className="border-t-2 p-3">
-                    {{ translateSender(payment.ReceiverName) }}
-                  </td>
-                  <td className="border-t-2 p-3">{{ $t(getItemName(payment.Item)) }}</td>
-                  <td className="border-t-2 p-3">{{ formatCredit(payment.Amount) }} €</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <Card class="section">
+        <table class="aug-table">
+          <thead>
+            <tr>
+              <th>{{ $t('date') }}</th>
+              <th>{{ $t('to') }}</th>
+              <th>{{ $t('item') }}</th>
+              <th>{{ $t('amount') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(payment, id) in payments" :key="id">
+              <td>{{ formatTime(payment.Timestamp) }}</td>
+              <td>{{ translateSender(payment.ReceiverName) }}</td>
+              <td>{{ $t(getItemName(payment.Item)) }}</td>
+              <td>{{ formatCredit(payment.Amount) }} €</td>
+            </tr>
+          </tbody>
+        </table>
+      </Card>
     </template>
   </component>
 </template>

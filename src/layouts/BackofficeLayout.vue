@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import WaitingAnimation from '@/components/WaitingAnimation.vue'
 import keycloak from '@/keycloak/keycloak'
 import { useKeycloakStore } from '@/stores/keycloak'
@@ -47,6 +48,77 @@ const logo = computed(() => {
 // mobile sidebar state
 const mobileMenuOpen = ref(false)
 
+interface NavItem {
+  to: string
+  labelKey: string
+  icon: IconDefinition
+}
+interface NavGroup {
+  labelKey: string
+  items: NavItem[]
+}
+
+// Grouped from the flat link list that used to make up the sidebar, matching the sections
+// vendors/staff already think in (Vendors, Customers, POS, Accounting, Products, Administration).
+const navGroups = computed<NavGroup[]>(() => {
+  const groups: NavGroup[] = [
+    {
+      labelKey: 'navGroupVendors',
+      items: [
+        { to: '/backoffice/vendorsummary', labelKey: 'menuOverview', icon: faUserGroup },
+        { to: '/backoffice/credits', labelKey: 'menuCredits', icon: faBagShopping }
+      ]
+    }
+  ]
+
+  if (settings.value.AbonementEnabled) {
+    groups.push({
+      labelKey: 'navGroupCustomers',
+      items: [{ to: '/backoffice/customers', labelKey: 'menuOverview', icon: faUsers }]
+    })
+  }
+
+  if (settings.value.POSEnabled) {
+    groups.push({
+      labelKey: 'navGroupPOS',
+      items: [{ to: '/backoffice/pos', labelKey: 'menuPOS', icon: faCashRegister }]
+    })
+  }
+
+  const accountingItems: NavItem[] = [
+    { to: '/backoffice/payments', labelKey: 'menuPayments', icon: faBagShopping },
+    { to: '/backoffice/sales', labelKey: 'menuSales', icon: faDungeon },
+    { to: '/backoffice/payouts', labelKey: 'menuPayouts', icon: faFileLines },
+    { to: '/backoffice/unverified-orders', labelKey: 'menuUnverifiedOrders', icon: faFileLines }
+  ]
+
+  if (settings.value.POSEnabled) {
+    accountingItems.push({
+      to: '/backoffice/pos-accounting',
+      labelKey: 'menuPOSAccounting',
+      icon: faCashRegister
+    })
+  }
+
+  groups.push({ labelKey: 'menuAccounting', items: accountingItems })
+
+  groups.push({
+    labelKey: 'navGroupProducts',
+    items: [{ to: '/backoffice/productsettings', labelKey: 'menuProducts', icon: faSplotch }]
+  })
+
+  groups.push({
+    labelKey: 'navGroupAdmin',
+    items: [
+      { to: '/backoffice/settings/update', labelKey: 'menuSettings', icon: faSliders },
+      { to: '/backoffice/map', labelKey: 'menuMap', icon: faMapLocation },
+      { to: '/backoffice/statistics', labelKey: 'menuStatistics', icon: faAreaChart }
+    ]
+  })
+
+  return groups
+})
+
 onMounted(() => {
   if (authenticated.value) {
     settingsStore.getSettingsFromApi()
@@ -60,188 +132,76 @@ onMounted(() => {
 
 <template>
   <div>
-    <div v-if="authenticated">
-      <div class="backoffice-layout h-screen flex">
-        <div class="h-full flex-none">
-          <button
-            class="mobile-menu-btn md:hidden fixed top-4 left-4 z-50 p-2 rounded bg-white dark:bg-slate-800 shadow"
-            aria-label="Toggle menu"
-            @click="mobileMenuOpen = !mobileMenuOpen"
-          >
-            {{ mobileMenuOpen ? '✖' : '☰' }}
+    <div v-if="authenticated" class="backoffice-layout">
+      <button
+        class="mobile-menu-btn md:hidden"
+        :aria-expanded="mobileMenuOpen"
+        aria-label="Toggle menu"
+        @click="mobileMenuOpen = !mobileMenuOpen"
+      >
+        {{ mobileMenuOpen ? '✖' : '☰' }}
+      </button>
+
+      <aside class="sidemenu" :class="{ open: mobileMenuOpen }">
+        <div class="sidemenu-inner">
+          <div class="logo-container">
+            <img :src="logo" alt="Newspaper logo" class="logo" width="auto" />
+          </div>
+
+          <nav class="sidenav">
+            <div v-for="group in navGroups" :key="group.labelKey" class="nav-group">
+              <p class="nav-label">{{ $t(group.labelKey) }}</p>
+              <RouterLink
+                v-for="item in group.items"
+                :key="item.to"
+                :to="item.to"
+                class="nav-item"
+                @click="mobileMenuOpen = false"
+              >
+                <font-awesome-icon :icon="item.icon" class="nav-item-icon" />
+                <span>{{ $t(item.labelKey) }}</span>
+              </RouterLink>
+            </div>
+          </nav>
+
+          <button class="nav-item nav-item-logout" @click="keycloak.keycloak?.logout()">
+            <font-awesome-icon :icon="faArrowRightFromBracket" class="nav-item-icon" />
+            <span>{{ $t('Logout') }}</span>
           </button>
-          <div
-            class="sidemenu t-0 left-0 top-0 z-40 overflow-y-auto border-r border-gray-200 dark:border-slate-700 w-[300px]"
-            :class="{ open: mobileMenuOpen }"
-          >
-            <div
-              class="sidemenu-inner t-0 l-0 h-full flex-none flex flex-col justify-start items-start pr-5 pl-4 border-gray-600 border-b space-y-3 pb-5 customcolor"
-            >
-              <div class="sidemenu-item object-center logo-container w-full p-3">
-                <img :src="logo" alt="Newspaper logo" class="logo mx-auto" width="auto" />
-              </div>
-              <div class="sidemenu-item flex flex-col w-full space-y-2">
-                <RouterLink v-if="settings.AbonementEnabled" to="/backoffice/customers">
-                  <button
-                    class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faUsers" />
-                    <p class="text-base leading-4">{{ $t('menuCustomers') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink to="/backoffice/vendorsummary">
-                  <button
-                    class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faUserGroup" />
-                    <p class="text-base leading-4">{{ $t('menuVendors') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink v-if="settings.POSEnabled" to="/backoffice/pos">
-                  <button
-                    class="flex justify-start w-full space-x-4 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faCashRegister" />
-                    <p class="text-base leading-4">{{ $t('menuPOS') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink to="/backoffice/credits" class-name="sidemenu-link">
-                  <button
-                    class="flex justifyy-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faBagShopping" />
-                    <p class="text-base leading-4">{{ $t('menuCredits') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink
-                  v-if="settings.POSEnabled"
-                  to="/backoffice/pos-accounting"
-                  class-name="sidemenu-link"
-                >
-                  <button
-                    class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faCashRegister" />
-                    <p class="text-base leading-4">{{ $t('menuPOSAccounting') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink to="/backoffice/payouts" class-name="sidemenu-link">
-                  <button
-                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faFileLines" />
 
-                    <p class="text-base leading-4">{{ $t('menuPayouts') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink to="/backoffice/sales" class-name="sidemenu-link">
-                  <button
-                    class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faDungeon" />
-
-                    <p class="text-base leading-4">{{ $t('menuSales') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink to="/backoffice/unverified-orders" class-name="sidemenu-link">
-                  <button
-                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faFileLines" />
-
-                    <p class="text-base leading-4">{{ $t('menuUnverifiedOrders') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink to="/backoffice/payments" class-name="sidemenu-link">
-                  <button
-                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faBagShopping" />
-
-                    <p class="text-base leading-4">{{ $t('menuAccounting') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink to="/backoffice/productsettings" class-name="sidemenu-link">
-                  <button
-                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faSplotch" />
-
-                    <p class="text-base leading-4">{{ $t('menuProducts') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink to="/backoffice/settings/update" class-name="sidemenu-link">
-                  <button
-                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faSliders" />
-
-                    <p class="text-base leading-4">{{ $t('menuSettings') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink to="/backoffice/map" class-name="sidemenu-link">
-                  <button
-                    class="flex justify-start items-center w-full space-x-5 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faMapLocation" />
-
-                    <p class="text-base leading-4">{{ $t('menuMap') }}</p>
-                  </button>
-                </RouterLink>
-                <RouterLink to="/backoffice/statistics" class-name="sidemenu-link">
-                  <button
-                    class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  >
-                    <font-awesome-icon :icon="faAreaChart" />
-
-                    <p class="text-base leading-4">{{ $t('menuStatistics') }}</p>
-                  </button>
-                </RouterLink>
-                <button
-                  class="flex justify-start items-center w-full space-x-6 focus:outline-none customcolor focus:text-indigo-400 pr-5 pb-1 rounded"
-                  @click="keycloak.keycloak?.logout()"
-                >
-                  <font-awesome-icon :icon="faArrowRightFromBracket" />
-
-                  <p class="text-base leading-4">{{ $t('Logout') }}</p>
-                </button>
-                <div class="customcolor mt-10 user-loggedin">
-                  <p v-if="keycloakStore.username">
-                    {{ keycloakStore.username }} {{ $t('userLoggedIn') }}
-                  </p>
-                  <p v-else>{{ $t('userNotLoggedIn') }}</p>
-                </div>
-                <select
-                  v-model="$i18n.locale"
-                  class="h-[40px] w-[70px] customcolor border-2 customborder font-semibold rounded-full text-center mt-4 mr-4 pl-2 text-sm"
-                >
-                  <option value="en">EN</option>
-                  <option value="de">DE</option>
-                </select>
-              </div>
-            </div>
+          <div class="sidemenu-footer">
+            <p class="user-loggedin">
+              <template v-if="keycloakStore.username">
+                {{ keycloakStore.username }} {{ $t('userLoggedIn') }}
+              </template>
+              <template v-else>{{ $t('userNotLoggedIn') }}</template>
+            </p>
+            <select v-model="$i18n.locale" class="lang-select">
+              <option value="en">EN</option>
+              <option value="de">DE</option>
+            </select>
           </div>
+        </div>
+      </aside>
 
-          <!-- overlay for mobile when menu is open -->
-          <div
-            v-if="mobileMenuOpen"
-            class="mobile-overlay md:hidden fixed inset-0 bg-black/40 z-30"
-            @click="mobileMenuOpen = false"
-          ></div>
+      <!-- overlay for mobile when menu is open -->
+      <div
+        v-if="mobileMenuOpen"
+        class="mobile-overlay md:hidden"
+        @click="mobileMenuOpen = false"
+      ></div>
 
-          <div class="main-container grow h-full flex flex-col">
-            <div class="header-slot w-full flex-none pl-3">
-              <slot name="header"> </slot>
-            </div>
-            <div class="main-slot grow">
-              <slot name="main"> </slot>
-            </div>
-          </div>
-          <footer>
-            <slot name="footer"></slot>
-          </footer>
+      <div class="main-container">
+        <div class="header-slot">
+          <slot name="header"> </slot>
+        </div>
+        <div class="main-slot">
+          <slot name="main"> </slot>
         </div>
       </div>
+      <footer>
+        <slot name="footer"></slot>
+      </footer>
     </div>
     <div v-else>
       <div
@@ -253,7 +213,7 @@ onMounted(() => {
           bottom: 0;
           right: 0;
           z-index: 2000;
-          background-color: #fff;
+          background-color: var(--color-bg);
           display: flex;
           justify-content: center;
           align-items: center;
@@ -267,52 +227,164 @@ onMounted(() => {
 
 <style>
 .customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
+  background-color: var(--color-accent);
+  color: var(--color-accent-fg);
 }
 .customborder {
-  border-color: v-bind(settingsStore.settings.FontColor);
+  border-color: var(--color-accent-fg);
 }
 </style>
 
 <style scoped>
-.sidemenu-link {
-  text-align: left;
+.backoffice-layout {
+  display: flex;
+  height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
-/* Make the left side menu fixed (non-scrolling) and let the main content scroll */
-.sidemenu {
+.mobile-menu-btn {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 16px;
+  left: 16px;
+  z-index: 50;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+}
+
+.sidemenu {
+  flex-shrink: 0;
+  width: 260px;
   height: 100vh;
-  width: 300px; /* fixed width for sidebar */
-  overflow-y: auto; /* allow sidebar inner scrolling if items overflow */
-  z-index: 40;
+  overflow-y: auto;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.sidemenu-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 100%;
+  padding: 16px 14px 20px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 4px 18px;
+}
+.logo-container img {
+  max-width: 85%;
+  height: auto;
+}
+
+.sidenav {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.nav-group {
+  margin-bottom: 14px;
+}
+.nav-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: 0 10px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text);
+  font-size: 13.5px;
+  font-weight: 500;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.nav-item:hover {
+  background: var(--color-surface-alt);
+}
+.nav-item.router-link-active {
+  /* --color-accent-fg is calibrated for text on a *solid* --color-accent background (e.g. a
+     primary button) - it can be a light color, which would wash out here since this is a pale
+     14%-tint background instead. --color-accent itself is always dark/saturated enough to read
+     against its own faint tint, regardless of what FontColor an admin configures. */
+  background: var(--color-accent-tint);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.nav-item-icon {
+  width: 15px;
+  flex-shrink: 0;
+}
+.nav-item-logout {
+  margin-top: auto;
+  color: var(--color-text-muted);
+}
+
+.sidemenu-footer {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
+}
+.user-loggedin {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  padding: 0 10px 10px;
+}
+.lang-select {
+  margin: 0 10px;
+  height: 32px;
+  width: 64px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
 }
 
 .main-container {
-  margin-left: 300px; /* space for fixed sidebar */
-  width: calc(100vw - 300px); /* use the rest of the width beside the sidebar */
+  flex: 1;
+  min-width: 0;
   height: 100vh;
-  overflow: hidden; /* container does not scroll; slot scrolls instead */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
-
 .header-slot {
+  flex: none;
   text-align: left;
-  border-radius: 5px;
-  z-index: 50;
-  max-width: calc(100vw - 300px);
   min-height: 80px;
+  padding: 20px 20px 16px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 .main-slot {
+  flex: 1;
+  min-height: 0;
   text-align: left;
-  border-radius: 5px;
-  width: 100%;
   padding: 20px;
-  background-color: #f2f2f2;
-  overflow-y: auto; /* only the content area scrolls */
-  min-height: 0; /* required for flex children to shrink below content size */
+  background: var(--color-bg);
+  overflow-y: auto;
 }
 
 footer {
@@ -323,52 +395,28 @@ footer {
   margin-top: 50px;
   padding-top: 50px;
 }
-.user-loggedin {
-  max-width: 270px;
-}
-.sidemenu button {
-  cursor: pointer;
-}
-.sidemenu button:hover {
-  text-decoration: underline;
-}
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-}
-.logo-container img {
-  max-width: 80%;
-  height: auto;
-}
 
-/* Mobile: hide sidebar by default, slide in when open
-@media (max-width: 767px) {
+@media (max-width: 767.98px) {
   .sidemenu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 40;
     transform: translateX(-100%);
-    transition: transform 0.28s ease-in-out;
-    width: 260px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transition: transform 0.22s ease-in-out;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   }
-
   .sidemenu.open {
     transform: translateX(0);
   }
-
-  .main-container {
-    margin-left: 0;
-    width: 100%;
+  .header-slot {
+    padding-left: 56px;
   }
-} */
-</style>
-
-<style lang="scss">
-.backoffice-layout {
-  tbody {
-    tr:hover {
-      background-color: #b3ceb3;
-    }
+  .mobile-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    background: rgba(0, 0, 0, 0.4);
   }
 }
 </style>

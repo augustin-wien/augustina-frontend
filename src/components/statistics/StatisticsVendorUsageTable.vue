@@ -2,6 +2,9 @@
 import { computed } from 'vue'
 import { exportAsCsv } from '@/utils/utils'
 import type { VendorUsageStatistics } from '@/stores/statistics'
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Button from '@/components/ui/Button.vue'
 
 type VendorUsageRow = {
   label: string
@@ -53,28 +56,46 @@ const exportTable = () => {
 
 <template>
   <div>
-    <div class="flex items-center justify-between mb-2">
-      <h2 class="font-semibold">Anteil nutzender Verkäufer</h2>
-      <button class="py-2 px-3 rounded border bg-white" @click="exportTable">CSV Export</button>
+    <div class="table-header">
+      <h2 class="section-title">Anteil nutzender Verkäufer</h2>
+      <Button variant="secondary" @click="exportTable">
+        <font-awesome-icon :icon="faFileCsv" /> CSV Export
+      </Button>
     </div>
-    <table class="table-auto w-full border-collapse">
+    <table class="aug-table">
       <thead>
         <tr>
-          <th class="text-left border-b p-2">Kategorie</th>
-          <th class="text-right border-b p-2">Anzahl</th>
-          <th class="text-right border-b p-2">Prozent</th>
+          <th>Kategorie</th>
+          <th class="text-right">Anzahl</th>
+          <th class="text-right">Prozent</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="row in rows" :key="row.label">
-          <td class="border-b p-2">{{ row.label }}</td>
-          <td class="border-b p-2 text-right">{{ row.count }}</td>
-          <td class="border-b p-2 text-right">{{ row.percentage.toFixed(2) }}%</td>
+          <td>{{ row.label }}</td>
+          <td class="text-right">{{ row.count }}</td>
+          <td class="text-right">{{ row.percentage.toFixed(2) }}%</td>
         </tr>
       </tbody>
     </table>
-    <p v-if="data" class="text-sm text-gray-600 mt-2">
-      Gesamtanzahl Verkäufer: {{ data.TotalVendors }}
-    </p>
+    <p v-if="data" class="total-hint">Gesamtanzahl Verkäufer: {{ data.TotalVendors }}</p>
   </div>
 </template>
+
+<style scoped>
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+.total-hint {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 10px;
+}
+</style>
