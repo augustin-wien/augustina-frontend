@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useSettingsStore, type Settings } from '@/stores/settings'
+import Card from '@/components/ui/Card.vue'
+import FormField from '@/components/ui/FormField.vue'
+import Button from '@/components/ui/Button.vue'
 
 const props = defineProps<{
   updatedSettings: Settings
@@ -64,46 +67,21 @@ defineExpose({ saveSettings })
 </script>
 
 <template>
-  <div class="space-y-6">
+  <div>
     <!-- Branding -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('Branding') }}</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Newspaper name -->
-        <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('Newspaper name')
-          }}</label>
-          <input
-            v-model="localSettings.NewspaperName"
-            type="text"
-            class="w-full border rounded px-3 py-2 text-gray-700"
-            required
-          />
-        </div>
-        <!-- Color -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('color') }}</label>
-          <input
-            v-model="localSettings.Color"
-            type="text"
-            class="w-full border rounded px-3 py-2 text-gray-700"
-            required
-          />
-        </div>
-        <!-- Font color -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('fontColor') }}</label>
-          <input
-            v-model="localSettings.FontColor"
-            type="text"
-            class="w-full border rounded px-3 py-2 text-gray-700"
-            required
-          />
-        </div>
-        <!-- Logo -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Logo</label>
+    <Card class="section">
+      <h2 class="section-title">{{ $t('Branding') }}</h2>
+      <div class="field-grid">
+        <FormField :label="$t('Newspaper name')" class="field-span-2" required>
+          <input v-model="localSettings.NewspaperName" type="text" class="aug-input" required />
+        </FormField>
+        <FormField :label="$t('color')" required>
+          <input v-model="localSettings.Color" type="text" class="aug-input" required />
+        </FormField>
+        <FormField :label="$t('fontColor')" required>
+          <input v-model="localSettings.FontColor" type="text" class="aug-input" required />
+        </FormField>
+        <FormField label="Logo">
           <img
             v-if="typeof localSettings.Logo === 'string' || !localSettings.Logo"
             :src="
@@ -112,19 +90,12 @@ defineExpose({ saveSettings })
                 : props.url + 'img/logo.png'
             "
             alt="Logo"
-            class="mb-2 h-16 object-contain"
+            class="preview-image"
           />
-          <img v-else :src="newLogo" alt="Logo preview" class="mb-2 h-16 object-contain" />
-          <input
-            type="file"
-            accept="image/png"
-            class="w-full border rounded px-3 py-1 text-sm text-gray-700"
-            @change="updateLogo"
-          />
-        </div>
-        <!-- Favicon -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Favicon</label>
+          <img v-else :src="newLogo" alt="Logo preview" class="preview-image" />
+          <input type="file" accept="image/png" class="aug-input" @change="updateLogo" />
+        </FormField>
+        <FormField label="Favicon">
           <img
             v-if="typeof localSettings.Favicon === 'string' || !localSettings.Favicon"
             :src="
@@ -133,306 +104,218 @@ defineExpose({ saveSettings })
                 : props.url + 'img/favicon.png'
             "
             alt="Favicon"
-            class="mb-2 h-16 object-contain"
+            class="preview-image"
           />
-          <img v-else :src="newFavicon" alt="Favicon preview" class="mb-2 h-16 object-contain" />
-          <input
-            type="file"
-            accept="image/png"
-            class="w-full border rounded px-3 py-1 text-sm text-gray-700"
-            @change="updateFavicon"
-          />
-        </div>
+          <img v-else :src="newFavicon" alt="Favicon preview" class="preview-image" />
+          <input type="file" accept="image/png" class="aug-input" @change="updateFavicon" />
+        </FormField>
       </div>
-    </div>
+    </Card>
 
     <!-- Webshop -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('Webshop') }}</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('mainProduct')
-          }}</label>
-          <select
-            v-model="localSettings.MainItem"
-            class="w-full border rounded px-3 py-2 text-gray-700"
-            required
-          >
+    <Card class="section">
+      <h2 class="section-title">{{ $t('Webshop') }}</h2>
+      <div class="field-grid">
+        <FormField :label="$t('mainProduct')" required>
+          <select v-model="localSettings.MainItem" class="aug-input" required>
             <option v-for="item in props.items" :key="item.ID" :value="item.ID">
               {{ item.Name }}
             </option>
           </select>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('Max order amount')
-          }}</label>
-          <input
-            v-model.number="localSettings.MaxOrderAmount"
-            type="number"
-            class="w-full border rounded px-3 py-2 text-gray-700"
-          />
-        </div>
+        </FormField>
+        <FormField :label="$t('Max order amount')">
+          <input v-model.number="localSettings.MaxOrderAmount" type="number" class="aug-input" />
+        </FormField>
       </div>
-      <div class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-y-3 gap-x-4">
-        <label class="flex items-center gap-2 text-sm cursor-pointer">
+      <div class="toggle-grid">
+        <label class="aug-toggle">
           <input v-model="localSettings.WebshopIsClosed" type="checkbox" />
-          {{ $t('Webshop closed') }}
+          <span class="aug-toggle-track"></span>
+          <span>{{ $t('Webshop closed') }}</span>
         </label>
-        <label class="flex items-center gap-2 text-sm cursor-pointer">
+        <label class="aug-toggle">
           <input v-model="localSettings.ShopLanding" type="checkbox" />
-          {{ $t('Shop page as landing page') }}
+          <span class="aug-toggle-track"></span>
+          <span>{{ $t('Shop page as landing page') }}</span>
         </label>
-        <label class="flex items-center gap-2 text-sm cursor-pointer">
+        <label class="aug-toggle">
           <input v-model="localSettings.UseTipInsteadOfDonation" type="checkbox" />
-          {{ $t('Use tip instead of donation in the shop') }}
+          <span class="aug-toggle-track"></span>
+          <span>{{ $t('Use tip instead of donation in the shop') }}</span>
         </label>
-        <label class="flex items-center gap-2 text-sm cursor-pointer">
+        <label class="aug-toggle">
           <input v-model="localSettings.OrgaCoversTransactionCosts" type="checkbox" />
-          {{ $t('Orga covers transaction costs') }}
+          <span class="aug-toggle-track"></span>
+          <span>{{ $t('Orga covers transaction costs') }}</span>
         </label>
-        <label class="flex items-center gap-2 text-sm cursor-pointer">
+        <label class="aug-toggle">
           <input v-model="localSettings.UseVendorLicenseIdInShop" type="checkbox" />
-          {{ $t('Use the license id instead of the name in the shop') }}
+          <span class="aug-toggle-track"></span>
+          <span>{{ $t('Use the license id instead of the name in the shop') }}</span>
         </label>
       </div>
-    </div>
+    </Card>
 
     <!-- Point of Sale -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('menuPOS') }}</h2>
-      <label class="flex items-center gap-2 text-sm cursor-pointer">
+    <Card class="section">
+      <h2 class="section-title">{{ $t('menuPOS') }}</h2>
+      <label class="aug-toggle">
         <input v-model="localSettings.POSEnabled" type="checkbox" />
-        {{ $t('settingsPOSEnabled') }}
+        <span class="aug-toggle-track"></span>
+        <span>{{ $t('settingsPOSEnabled') }}</span>
       </label>
-    </div>
+    </Card>
 
     <!-- Abonement / Subscription -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('abonementModule') }}</h2>
-      <label class="flex items-center gap-2 text-sm cursor-pointer mb-4">
+    <Card class="section">
+      <h2 class="section-title">{{ $t('abonementModule') }}</h2>
+      <label class="aug-toggle toggle-spaced">
         <input v-model="localSettings.AbonementEnabled" type="checkbox" />
-        {{ $t('abonementModuleEnabled') }}
+        <span class="aug-toggle-track"></span>
+        <span>{{ $t('abonementModuleEnabled') }}</span>
       </label>
-      <div v-if="localSettings.AbonementEnabled">
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{
-          $t('Abonement URL')
-        }}</label>
-        <input
-          v-model="localSettings.AbonementUrl"
-          type="url"
-          class="w-full border rounded px-3 py-2 text-gray-700"
-        />
-      </div>
-    </div>
+      <FormField
+        v-if="localSettings.AbonementEnabled"
+        :label="$t('Abonement URL')"
+        class="field-mt"
+      >
+        <input v-model="localSettings.AbonementUrl" type="url" class="aug-input" />
+      </FormField>
+    </Card>
 
     <!-- URLs -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <h2 class="text-base font-semibold text-gray-800 mb-4">URLs</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('AGB URL') }}</label>
-          <div class="flex gap-2">
-            <input
-              v-model="localSettings.AGBUrl"
-              type="text"
-              class="flex-1 border rounded px-3 py-2 text-gray-700"
-            />
-            <button
-              type="button"
-              class="px-3 rounded bg-gray-100 border text-sm"
-              @click="settingsStore.toAGB()"
-            >
-              {{ $t('Open') }}
-            </button>
+    <Card class="section">
+      <h2 class="section-title">URLs</h2>
+      <div class="field-grid">
+        <FormField :label="$t('AGB URL')">
+          <div class="input-with-action">
+            <input v-model="localSettings.AGBUrl" type="text" class="aug-input" />
+            <Button variant="secondary" @click="settingsStore.toAGB()">{{ $t('Open') }}</Button>
           </div>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('privacyPolicyUrl')
-          }}</label>
-          <div class="flex gap-2">
-            <input
-              v-model="localSettings.PrivacyPolicyUrl"
-              type="text"
-              class="flex-1 border rounded px-3 py-2 text-gray-700"
-            />
-            <button
-              type="button"
-              class="px-3 rounded bg-gray-100 border text-sm"
+        </FormField>
+        <FormField :label="$t('privacyPolicyUrl')" :hint="$t('privacyPolicyUrlHint')">
+          <div class="input-with-action">
+            <input v-model="localSettings.PrivacyPolicyUrl" type="text" class="aug-input" />
+            <Button
+              variant="secondary"
               :disabled="!localSettings.PrivacyPolicyUrl"
               @click="settingsStore.toPrivacyPolicy()"
             >
               {{ $t('Open') }}
-            </button>
+            </Button>
           </div>
-          <p class="text-xs text-gray-500 mt-1">{{ $t('privacyPolicyUrlHint') }}</p>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('Maintainance mode help URL')
-          }}</label>
-          <input
-            v-model="localSettings.MaintainanceModeHelpUrl"
-            type="text"
-            class="w-full border rounded px-3 py-2 text-gray-700"
-          />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('Vendor email postfix')
-          }}</label>
-          <input
-            v-model="localSettings.VendorEmailPostfix"
-            type="text"
-            class="w-full border rounded px-3 py-2 text-gray-700"
-          />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('Digital items URL')
-          }}</label>
-          <input
-            v-model="localSettings.DigitalItemsUrl"
-            type="text"
-            class="w-full border rounded px-3 py-2 text-gray-700"
-          />
-        </div>
+        </FormField>
+        <FormField :label="$t('Maintainance mode help URL')">
+          <input v-model="localSettings.MaintainanceModeHelpUrl" type="text" class="aug-input" />
+        </FormField>
+        <FormField :label="$t('Vendor email postfix')">
+          <input v-model="localSettings.VendorEmailPostfix" type="text" class="aug-input" />
+        </FormField>
+        <FormField :label="$t('Digital items URL')">
+          <input v-model="localSettings.DigitalItemsUrl" type="text" class="aug-input" />
+        </FormField>
       </div>
-    </div>
+    </Card>
 
     <!-- WordPress one-time login -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <h2 class="text-base font-semibold text-gray-800 mb-4">
-        {{ $t('wpInviteTitle') }}
-      </h2>
-      <label class="flex items-center gap-2 text-sm cursor-pointer mb-4">
+    <Card class="section">
+      <h2 class="section-title">{{ $t('wpInviteTitle') }}</h2>
+      <label class="aug-toggle toggle-spaced">
         <input v-model="wpInviteEnabled" type="checkbox" />
-        {{ $t('wpInviteEnabled') }}
+        <span class="aug-toggle-track"></span>
+        <span>{{ $t('wpInviteEnabled') }}</span>
       </label>
-      <div v-if="wpInviteEnabled" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="md:col-span-2">
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('wpInviteURL')
-          }}</label>
+      <div v-if="wpInviteEnabled" class="field-grid">
+        <FormField :label="$t('wpInviteURL')" class="field-span-2">
           <input
             v-model="localSettings.WordPressInviteURL"
             type="url"
-            class="w-full border rounded px-3 py-2 text-gray-700"
+            class="aug-input"
             placeholder="http://host.docker.internal:8088/wp-json/augustin/v1/shop/create-invite"
           />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('wpInviteAPIKey')
-          }}</label>
+        </FormField>
+        <FormField :label="$t('wpInviteAPIKey')">
           <input
             v-model="localSettings.WordPressInviteAPIKey"
             type="password"
             autocomplete="new-password"
-            class="w-full border rounded px-3 py-2 text-gray-700"
+            class="aug-input"
           />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('wpInviteTTL')
-          }}</label>
+        </FormField>
+        <FormField :label="$t('wpInviteTTL')">
           <input
             v-model.number="localSettings.WordPressInviteTTL"
             type="number"
             min="3600"
-            class="w-full border rounded px-3 py-2 text-gray-700"
+            class="aug-input"
           />
-        </div>
+        </FormField>
       </div>
-    </div>
+    </Card>
 
     <!-- Matomo -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <h2 class="text-base font-semibold text-gray-800 mb-4">
-        {{ $t('matomoTitle') }}
-      </h2>
-      <p class="text-sm text-gray-500 mb-4">{{ $t('matomoHint') }}</p>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ $t('matomoUrl') }}</label>
+    <Card class="section">
+      <h2 class="section-title">{{ $t('matomoTitle') }}</h2>
+      <p class="section-hint">{{ $t('matomoHint') }}</p>
+      <div class="field-grid">
+        <FormField :label="$t('matomoUrl')">
           <input
             v-model="localSettings.MatomoUrl"
             type="url"
-            class="w-full border rounded px-3 py-2 text-gray-700"
+            class="aug-input"
             placeholder="https://matomo.example.org/"
           />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('matomoSiteId')
-          }}</label>
+        </FormField>
+        <FormField :label="$t('matomoSiteId')">
           <input
             v-model="localSettings.MatomoSiteId"
             type="text"
             inputmode="numeric"
-            class="w-full border rounded px-3 py-2 text-gray-700"
+            class="aug-input"
             placeholder="1"
           />
-        </div>
+        </FormField>
       </div>
-    </div>
+    </Card>
 
     <!-- Map -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('menuMap') }}</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('Map center lat')
-          }}</label>
+    <Card class="section">
+      <h2 class="section-title">{{ $t('menuMap') }}</h2>
+      <div class="field-grid">
+        <FormField :label="$t('Map center lat')">
           <input
             v-model.number="localSettings.MapCenterLat"
             type="number"
             step="0.000001"
-            class="w-full border rounded px-3 py-2 text-gray-700"
+            class="aug-input"
           />
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('Map center long')
-          }}</label>
+        </FormField>
+        <FormField :label="$t('Map center long')">
           <input
             v-model.number="localSettings.MapCenterLong"
             type="number"
             step="0.000001"
-            class="w-full border rounded px-3 py-2 text-gray-700"
+            class="aug-input"
           />
-        </div>
+        </FormField>
       </div>
-    </div>
+    </Card>
 
     <!-- QR Code -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-      <h2 class="text-base font-semibold text-gray-800 mb-4">{{ $t('QR-Code settings') }}</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('QR Code url')
-          }}</label>
-          <input
-            v-model="localSettings.QRCodeUrl"
-            type="text"
-            class="w-full border rounded px-3 py-2 text-gray-700"
-            required
-          />
-        </div>
-        <div class="flex items-end">
-          <label class="flex items-center gap-2 text-sm cursor-pointer">
+    <Card class="section">
+      <h2 class="section-title">{{ $t('QR-Code settings') }}</h2>
+      <div class="field-grid">
+        <FormField :label="$t('QR Code url')" required>
+          <input v-model="localSettings.QRCodeUrl" type="text" class="aug-input" required />
+        </FormField>
+        <div class="toggle-inline">
+          <label class="aug-toggle">
             <input v-model="localSettings.QRCodeEnableLogo" type="checkbox" />
-            {{ $t('Show QR code logo') }}
+            <span class="aug-toggle-track"></span>
+            <span>{{ $t('Show QR code logo') }}</span>
           </label>
         </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{
-            $t('QR Code logo')
-          }}</label>
+        <FormField :label="$t('QR Code logo')">
           <img
             v-if="
               typeof localSettings.QRCodeLogoImgUrl === 'string' || !localSettings.QRCodeLogoImgUrl
@@ -443,22 +326,75 @@ defineExpose({ saveSettings })
                 : props.url + 'img/qrcode.png'
             "
             alt="QR code logo"
-            class="mb-2 h-16 object-contain"
+            class="preview-image"
           />
-          <img
-            v-else
-            :src="newQrCodeLogo"
-            alt="QR code logo preview"
-            class="mb-2 h-16 object-contain"
-          />
-          <input
-            type="file"
-            accept="image/png"
-            class="w-full border rounded px-3 py-1 text-sm text-gray-700"
-            @change="updateQRCodeLogo"
-          />
-        </div>
+          <img v-else :src="newQrCodeLogo" alt="QR code logo preview" class="preview-image" />
+          <input type="file" accept="image/png" class="aug-input" @change="updateQRCodeLogo" />
+        </FormField>
       </div>
-    </div>
+    </Card>
   </div>
 </template>
+
+<style scoped>
+.section {
+  margin-bottom: 20px;
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.section-hint {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 14px;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+}
+.field-span-2 {
+  grid-column: span 2;
+}
+.field-mt {
+  margin-top: 14px;
+}
+.toggle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+  margin-top: 16px;
+}
+.toggle-spaced {
+  margin-bottom: 14px;
+}
+.toggle-inline {
+  display: flex;
+  align-items: flex-end;
+}
+.input-with-action {
+  display: flex;
+  gap: 8px;
+}
+.input-with-action .aug-input {
+  flex: 1;
+}
+.preview-image {
+  display: block;
+  height: 64px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 640px) {
+  .field-grid,
+  .toggle-grid {
+    grid-template-columns: 1fr;
+  }
+  .field-span-2 {
+    grid-column: span 1;
+  }
+}
+</style>

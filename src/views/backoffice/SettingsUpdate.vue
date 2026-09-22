@@ -193,7 +193,6 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
         />
         <QrCodeSettings
           v-show="currentTab === 'qrcode'"
-          inline
           @update="updateQRCodeSettings"
           @save-settings="saveGeneralFromParent()"
         />
@@ -216,9 +215,6 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
 </template>
 
 <style scoped>
-#styles {
-  min-height: 300px;
-}
 .tab-nav {
   flex: none;
   margin-bottom: 20px;
