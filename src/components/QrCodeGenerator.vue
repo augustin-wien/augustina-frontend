@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useSettingsStore } from '@/stores/settings'
 import type { Vendor } from '@/stores/vendor'
-import IconCross from '@/components/icons/IconCross.vue'
 
 import QRCodeStyling from 'qr-code-styling'
 import { onMounted, ref, watch } from 'vue'
@@ -14,10 +13,11 @@ import type {
   CornerSquareOptions,
   CornersDotOptions
 } from '@/models/qrcode'
+import Modal from '@/components/ui/Modal.vue'
+import Button from '@/components/ui/Button.vue'
 
 const settingsStore = useSettingsStore()
-const props = defineProps(['vendor'])
-const vendor = props.vendor
+const props = defineProps<{ vendor: Vendor }>()
 const currentQrCode = ref<QRCodeStyling | null>(null)
 
 const emit = defineEmits(['close'])
@@ -67,14 +67,19 @@ const generateQRCode = async (vendor: Vendor) => {
     color: '#000'
   })
 
-  if (settingsStore.settings) {
-    const parsedSettings = JSON.parse(settingsStore.settings.QRCodeSettings)
-    dotsOptions.value = parsedSettings.dotsOptions
-    backgroundOptions.value = parsedSettings.backgroundOptions
-    imageOptions.value = parsedSettings.imageOptions
-    cornerSquareOptions.value = parsedSettings.cornerSquareOptions
-    cornersDotOptions.value = parsedSettings.cornersDotOptions
-    qrCodeOptions.value = parsedSettings.qrCodeOptions
+  if (settingsStore.settings.QRCodeSettings) {
+    try {
+      const parsedSettings = JSON.parse(settingsStore.settings.QRCodeSettings)
+      dotsOptions.value = parsedSettings.dotsOptions
+      backgroundOptions.value = parsedSettings.backgroundOptions
+      imageOptions.value = parsedSettings.imageOptions
+      cornerSquareOptions.value = parsedSettings.cornerSquareOptions
+      cornersDotOptions.value = parsedSettings.cornersDotOptions
+      qrCodeOptions.value = parsedSettings.qrCodeOptions
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Invalid QRCodeSettings JSON, falling back to defaults', err)
+    }
   }
 
   const qrCode = new QRCodeStyling({
@@ -110,7 +115,7 @@ const generateQRCode = async (vendor: Vendor) => {
 
 const save = () => {
   if (currentQrCode.value) {
-    currentQrCode.value.download({ name: vendor.LicenseID, extension: 'png' })
+    currentQrCode.value.download({ name: props.vendor.LicenseID, extension: 'png' })
   }
 }
 
@@ -122,63 +127,31 @@ watch(
 )
 
 onMounted(() => {
-  generateQRCode(vendor)
+  generateQRCode(props.vendor)
 })
 </script>
 
 <template>
-  <div
-    id="qrcode-modal"
-    tabindex="-1"
-    class="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  <Modal
+    open
+    :title="`${$t('Qr-Code for')} ${vendor.FirstName} ${vendor.LastName}`"
+    @close="emit('close')"
   >
-    <div class="relative p-4 w-full modal-content max-h-full">
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-        <div class="flex place-content-center justify-between pt-4 pr-4">
-          <span />
-          <button class="rounded-full bg-red-600 text-white font-bold" @click="emit('close')">
-            <IconCross />
-          </button>
-        </div>
-        <div class="p-4 md text-center">
-          <div class="mb-5 text-xl font-bold text-gray-500 dark:text-gray-400">
-            <h2>{{ `${$t('Qr-Code for')} ${vendor.FirstName} ${vendor.LastName}` }}</h2>
-            <div id="qr-wrapper"></div>
-          </div>
-          <button
-            type="button"
-            class="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-            @click="save()"
-          >
-            {{ $t('Save Qr-Code') }}
-          </button>
-        </div>
-      </div>
+    <div class="qr-preview">
+      <div id="qr-wrapper"></div>
     </div>
-  </div>
+    <template #footer>
+      <Button variant="primary" @click="save()">{{ $t('Save Qr-Code') }}</Button>
+    </template>
+  </Modal>
 </template>
 
-<style lang="scss" scoped>
-#qrcode-modal {
-  position: fixed;
+<style scoped>
+.qr-preview {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  background-color: #00000080;
-  justify-content: center;
-  align-items: center;
-  .modal-content {
-    width: 600px;
-  }
 }
-#qr-wrapper {
-  margin: 50px 0px;
-  #canvas {
-    max-width: 100%;
-  }
+.qr-preview :deep(#canvas) {
+  max-width: 100%;
 }
 </style>

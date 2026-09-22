@@ -191,8 +191,7 @@ const selectedVendor = ref<Vendor | null>(null)
         </table>
       </Card>
       <QrCodeGenerator
-        v-if="showQRCode"
-        :show-q-r-code="showQRCode"
+        v-if="showQRCode && selectedVendor"
         :vendor="selectedVendor"
         @close="showQRCode = false"
       />
