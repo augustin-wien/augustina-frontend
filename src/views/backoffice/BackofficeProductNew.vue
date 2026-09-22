@@ -6,8 +6,10 @@ import type { Item } from '@/stores/items'
 import { useSettingsStore } from '@/stores/settings'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
-import IconCross from '@/components/icons/IconCross.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
+import Card from '@/components/ui/Card.vue'
+import Button from '@/components/ui/Button.vue'
+import FormField from '@/components/ui/FormField.vue'
 
 const { t } = useI18n()
 
@@ -81,128 +83,125 @@ const updateImage = (event: any) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <PageHeader :title="`${$t('newProduct')} ${$t('create')}`" />
+      <PageHeader
+        :title="`${$t('newProduct')} ${$t('create')}`"
+        show-back
+        @back="router.push('/backoffice/productsettings')"
+      />
     </template>
     <template #main>
-      <div class="main">
-        <div class="w-full max-w-md mx-auto mt-4">
-          <div class="flex place-content-center justify-between">
-            <h1 class="text-2xl font-bold">{{ $t('newProduct') }}</h1>
-            <button
-              class="bg-red-600 rounded-full font-bold"
-              @click="router.push('/backoffice/productsettings')"
-            >
-              <IconCross />
-            </button>
-          </div>
-          <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-4" @submit.prevent="submitItem">
-            <div class="mb-4">
-              <!-- Item type -->
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="itemType">
-                {{ $t('itemType') }}:
-              </label>
-              <select
-                id="itemType"
-                v-model="newItem.Type"
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                required
-              >
+      <Toast v-if="toast" :toast="toast" @close="toast = null" />
+
+      <Card class="section">
+        <form @submit.prevent="submitItem">
+          <div class="field-grid">
+            <FormField :label="$t('itemType')" for="itemType" required>
+              <select id="itemType" v-model="newItem.Type" class="aug-input" required>
                 <option v-for="type in availableItemTypes" :key="type" :value="type">
                   {{ $t('itemType_' + type) }}
                 </option>
               </select>
+            </FormField>
 
-              <!-- Name -->
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="name">
-                {{ $t('name') }}:
-              </label>
-              <input
-                id="name"
-                v-model="newItem.Name"
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                required
-              />
+            <FormField :label="$t('name')" for="name" required>
+              <input id="name" v-model="newItem.Name" type="text" class="aug-input" required />
+            </FormField>
 
-              <!-- Description -->
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="description">
-                {{ $t('description') }}:
-              </label>
+            <FormField :label="$t('description')" for="description" required class="field-span-2">
               <input
                 id="description"
                 v-model="newItem.Description"
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
+                class="aug-input"
                 required
               />
+            </FormField>
 
-              <!-- Price -->
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="price">
-                {{ $t('price') }} (Cent):
-              </label>
+            <FormField :label="`${$t('price')} (Cent)`" for="price" required>
               <input
                 id="price"
                 v-model="newItem.Price"
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="number"
                 min="1"
+                class="aug-input"
                 required
               />
+            </FormField>
 
-              <!-- License group (for online_issue / abonement) -->
-              <template v-if="needsLicense">
-                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseGroup">
-                  {{ $t('licenseGroup') }}:
-                </label>
+            <template v-if="needsLicense">
+              <FormField :label="$t('licenseGroup')" for="licenseGroup">
                 <input
                   id="licenseGroup"
                   v-model="newItem.LicenseGroup"
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="text"
+                  class="aug-input"
                   placeholder="z.B. digital_edition"
                 />
+              </FormField>
 
-                <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="licenseCost">
-                  {{ $t('licenseCost') }} (Cent):
-                </label>
+              <FormField
+                :label="`${$t('licenseCost')} (Cent)`"
+                for="licenseCost"
+                required
+                :hint="$t('licenseCostHint')"
+              >
                 <input
                   id="licenseCost"
                   v-model="newItem.LicenseCost"
-                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="number"
                   min="1"
+                  class="aug-input"
                   required
                 />
-                <p class="text-xs text-gray-500 mt-1">
-                  {{ $t('licenseCostHint') }}
-                </p>
-              </template>
+              </FormField>
+            </template>
 
-              <!-- Image -->
-              <label class="block text-gray-700 text-sm font-bold mb-2 pt-3" for="image">
-                {{ $t('image') }}:
-              </label>
+            <FormField :label="$t('image')" for="image" class="field-span-2">
               <input
                 id="image"
-                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="file"
                 accept="image/png, image/jpeg"
+                class="aug-input"
                 @change="updateImage"
               />
-            </div>
+            </FormField>
+          </div>
 
-            <div class="flex justify-between">
-              <button class="p-3 rounded-full mr-3 bg-red-600 text-white" @click="cancel">
-                {{ $t('cancel') }}
-              </button>
-              <button type="submit" class="p-3 rounded-full bg-lime-600 text-white">
-                {{ $t('create') }}
-              </button>
-            </div>
-          </form>
-          <Toast v-if="toast" :toast="toast" @close="toast = null" />
-        </div>
-      </div>
+          <div class="form-actions">
+            <Button variant="ghost" @click="cancel">{{ $t('cancel') }}</Button>
+            <Button type="submit" variant="primary">{{ $t('create') }}</Button>
+          </div>
+        </form>
+      </Card>
     </template>
   </component>
 </template>
+
+<style scoped>
+.section {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+}
+.field-span-2 {
+  grid-column: span 2;
+}
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+@media (max-width: 640px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+  .field-span-2 {
+    grid-column: span 1;
+  }
+}
+</style>
