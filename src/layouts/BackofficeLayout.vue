@@ -213,7 +213,7 @@ onMounted(() => {
           bottom: 0;
           right: 0;
           z-index: 2000;
-          background-color: #fff;
+          background-color: var(--color-bg);
           display: flex;
           justify-content: center;
           align-items: center;
@@ -417,16 +417,6 @@ footer {
     inset: 0;
     z-index: 30;
     background: rgba(0, 0, 0, 0.4);
-  }
-}
-</style>
-
-<style lang="scss">
-.backoffice-layout {
-  tbody {
-    tr:hover {
-      background-color: #b3ceb3;
-    }
   }
 }
 </style>

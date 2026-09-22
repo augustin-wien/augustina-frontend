@@ -27,3 +27,30 @@
   --radius: 10px;
   --radius-sm: 6px;
 }
+
+/* Follows the OS/browser color-scheme preference - no in-app toggle exists (or is needed) since
+   this is the only place a page reads light vs. dark from. --color-accent/--color-accent-fg are
+   deliberately NOT overridden here: they're the admin's configured brand color (see the runtime
+   override note above) and stay the same regardless of theme, same as a real logo wouldn't flip
+   colors depending on the visitor's OS setting. --color-accent-tint recomputes automatically even
+   though it isn't listed here, since color-mix() re-resolves live whenever --color-accent or
+   --color-surface change. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #101317;
+    --color-surface: #181c22;
+    --color-surface-alt: #20252c;
+    --color-border: #2c323b;
+    --color-text: #e7e9ec;
+    --color-text-muted: #9399a6;
+
+    --color-accent-tint: color-mix(in srgb, var(--color-accent) 18%, var(--color-surface));
+
+    --color-success: #3ecf78;
+    --color-success-bg: #113322;
+    --color-danger: #ef5f57;
+    --color-danger-bg: #3a1717;
+    --color-info: #7c9cf0;
+    --color-info-bg: #16213d;
+  }
+}
