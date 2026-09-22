@@ -261,6 +261,7 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('PrivacyPolicyUrl', updatedSettings.PrivacyPolicyUrl ?? '')
   formData.append('MatomoUrl', updatedSettings.MatomoUrl ?? '')
   formData.append('MatomoSiteId', updatedSettings.MatomoSiteId ?? '')
+  formData.append('OnlinePaperUrl', updatedSettings.OnlinePaperUrl ?? '')
 
   formData.append(
     'OrgaCoversTransactionCosts',

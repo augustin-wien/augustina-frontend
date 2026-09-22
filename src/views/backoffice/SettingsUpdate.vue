@@ -59,7 +59,8 @@ const updatedSettings = ref<Settings>({
   WordPressInviteTTL: 604800,
   PrivacyPolicyUrl: '',
   MatomoUrl: '',
-  MatomoSiteId: ''
+  MatomoSiteId: '',
+  OnlinePaperUrl: ''
 })
 
 // The public settings endpoint withholds credentials, so this page loads the full set from the
