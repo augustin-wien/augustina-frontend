@@ -48,3 +48,31 @@
 .aug-table tbody tr:hover {
   background: var(--color-surface-alt);
 }
+
+/* Dense icon-only actions (edit/delete on a list row, close a modal) - too small/frequent for
+   the full Button component's padding and variant chrome. */
+.aug-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+.aug-icon-btn:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+}
+.aug-icon-btn-danger:hover {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+.aug-icon-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+}

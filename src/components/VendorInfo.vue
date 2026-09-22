@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import IconCross from '@/components/icons/IconCross.vue'
 import VendorMapView from '@/components/VendorMapView.vue'
 import { vendorsStore } from '@/stores/vendor'
 import { formatCredit } from '@/utils/utils'
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import Modal from '@/components/ui/Modal.vue'
+import Button from '@/components/ui/Button.vue'
+import Badge from '@/components/ui/Badge.vue'
 
 const formatVendorDate = (date: string | null | undefined): string => {
   if (!date) return '–'
@@ -144,182 +146,214 @@ const emit = defineEmits(['close'])
 </script>
 
 <template>
-  <div
-    id="vendorinfo-modal"
-    tabindex="-1"
-    class="fixed inset-0 z-50 flex items-center justify-center w-full h-full bg-gray-900 bg-opacity-50"
-  >
-    <div class="relative w-fit max-h-[90vh] overflow-y-auto">
-      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 dark:text-white">
-        <div class="flex justify-end pt-3 pr-3">
-          <button class="rounded-full bg-red-600 text-white font-bold" @click="emit('close')">
-            <IconCross />
-          </button>
-        </div>
+  <Modal open :title="`${vendor?.LicenseID} ${vendor?.FirstName}`" @close="emit('close')">
+    <div class="vendorinfo-grid">
+      <table class="aug-table">
+        <tbody>
+          <tr>
+            <th>{{ $t('firstName') }}:</th>
+            <td>{{ vendor?.FirstName }}</td>
+            <th>{{ $t('lastName') }}:</th>
+            <td>{{ vendor?.LastName }}</td>
+          </tr>
+          <tr>
+            <th>{{ $t('LicenseId') }}:</th>
+            <td>{{ vendor?.LicenseID }}</td>
+            <th>{{ $t('accountDeactivation') }}:</th>
+            <td>{{ $t(vendor?.IsDisabled ? 'yes' : 'no') }}</td>
+          </tr>
+          <tr>
+            <th>{{ $t('lastPayout') }}:</th>
+            <td>{{ formatVendorDate(vendor?.LastPayout) }}</td>
+            <th>{{ $t('currentCredit') }}:</th>
+            <td>{{ formatCredit(vendor?.Balance) }} €</td>
+          </tr>
+          <tr>
+            <th>{{ $t('E-mail') }}:</th>
+            <td>{{ vendor?.Email || '–' }}</td>
+            <th>{{ $t('telephone') }}:</th>
+            <td>{{ vendor?.Telephone || '–' }}</td>
+          </tr>
+          <tr>
+            <th>{{ $t('vendorSince') }}:</th>
+            <td>{{ formatVendorDate(vendor?.VendorSince) }}</td>
+            <th>{{ $t('registrationDate') }}:</th>
+            <td>{{ formatVendorDate(vendor?.RegistrationDate) }}</td>
+          </tr>
+          <tr>
+            <th>{{ $t('Has a smartphone') }}:</th>
+            <td>{{ $t(vendor?.HasSmartphone ? 'yes' : 'no') }}</td>
+            <th>{{ $t('bankAccount') }}:</th>
+            <td>{{ $t(vendor?.HasBankAccount ? 'yes' : 'no') }}</td>
+          </tr>
+          <tr v-if="vendor?.Debt">
+            <th>{{ $t('debt') }}:</th>
+            <td>{{ vendor?.Debt }}</td>
+          </tr>
+          <tr v-if="vendor?.AccountProofUrl">
+            <th>{{ $t('verificationLink') }}:</th>
+            <td>{{ vendor?.AccountProofUrl }}</td>
+          </tr>
+        </tbody>
+      </table>
 
-        <div class="grid grid-cols-2 gap-4 mx-8 pb-4">
-          <!-- Vendor details -->
-          <div>
-            <table class="w-full text-sm text-left">
-              <tbody>
-                <tr>
-                  <th class="py-1 px-2">{{ $t('firstName') }}:</th>
-                  <td class="py-1 px-2">{{ vendor?.FirstName }}</td>
-                  <th class="py-1 px-2">{{ $t('lastName') }}:</th>
-                  <td class="py-1 px-2">{{ vendor?.LastName }}</td>
-                </tr>
-                <tr>
-                  <th class="py-1 px-2">{{ $t('LicenseId') }}:</th>
-                  <td class="py-1 px-2">{{ vendor?.LicenseID }}</td>
-                  <th class="py-1 px-2">{{ $t('accountDeactivation') }}:</th>
-                  <td class="py-1 px-2">{{ $t(vendor?.IsDisabled ? 'yes' : 'no') }}</td>
-                </tr>
-                <tr>
-                  <th class="py-1 px-2">{{ $t('lastPayout') }}:</th>
-                  <td class="py-1 px-2">{{ formatVendorDate(vendor?.LastPayout) }}</td>
-                  <th class="py-1 px-2">{{ $t('currentCredit') }}:</th>
-                  <td class="py-1 px-2">{{ formatCredit(vendor?.Balance) }} €</td>
-                </tr>
-                <tr>
-                  <th class="py-1 px-2">{{ $t('E-mail') }}:</th>
-                  <td class="py-1 px-2">{{ vendor?.Email || '–' }}</td>
-                  <th class="py-1 px-2">{{ $t('telephone') }}:</th>
-                  <td class="py-1 px-2">{{ vendor?.Telephone || '–' }}</td>
-                </tr>
-                <tr>
-                  <th class="py-1 px-2">{{ $t('vendorSince') }}:</th>
-                  <td class="py-1 px-2">{{ formatVendorDate(vendor?.VendorSince) }}</td>
-                  <th class="py-1 px-2">{{ $t('registrationDate') }}:</th>
-                  <td class="py-1 px-2">{{ formatVendorDate(vendor?.RegistrationDate) }}</td>
-                </tr>
-                <tr>
-                  <th class="py-1 px-2">{{ $t('Has a smartphone') }}:</th>
-                  <td class="py-1 px-2">{{ $t(vendor?.HasSmartphone ? 'yes' : 'no') }}</td>
-                  <th class="py-1 px-2">{{ $t('bankAccount') }}:</th>
-                  <td class="py-1 px-2">{{ $t(vendor?.HasBankAccount ? 'yes' : 'no') }}</td>
-                </tr>
-                <tr v-if="vendor?.Debt">
-                  <th class="py-1 px-2">{{ $t('debt') }}:</th>
-                  <td class="py-1 px-2">{{ vendor?.Debt }}</td>
-                </tr>
-                <tr v-if="vendor?.AccountProofUrl">
-                  <th class="py-1 px-2">{{ $t('verificationLink') }}:</th>
-                  <td class="py-1 px-2">{{ vendor?.AccountProofUrl }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <div class="vendorinfo-map">
+        <VendorMapView
+          v-if="vendorStore.vendorLocations && vendorStore.vendorLocations.length > 0"
+          :locations="vendorStore.vendorLocations"
+          :enable-search="false"
+        />
+      </div>
 
-          <!-- Map -->
-          <div class="min-h-48 overflow-hidden">
-            <VendorMapView
-              v-if="vendorStore.vendorLocations && vendorStore.vendorLocations.length > 0"
-              :locations="vendorStore.vendorLocations"
-              :enable-search="false"
-            />
-          </div>
-
-          <!-- Locations + comments: full width, split in two -->
-          <div class="col-span-2 grid grid-cols-2 gap-4">
-            <div>
-              <h2 class="text-gray-700 text-sm font-bold mb-2">{{ $t('locations') }}</h2>
-              <div
-                v-if="vendorStore.vendorLocations && vendorStore.vendorLocations.length > 0"
-                class="space-y-2 max-h-48 overflow-y-auto pr-1"
-              >
-                <div
-                  v-for="location in vendorStore.vendorLocations"
-                  :key="'location_' + location.id"
-                  class="rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-600 dark:bg-gray-800"
-                >
-                  <div class="flex items-start justify-between gap-2">
-                    <div>
-                      <div class="text-sm font-semibold text-gray-900 dark:text-white">
-                        {{ location.name }}
-                      </div>
-                      <div class="text-xs text-gray-600 dark:text-gray-300">
-                        {{ location.address }}, {{ location.zip }}
-                      </div>
-                    </div>
-                    <span
-                      class="shrink-0 rounded-full bg-slate-900 px-2 py-0.5 text-[11px] font-semibold text-white dark:bg-white dark:text-slate-900"
-                    >
-                      {{ formatWorkingTimeMode(location.working_time) }}
-                    </span>
-                  </div>
-                  <div class="mt-1 text-xs text-gray-700 dark:text-gray-300">
-                    <span class="font-semibold text-gray-900 dark:text-white">
-                      {{ $t('workingTime') }}:
-                    </span>
-                    <span class="ml-1">{{ formatWorkingTimeDetails(location.working_time) }}</span>
-                  </div>
+      <div class="vendorinfo-lists">
+        <div>
+          <h2 class="vendorinfo-list-title">{{ $t('locations') }}</h2>
+          <div
+            v-if="vendorStore.vendorLocations && vendorStore.vendorLocations.length > 0"
+            class="vendorinfo-list"
+          >
+            <div v-for="location in vendorStore.vendorLocations" :key="'location_' + location.id">
+              <div class="vendorinfo-row">
+                <div>
+                  <div class="vendorinfo-row-title">{{ location.name }}</div>
+                  <div class="vendorinfo-row-sub">{{ location.address }}, {{ location.zip }}</div>
                 </div>
+                <Badge variant="neutral">{{ formatWorkingTimeMode(location.working_time) }}</Badge>
               </div>
-              <p v-else class="text-sm text-gray-600 dark:text-gray-400">{{ $t('noLocations') }}</p>
-            </div>
-
-            <div>
-              <h2 class="text-gray-700 text-sm font-bold mb-2">{{ $t('comments') }}</h2>
-              <div
-                v-if="vendorComments && vendorComments.length > 0"
-                class="space-y-2 max-h-48 overflow-y-auto pr-1"
-              >
-                <div
-                  v-for="comment in vendorComments"
-                  :key="'comment_' + comment.id"
-                  class="border border-gray-200 dark:border-gray-600 rounded p-2 bg-gray-50 dark:bg-gray-800"
-                  :class="{ 'text-red-600 dark:text-red-400': comment.warning }"
-                >
-                  <div class="font-bold text-xs mb-1 text-gray-500 dark:text-gray-400">
-                    {{ new Date(comment.created_at).toLocaleDateString() }}
-                  </div>
-                  <div class="text-sm break-words">
-                    <span v-if="comment.warning" class="font-bold">{{ $t('warning') }}: </span>
-                    {{ comment.comment }}
-                  </div>
-                  <div
-                    v-if="formatVendorDate(comment.resolved_at?.toString()) !== '–'"
-                    class="text-xs mt-1 text-gray-500 dark:text-gray-400"
-                  >
-                    <span class="pr-2 font-bold">{{ $t('Resolved at') }}:</span>
-                    <span>{{ formatVendorDate(comment.resolved_at?.toString()) }}</span>
-                  </div>
-                </div>
+              <div class="vendorinfo-row-detail">
+                <span class="vendorinfo-row-title">{{ $t('workingTime') }}:</span>
+                {{ formatWorkingTimeDetails(location.working_time) }}
               </div>
-              <p v-else class="text-sm text-gray-600 dark:text-gray-400">{{ $t('noComments') }}</p>
             </div>
           </div>
+          <p v-else class="vendorinfo-empty">{{ $t('noLocations') }}</p>
         </div>
 
-        <div class="flex justify-center items-center py-3 space-x-3">
-          <router-link :to="{ path: '/backoffice/payments', query: { vendor: vendor?.LicenseID } }">
-            <button
-              v-if="vendor?.LicenseID"
-              class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor flex items-center"
+        <div>
+          <h2 class="vendorinfo-list-title">{{ $t('comments') }}</h2>
+          <div v-if="vendorComments && vendorComments.length > 0" class="vendorinfo-list">
+            <div
+              v-for="comment in vendorComments"
+              :key="'comment_' + comment.id"
+              :class="{ 'vendorinfo-warning': comment.warning }"
             >
-              {{ $t('bank statement') }}
-            </button>
-          </router-link>
-
-          <router-link :to="`/backoffice/userprofile/${vendor?.ID}/comments`">
-            <button
-              class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor flex items-center"
-            >
-              {{ $t('comments') }}
-            </button>
-          </router-link>
-
-          <router-link :to="`/backoffice/userprofile/${vendor?.ID}/update`">
-            <button
-              class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor flex items-center"
-            >
-              {{ $t('change') }}
-            </button>
-          </router-link>
+              <div class="vendorinfo-row-date">
+                {{ new Date(comment.created_at).toLocaleDateString() }}
+              </div>
+              <div class="vendorinfo-row-detail">
+                <span v-if="comment.warning" class="vendorinfo-row-title"
+                  >{{ $t('warning') }}:
+                </span>
+                {{ comment.comment }}
+              </div>
+              <div
+                v-if="formatVendorDate(comment.resolved_at?.toString()) !== '–'"
+                class="vendorinfo-row-date"
+              >
+                <span class="vendorinfo-row-title">{{ $t('Resolved at') }}:</span>
+                {{ formatVendorDate(comment.resolved_at?.toString()) }}
+              </div>
+            </div>
+          </div>
+          <p v-else class="vendorinfo-empty">{{ $t('noComments') }}</p>
         </div>
       </div>
     </div>
-  </div>
+
+    <template #footer>
+      <router-link
+        v-if="vendor?.LicenseID"
+        :to="{ path: '/backoffice/payments', query: { vendor: vendor?.LicenseID } }"
+      >
+        <Button variant="secondary">{{ $t('bank statement') }}</Button>
+      </router-link>
+      <router-link :to="`/backoffice/userprofile/${vendor?.ID}/comments`">
+        <Button variant="secondary">{{ $t('comments') }}</Button>
+      </router-link>
+      <router-link :to="`/backoffice/userprofile/${vendor?.ID}/update`">
+        <Button variant="primary">{{ $t('change') }}</Button>
+      </router-link>
+    </template>
+  </Modal>
 </template>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.vendorinfo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.vendorinfo-map {
+  min-height: 190px;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+.vendorinfo-lists {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.vendorinfo-list-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+.vendorinfo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 190px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.vendorinfo-list > div {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  padding: 10px 12px;
+}
+.vendorinfo-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.vendorinfo-row-title {
+  font-size: 13px;
+  font-weight: 600;
+}
+.vendorinfo-row-sub {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+.vendorinfo-row-detail {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+.vendorinfo-row-date {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: 2px;
+}
+.vendorinfo-warning {
+  color: var(--color-danger);
+}
+.vendorinfo-empty {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 640px) {
+  .vendorinfo-grid,
+  .vendorinfo-lists {
+    grid-template-columns: 1fr;
+  }
+  .vendorinfo-lists {
+    grid-column: span 1;
+  }
+}
+</style>
