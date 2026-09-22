@@ -9,6 +9,7 @@ import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
+import Card from '@/components/ui/Card.vue'
 
 const { t } = useI18n()
 const itemsStore = useItemsStore()
@@ -82,50 +83,44 @@ function exportCSV() {
       </PageHeader>
     </template>
     <template #main>
-      <div class="main w-full">
-        <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div class="text-xl space-y-3 space-x-3">
-            <table class="table-auto w-full border-spacing-4 border-collapse">
-              <thead>
-                <tr>
-                  <th class="p-3">{{ $t('productId') }}</th>
-                  <th class="p-3">{{ $t('image') }}</th>
-                  <th class="p-3">{{ $t('name') }}</th>
-                  <th class="p-3">{{ $t('description') }}</th>
-                  <th class="p-3">{{ $t('price') }}</th>
-                  <th class="p-3">{{ $t('order') }}</th>
-                  <th class="p-3">{{ $t('measure') }}</th>
-                </tr>
-              </thead>
-              <tbody class="text-sm p-3">
-                <tr v-for="item in items" :key="item.ID" :class="{ 'disabled-row': item.Disabled }">
-                  <td class="border-t-2 p-3 text-gray-500">{{ item.ID }}</td>
-                  <td class="border-t-2 p-3">
-                    <img
-                      :src="item.Image ? apiUrl + item.Image : ''"
-                      :alt="$t('noImage')"
-                      class="logo mx-auto my-5"
-                      width="80"
-                      height="auto"
-                    />
-                  </td>
-                  <td class="border-t-2 p-3 font-bold">{{ $t(item.Name) }}</td>
-                  <td class="border-t-2 p-3">{{ $t(item.Description) }}</td>
-                  <td class="border-t-2 p-3">{{ formatCredit(item.Price) }} Euro</td>
-                  <td class="border-t-2 p-3">{{ item.ItemOrder }}</td>
-                  <td class="border-t-2">
-                    <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
-                      <button class="px-4 py-2 rounded-full customcolor h-[44px]">
-                        {{ $t('change') }}
-                      </button>
-                    </router-link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <Card class="section">
+        <table class="aug-table">
+          <thead>
+            <tr>
+              <th>{{ $t('productId') }}</th>
+              <th>{{ $t('image') }}</th>
+              <th>{{ $t('name') }}</th>
+              <th>{{ $t('description') }}</th>
+              <th>{{ $t('price') }}</th>
+              <th>{{ $t('order') }}</th>
+              <th>{{ $t('measure') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in items" :key="item.ID" :class="{ 'disabled-row': item.Disabled }">
+              <td class="muted">{{ item.ID }}</td>
+              <td>
+                <img
+                  :src="item.Image ? apiUrl + item.Image : ''"
+                  :alt="$t('noImage')"
+                  class="product-image"
+                  width="80"
+                  height="auto"
+                />
+              </td>
+              <td class="font-bold">{{ $t(item.Name) }}</td>
+              <td>{{ $t(item.Description) }}</td>
+              <td>{{ formatCredit(item.Price) }} €</td>
+              <td>{{ item.ItemOrder }}</td>
+              <td>
+                <router-link :to="`/backoffice/productsettings/update/${item.ID}`">
+                  <Button variant="secondary">{{ $t('change') }}</Button>
+                </router-link>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Card>
     </template>
     <template #footer>
       <footer>
@@ -140,11 +135,20 @@ function exportCSV() {
 </template>
 
 <style scoped>
+.section {
+  overflow-x: auto;
+}
+.product-image {
+  display: block;
+  margin: 8px auto;
+}
+.muted {
+  color: var(--color-text-muted);
+}
 .disabled-row {
-  color: #6b7280; /* gray-500 */
+  color: var(--color-text-muted);
 }
 .disabled-row td {
-  /* slightly muted background for visual separation */
-  background-color: rgba(229, 231, 235, 0.4);
+  background-color: var(--color-surface-alt);
 }
 </style>
