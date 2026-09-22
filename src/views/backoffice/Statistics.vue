@@ -18,6 +18,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, ref } from 'vue'
 import { type Statistics } from '@/stores/statistics'
 import PageHeader from '@/components/ui/PageHeader.vue'
+import Card from '@/components/ui/Card.vue'
 
 const itemsStore = useItemsStore()
 const store = useStatisticsStore()
@@ -135,35 +136,45 @@ useAuthLoad(() => itemsStore.getItemsBackoffice())
       </PageHeader>
     </template>
     <template #main>
-      <div class="main">
-        <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div v-if="showCharts" class="space-y-6">
-            <div>
-              <h2 class="font-semibold mb-2">Verkaufte Menge pro Produkt</h2>
-              <StatisticsQuantityChart :data="quantityData" />
-            </div>
-            <div>
-              <h2 class="font-semibold mb-2">Eingenommener Betrag pro Produkt (€)</h2>
-              <StatisticsAmountChart :data="amountData" />
-            </div>
-            <div>
-              <h2 class="font-semibold mb-2">Anteil nutzender Verkäufer</h2>
-              <StatisticsVendorUsageChart :data="vendorUsageData" />
-            </div>
-          </div>
+      <template v-if="showCharts">
+        <Card class="section">
+          <h2 class="section-title">Verkaufte Menge pro Produkt</h2>
+          <StatisticsQuantityChart :data="quantityData" />
+        </Card>
+        <Card class="section">
+          <h2 class="section-title">Eingenommener Betrag pro Produkt (€)</h2>
+          <StatisticsAmountChart :data="amountData" />
+        </Card>
+        <Card class="section">
+          <h2 class="section-title">Anteil nutzender Verkäufer</h2>
+          <StatisticsVendorUsageChart :data="vendorUsageData" />
+        </Card>
+      </template>
 
-          <div v-if="showTable" class="space-y-8 mt-2">
-            <StatisticsQuantityTable :data="quantityData" />
-            <StatisticsAmountTable :data="amountData" />
-            <StatisticsVendorUsageTable :data="vendorUsageData" />
-          </div>
-        </div>
-      </div>
+      <template v-if="showTable">
+        <Card class="section">
+          <StatisticsQuantityTable :data="quantityData" />
+        </Card>
+        <Card class="section">
+          <StatisticsAmountTable :data="amountData" />
+        </Card>
+        <Card class="section">
+          <StatisticsVendorUsageTable :data="vendorUsageData" />
+        </Card>
+      </template>
     </template>
   </component>
 </template>
 
 <style scoped>
+.section {
+  margin-bottom: 20px;
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
 .view-toggle {
   display: flex;
   gap: 2px;

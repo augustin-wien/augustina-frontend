@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import { exportAsCsv } from '@/utils/utils'
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import Button from '@/components/ui/Button.vue'
 
 type TableItem = {
   id: number
@@ -25,23 +28,38 @@ const exportTable = () => {
 
 <template>
   <div>
-    <div class="flex items-center justify-between mb-2">
-      <h2 class="font-semibold">Eingenommener Betrag pro Produkt (€)</h2>
-      <button class="py-2 px-3 rounded border bg-white" @click="exportTable">CSV Export</button>
+    <div class="table-header">
+      <h2 class="section-title">Eingenommener Betrag pro Produkt (€)</h2>
+      <Button variant="secondary" @click="exportTable">
+        <font-awesome-icon :icon="faFileCsv" /> CSV Export
+      </Button>
     </div>
-    <table class="table-auto w-full border-collapse">
+    <table class="aug-table">
       <thead>
         <tr>
-          <th class="text-left border-b p-2">Produkt</th>
-          <th class="text-right border-b p-2">Betrag (€)</th>
+          <th>Produkt</th>
+          <th class="text-right">Betrag (€)</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in data" :key="`a-${item.id}`">
-          <td class="border-b p-2">{{ item.name }}</td>
-          <td class="border-b p-2 text-right">{{ item.value.toFixed(2) }}</td>
+          <td>{{ item.name }}</td>
+          <td class="text-right">{{ item.value.toFixed(2) }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
+
+<style scoped>
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+</style>

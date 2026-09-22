@@ -18,6 +18,7 @@ import 'leaflet-geosearch/dist/geosearch.css'
 import { vendorsStore } from '@/stores/vendor'
 import VendorInfo from '@/components/VendorInfo.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
 
 const store = vendorsStore()
 
@@ -88,8 +89,8 @@ function onMapReady(instance: any) {
                   <l-popup class="text-center text-black grid">
                     <h2 class="text-xl font-semibold">{{ vendor.firstName }}</h2>
                     <span class="mb-2">{{ vendor.licenseID }}</span>
-                    <button
-                      class="rounded-full customcolor py-2 px-4 h-10"
+                    <Button
+                      variant="primary"
                       @click="
                         async () => {
                           await store.getVendor(vendor.id)
@@ -98,7 +99,7 @@ function onMapReady(instance: any) {
                       "
                     >
                       {{ $t('info') }}
-                    </button>
+                    </Button>
                   </l-popup>
                 </l-marker>
               </li>
@@ -117,14 +118,14 @@ function onMapReady(instance: any) {
 
 <style scoped>
 .leaflet-popup-content-wrapper {
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .leaflet-popup-tip {
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .leaflet-container a.leaflet-popup-close-button {
-  color: #000;
+  color: var(--color-text);
 }
 </style>

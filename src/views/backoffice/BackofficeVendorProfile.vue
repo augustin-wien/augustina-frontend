@@ -3,11 +3,12 @@ import { vendorsStore } from '@/stores/vendor'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
-import IconCross from '@/components/icons/IconCross.vue'
 import { faCashRegister } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import PageHeader from '@/components/ui/PageHeader.vue'
+import Card from '@/components/ui/Card.vue'
+import Button from '@/components/ui/Button.vue'
 
 const vendorStore = vendorsStore()
 const route = useRoute()
@@ -33,116 +34,135 @@ const formatCredit = (credit: number) => {
       />
     </template>
     <template #main>
-      <div v-if="vendor" class="main">
-        <div class="w-full mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div class="text-center text-2xl space-y-3 space-x-3">
-            <div class="flex place-content-center justify-between">
-              <span />
-              <button
-                class="rounded-full bg-red-600 text-white font-bold"
-                @click="router.push('/backoffice/vendorsummary')"
-              >
-                <IconCross />
-              </button>
-            </div>
-            <div class="table-auto border-spacing-4 border-collapse profile-wrapper">
-              <tbody class="text-sm text-left">
-                <tr>
-                  <th class="p-3">{{ $t('firstName') }}:</th>
-                  <td class="p-3">{{ vendor.FirstName }}</td>
-                  <th class="p-3">{{ $t('lastName') }}:</th>
-                  <td class="p-3">{{ vendor.LastName }}</td>
-                </tr>
-                <tr>
-                  <th class="p-3">{{ $t('LicenseId') }}:</th>
-                  <td class="p-3">{{ vendor.LicenseID }}</td>
-                  <th class="p-3">{{ $t('accountDeactivation') }}:</th>
-                  <td class="p-3">{{ $t(vendor.IsDisabled ? 'yes' : 'no') }}</td>
-                </tr>
-                <tr>
-                  <th class="p-3">{{ $t('lastPayout') }}:</th>
-                  <td class="p-3">{{ vendor.LastPayout }}</td>
-                  <th class="p-3">{{ $t('currentCredit') }}:</th>
-                  <td class="p-3">{{ formatCredit(vendor.Balance) }} €</td>
-                </tr>
-                <tr>
-                  <th class="p-3">E-Mail:</th>
-                  <td class="p-3">{{ vendor.Email }}</td>
-                  <th class="p-3">{{ $t('telephone') }}:</th>
-                  <td class="p-3">{{ vendor.Telephone }}</td>
-                </tr>
-                <tr>
-                  <th class="p-3">{{ $t('vendorSince') }}:</th>
-                  <td class="p-3">{{ vendor.VendorSince }}</td>
-                  <th class="p-3">{{ $t('registrationDate') }}:</th>
-                  <td class="p-3">{{ vendor.RegistrationDate }}</td>
-                </tr>
-                <tr>
-                  <th class="p-3">{{ $t('language') }}:</th>
-                  <td class="p-3">{{ vendor.Language }}</td>
-                  <th class="p-3">Online Karte:</th>
-                  <td class="p-3">{{ $t(vendor.OnlineMap ? 'yes' : 'no') }}</td>
-                </tr>
-                <tr>
-                  <th class="p-3">Smartphone:</th>
-                  <td class="p-3">{{ $t(vendor.HasSmartphone ? 'yes' : 'no') }}</td>
-                  <th class="p-3">{{ $t('bankAccount') }}:</th>
-                  <td class="p-3">{{ $t(vendor.HasBankAccount ? 'yes' : 'no') }}</td>
-                </tr>
-                <tr>
-                  <th class="p-3">{{ $t('verificationLink') }}</th>
-                  <td class="p-3">{{ vendor.AccountProofUrl }}</td>
-                </tr>
-                <tr>
-                  <th class="p-3">{{ $t('comment') }}:</th>
-                  <td class="p-3" colspan="4">
-                    <div v-for="(comment, index) in vendor.Comments" :key="index">
-                      {{ comment }}
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </div>
+      <Card v-if="vendor" class="section">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('firstName') }}</span>
+            <span class="detail-value">{{ vendor.FirstName }}</span>
           </div>
-          <div v-if="vendor" class="flex place-content-center">
-            <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
-              <button
-                class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center"
-              >
-                {{ $t('change') }}
-              </button>
-            </router-link>
-            <router-link :to="`/backoffice/pos/${vendor.LicenseID}`">
-              <button
-                class="px-4 py-2 text-[16px] rounded-full h-[44px] customcolor mr-3 flex items-center gap-2"
-              >
-                <font-awesome-icon :icon="faCashRegister" />
-                {{ $t('posOpenPOS') }}
-              </button>
-            </router-link>
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('lastName') }}</span>
+            <span class="detail-value">{{ vendor.LastName }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('LicenseId') }}</span>
+            <span class="detail-value">{{ vendor.LicenseID }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('accountDeactivation') }}</span>
+            <span class="detail-value">{{ $t(vendor.IsDisabled ? 'yes' : 'no') }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('lastPayout') }}</span>
+            <span class="detail-value">{{ vendor.LastPayout }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('currentCredit') }}</span>
+            <span class="detail-value">{{ formatCredit(vendor.Balance) }} €</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">E-Mail</span>
+            <span class="detail-value">{{ vendor.Email }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('telephone') }}</span>
+            <span class="detail-value">{{ vendor.Telephone }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('vendorSince') }}</span>
+            <span class="detail-value">{{ vendor.VendorSince }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('registrationDate') }}</span>
+            <span class="detail-value">{{ vendor.RegistrationDate }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('language') }}</span>
+            <span class="detail-value">{{ vendor.Language }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Online Karte</span>
+            <span class="detail-value">{{ $t(vendor.OnlineMap ? 'yes' : 'no') }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Smartphone</span>
+            <span class="detail-value">{{ $t(vendor.HasSmartphone ? 'yes' : 'no') }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('bankAccount') }}</span>
+            <span class="detail-value">{{ $t(vendor.HasBankAccount ? 'yes' : 'no') }}</span>
+          </div>
+          <div class="detail-item detail-span-2">
+            <span class="detail-label">{{ $t('verificationLink') }}</span>
+            <span class="detail-value">{{ vendor.AccountProofUrl }}</span>
+          </div>
+          <div class="detail-item detail-span-2">
+            <span class="detail-label">{{ $t('comment') }}</span>
+            <div class="detail-value">
+              <div v-for="(comment, index) in vendor.Comments" :key="index">
+                {{ comment }}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+
+        <div class="profile-actions">
+          <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
+            <Button variant="secondary">{{ $t('change') }}</Button>
+          </router-link>
+          <router-link :to="`/backoffice/pos/${vendor.LicenseID}`">
+            <Button variant="secondary">
+              <font-awesome-icon :icon="faCashRegister" /> {{ $t('posOpenPOS') }}
+            </Button>
+          </router-link>
+        </div>
+      </Card>
     </template>
   </component>
 </template>
 
 <style scoped>
-tr {
-  padding: 10px;
+.section {
+  max-width: 640px;
+  margin: 0 auto;
 }
-
-td {
-  padding: 10px;
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
 }
-
-.profile-wrapper {
+.detail-item {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 4px;
+}
+.detail-span-2 {
+  grid-column: span 2;
+}
+.detail-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+}
+.detail-value {
+  font-size: 14px;
+  color: var(--color-text);
+}
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
 }
 
-.map-wrapper {
-  width: 100%;
-  max-width: 500px;
+@media (max-width: 640px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .detail-span-2 {
+    grid-column: span 1;
+  }
 }
 </style>
