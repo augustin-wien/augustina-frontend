@@ -9,8 +9,9 @@ import { vendorsStore, type Vendor } from '@/stores/vendor'
 import { formatCredit, formatDate } from '@/utils/utils'
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import IconCross from '@/components/icons/IconCross.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
+import Card from '@/components/ui/Card.vue'
+import Button from '@/components/ui/Button.vue'
 
 const store = vendorsStore()
 const payoutStore = usePayoutStore()
@@ -149,88 +150,75 @@ const getItemName = (itemID: number) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <PageHeader :title="$t('menuPayouts')" />
+      <PageHeader
+        :title="
+          vendor ? `${vendor.LicenseID} ${vendor.FirstName} ${vendor.LastName}` : $t('menuPayouts')
+        "
+        show-back
+        @back="router.push('/backoffice/credits')"
+      />
     </template>
 
     <template #main>
-      <div class="main">
-        <div class="w-full max-w-md mx-auto mt-4 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div v-if="vendor" class="text-xl space-y-3 space-x-3">
-            <div class="flex place-content-center justify-between">
-              <h1 class="text-2xl font-bold"></h1>
-              <button
-                class="rounded-full bg-red-600 text-white font-bold"
-                @click="router.push('/backoffice/credits')"
-              >
-                <IconCross />
-              </button>
-            </div>
-            <div>
-              <strong>{{ vendor.LicenseID }}</strong>
-              <br />
-              {{ `${vendor.FirstName} ${vendor.LastName}` }}
-            </div>
-
-            <div class="container">
-              <div class="mx-3">
-                <div class="col text-lg underline">{{ $t('menuCredits') }}</div>
-                <div class="col text-md">{{ formatCredit(paymentsForPayout.balance) }} Euro</div>
-              </div>
-              <div v-if="vendor.Balance > 0">
-                <div>{{ $t('payout') }}:</div>
-                <div
-                  v-for="payment in paymentsForPayout.payments"
-                  :key="payment.ID"
-                  class="grid grid-cols-3"
-                >
-                  <div class="text-xs">{{ formatDate(payment.Timestamp) }}</div>
-                  <div v-if="items.length > 0" class="text-xs">
-                    {{ getItemName(payment.Item) }}
-                  </div>
-                  <div class="text-xs">{{ formatReceiver(payment) }} Euro</div>
-                </div>
-              </div>
-              <div class="mx-3">
-                <div class="col">
-                  <button
-                    v-if="vendor.Balance > 0"
-                    type="submit"
-                    value="Bestätigen"
-                    class="p-3 m-3 rounded-full customcolor"
-                    :onClick="payoutVendor"
-                    :disabled="vendor.Balance === 0"
-                  >
-                    {{ $t('confirmPayout') }}
-                  </button>
-                  <button
-                    v-else
-                    type="submit"
-                    value="Bestätigen"
-                    class="p-3 m-3 rounded-full customcolor"
-                    disabled
-                  >
-                    {{ $t('noCredits') }}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+      <Card v-if="vendor" class="section">
+        <div class="balance-row">
+          <span class="balance-label">{{ $t('menuCredits') }}</span>
+          <span class="balance-value">{{ formatCredit(paymentsForPayout.balance) }} €</span>
         </div>
-      </div>
+
+        <template v-if="vendor.Balance > 0">
+          <h2 class="section-title">{{ $t('payout') }}</h2>
+          <table class="aug-table">
+            <tbody>
+              <tr v-for="payment in paymentsForPayout.payments" :key="payment.ID">
+                <td>{{ formatDate(payment.Timestamp) }}</td>
+                <td v-if="items.length > 0">{{ getItemName(payment.Item) }}</td>
+                <td>{{ formatReceiver(payment) }} €</td>
+              </tr>
+            </tbody>
+          </table>
+        </template>
+
+        <div class="form-actions">
+          <Button variant="primary" :disabled="vendor.Balance === 0" @click="payoutVendor">
+            {{ vendor.Balance > 0 ? $t('confirmPayout') : $t('noCredits') }}
+          </Button>
+        </div>
+      </Card>
       <Toast v-if="toast" :toast="toast" @close="toast = null" />
     </template>
   </component>
 </template>
 
 <style scoped>
-.container {
-  flex-direction: column;
+.section {
+  max-width: 480px;
+  margin: 0 auto;
 }
-
-button:disabled,
-button[disabled] {
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
+.balance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+.balance-label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+.balance-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 </style>
