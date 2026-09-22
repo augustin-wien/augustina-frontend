@@ -134,6 +134,7 @@ onMounted(() => {
 <template>
   <Modal
     open
+    size="lg"
     :title="`${$t('Qr-Code for')} ${vendor.FirstName} ${vendor.LastName}`"
     @close="emit('close')"
   >
@@ -151,7 +152,10 @@ onMounted(() => {
   display: flex;
   justify-content: center;
 }
-.qr-preview :deep(#canvas) {
+/* QRCodeStyling renders an <svg> (type: 'svg') at a fixed 500x500 - without this it overflows
+   the modal's content width instead of scaling down to fit. */
+.qr-preview :deep(svg) {
   max-width: 100%;
+  height: auto;
 }
 </style>
