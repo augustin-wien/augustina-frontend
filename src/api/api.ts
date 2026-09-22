@@ -45,14 +45,44 @@ apiInstance.interceptors.request.use(
   }
 )
 
+// A 401 usually just means the access token expired mid-session, not that the user is
+// genuinely logged out - refresh it once and retry before giving up to a full login
+// redirect. Shared across concurrent 401s so a burst of simultaneously-expiring requests
+// triggers one refresh (and, if that fails, one redirect) instead of one per request.
+let refreshTokenPromise: Promise<boolean> | null = null
+let loginTriggered = false
+
+function refreshAccessToken(): Promise<boolean> {
+  if (!refreshTokenPromise) {
+    refreshTokenPromise = (keycloak.keycloak?.updateToken(-1) ?? Promise.resolve(false)).finally(
+      () => {
+        refreshTokenPromise = null
+      }
+    )
+  }
+
+  return refreshTokenPromise
+}
+
 apiInstance.interceptors.response.use(
   (response) => {
     return response
   },
-  (error) => {
+  async (error) => {
     if (error.response) {
-      if (error.response.status === 401) {
-        keycloak.keycloak?.login()
+      if (error.response.status === 401 && !error.config?._retriedAfterRefresh) {
+        if (error.config) error.config._retriedAfterRefresh = true
+
+        const refreshed = await refreshAccessToken().catch(() => false)
+
+        if (refreshed) {
+          return apiInstance(error.config)
+        }
+
+        if (!loginTriggered) {
+          loginTriggered = true
+          keycloak.keycloak?.login()
+        }
       }
     } else {
       // No response at all: the request never reached the backend (offline, DNS/

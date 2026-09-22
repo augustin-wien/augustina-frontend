@@ -12,13 +12,15 @@ interface MockScope {
 
 // vi.mock is hoisted above every import in this file, so the mock functions it
 // references have to be created through vi.hoisted rather than plain consts.
-const { scope, captureException, withScope } = vi.hoisted(() => {
+const { scope, captureException, withScope, updateToken, login } = vi.hoisted(() => {
   const scope: MockScope = { setTag: vi.fn(), setContext: vi.fn() }
 
   return {
     scope,
     captureException: vi.fn(),
-    withScope: vi.fn((callback: (scope: MockScope) => void) => callback(scope))
+    withScope: vi.fn((callback: (scope: MockScope) => void) => callback(scope)),
+    updateToken: vi.fn(),
+    login: vi.fn()
   }
 })
 
@@ -26,12 +28,22 @@ const { scope, captureException, withScope } = vi.hoisted(() => {
 // itself is replaced - api.ts's `import * as Sentry` resolves to this.
 vi.mock('@sentry/vue', () => ({ captureException, withScope }))
 
+// Same reasoning as the Sentry mock above - api.ts's `import keycloak from
+// '@/keycloak/keycloak'` resolves to this instead of the real singleton.
+vi.mock('@/keycloak/keycloak', () => ({
+  default: {
+    keycloak: { authenticated: true, token: 'stale-token', updateToken, login }
+  }
+}))
+
 describe('apiInstance', () => {
   afterEach(() => {
     captureException.mockClear()
     withScope.mockClear()
     scope.setTag.mockClear()
     scope.setContext.mockClear()
+    updateToken.mockReset()
+    login.mockClear()
   })
 
   // Port 1 is reserved and nothing listens there, so this is a real network
@@ -54,6 +66,47 @@ describe('apiInstance', () => {
 
     expect(captureException).not.toHaveBeenCalled()
   })
+
+  // The common case: the access token merely expired mid-session. A single retry with a
+  // refreshed token should resolve transparently, not reject and not redirect to login.
+  it('retries once with a refreshed token after a 401, resolving without a login redirect', async () => {
+    updateToken.mockResolvedValueOnce(true)
+
+    let calls = 0
+
+    const adapter: AxiosAdapter = async (config: InternalAxiosRequestConfig) => {
+      calls += 1
+
+      if (calls === 1) {
+        throw Object.assign(new Error('Request failed with status code 401'), {
+          config,
+          response: { status: 401, statusText: 'Unauthorized', headers: {}, config, data: {} },
+          isAxiosError: true
+        })
+      }
+
+      return { status: 200, statusText: 'OK', headers: {}, config, data: { ok: true } }
+    }
+
+    const response = await apiInstance.get('http://127.0.0.1:1/', { adapter })
+
+    expect(response.data).toEqual({ ok: true })
+    expect(calls).toBe(2)
+    expect(updateToken).toHaveBeenCalledWith(-1)
+    expect(login).not.toHaveBeenCalled()
+  })
+
+  // The refresh itself failing (session genuinely gone, not just an expired access token)
+  // is the one case that should still fall back to a login redirect.
+  it('falls back to a login redirect when the token refresh fails after a 401', async () => {
+    updateToken.mockRejectedValueOnce(new Error('refresh failed'))
+
+    await expect(
+      apiInstance.get('http://127.0.0.1:1/', { adapter: unauthorizedAdapter })
+    ).rejects.toMatchObject({ response: { status: 401 } })
+
+    expect(login).toHaveBeenCalledTimes(1)
+  })
 })
 
 // Minimal axios adapter stub returning a 404, to exercise the "has a response" branch
@@ -64,6 +117,17 @@ const notFoundAdapter: AxiosAdapter = async (config: InternalAxiosRequestConfig)
   const error = Object.assign(new Error('Request failed with status code 404'), {
     config,
     response: { status: 404, statusText: 'Not Found', headers: {}, config, data: {} },
+    isAxiosError: true
+  })
+
+  throw error
+}
+
+// Same shape as notFoundAdapter, for the 401 case - always throws.
+const unauthorizedAdapter: AxiosAdapter = async (config: InternalAxiosRequestConfig) => {
+  const error = Object.assign(new Error('Request failed with status code 401'), {
+    config,
+    response: { status: 401, statusText: 'Unauthorized', headers: {}, config, data: {} },
     isAxiosError: true
   })
 

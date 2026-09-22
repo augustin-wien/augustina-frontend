@@ -144,6 +144,18 @@ export function initSentry(app: App, router: Router) {
       replaysSessionSampleRate: 0.1,
       replaysOnErrorSampleRate: 1.0,
 
+      ignoreErrors: [
+        // Vue Router's own signal when a navigation guard redirects or denies a
+        // navigation (e.g. our auth guard bouncing an unauthenticated user to login) -
+        // expected control flow, not a bug.
+        /^Navigation (aborted|cancelled|duplicated) from/,
+        // Vite's dev-only HMR client retrying a failed module reload, and the
+        // temporal-dead-zone race that follows when a route's lazy-loaded component is
+        // hot-swapped mid-import. Both are local dev-tooling noise, not app bugs.
+        /^\[vite\] Failed to reload/,
+        /before initialization$/
+      ],
+
       beforeSend(event) {
         if (event.request?.url) {
           event.request.url = stripSensitiveUrlParts(event.request.url)
