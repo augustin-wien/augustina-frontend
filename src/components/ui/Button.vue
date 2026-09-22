@@ -45,7 +45,7 @@ withDefaults(
   color: var(--color-accent-fg);
 }
 .aug-btn-secondary {
-  background: var(--color-surface);
+  background: var(--color-bg);
   color: var(--color-text);
   border-color: var(--color-border);
 }

@@ -322,8 +322,12 @@ onMounted(() => {
   background: var(--color-surface-alt);
 }
 .nav-item.router-link-active {
+  /* --color-accent-fg is calibrated for text on a *solid* --color-accent background (e.g. a
+     primary button) - it can be a light color, which would wash out here since this is a pale
+     14%-tint background instead. --color-accent itself is always dark/saturated enough to read
+     against its own faint tint, regardless of what FontColor an admin configures. */
   background: var(--color-accent-tint);
-  color: var(--color-accent-fg);
+  color: var(--color-accent);
   font-weight: 600;
 }
 .nav-item-icon {
