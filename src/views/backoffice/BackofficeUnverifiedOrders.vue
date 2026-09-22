@@ -5,6 +5,7 @@ import { computed, ref } from 'vue'
 import ToastMessage from '@/components/ToastMessage.vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import PageHeader from '@/components/ui/PageHeader.vue'
+import Card from '@/components/ui/Card.vue'
 
 const ordersStore = useOrdersStore()
 const settingsStore = useSettingsStore()
@@ -78,64 +79,81 @@ const handleResendToOdoo = async (orderID: number) => {
       <PageHeader :title="$t('menuUnverifiedOrders')" />
     </template>
     <template #main>
-      <div class="w-full h-full p-3">
-        <ToastMessage :toast="toast" @close="toast = null" />
-        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-          <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead
-              class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-            >
-              <tr>
-                <th scope="col" class="py-3 px-6">Order ID</th>
-                <th scope="col" class="py-3 px-6">Vendor License ID</th>
-                <th scope="col" class="py-3 px-6">Transaction ID</th>
-                <th scope="col" class="py-3 px-6">Date</th>
-                <th scope="col" class="py-3 px-6">Amount</th>
-                <th scope="col" class="py-3 px-6">Customer Email</th>
-                <th scope="col" class="py-3 px-6">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="order in unverifiedOrders"
-                :key="order.ID"
-                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-              >
-                <td class="py-4 px-6">{{ order.OrderCode }}</td>
-                <td class="py-4 px-6">{{ getVendorLicenseId(order) }}</td>
-                <td class="py-4 px-6">{{ order.TransactionID || 'N/A' }}</td>
-                <td class="py-4 px-6">{{ new Date(order.Timestamp).toLocaleString() }}</td>
-                <td class="py-4 px-6">{{ (calculateTotal(order.Entries) / 100).toFixed(2) }} €</td>
-                <td class="py-4 px-6">{{ order.CustomerEmail }}</td>
-                <td class="py-4 px-6">
-                  <button
-                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    @click="handleVerify(order.OrderCode)"
-                  >
-                    Verify
-                  </button>
-                  <button
-                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-4"
-                    @click="handleAddTransactionID(order.OrderCode)"
-                  >
-                    Add Transaction ID
-                  </button>
-                  <button
-                    v-if="odooEnabled"
-                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-4"
-                    @click="handleResendToOdoo(order.ID)"
-                  >
-                    Resend to Odoo
-                  </button>
-                </td>
-              </tr>
-              <tr v-if="unverifiedOrders == null || unverifiedOrders.length === 0">
-                <td colspan="6" class="py-4 px-6 text-center">No unverified orders found.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <ToastMessage :toast="toast" @close="toast = null" />
+      <Card class="table-section">
+        <table class="aug-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Vendor License ID</th>
+              <th>Transaction ID</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Customer Email</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="order in unverifiedOrders" :key="order.ID">
+              <td>{{ order.OrderCode }}</td>
+              <td>{{ getVendorLicenseId(order) }}</td>
+              <td>{{ order.TransactionID || 'N/A' }}</td>
+              <td>{{ new Date(order.Timestamp).toLocaleString() }}</td>
+              <td>{{ (calculateTotal(order.Entries) / 100).toFixed(2) }} €</td>
+              <td>{{ order.CustomerEmail }}</td>
+              <td class="entry-actions">
+                <button type="button" class="link-btn" @click="handleVerify(order.OrderCode)">
+                  Verify
+                </button>
+                <button
+                  type="button"
+                  class="link-btn"
+                  @click="handleAddTransactionID(order.OrderCode)"
+                >
+                  Add Transaction ID
+                </button>
+                <button
+                  v-if="odooEnabled"
+                  type="button"
+                  class="link-btn"
+                  @click="handleResendToOdoo(order.ID)"
+                >
+                  Resend to Odoo
+                </button>
+              </td>
+            </tr>
+            <tr v-if="unverifiedOrders == null || unverifiedOrders.length === 0">
+              <td colspan="7" class="entry-empty">No unverified orders found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </Card>
     </template>
   </component>
 </template>
+
+<style scoped>
+.table-section {
+  overflow-x: auto;
+}
+.entry-actions {
+  display: flex;
+  gap: 14px;
+}
+.entry-empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 16px;
+}
+.link-btn {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--color-accent);
+  font-weight: 600;
+  cursor: pointer;
+}
+.link-btn:hover {
+  text-decoration: underline;
+}
+</style>

@@ -9,6 +9,7 @@ import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
+import Card from '@/components/ui/Card.vue'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -180,81 +181,75 @@ function downloadCSV() {
     <template #main>
       <div class="main space-y-4">
         <!-- Summary cards -->
-        <div v-if="orders.length > 0" class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="bg-white rounded shadow-sm px-4 py-3">
-            <div class="text-xs text-gray-400 mb-1">{{ $t('posOrderCount') }}</div>
-            <div class="text-xl font-bold">{{ totalOrders }}</div>
-          </div>
-          <div class="bg-white rounded shadow-sm px-4 py-3">
-            <div class="text-xs text-gray-400 mb-1">{{ $t('posBalanceUsed') }}</div>
-            <div class="text-xl font-bold text-blue-700">{{ formatCredit(totalBalance) }} €</div>
-          </div>
-          <div class="bg-white rounded shadow-sm px-4 py-3">
-            <div class="text-xs text-gray-400 mb-1">{{ $t('posCash') }}</div>
-            <div class="text-xl font-bold text-green-700">{{ formatCredit(totalCash) }} €</div>
-          </div>
-          <div class="bg-white rounded shadow-sm px-4 py-3">
-            <div class="text-xs text-gray-400 mb-1">{{ $t('total') }}</div>
-            <div class="text-xl font-bold">{{ formatCredit(totalAll) }} €</div>
-          </div>
+        <div v-if="orders.length > 0" class="stat-grid">
+          <Card>
+            <div class="stat-label">{{ $t('posOrderCount') }}</div>
+            <div class="stat-value">{{ totalOrders }}</div>
+          </Card>
+          <Card>
+            <div class="stat-label">{{ $t('posBalanceUsed') }}</div>
+            <div class="stat-value col-info">{{ formatCredit(totalBalance) }} €</div>
+          </Card>
+          <Card>
+            <div class="stat-label">{{ $t('posCash') }}</div>
+            <div class="stat-value col-success">{{ formatCredit(totalCash) }} €</div>
+          </Card>
+          <Card>
+            <div class="stat-label">{{ $t('total') }}</div>
+            <div class="stat-value">{{ formatCredit(totalAll) }} €</div>
+          </Card>
         </div>
 
         <!-- Per-item totals -->
-        <div v-if="itemTotals.length > 0" class="bg-white rounded shadow-sm px-4 py-3">
-          <div class="font-semibold text-gray-700 mb-2">{{ $t('posItemTotals') }}</div>
-          <div class="flex flex-wrap gap-3">
-            <div
-              v-for="it in itemTotals"
-              :key="it.name"
-              class="flex items-center gap-2 bg-gray-50 border rounded px-3 py-1.5 text-sm"
-            >
+        <Card v-if="itemTotals.length > 0">
+          <h2 class="section-title">{{ $t('posItemTotals') }}</h2>
+          <div class="chip-list">
+            <div v-for="it in itemTotals" :key="it.name" class="chip">
               <span class="font-medium">{{ it.name }}</span>
-              <span class="text-gray-500">{{ it.quantity }}×</span>
+              <span class="muted">{{ it.quantity }}×</span>
               <span class="font-semibold">{{ formatCredit(it.amount) }} €</span>
             </div>
           </div>
-        </div>
+        </Card>
 
         <!-- Orders table -->
-        <div class="w-full mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 overflow-x-auto">
-          <table class="table-auto border-collapse w-full text-sm">
+        <Card class="table-section">
+          <table class="aug-table">
             <thead>
-              <tr class="text-left">
-                <th class="p-3 border-b-2">{{ $t('date') }}</th>
-                <th class="p-3 border-b-2">{{ $t('posVendor') }}</th>
-                <th class="p-3 border-b-2">{{ $t('item') }}</th>
-                <th class="p-3 border-b-2 text-right text-blue-700">{{ $t('posBalanceUsed') }}</th>
-                <th class="p-3 border-b-2 text-right text-green-700">{{ $t('posCash') }}</th>
-                <th class="p-3 border-b-2 text-right">{{ $t('total') }}</th>
+              <tr>
+                <th>{{ $t('date') }}</th>
+                <th>{{ $t('posVendor') }}</th>
+                <th>{{ $t('item') }}</th>
+                <th class="text-right col-info">{{ $t('posBalanceUsed') }}</th>
+                <th class="text-right col-success">{{ $t('posCash') }}</th>
+                <th class="text-right">{{ $t('total') }}</th>
               </tr>
             </thead>
             <tbody>
               <tr v-if="loading">
-                <td colspan="6" class="p-4 text-center text-gray-400">…</td>
+                <td colspan="6" class="entry-empty">…</td>
               </tr>
               <tr v-else-if="orders.length === 0">
-                <td colspan="6" class="p-4 text-center text-gray-400 italic">
-                  {{ $t('posNoHistory') }}
-                </td>
+                <td colspan="6" class="entry-empty">{{ $t('posNoHistory') }}</td>
               </tr>
-              <tr v-for="(order, idx) in orders" :key="idx" class="hover:bg-gray-50">
-                <td class="p-3 border-t whitespace-nowrap">{{ formatDate(order.timestamp) }}</td>
-                <td class="p-3 border-t">
+              <tr v-for="(order, idx) in orders" :key="idx">
+                <td class="nowrap">{{ formatDate(order.timestamp) }}</td>
+                <td>
                   <div class="font-medium">{{ order.vendorName }}</div>
-                  <div class="text-xs text-gray-400">{{ order.vendorLicenseId }}</div>
+                  <div class="muted">{{ order.vendorLicenseId }}</div>
                 </td>
-                <td class="p-3 border-t">
-                  <ul v-if="order.items?.length" class="space-y-0.5">
+                <td>
+                  <ul v-if="order.items?.length" class="item-list">
                     <li v-for="(item, i) in order.items" :key="i">
                       {{ item.quantity }}× {{ item.itemName || `#${item.itemId}` }}
                     </li>
                   </ul>
-                  <span v-else class="text-gray-400">—</span>
+                  <span v-else class="muted">—</span>
                 </td>
-                <td class="p-3 border-t text-right text-blue-700">
+                <td class="text-right col-info">
                   {{ order.balanceUsed > 0 ? formatCredit(order.balanceUsed) + ' €' : '—' }}
                 </td>
-                <td class="p-3 border-t text-right text-green-700">
+                <td class="text-right col-success">
                   <template v-if="order.cashAmount > 0"
                     >{{ formatCredit(order.cashAmount) }} €</template
                   >
@@ -263,21 +258,93 @@ function downloadCSV() {
                   >
                   <template v-else>—</template>
                 </td>
-                <td class="p-3 border-t text-right font-semibold">
+                <td class="text-right font-semibold">
                   {{ formatCredit(order.totalAmount || order.balanceUsed) }} €
                 </td>
               </tr>
               <!-- Totals row -->
-              <tr v-if="orders.length > 0" class="border-t-4 font-bold bg-gray-50">
-                <td class="p-3" colspan="3">{{ $t('total') }} ({{ totalOrders }})</td>
-                <td class="p-3 text-right text-blue-700">{{ formatCredit(totalBalance) }} €</td>
-                <td class="p-3 text-right text-green-700">{{ formatCredit(totalCash) }} €</td>
-                <td class="p-3 text-right">{{ formatCredit(totalAll) }} €</td>
+              <tr v-if="orders.length > 0" class="totals-row">
+                <td class="font-bold" colspan="3">{{ $t('total') }} ({{ totalOrders }})</td>
+                <td class="text-right col-info font-bold">{{ formatCredit(totalBalance) }} €</td>
+                <td class="text-right col-success font-bold">{{ formatCredit(totalCash) }} €</td>
+                <td class="text-right font-bold">{{ formatCredit(totalAll) }} €</td>
               </tr>
             </tbody>
           </table>
-        </div>
+        </Card>
       </div>
     </template>
   </component>
 </template>
+
+<style scoped>
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  font-size: 13px;
+}
+.table-section {
+  overflow-x: auto;
+}
+.col-info {
+  color: var(--color-info);
+}
+.col-success {
+  color: var(--color-success);
+}
+.muted {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+.nowrap {
+  white-space: nowrap;
+}
+.item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.entry-empty {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 16px;
+}
+.totals-row td {
+  border-top: 2px solid var(--color-border);
+}
+
+@media (max-width: 900px) {
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>
