@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import { usePreferredDark } from '@vueuse/core'
 import { ref, computed } from 'vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { fetchAllPOSOrders } from '@/api/api'
@@ -22,6 +23,7 @@ const tomorrow = startOfDay(new Date(new Date().setDate(new Date().getDate() + 1
 const startDate = ref<Date>(yesterday)
 const endDate = ref<Date>(tomorrow)
 const date = ref([startDate.value, endDate.value])
+const isDark = usePreferredDark()
 
 interface POSOrderItem {
   itemId: number
@@ -169,6 +171,7 @@ function downloadCSV() {
           :enable-time-picker="false"
           :placeholder="$t('chooseDateRange')"
           class="max-w-md"
+          :dark="isDark"
           @range-start="onRangeStart"
           @range-end="onRangeEnd"
         />

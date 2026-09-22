@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Chart from 'chart.js/auto'
+import { usePreferredDark } from '@vueuse/core'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 type VendorUsage = {
@@ -13,6 +14,12 @@ const props = defineProps<{
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 let chart: Chart | null = null
+const isDark = usePreferredDark()
+
+// Chart.js defaults to black legend text and doesn't know about our CSS custom properties - read
+// the currently-resolved token value so the legend stays legible against a dark card too.
+const tokenColor = (name: string) =>
+  getComputedStyle(document.documentElement).getPropertyValue(name).trim()
 
 const renderChart = () => {
   if (!canvasRef.value || !props.data) {
@@ -45,7 +52,12 @@ const renderChart = () => {
     },
     options: {
       responsive: false,
-      maintainAspectRatio: false
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: { color: tokenColor('--color-text') }
+        }
+      }
     }
   })
 }
@@ -61,6 +73,10 @@ watch(
   },
   { deep: true }
 )
+
+watch(isDark, () => {
+  renderChart()
+})
 
 onBeforeUnmount(() => {
   if (chart) {

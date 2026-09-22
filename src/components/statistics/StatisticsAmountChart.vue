@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Chart from 'chart.js/auto'
+import { usePreferredDark } from '@vueuse/core'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 type ChartItem = {
@@ -14,6 +15,12 @@ const props = defineProps<{
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 let chart: Chart | null = null
+const isDark = usePreferredDark()
+
+// Chart.js defaults to black text/gridlines and doesn't know about our CSS custom properties -
+// read the currently-resolved token values so labels stay legible against a dark card too.
+const tokenColor = (name: string) =>
+  getComputedStyle(document.documentElement).getPropertyValue(name).trim()
 
 const renderChart = () => {
   if (!canvasRef.value) {
@@ -29,6 +36,9 @@ const renderChart = () => {
   if (!ctx) {
     return
   }
+
+  const textColor = tokenColor('--color-text-muted')
+  const gridColor = tokenColor('--color-border')
 
   chart = new Chart(ctx, {
     type: 'bar',
@@ -48,11 +58,18 @@ const renderChart = () => {
       responsive: false,
       maintainAspectRatio: false,
       scales: {
+        x: {
+          ticks: { color: textColor },
+          grid: { color: gridColor }
+        },
         y: {
           beginAtZero: true,
+          ticks: { color: textColor },
+          grid: { color: gridColor },
           title: {
             display: true,
             text: 'Eingenommener Betrag in €',
+            color: textColor,
             padding: {
               top: 10,
               bottom: 10
@@ -75,6 +92,10 @@ watch(
   },
   { deep: true }
 )
+
+watch(isDark, () => {
+  renderChart()
+})
 
 onBeforeUnmount(() => {
   if (chart) {

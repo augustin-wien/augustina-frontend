@@ -15,6 +15,7 @@ import {
 } from '@/stores/statistics'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import { usePreferredDark } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { type Statistics } from '@/stores/statistics'
 import PageHeader from '@/components/ui/PageHeader.vue'
@@ -22,6 +23,7 @@ import Card from '@/components/ui/Card.vue'
 
 const itemsStore = useItemsStore()
 const store = useStatisticsStore()
+const isDark = usePreferredDark()
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -104,6 +106,7 @@ useAuthLoad(() => itemsStore.getItemsBackoffice())
           :enable-time-picker="false"
           :placeholder="$t('chooseDateRange')"
           class="max-w-md"
+          :dark="isDark"
           @range-start="onRangeStart"
           @range-end="onRangeEnd"
         />
