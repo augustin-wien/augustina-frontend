@@ -113,6 +113,20 @@ export function transformToFloat(num: number | string): number {
   }
 }
 
+// Keycloak's OIDC redirect briefly leaves the auth code/tokens in the URL (query or
+// fragment) before keycloak-js strips them - any error or navigation breadcrumb captured
+// in that window would otherwise ship the raw code/access_token/id_token to Sentry/
+// GlitchTip verbatim. Origin + path carries all the debugging value we actually need, so
+// drop query and fragment unconditionally rather than trying to denylist individual params.
+function stripSensitiveUrlParts(url: string): string {
+  try {
+    const parsed = new URL(url)
+    return parsed.origin + parsed.pathname
+  } catch {
+    return url
+  }
+}
+
 export function initSentry(app: App, router: Router) {
   if (import.meta.env.VITE_SENTRY_DSN) {
     Sentry.init({
@@ -128,7 +142,49 @@ export function initSentry(app: App, router: Router) {
       // Capture Replay for 10% of all sessions,
       // plus for 100% of sessions with an error
       replaysSessionSampleRate: 0.1,
-      replaysOnErrorSampleRate: 1.0
+      replaysOnErrorSampleRate: 1.0,
+
+      ignoreErrors: [
+        // Vue Router's own signal when a navigation guard redirects or denies a
+        // navigation (e.g. our auth guard bouncing an unauthenticated user to login) -
+        // expected control flow, not a bug.
+        /^Navigation (aborted|cancelled|duplicated) from/,
+        // Vite's dev-only HMR client retrying a failed module reload, and the
+        // temporal-dead-zone race that follows when a route's lazy-loaded component is
+        // hot-swapped mid-import. Both are local dev-tooling noise, not app bugs.
+        /^\[vite\] Failed to reload/,
+        /before initialization$/
+      ],
+
+      beforeSend(event) {
+        if (event.request?.url) {
+          event.request.url = stripSensitiveUrlParts(event.request.url)
+        }
+
+        return event
+      },
+      beforeSendTransaction(event) {
+        if (event.request?.url) {
+          event.request.url = stripSensitiveUrlParts(event.request.url)
+        }
+
+        return event
+      },
+      beforeBreadcrumb(breadcrumb) {
+        if (typeof breadcrumb.data?.url === 'string') {
+          breadcrumb.data.url = stripSensitiveUrlParts(breadcrumb.data.url)
+        }
+
+        if (typeof breadcrumb.data?.to === 'string') {
+          breadcrumb.data.to = stripSensitiveUrlParts(breadcrumb.data.to)
+        }
+
+        if (typeof breadcrumb.data?.from === 'string') {
+          breadcrumb.data.from = stripSensitiveUrlParts(breadcrumb.data.from)
+        }
+
+        return breadcrumb
+      }
     })
 
     // One frontend build is served behind every paper's shop domain, so tag events by
