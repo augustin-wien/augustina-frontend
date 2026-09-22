@@ -55,17 +55,23 @@ watch(
   /* Tailwind's preflight zeroes margin on every element (including dialog), which breaks the
      native dialog:modal centering trick (fixed + inset:0 + margin:auto) - restore it explicitly. */
   margin: auto;
-  display: flex;
-  flex-direction: column;
-  /* Content can be taller than the viewport (AddressModal's working-time editor, VendorInfo's
-     detail grid) - cap the dialog and let the body scroll instead of the dialog overflowing. */
-  max-height: calc(100vh - 64px);
   border: none;
   border-radius: var(--radius);
   padding: 0;
   background: var(--color-surface);
   color: var(--color-text);
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.25);
+}
+/* The UA stylesheet is what actually hides a dialog without the open attribute (`dialog {
+   display: none } dialog[open] { display: block }`) - author rules always beat UA rules
+   regardless of specificity, so an unconditional `display: flex` here would force every Modal
+   instance permanently visible, open or not. Scope it to [open] so closed dialogs stay hidden. */
+.aug-modal[open] {
+  display: flex;
+  flex-direction: column;
+  /* Content can be taller than the viewport (AddressModal's working-time editor, VendorInfo's
+     detail grid) - cap the dialog and let the body scroll instead of the dialog overflowing. */
+  max-height: calc(100vh - 64px);
 }
 /* sm/lg exist for content that's narrower or wider than a typical confirm/short-form dialog -
    AddressModal (a form beside a map) and VendorInfo (a two-column detail grid) both need lg. */
