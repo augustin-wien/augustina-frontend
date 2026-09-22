@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Button from '@/components/ui/Button.vue'
 import Badge from '@/components/ui/Badge.vue'
 import Card from '@/components/ui/Card.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const store = useCustomerStore()
 
@@ -36,16 +37,15 @@ const displayCustomers = computed(() => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex justify-between items-center pt-3">
-        <h1 class="font-bold text-2xl">{{ $t('menuCustomers') }}</h1>
+      <PageHeader :title="$t('menuCustomers')">
         <input
           v-model="searchQuery"
           type="text"
           :placeholder="$t('SearchPlaceholder')"
-          class="aug-input ml-2"
+          class="aug-input"
           style="width: auto"
         />
-      </div>
+      </PageHeader>
     </template>
 
     <template #main>

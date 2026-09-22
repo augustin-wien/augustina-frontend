@@ -4,6 +4,7 @@ import { useSettingsStore } from '@/stores/settings'
 import { computed, ref } from 'vue'
 import ToastMessage from '@/components/ToastMessage.vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const ordersStore = useOrdersStore()
 const settingsStore = useSettingsStore()
@@ -74,7 +75,7 @@ const handleResendToOdoo = async (orderID: number) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('menuUnverifiedOrders') }}</h1>
+      <PageHeader :title="$t('menuUnverifiedOrders')" />
     </template>
     <template #main>
       <div class="w-full h-full p-3">

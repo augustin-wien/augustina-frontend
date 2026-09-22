@@ -10,6 +10,7 @@ import { formatCredit, formatDate } from '@/utils/utils'
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import IconCross from '@/components/icons/IconCross.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const store = vendorsStore()
 const payoutStore = usePayoutStore()
@@ -148,7 +149,7 @@ const getItemName = (itemID: number) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('menuPayouts') }}</h1>
+      <PageHeader :title="$t('menuPayouts')" />
     </template>
 
     <template #main>

@@ -7,6 +7,7 @@ import { useSettingsStore } from '@/stores/settings'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import IconCross from '@/components/icons/IconCross.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const { t } = useI18n()
 
@@ -80,7 +81,7 @@ const updateImage = (event: any) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('newProduct') }} {{ $t('create') }}</h1>
+      <PageHeader :title="`${$t('newProduct')} ${$t('create')}`" />
     </template>
     <template #main>
       <div class="main">

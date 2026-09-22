@@ -16,6 +16,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
 import VendorInfo from '@/components/VendorInfo.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
 
 // Initialize the vendor store
 const store = vendorsStore()
@@ -75,27 +77,19 @@ const selectedVendor = ref<Vendor | null>(null)
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center pt-3">
-        <h1 class="font-bold text-2xl">{{ $t('menuVendors') }}</h1>
-        <div>
-          <span>
-            <input
-              id="searchInput"
-              v-model="searchQuery"
-              type="text"
-              :placeholder="$t('SearchPlaceholder')"
-              class="border-2 border-gray-400 rounded-md p-2 ml-2"
-              @keyup.enter="search"
-            />
-            <button class="py-2 px-4 rounded-full customcolor ml-2 h-[44px]" @click="search">
-              {{ $t('search') }}
-            </button>
-          </span>
-        </div>
-        <button class="py-2 px-4 rounded-full customcolor h-[44px] mr-6" @click="exportTable">
-          {{ $t('export') }}
-        </button>
-      </div>
+      <PageHeader :title="$t('menuVendors')">
+        <input
+          id="searchInput"
+          v-model="searchQuery"
+          type="text"
+          :placeholder="$t('SearchPlaceholder')"
+          class="aug-input"
+          style="width: auto"
+          @keyup.enter="search"
+        />
+        <Button variant="secondary" @click="search">{{ $t('search') }}</Button>
+        <Button variant="secondary" @click="exportTable">{{ $t('export') }}</Button>
+      </PageHeader>
     </template>
 
     <template #main>

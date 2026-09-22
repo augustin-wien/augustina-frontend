@@ -8,13 +8,14 @@ import type { Customer, Abonement } from '@/stores/customer'
 import { useItemsStore } from '@/stores/items'
 import { fetchLicenseGroups } from '@/api/api'
 import Toast from '@/components/ToastMessage.vue'
-import { faArrowLeft, faTrash, faPen, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faTrash, faPen, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
 import Badge from '@/components/ui/Badge.vue'
 import FormField from '@/components/ui/FormField.vue'
 import Modal from '@/components/ui/Modal.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const route = useRoute()
 const store = useCustomerStore()
@@ -175,12 +176,11 @@ function abonementBadgeVariant(status: string) {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="page-title">
-        <button type="button" class="aug-icon-btn" @click="router.push('/backoffice/customers')">
-          <font-awesome-icon :icon="faArrowLeft" />
-        </button>
-        <h1>{{ isNew ? $t('newCustomer') : `${form.firstname} ${form.lastname}` }}</h1>
-      </div>
+      <PageHeader
+        :title="isNew ? $t('newCustomer') : `${form.firstname} ${form.lastname}`"
+        show-back
+        @back="router.push('/backoffice/customers')"
+      />
     </template>
 
     <template #main>
@@ -359,16 +359,6 @@ function abonementBadgeVariant(status: string) {
 </template>
 
 <style scoped>
-.page-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-top: 12px;
-}
-.page-title h1 {
-  font-size: 22px;
-  font-weight: 700;
-}
 .section {
   margin-bottom: 20px;
 }

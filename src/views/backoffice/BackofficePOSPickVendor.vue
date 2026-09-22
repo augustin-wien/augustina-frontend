@@ -4,6 +4,7 @@ import { useSettingsStore } from '@/stores/settings'
 import { vendorsStore } from '@/stores/vendor'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const vendorStore = vendorsStore()
 const settingsStore = useSettingsStore()
@@ -47,9 +48,7 @@ function initials(first: string, last: string) {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex justify-between items-center mt-3">
-        <h1 class="font-bold text-2xl">{{ $t('posTitle') }}</h1>
-      </div>
+      <PageHeader :title="$t('posTitle')" />
     </template>
 
     <template #main>

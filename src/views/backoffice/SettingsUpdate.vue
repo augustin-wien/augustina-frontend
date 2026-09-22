@@ -8,6 +8,7 @@ import QrCodeSettings from '@/components/QrCodeSettings.vue'
 import GeneralSettings from '@/components/settings/GeneralSettings.vue'
 import StylesSettings from '@/components/settings/StylesSettings.vue'
 import MailTemplatesSettings from '@/components/settings/MailTemplatesSettings.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const settingsStore = useSettingsStore()
 const storeItems = useItemsStore()
@@ -129,7 +130,7 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('menuSettings') }}</h1>
+      <PageHeader :title="$t('menuSettings')" />
     </template>
     <template #main>
       <!-- min-h-full, not h-full: the tab content has to be allowed to grow past one screen,

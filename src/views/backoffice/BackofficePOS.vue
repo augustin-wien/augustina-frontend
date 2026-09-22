@@ -9,6 +9,7 @@ import { useRoute, useRouter } from 'vue-router'
 import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
 import Badge from '@/components/ui/Badge.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -189,10 +190,7 @@ function formatDate(ts: string) {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="pos-header">
-        <button type="button" class="aug-icon-btn" @click="router.back()">←</button>
-        <h1>{{ $t('posTitle') }}</h1>
-      </div>
+      <PageHeader :title="$t('posTitle')" show-back @back="router.back()" />
     </template>
 
     <template #main>
@@ -403,16 +401,6 @@ function formatDate(ts: string) {
 </template>
 
 <style scoped>
-.pos-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-}
-.pos-header h1 {
-  font-size: 22px;
-  font-weight: 700;
-}
 .pos-layout {
   display: flex;
   gap: 20px;

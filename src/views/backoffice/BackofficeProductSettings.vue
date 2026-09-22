@@ -5,6 +5,7 @@ import { formatCredit } from '@/utils/utils'
 import type { Item } from '@/stores/items'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { useI18n } from 'vue-i18n'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const { t } = useI18n()
 const itemsStore = useItemsStore()
@@ -71,8 +72,8 @@ function exportCSV() {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('menuProducts') }}</h1></template
-    >
+      <PageHeader :title="$t('menuProducts')" />
+    </template>
     <template #main>
       <div class="main w-full">
         <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">

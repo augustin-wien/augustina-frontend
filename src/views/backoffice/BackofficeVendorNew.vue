@@ -7,6 +7,7 @@ import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
 import IconCross from '@/components/icons/IconCross.vue'
 import { downloadVendorCsvTemplate, parseVendorsCsv } from '@/utils/vendorCsv'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const store = vendorsStore()
 const settingsStore = useSettingsStore()
@@ -125,9 +126,7 @@ const importCSV = async () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 class="font-bold mt-3 pt-3 text-2xl">
-        {{ $t('newGendered') }} {{ $t('vendorSingular') }} {{ $t('create') }}
-      </h1>
+      <PageHeader :title="`${$t('newGendered')} ${$t('vendorSingular')} ${$t('create')}`" />
     </template>
 
     <template #main>

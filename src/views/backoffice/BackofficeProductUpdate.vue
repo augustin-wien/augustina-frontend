@@ -11,6 +11,7 @@ import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
 import FormField from '@/components/ui/FormField.vue'
 import Modal from '@/components/ui/Modal.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -144,7 +145,11 @@ const previewImage = (image: string | Blob | MediaSource) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 class="page-title">{{ item?.Name }}</h1>
+      <PageHeader
+        :title="item?.Name ?? ''"
+        show-back
+        @back="router.push({ name: 'Backoffice Product Settings' })"
+      />
     </template>
 
     <template v-if="updatedItem" #main>
@@ -345,12 +350,6 @@ const previewImage = (image: string | Blob | MediaSource) => {
 </template>
 
 <style scoped>
-.page-title {
-  font-size: 22px;
-  font-weight: 700;
-  margin-top: 12px;
-  padding-top: 12px;
-}
 .product-page {
   margin-top: 16px;
   padding-bottom: 40px;

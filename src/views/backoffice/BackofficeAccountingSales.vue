@@ -9,6 +9,8 @@ import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Payment } from '@/stores/payments'
 import { useSettingsStore } from '@/stores/settings'
 import { useKeycloakStore } from '@/stores/keycloak'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -95,23 +97,18 @@ const exportTable = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between mt-3 justify-between content-center items-center">
-        <h1 class="font-bold text-2xl">{{ $t('inbox') }}</h1>
-        <div>
-          <VueDatePicker
-            v-model="date"
-            range
-            :enable-time-picker="false"
-            :placeholder="$t('enterPeriod')"
-            class="max-w-md"
-            @range-start="onRangeStart"
-            @range-end="onRangeEnd"
-          />
-        </div>
-        <button class="py-2 px-4 rounded-full customcolor mr-6 h-[44px]" @click="exportTable">
-          {{ $t('export') }}
-        </button>
-      </div>
+      <PageHeader :title="$t('inbox')">
+        <VueDatePicker
+          v-model="date"
+          range
+          :enable-time-picker="false"
+          :placeholder="$t('enterPeriod')"
+          class="max-w-md"
+          @range-start="onRangeStart"
+          @range-end="onRangeEnd"
+        />
+        <Button variant="secondary" @click="exportTable">{{ $t('export') }}</Button>
+      </PageHeader>
     </template>
 
     <template v-if="authenticated && items.length > 0" #main>

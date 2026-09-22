@@ -4,9 +4,10 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
 import IconCross from '@/components/icons/IconCross.vue'
-import { faArrowLeft, faCashRegister } from '@fortawesome/free-solid-svg-icons'
+import { faCashRegister } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useAuthLoad } from '@/composables/useAuthLoad'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const vendorStore = vendorsStore()
 const route = useRoute()
@@ -25,12 +26,11 @@ const formatCredit = (credit: number) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 class="font-bold mt-3 pt-3 text-2xl">
-        <button @click="router.push('/backoffice/vendorsummary')">
-          <font-awesome-icon :icon="faArrowLeft" />
-        </button>
-        {{ $t('vendorSingular') }} Profil {{ vendor?.LicenseID }}
-      </h1>
+      <PageHeader
+        :title="`${$t('vendorSingular')} Profil ${vendor?.LicenseID ?? ''}`"
+        show-back
+        @back="router.push('/backoffice/vendorsummary')"
+      />
     </template>
     <template #main>
       <div v-if="vendor" class="main">

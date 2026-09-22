@@ -8,6 +8,8 @@ import { useItemsStore } from '@/stores/items'
 import { type Payment } from '@/stores/payments'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { useSettingsStore } from '@/stores/settings'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -104,23 +106,18 @@ const exportTable = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center mt-3">
-        <h1 class="font-bold text-2xl">{{ $t('protocol') }}</h1>
-        <div>
-          <VueDatePicker
-            v-model="date"
-            range
-            :enable-time-picker="false"
-            :placeholder="$t('chooseDateRange')"
-            class="max-w-md"
-            @range-start="onRangeStart"
-            @range-end="onRangeEnd"
-          />
-        </div>
-        <button class="py-2 px-4 rounded-full customcolor ml-2 h-[44px] mr-6" @click="exportTable">
-          {{ $t('export') }}
-        </button>
-      </div>
+      <PageHeader :title="$t('protocol')">
+        <VueDatePicker
+          v-model="date"
+          range
+          :enable-time-picker="false"
+          :placeholder="$t('chooseDateRange')"
+          class="max-w-md"
+          @range-start="onRangeStart"
+          @range-end="onRangeEnd"
+        />
+        <Button variant="secondary" @click="exportTable">{{ $t('export') }}</Button>
+      </PageHeader>
     </template>
 
     <template #main>

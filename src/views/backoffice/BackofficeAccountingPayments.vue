@@ -11,6 +11,8 @@ import { vendorsStore } from '@/stores/vendor'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { useSettingsStore } from '@/stores/settings'
 import { useI18n } from 'vue-i18n'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
 
 const { locale } = useI18n()
 const settingsStore = useSettingsStore()
@@ -135,39 +137,26 @@ const exportTable = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center mt-3">
-        <h1 class="font-bold text-2xl">
-          {{ $t('bank statement') }}<span v-if="vendorFilter"> - {{ vendorFilter }}</span>
-        </h1>
-        <div>
-          <span>
-            <VueDatePicker
-              v-model="date"
-              range
-              :enable-time-picker="false"
-              :placeholder="$t('chooseDateRange')"
-              class="max-w-md"
-              :locale="locale"
-              @update:model-value="onDateUpdate"
-            />
-          </span>
-        </div>
-        <div class="flex items-center space-x-2">
-          <router-link
-            v-if="vendorFilter && findVendorIdByLicense(vendorFilter)"
-            :to="`/backoffice/userprofile/${findVendorIdByLicense(vendorFilter)}/update`"
-          >
-            <button class="py-2 px-4 rounded-full customcolor h-[44px]">Profil</button>
-          </router-link>
-
-          <button
-            class="py-2 px-4 rounded-full customcolor ml-2 h-[44px] mr-6"
-            @click="exportTable"
-          >
-            {{ $t('export') }}
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        :title="vendorFilter ? `${$t('bank statement')} - ${vendorFilter}` : $t('bank statement')"
+      >
+        <VueDatePicker
+          v-model="date"
+          range
+          :enable-time-picker="false"
+          :placeholder="$t('chooseDateRange')"
+          class="max-w-md"
+          :locale="locale"
+          @update:model-value="onDateUpdate"
+        />
+        <router-link
+          v-if="vendorFilter && findVendorIdByLicense(vendorFilter)"
+          :to="`/backoffice/userprofile/${findVendorIdByLicense(vendorFilter)}/update`"
+        >
+          <Button variant="secondary">Profil</Button>
+        </router-link>
+        <Button variant="secondary" @click="exportTable">{{ $t('export') }}</Button>
+      </PageHeader>
     </template>
     <template #main>
       <div class="main">

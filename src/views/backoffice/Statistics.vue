@@ -17,6 +17,7 @@ import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { computed, ref } from 'vue'
 import { type Statistics } from '@/stores/statistics'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const itemsStore = useItemsStore()
 const store = useStatisticsStore()
@@ -95,45 +96,43 @@ useAuthLoad(() => itemsStore.getItemsBackoffice())
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center pt-3">
-        <div class="grid grid-cols-2">
-          <h1 class="font-bold text-2xl">{{ $t('menuStatistics') }}</h1>
-          <div>
-            <VueDatePicker
-              v-model="date"
-              range
-              :enable-time-picker="false"
-              :placeholder="$t('chooseDateRange')"
-              class="max-w-md"
-              @range-start="onRangeStart"
-              @range-end="onRangeEnd"
-            />
-          </div>
-        </div>
-        <div class="flex gap-2">
+      <PageHeader :title="$t('menuStatistics')">
+        <VueDatePicker
+          v-model="date"
+          range
+          :enable-time-picker="false"
+          :placeholder="$t('chooseDateRange')"
+          class="max-w-md"
+          @range-start="onRangeStart"
+          @range-end="onRangeEnd"
+        />
+        <div class="view-toggle">
           <button
-            class="py-2 px-3 rounded border"
-            :class="viewMode === 'chart' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
+            type="button"
+            class="view-toggle-btn"
+            :class="{ 'view-toggle-btn-active': viewMode === 'chart' }"
             @click="viewMode = 'chart'"
           >
             Diagramm
           </button>
           <button
-            class="py-2 px-3 rounded border"
-            :class="viewMode === 'table' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
+            type="button"
+            class="view-toggle-btn"
+            :class="{ 'view-toggle-btn-active': viewMode === 'table' }"
             @click="viewMode = 'table'"
           >
             Tabelle
           </button>
           <button
-            class="py-2 px-3 rounded border"
-            :class="viewMode === 'both' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white'"
+            type="button"
+            class="view-toggle-btn"
+            :class="{ 'view-toggle-btn-active': viewMode === 'both' }"
             @click="viewMode = 'both'"
           >
             Beides
           </button>
         </div>
-      </div>
+      </PageHeader>
     </template>
     <template #main>
       <div class="main">
@@ -163,3 +162,29 @@ useAuthLoad(() => itemsStore.getItemsBackoffice())
     </template>
   </component>
 </template>
+
+<style scoped>
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+}
+.view-toggle-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.view-toggle-btn-active {
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+</style>

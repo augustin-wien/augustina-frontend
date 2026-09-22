@@ -6,8 +6,10 @@ import type { VendorComment } from '@/stores/vendor'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import router from '@/router'
 import CommentsModal from '@/components/CommentsModal.vue'
-import { faArrowLeft, faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
 
 const route = useRoute()
 const store = vendorsStore()
@@ -86,22 +88,16 @@ const formatDate = (date: Date | string | null | undefined): string => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex justify-between items-center mt-3 pt-3">
-        <h1 v-if="vendor" class="font-bold text-2xl">
-          <button @click="router.back()">
-            <font-awesome-icon :icon="faArrowLeft" />
-          </button>
-          {{ vendor.LicenseID }} {{ vendor.FirstName }} {{ vendor.LastName }} –
-          {{ $t('comments') }}
-        </h1>
-        <router-link
-          v-if="vendor"
-          :to="`/backoffice/userprofile/${vendor.ID}/update`"
-          class="py-2 px-4 rounded-full customcolor"
-        >
-          {{ $t('change') }}
+      <PageHeader
+        v-if="vendor"
+        :title="`${vendor.LicenseID} ${vendor.FirstName} ${vendor.LastName} – ${$t('comments')}`"
+        show-back
+        @back="router.back()"
+      >
+        <router-link :to="`/backoffice/userprofile/${vendor.ID}/update`">
+          <Button variant="secondary">{{ $t('change') }}</Button>
         </router-link>
-      </div>
+      </PageHeader>
     </template>
 
     <template #main>

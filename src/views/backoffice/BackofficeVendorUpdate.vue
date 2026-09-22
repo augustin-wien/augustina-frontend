@@ -13,10 +13,11 @@ import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
 import FormField from '@/components/ui/FormField.vue'
 import Modal from '@/components/ui/Modal.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const { t } = useI18n()
 
-import { faArrowLeft, faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import CommentsModal from '@/components/CommentsModal.vue'
 
@@ -265,16 +266,12 @@ const formatWorkingTime = (workingTime: any) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 v-if="updatedVendor" class="page-title">
-        <button
-          type="button"
-          class="aug-icon-btn"
-          @click="router.push('/backoffice/vendorsummary')"
-        >
-          <font-awesome-icon :icon="faArrowLeft" />
-        </button>
-        {{ $t('vendorSingular') }} {{ updatedVendor.LicenseID }} {{ $t('change') }}
-      </h1>
+      <PageHeader
+        v-if="updatedVendor"
+        :title="`${$t('vendorSingular')} ${updatedVendor.LicenseID} ${$t('change')}`"
+        show-back
+        @back="router.push('/backoffice/vendorsummary')"
+      />
     </template>
     <template v-if="updatedVendor !== null" #main>
       <div class="main">
@@ -553,15 +550,6 @@ const formatWorkingTime = (workingTime: any) => {
 </template>
 
 <style scoped>
-.page-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 22px;
-  font-weight: 700;
-  margin-top: 12px;
-  padding-top: 12px;
-}
 .form-top-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

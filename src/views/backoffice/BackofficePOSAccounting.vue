@@ -5,6 +5,8 @@ import { ref, computed } from 'vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { fetchAllPOSOrders } from '@/api/api'
 import { formatCredit } from '@/utils/utils'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -157,27 +159,20 @@ function downloadCSV() {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex justify-between items-center mt-3 gap-4">
-        <h1 class="font-bold text-2xl">{{ $t('posAccountingTitle') }}</h1>
-        <div class="flex items-center gap-3">
-          <VueDatePicker
-            v-model="date"
-            range
-            :enable-time-picker="false"
-            :placeholder="$t('chooseDateRange')"
-            class="max-w-md"
-            @range-start="onRangeStart"
-            @range-end="onRangeEnd"
-          />
-          <button
-            class="px-4 py-2 rounded bg-gray-700 text-white text-sm font-medium hover:bg-gray-800 whitespace-nowrap disabled:opacity-50"
-            :disabled="orders.length === 0"
-            @click="downloadCSV"
-          >
-            {{ $t('downloadCSV') }}
-          </button>
-        </div>
-      </div>
+      <PageHeader :title="$t('posAccountingTitle')">
+        <VueDatePicker
+          v-model="date"
+          range
+          :enable-time-picker="false"
+          :placeholder="$t('chooseDateRange')"
+          class="max-w-md"
+          @range-start="onRangeStart"
+          @range-end="onRangeEnd"
+        />
+        <Button variant="secondary" :disabled="orders.length === 0" @click="downloadCSV">
+          {{ $t('downloadCSV') }}
+        </Button>
+      </PageHeader>
     </template>
 
     <template #main>

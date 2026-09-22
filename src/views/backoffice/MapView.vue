@@ -17,6 +17,7 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 import 'leaflet-geosearch/dist/geosearch.css'
 import { vendorsStore } from '@/stores/vendor'
 import VendorInfo from '@/components/VendorInfo.vue'
+import PageHeader from '@/components/ui/PageHeader.vue'
 
 const store = vendorsStore()
 
@@ -60,7 +61,7 @@ function onMapReady(instance: any) {
 <template>
   <component :is="$route.meta.layout || 'div'" v-if="authenticated">
     <template v-if="vendors" #header>
-      <h1 class="font-bold mt-3 pt-3 text-2xl">{{ $t('menuMap') }}</h1>
+      <PageHeader :title="$t('menuMap')" />
     </template>
     <template v-if="vendors" #main>
       <div class="h-full">

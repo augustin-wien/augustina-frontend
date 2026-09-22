@@ -4,6 +4,8 @@ import { computed, ref, watch } from 'vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Vendor } from '@/stores/vendor'
+import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
 
 const store = vendorsStore()
 
@@ -67,33 +69,21 @@ const exportTable = () => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <div class="flex space-between justify-between content-center items-center pt-3">
-        <h1 class="font-bold text-2xl">{{ $t('openCredits') }}</h1>
-        <div>
-          <span>
-            <input
-              id="searchInput"
-              v-model="searchQuery"
-              type="text"
-              :placeholder="$t('IDNumber')"
-              class="border-2 border-gray-400 rounded-md p-2 ml-2"
-            />
-            <button class="py-2 px-4 rounded-full customcolor ml-2 h-[44px]">
-              {{ $t('search') }}
-            </button>
-          </span>
-        </div>
-        <button
-          class="py-2 px-4 rounded-full customcolor h-[44px]"
-          :disabled="isRecalculating"
-          @click="recalculate"
-        >
+      <PageHeader :title="$t('openCredits')">
+        <input
+          id="searchInput"
+          v-model="searchQuery"
+          type="text"
+          :placeholder="$t('IDNumber')"
+          class="aug-input"
+          style="width: auto"
+        />
+        <Button variant="secondary">{{ $t('search') }}</Button>
+        <Button variant="secondary" :disabled="isRecalculating" @click="recalculate">
           {{ isRecalculating ? '…' : $t('recalculateBalances') }}
-        </button>
-        <button class="py-2 px-4 rounded-full customcolor h-[44px] mr-6" @click="exportTable">
-          {{ $t('export') }}
-        </button>
-      </div>
+        </Button>
+        <Button variant="secondary" @click="exportTable">{{ $t('export') }}</Button>
+      </PageHeader>
     </template>
 
     <template #main>
