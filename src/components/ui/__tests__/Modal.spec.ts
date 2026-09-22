@@ -58,6 +58,18 @@ describe('Modal', () => {
     expect(wrapper.get('.aug-modal-title').text()).toBe('Delete vendor')
   })
 
+  it('defaults to the md size', () => {
+    const wrapper = mount(Modal, { props: { open: true } })
+    expect(wrapper.get('dialog').classes()).toContain('aug-modal-md')
+  })
+
+  it('applies the requested size class', () => {
+    const wrapper = mount(Modal, { props: { open: true, size: 'lg' } })
+    const classes = wrapper.get('dialog').classes()
+    expect(classes).toContain('aug-modal-lg')
+    expect(classes).not.toContain('aug-modal-md')
+  })
+
   it('renders no footer when no footer slot content is given', () => {
     const wrapper = mount(Modal, { props: { open: true, title: 'x' } })
     expect(wrapper.find('.aug-modal-footer').exists()).toBe(false)

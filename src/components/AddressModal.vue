@@ -154,6 +154,7 @@ const editMarker = (newLocation: any) => {
   <Modal
     v-if="updatedVendor"
     open
+    size="lg"
     :title="`${updatedVendor.LicenseID} ${updatedVendor.FirstName} ${$t('address')} ${$t('edit')}`"
     @close="emit('close')"
   >
@@ -273,14 +274,16 @@ const editMarker = (newLocation: any) => {
         </div>
       </form>
 
-      <VendorMapView
-        v-if="newAddress && newAddress.latitude && newAddress.longitude"
-        :enable-search="1"
-        :locations="[newAddress]"
-        :new-coords="1"
-        @new-location="updateLocation"
-        @edit-marker="editMarker"
-      />
+      <div class="address-map">
+        <VendorMapView
+          v-if="newAddress && newAddress.latitude && newAddress.longitude"
+          :enable-search="1"
+          :locations="[newAddress]"
+          :new-coords="1"
+          @new-location="updateLocation"
+          @edit-marker="editMarker"
+        />
+      </div>
     </div>
 
     <template #footer>
@@ -300,6 +303,22 @@ const editMarker = (newLocation: any) => {
   width: 100%;
   max-width: 320px;
   flex-shrink: 0;
+}
+.address-map {
+  flex: 1;
+  min-width: 0;
+  min-height: 320px;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+
+@media (max-width: 640px) {
+  .address-modal-body {
+    flex-direction: column;
+  }
+  .address-form {
+    max-width: none;
+  }
 }
 .working-time-panel {
   margin-top: 14px;

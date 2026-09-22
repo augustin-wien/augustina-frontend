@@ -146,7 +146,7 @@ const emit = defineEmits(['close'])
 </script>
 
 <template>
-  <Modal open :title="`${vendor?.LicenseID} ${vendor?.FirstName}`" @close="emit('close')">
+  <Modal open size="lg" :title="`${vendor?.LicenseID} ${vendor?.FirstName}`" @close="emit('close')">
     <div class="vendorinfo-grid">
       <table class="aug-table">
         <tbody>
