@@ -9,6 +9,10 @@ import router from '@/router'
 import VendorMapView from '@/components/VendorMapView.vue'
 import AddressModal from '@/components/AddressModal.vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
+import Card from '@/components/ui/Card.vue'
+import Button from '@/components/ui/Button.vue'
+import FormField from '@/components/ui/FormField.vue'
+import Modal from '@/components/ui/Modal.vue'
 
 const { t } = useI18n()
 
@@ -261,8 +265,12 @@ const formatWorkingTime = (workingTime: any) => {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <h1 v-if="updatedVendor" class="font-bold mt-3 pt-3 text-2xl">
-        <button @click="router.push('/backoffice/vendorsummary')">
+      <h1 v-if="updatedVendor" class="page-title">
+        <button
+          type="button"
+          class="aug-icon-btn"
+          @click="router.push('/backoffice/vendorsummary')"
+        >
           <font-awesome-icon :icon="faArrowLeft" />
         </button>
         {{ $t('vendorSingular') }} {{ updatedVendor.LicenseID }} {{ $t('change') }}
@@ -270,138 +278,115 @@ const formatWorkingTime = (workingTime: any) => {
     </template>
     <template v-if="updatedVendor !== null" #main>
       <div class="main">
-        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <Card>
           <form @submit.prevent="updateVendor">
             <!-- Top row: form fields (left) + map (right) -->
-            <div class="grid grid-cols-2 gap-6 mb-6">
-              <div class="grid grid-cols-2 gap-x-4 gap-y-3 content-start">
-                <div>
-                  <label class="field-label" for="firstName">{{ $t('firstName') }}:</label>
+            <div class="form-top-grid">
+              <div class="field-grid">
+                <FormField :label="`${$t('firstName')}:`" for="firstName">
                   <input
                     id="firstName"
                     v-model="updatedVendor.FirstName"
-                    class="field-input"
+                    class="aug-input"
                     type="text"
                     required
                   />
-                </div>
-                <div>
-                  <label class="field-label" for="lastName">{{ $t('lastName') }}:</label>
+                </FormField>
+                <FormField :label="`${$t('lastName')}:`" for="lastName">
                   <input
                     id="lastName"
                     v-model="updatedVendor.LastName"
-                    class="field-input"
+                    class="aug-input"
                     type="text"
                     required
                   />
-                </div>
-                <div>
-                  <label class="field-label" for="email">{{ $t('E-Mail') }}:</label>
+                </FormField>
+                <FormField :label="`${$t('E-Mail')}:`" for="email">
                   <input
                     id="email"
                     v-model="updatedVendor.Email"
-                    class="field-input"
+                    class="aug-input"
                     type="email"
                     required
                   />
-                </div>
-                <div>
-                  <label class="field-label" for="licenseID">{{ $t('licenseId') }}:</label>
+                </FormField>
+                <FormField :label="`${$t('licenseId')}:`" for="licenseID">
                   <input
                     id="licenseID"
                     v-model="updatedVendor.LicenseID"
-                    class="field-input"
+                    class="aug-input"
                     type="text"
                     required
                   />
-                </div>
-                <div>
-                  <label class="field-label" for="telephone">{{ $t('telephone') }}:</label>
+                </FormField>
+                <FormField :label="`${$t('telephone')}:`" for="telephone">
                   <input
                     id="telephone"
                     v-model="updatedVendor.Telephone"
-                    class="field-input"
+                    class="aug-input"
                     type="text"
                   />
-                </div>
-                <div>
-                  <label class="field-label" for="language">{{ $t('language') }}:</label>
+                </FormField>
+                <FormField :label="`${$t('language')}:`" for="language">
                   <input
                     id="language"
                     v-model="updatedVendor.Language"
-                    class="field-input"
+                    class="aug-input"
                     type="text"
                   />
-                </div>
-                <div>
-                  <label class="field-label" for="registrationDate"
-                    >{{ $t('registrationDate') }}:</label
-                  >
+                </FormField>
+                <FormField :label="`${$t('registrationDate')}:`" for="registrationDate">
                   <input
                     id="registrationDate"
                     v-model="updatedVendor.RegistrationDate"
-                    class="field-input"
+                    class="aug-input"
                     type="text"
                   />
-                </div>
-                <div>
-                  <label class="field-label" for="vendorSince">{{ $t('vendorSince') }}:</label>
+                </FormField>
+                <FormField :label="`${$t('vendorSince')}:`" for="vendorSince">
                   <input
                     id="vendorSince"
                     v-model="updatedVendor.VendorSince"
-                    class="field-input"
+                    class="aug-input"
                     type="text"
                   />
-                </div>
-                <div>
-                  <label class="field-label" for="isDisabled">{{ $t('deactivated') }}:</label>
-                  <select id="isDisabled" v-model="updatedVendor.IsDisabled" class="field-select">
+                </FormField>
+                <FormField :label="`${$t('deactivated')}:`" for="isDisabled">
+                  <select id="isDisabled" v-model="updatedVendor.IsDisabled" class="aug-input">
                     <option :value="true">{{ $t('yes') }}</option>
                     <option :value="false">{{ $t('no') }}</option>
                   </select>
-                </div>
-                <div>
-                  <label class="field-label" for="hasSmartphone"
-                    >{{ $t('Has a smartphone') }}:</label
-                  >
+                </FormField>
+                <FormField :label="`${$t('Has a smartphone')}:`" for="hasSmartphone">
                   <select
                     id="hasSmartphone"
                     v-model="updatedVendor.HasSmartphone"
-                    class="field-select"
+                    class="aug-input"
                   >
                     <option :value="true">{{ $t('yes') }}</option>
                     <option :value="false">{{ $t('no') }}</option>
                   </select>
-                </div>
-                <div>
-                  <label class="field-label" for="bankAccount">{{ $t('bankAccount') }}:</label>
-                  <select
-                    id="bankAccount"
-                    v-model="updatedVendor.HasBankAccount"
-                    class="field-select"
-                  >
+                </FormField>
+                <FormField :label="`${$t('bankAccount')}:`" for="bankAccount">
+                  <select id="bankAccount" v-model="updatedVendor.HasBankAccount" class="aug-input">
                     <option :value="true">{{ $t('yes') }}</option>
                     <option :value="false">{{ $t('no') }}</option>
                   </select>
-                </div>
-                <div>
-                  <label class="field-label" for="verification"
-                    >{{ $t('verificationLink') }}:</label
-                  >
+                </FormField>
+                <FormField :label="`${$t('verificationLink')}:`" for="verification">
                   <input
                     id="verification"
                     v-model="updatedVendor.AccountProofUrl"
-                    class="field-input"
+                    class="aug-input"
                     type="url"
                   />
-                </div>
-                <div class="col-span-2">
-                  <label class="field-label" for="debt">{{ $t('debt') }}:</label>
-                  <input id="debt" v-model="updatedVendor.Debt" class="field-input" type="text" />
-                </div>
+                </FormField>
+                <FormField :label="`${$t('debt')}:`" for="debt" class="field-span-2">
+                  <input id="debt" v-model="updatedVendor.Debt" class="aug-input" type="text" />
+                </FormField>
               </div>
 
-              <div class="min-h-48 overflow-hidden">
+              <div class="vendor-map">
                 <VendorMapView
                   v-if="vendorLocations && vendorLocations.length > 0"
                   :locations="vendorLocations"
@@ -410,46 +395,32 @@ const formatWorkingTime = (workingTime: any) => {
             </div>
 
             <!-- Bottom row: locations (left) + comments (right) -->
-            <div class="grid grid-cols-2 gap-6 mb-6">
+            <div class="form-bottom-grid">
               <div>
-                <div class="flex justify-between items-center mb-2">
-                  <h2 class="text-gray-700 text-sm font-bold">{{ $t('vendor locations') }}</h2>
-                  <button
-                    type="button"
-                    class="py-2 px-4 rounded-full customcolor"
-                    @click="showAddressModal = true"
-                  >
+                <div class="section-header">
+                  <h2 class="section-title">{{ $t('vendor locations') }}</h2>
+                  <Button type="button" variant="secondary" @click="showAddressModal = true">
                     {{ $t('New Location') }}
-                  </button>
+                  </Button>
                 </div>
-                <div
-                  v-if="vendorLocations && vendorLocations.length > 0"
-                  class="space-y-2 max-h-48 overflow-y-auto pr-1"
-                >
+                <div v-if="vendorLocations && vendorLocations.length > 0" class="entry-list">
                   <div
                     v-for="location in vendorLocations"
                     :key="'location_' + location.id"
-                    class="border border-gray-200 dark:border-gray-600 rounded p-2 bg-gray-50 dark:bg-gray-800 flex justify-between"
+                    class="entry-row"
                   >
                     <div>
-                      <div class="font-bold text-gray-700 dark:text-gray-200">
-                        {{ location.name }}
-                      </div>
-                      <div class="text-sm text-gray-600 dark:text-gray-400">
-                        {{ location.address }} {{ location.zip }}
-                      </div>
-                      <div
-                        v-if="location.working_time"
-                        class="text-xs mt-1 text-gray-500 dark:text-gray-400"
-                      >
-                        <span class="font-bold pr-1">{{ $t('workingTime') }}:</span>
+                      <div class="entry-title">{{ location.name }}</div>
+                      <div class="entry-sub">{{ location.address }} {{ location.zip }}</div>
+                      <div v-if="location.working_time" class="entry-detail">
+                        <span class="entry-detail-label">{{ $t('workingTime') }}:</span>
                         <span>{{ formatWorkingTime(location.working_time) }}</span>
                       </div>
                     </div>
-                    <div class="flex items-center space-x-2 ml-2">
+                    <div class="entry-actions">
                       <button
                         type="button"
-                        class="customcolor p-2"
+                        class="aug-icon-btn"
                         :title="$t('edit')"
                         @click.prevent="editLocation(location)"
                       >
@@ -457,7 +428,7 @@ const formatWorkingTime = (workingTime: any) => {
                       </button>
                       <button
                         type="button"
-                        class="text-red-600 hover:text-red-800 p-2"
+                        class="aug-icon-btn aug-icon-btn-danger"
                         :title="$t('delete')"
                         @click.prevent="store.deleteVendorLocation(updatedVendor.ID, location.id)"
                       >
@@ -466,59 +437,52 @@ const formatWorkingTime = (workingTime: any) => {
                     </div>
                   </div>
                 </div>
-                <p v-else class="text-sm text-gray-600 dark:text-gray-400">
-                  {{ $t('Vendor has no locations yet') }}
-                </p>
+                <p v-else class="entry-empty">{{ $t('Vendor has no locations yet') }}</p>
               </div>
 
               <div>
-                <div class="flex justify-between items-center mb-2">
+                <div class="section-header">
                   <router-link
                     :to="`/backoffice/userprofile/${updatedVendor.ID}/comments`"
-                    class="text-gray-700 text-sm font-bold hover:underline"
+                    class="section-title-link"
                   >
                     {{ $t('comments') }} →
                   </router-link>
-                  <button
-                    type="button"
-                    class="py-2 px-4 rounded-full customcolor"
-                    @click="addNewComment()"
-                  >
+                  <Button type="button" variant="secondary" @click="addNewComment()">
                     {{ $t('Add a comment') }}
-                  </button>
+                  </Button>
                 </div>
-                <div
-                  v-if="vendorComments && vendorComments.length > 0"
-                  class="space-y-2 max-h-48 overflow-y-auto pr-1"
-                >
+                <div v-if="vendorComments && vendorComments.length > 0" class="entry-list">
                   <div
                     v-for="comment in vendorComments"
                     :key="'comment_' + comment.id"
-                    class="border border-gray-200 dark:border-gray-600 rounded p-2 bg-gray-50 dark:bg-gray-800 flex justify-between"
-                    :class="{ 'text-red-600 dark:text-red-400': comment.warning }"
+                    class="entry-row"
+                    :class="{ 'entry-row-warning': comment.warning }"
                   >
-                    <div class="w-full">
-                      <div class="font-bold text-xs mb-1 text-gray-500 dark:text-gray-400">
+                    <div class="entry-comment-body">
+                      <div class="entry-date">
                         {{ new Date(comment.created_at).toLocaleDateString() }}
                       </div>
-                      <div class="text-sm break-words">
-                        <span v-if="comment.warning" class="font-bold">{{ $t('warning') }}: </span>
+                      <div class="entry-comment-text">
+                        <span v-if="comment.warning" class="entry-detail-label"
+                          >{{ $t('warning') }}:
+                        </span>
                         {{ comment.comment }}
                       </div>
                       <div
                         v-if="
                           comment.resolved_at && new Date(comment.resolved_at).getFullYear() > 1
                         "
-                        class="text-xs mt-1 text-gray-500 dark:text-gray-400"
+                        class="entry-detail"
                       >
-                        <span class="font-bold pr-2">{{ $t('Resolved at') }}:</span>
+                        <span class="entry-detail-label">{{ $t('Resolved at') }}:</span>
                         <span>{{ new Date(comment.resolved_at).toLocaleDateString() }}</span>
                       </div>
                     </div>
-                    <div class="flex items-center space-x-2 ml-2">
+                    <div class="entry-actions">
                       <button
                         type="button"
-                        class="customcolor p-2"
+                        class="aug-icon-btn"
                         :title="$t('edit')"
                         @click.prevent="editComment(comment)"
                       >
@@ -527,7 +491,7 @@ const formatWorkingTime = (workingTime: any) => {
                       <button
                         id="delete-vendor-comment"
                         type="button"
-                        class="text-red-600 hover:text-red-800 p-2"
+                        class="aug-icon-btn aug-icon-btn-danger"
                         :title="$t('delete')"
                         @click.prevent="store.deleteVendorComment(updatedVendor.ID, comment.id)"
                       >
@@ -536,103 +500,39 @@ const formatWorkingTime = (workingTime: any) => {
                     </div>
                   </div>
                 </div>
-                <p v-else class="text-sm text-gray-600 dark:text-gray-400">
-                  {{ $t('noComments') }}
-                </p>
+                <p v-else class="entry-empty">{{ $t('noComments') }}</p>
               </div>
             </div>
 
-            <div class="flex justify-between">
-              <button
+            <div class="form-actions">
+              <Button
                 id="delete-vendor"
                 type="button"
-                class="py-2 px-4 rounded-full text-white bg-red-500 hover:bg-red-800"
+                variant="danger"
                 @click="showDeleteModal = true"
               >
                 {{ $t('delete') }}
-              </button>
-              <button type="submit" class="py-2 px-4 rounded-full customcolor">
-                {{ $t('confirmation') }}
-              </button>
+              </Button>
+              <Button type="submit" variant="primary">{{ $t('confirmation') }}</Button>
             </div>
           </form>
-        </div>
+        </Card>
         <Toast v-if="toast" :toast="toast" @close="toast = null" />
 
-        <!-- delete modal -->
-        <div v-if="showDeleteModal">
-          <div
-            id="defaultModal"
-            tabindex="-1"
-            aria-hidden="false"
-            class="fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden flex items-center justify-center overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
-          >
-            <div class="relative w-full max-w-2xl max-h-full">
-              <!-- Modal content -->
-              <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <!-- Modal header -->
-                <div
-                  class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600"
-                >
-                  <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                    {{ updatedVendor.LicenseID }} {{ updatedVendor.FirstName }} {{ $t('delete') }}
-                  </h3>
-                  <button
-                    type="button"
-                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                    data-modal-hide="defaultModal"
-                    @click="showDeleteModal = false"
-                  >
-                    <svg
-                      class="w-3 h-3"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 14 14"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                      />
-                    </svg>
-                    <span class="sr-only">Close modal</span>
-                  </button>
-                </div>
-                <!-- Modal body -->
-                <div class="p-6 space-y-6">
-                  <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                    {{ $t('vendordeletionConfirmation') }}
-                  </p>
-                </div>
-                <!-- Modal footer -->
-                <div
-                  class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
-                >
-                  <button
-                    id="delete-vendor-confirm"
-                    data-modal-hide="defaultModal"
-                    type="button"
-                    class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    @click="deleteVendor"
-                  >
-                    {{ $t('delete') }}
-                  </button>
-                  <button
-                    data-modal-hide="defaultModal"
-                    type="button"
-                    class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                    @click="showDeleteModal = false"
-                  >
-                    {{ $t('cancel') }}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Modal
+          :open="showDeleteModal"
+          :title="`${updatedVendor.LicenseID} ${updatedVendor.FirstName} ${$t('delete')}`"
+          @close="showDeleteModal = false"
+        >
+          <p>{{ $t('vendordeletionConfirmation') }}</p>
+          <template #footer>
+            <Button variant="ghost" @click="showDeleteModal = false">{{ $t('cancel') }}</Button>
+            <Button id="delete-vendor-confirm" variant="danger" @click="deleteVendor">
+              {{ $t('delete') }}
+            </Button>
+          </template>
+        </Modal>
+
         <AddressModal
           v-if="showAddressModal"
           :vendor="updatedVendor"
@@ -653,15 +553,133 @@ const formatWorkingTime = (workingTime: any) => {
 </template>
 
 <style scoped>
-@reference "tailwindcss";
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 12px;
+  padding-top: 12px;
+}
+.form-top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 16px;
+  align-content: start;
+}
+.field-span-2 {
+  grid-column: span 2;
+}
+.vendor-map {
+  min-height: 190px;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+}
+.form-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+.section-title-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+.section-title-link:hover {
+  text-decoration: underline;
+}
+.entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 190px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.entry-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  padding: 10px 12px;
+}
+.entry-row-warning {
+  color: var(--color-danger);
+}
+.entry-comment-body {
+  width: 100%;
+}
+.entry-title {
+  font-size: 13px;
+  font-weight: 700;
+}
+.entry-sub {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+.entry-detail {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+.entry-detail-label {
+  font-weight: 700;
+  margin-right: 4px;
+}
+.entry-date {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: 2px;
+}
+.entry-comment-text {
+  font-size: 13px;
+  word-break: break-word;
+}
+.entry-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.entry-empty {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+}
 
-.field-label {
-  @apply block text-gray-700 text-sm font-bold mb-1;
-}
-.field-input {
-  @apply w-full appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:outline-none;
-}
-.field-select {
-  @apply appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:outline-none;
+@media (max-width: 900px) {
+  .form-top-grid,
+  .form-bottom-grid,
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+  .field-span-2 {
+    grid-column: span 1;
+  }
 }
 </style>
