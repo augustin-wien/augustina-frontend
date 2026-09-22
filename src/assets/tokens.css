@@ -1,0 +1,29 @@
+/*
+ * Design tokens for the backoffice redesign (clean/neutral direction).
+ * --color-accent and --color-accent-fg are overwritten reactively at runtime
+ * from the admin-configurable settings.Color / settings.FontColor — see
+ * src/composables/useAccentColor.ts. The values below are just the fallback
+ * shown before settings finish loading.
+ */
+:root {
+  --color-bg: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-alt: #fbfbfc;
+  --color-border: #e2e5ea;
+  --color-text: #1a1d23;
+  --color-text-muted: #6b7280;
+
+  --color-accent: #f5ab00;
+  --color-accent-fg: #2a1f00;
+  --color-accent-tint: color-mix(in srgb, var(--color-accent) 14%, white);
+
+  --color-success: #157a44;
+  --color-success-bg: #e6f6ec;
+  --color-danger: #c23a3a;
+  --color-danger-bg: #fbeaea;
+  --color-info: #3357c7;
+  --color-info-bg: #eaeffe;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+}

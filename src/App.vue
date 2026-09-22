@@ -4,12 +4,14 @@ import { useFavicon } from '@vueuse/core'
 import { onMounted } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import { initMatomo } from '@/utils/matomo'
+import { useAccentColor } from '@/composables/useAccentColor'
 
 const favicon = import.meta.env.VITE_API_URL + 'img/favicon.png'
 useFavicon(favicon)
 
 const settingsStore = useSettingsStore()
 const router = useRouter()
+useAccentColor()
 
 // Matomo is configured per tenant in the backend settings, so it can only be started once those
 // are loaded. Without a configured url and site id nothing is loaded at all.

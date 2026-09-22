@@ -267,11 +267,11 @@ onMounted(() => {
 
 <style>
 .customcolor {
-  background-color: v-bind(settingsStore.settings.Color);
-  color: v-bind(settingsStore.settings.FontColor);
+  background-color: var(--color-accent);
+  color: var(--color-accent-fg);
 }
 .customborder {
-  border-color: v-bind(settingsStore.settings.FontColor);
+  border-color: var(--color-accent-fg);
 }
 </style>
 
