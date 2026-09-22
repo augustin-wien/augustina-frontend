@@ -370,6 +370,9 @@ onMounted(() => {
   flex: none;
   text-align: left;
   min-height: 80px;
+  padding: 20px 20px 16px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
 }
 .main-slot {
   flex: 1;
