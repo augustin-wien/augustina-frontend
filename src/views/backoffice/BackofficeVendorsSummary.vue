@@ -11,7 +11,8 @@ import {
   faCreditCard,
   faArrowAltCircleRight,
   faQrcode,
-  faComment
+  faComment,
+  faFileCsv
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
@@ -88,7 +89,9 @@ const selectedVendor = ref<Vendor | null>(null)
           @keyup.enter="search"
         />
         <Button variant="secondary" @click="search">{{ $t('search') }}</Button>
-        <Button variant="secondary" @click="exportTable">{{ $t('export') }}</Button>
+        <Button variant="secondary" @click="exportTable">
+          <font-awesome-icon :icon="faFileCsv" /> {{ $t('export') }}
+        </Button>
       </PageHeader>
     </template>
 

@@ -9,6 +9,8 @@ import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Payment } from '@/stores/payments'
 import { useSettingsStore } from '@/stores/settings'
 import { useKeycloakStore } from '@/stores/keycloak'
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 
@@ -107,7 +109,9 @@ const exportTable = () => {
           @range-start="onRangeStart"
           @range-end="onRangeEnd"
         />
-        <Button variant="secondary" @click="exportTable">{{ $t('export') }}</Button>
+        <Button variant="secondary" @click="exportTable">
+          <font-awesome-icon :icon="faFileCsv" /> {{ $t('export') }}
+        </Button>
       </PageHeader>
     </template>
 

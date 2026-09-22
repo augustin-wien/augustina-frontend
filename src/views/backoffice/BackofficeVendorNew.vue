@@ -7,7 +7,10 @@ import { vendorsStore } from '@/stores/vendor'
 import { ref } from 'vue'
 import IconCross from '@/components/icons/IconCross.vue'
 import { downloadVendorCsvTemplate, parseVendorsCsv } from '@/utils/vendorCsv'
+import { faFileCsv, faFileImport } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
 
 const store = vendorsStore()
 const settingsStore = useSettingsStore()
@@ -340,12 +343,12 @@ const importCSV = async () => {
         </div>
       </div>
       <footer class="fixed bottom-10 right-10 flex flex-col items-end gap-3">
-        <button class="p-3 rounded-full customcolor" @click="downloadVendorCsvTemplate">
-          {{ $t('downloadDemoCSV') }}
-        </button>
-        <button class="p-3 rounded-full customcolor h-20 w-20" @click="importCSV">
-          {{ $t('CSV import') }}
-        </button>
+        <Button variant="secondary" @click="downloadVendorCsvTemplate">
+          <font-awesome-icon :icon="faFileCsv" /> {{ $t('downloadDemoCSV') }}
+        </Button>
+        <Button variant="secondary" @click="importCSV">
+          <font-awesome-icon :icon="faFileImport" /> {{ $t('CSV import') }}
+        </Button>
       </footer>
     </template>
   </component>

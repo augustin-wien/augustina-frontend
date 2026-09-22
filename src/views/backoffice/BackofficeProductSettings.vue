@@ -5,7 +5,10 @@ import { formatCredit } from '@/utils/utils'
 import type { Item } from '@/stores/items'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { useI18n } from 'vue-i18n'
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
+import Button from '@/components/ui/Button.vue'
 
 const { t } = useI18n()
 const itemsStore = useItemsStore()
@@ -72,16 +75,15 @@ function exportCSV() {
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #header>
-      <PageHeader :title="$t('menuProducts')" />
+      <PageHeader :title="$t('menuProducts')">
+        <Button variant="secondary" @click="exportCSV">
+          <font-awesome-icon :icon="faFileCsv" /> {{ $t('downloadCSV') }}
+        </Button>
+      </PageHeader>
     </template>
     <template #main>
       <div class="main w-full">
         <div class="mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div class="flex justify-end mb-4">
-            <button class="px-4 py-2 rounded-full customcolor h-[44px]" @click="exportCSV">
-              {{ $t('downloadCSV') }}
-            </button>
-          </div>
           <div class="text-xl space-y-3 space-x-3">
             <table class="table-auto w-full border-spacing-4 border-collapse">
               <thead>

@@ -11,6 +11,8 @@ import { vendorsStore } from '@/stores/vendor'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { useSettingsStore } from '@/stores/settings'
 import { useI18n } from 'vue-i18n'
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 
@@ -155,7 +157,9 @@ const exportTable = () => {
         >
           <Button variant="secondary">Profil</Button>
         </router-link>
-        <Button variant="secondary" @click="exportTable">{{ $t('export') }}</Button>
+        <Button variant="secondary" @click="exportTable">
+          <font-awesome-icon :icon="faFileCsv" /> {{ $t('export') }}
+        </Button>
       </PageHeader>
     </template>
     <template #main>

@@ -5,6 +5,8 @@ import { ref, computed } from 'vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { fetchAllPOSOrders } from '@/api/api'
 import { formatCredit } from '@/utils/utils'
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 
@@ -170,7 +172,7 @@ function downloadCSV() {
           @range-end="onRangeEnd"
         />
         <Button variant="secondary" :disabled="orders.length === 0" @click="downloadCSV">
-          {{ $t('downloadCSV') }}
+          <font-awesome-icon :icon="faFileCsv" /> {{ $t('downloadCSV') }}
         </Button>
       </PageHeader>
     </template>

@@ -4,6 +4,8 @@ import { computed, ref, watch } from 'vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { type Vendor } from '@/stores/vendor'
+import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 
@@ -82,7 +84,9 @@ const exportTable = () => {
         <Button variant="secondary" :disabled="isRecalculating" @click="recalculate">
           {{ isRecalculating ? '…' : $t('recalculateBalances') }}
         </Button>
-        <Button variant="secondary" @click="exportTable">{{ $t('export') }}</Button>
+        <Button variant="secondary" @click="exportTable">
+          <font-awesome-icon :icon="faFileCsv" /> {{ $t('export') }}
+        </Button>
       </PageHeader>
     </template>
 
