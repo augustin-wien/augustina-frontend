@@ -51,6 +51,7 @@ export interface Settings {
   PrivacyPolicyUrl: string
   MatomoUrl: string
   MatomoSiteId: string
+  OnlinePaperUrl: string
   edges?: any
   Keycloak: {
     Realm: string

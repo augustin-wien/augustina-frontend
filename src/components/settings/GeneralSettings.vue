@@ -208,6 +208,9 @@ defineExpose({ saveSettings })
         <FormField :label="$t('Maintainance mode help URL')">
           <input v-model="localSettings.MaintainanceModeHelpUrl" type="text" class="aug-input" />
         </FormField>
+        <FormField :label="$t('onlinePaperUrl')" :hint="$t('onlinePaperUrlHint')">
+          <input v-model="localSettings.OnlinePaperUrl" type="text" class="aug-input" />
+        </FormField>
         <FormField :label="$t('Vendor email postfix')">
           <input v-model="localSettings.VendorEmailPostfix" type="text" class="aug-input" />
         </FormField>
