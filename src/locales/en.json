@@ -183,6 +183,11 @@
   "error": "Error",
   "errorText": "An error occurred. Please try again later.",
   "errorTextInvalidLink": "The link to the pdf is invalid or expired. Please contact the office. ",
+  "backendUnreachableTitle": "Connection problem",
+  "backendUnreachableText": "The server can't be reached right now. We keep trying and the page loads automatically as soon as it's back.",
+  "backendUnreachableRetryIn": "Next attempt in {seconds} s",
+  "backendUnreachableRetrying": "Trying again…",
+  "backendUnreachableRetryNow": "Try again now",
 
   "Logout": "Logout",
   "Save": "Save",

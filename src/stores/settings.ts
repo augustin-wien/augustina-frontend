@@ -4,7 +4,8 @@ import {
   fetchAdminSettings,
   patchSettings,
   patchSettingsStyles,
-  getStyles
+  getStyles,
+  isBackendUnreachable
 } from '@/api/api'
 
 // Shared in-flight request so concurrent callers await the same fetch instead
@@ -65,6 +66,9 @@ export const useSettingsStore = defineStore('settings', {
       settings: { Color: '#000', ShopLanding: undefined } as Settings,
       settingsLoaded: false,
       isLoading: false,
+      // Set when the backend could not be reached. App.vue then shows BackendUnavailable in place
+      // of the page, which keeps retrying and reloads once the backend answers again.
+      backendUnreachable: false,
       imgUrl: '',
       styleRev: 0,
       styleCurrent: -1,
@@ -103,10 +107,13 @@ export const useSettingsStore = defineStore('settings', {
           this.settings.MainItemPrice = data.data.Settings.Edges.MainItem.Price
           this.imgUrl = import.meta.env.VITE_API_URL + this.settings.Logo
           this.settingsLoaded = true
+          this.backendUnreachable = false
         })
         .catch((error) => {
           // eslint-disable-next-line no-console
           console.log('failed to get the settings', error)
+
+          if (isBackendUnreachable(error)) this.backendUnreachable = true
         })
         .finally(() => {
           this.isLoading = false

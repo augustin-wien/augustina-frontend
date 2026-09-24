@@ -5,6 +5,7 @@ import { onMounted } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import { initMatomo } from '@/utils/matomo'
 import { useAccentColor } from '@/composables/useAccentColor'
+import BackendUnavailable from '@/components/BackendUnavailable.vue'
 
 const favicon = import.meta.env.VITE_API_URL + 'img/favicon.png'
 useFavicon(favicon)
@@ -24,7 +25,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <RouterView />
+  <BackendUnavailable v-if="settingsStore.backendUnreachable" />
+  <RouterView v-else />
 </template>
 
 <style scoped>
