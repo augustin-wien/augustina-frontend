@@ -122,33 +122,27 @@ const showToast = (type: string, message: string) => {
 const isEditLocation = ref(false)
 
 const updateLocation = (newLocation: VendorLocation) => {
-  if (updatedVendor.value && updatedVendor.value !== null && updatedVendor.value.ID) {
-    if (!updatedVendor.value.Locations) {
-      updatedVendor.value.Locations = []
-      store.updateVendorLocation(newLocation, updatedVendor.value.ID)
-    }
+  const vendorId = updatedVendor.value?.ID
 
-    // check if we are editing a location
-    if (isEditLocation.value) {
-      updatedVendor.value.Locations = updatedVendor.value.Locations.map((location) => {
-        if (location.id === newLocation.id && updatedVendor.value !== null) {
-          store.updateVendorLocation(newLocation, updatedVendor.value.ID)
-          return newLocation
-        }
-
-        if (updatedVendor.value !== null) {
-          store.createVendorLocation(newLocation, updatedVendor.value.ID)
-        }
-
-        return location
-      })
+  if (vendorId) {
+    if (isEditLocation.value && newLocation.id) {
+      store.updateVendorLocation(newLocation, vendorId)
     } else {
-      store.createVendorLocation(newLocation, updatedVendor.value.ID)
-
-      updatedVendor.value.Locations.push(newLocation)
+      store.createVendorLocation(newLocation, vendorId)
     }
   }
 
+  closeAddressModal()
+}
+
+const addLocation = () => {
+  selectedLocation.value = null
+  isEditLocation.value = false
+  showAddressModal.value = true
+}
+
+const closeAddressModal = () => {
+  selectedLocation.value = null
   isEditLocation.value = false
   showAddressModal.value = false
 }
@@ -396,7 +390,7 @@ const formatWorkingTime = (workingTime: any) => {
               <div>
                 <div class="section-header">
                   <h2 class="section-title">{{ $t('vendor locations') }}</h2>
-                  <Button type="button" variant="secondary" @click="showAddressModal = true">
+                  <Button type="button" variant="secondary" @click="addLocation">
                     {{ $t('New Location') }}
                   </Button>
                 </div>
@@ -534,7 +528,7 @@ const formatWorkingTime = (workingTime: any) => {
           v-if="showAddressModal"
           :vendor="updatedVendor"
           :locations="selectedLocation"
-          @close="showAddressModal = false"
+          @close="closeAddressModal"
           @update="updateLocation"
         ></AddressModal>
         <CommentsModal
