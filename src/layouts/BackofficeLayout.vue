@@ -419,4 +419,33 @@ footer {
     background: rgba(0, 0, 0, 0.4);
   }
 }
+
+/* Print: drop the navigation and let the content flow over as many pages as it needs, instead of
+   the screen layout's fixed-height, internally scrolling panes (which would clip to one page). */
+@media print {
+  .mobile-menu-btn,
+  .sidemenu,
+  .mobile-overlay,
+  footer {
+    display: none !important;
+  }
+  .backoffice-layout,
+  .main-container {
+    display: block;
+    height: auto;
+    overflow: visible;
+    background: none;
+  }
+  .header-slot {
+    min-height: 0;
+    padding: 0 0 12px;
+    background: none;
+    border-bottom: none;
+  }
+  .main-slot {
+    padding: 0;
+    overflow: visible;
+    background: none;
+  }
+}
 </style>

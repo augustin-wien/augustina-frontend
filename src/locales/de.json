@@ -63,6 +63,7 @@
   "item": "Artikel",
   "amount": "Betrag",
   "total": "Gesamt",
+  "print": "Drucken",
 
   "enterPeriod": "Zeitraum eingeben",
   "protocol": "Logbuch",

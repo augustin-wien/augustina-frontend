@@ -59,6 +59,7 @@
   "item": "Item",
   "amount": "Amount",
   "total": "Total",
+  "print": "Print",
 
   "enterPeriod": "Enter period",
   "protocol": "Protocol",

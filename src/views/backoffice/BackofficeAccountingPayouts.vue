@@ -9,7 +9,7 @@ import { useItemsStore } from '@/stores/items'
 import { type Payment } from '@/stores/payments'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { useSettingsStore } from '@/stores/settings'
-import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { faFileCsv, faPrint } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
@@ -50,6 +50,10 @@ const formatTime = (time: string) => {
     minute: '2-digit'
   })
 }
+
+const formatDate = (date: Date) => date.toLocaleDateString('de-DE')
+
+const printPage = () => window.print()
 
 const payments = computed(() => paymentStore.payments)
 
@@ -125,11 +129,15 @@ const exportTable = () => {
         <Button variant="secondary" @click="exportTable">
           <font-awesome-icon :icon="faFileCsv" /> {{ $t('export') }}
         </Button>
+        <Button variant="secondary" @click="printPage">
+          <font-awesome-icon :icon="faPrint" /> {{ $t('print') }}
+        </Button>
       </PageHeader>
+      <p class="print-only print-range">{{ formatDate(startDate) }} – {{ formatDate(endDate) }}</p>
     </template>
 
     <template #main>
-      <Card class="section">
+      <Card class="section payouts-print">
         <table class="aug-table">
           <thead>
             <tr>
@@ -178,5 +186,27 @@ const exportTable = () => {
 <style scoped>
 .totals-row td {
   border-top: 2px solid var(--color-border);
+}
+.print-range {
+  margin-top: 4px;
+  font-size: 13px;
+}
+@media print {
+  /* One column per item makes this table wide - print it on the landscape named page below. */
+  .payouts-print {
+    page: payouts-landscape;
+    border: none;
+    padding: 0;
+  }
+  .payouts-print .aug-table {
+    font-size: 11px;
+  }
+}
+</style>
+
+<style>
+@page payouts-landscape {
+  size: A4 landscape;
+  margin: 12mm;
 }
 </style>
