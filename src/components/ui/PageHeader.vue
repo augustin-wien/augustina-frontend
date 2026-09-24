@@ -66,4 +66,10 @@ defineEmits<{ back: [] }>()
     flex-wrap: wrap;
   }
 }
+@media print {
+  .page-header-back,
+  .page-header-actions {
+    display: none;
+  }
+}
 </style>
