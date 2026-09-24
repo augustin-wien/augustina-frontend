@@ -105,6 +105,19 @@ apiInstance.interceptors.response.use(
   }
 )
 
+/**
+ * True when a request failed because the backend could not be reached at all: no response
+ * (offline, connection refused, DNS, timeout) or a gateway error from the reverse proxy in front
+ * of a backend that is down. A normal 4xx/500 means the backend answered and is not included.
+ */
+export function isBackendUnreachable(error: unknown): boolean {
+  if (!axios.isAxiosError(error)) return false
+
+  if (!error.response) return true
+
+  return [502, 503, 504].includes(error.response.status)
+}
+
 export function getAuthHello() {
   return apiInstance.get(AUTH_API_URL)
 }

@@ -5,6 +5,7 @@ import VendorLayoutVue from '@/layouts/VendorLayout.vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
 import { useSettingsStore } from '@/stores/settings'
+import { isBackendUnreachable } from '@/api/api'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -448,6 +449,15 @@ router.afterEach((to) => {
   }
 })
 
+// Normalize paths with repeated slashes (e.g. /backoffice/vendorsummary// after a Keycloak
+// redirect) - otherwise they fall through to the catch-all vendor route. The hash is dropped
+// because it only carries the Keycloak callback, which keycloak-js reads from window.location.
+router.beforeEach((to) => {
+  if (to.path.includes('//')) {
+    return { path: to.path.replace(/\/{2,}/g, '/'), query: to.query, replace: true }
+  }
+})
+
 // Check if the user is authenticated
 router.beforeEach(async (to: RouteLocationNormalized) => {
   if (to.meta.requiresAuth && to.name !== '404') {
@@ -463,6 +473,10 @@ async function isAuthenticated(to: RouteLocationNormalized) {
     } catch (error) {
       // eslint-disable-next-line no-console
       console.log('init keycloak failed', error)
+
+      // The navigation is aborted below, which would leave a blank page - let App.vue show the
+      // error screen instead.
+      if (isBackendUnreachable(error)) useSettingsStore().backendUnreachable = true
     }
 
     const keycloakStore = useKeycloakStore()
