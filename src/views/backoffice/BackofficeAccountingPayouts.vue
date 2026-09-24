@@ -192,9 +192,7 @@ const exportTable = () => {
   font-size: 13px;
 }
 @media print {
-  /* One column per item makes this table wide - print it on the landscape named page below. */
   .payouts-print {
-    page: payouts-landscape;
     border: none;
     padding: 0;
   }
@@ -205,6 +203,14 @@ const exportTable = () => {
 </style>
 
 <style>
+/* One column per item makes the table wide - print on the landscape named page. The page name sits
+   on the container holding both the header (title + date range) and the table: setting it on the
+   table alone forces a page break at the name change, leaving the title alone on page 1. */
+@media print {
+  .main-container:has(.payouts-print) {
+    page: payouts-landscape;
+  }
+}
 @page payouts-landscape {
   size: A4 landscape;
   margin: 12mm;
