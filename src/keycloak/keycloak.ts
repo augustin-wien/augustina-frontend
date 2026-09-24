@@ -76,9 +76,9 @@ export const initKeycloak = async () => {
     if (!keycloak.keycloak) return
 
     if (!authenticated) {
-      const path = window.location.pathname.endsWith('/')
-        ? window.location.pathname
-        : window.location.pathname + '/'
+      // Collapse repeated slashes: a URL that already contains '//' (old bookmark, earlier
+      // redirect) would otherwise be reflected back by Keycloak and match no route.
+      const path = (window.location.pathname + '/').replace(/\/{2,}/g, '/')
 
       keycloak.keycloak.login({
         locale: 'de',

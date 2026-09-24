@@ -458,6 +458,15 @@ router.beforeEach((to) => {
   }
 })
 
+// Normalize paths with repeated slashes (e.g. /backoffice/vendorsummary// after a Keycloak
+// redirect) - otherwise they fall through to the catch-all vendor route. The hash is dropped
+// because it only carries the Keycloak callback, which keycloak-js reads from window.location.
+router.beforeEach((to) => {
+  if (to.path.includes('//')) {
+    return { path: to.path.replace(/\/{2,}/g, '/'), query: to.query, replace: true }
+  }
+})
+
 // Check if the user is authenticated
 router.beforeEach(async (to: RouteLocationNormalized) => {
   if (to.meta.requiresAuth && to.name !== '404') {
