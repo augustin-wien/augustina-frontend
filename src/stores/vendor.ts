@@ -81,6 +81,9 @@ export interface Vendor {
   Balance: number
   IsDisabled: boolean
   IsDeleted: boolean
+  // A blocked vendor can't sell at the POS or via their QR code
+  IsBlocked: boolean
+  BlockedNote: string
   Language: string
   Comments: VendorComment[]
   Locations: VendorLocation[]

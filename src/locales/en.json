@@ -306,5 +306,14 @@
   "wpInviteLogin": "Log in directly",
   "abonementModule": "Abonement / Subscriptions",
   "abonementModuleEnabled": "Enable abonement module",
-  "recalculateBalances": "Recalculate balances"
+  "recalculateBalances": "Recalculate balances",
+
+  "blocked": "Blocked",
+  "blockedNote": "Block note",
+  "blockedNotePlaceholder": "Reason and duration of the block",
+  "blockedNoteRequired": "Blocking a vendor requires a note.",
+  "vendorBlocked": "Vendor blocked",
+  "allQrCodes": "All QR codes",
+  "qrCodesDownloading": "Creating QR codes",
+  "qrCodesDownloadFailed": "The QR codes could not be created."
 }

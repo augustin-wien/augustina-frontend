@@ -2,9 +2,12 @@
 // Import necessary dependencies and types
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
+import { useSettingsStore } from '@/stores/settings'
 import { ref, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
+import { downloadAllQrCodes } from '@/utils/qrCode'
 
 import {
   faCashRegister,
@@ -13,7 +16,8 @@ import {
   faQrcode,
   faComment,
   faFileCsv,
-  faFileInvoice
+  faFileInvoice,
+  faFileZipper
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
@@ -21,11 +25,29 @@ import VendorInfo from '@/components/VendorInfo.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
+import VendorStatusBadge from '@/components/VendorStatusBadge.vue'
+
+const { t } = useI18n()
 
 // Initialize the vendor store
 const store = vendorsStore()
+const settingsStore = useSettingsStore()
+const posEnabled = computed(() => settingsStore.settings.POSEnabled)
 
-useAuthLoad(() => store.getVendors())
+// The vendor list can take a while to load, so show placeholder rows in the meantime
+const loading = ref(false)
+
+const loadVendors = async () => {
+  loading.value = true
+
+  try {
+    await store.getVendors()
+  } finally {
+    loading.value = false
+  }
+}
+
+useAuthLoad(loadVendors)
 
 // Create a computed property for vendors data
 const vendors = computed(() => store.vendors)
@@ -41,7 +63,7 @@ const search = () => {
   if (searchQuery.value) {
     store.searchVendors(searchQuery.value)
   } else {
-    store.getVendors()
+    loadVendors()
   }
 }
 
@@ -56,7 +78,16 @@ const exportTable = () => {
     return
   }
 
-  const header = ['ID', 'Ausweisnummer', 'Vorname', 'Nachname', 'Aktuelles Guthaben']
+  const header = [
+    'ID',
+    'Ausweisnummer',
+    'Vorname',
+    'Nachname',
+    'Aktuelles Guthaben',
+    'Gesperrt',
+    'Sperrvermerk',
+    'Deaktiviert'
+  ]
 
   const data = displayVendors.value.map((vendor: Vendor) => {
     return [
@@ -64,12 +95,39 @@ const exportTable = () => {
       vendor.LicenseID,
       vendor.FirstName,
       vendor.LastName,
-      formatCredit(vendor.Balance) + ' €'
+      formatCredit(vendor.Balance) + ' €',
+      vendor.IsBlocked ? 'ja' : 'nein',
+      vendor.IsBlocked ? vendor.BlockedNote : '',
+      vendor.IsDisabled ? 'ja' : 'nein'
     ]
   })
 
   const now = new Date()
   exportAsCsv([header, ...data], `vendors_${now.toLocaleDateString()}`)
+}
+
+// Number of QR codes rendered so far while the zip is being built, null when idle
+const qrDownloadProgress = ref<number | null>(null)
+
+const downloadQrCodes = async () => {
+  // Deactivated vendors don't sell any more, so they don't need a QR code
+  const list = (displayVendors.value ?? []).filter((vendor) => !vendor.IsDisabled)
+
+  if (list.length === 0 || qrDownloadProgress.value !== null) return
+
+  qrDownloadProgress.value = 0
+
+  try {
+    await downloadAllQrCodes(list, settingsStore.settings, (done) => {
+      qrDownloadProgress.value = done
+    })
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Downloading QR codes failed:', error)
+    alert(t('qrCodesDownloadFailed'))
+  } finally {
+    qrDownloadProgress.value = null
+  }
 }
 
 const showQRCode = ref(false)
@@ -94,6 +152,17 @@ const selectedVendor = ref<Vendor | null>(null)
         <Button variant="secondary" @click="exportTable">
           <font-awesome-icon :icon="faFileCsv" /> {{ $t('export') }}
         </Button>
+        <Button
+          variant="secondary"
+          :disabled="qrDownloadProgress !== null || !displayVendors?.length"
+          @click="downloadQrCodes"
+        >
+          <font-awesome-icon :icon="faFileZipper" />
+          <template v-if="qrDownloadProgress !== null">
+            {{ $t('qrCodesDownloading') }} {{ qrDownloadProgress }}/{{ displayVendors?.length }}
+          </template>
+          <template v-else>{{ $t('allQrCodes') }}</template>
+        </Button>
       </PageHeader>
     </template>
 
@@ -109,17 +178,34 @@ const selectedVendor = ref<Vendor | null>(null)
               <th>{{ $t('measure') }}</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody :aria-busy="loading">
+            <template v-if="loading && !displayVendors?.length">
+              <tr v-for="n in 8" :key="`skeleton-${n}`" aria-hidden="true">
+                <td><span class="aug-skeleton" style="width: 60px" /></td>
+                <td>
+                  <span class="aug-skeleton" :style="{ width: `${60 + ((n * 37) % 50)}px` }" />
+                </td>
+                <td>
+                  <span class="aug-skeleton" :style="{ width: `${70 + ((n * 53) % 60)}px` }" />
+                </td>
+                <td><span class="aug-skeleton" style="width: 50px" /></td>
+                <td><span class="aug-skeleton" style="width: 180px" /></td>
+              </tr>
+            </template>
             <tr
               v-for="vendor in displayVendors"
               :key="vendor.ID"
-              :class="{ 'disabled-vendor': vendor.IsDisabled }"
+              :class="{ 'disabled-vendor': vendor.IsDisabled || vendor.IsBlocked }"
             >
               <td>
                 <router-link :to="`/backoffice/userprofile/${vendor.ID}`">
-                  {{ vendor.IsDisabled ? $t('Disabled') + ': ' : '' }}
                   {{ vendor?.LicenseID }}
                 </router-link>
+                <VendorStatusBadge
+                  :blocked="vendor.IsBlocked"
+                  :disabled="vendor.IsDisabled"
+                  :note="vendor.BlockedNote"
+                />
               </td>
               <td>{{ vendor.FirstName }}</td>
               <td>{{ vendor.LastName }}</td>
@@ -180,11 +266,22 @@ const selectedVendor = ref<Vendor | null>(null)
                     <font-awesome-icon :icon="faComment" />
                   </button>
                 </router-link>
-                <router-link :to="`/backoffice/pos/${vendor.LicenseID}`">
-                  <button type="button" class="aug-icon-btn" aria-label="Kassa">
+                <template v-if="posEnabled">
+                  <button
+                    v-if="vendor.IsBlocked || vendor.IsDisabled"
+                    type="button"
+                    disabled
+                    class="aug-icon-btn"
+                    aria-label="Kassa"
+                  >
                     <font-awesome-icon :icon="faCashRegister" />
                   </button>
-                </router-link>
+                  <router-link v-else :to="`/backoffice/pos/${vendor.LicenseID}`">
+                    <button type="button" class="aug-icon-btn" aria-label="Kassa">
+                      <font-awesome-icon :icon="faCashRegister" />
+                    </button>
+                  </router-link>
+                </template>
               </td>
             </tr>
           </tbody>

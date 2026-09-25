@@ -92,7 +92,7 @@ function initials(first: string, last: string) {
             :key="vendor.ID"
             type="button"
             class="vendor-card"
-            :disabled="!posEnabled"
+            :disabled="!posEnabled || vendor.IsBlocked || vendor.IsDisabled"
             @click="openPOS(vendor.LicenseID ?? '')"
           >
             <div class="vendor-avatar">
@@ -102,6 +102,10 @@ function initials(first: string, last: string) {
             <div class="vendor-info">
               <div class="vendor-name">{{ vendor.FirstName }} {{ vendor.LastName }}</div>
               <div class="vendor-license">{{ vendor.LicenseID }}</div>
+              <div v-if="vendor.IsBlocked" class="vendor-blocked">{{ $t('vendorBlocked') }}</div>
+              <div v-else-if="vendor.IsDisabled" class="vendor-blocked">
+                {{ $t('deactivated') }}
+              </div>
               <div
                 v-if="vendor.Balance != null"
                 class="vendor-balance"
@@ -228,5 +232,10 @@ function initials(first: string, last: string) {
   flex-shrink: 0;
   font-size: 18px;
   color: var(--color-text-muted);
+}
+.vendor-blocked {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-danger);
 }
 </style>

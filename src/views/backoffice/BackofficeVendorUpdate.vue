@@ -60,6 +60,11 @@ const updateVendor = async () => {
     return
   }
 
+  if (newVendor.IsBlocked && !newVendor.BlockedNote?.trim()) {
+    showToast('error', t('blockedNoteRequired'))
+    return
+  }
+
   try {
     const response = await store.updateVendor(newVendor as Vendor)
 
@@ -347,6 +352,27 @@ const formatWorkingTime = (workingTime: any) => {
                     <option :value="true">{{ $t('yes') }}</option>
                     <option :value="false">{{ $t('no') }}</option>
                   </select>
+                </FormField>
+                <FormField :label="`${$t('blocked')}:`" for="isBlocked">
+                  <select id="isBlocked" v-model="updatedVendor.IsBlocked" class="aug-input">
+                    <option :value="true">{{ $t('yes') }}</option>
+                    <option :value="false">{{ $t('no') }}</option>
+                  </select>
+                </FormField>
+                <FormField
+                  v-if="updatedVendor.IsBlocked"
+                  :label="`${$t('blockedNote')}:`"
+                  for="blockedNote"
+                  class="field-span-2"
+                >
+                  <textarea
+                    id="blockedNote"
+                    v-model="updatedVendor.BlockedNote"
+                    class="aug-input"
+                    rows="2"
+                    required
+                    :placeholder="$t('blockedNotePlaceholder')"
+                  />
                 </FormField>
                 <FormField :label="`${$t('Has a smartphone')}:`" for="hasSmartphone">
                   <select

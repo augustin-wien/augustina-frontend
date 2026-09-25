@@ -39,6 +39,8 @@ const newVendor = ref<Vendor>({
   OpenPayments: null,
   AccountProofUrl: null,
   IsDeleted: false,
+  IsBlocked: false,
+  BlockedNote: '',
   Debt: ''
 })
 

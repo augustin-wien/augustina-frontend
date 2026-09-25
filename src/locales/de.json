@@ -395,5 +395,14 @@
   "wpInviteLogin": "Direkt einloggen",
   "abonementModule": "Abonnement",
   "abonementModuleEnabled": "Abonnement-Modul aktivieren",
-  "recalculateBalances": "Beträge neu berechnen"
+  "recalculateBalances": "Beträge neu berechnen",
+
+  "blocked": "Gesperrt",
+  "blockedNote": "Sperrvermerk",
+  "blockedNotePlaceholder": "Grund und Dauer der Sperre",
+  "blockedNoteRequired": "Für eine Sperre braucht es einen Vermerk.",
+  "vendorBlocked": "Verkäufer:in gesperrt",
+  "allQrCodes": "Alle QR-Codes",
+  "qrCodesDownloading": "QR-Codes werden erstellt",
+  "qrCodesDownloadFailed": "Die QR-Codes konnten nicht erstellt werden."
 }

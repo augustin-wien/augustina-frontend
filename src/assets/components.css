@@ -49,6 +49,35 @@
   background: var(--color-surface-alt);
 }
 
+/* Placeholder bar for table cells (or anything else) while data is still loading. Set a width
+   inline per column so the placeholder rows roughly match the shape of the real data. */
+.aug-skeleton {
+  display: block;
+  height: 12px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--color-border) 25%,
+    var(--color-surface-alt) 50%,
+    var(--color-border) 75%
+  );
+  background-size: 200% 100%;
+  animation: aug-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes aug-skeleton-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .aug-skeleton {
+    animation: none;
+  }
+}
+
 /* Dense icon-only actions (edit/delete on a list row, close a modal) - too small/frequent for
    the full Button component's padding and variant chrome. */
 .aug-icon-btn {

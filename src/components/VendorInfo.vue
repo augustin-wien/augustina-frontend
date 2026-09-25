@@ -147,6 +147,10 @@ const emit = defineEmits(['close'])
 
 <template>
   <Modal open size="lg" :title="`${vendor?.LicenseID} ${vendor?.FirstName}`" @close="emit('close')">
+    <div v-if="vendor?.IsBlocked" class="vendorinfo-blocked" role="alert">
+      <div class="vendorinfo-blocked-title">{{ $t('vendorBlocked') }}</div>
+      <div class="vendorinfo-blocked-note">{{ vendor?.BlockedNote || '–' }}</div>
+    </div>
     <div class="vendorinfo-grid">
       <table class="aug-table">
         <tbody>
@@ -341,6 +345,23 @@ const emit = defineEmits(['close'])
 }
 .vendorinfo-warning {
   color: var(--color-danger);
+}
+.vendorinfo-blocked {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+.vendorinfo-blocked-title {
+  font-size: 13px;
+  font-weight: 700;
+}
+.vendorinfo-blocked-note {
+  font-size: 13px;
+  margin-top: 2px;
+  white-space: pre-line;
 }
 .vendorinfo-empty {
   font-size: 13px;
