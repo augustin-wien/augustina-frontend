@@ -41,7 +41,8 @@ const newVendor = ref<Vendor>({
   IsDeleted: false,
   IsBlocked: false,
   BlockedNote: '',
-  Debt: ''
+  Debt: '',
+  FirstOnlineSale: null
 })
 
 const toast = ref<{ type: string; message: string } | null>(null)

@@ -72,6 +72,10 @@ const displayVendors = computed(() => {
   return searchQuery.value ? store.filteredVendors : vendors.value
 })
 
+// Date of the vendor's first online sale, '–' if they never sold online
+const formatOnlineSale = (date: string | null | undefined) =>
+  date ? new Date(date).toLocaleDateString() : '–'
+
 const exportTable = () => {
   if (!displayVendors.value || displayVendors.value.length == 0) {
     alert('Nothing to export')
@@ -86,7 +90,8 @@ const exportTable = () => {
     'Aktuelles Guthaben',
     'Gesperrt',
     'Sperrvermerk',
-    'Deaktiviert'
+    'Deaktiviert',
+    'Erster Onlineverkauf'
   ]
 
   const data = displayVendors.value.map((vendor: Vendor) => {
@@ -98,7 +103,8 @@ const exportTable = () => {
       formatCredit(vendor.Balance) + ' €',
       vendor.IsBlocked ? 'ja' : 'nein',
       vendor.IsBlocked ? vendor.BlockedNote : '',
-      vendor.IsDisabled ? 'ja' : 'nein'
+      vendor.IsDisabled ? 'ja' : 'nein',
+      formatOnlineSale(vendor.FirstOnlineSale)
     ]
   })
 
@@ -175,6 +181,7 @@ const selectedVendor = ref<Vendor | null>(null)
               <th>{{ $t('firstName') }}</th>
               <th>{{ $t('lastName') }}</th>
               <th>{{ $t('currentCredit') }}</th>
+              <th>{{ $t('firstOnlineSale') }}</th>
               <th>{{ $t('measure') }}</th>
             </tr>
           </thead>
@@ -189,6 +196,7 @@ const selectedVendor = ref<Vendor | null>(null)
                   <span class="aug-skeleton" :style="{ width: `${70 + ((n * 53) % 60)}px` }" />
                 </td>
                 <td><span class="aug-skeleton" style="width: 50px" /></td>
+                <td><span class="aug-skeleton" style="width: 70px" /></td>
                 <td><span class="aug-skeleton" style="width: 180px" /></td>
               </tr>
             </template>
@@ -210,6 +218,7 @@ const selectedVendor = ref<Vendor | null>(null)
               <td>{{ vendor.FirstName }}</td>
               <td>{{ vendor.LastName }}</td>
               <td>{{ formatCredit(vendor.Balance) }}€</td>
+              <td>{{ formatOnlineSale(vendor.FirstOnlineSale) }}</td>
               <td class="entry-actions">
                 <button
                   type="button"

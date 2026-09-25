@@ -98,6 +98,8 @@ export interface Vendor {
   HasSmartphone: boolean
   HasBankAccount: boolean
   Debt: string
+  // Time of the first verified online (QR code) sale, null if the vendor never sold online
+  FirstOnlineSale: string | null
 
   OpenPayments:
     | [

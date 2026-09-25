@@ -190,6 +190,10 @@ const emit = defineEmits(['close'])
             <th>{{ $t('bankAccount') }}:</th>
             <td>{{ $t(vendor?.HasBankAccount ? 'yes' : 'no') }}</td>
           </tr>
+          <tr>
+            <th>{{ $t('firstOnlineSale') }}:</th>
+            <td>{{ formatVendorDate(vendor?.FirstOnlineSale) }}</td>
+          </tr>
           <tr v-if="vendor?.Debt">
             <th>{{ $t('debt') }}:</th>
             <td>{{ vendor?.Debt }}</td>

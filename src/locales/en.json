@@ -314,6 +314,7 @@
   "locationsLoadFailed": "The locations could not be loaded.",
   "nothingToExport": "Nothing to export",
   "blocked": "Blocked",
+  "firstOnlineSale": "First online sale",
   "blockedNote": "Block note",
   "blockedNotePlaceholder": "Reason and duration of the block",
   "blockedNoteRequired": "Blocking a vendor requires a note.",

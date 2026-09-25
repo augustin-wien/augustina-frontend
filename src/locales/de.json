@@ -403,6 +403,7 @@
   "locationsLoadFailed": "Die Standorte konnten nicht geladen werden.",
   "nothingToExport": "Nichts zu exportieren",
   "blocked": "Gesperrt",
+  "firstOnlineSale": "Erster Onlineverkauf",
   "blockedNote": "Sperrvermerk",
   "blockedNotePlaceholder": "Grund und Dauer der Sperre",
   "blockedNoteRequired": "Für eine Sperre braucht es einen Vermerk.",

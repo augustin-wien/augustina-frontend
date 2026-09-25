@@ -65,6 +65,12 @@ const formatCredit = (credit: number) => {
             <span class="detail-value">{{ vendor.LastPayout }}</span>
           </div>
           <div class="detail-item">
+            <span class="detail-label">{{ $t('firstOnlineSale') }}</span>
+            <span class="detail-value">{{
+              vendor.FirstOnlineSale ? new Date(vendor.FirstOnlineSale).toLocaleDateString() : '–'
+            }}</span>
+          </div>
+          <div class="detail-item">
             <span class="detail-label">{{ $t('currentCredit') }}</span>
             <span class="detail-value">{{ formatCredit(vendor.Balance) }} €</span>
           </div>
