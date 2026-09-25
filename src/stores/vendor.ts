@@ -13,6 +13,10 @@ import {
   postVendorLocation,
   deleteVendorLocation,
   fetchVendorLocations,
+  fetchAllLocations,
+  postLocation,
+  patchLocation,
+  deleteLocation,
   fetchVendorComments,
   postVendorComment,
   patchVendorComment,
@@ -126,6 +130,10 @@ export interface VendorLocation {
   longitude: number
   latitude: number
   zip: string
+  // The location's own phone number, not the vendor's
+  telephone?: string
+  // Only used when editing from the locations page; null means no vendor
+  vendorID?: number | null
   working_time:
     | string
     | {
@@ -134,6 +142,26 @@ export interface VendorLocation {
         week_days?: { [key: string]: Array<{ from?: string; to?: string; full_day?: boolean }> }
         whole_week?: boolean
       }
+}
+
+// A location together with the vendor it belongs to, for the table of all locations
+export interface LocationOverview {
+  id: number
+  name: string
+  address: string
+  zip: string
+  telephone: string
+  longitude: number
+  latitude: number
+  working_time: VendorLocation['working_time']
+  // null for a location that isn't assigned to any vendor
+  vendorID: number | null
+  vendorLicenseID: string
+  vendorFirstName: string
+  vendorLastName: string
+  vendorTelephone: string
+  vendorIsDisabled: boolean
+  vendorIsBlocked: boolean
 }
 
 export interface VendorComment {
@@ -155,6 +183,7 @@ type VendorStoreState = {
   filteredVendors: Vendor[]
   vendor: Vendor | null
   vendorLocations: VendorLocation[] | null
+  allLocations: LocationOverview[]
   vendorComments: VendorComment[] | null
 }
 
@@ -164,7 +193,8 @@ export const vendorsStore = defineStore('vendors', {
       vendors: [] as Vendor[],
       vendorsImportedCount: 0,
       filteredVendors: [] as Vendor[],
-      vendor: null as Vendor | null
+      vendor: null as Vendor | null,
+      allLocations: [] as LocationOverview[]
     } as VendorStoreState
   },
 
@@ -185,6 +215,30 @@ export const vendorsStore = defineStore('vendors', {
         // eslint-disable-next-line no-console
         console.error(error)
       }
+    },
+
+    async getAllLocations() {
+      const response = await fetchAllLocations()
+      this.allLocations = response.data ?? []
+    },
+
+    // Creates or updates a location from the locations page, then reloads the list
+    async saveLocation(location: VendorLocation) {
+      const { id, vendorID, ...fields } = location
+      const body = { ...fields, vendorID: vendorID ?? null }
+
+      if (id) {
+        await patchLocation(id, body)
+      } else {
+        await postLocation(body)
+      }
+
+      await this.getAllLocations()
+    },
+
+    async removeLocation(locationId: number) {
+      await deleteLocation(locationId)
+      await this.getAllLocations()
     },
 
     async recalculateBalances() {

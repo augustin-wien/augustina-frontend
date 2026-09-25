@@ -142,3 +142,57 @@ export const normalizeWorkingTime = (
 
   return workingTime
 }
+
+/**
+ * One-line summary of a location's working time, e.g. "Täglich: 08:00-12:00" or
+ * "Mo: 09:00-17:00 · Di: geschlossen". Also understands the legacy v/n/g codes.
+ */
+export const formatWorkingTimeSummary = (
+  workingTime: WorkingTime | string | null | undefined,
+  t: (key: string) => string
+): string => {
+  if (!workingTime) return t('noLocations')
+
+  if (typeof workingTime === 'string') {
+    switch (workingTime.toLowerCase()) {
+      case 'v':
+        return `${t('everyday')}: 08:00 - 12:00`
+      case 'n':
+        return `${t('everyday')}: 13:00 - 17:00`
+      case 'g':
+        return t('open 24/7')
+      default:
+        return workingTime
+    }
+  }
+
+  const formatRange = (range: TimeRange) =>
+    range.full_day ? t('full day') : `${range.from}-${range.to}`
+
+  const mode = workingTime.mode
+  if (mode === 'whole_week') return t('open 24/7')
+
+  if (mode === 'everyday' && workingTime.everyday) {
+    const times = workingTime.everyday
+    if (times.length === 0) return t('closed')
+    if (times[0]?.full_day) return t('full day')
+    return `${t('everyday')}: ${times.map(formatRange).join(', ')}`
+  }
+
+  if (mode === 'by_day' && workingTime.week_days) {
+    const weekDays = workingTime.week_days
+    return WEEK_DAYS.filter((day) => weekDays[day])
+      .map((day) => {
+        const ranges = weekDays[day] || []
+
+        if (ranges.length === 0) {
+          return `${t(day)}: ${t('closed')}`
+        }
+
+        return `${t(day)}: ${ranges.map(formatRange).join(', ')}`
+      })
+      .join(' · ')
+  }
+
+  return mode || t('workingTime')
+}

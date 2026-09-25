@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import type { VendorLocation } from '@/stores/vendor'
+import type { Vendor, VendorLocation } from '@/stores/vendor'
 import { computed, onMounted, ref, type Ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import VendorMapView from '@/components/VendorMapView.vue'
+import VendorPicker from '@/components/VendorPicker.vue'
 import { useSettingsStore } from '@/stores/settings'
 import { createDefaultWorkingTime, normalizeWorkingTime } from '@/utils/workingTime'
 import Modal from '@/components/ui/Modal.vue'
@@ -9,25 +11,45 @@ import Button from '@/components/ui/Button.vue'
 import FormField from '@/components/ui/FormField.vue'
 
 const settingsStore = useSettingsStore()
-const props = defineProps(['vendor', 'locations'])
+const { t } = useI18n()
+
+const props = defineProps<{
+  vendor?: Vendor | null
+  locations?: VendorLocation[] | null
+  // When given, the dialog lets you pick the vendor the location belongs to (or none)
+  vendors?: Vendor[]
+}>()
+
 const updatedVendor = ref(props.vendor)
 const emit = defineEmits(['close', 'update'])
+
+const title = computed(() => {
+  if (updatedVendor.value) {
+    return `${updatedVendor.value.LicenseID} ${updatedVendor.value.FirstName} ${t('address')} ${t('edit')}`
+  }
+
+  return props.locations?.length ? t('editLocation') : t('New Location')
+})
 
 const newAddress: Ref<VendorLocation> = ref({
   id: 0,
   name: '',
   address: '',
   zip: '',
+  telephone: '',
+  vendorID: null,
   longitude: settingsStore.settings?.MapCenterLong || 0.0,
   latitude: settingsStore.settings?.MapCenterLat || 0.0,
   working_time: createDefaultWorkingTime()
 })
 
 onMounted(() => {
-  if (props.locations && props.locations.length > 0) {
+  const location = props.locations?.[0]
+
+  if (location) {
     newAddress.value = {
-      ...props.locations[0],
-      working_time: normalizeWorkingTime(props.locations[0].working_time)
+      ...location,
+      working_time: normalizeWorkingTime(location.working_time)
     }
   }
 })
@@ -151,16 +173,19 @@ const editMarker = (newLocation: any) => {
 </script>
 
 <template>
-  <Modal
-    v-if="updatedVendor"
-    open
-    size="lg"
-    :title="`${updatedVendor.LicenseID} ${updatedVendor.FirstName} ${$t('address')} ${$t('edit')}`"
-    @close="emit('close')"
-  >
+  <Modal open size="lg" :title="title" @close="emit('close')">
     <div class="address-modal-body">
       <form class="address-form" @submit.prevent="updateAddress">
-        <FormField :label="$t('location name')" for="name">
+        <FormField v-if="vendors" :label="`${$t('vendorSingular')}:`" for="location-vendor">
+          <VendorPicker
+            id="location-vendor"
+            v-model="newAddress.vendorID"
+            :vendors="vendors"
+            :placeholder="$t('vendorPickerPlaceholder')"
+          />
+        </FormField>
+
+        <FormField :label="$t('location name')" for="name" :class="{ 'mt-3': vendors }">
           <input id="name" v-model="newAddress.name" class="aug-input" type="text" />
         </FormField>
 
@@ -170,6 +195,15 @@ const editMarker = (newLocation: any) => {
 
         <FormField :label="`${$t('postCode')}:`" for="plz" class="mt-3">
           <input id="plz" v-model="newAddress.zip" class="aug-input" type="text" />
+        </FormField>
+
+        <FormField :label="`${$t('locationTelephone')}:`" for="location-telephone" class="mt-3">
+          <input
+            id="location-telephone"
+            v-model="newAddress.telephone"
+            class="aug-input"
+            type="tel"
+          />
         </FormField>
 
         <FormField :label="`${$t('longitude')}:`" for="location-long" class="mt-3">

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   createDefaultWorkingTime,
+  formatWorkingTimeSummary,
   normalizeWorkingTime,
   parseWorkingTime
 } from '@/utils/workingTime'
@@ -120,5 +121,43 @@ describe('normalizeWorkingTime', () => {
   it('defaults when there is nothing stored', () => {
     expect(normalizeWorkingTime(null)).toEqual(createDefaultWorkingTime())
     expect(normalizeWorkingTime(undefined)).toEqual(createDefaultWorkingTime())
+  })
+})
+
+describe('formatWorkingTimeSummary', () => {
+  // Echo the key so the assertions don't depend on the locale files
+  const t = (key: string) => key
+
+  it('lists the everyday ranges', () => {
+    expect(
+      formatWorkingTimeSummary(
+        {
+          mode: 'everyday',
+          everyday: [
+            { from: '08:00', to: '12:00' },
+            { from: '14:00', to: '18:00' }
+          ]
+        },
+        t
+      )
+    ).toBe('everyday: 08:00-12:00, 14:00-18:00')
+  })
+
+  it('lists the days in week order and marks closed days', () => {
+    expect(
+      formatWorkingTimeSummary(
+        {
+          mode: 'by_day',
+          week_days: { tue: [], mon: [{ from: '09:00', to: '17:00' }], sat: [{ full_day: true }] }
+        },
+        t
+      )
+    ).toBe('mon: 09:00-17:00 · tue: closed · sat: full day')
+  })
+
+  it('understands the legacy codes', () => {
+    expect(formatWorkingTimeSummary('v', t)).toBe('everyday: 08:00 - 12:00')
+    expect(formatWorkingTimeSummary('g', t)).toBe('open 24/7')
+    expect(formatWorkingTimeSummary(null, t)).toBe('noLocations')
   })
 })

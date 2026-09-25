@@ -3,6 +3,7 @@ import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor, VendorComment, VendorLocation } from '@/stores/vendor'
+import { formatWorkingTimeSummary } from '@/utils/workingTime'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
@@ -210,56 +211,8 @@ const cancelEditComment = () => {
   selectedComment.value = null
 }
 
-const formatWorkingTime = (workingTime: any) => {
-  if (!workingTime) return t('noLocations')
-
-  if (typeof workingTime === 'string') {
-    switch (workingTime.toLowerCase()) {
-      case 'v':
-        return `${t('everyday')}: 08:00 - 12:00`
-      case 'n':
-        return `${t('everyday')}: 13:00 - 17:00`
-      case 'g':
-        return t('open 24/7')
-      default:
-        return workingTime
-    }
-  }
-
-  const mode = workingTime.mode
-  if (mode === 'whole_week') return t('open 24/7')
-
-  if (mode === 'everyday' && workingTime.everyday) {
-    const times = workingTime.everyday
-    if (times.length === 0) return t('closed')
-    if (times[0]?.full_day) return t('full day')
-    return `${t('everyday')}: ${times
-      .map((range: any) => (range.full_day ? t('full day') : `${range.from}-${range.to}`))
-      .join(', ')}`
-  }
-
-  if (mode === 'by_day' && workingTime.week_days) {
-    const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
-    return days
-      .filter((day) => workingTime.week_days[day])
-      .map((day) => {
-        const ranges = workingTime.week_days[day] || []
-
-        if (ranges.length === 0) {
-          return `${t(day)}: ${t('closed')}`
-        }
-
-        const formattedRanges = ranges
-          .map((range: any) => (range.full_day ? t('full day') : `${range.from}-${range.to}`))
-          .join(', ')
-
-        return `${t(day)}: ${formattedRanges}`
-      })
-      .join(' · ')
-  }
-
-  return mode || t('workingTime')
-}
+const formatWorkingTime = (workingTime: VendorLocation['working_time']) =>
+  formatWorkingTimeSummary(workingTime, t)
 </script>
 
 <template>
@@ -429,6 +382,9 @@ const formatWorkingTime = (workingTime: any) => {
                     <div>
                       <div class="entry-title">{{ location.name }}</div>
                       <div class="entry-sub">{{ location.address }} {{ location.zip }}</div>
+                      <div v-if="location.telephone" class="entry-sub">
+                        {{ $t('telephone') }}: {{ location.telephone }}
+                      </div>
                       <div v-if="location.working_time" class="entry-detail">
                         <span class="entry-detail-label">{{ $t('workingTime') }}:</span>
                         <span>{{ formatWorkingTime(location.working_time) }}</span>

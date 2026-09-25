@@ -221,6 +221,9 @@ const emit = defineEmits(['close'])
                 <div>
                   <div class="vendorinfo-row-title">{{ location.name }}</div>
                   <div class="vendorinfo-row-sub">{{ location.address }}, {{ location.zip }}</div>
+                  <div v-if="location.telephone" class="vendorinfo-row-sub">
+                    {{ $t('telephone') }}: {{ location.telephone }}
+                  </div>
                 </div>
                 <Badge variant="neutral">{{ formatWorkingTimeMode(location.working_time) }}</Badge>
               </div>

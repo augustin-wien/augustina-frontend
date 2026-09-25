@@ -14,6 +14,7 @@ export const PAYOUT_API_URL = `${BASE_URL}api/payments/payout/`
 export const PAYMENTS_FOR_PAYOUT_API_URL = `${BASE_URL}api/payments/forpayout/`
 export const VENDOR_ME_API_URL = `${BASE_URL}api/vendors/me/`
 export const VENDORS_LOCATION_URL = `${BASE_URL}api/map/`
+export const LOCATIONS_API_URL = `${BASE_URL}api/locations/`
 export const PAYMENT_STATISTICS_API_URL = `${BASE_URL}api/payments/statistics/`
 export const VENDOR_STATISTICS_API_URL = `${BASE_URL}api/vendors/statistics/`
 export const PDF_DOWNLOAD_API_URL = `${BASE_URL}api/pdf/`

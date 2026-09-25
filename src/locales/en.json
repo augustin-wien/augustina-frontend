@@ -308,6 +308,11 @@
   "abonementModuleEnabled": "Enable abonement module",
   "recalculateBalances": "Recalculate balances",
 
+  "menuLocations": "Locations",
+  "locationTelephone": "Location phone",
+  "locationSearchPlaceholder": "Number, name, address …",
+  "locationsLoadFailed": "The locations could not be loaded.",
+  "nothingToExport": "Nothing to export",
   "blocked": "Blocked",
   "blockedNote": "Block note",
   "blockedNotePlaceholder": "Reason and duration of the block",
@@ -315,5 +320,14 @@
   "vendorBlocked": "Vendor blocked",
   "allQrCodes": "All QR codes",
   "qrCodesDownloading": "Creating QR codes",
-  "qrCodesDownloadFailed": "The QR codes could not be created."
+  "qrCodesDownloadFailed": "The QR codes could not be created.",
+  "Disabled": "Disabled",
+  "location name": "Location name",
+  "editLocation": "Edit location",
+  "noVendorAssigned": "No vendor assigned",
+  "deleteLocationConfirm": "Really delete the location \"{name}\"?",
+  "locationSaveFailed": "The location could not be saved.",
+  "locationDeleteFailed": "The location could not be deleted.",
+  "mapLegendAssigned": "Location of a vendor",
+  "vendorPickerPlaceholder": "Type an ID number or name …"
 }
