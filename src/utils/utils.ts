@@ -86,8 +86,15 @@ export function formatDate(date: string) {
 export function exportAsCsv(data: Array<any>[], fileName: string) {
   let csv = ''
 
+  // Quote cells that would otherwise break the row, e.g. an address with a ";" in it
+  const escapeCell = (cell: unknown) => {
+    const text = cell === null || cell === undefined ? '' : String(cell)
+
+    return /[;"\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text
+  }
+
   data.forEach((row) => {
-    csv += row.join(';')
+    csv += row.map(escapeCell).join(';')
     csv += '\n'
   })
 

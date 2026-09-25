@@ -15,6 +15,7 @@ import {
   faUserGroup,
   faUsers,
   faMapLocation,
+  faLocationDot,
   faAreaChart
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -66,6 +67,7 @@ const navGroups = computed<NavGroup[]>(() => {
       labelKey: 'navGroupVendors',
       items: [
         { to: '/backoffice/vendorsummary', labelKey: 'menuOverview', icon: faUserGroup },
+        { to: '/backoffice/locations', labelKey: 'menuLocations', icon: faLocationDot },
         { to: '/backoffice/credits', labelKey: 'menuCredits', icon: faBagShopping }
       ]
     }

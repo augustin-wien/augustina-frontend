@@ -198,6 +198,9 @@ function formatDate(ts: string) {
         <!-- Left column: POS form -->
         <div class="pos-main">
           <div v-if="!posEnabled" class="pos-banner">{{ $t('posDisabled') }}</div>
+          <div v-if="vendor?.IsBlocked" class="pos-banner pos-banner-danger" role="alert">
+            {{ $t('vendorBlocked') }}: {{ vendor.BlockedNote }}
+          </div>
 
           <!-- Vendor header -->
           <Card v-if="vendor" class="pos-vendor-card">
@@ -286,7 +289,7 @@ function formatDate(ts: string) {
             <Button
               variant="primary"
               class="pos-complete-btn"
-              :disabled="total === 0 || submitting || !posEnabled"
+              :disabled="total === 0 || submitting || !posEnabled || vendor?.IsBlocked"
               @click="completeSale"
             >
               {{ submitting ? '...' : $t('posCompleteSale') }}
@@ -419,6 +422,11 @@ function formatDate(ts: string) {
   background: var(--color-info-bg);
   color: var(--color-info);
   border: 1px solid var(--color-info);
+}
+.pos-banner-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
 }
 .pos-vendor-card {
   margin-bottom: 20px;

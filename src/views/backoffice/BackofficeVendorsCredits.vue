@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
+import VendorStatusBadge from '@/components/VendorStatusBadge.vue'
 
 const store = vendorsStore()
 
@@ -53,13 +54,15 @@ const exportTable = () => {
     return
   }
 
-  const header = ['Ausweis', 'Betrag', 'Letzte Auszahlung']
+  const header = ['Ausweis', 'Betrag', 'Letzte Auszahlung', 'Gesperrt', 'Deaktiviert']
 
   const data = displayVendors.value.map((vendor: Vendor) => {
     return [
       vendor?.LicenseID,
       formatCredit(vendor.Balance) + ' €',
-      vendor.LastPayout ? formatDate(vendor.LastPayout) : 'nicht ausgezahlt'
+      vendor.LastPayout ? formatDate(vendor.LastPayout) : 'nicht ausgezahlt',
+      vendor.IsBlocked ? 'ja' : 'nein',
+      vendor.IsDisabled ? 'ja' : 'nein'
     ]
   })
 
@@ -103,8 +106,19 @@ const exportTable = () => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(vendor, id) in displayVendors" :key="id">
-              <td>{{ vendor?.LicenseID }}</td>
+            <tr
+              v-for="(vendor, id) in displayVendors"
+              :key="id"
+              :class="{ 'inactive-vendor': vendor.IsBlocked || vendor.IsDisabled }"
+            >
+              <td>
+                {{ vendor?.LicenseID }}
+                <VendorStatusBadge
+                  :blocked="vendor.IsBlocked"
+                  :disabled="vendor.IsDisabled"
+                  :note="vendor.BlockedNote"
+                />
+              </td>
               <td>{{ formatCredit(vendor.Balance) }} €</td>
               <td>{{ vendor.LastPayout ? formatDate(vendor.LastPayout) : '' }}</td>
               <td>
@@ -121,3 +135,9 @@ const exportTable = () => {
     </template>
   </component>
 </template>
+
+<style scoped>
+.inactive-vendor {
+  background-color: var(--color-danger-bg);
+}
+</style>

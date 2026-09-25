@@ -395,5 +395,27 @@
   "wpInviteLogin": "Direkt einloggen",
   "abonementModule": "Abonnement",
   "abonementModuleEnabled": "Abonnement-Modul aktivieren",
-  "recalculateBalances": "Beträge neu berechnen"
+  "recalculateBalances": "Beträge neu berechnen",
+
+  "menuLocations": "Standorte",
+  "locationTelephone": "Telefon Standort",
+  "locationSearchPlaceholder": "Nummer, Name, Adresse …",
+  "locationsLoadFailed": "Die Standorte konnten nicht geladen werden.",
+  "nothingToExport": "Nichts zu exportieren",
+  "blocked": "Gesperrt",
+  "firstOnlineSale": "Erster Onlineverkauf",
+  "blockedNote": "Sperrvermerk",
+  "blockedNotePlaceholder": "Grund und Dauer der Sperre",
+  "blockedNoteRequired": "Für eine Sperre braucht es einen Vermerk.",
+  "vendorBlocked": "Verkäufer:in gesperrt",
+  "allQrCodes": "Alle QR-Codes",
+  "qrCodesDownloading": "QR-Codes werden erstellt",
+  "qrCodesDownloadFailed": "Die QR-Codes konnten nicht erstellt werden.",
+  "editLocation": "Standort bearbeiten",
+  "noVendorAssigned": "Keine Verkäufer:in zugeordnet",
+  "deleteLocationConfirm": "Standort „{name}“ wirklich löschen?",
+  "locationSaveFailed": "Der Standort konnte nicht gespeichert werden.",
+  "locationDeleteFailed": "Der Standort konnte nicht gelöscht werden.",
+  "mapLegendAssigned": "Standort einer Verkäufer:in",
+  "vendorPickerPlaceholder": "Ausweisnummer oder Name eingeben …"
 }

@@ -16,6 +16,7 @@ import {
   SETTINGS_API_URL,
   VENDORS_API_URL,
   VENDORS_LOCATION_URL,
+  LOCATIONS_API_URL,
   VENDOR_ME_API_URL,
   PAYMENT_STATISTICS_API_URL,
   PDF_DOWNLOAD_API_URL,
@@ -436,6 +437,24 @@ function blobToData(blob: Blob): Promise<string | undefined> {
 }
 
 // Locations API
+
+// Locations independent of a vendor: a location may belong to no vendor at all
+
+export async function fetchAllLocations() {
+  return apiInstance.get(LOCATIONS_API_URL)
+}
+
+export async function postLocation(location: unknown) {
+  return apiInstance.post(LOCATIONS_API_URL, location)
+}
+
+export async function patchLocation(locationId: number, location: unknown) {
+  return apiInstance.patch(`${LOCATIONS_API_URL}${locationId}/`, location)
+}
+
+export async function deleteLocation(locationId: number) {
+  return apiInstance.delete(`${LOCATIONS_API_URL}${locationId}/`)
+}
 
 export async function fetchVendorLocations(vendorId: number) {
   return apiInstance.get(`${VENDORS_API_URL}${vendorId}/locations/`)

@@ -53,8 +53,22 @@ const formatCredit = (credit: number) => {
             <span class="detail-value">{{ $t(vendor.IsDisabled ? 'yes' : 'no') }}</span>
           </div>
           <div class="detail-item">
+            <span class="detail-label">{{ $t('blocked') }}</span>
+            <span class="detail-value">{{ $t(vendor.IsBlocked ? 'yes' : 'no') }}</span>
+          </div>
+          <div v-if="vendor.IsBlocked" class="detail-item">
+            <span class="detail-label">{{ $t('blockedNote') }}</span>
+            <span class="detail-value">{{ vendor.BlockedNote }}</span>
+          </div>
+          <div class="detail-item">
             <span class="detail-label">{{ $t('lastPayout') }}</span>
             <span class="detail-value">{{ vendor.LastPayout }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">{{ $t('firstOnlineSale') }}</span>
+            <span class="detail-value">{{
+              vendor.FirstOnlineSale ? new Date(vendor.FirstOnlineSale).toLocaleDateString() : '–'
+            }}</span>
           </div>
           <div class="detail-item">
             <span class="detail-label">{{ $t('currentCredit') }}</span>
