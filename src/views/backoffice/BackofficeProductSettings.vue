@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useItemsStore } from '@/stores/items'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { formatCredit } from '@/utils/utils'
 import type { Item } from '@/stores/items'
 import { useAuthLoad } from '@/composables/useAuthLoad'
@@ -10,13 +10,45 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
+import Toast from '@/components/ToastMessage.vue'
 
 const { t } = useI18n()
 const itemsStore = useItemsStore()
 
+const currentTab = ref<'active' | 'archived'>('active')
+const toast = ref<{ type: string; message: string } | null>(null)
+const restoringId = ref<number | null>(null)
+
 useAuthLoad(() => {
   itemsStore.getItemsBackoffice()
+  itemsStore.getArchivedItems()
 })
+
+const archivedItems = computed(() => itemsStore.archivedItems)
+
+const showToast = (type: string, message: string) => {
+  toast.value = { type, message }
+
+  setTimeout(() => {
+    toast.value = null
+  }, 5000)
+}
+
+async function restore(item: Item) {
+  if (!confirm(t('restoreProductConfirm', { name: item.Name }))) return
+  restoringId.value = item.ID
+
+  try {
+    await itemsStore.restoreItem(item.ID)
+    showToast('success', t('restoreProductSuccess'))
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error restoring item:', error)
+    showToast('error', t('restoreProductError'))
+  } finally {
+    restoringId.value = null
+  }
+}
 
 const items = computed(() => {
   const tmpItems = JSON.parse(JSON.stringify(itemsStore.itemsBackoffice))
@@ -43,17 +75,21 @@ function exportCSV() {
     t('price'),
     t('order'),
     t('itemType'),
-    t('isDisabled')
+    t('isDisabled'),
+    t('isArchived')
   ]
 
-  const rows = items.value.map((item: Item) => [
+  // Archived (deleted) products are exported too, so historic payments can
+  // still be matched to a product.
+  const rows = [...items.value, ...archivedItems.value].map((item: Item) => [
     item.ID,
     item.Name,
     item.Description,
     item.Price,
     item.ItemOrder,
     item.Type ?? '',
-    item.Disabled ? t('yes') : t('no')
+    item.Disabled ? t('yes') : t('no'),
+    item.Archived ? t('yes') : t('no')
   ])
 
   const csvContent = [headers, ...rows]
@@ -83,7 +119,26 @@ function exportCSV() {
       </PageHeader>
     </template>
     <template #main>
-      <Card class="section">
+      <Toast v-if="toast" :toast="toast" @close="toast = null" />
+      <div class="tab-nav">
+        <button
+          type="button"
+          class="tab-btn"
+          :class="{ 'tab-btn-active': currentTab === 'active' }"
+          @click="currentTab = 'active'"
+        >
+          {{ $t('productsActive') }}
+        </button>
+        <button
+          type="button"
+          class="tab-btn"
+          :class="{ 'tab-btn-active': currentTab === 'archived' }"
+          @click="currentTab = 'archived'"
+        >
+          {{ $t('productsArchived') }} ({{ archivedItems.length }})
+        </button>
+      </div>
+      <Card v-show="currentTab === 'active'" class="section">
         <table class="aug-table">
           <thead>
             <tr>
@@ -121,6 +176,49 @@ function exportCSV() {
           </tbody>
         </table>
       </Card>
+      <Card v-show="currentTab === 'archived'" class="section">
+        <p v-if="archivedItems.length === 0" class="muted empty">{{ $t('noArchivedProducts') }}</p>
+        <table v-else class="aug-table">
+          <thead>
+            <tr>
+              <th>{{ $t('productId') }}</th>
+              <th>{{ $t('image') }}</th>
+              <th>{{ $t('name') }}</th>
+              <th>{{ $t('description') }}</th>
+              <th>{{ $t('itemType') }}</th>
+              <th>{{ $t('price') }}</th>
+              <th>{{ $t('measure') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in archivedItems" :key="item.ID" class="disabled-row">
+              <td>{{ item.ID }}</td>
+              <td>
+                <img
+                  :src="item.Image ? apiUrl + item.Image : ''"
+                  :alt="$t('noImage')"
+                  class="product-image"
+                  width="80"
+                  height="auto"
+                />
+              </td>
+              <td class="font-bold">{{ $t(item.Name) }}</td>
+              <td>{{ $t(item.Description) }}</td>
+              <td>{{ item.Type ? $t(`itemType_${item.Type}`) : '' }}</td>
+              <td>{{ formatCredit(item.Price) }} €</td>
+              <td>
+                <Button
+                  variant="secondary"
+                  :disabled="restoringId === item.ID"
+                  @click="restore(item)"
+                >
+                  {{ $t('restore') }}
+                </Button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </Card>
     </template>
     <template #footer>
       <footer>
@@ -137,6 +235,33 @@ function exportCSV() {
 <style scoped>
 .section {
   overflow-x: auto;
+}
+.tab-nav {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--color-border);
+}
+.tab-btn {
+  margin-bottom: -1px;
+  padding: 10px 16px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+.tab-btn:hover {
+  color: var(--color-text);
+}
+.tab-btn-active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+.empty {
+  padding: 16px;
 }
 .product-image {
   display: block;

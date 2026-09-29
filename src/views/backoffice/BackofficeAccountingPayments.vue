@@ -23,7 +23,8 @@ const isDark = usePreferredDark()
 const settingsStore = useSettingsStore()
 const ordersStore = useOrdersStore()
 const itemsStore = useItemsStore()
-const items = computed(() => itemsStore.itemsBackoffice)
+// Include archived items: payments may reference products that were deleted since.
+const items = computed(() => itemsStore.itemsWithArchived)
 const odooEnabled = computed(() => !!settingsStore.settings?.OdooEnabled)
 
 const startOfDay = (date: Date) => {
@@ -88,7 +89,7 @@ const translateItem = (payment: Payment) => {
 }
 
 useAuthLoad(() => {
-  itemsStore.getItemsBackoffice().then(() => {
+  itemsStore.getItemsWithArchived().then(() => {
     store.getPayments(startDate.value, endDate.value, `vendor=${vendorFilter.value}`)
   })
 

@@ -1,5 +1,13 @@
 import { defineStore } from 'pinia'
-import { fetchItemsBackoffice, fetchItems, postItems, patchItem, removeItem } from '@/api/api'
+import {
+  fetchItemsBackoffice,
+  fetchArchivedItems,
+  fetchItems,
+  postItems,
+  patchItem,
+  removeItem,
+  restoreItem
+} from '@/api/api'
 
 //define interface to store data from backend properly
 export const ITEM_TYPES = [
@@ -21,6 +29,7 @@ export interface Item {
   Name: 'string'
   Price: number
   Disabled: boolean
+  Archived?: boolean
   IsLicenseItem: boolean
   LicenseItem: number | null
   LicenseGroup: string | null
@@ -37,7 +46,11 @@ export const useItemsStore = defineStore('items', {
   state: () => {
     return {
       items: [] as Item[],
-      itemsBackoffice: [] as Item[]
+      itemsBackoffice: [] as Item[],
+      // Includes archived (deleted) items. Use this wherever historic payments
+      // are shown or exported, since they may reference deleted items.
+      itemsWithArchived: [] as Item[],
+      archivedItems: [] as Item[]
     }
   },
 
@@ -67,6 +80,29 @@ export const useItemsStore = defineStore('items', {
       }
     },
 
+    async getItemsWithArchived() {
+      try {
+        const data = await fetchItemsBackoffice(true)
+        this.itemsWithArchived = data.data
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error)
+      }
+    },
+    async getArchivedItems() {
+      try {
+        const data = await fetchArchivedItems()
+        this.archivedItems = data.data
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error)
+      }
+    },
+    async restoreItem(itemId: number) {
+      await restoreItem(itemId)
+      await Promise.all([this.getArchivedItems(), this.getItemsBackoffice()])
+    },
+
     async createItem(newItem: Item) {
       return postItems(newItem)
     },
@@ -75,14 +111,8 @@ export const useItemsStore = defineStore('items', {
       return patchItem(updatedItem)
     },
     async deleteItem(itemId: number) {
-      removeItem(itemId)
-        .then(() => {
-          this.getItems()
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log('Error deleting item:', error)
-        })
+      await removeItem(itemId)
+      this.getItems()
     }
   }
 })

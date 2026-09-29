@@ -61,11 +61,21 @@ const translateSender = (receiver: string) => {
   return receiver == 'Orga' ? settingsStore.settings.NewspaperName : receiver
 }
 
-const items = computed(() => itemsStore.itemsBackoffice)
+// One column per active item, plus archived (deleted) items that still show
+// up in the listed payouts.
+const items = computed(() => {
+  const usedIDs = new Set<number>()
+
+  payments.value?.forEach((payment: Payment) =>
+    payment.IsPayoutFor?.forEach((payout: Payment) => usedIDs.add(payout.Item))
+  )
+
+  return itemsStore.itemsWithArchived.filter((item) => !item.Archived || usedIDs.has(item.ID))
+})
 
 useAuthLoad(() => {
   paymentStore.getPayouts(startDate.value, endDate.value)
-  itemsStore.getItemsBackoffice()
+  itemsStore.getItemsWithArchived()
 })
 
 const sumItemsForOrder = (payment: any, itemID: number) => {

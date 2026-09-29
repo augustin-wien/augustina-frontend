@@ -30,13 +30,14 @@ const date = ref([startDate.value, endDate.value])
 const isDark = usePreferredDark()
 const store = usePaymentsStore()
 const itemsStore = useItemsStore()
-const items = computed(() => itemsStore.itemsBackoffice)
+// Include archived items: sales may reference products that were deleted since.
+const items = computed(() => itemsStore.itemsWithArchived)
 const settingsStore = useSettingsStore()
 const authenticated = computed(() => useKeycloakStore().authenticated)
 
 useAuthLoad(() => {
   store.getSales(startDate.value, endDate.value)
-  itemsStore.getItemsBackoffice()
+  itemsStore.getItemsWithArchived()
 })
 
 //fetch paymentlist data once component is mounted
