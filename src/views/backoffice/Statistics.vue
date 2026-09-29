@@ -132,6 +132,38 @@ const dailyColorOrder = computed(() => {
   return keys
 })
 
+// Payouts form a single line, so they are fed to buildDailyStatistics as one pseudo item
+const PAYOUT_ID = 0
+
+const payoutDays = computed<DailyItemStatistics[]>(() =>
+  store.payouts.map((payout) => ({
+    Date: payout.Date,
+    ItemID: PAYOUT_ID,
+    SumQuantity: payout.Count,
+    SumAmount: payout.SumAmount
+  }))
+)
+
+const buildPayouts = (name: string, value?: (day: DailyItemStatistics) => number) =>
+  buildDailyStatistics(
+    payoutDays.value,
+    new Map([[PAYOUT_ID, name]]),
+    startDate.value,
+    endDate.value,
+    {
+      value
+    }
+  )
+
+const dailyPayoutCount = computed(() => buildPayouts('Anzahl'))
+const dailyPayoutAmount = computed(() => buildPayouts('Summe', dayAmount))
+
+const payoutCount = computed(() => store.payouts.reduce((sum, day) => sum + day.Count, 0))
+
+const payoutAmount = computed(
+  () => store.payouts.reduce((sum, day) => sum + day.SumAmount, 0) / 100
+)
+
 const vendorLabel = (vendor: VendorSalesStatistics) =>
   [vendor.LicenseID, vendor.Name].filter(Boolean).join(' ')
 
@@ -250,6 +282,13 @@ useAuthLoad(async () => {
           <span class="kpi-value">{{ euro(transactionCosts) }}</span>
         </Card>
         <Card class="kpi">
+          <span class="kpi-label">Auszahlungen</span>
+          <span class="kpi-value">{{ euro(payoutAmount) }}</span>
+          <span class="kpi-hint">
+            {{ number(payoutCount) }} {{ payoutCount === 1 ? 'Auszahlung' : 'Auszahlungen' }}
+          </span>
+        </Card>
+        <Card class="kpi">
           <span class="kpi-label">Nutzende Verkäufer:innen</span>
           <span class="kpi-value">
             {{ vendorUsageData ? `${vendorUsageData.UsedPercentage.toFixed(0)} %` : '–' }}
@@ -271,6 +310,12 @@ useAuthLoad(async () => {
               :format="euro"
               :color-order="dailyColorOrder"
             />
+          </StatisticsChartCard>
+          <StatisticsChartCard title="Auszahlungen pro Tag" :range="rangeLabel">
+            <StatisticsDailyChart :data="dailyPayoutCount" />
+          </StatisticsChartCard>
+          <StatisticsChartCard title="Summe der Auszahlungen pro Tag" :range="rangeLabel">
+            <StatisticsDailyChart :data="dailyPayoutAmount" :format="euro" />
           </StatisticsChartCard>
           <StatisticsChartCard title="Verkaufte Menge pro Produkt" :range="rangeLabel">
             <StatisticsBarChart :data="quantityData" label="Menge" integer />
@@ -303,6 +348,23 @@ useAuthLoad(async () => {
             :format="euro"
           />
         </Card>
+        <div class="grid">
+          <Card>
+            <StatisticsDailyTable
+              :data="dailyPayoutCount"
+              title="Auszahlungen pro Tag"
+              filename="statistics_daily_payouts"
+            />
+          </Card>
+          <Card>
+            <StatisticsDailyTable
+              :data="dailyPayoutAmount"
+              title="Summe der Auszahlungen pro Tag"
+              filename="statistics_daily_payout_amount"
+              :format="euro"
+            />
+          </Card>
+        </div>
         <div class="grid">
           <Card>
             <StatisticsQuantityTable :data="quantityData" />
