@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import StatisticsAmountTable from '@/components/statistics/StatisticsAmountTable.vue'
 import StatisticsBarChart from '@/components/statistics/StatisticsBarChart.vue'
+import StatisticsChartCard from '@/components/statistics/StatisticsChartCard.vue'
 import StatisticsDailyChart from '@/components/statistics/StatisticsDailyChart.vue'
 import StatisticsDailyTable from '@/components/statistics/StatisticsDailyTable.vue'
 import StatisticsQuantityTable from '@/components/statistics/StatisticsQuantityTable.vue'
@@ -16,7 +17,11 @@ import {
   type StatisticsItemMinimal,
   type VendorUsageStatistics
 } from '@/stores/statistics'
-import { buildDailyStatistics, type DailyStatisticsOptions } from '@/utils/dailyStatistics'
+import {
+  buildDailyStatistics,
+  dateRange,
+  type DailyStatisticsOptions
+} from '@/utils/dailyStatistics'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { usePreferredDark } from '@vueuse/core'
@@ -57,6 +62,13 @@ const onRangeEnd = (value: Date) => {
     loadStatistics()
   }
 }
+
+// The days the statistics cover, e.g. "24.09.2026 – 26.09.2026"
+const rangeLabel = computed(() => {
+  const days = dateRange(startDate.value, endDate.value)
+  const format = (day?: string) => (day ?? '').split('-').reverse().join('.')
+  return days.length > 1 ? `${format(days[0])} – ${format(days[days.length - 1])}` : format(days[0])
+})
 
 const viewMode = ref<'chart' | 'table' | 'both'>('chart')
 const showCharts = computed(() => viewMode.value === 'chart' || viewMode.value === 'both')
@@ -250,34 +262,28 @@ useAuthLoad(async () => {
 
       <template v-if="showCharts">
         <div class="grid">
-          <Card>
-            <h2 class="section-title">Verkaufte Menge pro Tag</h2>
+          <StatisticsChartCard title="Verkaufte Menge pro Tag" :range="rangeLabel">
             <StatisticsDailyChart :data="dailyQuantityChart" :color-order="dailyColorOrder" />
-          </Card>
-          <Card>
-            <h2 class="section-title">Einnahmen pro Tag</h2>
+          </StatisticsChartCard>
+          <StatisticsChartCard title="Einnahmen pro Tag" :range="rangeLabel">
             <StatisticsDailyChart
               :data="dailyAmountChart"
               :format="euro"
               :color-order="dailyColorOrder"
             />
-          </Card>
-          <Card>
-            <h2 class="section-title">Verkaufte Menge pro Produkt</h2>
+          </StatisticsChartCard>
+          <StatisticsChartCard title="Verkaufte Menge pro Produkt" :range="rangeLabel">
             <StatisticsBarChart :data="quantityData" label="Menge" integer />
-          </Card>
-          <Card>
-            <h2 class="section-title">Einnahmen pro Produkt</h2>
+          </StatisticsChartCard>
+          <StatisticsChartCard title="Einnahmen pro Produkt" :range="rangeLabel">
             <StatisticsBarChart :data="amountData" label="Betrag" :format="euro" />
-          </Card>
-          <Card>
-            <h2 class="section-title">Top 10 Verkäufer:innen (verkaufte Menge)</h2>
+          </StatisticsChartCard>
+          <StatisticsChartCard title="Top 10 Verkäufer:innen (verkaufte Menge)" :range="rangeLabel">
             <StatisticsBarChart :data="topVendorsByQuantity" label="Menge" integer />
-          </Card>
-          <Card>
-            <h2 class="section-title">Top 10 Verkäufer:innen (Einnahmen)</h2>
+          </StatisticsChartCard>
+          <StatisticsChartCard title="Top 10 Verkäufer:innen (Einnahmen)" :range="rangeLabel">
             <StatisticsBarChart :data="topVendorsByAmount" label="Betrag" :format="euro" />
-          </Card>
+          </StatisticsChartCard>
         </div>
       </template>
 

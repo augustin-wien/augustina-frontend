@@ -77,6 +77,8 @@ const renderChart = () => {
           ticks: {
             color: textColor,
             precision: props.integer ? 0 : undefined,
+            maxRotation: 0,
+            autoSkipPadding: 16,
             callback: (value) => props.format(Number(value))
           },
           grid: { color: gridColor },
@@ -85,10 +87,11 @@ const renderChart = () => {
         y: {
           ticks: {
             color: tokenColor('--color-text'),
-            // Long names would be clipped on narrow screens; the tooltip shows them in full
-            callback: (_, index) => {
+            // Long names would be clipped on narrow charts; the tooltip shows them in full
+            callback: function (_, index) {
               const name = props.data[index]?.name ?? ''
-              return name.length > 24 ? `${name.slice(0, 23)}…` : name
+              const max = this.chart.width < 500 ? 24 : 40
+              return name.length > max ? `${name.slice(0, max - 1)}…` : name
             }
           },
           grid: { display: false }
