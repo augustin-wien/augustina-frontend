@@ -28,6 +28,12 @@ export interface DailyItemStatistics {
   SumQuantity: number
 }
 
+export interface DailyPayoutStatistics {
+  Date: string // YYYY-MM-DD, Europe/Vienna
+  Count: number
+  SumAmount: number
+}
+
 export interface VendorSalesStatistics {
   VendorID: number
   LicenseID: string
@@ -50,6 +56,7 @@ type StatisticsStoreState = {
   statistics: Statistics[]
   Items: Statistics[]
   days: DailyItemStatistics[]
+  payouts: DailyPayoutStatistics[]
   topVendors: VendorSalesStatistics[]
   topVendorsByAmount: VendorSalesStatistics[]
   vendorUsageStatistics: VendorUsageStatistics | null
@@ -61,6 +68,7 @@ export const useStatisticsStore = defineStore('statistics', {
       statistics: [] as Statistics[],
       Items: [] as Statistics[],
       days: [] as DailyItemStatistics[],
+      payouts: [] as DailyPayoutStatistics[],
       topVendors: [] as VendorSalesStatistics[],
       topVendorsByAmount: [] as VendorSalesStatistics[],
       vendorUsageStatistics: null as VendorUsageStatistics | null
@@ -83,6 +91,8 @@ export const useStatisticsStore = defineStore('statistics', {
         this.statistics = data.data.Items
         //@ts-ignore
         this.days = data.data.Days ?? []
+        //@ts-ignore
+        this.payouts = data.data.Payouts ?? []
         //@ts-ignore
         this.topVendors = data.data.TopVendors ?? []
         //@ts-ignore
