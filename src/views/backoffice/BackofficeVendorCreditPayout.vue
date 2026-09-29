@@ -26,7 +26,8 @@ const vendors = computed(() => store.vendors)
 const route = useRoute()
 const idparams = route.params.ID
 const vendorID = Number(idparams) // Convert the string to a number or NaN
-const items = computed(() => itemsStore.itemsBackoffice)
+// Include archived items: payments may reference products that were deleted since.
+const items = computed(() => itemsStore.itemsWithArchived)
 
 const setVendor = () => {
   if (store.vendors.length === 0) return null
@@ -42,7 +43,7 @@ const setVendor = () => {
       return null
     }
 
-    if (items?.value.length === 0) itemsStore.getItemsBackoffice()
+    if (items?.value.length === 0) itemsStore.getItemsWithArchived()
     payoutStore.getPaymentsForPayout(val.LicenseID)
     return val
   } else {
@@ -62,7 +63,7 @@ watch(vendor, (val: Vendor | null) => {
 })
 
 watch(store.vendors, () => {
-  itemsStore.getItemsBackoffice()
+  itemsStore.getItemsWithArchived()
   if (vendor.value) payoutStore.getPaymentsForPayout(vendor.value.LicenseID)
 })
 
@@ -70,7 +71,7 @@ watch(store.vendors, () => {
 const amount = ref<number>(0.0)
 
 useAuthLoad(() => {
-  itemsStore.getItemsBackoffice()
+  itemsStore.getItemsWithArchived()
 
   if (route?.params?.ID) {
     store.getVendor(parseInt(route.params.ID.toString()))

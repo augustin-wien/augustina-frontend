@@ -66,7 +66,7 @@ function removeLicenseGroup(group: string) {
 useAuthLoad(async () => {
   const response = await fetchLicenseGroups()
   availableLicenseGroups.value = response.data ?? []
-  await itemsStore.getItemsBackoffice()
+  await Promise.all([itemsStore.getItemsBackoffice(), itemsStore.getItemsWithArchived()])
 
   if (!isNew.value && customerId.value) {
     await store.getCustomerById(customerId.value)
@@ -266,7 +266,11 @@ function abonementBadgeVariant(status: string) {
           </thead>
           <tbody>
             <tr v-for="a in abonements" :key="a.id">
-              <td>{{ items.find((i) => i.ID === a.item_id)?.Name ?? a.item_id }}</td>
+              <td>
+                {{
+                  itemsStore.itemsWithArchived.find((i) => i.ID === a.item_id)?.Name ?? a.item_id
+                }}
+              </td>
               <td>{{ formatDate(a.from_date) }}</td>
               <td>{{ formatDate(a.to_date) }}</td>
               <td>

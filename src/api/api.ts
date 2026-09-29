@@ -200,8 +200,18 @@ export async function fetchItems() {
   return apiInstance.get<Item[]>(ITEMS_API_URL)
 }
 
-export async function fetchItemsBackoffice() {
-  return apiInstance.get<Item[]>(`${ITEMS_BACKOFFICE_API_URL}`)
+export async function fetchItemsBackoffice(includeArchived = false) {
+  return apiInstance.get<Item[]>(`${ITEMS_BACKOFFICE_API_URL}`, {
+    params: includeArchived ? { includeArchived: true } : undefined
+  })
+}
+
+export async function fetchArchivedItems() {
+  return apiInstance.get<Item[]>(`${ITEMS_API_URL}archived/`)
+}
+
+export async function restoreItem(itemId: number) {
+  return apiInstance.post(`${ITEMS_API_URL}${itemId}/restore/`)
 }
 
 export async function fetchLicenseGroups() {

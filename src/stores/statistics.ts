@@ -21,6 +21,21 @@ export interface Statistics {
   Items: StatisticsItem[] | null
 }
 
+export interface DailyItemStatistics {
+  Date: string // YYYY-MM-DD, Europe/Vienna
+  ItemID: number
+  SumAmount: number
+  SumQuantity: number
+}
+
+export interface VendorSalesStatistics {
+  VendorID: number
+  LicenseID: string
+  Name: string
+  SumAmount: number
+  SumQuantity: number
+}
+
 export interface VendorUsageStatistics {
   From: string
   To: string
@@ -34,6 +49,9 @@ export interface VendorUsageStatistics {
 type StatisticsStoreState = {
   statistics: Statistics[]
   Items: Statistics[]
+  days: DailyItemStatistics[]
+  topVendors: VendorSalesStatistics[]
+  topVendorsByAmount: VendorSalesStatistics[]
   vendorUsageStatistics: VendorUsageStatistics | null
 }
 
@@ -42,6 +60,9 @@ export const useStatisticsStore = defineStore('statistics', {
     return {
       statistics: [] as Statistics[],
       Items: [] as Statistics[],
+      days: [] as DailyItemStatistics[],
+      topVendors: [] as VendorSalesStatistics[],
+      topVendorsByAmount: [] as VendorSalesStatistics[],
       vendorUsageStatistics: null as VendorUsageStatistics | null
     } as StatisticsStoreState
   },
@@ -60,6 +81,12 @@ export const useStatisticsStore = defineStore('statistics', {
         const data = await fetchStatistics(startDate, endDate, '')
         //@ts-ignore
         this.statistics = data.data.Items
+        //@ts-ignore
+        this.days = data.data.Days ?? []
+        //@ts-ignore
+        this.topVendors = data.data.TopVendors ?? []
+        //@ts-ignore
+        this.topVendorsByAmount = data.data.TopVendorsByAmount ?? []
         //@ts-ignore
       } catch (error) {
         // eslint-disable-next-line no-console
