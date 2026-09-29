@@ -289,6 +289,16 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeLocations.vue')
     },
     {
+      path: '/backoffice/campaigns',
+      name: 'Campaigns',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Campaigns'
+      },
+      component: () => import('@/views/backoffice/BackofficeCampaigns.vue')
+    },
+    {
       path: '/backoffice/map',
       name: 'Map',
       meta: {

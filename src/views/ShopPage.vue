@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Toast from '@/components/ToastMessage.vue'
+import CampaignPopup from '@/components/CampaignPopup.vue'
 import { useShopStore } from '@/stores/ShopStore'
 import { useSettingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
@@ -244,6 +245,7 @@ const checkIfItemSelected = () => {
             </ul>
           </div>
         </div>
+        <CampaignPopup />
         <div class="place-items-center row-span-1 w-full flex">
           <button
             id="next-button"
