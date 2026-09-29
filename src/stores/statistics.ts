@@ -5,6 +5,7 @@ import { fetchStatistics, fetchVendorUsageStatistics } from '@/api/api'
 export interface StatisticsItem {
   ID: number
   Name: string
+  Type?: string // item type, e.g. donation or transaction_costs
   SumAmount: number
   SumQuantity: number
 }

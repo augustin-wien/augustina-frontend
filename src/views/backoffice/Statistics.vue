@@ -74,8 +74,18 @@ const viewMode = ref<'chart' | 'table' | 'both'>('chart')
 const showCharts = computed(() => viewMode.value === 'chart' || viewMode.value === 'both')
 const showTable = computed(() => viewMode.value === 'table' || viewMode.value === 'both')
 
+const statisticsData = computed<StatisticsItem[]>(() => store.statisticsList ?? [])
+
+// The statistics carry the item type; the items store is a fallback for older backends
+// and lacks archived items
 const itemTypes = computed(
-  () => new Map(itemsStore.itemsBackoffice.map((item) => [item.ID, item.Type] as [number, string]))
+  () =>
+    new Map<number, string | undefined>([
+      ...itemsStore.itemsBackoffice.map((item) => [item.ID, item.Type] as [number, string]),
+      ...statisticsData.value
+        .filter((item) => item.Type)
+        .map((item) => [item.ID, item.Type] as [number, string])
+    ])
 )
 
 const isTransactionCosts = (id: number) => itemTypes.value.get(id) === 'transaction_costs'
@@ -86,8 +96,6 @@ const displayName = (item: StatisticsItem) => {
   const type = itemTypes.value.get(item.ID)
   return type === 'donation' || type === 'transaction_costs' ? t(`itemType_${type}`) : item.Name
 }
-
-const statisticsData = computed<StatisticsItem[]>(() => store.statisticsList ?? [])
 
 const quantityData = computed<StatisticsItemMinimal[]>(() =>
   statisticsData.value
@@ -185,12 +193,9 @@ const topVendorsByAmount = computed<StatisticsItemMinimal[]>(() =>
 
 const vendorUsageData = computed<VendorUsageStatistics | null>(() => store.vendorUsageStats)
 
-const soldCount = computed(() =>
-  quantityData.value
-    .filter((item) => !isDonation(item.id))
-    .reduce((sum, item) => sum + item.value, 0)
-)
+const soldCount = computed(() => quantityData.value.reduce((sum, item) => sum + item.value, 0))
 
+// A donation counts as one piece per sale
 const donationCount = computed(() =>
   quantityData.value
     .filter((item) => isDonation(item.id))
@@ -271,7 +276,9 @@ useAuthLoad(async () => {
         <Card class="kpi">
           <span class="kpi-label">Verkaufte Produkte</span>
           <span class="kpi-value">{{ number(soldCount) }}</span>
-          <span v-if="donationCount" class="kpi-hint">+ {{ number(donationCount) }} Spenden</span>
+          <span v-if="donationCount" class="kpi-hint"
+            >davon {{ number(donationCount) }} Spenden</span
+          >
         </Card>
         <Card class="kpi">
           <span class="kpi-label">Einnahmen</span>
