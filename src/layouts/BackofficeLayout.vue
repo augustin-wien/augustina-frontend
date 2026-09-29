@@ -11,6 +11,7 @@ import {
   faCashRegister,
   faDungeon,
   faFileLines,
+  faReceipt,
   faSliders,
   faSplotch,
   faUserGroup,
@@ -91,6 +92,7 @@ const navGroups = computed<NavGroup[]>(() => {
   const accountingItems: NavItem[] = [
     { to: '/backoffice/payments', labelKey: 'menuPayments', icon: faBagShopping },
     { to: '/backoffice/sales', labelKey: 'menuSales', icon: faDungeon },
+    { to: '/backoffice/sales-extended', labelKey: 'menuSalesExtended', icon: faReceipt },
     { to: '/backoffice/payouts', labelKey: 'menuPayouts', icon: faFileLines },
     { to: '/backoffice/unverified-orders', labelKey: 'menuUnverifiedOrders', icon: faFileLines }
   ]
