@@ -188,6 +188,16 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeAccountingSales.vue')
     },
     {
+      path: '/backoffice/sales-extended',
+      name: 'Backoffice Sales Extended',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Sales (extended)'
+      },
+      component: () => import('@/views/backoffice/BackofficeAccountingSalesExtended.vue')
+    },
+    {
       path: '/backoffice/unverified-orders',
       name: 'Backoffice Unverified Orders',
       meta: {
