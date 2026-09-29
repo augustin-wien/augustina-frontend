@@ -116,8 +116,10 @@ const itemName = (itemID: number) => {
 
 // Donation and transaction costs store the amount in cents as quantity (price 1 cent),
 // but are one entry per sale
+const itemType = (itemID: number) => itemsStore.itemsWithArchived.find((i) => i.ID === itemID)?.Type
+
 const isAmountItem = (itemID: number) => {
-  const type = itemsStore.itemsWithArchived.find((i) => i.ID === itemID)?.Type
+  const type = itemType(itemID)
   return type === 'donation' || type === 'transaction_costs'
 }
 
@@ -249,6 +251,17 @@ const totalItems = computed(() =>
   )
 )
 
+const totalDonations = computed(() =>
+  filteredOrders.value.reduce(
+    (sum, order) =>
+      sum +
+      saleEntries(order)
+        .filter((e) => itemType(e.Item) === 'donation')
+        .reduce((s, e) => s + e.Price * e.Quantity, 0),
+    0
+  )
+)
+
 // One CSV row per product, so a sale with several products can be regrouped by its ID
 const exportTable = () => {
   if (filteredOrders.value.length === 0) {
@@ -336,6 +349,10 @@ const exportTable = () => {
           <Card>
             <div class="stat-label">{{ $t('total') }}</div>
             <div class="stat-value">{{ formatCredit(totalAmount) }} €</div>
+          </Card>
+          <Card>
+            <div class="stat-label">{{ $t('salesDonationTotal') }}</div>
+            <div class="stat-value">{{ formatCredit(totalDonations) }} €</div>
           </Card>
         </div>
 
@@ -472,7 +489,7 @@ const exportTable = () => {
 }
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
 .stat-label {
