@@ -17,6 +17,7 @@ import {
   VENDORS_API_URL,
   VENDORS_LOCATION_URL,
   LOCATIONS_API_URL,
+  CAMPAIGNS_API_URL,
   VENDOR_ME_API_URL,
   PAYMENT_STATISTICS_API_URL,
   PDF_DOWNLOAD_API_URL,
@@ -584,4 +585,29 @@ export async function putAbonement(abonementId: number, abonement: object) {
 
 export async function removeAbonement(abonementId: number) {
   return apiInstance.delete(`${ABONEMENTS_API_URL}${abonementId}/`)
+}
+
+// campaigns
+export async function fetchCampaigns() {
+  return apiInstance.get(CAMPAIGNS_API_URL)
+}
+
+export async function fetchActiveCampaigns() {
+  return apiInstance.get(`${CAMPAIGNS_API_URL}active/`)
+}
+
+export async function postCampaign(campaign: unknown) {
+  return apiInstance.post(CAMPAIGNS_API_URL, campaign)
+}
+
+export async function putCampaign(id: number, campaign: unknown) {
+  return apiInstance.put(`${CAMPAIGNS_API_URL}${id}/`, campaign)
+}
+
+export async function deleteCampaign(id: number) {
+  return apiInstance.delete(`${CAMPAIGNS_API_URL}${id}/`)
+}
+
+export async function trackCampaign(id: number, counter: 'view' | 'click') {
+  return apiInstance.post(`${CAMPAIGNS_API_URL}${id}/${counter}/`)
 }

@@ -7,13 +7,27 @@ import { useVendorStore } from '@/stores/vendor'
 import { useShopStore } from '@/stores/ShopStore'
 import IconCross from '@/components/icons/IconCross.vue'
 import IconAvatar from '@/components/icons/IconAvatar.vue'
+import CampaignPopup from '@/components/CampaignPopup.vue'
 
 const router = useRouter()
 const route = useRoute()
 const shopStore = useShopStore()
 const vendorStore = useVendorStore()
 const settStore = useSettingsStore()
-const price = computed(() => (settStore.settings.MainItemPrice / 100).toFixed(2))
+
+// Normally the main item, but a customer who took a campaign offer has that item in the cart instead.
+const landingItemId = computed(
+  () => shopStore.amount.find((a) => a.quantity > 0)?.item ?? settStore.settings.MainItem
+)
+
+const price = computed(() => {
+  const cents =
+    landingItemId.value === settStore.settings.MainItem
+      ? settStore.settings.MainItemPrice
+      : shopStore.getItembyId(landingItemId.value).Price
+
+  return (cents / 100).toFixed(2)
+})
 
 const checkVendor = () => {
   window.location.href = vendorStore.vendorLink
@@ -101,7 +115,7 @@ onMounted(() => {
               class="w-full h-full text-2xl text-center font-semibold text-white bg-black rounded-full place-self-center flex items-center justify-center"
             >
               <p id="main-item-name" class="text-center">
-                1x {{ shopStore.getName(settStore.settings.MainItem) }}
+                1x {{ shopStore.getName(landingItemId) }}
               </p>
             </div>
             <div
@@ -129,6 +143,7 @@ onMounted(() => {
         </div>
       </div>
       <div class="absolute"></div>
+      <CampaignPopup />
     </template>
   </component>
 </template>

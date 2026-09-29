@@ -22,3 +22,4 @@ export const STYLES_URL = `${BASE_URL}public/style.css`
 export const MAIL_TEMPLATES_API = `${BASE_URL}api/mail-templates/`
 export const CUSTOMERS_API_URL = `${BASE_URL}api/customers/`
 export const ABONEMENTS_API_URL = `${BASE_URL}api/abonements/`
+export const CAMPAIGNS_API_URL = `${BASE_URL}api/campaigns/`
