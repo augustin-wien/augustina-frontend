@@ -114,6 +114,19 @@ const itemName = (itemID: number) => {
   return item ? t(item.Name) : `#${itemID}`
 }
 
+// Donation and transaction costs store the amount in cents as quantity (price 1 cent),
+// but are one entry per sale
+const itemType = (itemID: number) => itemsStore.itemsWithArchived.find((i) => i.ID === itemID)?.Type
+
+const isAmountItem = (itemID: number) => {
+  const type = itemType(itemID)
+  return type === 'donation' || type === 'transaction_costs'
+}
+
+const entryQuantity = (e: OrderEntry) => (isAmountItem(e.Item) ? 1 : e.Quantity)
+
+const entryUnitPrice = (e: OrderEntry) => (isAmountItem(e.Item) ? e.Price * e.Quantity : e.Price)
+
 // Entries the customer paid for (buyer -> vendor)
 const saleEntries = (order: Order) => (order.Entries ?? []).filter((e) => e.IsSale)
 // Bookkeeping entries, e.g. license items (vendor -> orga)
@@ -233,7 +246,18 @@ const totalAmount = computed(() =>
 
 const totalItems = computed(() =>
   filteredOrders.value.reduce(
-    (sum, order) => sum + saleEntries(order).reduce((s, e) => s + e.Quantity, 0),
+    (sum, order) => sum + saleEntries(order).reduce((s, e) => s + entryQuantity(e), 0),
+    0
+  )
+)
+
+const totalDonations = computed(() =>
+  filteredOrders.value.reduce(
+    (sum, order) =>
+      sum +
+      saleEntries(order)
+        .filter((e) => itemType(e.Item) === 'donation')
+        .reduce((s, e) => s + e.Price * e.Quantity, 0),
     0
   )
 )
@@ -268,8 +292,8 @@ const exportTable = () => {
       vendorLicenseId(order),
       order.CustomerEmail ?? '',
       itemName(entry.Item),
-      entry.Quantity,
-      formatCredit(entry.Price),
+      entryQuantity(entry),
+      formatCredit(entryUnitPrice(entry)),
       formatCredit(entry.Price * entry.Quantity),
       formatCredit(orderTotal(order))
     ])
@@ -326,6 +350,10 @@ const exportTable = () => {
             <div class="stat-label">{{ $t('total') }}</div>
             <div class="stat-value">{{ formatCredit(totalAmount) }} €</div>
           </Card>
+          <Card>
+            <div class="stat-label">{{ $t('salesDonationTotal') }}</div>
+            <div class="stat-value">{{ formatCredit(totalDonations) }} €</div>
+          </Card>
         </div>
 
         <Card class="table-section">
@@ -365,9 +393,11 @@ const exportTable = () => {
                 <td>
                   <table class="entry-table">
                     <tr v-for="entry in saleEntries(order)" :key="entry.ID">
-                      <td class="qty">{{ entry.Quantity }}×</td>
+                      <td class="qty">{{ entryQuantity(entry) }}×</td>
                       <td>{{ itemName(entry.Item) }}</td>
-                      <td class="text-right muted nowrap">à {{ formatCredit(entry.Price) }} €</td>
+                      <td class="text-right muted nowrap">
+                        à {{ formatCredit(entryUnitPrice(entry)) }} €
+                      </td>
                       <td class="text-right nowrap">
                         {{ formatCredit(entry.Price * entry.Quantity) }} €
                       </td>
@@ -376,14 +406,16 @@ const exportTable = () => {
                       <td colspan="4" class="booking-heading">{{ $t('salesBookings') }}</td>
                     </tr>
                     <tr v-for="entry in otherEntries(order)" :key="entry.ID" class="muted">
-                      <td class="qty">{{ entry.Quantity }}×</td>
+                      <td class="qty">{{ entryQuantity(entry) }}×</td>
                       <td>
                         {{ itemName(entry.Item) }}
                         <span class="nowrap"
                           >({{ entry.SenderName }} → {{ entry.ReceiverName }})</span
                         >
                       </td>
-                      <td class="text-right nowrap">à {{ formatCredit(entry.Price) }} €</td>
+                      <td class="text-right nowrap">
+                        à {{ formatCredit(entryUnitPrice(entry)) }} €
+                      </td>
                       <td class="text-right nowrap">
                         {{ formatCredit(entry.Price * entry.Quantity) }} €
                       </td>
@@ -457,7 +489,7 @@ const exportTable = () => {
 }
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
 .stat-label {

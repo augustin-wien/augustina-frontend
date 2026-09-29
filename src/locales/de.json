@@ -44,6 +44,7 @@
   "salesOrderId": "Verkauf-ID",
   "salesOrderCount": "Verkäufe",
   "salesItemCount": "Verkaufte Produkte",
+  "salesDonationTotal": "Spenden",
   "salesProducts": "Produkte",
   "salesVendor": "VerkäuferIn",
   "salesCustomer": "KundIn",

@@ -40,6 +40,7 @@
   "salesOrderId": "Sale ID",
   "salesOrderCount": "Sales",
   "salesItemCount": "Products sold",
+  "salesDonationTotal": "Donations",
   "salesProducts": "Products",
   "salesVendor": "Vendor",
   "salesCustomer": "Customer",
