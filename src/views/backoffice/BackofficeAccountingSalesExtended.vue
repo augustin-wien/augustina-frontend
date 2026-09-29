@@ -5,14 +5,15 @@ import { usePreferredDark } from '@vueuse/core'
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthLoad } from '@/composables/useAuthLoad'
-import { fetchVerifiedOrders } from '@/api/api'
+import { fetchVerifiedOrders, resendOrderMail } from '@/api/api'
 import { useItemsStore } from '@/stores/items'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
-import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
+import Toast from '@/components/ToastMessage.vue'
 
 // Extended sales view: one row per sale (verified online order) with all the
 // products that belong to it. The plain /backoffice/sales list of single sales
@@ -118,6 +119,43 @@ const vendorLicenseId = (order: Order) => saleEntries(order)[0]?.ReceiverName ||
 
 const saleTime = (order: Order) => order.VerifiedAt || order.Timestamp
 
+// Digital sales deliver the online paper or a PDF download link by mail
+const isDigitalSale = (order: Order) =>
+  saleEntries(order).some((e) => {
+    const item = itemsStore.itemsWithArchived.find((i) => i.ID === e.Item)
+
+    return item && (item.LicenseItem !== null || item.Type === 'abonement')
+  })
+
+const canResendMail = (order: Order) => !!order.CustomerEmail && isDigitalSale(order)
+
+const toast = ref<{ type: string; message: string } | null>(null)
+const resendingOrderID = ref<number | null>(null)
+
+const showToast = (type: string, message: string) => {
+  toast.value = { type, message }
+
+  setTimeout(() => {
+    toast.value = null
+  }, 5000)
+}
+
+async function resendMail(order: Order) {
+  if (!confirm(t('salesResendMailConfirm', { email: order.CustomerEmail }))) return
+
+  resendingOrderID.value = order.ID
+
+  try {
+    await resendOrderMail(order.ID)
+    showToast('success', t('salesResendMailSuccess', { email: order.CustomerEmail }))
+  } catch (err) {
+    console.error('Error resending order mail:', err)
+    showToast('error', t('salesResendMailError'))
+  } finally {
+    resendingOrderID.value = null
+  }
+}
+
 const filteredOrders = computed(() => {
   const q = searchQuery.value.trim().toLowerCase()
   if (!q) return orders.value
@@ -217,6 +255,7 @@ const exportTable = () => {
 
     <template #main>
       <div class="main space-y-4">
+        <Toast v-if="toast" :toast="toast" @close="toast = null" />
         <p class="hint">{{ $t('salesExtendedHint') }}</p>
 
         <div class="stat-grid">
@@ -295,7 +334,19 @@ const exportTable = () => {
                     </tr>
                   </table>
                 </td>
-                <td>{{ order.CustomerEmail || '—' }}</td>
+                <td>
+                  <div>{{ order.CustomerEmail || '—' }}</div>
+                  <Button
+                    v-if="canResendMail(order)"
+                    variant="ghost"
+                    class="resend-btn"
+                    :disabled="resendingOrderID === order.ID"
+                    :title="$t('salesResendMailHint')"
+                    @click="resendMail(order)"
+                  >
+                    <font-awesome-icon :icon="faEnvelope" /> {{ $t('salesResendMail') }}
+                  </Button>
+                </td>
                 <td class="text-right font-semibold nowrap">
                   {{ formatCredit(orderTotal(order)) }} €
                 </td>
@@ -369,6 +420,11 @@ const exportTable = () => {
 }
 .nowrap {
   white-space: nowrap;
+}
+.resend-btn {
+  margin-top: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
 }
 .entry-empty {
   text-align: center;

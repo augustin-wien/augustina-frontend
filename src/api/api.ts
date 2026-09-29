@@ -26,6 +26,7 @@ import {
   BASE_URL,
   ORDERS_UNVERIFIED_API_URL,
   ORDERS_VERIFIED_API_URL,
+  ORDERS_API_URL,
   VENDOR_STATISTICS_API_URL,
   CUSTOMERS_API_URL,
   ABONEMENTS_API_URL
@@ -538,6 +539,11 @@ export async function fetchVerifiedOrders(startDate: Date, endDate: Date) {
   return apiInstance.get(
     `${ORDERS_VERIFIED_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
   )
+}
+
+// Sends the online paper and PDF download mails of a digital sale to its customer again
+export async function resendOrderMail(orderID: number) {
+  return apiInstance.post(`${ORDERS_API_URL}${orderID}/resend-mail/`)
 }
 
 // Customers API
