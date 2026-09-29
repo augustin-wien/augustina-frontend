@@ -7,6 +7,7 @@ import { useSettingsStore } from '@/stores/settings'
 import {
   faArrowRightFromBracket,
   faBagShopping,
+  faBullhorn,
   faCashRegister,
   faDungeon,
   faFileLines,
@@ -113,6 +114,7 @@ const navGroups = computed<NavGroup[]>(() => {
     labelKey: 'navGroupAdmin',
     items: [
       { to: '/backoffice/settings/update', labelKey: 'menuSettings', icon: faSliders },
+      { to: '/backoffice/campaigns', labelKey: 'menuCampaigns', icon: faBullhorn },
       { to: '/backoffice/map', labelKey: 'menuMap', icon: faMapLocation },
       { to: '/backoffice/statistics', labelKey: 'menuStatistics', icon: faAreaChart }
     ]
