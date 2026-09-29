@@ -6,13 +6,16 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { fetchVerifiedOrders, resendOrderMail } from '@/api/api'
+import agent from '@/api/agent'
 import { useItemsStore } from '@/stores/items'
+import { useSettingsStore } from '@/stores/settings'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
-import { faEnvelope, faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faFileCsv, faRotateRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
+import Badge from '@/components/ui/Badge.vue'
 import Toast from '@/components/ToastMessage.vue'
 
 // Extended sales view: one row per sale (verified online order) with all the
@@ -39,6 +42,8 @@ interface Order {
   VerifiedAt: string | null
   Vendor: number
   CustomerEmail: string | null
+  OdooSyncedAt: string | null
+  OdooSyncError: string | null
   Entries: OrderEntry[] | null
 }
 
@@ -57,6 +62,9 @@ const endDate = ref<Date>(tomorrow)
 const date = ref([startDate.value, endDate.value])
 const isDark = usePreferredDark()
 const itemsStore = useItemsStore()
+const settingsStore = useSettingsStore()
+const odooEnabled = computed(() => !!settingsStore.settings?.OdooEnabled)
+const columnCount = computed(() => (odooEnabled.value ? 7 : 6))
 
 const orders = ref<Order[]>([])
 const loading = ref(false)
@@ -153,6 +161,53 @@ async function resendMail(order: Order) {
     showToast('error', t('salesResendMailError'))
   } finally {
     resendingOrderID.value = null
+  }
+}
+
+// Odoo webhook delivery: delivered, failed after all retries, or never recorded
+// (sent before delivery was tracked, or still retrying)
+type OdooStatus = 'synced' | 'failed' | 'pending'
+
+const odooStatus = (order: Order): OdooStatus => {
+  if (order.OdooSyncedAt) return 'synced'
+  if (order.OdooSyncError) return 'failed'
+  return 'pending'
+}
+
+const odooBadge = { synced: 'success', failed: 'danger', pending: 'neutral' } as const
+
+const odooLabel = {
+  synced: 'salesOdooSynced',
+  failed: 'salesOdooFailed',
+  pending: 'salesOdooPending'
+} as const
+
+const odooTitle = (order: Order) => {
+  const status = odooStatus(order)
+  if (status === 'synced') return formatDate(order.OdooSyncedAt)
+  if (status === 'failed') return order.OdooSyncError ?? ''
+  return t('salesOdooPendingHint')
+}
+
+const resendingOdooOrderID = ref<number | null>(null)
+
+async function resendOdoo(order: Order) {
+  if (!confirm(t('salesOdooResendConfirm', { id: order.ID }))) return
+
+  resendingOdooOrderID.value = order.ID
+
+  try {
+    const res = await agent.VivaWallet.resendWebhook(order.ID)
+    order.OdooSyncedAt = res?.sent_at ?? new Date().toISOString()
+    order.OdooSyncError = null
+    showToast('success', t('salesOdooResendSuccess', { id: order.ID }))
+  } catch (err: any) {
+    console.error('Error resending Odoo webhook:', err)
+    const message = typeof err?.response?.data === 'string' ? err.response.data.trim() : ''
+    order.OdooSyncError = message || t('salesOdooResendError')
+    showToast('error', t('salesOdooResendError'))
+  } finally {
+    resendingOdooOrderID.value = null
   }
 }
 
@@ -282,15 +337,16 @@ const exportTable = () => {
                 <th>{{ $t('salesVendor') }}</th>
                 <th>{{ $t('salesProducts') }}</th>
                 <th>{{ $t('salesCustomer') }}</th>
+                <th v-if="odooEnabled">Odoo</th>
                 <th class="text-right">{{ $t('total') }}</th>
               </tr>
             </thead>
             <tbody>
               <tr v-if="loading">
-                <td colspan="6" class="entry-empty">…</td>
+                <td :colspan="columnCount" class="entry-empty">…</td>
               </tr>
               <tr v-else-if="filteredOrders.length === 0">
-                <td colspan="6" class="entry-empty">{{ $t('salesNoOrders') }}</td>
+                <td :colspan="columnCount" class="entry-empty">{{ $t('salesNoOrders') }}</td>
               </tr>
               <tr v-for="order in filteredOrders" :key="order.ID">
                 <td class="nowrap">
@@ -347,12 +403,37 @@ const exportTable = () => {
                     <font-awesome-icon :icon="faEnvelope" /> {{ $t('salesResendMail') }}
                   </Button>
                 </td>
+                <td v-if="odooEnabled" class="nowrap">
+                  <Badge :variant="odooBadge[odooStatus(order)]" :title="odooTitle(order)">
+                    {{ $t(odooLabel[odooStatus(order)]) }}
+                  </Badge>
+                  <div v-if="odooStatus(order) === 'synced'" class="muted">
+                    {{ formatDate(order.OdooSyncedAt) }}
+                  </div>
+                  <Button
+                    v-else
+                    variant="ghost"
+                    class="resend-btn"
+                    :disabled="resendingOdooOrderID === order.ID"
+                    @click="resendOdoo(order)"
+                  >
+                    <font-awesome-icon
+                      :icon="faRotateRight"
+                      :spin="resendingOdooOrderID === order.ID"
+                    />
+                    {{
+                      resendingOdooOrderID === order.ID
+                        ? $t('salesOdooResending')
+                        : $t('salesOdooResend')
+                    }}
+                  </Button>
+                </td>
                 <td class="text-right font-semibold nowrap">
                   {{ formatCredit(orderTotal(order)) }} €
                 </td>
               </tr>
               <tr v-if="filteredOrders.length > 0" class="totals-row">
-                <td class="font-bold" colspan="5">
+                <td class="font-bold" :colspan="columnCount - 1">
                   {{ $t('total') }} ({{ filteredOrders.length }})
                 </td>
                 <td class="text-right font-bold nowrap">{{ formatCredit(totalAmount) }} €</td>
