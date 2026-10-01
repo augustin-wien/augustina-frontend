@@ -79,64 +79,78 @@ const choose = () => {
 <template>
   <div
     v-if="campaign && item"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-6"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-4"
     @click.self="close"
   >
+    <!-- The dialog never grows beyond the screen: the content scrolls, the buttons stay visible.
+         It has to work down to an iPhone SE (320 x 568). -->
     <div
       role="dialog"
       aria-modal="true"
       :aria-label="campaign.title || item.Name"
-      class="relative w-full max-w-sm rounded-3xl bg-white p-6 shadow-xl"
+      class="relative flex max-h-full w-full max-w-sm flex-col rounded-3xl bg-white p-5 shadow-xl"
     >
       <button
         type="button"
-        class="absolute right-4 top-3 text-2xl text-gray-500"
+        class="absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full text-3xl leading-none text-gray-800"
         :aria-label="$t('campaignDismiss')"
         @click="close"
       >
         ✕
       </button>
 
-      <h2 v-if="campaign.title" class="mb-3 pr-6 text-2xl font-bold">
-        {{ campaign.title }}
-      </h2>
+      <div class="flex min-h-0 flex-1 flex-col overflow-y-auto">
+        <h2 v-if="campaign.title" class="mb-3 shrink-0 pr-10 text-xl font-bold">
+          {{ campaign.title }}
+        </h2>
 
-      <div
-        v-if="item.Image"
-        class="mb-4 h-40 w-full rounded-2xl bg-cover bg-center"
-        :style="{ backgroundImage: `url(${apiUrl}${item.Image})` }"
-      ></div>
+        <!-- The product image takes the space the rest leaves and is never cropped. On a small
+             screen it shrinks down to a minimum height before the content starts to scroll. -->
+        <img
+          v-if="item.Image"
+          :src="`${apiUrl}${item.Image}`"
+          :alt="item.Name"
+          class="campaign-image mx-auto w-full rounded-2xl object-contain"
+          :class="{ 'mt-8': !campaign.title }"
+        />
 
-      <p v-if="campaign.text" class="mb-4 whitespace-pre-line text-base">
-        {{ campaign.text }}
-      </p>
+        <p class="mt-2 shrink-0 text-center text-lg font-semibold">
+          {{ item.Name }} {{ (item.Price / 100).toFixed(2) }}€
+        </p>
 
-      <div
-        class="mb-4 flex h-14 w-full items-center justify-center rounded-full text-center text-xl font-semibold"
-        :style="{
-          'background-color': item.ItemColor || '#000000',
-          color: item.ItemTextColor || '#ffffff'
-        }"
-      >
-        {{ item.Name }} {{ (item.Price / 100).toFixed(2) }}€
+        <p v-if="campaign.text" class="mt-2 shrink-0 whitespace-pre-line text-base">
+          {{ campaign.text }}
+        </p>
       </div>
 
-      <button
-        id="campaign-choose"
-        type="button"
-        class="customcolor w-full rounded-full p-4 text-2xl font-semibold"
-        @click="choose"
-      >
-        {{ $t('campaignChoose') }}
-      </button>
-      <button type="button" class="mt-3 w-full text-center text-gray-500 underline" @click="close">
-        {{ $t('campaignDismiss') }}
-      </button>
+      <div class="mt-4 flex shrink-0 flex-col gap-3">
+        <button
+          id="campaign-choose"
+          type="button"
+          class="customcolor h-14 w-full rounded-full text-xl font-semibold"
+          @click="choose"
+        >
+          {{ $t('campaignChoose') }}
+        </button>
+        <button
+          type="button"
+          class="customcolor h-14 w-full rounded-full text-xl font-semibold"
+          @click="close"
+        >
+          {{ $t('campaignDismiss') }}
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.campaign-image {
+  min-height: 30vh;
+  min-height: 30dvh;
+  max-height: 50vh;
+  max-height: 50dvh;
+}
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
   color: v-bind(settStore.settings.FontColor);
