@@ -43,6 +43,19 @@ const items = computed(() => itemsStore.itemsBackoffice)
 
 const licenseItems = computed(() => itemsStore.itemsBackoffice.filter((item) => item.IsLicenseItem))
 
+// The license group is the Keycloak group a purchase grants access to. It has to stay editable
+// for every item that grants access, including license items and PDF issues.
+const licenseGroupTypes = ['issue', 'online_issue', 'abonement', 'license_item']
+
+const showLicenseGroup = computed(
+  () =>
+    !!updatedItem.value &&
+    (licenseGroupTypes.includes(updatedItem.value.Type) ||
+      updatedItem.value.IsLicenseItem ||
+      !!updatedItem.value.LicenseItem ||
+      !!updatedItem.value.LicenseGroup)
+)
+
 const item = computed(() => updatedItem.value)
 
 const route = useRoute()
@@ -267,6 +280,16 @@ const previewImage = (image: string | Blob | MediaSource) => {
                   <span>{{ $t('isLicenseItem') }}</span>
                 </label>
 
+                <FormField v-if="showLicenseGroup" :label="$t('licenseGroup')" for="licenseGroup">
+                  <input
+                    id="licenseGroup"
+                    v-model="updatedItem.LicenseGroup"
+                    type="text"
+                    class="aug-input"
+                    placeholder="z.B. digital_edition"
+                  />
+                </FormField>
+
                 <template v-if="!updatedItem.IsLicenseItem">
                   <FormField :label="$t('licenseItem')" for="licenseItem">
                     <div class="license-item-row">
@@ -293,19 +316,6 @@ const previewImage = (image: string | Blob | MediaSource) => {
                       <span class="aug-toggle-track"></span>
                       <span>{{ $t('isPDFLicenseItem') }}</span>
                     </label>
-
-                    <FormField
-                      v-if="!updatedItem.IsPDFItem"
-                      :label="$t('licenseGroup')"
-                      for="licenseGroup"
-                    >
-                      <input
-                        id="licenseGroup"
-                        v-model="updatedItem.LicenseGroup"
-                        type="text"
-                        class="aug-input"
-                      />
-                    </FormField>
 
                     <FormField v-if="updatedItem.IsPDFItem" :label="$t('pdf item')" for="pdf">
                       <input
