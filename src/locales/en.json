@@ -403,5 +403,6 @@
   "campaignDeleteFailed": "The campaign could not be deleted.",
   "campaignDeleteConfirm": "Really delete the campaign “{name}”? Its counters will be lost.",
   "campaignChoose": "Choose",
-  "campaignDismiss": "No, thanks"
+  "campaignDismiss": "No, thanks",
+  "noAbonementItems": "There is no subscription product. Create a product of type “Abonement” first."
 }
