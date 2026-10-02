@@ -7,7 +7,12 @@ import { useAuthLoad } from '@/composables/useAuthLoad'
 import { useCustomerStore } from '@/stores/customer'
 import type { Customer, Abonement } from '@/stores/customer'
 import { useItemsStore } from '@/stores/items'
-import { fetchLicenseGroups } from '@/api/api'
+import {
+  fetchLicenseGroups,
+  sendCustomerPasswordResetEmail,
+  sendCustomerVerifyEmail
+} from '@/api/api'
+import AccountMailButtons from '@/components/AccountMailButtons.vue'
 import Toast from '@/components/ToastMessage.vue'
 import { faTrash, faPen, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -33,6 +38,15 @@ const form = ref<Partial<Customer>>({
   lastname: '',
   licensegroups: []
 })
+
+// Email as last loaded or saved - Keycloak mails go there, so they wait for unsaved changes
+const savedEmail = ref('')
+
+const mailsDisabled = computed(
+  () =>
+    !savedEmail.value ||
+    (form.value.email ?? '').trim().toLowerCase() !== savedEmail.value.toLowerCase()
+)
 
 const abonements = computed(() => store.abonements)
 
@@ -83,6 +97,7 @@ useAuthLoad(async () => {
 
     if (store.customer) {
       form.value = { ...store.customer }
+      savedEmail.value = store.customer.email ?? ''
     }
 
     await store.getAbonementsByCustomer(customerId.value)
@@ -97,10 +112,14 @@ async function save() {
       router.push('/backoffice/customers')
     } else if (customerId.value) {
       await store.updateCustomer(customerId.value, form.value)
+      savedEmail.value = form.value.email ?? ''
       showToast('success', 'Customer updated')
     }
-  } catch {
-    showToast('error', 'Could not save customer')
+  } catch (error: any) {
+    showToast(
+      'error',
+      `Could not save customer ${error?.response?.data?.error?.message ?? ''}`.trim()
+    )
   }
 }
 
@@ -215,6 +234,15 @@ function abonementBadgeVariant(status: string) {
           </FormField>
           <FormField :label="$t('email')" for="email">
             <input id="email" v-model="form.email" type="email" class="aug-input" />
+            <AccountMailButtons
+              v-if="!isNew && customerId"
+              class="email-mail-buttons"
+              :send-password-reset="() => sendCustomerPasswordResetEmail(customerId!)"
+              :send-verify="() => sendCustomerVerifyEmail(customerId!)"
+              :disabled="mailsDisabled"
+              :disabled-hint="$t('saveEmailFirst')"
+              @result="(r) => showToast(r.type, r.message)"
+            />
           </FormField>
           <FormField label="Keycloak ID" for="keycloakid">
             <input id="keycloakid" v-model="form.keycloakid" type="text" class="aug-input" />
@@ -411,6 +439,9 @@ function abonementBadgeVariant(status: string) {
 }
 .field-span-2 {
   grid-column: span 2;
+}
+.email-mail-buttons {
+  margin-top: 10px;
 }
 .license-chips {
   display: flex;
