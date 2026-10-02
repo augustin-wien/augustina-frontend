@@ -404,6 +404,7 @@
   "campaignDeleteConfirm": "Really delete the campaign “{name}”? Its counters will be lost.",
   "campaignChoose": "Choose",
   "campaignDismiss": "No, thanks",
+  "noAbonementItems": "There is no subscription product. Create a product of type “Abonement” first.",
   "notifyAbonements": "Send new issue to subscribers",
   "notifyAbonementsHint": "Mails this issue to every subscriber with an active subscription. Enabling the issue no longer sends a mail.",
   "notifyAbonementsDisabled": "The issue has to be enabled and saved before it can be sent to the subscribers.",

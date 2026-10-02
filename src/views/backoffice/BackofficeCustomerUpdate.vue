@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import router from '@/router'
 import { useAuthLoad } from '@/composables/useAuthLoad'
@@ -17,6 +18,7 @@ import FormField from '@/components/ui/FormField.vue'
 import Modal from '@/components/ui/Modal.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
 
+const { t } = useI18n()
 const route = useRoute()
 const store = useCustomerStore()
 const itemsStore = useItemsStore()
@@ -33,7 +35,15 @@ const form = ref<Partial<Customer>>({
 })
 
 const abonements = computed(() => store.abonements)
-const items = computed(() => itemsStore.itemsBackoffice)
+
+// An abonement only makes sense for abonement products - there are no print abonements. The
+// product an existing abonement points at stays in the list, so editing it doesn't change it.
+const abonementItems = computed(() =>
+  itemsStore.itemsBackoffice.filter(
+    (i) => i.Type === 'abonement' || i.ID === editingAbonement.value?.item_id
+  )
+)
+
 const availableLicenseGroups = ref<string[]>([])
 const selectedLicenseGroup = ref('')
 
@@ -106,8 +116,12 @@ async function confirmDeleteCustomer() {
 }
 
 function openNewAbonement() {
-  const firstItem = items.value[0]
-  if (!firstItem) return
+  const firstItem = itemsStore.itemsBackoffice.find((i) => i.Type === 'abonement')
+
+  if (!firstItem) {
+    showToast('error', t('noAbonementItems'))
+    return
+  }
 
   editingAbonement.value = {
     customer_id: customerId.value ?? 0,
@@ -144,8 +158,11 @@ async function saveAbonement() {
 
     await store.getAbonementsByCustomer(customerId.value)
     showAbonementModal.value = false
-  } catch {
-    showToast('error', 'Could not save abonement')
+  } catch (error: any) {
+    showToast(
+      'error',
+      `Could not save abonement: ${error?.response?.data?.error?.message ?? error?.message ?? ''}`
+    )
   }
 }
 
@@ -303,8 +320,15 @@ function abonementBadgeVariant(status: string) {
       >
         <div v-if="editingAbonement" class="abonement-form">
           <FormField :label="$t('item')">
-            <select v-model="editingAbonement.item_id" class="aug-input">
-              <option v-for="i in items" :key="i.ID" :value="i.ID">{{ i.Name }}</option>
+            <input
+              v-if="abonementItems.length === 1"
+              :value="abonementItems[0]?.Name"
+              type="text"
+              class="aug-input"
+              readonly
+            />
+            <select v-else v-model="editingAbonement.item_id" class="aug-input">
+              <option v-for="i in abonementItems" :key="i.ID" :value="i.ID">{{ i.Name }}</option>
             </select>
           </FormField>
           <div class="abonement-dates">

@@ -491,6 +491,7 @@
   "campaignDeleteConfirm": "Kampagne „{name}“ wirklich löschen? Die Zähler gehen dabei verloren.",
   "campaignChoose": "Auswählen",
   "campaignDismiss": "Nein, danke",
+  "noAbonementItems": "Es gibt kein Abo-Produkt. Lege zuerst ein Produkt vom Typ „Abonnement“ an.",
   "notifyAbonements": "Neue Ausgabe an Abonnent·innen senden",
   "notifyAbonementsHint": "Schickt allen Abonnent·innen mit aktivem Abo eine Mail mit dieser Ausgabe. Beim Freischalten wird keine Mail mehr verschickt.",
   "notifyAbonementsDisabled": "Die Ausgabe muss freigeschaltet und gespeichert sein, bevor sie an die Abonnent·innen geschickt werden kann.",
