@@ -23,6 +23,7 @@ import {
   deleteVendorComment,
   recalculateVendorBalances
 } from '@/api/api'
+import type { VendorLocationsAction } from '@/api/api'
 import type { VendorCsvRow } from '@/utils/vendorCsv'
 import { buildComment, buildLocation, hasLocation } from '@/utils/vendorCsv'
 import router from '@/router'
@@ -99,7 +100,7 @@ export interface Vendor {
   HasBankAccount: boolean
   Debt: string
   // Time of the first verified online (QR code) sale, null if the vendor never sold online
-  FirstOnlineSale: string | null
+  LastOnlineSale: string | null
 
   OpenPayments:
     | [
@@ -339,24 +340,18 @@ export const vendorsStore = defineStore('vendors', {
       }
     },
 
-    async updateVendor(updatedVendor: Vendor) {
+    async updateVendor(updatedVendor: Vendor, locations?: VendorLocationsAction) {
       try {
-        await patchVendor(updatedVendor)
+        await patchVendor(updatedVendor, locations)
         this.getVendors()
         return
       } catch (error) {
         return error
       }
     },
-    async deleteVendor(vendorId: number) {
-      removeVendor(vendorId)
-        .then(() => {
-          this.getVendors()
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.error('Error deleting vendor:', error)
-        })
+    async deleteVendor(vendorId: number, locations?: VendorLocationsAction) {
+      await removeVendor(vendorId, locations)
+      this.getVendors()
     },
     async getVendor(vendorId: number) {
       try {
