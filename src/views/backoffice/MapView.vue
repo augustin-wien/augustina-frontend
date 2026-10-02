@@ -104,8 +104,8 @@ function onMapReady(instance: any) {
                     <h2 class="text-xl font-semibold">{{ vendor.locationName }}</h2>
                     <span>{{ vendor.address }}</span>
                     <span class="mb-2">{{ $t('noVendorAssigned') }}</span>
-                    <router-link to="/backoffice/locations">
-                      <Button variant="primary">{{ $t('menuLocations') }}</Button>
+                    <router-link :to="`/backoffice/locations?edit=${vendor.locationID}`">
+                      <Button variant="primary">{{ $t('editLocation') }}</Button>
                     </router-link>
                   </l-popup>
                 </l-marker>
