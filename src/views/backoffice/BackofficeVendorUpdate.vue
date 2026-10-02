@@ -4,6 +4,10 @@ import { useI18n } from 'vue-i18n'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor, VendorComment, VendorLocation } from '@/stores/vendor'
 import type { VendorLocationsAction } from '@/api/api'
+import { sendVendorPasswordResetEmail, sendVendorVerifyEmail } from '@/api/api'
+import { useSettingsStore } from '@/stores/settings'
+import { internalVendorEmail } from '@/utils/vendorEmail'
+import AccountMailButtons from '@/components/AccountMailButtons.vue'
 import { formatWorkingTimeSummary } from '@/utils/workingTime'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
@@ -24,8 +28,49 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import CommentsModal from '@/components/CommentsModal.vue'
 
 const store = vendorsStore()
+const settingsStore = useSettingsStore()
 
 const updatedVendor = ref<Vendor | null>(store.vendor)
+
+// The "own email" switch; switched off, the backend assigns the internal address
+const useOwnEmail = ref(false)
+// Email as last loaded or saved - Keycloak mails go there, so they wait for unsaved changes
+const savedEmail = ref('')
+const savedHasOwnEmail = ref(false)
+
+const syncEmailState = (vendor: Vendor | null) => {
+  if (!vendor) return
+  savedEmail.value = vendor.Email
+  savedHasOwnEmail.value = vendor.HasOwnEmail
+  useOwnEmail.value = vendor.HasOwnEmail
+}
+
+const internalEmail = computed(() =>
+  internalVendorEmail(
+    updatedVendor.value?.LicenseID ?? '',
+    settingsStore.settings.VendorEmailPostfix
+  )
+)
+
+// Switching to an own email starts with an empty field instead of the internal address
+watch(useOwnEmail, (on) => {
+  const vendor = updatedVendor.value
+
+  if (on && vendor && !savedHasOwnEmail.value && vendor.Email === savedEmail.value) {
+    vendor.Email = ''
+  }
+})
+
+const mailsDisabled = computed(
+  () =>
+    !savedHasOwnEmail.value ||
+    !useOwnEmail.value ||
+    (updatedVendor.value?.Email ?? '').trim().toLowerCase() !== savedEmail.value.toLowerCase()
+)
+
+const mailsDisabledHint = computed(() =>
+  !savedHasOwnEmail.value && !useOwnEmail.value ? t('noOwnEmailNoMails') : t('saveEmailFirst')
+)
 
 const route = useRoute()
 
@@ -52,6 +97,7 @@ useAuthLoad(() => {
   store.getVendor(vendorId).then(() => {
     updatedVendor.value = store.vendor
     wasDisabled.value = store.vendor?.IsDisabled ?? false
+    syncEmailState(store.vendor)
   })
 
   store.getVendorLocations(vendorId)
@@ -63,6 +109,7 @@ watch(
   (newVal: Vendor | null) => {
     if (newVal && newVal !== null) {
       updatedVendor.value = newVal
+      syncEmailState(newVal)
     }
   }
 )
@@ -73,6 +120,11 @@ const updateVendor = async () => {
   const newVendor = updatedVendor.value
 
   if (!newVendor) {
+    return
+  }
+
+  if (useOwnEmail.value && !newVendor.Email?.trim()) {
+    showToast('error', t('emailRequired'))
     return
   }
 
@@ -101,7 +153,11 @@ const saveVendor = async (locations?: VendorLocationsAction) => {
   showDisableModal.value = false
 
   try {
-    const response = await store.updateVendor(newVendor as Vendor, locations)
+    // Without an own email the backend assigns the internal address
+    const response = await store.updateVendor(
+      { ...newVendor, Email: useOwnEmail.value ? newVendor.Email : '' } as Vendor,
+      locations
+    )
 
     if (response) {
       // eslint-disable-next-line no-console
@@ -110,6 +166,8 @@ const saveVendor = async (locations?: VendorLocationsAction) => {
     } else {
       wasDisabled.value = newVendor.IsDisabled
       if (locations) store.getVendorLocations(newVendor.ID)
+      // Reload for the email the backend settled on (internal address, HasOwnEmail)
+      store.getVendor(newVendor.ID)
       showToast('success', t('The vendor has been updated'))
     }
   } catch (error) {
@@ -288,13 +346,30 @@ const formatWorkingTime = (workingTime: VendorLocation['working_time']) =>
                     required
                   />
                 </FormField>
-                <FormField :label="`${$t('E-Mail')}:`" for="email">
+                <FormField :label="`${$t('E-Mail')}:`" for="email" class="field-span-2">
+                  <label class="aug-toggle email-toggle">
+                    <input id="useOwnEmail" v-model="useOwnEmail" type="checkbox" />
+                    <span class="aug-toggle-track"></span>
+                    <span>{{ $t('useOwnEmail') }}</span>
+                  </label>
                   <input
+                    v-if="useOwnEmail"
                     id="email"
                     v-model="updatedVendor.Email"
                     class="aug-input"
                     type="email"
                     required
+                  />
+                  <p v-else class="email-hint">
+                    {{ $t('internalEmailHint', { email: internalEmail || '…' }) }}
+                  </p>
+                  <AccountMailButtons
+                    class="email-mail-buttons"
+                    :send-password-reset="() => sendVendorPasswordResetEmail(updatedVendor!.ID)"
+                    :send-verify="() => sendVendorVerifyEmail(updatedVendor!.ID)"
+                    :disabled="mailsDisabled"
+                    :disabled-hint="mailsDisabledHint"
+                    @result="(r) => showToast(r.type, r.message)"
                   />
                 </FormField>
                 <FormField :label="`${$t('licenseId')}:`" for="licenseID">
@@ -612,6 +687,17 @@ const formatWorkingTime = (workingTime: VendorLocation['working_time']) =>
 </template>
 
 <style scoped>
+.email-toggle {
+  margin-bottom: 8px;
+}
+.email-hint {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+.email-mail-buttons {
+  margin-top: 10px;
+}
 .locations-choice {
   display: grid;
   gap: 6px;

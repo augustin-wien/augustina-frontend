@@ -77,6 +77,9 @@ export interface Vendor {
   ID: number
   AccountProofUrl: string | null
   Email: string
+  // false: Email is the generated internal address (license ID + vendor email postfix) and
+  // nobody reads it. Computed by the backend from the submitted email, send '' for internal.
+  HasOwnEmail: boolean
   FirstName: string
   KeycloakID: string
   LastName: string

@@ -4,7 +4,9 @@ import router from '@/router'
 import { useSettingsStore } from '@/stores/settings'
 import type { Vendor } from '@/stores/vendor'
 import { vendorsStore } from '@/stores/vendor'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { internalVendorEmail } from '@/utils/vendorEmail'
 import { downloadVendorCsvTemplate, parseVendorsCsv } from '@/utils/vendorCsv'
 import { faFileCsv, faFileImport } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -13,11 +15,16 @@ import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
 import FormField from '@/components/ui/FormField.vue'
 
+const { t } = useI18n()
 const store = vendorsStore()
 const settingsStore = useSettingsStore()
 
+// Many vendors have no mailbox of their own; they get an internal address instead
+const useOwnEmail = ref(false)
+
 const newVendor = ref<Vendor>({
-  Email: settingsStore.settings.VendorEmailPostfix,
+  Email: '',
+  HasOwnEmail: false,
   FirstName: '',
   ID: 0,
   KeycloakID: '',
@@ -45,6 +52,10 @@ const newVendor = ref<Vendor>({
   LastOnlineSale: null
 })
 
+const internalEmail = computed(() =>
+  internalVendorEmail(newVendor.value.LicenseID, settingsStore.settings.VendorEmailPostfix)
+)
+
 const toast = ref<{ type: string; message: string } | null>(null)
 const importing = ref(false)
 const importingVendorsCount = ref(0)
@@ -52,11 +63,8 @@ const importingVendorsCount = ref(0)
 const submitVendor = async () => {
   if (!newVendor.value) return
 
-  if (
-    !newVendor.value.Email ||
-    newVendor.value.Email === '@' + import.meta.env.VITE_VENDOR_EMAIL_POSTFIX
-  ) {
-    showToast('error', 'Email muss angegeben werden')
+  if (useOwnEmail.value && !newVendor.value.Email.trim()) {
+    showToast('error', t('emailRequired'))
     return
   }
 
@@ -76,7 +84,10 @@ const submitVendor = async () => {
   }
 
   try {
-    await store.createVendorPromise(newVendor.value as Vendor).then(() => {
+    // Without an own email the backend assigns the internal address
+    const vendor = { ...newVendor.value, Email: useOwnEmail.value ? newVendor.value.Email : '' }
+
+    await store.createVendorPromise(vendor as Vendor).then(() => {
       router.push(`/backoffice/vendorsummary/`)
     })
   } catch (err: any) {
@@ -167,14 +178,23 @@ const importCSV = async () => {
                 />
               </FormField>
 
-              <FormField label="Email" for="email" required>
+              <FormField label="Email" for="email" :required="useOwnEmail">
+                <label class="aug-toggle email-toggle">
+                  <input id="useOwnEmail" v-model="useOwnEmail" type="checkbox" />
+                  <span class="aug-toggle-track"></span>
+                  <span>{{ $t('useOwnEmail') }}</span>
+                </label>
                 <input
+                  v-if="useOwnEmail"
                   id="email"
                   v-model="newVendor.Email"
                   type="email"
                   class="aug-input"
                   required
                 />
+                <p v-else class="hint-text">
+                  {{ $t('internalEmailHint', { email: internalEmail || '…' }) }}
+                </p>
               </FormField>
 
               <FormField :label="$t('licenseId')" for="licenseID" required>
@@ -290,6 +310,9 @@ const importCSV = async () => {
 }
 .field-span-2 {
   grid-column: span 2;
+}
+.email-toggle {
+  margin-bottom: 8px;
 }
 .hint-text {
   font-size: 13px;

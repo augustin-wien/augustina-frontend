@@ -157,6 +157,15 @@ export async function patchVendor(updatedVendor: Vendor, locations?: VendorLocat
   })
 }
 
+// Keycloak mails the vendor a link to set a new password / to confirm their address
+export async function sendVendorPasswordResetEmail(vendorId: number) {
+  return apiInstance.post(`${VENDORS_API_URL}${vendorId}/password-reset-email/`)
+}
+
+export async function sendVendorVerifyEmail(vendorId: number) {
+  return apiInstance.post(`${VENDORS_API_URL}${vendorId}/verify-email/`)
+}
+
 export async function postPOSOrder(
   licenseId: string,
   entries: { item: number; quantity: number }[],
@@ -580,6 +589,14 @@ export async function putCustomer(customerId: number, customer: object) {
 
 export async function removeCustomer(customerId: number) {
   return apiInstance.delete(`${CUSTOMERS_API_URL}${customerId}/`)
+}
+
+export async function sendCustomerPasswordResetEmail(customerId: number) {
+  return apiInstance.post(`${CUSTOMERS_API_URL}${customerId}/password-reset-email/`)
+}
+
+export async function sendCustomerVerifyEmail(customerId: number) {
+  return apiInstance.post(`${CUSTOMERS_API_URL}${customerId}/verify-email/`)
 }
 
 export async function fetchCustomerAbonements(customerId: number) {
