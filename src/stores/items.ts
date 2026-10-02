@@ -6,7 +6,8 @@ import {
   postItems,
   patchItem,
   removeItem,
-  restoreItem
+  restoreItem,
+  notifyAbonements
 } from '@/api/api'
 
 //define interface to store data from backend properly
@@ -109,6 +110,11 @@ export const useItemsStore = defineStore('items', {
 
     async updateItem(updatedItem: Item) {
       return patchItem(updatedItem)
+    },
+    // Mails a published online issue to all active abonnents, returns the number of recipients
+    async notifyAbonements(itemId: number): Promise<number> {
+      const res = await notifyAbonements(itemId)
+      return res.data?.recipients ?? 0
     },
     async deleteItem(itemId: number) {
       await removeItem(itemId)

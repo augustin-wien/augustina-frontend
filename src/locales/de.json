@@ -490,5 +490,12 @@
   "campaignDeleteFailed": "Die Kampagne konnte nicht gelöscht werden.",
   "campaignDeleteConfirm": "Kampagne „{name}“ wirklich löschen? Die Zähler gehen dabei verloren.",
   "campaignChoose": "Auswählen",
-  "campaignDismiss": "Nein, danke"
+  "campaignDismiss": "Nein, danke",
+  "notifyAbonements": "Neue Ausgabe an Abonnent·innen senden",
+  "notifyAbonementsHint": "Schickt allen Abonnent·innen mit aktivem Abo eine Mail mit dieser Ausgabe. Beim Freischalten wird keine Mail mehr verschickt.",
+  "notifyAbonementsDisabled": "Die Ausgabe muss freigeschaltet und gespeichert sein, bevor sie an die Abonnent·innen geschickt werden kann.",
+  "notifyAbonementsConfirm": "„{name}“ jetzt an alle Abonnent·innen mit aktivem Abo schicken?",
+  "notifyAbonementsSend": "Jetzt senden",
+  "notifyAbonementsSent": "Die Mail wird an {count} Abonnent·innen verschickt.",
+  "notifyAbonementsFailed": "Die Mail konnte nicht verschickt werden."
 }
