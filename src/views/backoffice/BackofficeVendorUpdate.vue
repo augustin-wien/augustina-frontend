@@ -3,6 +3,7 @@ import { ref, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor, VendorComment, VendorLocation } from '@/stores/vendor'
+import type { VendorLocationsAction } from '@/api/api'
 import { formatWorkingTimeSummary } from '@/utils/workingTime'
 import { useRoute } from 'vue-router'
 import Toast from '@/components/ToastMessage.vue'
@@ -30,6 +31,19 @@ const route = useRoute()
 
 const vendorLocations = computed(() => store.vendorLocations)
 const vendorComments = computed(() => store.vendorComments)
+const hasLocations = computed(() => (vendorLocations.value?.length ?? 0) > 0)
+
+// Whether the vendor was disabled when loaded or last saved, to notice when the
+// form switches it to disabled
+const wasDisabled = ref(false)
+
+// What happens to the vendor's locations when it is deleted or disabled;
+// "assigned" (disable only) leaves them with the vendor
+const locationsAction = ref<VendorLocationsAction | 'assigned'>('keep')
+const showDisableModal = ref(false)
+
+const confirmDisable = () =>
+  saveVendor(locationsAction.value === 'assigned' ? undefined : locationsAction.value)
 
 useAuthLoad(() => {
   if (!route?.params?.ID) return
@@ -37,6 +51,7 @@ useAuthLoad(() => {
 
   store.getVendor(vendorId).then(() => {
     updatedVendor.value = store.vendor
+    wasDisabled.value = store.vendor?.IsDisabled ?? false
   })
 
   store.getVendorLocations(vendorId)
@@ -66,14 +81,35 @@ const updateVendor = async () => {
     return
   }
 
+  // Ask what happens to the locations before a vendor gets disabled
+  if (newVendor.IsDisabled && !wasDisabled.value && hasLocations.value) {
+    locationsAction.value = 'assigned'
+    showDisableModal.value = true
+    return
+  }
+
+  await saveVendor()
+}
+
+const saveVendor = async (locations?: VendorLocationsAction) => {
+  const newVendor = updatedVendor.value
+
+  if (!newVendor) {
+    return
+  }
+
+  showDisableModal.value = false
+
   try {
-    const response = await store.updateVendor(newVendor as Vendor)
+    const response = await store.updateVendor(newVendor as Vendor, locations)
 
     if (response) {
       // eslint-disable-next-line no-console
       console.error('Error creating vendor:', response)
       showToast('error', t('The vendor could not be updated'))
     } else {
+      wasDisabled.value = newVendor.IsDisabled
+      if (locations) store.getVendorLocations(newVendor.ID)
       showToast('success', t('The vendor has been updated'))
     }
   } catch (error) {
@@ -95,21 +131,23 @@ const deleteVendor = async () => {
   }
 
   try {
-    store
-      .deleteVendor(updatedVendor.value.ID)
-      .catch((error: any) => {
-        // eslint-disable-next-line no-console
-        console.error('Error deleting vendor:', error)
-        showToast('error', t('The vendor could not be deleted'))
-      })
-      .then(() => {
-        router.push('/backoffice/vendorsummary')
-      })
+    await store.deleteVendor(
+      updatedVendor.value.ID,
+      hasLocations.value && locationsAction.value !== 'assigned' ? locationsAction.value : undefined
+    )
+
+    router.push('/backoffice/vendorsummary')
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error deleting vendor:', error)
-    showToast('error', 'VerkäuferIn konnte nicht gelöscht werden')
+    showDeleteModal.value = false
+    showToast('error', t('The vendor could not be deleted'))
   }
+}
+
+const openDeleteModal = () => {
+  locationsAction.value = 'keep'
+  showDeleteModal.value = true
 }
 
 const showDeleteModal = ref(false)
@@ -478,12 +516,7 @@ const formatWorkingTime = (workingTime: VendorLocation['working_time']) =>
             </div>
 
             <div class="form-actions">
-              <Button
-                id="delete-vendor"
-                type="button"
-                variant="danger"
-                @click="showDeleteModal = true"
-              >
+              <Button id="delete-vendor" type="button" variant="danger" @click="openDeleteModal">
                 {{ $t('delete') }}
               </Button>
               <Button type="submit" variant="primary">{{ $t('confirmation') }}</Button>
@@ -498,10 +531,63 @@ const formatWorkingTime = (workingTime: VendorLocation['working_time']) =>
           @close="showDeleteModal = false"
         >
           <p>{{ $t('vendordeletionConfirmation') }}</p>
+          <fieldset v-if="hasLocations" class="locations-choice">
+            <legend>
+              {{ $t('keepVendorLocationsQuestion', { count: vendorLocations?.length }) }}
+            </legend>
+            <label>
+              <input v-model="locationsAction" type="radio" name="deleteLocations" value="keep" />
+              {{ $t('keepVendorLocations') }}
+            </label>
+            <label>
+              <input v-model="locationsAction" type="radio" name="deleteLocations" value="delete" />
+              {{ $t('deleteVendorLocations') }}
+            </label>
+          </fieldset>
           <template #footer>
             <Button variant="ghost" @click="showDeleteModal = false">{{ $t('cancel') }}</Button>
             <Button id="delete-vendor-confirm" variant="danger" @click="deleteVendor">
               {{ $t('delete') }}
+            </Button>
+          </template>
+        </Modal>
+
+        <Modal
+          :open="showDisableModal"
+          :title="`${updatedVendor.LicenseID} ${updatedVendor.FirstName} ${$t('deactivate')}`"
+          @close="showDisableModal = false"
+        >
+          <fieldset class="locations-choice">
+            <legend>
+              {{ $t('keepVendorLocationsQuestion', { count: vendorLocations?.length }) }}
+            </legend>
+            <label>
+              <input
+                v-model="locationsAction"
+                type="radio"
+                name="disableLocations"
+                value="assigned"
+              />
+              {{ $t('keepVendorLocationsAssigned') }}
+            </label>
+            <label>
+              <input v-model="locationsAction" type="radio" name="disableLocations" value="keep" />
+              {{ $t('keepVendorLocations') }}
+            </label>
+            <label>
+              <input
+                v-model="locationsAction"
+                type="radio"
+                name="disableLocations"
+                value="delete"
+              />
+              {{ $t('deleteVendorLocations') }}
+            </label>
+          </fieldset>
+          <template #footer>
+            <Button variant="ghost" @click="showDisableModal = false">{{ $t('cancel') }}</Button>
+            <Button id="disable-vendor-confirm" variant="primary" @click="confirmDisable">
+              {{ $t('deactivate') }}
             </Button>
           </template>
         </Modal>
@@ -526,6 +612,22 @@ const formatWorkingTime = (workingTime: VendorLocation['working_time']) =>
 </template>
 
 <style scoped>
+.locations-choice {
+  display: grid;
+  gap: 6px;
+  margin-top: 12px;
+  border: none;
+  padding: 0;
+}
+.locations-choice legend {
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.locations-choice label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .form-top-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

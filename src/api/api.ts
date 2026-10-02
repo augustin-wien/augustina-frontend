@@ -143,8 +143,13 @@ export async function postVendors(newVendor: Vendor) {
   })
 }
 
-export async function patchVendor(updatedVendor: Vendor) {
+// What happens to a vendor's locations when the vendor is deleted or disabled:
+// kept as unassigned locations or deleted. Without it they stay with the vendor.
+export type VendorLocationsAction = 'keep' | 'delete'
+
+export async function patchVendor(updatedVendor: Vendor, locations?: VendorLocationsAction) {
   return apiInstance.put(`${VENDORS_API_URL}${updatedVendor.ID}/`, JSON.stringify(updatedVendor), {
+    params: locations ? { locations } : undefined,
     headers: {
       accept: 'application/json',
       'Content-Type': 'application/json'
@@ -174,8 +179,10 @@ export async function fetchAllPOSOrders(startDate: Date, endDate: Date) {
   )
 }
 
-export async function removeVendor(vendorId: number) {
-  return apiInstance.delete(`${VENDORS_API_URL}${vendorId}/`)
+export async function removeVendor(vendorId: number, locations?: VendorLocationsAction) {
+  return apiInstance.delete(`${VENDORS_API_URL}${vendorId}/`, {
+    params: locations ? { locations } : undefined
+  })
 }
 
 export async function getVendor(vendorId: number) {
