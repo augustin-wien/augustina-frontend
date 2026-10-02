@@ -65,9 +65,9 @@ const formatCredit = (credit: number) => {
             <span class="detail-value">{{ vendor.LastPayout }}</span>
           </div>
           <div class="detail-item">
-            <span class="detail-label">{{ $t('firstOnlineSale') }}</span>
+            <span class="detail-label">{{ $t('lastOnlineSale') }}</span>
             <span class="detail-value">{{
-              vendor.FirstOnlineSale ? new Date(vendor.FirstOnlineSale).toLocaleDateString() : '–'
+              vendor.LastOnlineSale ? new Date(vendor.LastOnlineSale).toLocaleDateString() : '–'
             }}</span>
           </div>
           <div class="detail-item">

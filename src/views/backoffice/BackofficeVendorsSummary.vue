@@ -72,7 +72,7 @@ const displayVendors = computed(() => {
   return searchQuery.value ? store.filteredVendors : vendors.value
 })
 
-// Date of the vendor's first online sale, '–' if they never sold online
+// Date of the vendor's last online sale, '–' if they never sold online
 const formatOnlineSale = (date: string | null | undefined) =>
   date ? new Date(date).toLocaleDateString() : '–'
 
@@ -91,7 +91,7 @@ const exportTable = () => {
     'Gesperrt',
     'Sperrvermerk',
     'Deaktiviert',
-    'Erster Onlineverkauf'
+    'Letzter Onlineverkauf'
   ]
 
   const data = displayVendors.value.map((vendor: Vendor) => {
@@ -104,7 +104,7 @@ const exportTable = () => {
       vendor.IsBlocked ? 'ja' : 'nein',
       vendor.IsBlocked ? vendor.BlockedNote : '',
       vendor.IsDisabled ? 'ja' : 'nein',
-      formatOnlineSale(vendor.FirstOnlineSale)
+      formatOnlineSale(vendor.LastOnlineSale)
     ]
   })
 
@@ -181,7 +181,7 @@ const selectedVendor = ref<Vendor | null>(null)
               <th>{{ $t('firstName') }}</th>
               <th>{{ $t('lastName') }}</th>
               <th>{{ $t('currentCredit') }}</th>
-              <th>{{ $t('firstOnlineSale') }}</th>
+              <th>{{ $t('lastOnlineSale') }}</th>
               <th>{{ $t('measure') }}</th>
             </tr>
           </thead>
@@ -218,7 +218,7 @@ const selectedVendor = ref<Vendor | null>(null)
               <td>{{ vendor.FirstName }}</td>
               <td>{{ vendor.LastName }}</td>
               <td>{{ formatCredit(vendor.Balance) }}€</td>
-              <td>{{ formatOnlineSale(vendor.FirstOnlineSale) }}</td>
+              <td>{{ formatOnlineSale(vendor.LastOnlineSale) }}</td>
               <td class="entry-actions">
                 <button
                   type="button"
