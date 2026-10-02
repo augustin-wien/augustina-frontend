@@ -3,6 +3,7 @@ import { vendorsStore } from '@/stores/vendor'
 import type { LocationOverview, VendorLocation } from '@/stores/vendor'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { exportAsCsv } from '@/utils/utils'
 import { formatWorkingTimeSummary } from '@/utils/workingTime'
@@ -17,6 +18,8 @@ import AddressModal from '@/components/AddressModal.vue'
 
 const { t } = useI18n()
 const store = vendorsStore()
+const route = useRoute()
+const router = useRouter()
 
 const loading = ref(false)
 const loadFailed = ref(false)
@@ -28,6 +31,7 @@ useAuthLoad(async () => {
   try {
     // The vendor list feeds the vendor picker in the edit dialog
     await Promise.all([store.getAllLocations(), store.getVendors()])
+    openLocationFromQuery()
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Loading locations failed:', error)
@@ -38,6 +42,11 @@ useAuthLoad(async () => {
 })
 
 const searchQuery = ref('')
+
+// "unassigned" shows only the locations without a vendor
+const vendorFilter = ref<'all' | 'unassigned'>(
+  route.query.filter === 'unassigned' ? 'unassigned' : 'all'
+)
 
 // The location being edited: null when the dialog is closed, [] for a new one
 const editedLocation = ref<VendorLocation[] | null>(null)
@@ -56,6 +65,19 @@ const editLocation = (location: LocationOverview) => {
       vendorID: location.vendorID
     }
   ]
+}
+
+// The map links here with ?edit=<location id> to open that location's dialog
+const openLocationFromQuery = () => {
+  const id = Number(route.query.edit)
+  if (!id) return
+
+  const location = store.allLocations.find((l) => l.id === id)
+  if (location) editLocation(location)
+
+  const query = { ...route.query }
+  delete query.edit
+  router.replace({ query })
 }
 
 const saveLocation = async (location: VendorLocation) => {
@@ -84,9 +106,14 @@ const removeLocation = async (location: LocationOverview) => {
 const locations = computed(() => {
   const query = searchQuery.value.trim().toLowerCase()
 
-  if (!query) return store.allLocations
+  const filtered =
+    vendorFilter.value === 'unassigned'
+      ? store.allLocations.filter((location) => !location.vendorID)
+      : store.allLocations
 
-  return store.allLocations.filter((location) =>
+  if (!query) return filtered
+
+  return filtered.filter((location) =>
     [
       location.vendorLicenseID,
       location.vendorFirstName,
@@ -163,6 +190,16 @@ const exportTable = () => {
           class="aug-input"
           style="width: auto"
         />
+        <select
+          id="locationFilter"
+          v-model="vendorFilter"
+          class="aug-input"
+          style="width: auto"
+          :aria-label="$t('locationFilter')"
+        >
+          <option value="all">{{ $t('locationFilterAll') }}</option>
+          <option value="unassigned">{{ $t('locationFilterUnassigned') }}</option>
+        </select>
         <Button variant="secondary" @click="exportTable">
           <font-awesome-icon :icon="faFileCsv" /> {{ $t('export') }}
         </Button>
