@@ -118,6 +118,7 @@ const notifyAbonements = async () => {
   } catch (error: any) {
     // eslint-disable-next-line no-console
     console.error('Sending the issue to the abonnents failed:', error)
+
     showToast(
       'error',
       `${t('notifyAbonementsFailed')} ${error?.response?.data?.error?.message ?? ''}`
