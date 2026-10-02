@@ -322,7 +322,7 @@ function abonementBadgeVariant(status: string) {
           <FormField :label="$t('item')">
             <input
               v-if="abonementItems.length === 1"
-              :value="abonementItems[0].Name"
+              :value="abonementItems[0]?.Name"
               type="text"
               class="aug-input"
               readonly
