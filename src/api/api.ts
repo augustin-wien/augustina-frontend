@@ -217,6 +217,10 @@ export async function restoreItem(itemId: number) {
   return apiInstance.post(`${ITEMS_API_URL}${itemId}/restore/`)
 }
 
+export async function notifyAbonements(itemId: number) {
+  return apiInstance.post(`${ITEMS_API_URL}${itemId}/notify-abonements/`)
+}
+
 export async function fetchLicenseGroups() {
   return apiInstance.get<string[]>(`${ITEMS_API_URL}licensegroups/`)
 }

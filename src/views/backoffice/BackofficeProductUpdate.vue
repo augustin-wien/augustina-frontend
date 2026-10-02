@@ -5,7 +5,7 @@ import type { Item } from '@/stores/items'
 import { useItemsStore, ITEM_TYPES } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
-import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faPen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
@@ -14,8 +14,10 @@ import Modal from '@/components/ui/Modal.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
 
 import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 
+const { t } = useI18n()
 const itemsStore = useItemsStore()
 const keycloakStore = useKeycloakStore()
 const settingsStore = useSettingsStore()
@@ -90,6 +92,40 @@ const updateItem = async () => {
     // eslint-disable-next-line no-console
     console.error('Error creating item:', error)
     showToast('error', 'Produkt konnte nicht angelegt werden')
+  }
+}
+
+// Sending a new online issue to the abonnents ----------------------------------
+
+// Whether the saved item is published - the backend only sends enabled online issues, so
+// unsaved changes to the toggle don't count.
+const savedItemEnabled = computed(
+  () => items.value.find((i) => i.ID === idParams.value)?.Disabled === false
+)
+
+const showNotifyModal = ref(false)
+const notifying = ref(false)
+
+const notifyAbonements = async () => {
+  if (!item.value) return
+
+  notifying.value = true
+
+  try {
+    const recipients = await itemsStore.notifyAbonements(item.value.ID)
+
+    showToast('success', t('notifyAbonementsSent', { count: recipients }))
+  } catch (error: any) {
+    // eslint-disable-next-line no-console
+    console.error('Sending the issue to the abonnents failed:', error)
+
+    showToast(
+      'error',
+      `${t('notifyAbonementsFailed')} ${error?.response?.data?.error?.message ?? ''}`
+    )
+  } finally {
+    notifying.value = false
+    showNotifyModal.value = false
   }
 }
 
@@ -258,6 +294,27 @@ const previewImage = (image: string | Blob | MediaSource) => {
               </label>
             </Card>
 
+            <Card v-if="updatedItem.Type === 'online_issue'">
+              <h2 class="section-title">{{ $t('abonements') }}</h2>
+              <div class="field-stack">
+                <p class="card-hint">
+                  {{
+                    savedItemEnabled ? $t('notifyAbonementsHint') : $t('notifyAbonementsDisabled')
+                  }}
+                </p>
+                <div>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    :disabled="!savedItemEnabled || notifying"
+                    @click="showNotifyModal = true"
+                  >
+                    <font-awesome-icon :icon="faEnvelope" /> {{ $t('notifyAbonements') }}
+                  </Button>
+                </div>
+              </div>
+            </Card>
+
             <Card>
               <h2 class="section-title">{{ $t('licenseItem') }}</h2>
               <div class="field-stack">
@@ -334,6 +391,21 @@ const previewImage = (image: string | Blob | MediaSource) => {
       </div>
 
       <Modal
+        :open="showNotifyModal"
+        size="sm"
+        :title="$t('notifyAbonements')"
+        @close="showNotifyModal = false"
+      >
+        <p>{{ $t('notifyAbonementsConfirm', { name: updatedItem.Name }) }}</p>
+        <template #footer>
+          <Button variant="ghost" @click="showNotifyModal = false">{{ $t('cancel') }}</Button>
+          <Button variant="primary" :disabled="notifying" @click="notifyAbonements">
+            {{ $t('notifyAbonementsSend') }}
+          </Button>
+        </template>
+      </Modal>
+
+      <Modal
         :open="showDeleteModal"
         size="sm"
         :title="`${updatedItem.Name} ${$t('delete')}`"
@@ -367,6 +439,10 @@ const previewImage = (image: string | Blob | MediaSource) => {
   letter-spacing: 0.04em;
   color: var(--color-text-muted);
   margin-bottom: 14px;
+}
+.card-hint {
+  font-size: 13px;
+  color: var(--color-text-muted);
 }
 .field-stack {
   display: flex;
