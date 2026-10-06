@@ -131,6 +131,13 @@ const itemDetails = (id: number) => {
 
 const hasDigitalItemWithoutPDF = computed(() => digitalItems.value.length > 0)
 
+// The WordPress one-time login link logs the customer in directly; without it
+// they land on the online paper with their email filled in
+const digitalItemsLink = computed(
+  () =>
+    paymentStore.verification?.InviteURL || settStore.settings.DigitalItemsUrl + '?email=' + email
+)
+
 const downloadPDF = (link: string) => {
   PDFDownloadStore.downloadPDF(link)
   // TODO: Implement validation without triggering spam protection in the browser
@@ -247,11 +254,7 @@ const email = localStorage.getItem('email') || ''
             </button>
           </div>
           <div v-if="hasDigitalItemWithoutPDF" class="digitial-item-link mt-3">
-            <a
-              :href="settStore.settings.DigitalItemsUrl + '?email=' + email"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a :href="digitalItemsLink" target="_blank" rel="noopener noreferrer">
               <button
                 class="digital-item-download-button bg-gray-500 rounded-full text-center p-5 customfont text-sm font font-semibold w-full cursor-pointer"
                 :style="
@@ -291,7 +294,10 @@ const email = localStorage.getItem('email') || ''
               </button>
             </a>
           </div>
-          <div v-if="paymentStore.verification?.InviteURL" class="wp-invite-link mt-3">
+          <div
+            v-if="paymentStore.verification?.InviteURL && !hasDigitalItemWithoutPDF"
+            class="wp-invite-link mt-3"
+          >
             <a
               :href="paymentStore.verification.InviteURL"
               target="_blank"

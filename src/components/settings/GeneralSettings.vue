@@ -4,6 +4,7 @@ import { useSettingsStore, type Settings } from '@/stores/settings'
 import Card from '@/components/ui/Card.vue'
 import FormField from '@/components/ui/FormField.vue'
 import Button from '@/components/ui/Button.vue'
+import { testWordPressInvite, type WordPressInviteTestResult } from '@/api/api'
 
 const props = defineProps<{
   updatedSettings: Settings
@@ -18,6 +19,28 @@ const settingsStore = useSettingsStore()
 const localSettings = ref<Settings>({ ...props.updatedSettings })
 
 const wpInviteEnabled = ref(!!props.updatedSettings.WordPressInviteURL)
+
+const wpInviteTesting = ref(false)
+const wpInviteTestResult = ref<WordPressInviteTestResult | null>(null)
+
+// Tests the values in the form, so a typo shows up before saving
+const testWpInvite = async () => {
+  wpInviteTesting.value = true
+  wpInviteTestResult.value = null
+
+  try {
+    const res = await testWordPressInvite(
+      localSettings.value.WordPressInviteURL,
+      localSettings.value.WordPressInviteAPIKey
+    )
+
+    wpInviteTestResult.value = res.data
+  } catch (err) {
+    wpInviteTestResult.value = { Success: false, Message: String(err), Link: '' }
+  } finally {
+    wpInviteTesting.value = false
+  }
+}
 
 const newLogo = ref('')
 const newFavicon = ref('')
@@ -260,6 +283,21 @@ defineExpose({ saveSettings })
             class="aug-input"
           />
         </FormField>
+        <div class="field-span-2 wp-invite-test">
+          <Button variant="secondary" :disabled="wpInviteTesting" @click="testWpInvite">
+            {{ wpInviteTesting ? $t('wpInviteTesting') : $t('wpInviteTest') }}
+          </Button>
+          <p
+            v-if="wpInviteTestResult"
+            class="wp-invite-test-result"
+            :class="wpInviteTestResult.Success ? 'is-success' : 'is-error'"
+          >
+            {{ wpInviteTestResult.Success ? '✓' : '✗' }} {{ wpInviteTestResult.Message }}
+            <span v-if="wpInviteTestResult.Link" class="wp-invite-test-link">
+              {{ $t('wpInviteTestLink') }} {{ wpInviteTestResult.Link }}
+            </span>
+          </p>
+        </div>
       </div>
     </Card>
 
@@ -354,6 +392,27 @@ defineExpose({ saveSettings })
   font-size: 15px;
   font-weight: 700;
   margin-bottom: 14px;
+}
+.wp-invite-test {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.wp-invite-test-result {
+  font-size: 13px;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.wp-invite-test-result.is-success {
+  color: var(--color-success);
+}
+.wp-invite-test-result.is-error {
+  color: var(--color-danger);
+}
+.wp-invite-test-link {
+  display: block;
+  color: var(--color-text-muted);
 }
 .section-hint {
   font-size: 13px;
