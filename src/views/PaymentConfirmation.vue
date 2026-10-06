@@ -62,13 +62,22 @@ const purchasedItems = computed(() => {
   return result
 })
 
+// Digital items that are read online. PDF items are left out, their download
+// link is attached either to the item itself or to its license item.
 const digitalItems = computed(() => {
   const items = purchasedItems.value
   if (!items) return []
 
   return items.filter((item) => {
     const itemDetails = itemsStore.items?.find((i) => i.ID == item.Item)
-    return itemDetails && itemDetails.LicenseItem && itemDetails.Type !== 'abonement'
+    return (
+      itemDetails &&
+      itemDetails.LicenseItem &&
+      itemDetails.Type !== 'abonement' &&
+      !downloadLinks.value?.some(
+        (link) => link.ItemID == item.Item || link.ItemID == itemDetails.LicenseItem
+      )
+    )
   })
 })
 
@@ -120,26 +129,7 @@ const itemDetails = (id: number) => {
   return item
 }
 
-const hasDigitalItemWithoutPDF = computed(() => {
-  const items = purchasedItems.value
-
-  if (!items) return false
-
-  for (const item of items) {
-    const itemDetails = itemsStore.items?.find((i) => i.ID == item.Item)
-
-    if (
-      itemDetails &&
-      itemDetails.LicenseItem &&
-      itemDetails.Type !== 'abonement' &&
-      !downloadLinks.value?.some((link) => link.ItemID == item.Item)
-    ) {
-      return true
-    }
-  }
-
-  return false
-})
+const hasDigitalItemWithoutPDF = computed(() => digitalItems.value.length > 0)
 
 const downloadPDF = (link: string) => {
   PDFDownloadStore.downloadPDF(link)
