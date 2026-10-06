@@ -26,7 +26,11 @@ const newQrCodeLogo = ref('')
 watch(
   () => props.updatedSettings,
   (val) => {
-    if (val) localSettings.value = { ...val }
+    if (!val) return
+    localSettings.value = { ...val }
+    // The settings arrive after mount, so the toggle has to follow them rather than only
+    // reading the (still empty) initial props.
+    wpInviteEnabled.value = !!val.WordPressInviteURL
   },
   { deep: true }
 )
@@ -53,6 +57,9 @@ const updateQRCodeLogo = (event: Event) => {
 }
 
 const saveSettings = async () => {
+  // The backend treats an empty URL as "disabled", so switching the toggle off has to clear it.
+  if (!wpInviteEnabled.value) localSettings.value.WordPressInviteURL = ''
+
   try {
     await settingsStore.updateSettings(localSettings.value as Settings)
     emits('saved', 'Einstellungen erfolgreich aktualisiert')
