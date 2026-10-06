@@ -11,7 +11,10 @@ describe('Modal', () => {
     // Stub them and assert the component drives them correctly instead.
     showModalSpy = vi.fn()
     closeSpy = vi.fn()
-    HTMLDialogElement.prototype.showModal = showModalSpy as unknown as HTMLDialogElement['showModal']
+
+    HTMLDialogElement.prototype.showModal =
+      showModalSpy as unknown as HTMLDialogElement['showModal']
+
     HTMLDialogElement.prototype.close = closeSpy as unknown as HTMLDialogElement['close']
   })
 
