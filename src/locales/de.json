@@ -248,6 +248,8 @@
   "donation_only": "Nur Spende ist nicht möglich",
   "isPDFLicenseItem": "Ist das Produkt ein PDF Lizenzartikel?",
   "pdf item": "PDF Datei",
+  "viewPDF": "PDF ansehen",
+  "pdfLoadFailed": "PDF konnte nicht geladen werden",
   "Download": "Download",
   "have fun": "Viel Spaß beim Lesen!",
 

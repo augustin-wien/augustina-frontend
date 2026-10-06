@@ -233,6 +233,8 @@
   "donation_only": "Donation only is not allowed",
   "isPDFLicenseItem": "Is PDF license item",
   "pdf item": "PDF item",
+  "viewPDF": "View PDF",
+  "pdfLoadFailed": "PDF could not be loaded",
   "have fun": "Have fun reading!",
 
   "maintenance": "This page is currently under maintenance. We are sorry for the inconveniences. Please try again within the next days.",

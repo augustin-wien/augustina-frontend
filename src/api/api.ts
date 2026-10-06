@@ -248,6 +248,10 @@ export async function patchItem(updatedItem: Item) {
   return apiInstance.putForm(`${ITEMS_API_URL}${updatedItem.ID}/`, updatedItem)
 }
 
+export async function fetchItemPDF(itemId: number) {
+  return apiInstance.get<Blob>(`${ITEMS_API_URL}${itemId}/pdf/`, { responseType: 'blob' })
+}
+
 export async function removeItem(itemId: number) {
   return apiInstance.delete(`${ITEMS_API_URL}${itemId}/`)
 }
