@@ -339,6 +339,16 @@ export async function patchSettingsStyles(styles: string) {
   })
 }
 
+export type WordPressInviteTestResult = { Success: boolean; Message: string; Link: string }
+
+// asks WordPress for a test login link with the given (possibly unsaved) invite settings
+export async function testWordPressInvite(url: string, apiKey: string) {
+  return apiInstance.post<WordPressInviteTestResult>(`${SETTINGS_API_URL}wordpress-invite/test/`, {
+    WordPressInviteURL: url,
+    WordPressInviteAPIKey: apiKey
+  })
+}
+
 // get styles to load it dynamically
 export async function getStyles(rev: number) {
   return apiInstance.get(`${STYLES_URL}?rev=${rev}`)

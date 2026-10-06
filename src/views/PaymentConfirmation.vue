@@ -247,8 +247,13 @@ const email = localStorage.getItem('email') || ''
             </button>
           </div>
           <div v-if="hasDigitalItemWithoutPDF" class="digitial-item-link mt-3">
+            <!-- The WordPress one-time login link logs the customer in directly; without it
+                 they land on the online paper with their email filled in -->
             <a
-              :href="settStore.settings.DigitalItemsUrl + '?email=' + email"
+              :href="
+                paymentStore.verification?.InviteURL ||
+                settStore.settings.DigitalItemsUrl + '?email=' + email
+              "
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -291,7 +296,10 @@ const email = localStorage.getItem('email') || ''
               </button>
             </a>
           </div>
-          <div v-if="paymentStore.verification?.InviteURL" class="wp-invite-link mt-3">
+          <div
+            v-if="paymentStore.verification?.InviteURL && !hasDigitalItemWithoutPDF"
+            class="wp-invite-link mt-3"
+          >
             <a
               :href="paymentStore.verification.InviteURL"
               target="_blank"
