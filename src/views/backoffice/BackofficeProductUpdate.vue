@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Toast from '@/components/ToastMessage.vue'
+import { fetchItemPDF } from '@/api/api'
 import router from '@/router'
 import type { Item } from '@/stores/items'
 import { useItemsStore, ITEM_TYPES } from '@/stores/items'
@@ -166,6 +167,29 @@ const updateImage = (event: any) => {
 const updatePDF = (event: any) => {
   if (!updatedItem.value) return
   updatedItem.value.PDF = event.target?.files[0]
+}
+
+// Whether the saved item has a PDF attached; a newly chosen file is only stored on save
+const savedItemHasPDF = computed(() => !!items.value.find((i) => i.ID === idParams.value)?.PDF)
+
+// Opens the stored PDF in a new tab, where it can also be downloaded. The endpoint
+// needs the admin token, so the file is fetched here instead of linking to it.
+const viewPDF = async () => {
+  if (!item.value) return
+  // Open the tab right away, browsers block popups opened after an await
+  const tab = window.open('', '_blank')
+
+  try {
+    const response = await fetchItemPDF(item.value.ID)
+    const url = URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }))
+    if (tab) tab.location.href = url
+    else window.location.href = url
+  } catch (error) {
+    tab?.close()
+    // eslint-disable-next-line no-console
+    console.error('Loading the PDF failed:', error)
+    showToast('error', t('pdfLoadFailed'))
+  }
 }
 
 const apiUrl = import.meta.env.VITE_API_URL
@@ -372,6 +396,15 @@ const previewImage = (image: string | Blob | MediaSource) => {
                         class="aug-input"
                         @change="updatePDF"
                       />
+                      <Button
+                        v-if="savedItemHasPDF"
+                        type="button"
+                        variant="secondary"
+                        class="mt-2"
+                        @click="viewPDF"
+                      >
+                        {{ $t('viewPDF') }}
+                      </Button>
                     </FormField>
                   </template>
                 </template>
