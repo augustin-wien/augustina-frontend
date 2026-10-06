@@ -182,6 +182,9 @@ export const useSettingsStore = defineStore('settings', {
         this.settingsLoaded = false
         await patchSettings(updatedSettings)
         await this.getSettingsFromApi()
+        // The public reload above replaces the settings without the withheld credentials, which
+        // would empty those fields in the backoffice form and wipe them on the next save.
+        await this.getAdminSettingsFromApi()
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log('Error updating settings:', error)
