@@ -393,15 +393,6 @@ onMounted(() => {
   overflow-y: auto;
 }
 
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  text-align: left;
-  margin-top: 50px;
-  padding-top: 50px;
-}
-
 @media (max-width: 767.98px) {
   .sidemenu {
     position: fixed;
