@@ -28,16 +28,37 @@
   --radius-sm: 6px;
 }
 
-/* Follows the OS/browser color-scheme preference - no in-app toggle exists (or is needed) since
-   this is the only place a page reads light vs. dark from. --color-accent/--color-accent-fg are
-   deliberately NOT overridden here: they're the admin's configured brand color (see the runtime
-   override note above) and stay the same regardless of theme, same as a real logo wouldn't flip
-   colors depending on the visitor's OS setting. --color-accent-tint recomputes automatically even
-   though it isn't listed here, since color-mix() re-resolves live whenever --color-accent or
-   --color-surface change.
+/* Dark palette. Follows the OS/browser color-scheme preference unless the user picked light or dark
+   explicitly in the backoffice sidebar, which sets <html data-theme="light|dark"> (see
+   src/composables/useColorScheme.ts). The same values are listed twice because a forced dark theme
+   has to apply regardless of the media query. --color-accent/--color-accent-fg are deliberately
+   NOT overridden here: they're the admin's configured brand color (see the runtime override note
+   above) and stay the same regardless of theme, same as a real logo wouldn't flip colors depending
+   on the visitor's theme. --color-accent-tint recomputes automatically even though only its mix
+   base is changed, since color-mix() re-resolves live whenever --color-accent or --color-surface
+   change.
    Screen-only so printouts always use the light palette (dark text on white paper). */
 @media screen and (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
+    --color-bg: #101317;
+    --color-surface: #181c22;
+    --color-surface-alt: #20252c;
+    --color-border: #2c323b;
+    --color-text: #e7e9ec;
+    --color-text-muted: #9399a6;
+
+    --color-accent-tint: color-mix(in srgb, var(--color-accent) 18%, var(--color-surface));
+
+    --color-success: #3ecf78;
+    --color-success-bg: #113322;
+    --color-danger: #ef5f57;
+    --color-danger-bg: #3a1717;
+    --color-info: #7c9cf0;
+    --color-info-bg: #16213d;
+  }
+}
+@media screen {
+  :root[data-theme='dark'] {
     --color-bg: #101317;
     --color-surface: #181c22;
     --color-surface-alt: #20252c;

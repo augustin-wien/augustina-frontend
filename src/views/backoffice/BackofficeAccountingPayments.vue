@@ -4,7 +4,7 @@ import { useOrdersStore } from '@/stores/orders'
 import { usePaymentsStore, type Payment } from '@/stores/payments'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { usePreferredDark } from '@vueuse/core'
+import { useColorScheme } from '@/composables/useColorScheme'
 import { computed, ref } from 'vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { useRoute } from 'vue-router'
@@ -19,7 +19,7 @@ import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
 
 const { locale } = useI18n()
-const isDark = usePreferredDark()
+const { isDark } = useColorScheme()
 const settingsStore = useSettingsStore()
 const ordersStore = useOrdersStore()
 const itemsStore = useItemsStore()

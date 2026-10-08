@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import Chart from 'chart.js/auto'
-import { usePreferredDark } from '@vueuse/core'
+import { useColorScheme } from '@/composables/useColorScheme'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { DailyStatistics } from '@/utils/dailyStatistics'
 
@@ -42,7 +42,7 @@ const OTHER_COLOR = { light: '#8a8f98', dark: '#6b717c' }
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 let chart: Chart | null = null
-const isDark = usePreferredDark()
+const { isDark } = useColorScheme()
 
 const tokenColor = (name: string) =>
   getComputedStyle(document.documentElement).getPropertyValue(name).trim()

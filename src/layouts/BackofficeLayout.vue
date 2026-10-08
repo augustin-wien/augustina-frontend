@@ -4,6 +4,7 @@ import WaitingAnimation from '@/components/WaitingAnimation.vue'
 import keycloak from '@/keycloak/keycloak'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
+import { useApplyColorScheme, useColorScheme } from '@/composables/useColorScheme'
 import {
   faArrowRightFromBracket,
   faBagShopping,
@@ -28,6 +29,8 @@ const settingsStore = useSettingsStore()
 settingsStore.getSettingsFromApi()
 const settings = computed(() => settingsStore.settings)
 const authenticated = computed(() => keycloakStore.authenticated)
+const { mode: colorScheme } = useColorScheme()
+useApplyColorScheme()
 // remove the last / from the URL
 const apiUrl = import.meta.env.VITE_API_URL.replace(/\/$/, '')
 
@@ -182,10 +185,17 @@ onMounted(() => {
               </template>
               <template v-else>{{ $t('userNotLoggedIn') }}</template>
             </p>
-            <select v-model="$i18n.locale" class="lang-select">
-              <option value="en">EN</option>
-              <option value="de">DE</option>
-            </select>
+            <div class="footer-selects">
+              <select v-model="$i18n.locale" class="lang-select" :aria-label="$t('language')">
+                <option value="en">EN</option>
+                <option value="de">DE</option>
+              </select>
+              <select v-model="colorScheme" class="theme-select" :aria-label="$t('colorScheme')">
+                <option value="auto">{{ $t('colorSchemeAuto') }}</option>
+                <option value="light">{{ $t('colorSchemeLight') }}</option>
+                <option value="dark">{{ $t('colorSchemeDark') }}</option>
+              </select>
+            </div>
           </div>
         </div>
       </aside>
@@ -355,17 +365,29 @@ onMounted(() => {
   color: var(--color-text-muted);
   padding: 0 10px 10px;
 }
-.lang-select {
-  margin: 0 10px;
+.footer-selects {
+  display: flex;
+  gap: 8px;
+  padding: 0 10px;
+}
+.lang-select,
+.theme-select {
   height: 32px;
-  width: 64px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-surface);
   color: var(--color-text);
   font-size: 12px;
   font-weight: 600;
+}
+.lang-select {
+  width: 64px;
   text-align: center;
+}
+.theme-select {
+  flex: 1;
+  min-width: 0;
+  padding: 0 8px;
 }
 
 .main-container {

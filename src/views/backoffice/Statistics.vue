@@ -24,7 +24,7 @@ import {
 } from '@/utils/dailyStatistics'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { usePreferredDark } from '@vueuse/core'
+import { useColorScheme } from '@/composables/useColorScheme'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import PageHeader from '@/components/ui/PageHeader.vue'
@@ -32,7 +32,7 @@ import Card from '@/components/ui/Card.vue'
 
 const itemsStore = useItemsStore()
 const store = useStatisticsStore()
-const isDark = usePreferredDark()
+const { isDark } = useColorScheme()
 const { t } = useI18n()
 
 const startOfDay = (date: Date) => {

@@ -80,6 +80,10 @@
   "navGroupAdmin": "Administration",
   "userLoggedIn": "is logged in.",
   "userNotLoggedIn": "No user is logged in.",
+  "colorScheme": "Appearance",
+  "colorSchemeAuto": "System",
+  "colorSchemeLight": "Light",
+  "colorSchemeDark": "Dark",
 
   "accountingTitle": "Sales in the selected period",
 
