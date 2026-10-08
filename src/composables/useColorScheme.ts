@@ -3,8 +3,6 @@ import { usePreferredDark, useStorage } from '@vueuse/core'
 
 export type ColorSchemeMode = 'auto' | 'light' | 'dark'
 
-// Module-level so every component shares the same choice. 'auto' follows the OS/browser
-// preference, 'light'/'dark' override it. Stored per browser, not per user account.
 const mode = useStorage<ColorSchemeMode>('backoffice-color-scheme', 'auto')
 const preferredDark = usePreferredDark()
 
@@ -14,11 +12,12 @@ export function useColorScheme() {
   return { mode, isDark }
 }
 
-// Mirrors the chosen mode onto <html data-theme="...">, which assets/tokens.css reads to pick the
-// light or dark palette. Only the backoffice layout calls this, so the attribute is removed again
-// when leaving the backoffice and the public pages keep following the OS preference.
+// Sets <html data-theme> for assets/tokens.css while a backoffice layout is mounted.
+let activeLayouts = 0
+
 export function useApplyColorScheme() {
   const root = document.documentElement
+  activeLayouts++
 
   watchEffect(() => {
     if (mode.value === 'auto') delete root.dataset.theme
@@ -26,6 +25,7 @@ export function useApplyColorScheme() {
   })
 
   onUnmounted(() => {
-    delete root.dataset.theme
+    activeLayouts--
+    if (activeLayouts === 0) delete root.dataset.theme
   })
 }
