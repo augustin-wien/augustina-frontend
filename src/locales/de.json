@@ -521,5 +521,7 @@
   "notifyAbonementsConfirm": "„{name}“ jetzt an alle Abonnent·innen mit aktivem Abo schicken?",
   "notifyAbonementsSend": "Jetzt senden",
   "notifyAbonementsSent": "Die Mail wird an {count} Abonnent·innen verschickt.",
-  "notifyAbonementsFailed": "Die Mail konnte nicht verschickt werden."
+  "notifyAbonementsFailed": "Die Mail konnte nicht verschickt werden.",
+  "vendorEmailPostfixInvalid": "Muss eine Domain und höchstens ein {'@'} enthalten, z. B. \"{'@'}example.com\" oder \"-{'@'}example.com\".",
+  "vendorEmailPostfixHint": "Wird an die Lizenznummer angehängt, z. B. {example}"
 }

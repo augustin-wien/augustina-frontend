@@ -434,5 +434,7 @@
   "notifyAbonementsConfirm": "Send “{name}” to all subscribers with an active subscription now?",
   "notifyAbonementsSend": "Send now",
   "notifyAbonementsSent": "The mail is being sent to {count} subscribers.",
-  "notifyAbonementsFailed": "The mail could not be sent."
+  "notifyAbonementsFailed": "The mail could not be sent.",
+  "vendorEmailPostfixInvalid": "Must contain a domain and at most one {'@'}, e.g. \"{'@'}example.com\" or \"-{'@'}example.com\".",
+  "vendorEmailPostfixHint": "Appended to the license ID, e.g. {example}"
 }
