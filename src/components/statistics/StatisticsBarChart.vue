@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import Chart from 'chart.js/auto'
-import { usePreferredDark } from '@vueuse/core'
+import { useColorScheme } from '@/composables/useColorScheme'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { StatisticsItemMinimal } from '@/stores/statistics'
 
@@ -16,7 +16,7 @@ const props = withDefaults(
 
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 let chart: Chart | null = null
-const isDark = usePreferredDark()
+const { isDark } = useColorScheme()
 
 // Horizontal bars grow with the number of products instead of squeezing their names
 const height = computed(() => Math.max(120, props.data.length * 28 + 40))

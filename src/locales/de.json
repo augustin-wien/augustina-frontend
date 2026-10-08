@@ -84,6 +84,10 @@
   "userLoggedIn": "ist angemeldet.",
   "menuStatistics": "Statistik",
   "userNotLoggedIn": "Kein User ist angemeldet.",
+  "colorScheme": "Darstellung",
+  "colorSchemeAuto": "System",
+  "colorSchemeLight": "Hell",
+  "colorSchemeDark": "Dunkel",
 
   "accountingTitle": "Umsätze im gewählten Zeitraum",
 

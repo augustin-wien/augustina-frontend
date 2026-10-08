@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { usePreferredDark } from '@vueuse/core'
+import { useColorScheme } from '@/composables/useColorScheme'
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthLoad } from '@/composables/useAuthLoad'
@@ -60,7 +60,7 @@ const tomorrow = startOfDay(new Date(new Date().setDate(new Date().getDate() + 1
 const startDate = ref<Date>(yesterday)
 const endDate = ref<Date>(tomorrow)
 const date = ref([startDate.value, endDate.value])
-const isDark = usePreferredDark()
+const { isDark } = useColorScheme()
 const itemsStore = useItemsStore()
 const settingsStore = useSettingsStore()
 const odooEnabled = computed(() => !!settingsStore.settings?.OdooEnabled)

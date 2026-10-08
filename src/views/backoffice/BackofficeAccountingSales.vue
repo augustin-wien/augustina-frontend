@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { usePreferredDark } from '@vueuse/core'
+import { useColorScheme } from '@/composables/useColorScheme'
 import { ref, computed } from 'vue'
 import { usePaymentsStore } from '@/stores/payments'
 import { useAuthLoad } from '@/composables/useAuthLoad'
@@ -27,7 +27,7 @@ const tomorrow = startOfDay(new Date(new Date().setDate(new Date().getDate() + 1
 const startDate = ref<Date>(yesterday)
 const endDate = ref(tomorrow)
 const date = ref([startDate.value, endDate.value])
-const isDark = usePreferredDark()
+const { isDark } = useColorScheme()
 const store = usePaymentsStore()
 const itemsStore = useItemsStore()
 // Include archived items: sales may reference products that were deleted since.
