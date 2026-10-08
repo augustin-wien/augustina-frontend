@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useSettingsStore, type Settings } from '@/stores/settings'
 import Card from '@/components/ui/Card.vue'
 import FormField from '@/components/ui/FormField.vue'
 import Button from '@/components/ui/Button.vue'
 import { testWordPressInvite, type WordPressInviteTestResult } from '@/api/api'
+import { internalVendorEmail, normalizeVendorEmailPostfix } from '@/utils/vendorEmail'
 
 const props = defineProps<{
   updatedSettings: Settings
@@ -15,6 +17,7 @@ const props = defineProps<{
 const emits = defineEmits(['open-qrcode', 'saved', 'error'])
 
 const settingsStore = useSettingsStore()
+const { t } = useI18n()
 
 const localSettings = ref<Settings>({ ...props.updatedSettings })
 
@@ -41,6 +44,19 @@ const testWpInvite = async () => {
     wpInviteTesting.value = false
   }
 }
+
+// Vendors without an own email get "<license ID><postfix>", so it has to make a valid address
+const vendorEmailPostfixError = computed(() =>
+  normalizeVendorEmailPostfix(localSettings.value.VendorEmailPostfix) === null
+    ? t('vendorEmailPostfixInvalid')
+    : ''
+)
+
+const vendorEmailPostfixHint = computed(() =>
+  t('vendorEmailPostfixHint', {
+    example: internalVendorEmail('123', localSettings.value.VendorEmailPostfix)
+  })
+)
 
 const newLogo = ref('')
 const newFavicon = ref('')
@@ -82,6 +98,11 @@ const updateQRCodeLogo = (event: Event) => {
 const saveSettings = async () => {
   // The backend treats an empty URL as "disabled", so switching the toggle off has to clear it.
   if (!wpInviteEnabled.value) localSettings.value.WordPressInviteURL = ''
+
+  if (vendorEmailPostfixError.value) {
+    emits('error', vendorEmailPostfixError.value)
+    return
+  }
 
   try {
     await settingsStore.updateSettings(localSettings.value as Settings)
@@ -241,7 +262,11 @@ defineExpose({ saveSettings })
         <FormField :label="$t('onlinePaperUrl')" :hint="$t('onlinePaperUrlHint')">
           <input v-model="localSettings.OnlinePaperUrl" type="text" class="aug-input" />
         </FormField>
-        <FormField :label="$t('Vendor email postfix')">
+        <FormField
+          :label="$t('Vendor email postfix')"
+          :error="vendorEmailPostfixError"
+          :hint="vendorEmailPostfixHint"
+        >
           <input v-model="localSettings.VendorEmailPostfix" type="text" class="aug-input" />
         </FormField>
         <FormField :label="$t('Digital items URL')">
