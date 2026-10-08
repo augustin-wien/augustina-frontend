@@ -28,16 +28,7 @@
   --radius-sm: 6px;
 }
 
-/* Dark palette. Follows the OS/browser color-scheme preference unless the user picked light or dark
-   explicitly in the backoffice sidebar, which sets <html data-theme="light|dark"> (see
-   src/composables/useColorScheme.ts). The same values are listed twice because a forced dark theme
-   has to apply regardless of the media query. --color-accent/--color-accent-fg are deliberately
-   NOT overridden here: they're the admin's configured brand color (see the runtime override note
-   above) and stay the same regardless of theme, same as a real logo wouldn't flip colors depending
-   on the visitor's theme. --color-accent-tint recomputes automatically even though only its mix
-   base is changed, since color-mix() re-resolves live whenever --color-accent or --color-surface
-   change.
-   Screen-only so printouts always use the light palette (dark text on white paper). */
+/* Dark palette: OS preference, overridable via <html data-theme>. Screen-only so printouts stay light. */
 @media screen and (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --color-bg: #101317;
