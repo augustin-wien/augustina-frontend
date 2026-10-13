@@ -25,7 +25,8 @@ export const VENDOR_CSV_COLUMNS = [
   'Auf die Karte?',
   'Hat ein Smartphone?',
   'Hat ein Konto',
-  'Schulden'
+  'Schulden',
+  'Telefon Standplatz'
 ] as const
 
 /** A single vendor as parsed from the import CSV. */
@@ -52,6 +53,7 @@ export interface VendorCsvRow {
   IsDisabled: boolean
   Email: string
   Debt: string
+  LocationTelephone: string
 }
 
 /**
@@ -68,6 +70,7 @@ export function buildLocation(vendor: VendorCsvRow): VendorLocation {
     name: vendor.Location,
     address: vendor.Address,
     zip: vendor.PLZ,
+    telephone: vendor.LocationTelephone,
     longitude: vendor.Longitude,
     latitude: vendor.Latitude,
     working_time: normalizeWorkingTime(vendor.WorkingTime)
@@ -140,7 +143,8 @@ export function parseVendorsCsv(text: string, emailPostfix: string): VendorCsvRo
         OnlineMap,
         HasSmartphone,
         HasBankAccount,
-        Debt
+        Debt,
+        LocationTelephone
       ] = line.split(';').map((field) => field.trim())
 
       return {
@@ -165,7 +169,8 @@ export function parseVendorsCsv(text: string, emailPostfix: string): VendorCsvRo
         HasBankAccount: isYes(HasBankAccount ?? ''),
         IsDisabled: false,
         Email: `${LicenseID ?? ''}${emailPostfix}`,
-        Debt: Debt ?? ''
+        Debt: Debt ?? '',
+        LocationTelephone: LocationTelephone ?? ''
       }
     })
     .filter((vendor) => vendor.LicenseID !== '')

@@ -78,7 +78,7 @@ describe('parseVendorsCsv', () => {
     const csv = [
       VENDOR_CSV_COLUMNS.join(';'),
       '1010;Billa Stephansplatz;Stephansplatz 4;16.3725;48.2082;G;A-201;Marija;Novak;' +
-        '+436641234501;deutsch/kroatisch;2024-01-15;2024-01-15;Stammplatz am Vormittag;Ja;Ja;Ja;0'
+        '+436641234501;deutsch/kroatisch;2024-01-15;2024-01-15;Stammplatz am Vormittag;Ja;Ja;Ja;0;+4315012301'
     ].join('\n')
 
     expect(parseVendorsCsv(csv, EMAIL_POSTFIX)[0]).toEqual({
@@ -103,7 +103,8 @@ describe('parseVendorsCsv', () => {
       HasBankAccount: true,
       IsDisabled: false,
       Email: 'A-201@augustin.or.at',
-      Debt: '0'
+      Debt: '0',
+      LocationTelephone: '+4315012301'
     })
   })
 
@@ -172,6 +173,19 @@ describe('parseVendorsCsv', () => {
       OnlineMap: false,
       HasSmartphone: false,
       HasBankAccount: false
+    })
+  })
+
+  it('still reads files written before the Standplatz phone column existed', () => {
+    const csv = [
+      VENDOR_CSV_COLUMNS.slice(0, -1).join(';'),
+      '1010;Billa;Gasse 1;1;1;G;A-1;Test;Person;+436641234501;deutsch;2024-01-01;2024-01-01;;Ja;Ja;Ja;0'
+    ].join('\n')
+
+    expect(parseVendorsCsv(csv, EMAIL_POSTFIX)[0]).toMatchObject({
+      Telephone: '+436641234501',
+      Debt: '0',
+      LocationTelephone: ''
     })
   })
 
@@ -307,6 +321,7 @@ describe('importing the sample file through the vendor store', () => {
       name: 'Billa Stephansplatz',
       address: 'Stephansplatz 4',
       zip: '1010',
+      telephone: '+4315012301',
       longitude: 16.3725,
       latitude: 48.2082,
       working_time: {
