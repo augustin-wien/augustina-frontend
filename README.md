@@ -111,9 +111,10 @@ Note: the container will be removed after it is stopped. If you want to keep it,
 ## Import vendors csv structure
 The delimiter is a `;` and the first line is the header. The header is not used for the import.
 ```
-PLZ;Station/Supermarkt;Adresse;Arbeitszeit;Nummer;Ausweis Nr.;Vorname;Nachname;Sprache
-1230;Billa Plus;Schönestr 6;G;;A-123;Augustin;Augustina;engl/deutsch
+PLZ;Station/Supermarkt;Adresse;Longitude;Latitude;Arbeitszeit;Ausweis Nr.;Vorname;Nachname;Nummer;Sprache;Registrierungsdatum;VerkäuferIn seit;Kommentar;Auf die Karte?;Hat ein Smartphone?;Hat ein Konto;Schulden;Telefon Standplatz
+1230;Billa Plus;Schönestr 6;16.3;48.14;G;A-123;Augustin;Augustina;+436641234501;engl/deutsch;2024-01-15;2024-01-15;;Ja;Ja;Ja;0;+4315012301
 ```
+`Nummer` is the vendor's own phone number, `Telefon Standplatz` the one of the market. A complete sample is in [Vendor_import.csv](Vendor_import.csv).
 
 
 ## Sentry / Glitchtip
