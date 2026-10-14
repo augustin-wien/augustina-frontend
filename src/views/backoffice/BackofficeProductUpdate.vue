@@ -75,7 +75,21 @@ watch(items, (newVal) => {
 
 const toast = ref<{ type: string; message: string } | null>(null)
 
+// Keycloak grants access to online issues and abonements by their license group,
+// without it customers can buy the item but not read it. PDF items need none.
+const licenseGroupRequired = computed(
+  () =>
+    !!updatedItem.value &&
+    ['online_issue', 'abonement'].includes(updatedItem.value.Type) &&
+    !updatedItem.value.IsPDFItem
+)
+
 const updateItem = async () => {
+  if (licenseGroupRequired.value && !updatedItem.value?.LicenseGroup?.trim()) {
+    showToast('error', t('licenseGroupRequired'))
+    return
+  }
+
   try {
     itemsStore
       .updateItem(updatedItem.value as Item)
@@ -87,7 +101,11 @@ const updateItem = async () => {
         })
       })
       .catch((err) => {
-        showToast('error', 'Produkt konnte nicht aktualisiert werden' + err)
+        showToast(
+          'error',
+          'Produkt konnte nicht aktualisiert werden. ' +
+            (err?.response?.data?.error?.message ?? err)
+        )
       })
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -368,7 +386,7 @@ const previewImage = (image: string | Blob | MediaSource) => {
                     </div>
                   </FormField>
 
-                  <template v-if="updatedItem.LicenseItem !== undefined">
+                  <template v-if="updatedItem.LicenseItem !== undefined || licenseGroupRequired">
                     <label class="aug-toggle">
                       <input id="isPDFItem" v-model="updatedItem.IsPDFItem" type="checkbox" />
                       <span class="aug-toggle-track"></span>
@@ -379,12 +397,16 @@ const previewImage = (image: string | Blob | MediaSource) => {
                       v-if="!updatedItem.IsPDFItem"
                       :label="$t('licenseGroup')"
                       for="licenseGroup"
+                      :required="licenseGroupRequired"
+                      :hint="licenseGroupRequired ? $t('licenseGroupHint') : undefined"
                     >
                       <input
                         id="licenseGroup"
                         v-model="updatedItem.LicenseGroup"
                         type="text"
                         class="aug-input"
+                        placeholder="z.B. digital_edition"
+                        :required="licenseGroupRequired"
                       />
                     </FormField>
 
