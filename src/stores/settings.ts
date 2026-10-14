@@ -53,6 +53,7 @@ export interface Settings {
   MatomoUrl: string
   MatomoSiteId: string
   OnlinePaperUrl: string
+  MailSenderName: string
   edges?: any
   Keycloak: {
     Realm: string
