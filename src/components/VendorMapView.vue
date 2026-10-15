@@ -113,6 +113,10 @@ function onMapReady(instance: any) {
               <span class="font-bold">{{ location.name }}</span>
               <span>{{ location.address }}</span>
               <span>{{ location.zip }}</span>
+              <span v-if="location.telephone"
+                ><span class="font-bold mr-1">{{ $t('telephone') }}:</span
+                ><a :href="`tel:${location.telephone}`">{{ location.telephone }}</a></span
+              >
               <span
                 ><span class="font-bold mr-1">{{ $t('workingTime') }}:</span
                 >{{ location.working_time }}</span
