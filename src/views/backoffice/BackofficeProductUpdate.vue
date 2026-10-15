@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import Toast from '@/components/ToastMessage.vue'
-import { fetchItemPDF } from '@/api/api'
+import { checkWordPressIssue, fetchItemPDF, type WordPressIssueCheck } from '@/api/api'
 import router from '@/router'
 import type { Item } from '@/stores/items'
 import { useItemsStore, ITEM_TYPES } from '@/stores/items'
@@ -14,7 +14,7 @@ import FormField from '@/components/ui/FormField.vue'
 import Modal from '@/components/ui/Modal.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
 
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 
@@ -93,6 +93,48 @@ const updateItem = async () => {
     // eslint-disable-next-line no-console
     console.error('Error creating item:', error)
     showToast('error', 'Produkt konnte nicht angelegt werden')
+  }
+}
+
+// Checking the license group in WordPress ---------------------------------------
+
+// The check needs the WordPress invite settings; an empty license group only asks
+// whether they are set up, without calling WordPress.
+const wpInviteConfigured = ref(false)
+
+onMounted(async () => {
+  try {
+    wpInviteConfigured.value = (await checkWordPressIssue('')).data.configured
+  } catch {
+    wpInviteConfigured.value = false
+  }
+})
+
+const wpIssueChecking = ref(false)
+const wpIssueCheck = ref<WordPressIssueCheck | null>(null)
+
+watch(
+  () => updatedItem.value?.LicenseGroup,
+  () => {
+    wpIssueCheck.value = null
+  }
+)
+
+const checkWpIssue = async () => {
+  wpIssueChecking.value = true
+  wpIssueCheck.value = null
+
+  try {
+    wpIssueCheck.value = (await checkWordPressIssue(updatedItem.value?.LicenseGroup ?? '')).data
+  } catch (err: any) {
+    wpIssueCheck.value = {
+      configured: true,
+      ok: false,
+      message: err?.response?.data?.error?.message ?? String(err),
+      issue: { exists: false, issue_number: '', published: false, is_demo: false }
+    }
+  } finally {
+    wpIssueChecking.value = false
   }
 }
 
@@ -386,6 +428,26 @@ const previewImage = (image: string | Blob | MediaSource) => {
                         type="text"
                         class="aug-input"
                       />
+                      <div
+                        v-if="wpInviteConfigured && updatedItem.Type === 'online_issue'"
+                        class="wp-issue-check"
+                      >
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          :disabled="wpIssueChecking || !updatedItem.LicenseGroup?.trim()"
+                          @click="checkWpIssue"
+                        >
+                          {{ wpIssueChecking ? $t('wpIssueChecking') : $t('wpIssueCheck') }}
+                        </Button>
+                        <p
+                          v-if="wpIssueCheck"
+                          class="wp-issue-check-result"
+                          :class="wpIssueCheck.ok ? 'is-success' : 'is-error'"
+                        >
+                          {{ wpIssueCheck.ok ? '✓' : '✗' }} {{ wpIssueCheck.message }}
+                        </p>
+                      </div>
                     </FormField>
 
                     <FormField v-if="updatedItem.IsPDFItem" :label="$t('pdf item')" for="pdf">
@@ -505,6 +567,24 @@ const previewImage = (image: string | Blob | MediaSource) => {
   display: flex;
   gap: 8px;
   align-items: center;
+}
+.wp-issue-check {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 8px;
+}
+.wp-issue-check-result {
+  font-size: 13px;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.wp-issue-check-result.is-success {
+  color: var(--color-success);
+}
+.wp-issue-check-result.is-error {
+  color: var(--color-danger);
 }
 .license-item-row .aug-input {
   flex: 1;

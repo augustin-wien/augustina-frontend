@@ -237,6 +237,26 @@ export async function notifyAbonements(itemId: number) {
   return apiInstance.post(`${ITEMS_API_URL}${itemId}/notify-abonements/`)
 }
 
+export type WordPressIssueCheck = {
+  configured: boolean
+  ok: boolean
+  message: string
+  issue: {
+    exists: boolean
+    issue_number: string
+    title?: string
+    published: boolean
+    is_demo: boolean
+  }
+}
+
+// Asks WordPress (via the backend) whether the license group names a published issue
+export async function checkWordPressIssue(licenseGroup: string) {
+  return apiInstance.get<WordPressIssueCheck>(`${ITEMS_API_URL}wordpress-issue/`, {
+    params: { licenseGroup }
+  })
+}
+
 export async function fetchLicenseGroups() {
   return apiInstance.get<string[]>(`${ITEMS_API_URL}licensegroups/`)
 }
