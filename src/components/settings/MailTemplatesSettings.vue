@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useMailTemplatesStore } from '@/stores/mailTemplates'
+import { useSettingsStore } from '@/stores/settings'
+import { patchMailSenderName } from '@/api/api'
 import Card from '@/components/ui/Card.vue'
 import FormField from '@/components/ui/FormField.vue'
 import Button from '@/components/ui/Button.vue'
@@ -16,6 +18,32 @@ const mailStore = useMailTemplatesStore()
 const { t: i18n } = useI18n()
 
 const testEmail = ref('')
+
+const settingsStore = useSettingsStore()
+const senderName = ref(settingsStore.settings.MailSenderName ?? '')
+const savingSenderName = ref(false)
+
+watch(
+  () => settingsStore.settings.MailSenderName,
+  (v) => {
+    senderName.value = v ?? ''
+  }
+)
+
+const saveSenderName = async () => {
+  try {
+    savingSenderName.value = true
+    await patchMailSenderName(senderName.value.trim())
+    settingsStore.settings.MailSenderName = senderName.value.trim()
+    emits('saved', i18n('mailSenderNameSaved'))
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Error saving mail sender name', err)
+    emits('error', i18n('mailSenderNameError'))
+  } finally {
+    savingSenderName.value = false
+  }
+}
 
 const loadList = async () => {
   try {
@@ -189,6 +217,21 @@ onMounted(() => {
 
 <template>
   <Card>
+    <div class="sender-row">
+      <FormField :label="$t('mailSenderName')" :hint="$t('mailSenderNameHint')">
+        <div class="input-with-action">
+          <input
+            v-model="senderName"
+            class="aug-input"
+            maxlength="100"
+            @keydown.enter.prevent="saveSenderName"
+          />
+          <Button variant="secondary" :disabled="savingSenderName" @click="saveSenderName">
+            {{ $t('save') }}
+          </Button>
+        </div>
+      </FormField>
+    </div>
     <div class="settings-grid">
       <!-- Template list -->
       <div>
@@ -293,6 +336,12 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.sender-row {
+  max-width: 560px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+}
 .settings-grid {
   display: grid;
   grid-template-columns: 1fr 2fr;

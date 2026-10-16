@@ -290,6 +290,18 @@ export async function fetchAdminSettings() {
   return apiInstance.get(`${SETTINGS_API_URL}admin/`)
 }
 
+export async function patchMailSenderName(mailSenderName: string) {
+  const formData = new FormData()
+  formData.append('MailSenderName', mailSenderName)
+
+  return apiInstance.put(`${SETTINGS_API_URL}`, formData, {
+    headers: {
+      accept: 'application/json',
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
 export async function patchSettings(updatedSettings: Settings) {
   const formData = new FormData()
   formData.append('Color', updatedSettings.Color ?? '')
@@ -333,6 +345,7 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('MatomoUrl', updatedSettings.MatomoUrl ?? '')
   formData.append('MatomoSiteId', updatedSettings.MatomoSiteId ?? '')
   formData.append('OnlinePaperUrl', updatedSettings.OnlinePaperUrl ?? '')
+  formData.append('MailSenderName', updatedSettings.MailSenderName ?? '')
 
   formData.append(
     'OrgaCoversTransactionCosts',

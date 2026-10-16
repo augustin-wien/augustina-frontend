@@ -60,7 +60,8 @@ const updatedSettings = ref<Settings>({
   PrivacyPolicyUrl: '',
   MatomoUrl: '',
   MatomoSiteId: '',
-  OnlinePaperUrl: ''
+  OnlinePaperUrl: '',
+  MailSenderName: ''
 })
 
 // The public settings endpoint withholds credentials, so this page loads the full set from the
