@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { useItemsStore } from '@/stores/items'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { formatCredit } from '@/utils/utils'
 import type { Item } from '@/stores/items'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { useI18n } from 'vue-i18n'
-import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faEyeSlash, faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
@@ -25,6 +25,37 @@ useAuthLoad(() => {
 })
 
 const archivedItems = computed(() => itemsStore.archivedItems)
+
+const SHOW_ARCHIVED_LICENSES_KEY = 'backoffice.products.showArchivedLicenses'
+
+function loadShowArchivedLicenses() {
+  try {
+    return localStorage.getItem(SHOW_ARCHIVED_LICENSES_KEY) === 'true'
+  } catch {
+    return false
+  }
+}
+
+// Every online issue leaves an archived license item behind, so they are hidden by default
+const showArchivedLicenses = ref(loadShowArchivedLicenses())
+
+watch(showArchivedLicenses, (show) => {
+  try {
+    localStorage.setItem(SHOW_ARCHIVED_LICENSES_KEY, String(show))
+  } catch {
+    // Only a convenience, the default works without storage
+  }
+})
+
+const isLicense = (item: Item) => item.IsLicenseItem || item.Type === 'license_item'
+
+const archivedLicenseCount = computed(() => archivedItems.value.filter(isLicense).length)
+
+const visibleArchivedItems = computed(() =>
+  showArchivedLicenses.value
+    ? archivedItems.value
+    : archivedItems.value.filter((item) => !isLicense(item))
+)
 
 const showToast = (type: string, message: string) => {
   toast.value = { type, message }
@@ -135,7 +166,7 @@ function exportCSV() {
           :class="{ 'tab-btn-active': currentTab === 'archived' }"
           @click="currentTab = 'archived'"
         >
-          {{ $t('productsArchived') }} ({{ archivedItems.length }})
+          {{ $t('productsArchived') }} ({{ visibleArchivedItems.length }})
         </button>
       </div>
       <Card v-show="currentTab === 'active'" class="section">
@@ -176,8 +207,24 @@ function exportCSV() {
           </tbody>
         </table>
       </Card>
+      <div v-show="currentTab === 'archived'" class="archive-toolbar">
+        <Button
+          v-if="archivedLicenseCount > 0"
+          variant="secondary"
+          @click="showArchivedLicenses = !showArchivedLicenses"
+        >
+          <font-awesome-icon :icon="showArchivedLicenses ? faEyeSlash : faEye" />
+          {{
+            showArchivedLicenses
+              ? $t('hideArchivedLicenses')
+              : $t('showArchivedLicenses', { count: archivedLicenseCount })
+          }}
+        </Button>
+      </div>
       <Card v-show="currentTab === 'archived'" class="section">
-        <p v-if="archivedItems.length === 0" class="muted empty">{{ $t('noArchivedProducts') }}</p>
+        <p v-if="visibleArchivedItems.length === 0" class="muted empty">
+          {{ $t('noArchivedProducts') }}
+        </p>
         <table v-else class="aug-table">
           <thead>
             <tr>
@@ -191,7 +238,7 @@ function exportCSV() {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in archivedItems" :key="item.ID" class="disabled-row">
+            <tr v-for="item in visibleArchivedItems" :key="item.ID" class="disabled-row">
               <td>{{ item.ID }}</td>
               <td>
                 <img
@@ -259,6 +306,14 @@ function exportCSV() {
 .tab-btn-active {
   color: var(--color-accent);
   border-bottom-color: var(--color-accent);
+}
+.archive-toolbar {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+.archive-toolbar:empty {
+  display: none;
 }
 .empty {
   padding: 16px;

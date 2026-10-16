@@ -43,6 +43,11 @@ const submitItem = async () => {
     return
   }
 
+  if (needsLicense.value && !newItem.value.LicenseGroup.trim()) {
+    showToast('error', t('licenseGroupRequired'))
+    return
+  }
+
   try {
     await store
       .createItem(newItem.value as Item)
@@ -129,13 +134,19 @@ const updateImage = (event: any) => {
             </FormField>
 
             <template v-if="needsLicense">
-              <FormField :label="$t('licenseGroup')" for="licenseGroup">
+              <FormField
+                :label="$t('licenseGroup')"
+                for="licenseGroup"
+                required
+                :hint="$t('licenseGroupHint')"
+              >
                 <input
                   id="licenseGroup"
                   v-model="newItem.LicenseGroup"
                   type="text"
                   class="aug-input"
                   placeholder="z.B. digital_edition"
+                  required
                 />
               </FormField>
 
