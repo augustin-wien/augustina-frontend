@@ -53,6 +53,7 @@ const updatedSettings = ref<Settings>({
   AbonementUrl: '',
   AbonementEnabled: false,
   POSEnabled: true,
+  DonationTrackingEnabled: false,
   OdooEnabled: false,
   WordPressInviteURL: '',
   WordPressInviteAPIKey: '',

@@ -299,6 +299,16 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeLocations.vue')
     },
     {
+      path: '/backoffice/donations',
+      name: 'Donations',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Donations'
+      },
+      component: () => import('@/views/backoffice/BackofficeDonations.vue')
+    },
+    {
       path: '/backoffice/campaigns',
       name: 'Campaigns',
       meta: {
