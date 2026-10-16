@@ -217,6 +217,17 @@ defineExpose({ saveSettings })
       </label>
     </Card>
 
+    <!-- Donation tracking -->
+    <Card class="section">
+      <h2 class="section-title">{{ $t('donationTrackingTitle') }}</h2>
+      <label class="aug-toggle">
+        <input v-model="localSettings.DonationTrackingEnabled" type="checkbox" />
+        <span class="aug-toggle-track"></span>
+        <span>{{ $t('settingsDonationTrackingEnabled') }}</span>
+      </label>
+      <p class="section-hint">{{ $t('settingsDonationTrackingHint') }}</p>
+    </Card>
+
     <!-- Abonement / Subscription -->
     <Card class="section">
       <h2 class="section-title">{{ $t('abonementModule') }}</h2>

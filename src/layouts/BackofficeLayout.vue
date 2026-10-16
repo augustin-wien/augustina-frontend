@@ -12,6 +12,7 @@ import {
   faCashRegister,
   faDungeon,
   faFileLines,
+  faHandHoldingHeart,
   faReceipt,
   faSliders,
   faSplotch,
@@ -105,6 +106,14 @@ const navGroups = computed<NavGroup[]>(() => {
       to: '/backoffice/pos-accounting',
       labelKey: 'menuPOSAccounting',
       icon: faCashRegister
+    })
+  }
+
+  if (settings.value.DonationTrackingEnabled) {
+    accountingItems.push({
+      to: '/backoffice/donations',
+      labelKey: 'menuDonationTracking',
+      icon: faHandHoldingHeart
     })
   }
 

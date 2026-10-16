@@ -188,6 +188,12 @@ export async function fetchAllPOSOrders(startDate: Date, endDate: Date) {
   )
 }
 
+export async function fetchExternalPayments(startDate: Date, endDate: Date) {
+  return apiInstance.get(`${BASE_URL}api/external-payments/`, {
+    params: { from: startDate.toISOString(), to: endDate.toISOString() }
+  })
+}
+
 export async function removeVendor(vendorId: number, locations?: VendorLocationsAction) {
   return apiInstance.delete(`${VENDORS_API_URL}${vendorId}/`, {
     params: locations ? { locations } : undefined
@@ -338,6 +344,12 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('AbonementUrl', updatedSettings.AbonementUrl ?? '')
   formData.append('AbonementEnabled', (updatedSettings.AbonementEnabled ?? false).toString())
   formData.append('POSEnabled', (updatedSettings.POSEnabled ?? true).toString())
+
+  formData.append(
+    'DonationTrackingEnabled',
+    (updatedSettings.DonationTrackingEnabled ?? false).toString()
+  )
+
   formData.append('WordPressInviteURL', updatedSettings.WordPressInviteURL ?? '')
   formData.append('WordPressInviteAPIKey', updatedSettings.WordPressInviteAPIKey ?? '')
   formData.append('WordPressInviteTTL', (updatedSettings.WordPressInviteTTL ?? 604800).toString())
