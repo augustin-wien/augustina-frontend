@@ -237,6 +237,26 @@ export async function notifyAbonements(itemId: number) {
   return apiInstance.post(`${ITEMS_API_URL}${itemId}/notify-abonements/`)
 }
 
+export type WordPressIssueCheck = {
+  configured: boolean
+  ok: boolean
+  message: string
+  issue: {
+    exists: boolean
+    issue_number: string
+    title?: string
+    published: boolean
+    is_demo: boolean
+  }
+}
+
+// Asks WordPress (via the backend) whether the license group names a published issue
+export async function checkWordPressIssue(licenseGroup: string) {
+  return apiInstance.get<WordPressIssueCheck>(`${ITEMS_API_URL}wordpress-issue/`, {
+    params: { licenseGroup }
+  })
+}
+
 export async function fetchLicenseGroups() {
   return apiInstance.get<string[]>(`${ITEMS_API_URL}licensegroups/`)
 }
@@ -268,6 +288,18 @@ export async function fetchSettings() {
  */
 export async function fetchAdminSettings() {
   return apiInstance.get(`${SETTINGS_API_URL}admin/`)
+}
+
+export async function patchMailSenderName(mailSenderName: string) {
+  const formData = new FormData()
+  formData.append('MailSenderName', mailSenderName)
+
+  return apiInstance.put(`${SETTINGS_API_URL}`, formData, {
+    headers: {
+      accept: 'application/json',
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 }
 
 export async function patchSettings(updatedSettings: Settings) {
@@ -313,6 +345,7 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('MatomoUrl', updatedSettings.MatomoUrl ?? '')
   formData.append('MatomoSiteId', updatedSettings.MatomoSiteId ?? '')
   formData.append('OnlinePaperUrl', updatedSettings.OnlinePaperUrl ?? '')
+  formData.append('MailSenderName', updatedSettings.MailSenderName ?? '')
 
   formData.append(
     'OrgaCoversTransactionCosts',
