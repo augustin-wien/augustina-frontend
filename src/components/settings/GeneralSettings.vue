@@ -190,6 +190,16 @@ defineExpose({ saveSettings })
           <span>{{ $t('Shop page as landing page') }}</span>
         </label>
         <label class="aug-toggle">
+          <input v-model="localSettings.DonationPageEnabled" type="checkbox" />
+          <span class="aug-toggle-track"></span>
+          <span>{{ $t('settingsDonationPageEnabled') }}</span>
+        </label>
+        <label class="aug-toggle">
+          <input v-model="localSettings.AGBRequired" type="checkbox" />
+          <span class="aug-toggle-track"></span>
+          <span>{{ $t('settingsAGBRequired') }}</span>
+        </label>
+        <label class="aug-toggle">
           <input v-model="localSettings.UseTipInsteadOfDonation" type="checkbox" />
           <span class="aug-toggle-track"></span>
           <span>{{ $t('Use tip instead of donation in the shop') }}</span>
@@ -349,6 +359,30 @@ defineExpose({ saveSettings })
           />
         </FormField>
       </div>
+      <label class="aug-toggle field-mt">
+        <input v-model="localSettings.MatomoTrackCart" type="checkbox" />
+        <span class="aug-toggle-track"></span>
+        <span>{{ $t('matomoTrackCart') }}</span>
+      </label>
+    </Card>
+
+    <!-- Feedback -->
+    <Card class="section">
+      <h2 class="section-title">{{ $t('feedbackSettingsTitle') }}</h2>
+      <p class="section-hint">{{ $t('feedbackSettingsHint') }}</p>
+      <label class="aug-toggle toggle-spaced">
+        <input v-model="localSettings.FeedbackEnabled" type="checkbox" />
+        <span class="aug-toggle-track"></span>
+        <span>{{ $t('feedbackSettingsEnabled') }}</span>
+      </label>
+      <FormField v-if="localSettings.FeedbackEnabled" :label="$t('feedbackSettingsEmail')">
+        <input
+          v-model="localSettings.FeedbackEmail"
+          type="email"
+          class="aug-input"
+          placeholder="feedback@example.org"
+        />
+      </FormField>
     </Card>
 
     <!-- Map -->

@@ -6,6 +6,21 @@ import { useKeycloakStore } from '@/stores/keycloak'
 import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
 import { useSettingsStore } from '@/stores/settings'
 import { isBackendUnreachable } from '@/api/api'
+import { useShopStore } from '@/stores/ShopStore'
+
+// The donation step can be switched off in the settings; the purchase then goes straight on to
+// the confirmation, without a donation in the cart
+const skipDonationIfDisabled = async (to: RouteLocationNormalized) => {
+  const settingsStore = useSettingsStore()
+
+  await settingsStore.getSettingsFromApi()
+
+  if (settingsStore.settings.DonationPageEnabled !== false) return true
+
+  useShopStore().setDonation(0)
+
+  return { name: 'Confirmation', params: to.params, replace: true }
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,6 +64,7 @@ const router = createRouter({
         {
           path: '/v/:id/tipping',
           name: 'Tippingpage',
+          beforeEnter: skipDonationIfDisabled,
           component: () => import('@/views/TippingPage.vue')
         },
         {
@@ -69,6 +85,7 @@ const router = createRouter({
         {
           path: '/v/:id/custom-tip',
           name: 'Custom Tip',
+          beforeEnter: skipDonationIfDisabled,
           component: () => import('@/views/CustomTip.vue')
         },
         {

@@ -537,5 +537,23 @@
   "notifyAbonementsSent": "Die Mail wird an {count} Abonnent·innen verschickt.",
   "notifyAbonementsFailed": "Die Mail konnte nicht verschickt werden.",
   "vendorEmailPostfixInvalid": "Muss eine Domain und höchstens ein {'@'} enthalten, z. B. \"{'@'}example.com\" oder \"-{'@'}example.com\".",
-  "vendorEmailPostfixHint": "Wird an die Lizenznummer angehängt, z. B. {example}"
+  "vendorEmailPostfixHint": "Wird an die Lizenznummer angehängt, z. B. {example}",
+
+  "settingsAGBRequired": "Kund*innen müssen den AGB zustimmen",
+  "settingsDonationPageEnabled": "Spendenseite im Kaufprozess anzeigen",
+  "matomoTrackCart": "Produkte im Warenkorb beim Bezahlen an Matomo senden",
+  "feedbackSettingsTitle": "Feedback",
+  "feedbackSettingsHint": "Zeigt am Ende des Kaufs und auf den Fehlerseiten ein Feedback-Formular. Das Feedback wird mit Transaktions-ID und Request-ID an die angegebene Adresse gemailt.",
+  "feedbackSettingsEnabled": "Feedback-Formular anzeigen",
+  "feedbackSettingsEmail": "E-Mail-Adresse für Feedback",
+  "feedbackGive": "Feedback geben",
+  "feedbackQuestion": "Wie war's? Ist etwas schiefgegangen?",
+  "feedbackAttached": "Wird mitgeschickt:",
+  "feedbackTransactionId": "Transaktions-ID",
+  "feedbackRequestId": "Request-ID",
+  "feedbackVendorId": "Verkäufer*innen-ID",
+  "feedbackPageOnly": "nur die aktuelle Seite",
+  "feedbackSend": "Senden",
+  "feedbackThanks": "Danke für dein Feedback!",
+  "feedbackFailed": "Das Feedback konnte nicht gesendet werden. Bitte versuche es später noch einmal."
 }

@@ -5,6 +5,8 @@ import { usePaymentStore } from '@/stores/payment'
 import { useSettingsStore } from '@/stores/settings'
 import { useVendorStore } from '@/stores/vendor'
 import { onMounted, ref } from 'vue'
+import { trackCart } from '@/utils/matomo'
+import FeedbackForm from '@/components/FeedbackForm.vue'
 
 const shopStore = useShopStore()
 const paymentStore = usePaymentStore()
@@ -24,6 +26,14 @@ onMounted(() => {
 
   // delete empty items
   const itemsCleaned = items.filter((item) => item.quantity > 0)
+
+  trackCart(
+    settings.settings,
+    itemsCleaned.map((item) => ({
+      name: shopStore.getName(item.item),
+      value: item.item == shopStore.donationItem ? item.quantity / 100 : item.quantity
+    }))
+  )
 
   paymentStore
     .postOrder(itemsCleaned, 1, vendorStore.vendorid, paymentStore.email)
@@ -52,6 +62,7 @@ onMounted(() => {
             {{ errorMessageDetail }}
           </div>
           <div class="text-center">{{ errorTimestamp }}</div>
+          <FeedbackForm class="mt-6" />
         </div>
       </main>
     </template>

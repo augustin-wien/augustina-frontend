@@ -7,6 +7,7 @@ import { usePaymentStore } from '@/stores/payment'
 import { usePDFDownloadStore } from '@/stores/pdfDownload'
 import { useSettingsStore } from '@/stores/settings'
 import { computed, onMounted, ref } from 'vue'
+import FeedbackForm from '@/components/FeedbackForm.vue'
 
 const DONATION_ITEM_ID = 2
 
@@ -318,6 +319,7 @@ const email = localStorage.getItem('email') || ''
               </button>
             </a>
           </div>
+          <FeedbackForm class="mt-4" />
         </div>
         <div v-else class="text-6xl row-span-4 font-bold w-fit h-full relative">
           <div
@@ -325,6 +327,7 @@ const email = localStorage.getItem('email') || ''
           >
             <IconCross />
           </div>
+          <FeedbackForm class="mt-4" />
         </div>
       </div>
     </template>

@@ -13,8 +13,12 @@ const settStore = useSettingsStore()
 const paymentStore = usePaymentStore()
 const shake = ref(false)
 
+// Older backends don't send the setting, so anything but an explicit false keeps the checkbox
+const agbRequired = computed(() => settStore.settings.AGBRequired !== false)
+const canContinue = computed(() => paymentStore.agbChecked || !agbRequired.value)
+
 const checkAgb = () => {
-  const agbsChecked = paymentStore.checkAgb(route.params.id as string)
+  const agbsChecked = paymentStore.checkAgb(route.params.id as string, agbRequired.value)
 
   if (!agbsChecked) {
     shake.value = true
@@ -71,7 +75,7 @@ const hasLicenseItem = computed(() => {
               <p id="final-price" class="text-center text-8xl font-semibold">
                 {{ shopStore.calculateSum().toFixed(2) }}€
               </p>
-              <p class="text-center text">
+              <p v-if="settStore.settings.DonationPageEnabled !== false" class="text-center text">
                 {{ $t('includes') }} {{ shopStore.donationInEuro }}€
                 {{
                   settStore.settings.UseTipInsteadOfDonation
@@ -94,7 +98,7 @@ const hasLicenseItem = computed(() => {
           </div>
 
           <div :class="shake ? 'shake' : ''">
-            <div class="flex items-center justify-center">
+            <div v-if="agbRequired" class="flex items-center justify-center">
               <input id="checkbox" v-model="paymentStore.agbChecked" type="checkbox" class="mr-2" />
               <label for="checkbox" class="text-center">
                 {{ $t('agreement') }}
@@ -131,7 +135,7 @@ const hasLicenseItem = computed(() => {
             v-else
             id="next-btn"
             class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full"
-            :style="paymentStore.agbChecked ? 'background-color:' + settStore.settings.Color : ''"
+            :style="canContinue ? 'background-color:' + settStore.settings.Color : ''"
             @click="checkAgb"
           >
             {{ $t('next') }}

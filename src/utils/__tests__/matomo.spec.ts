@@ -9,7 +9,8 @@ import {
   isTrackablePath,
   markPrivacyNoticeSeen,
   resetMatomo,
-  setMatomoOptOut
+  setMatomoOptOut,
+  trackCart
 } from '@/utils/matomo'
 
 const CONFIGURED = { MatomoUrl: 'https://matomo.example.org/', MatomoSiteId: '3' }
@@ -455,5 +456,48 @@ describe('a url that must never become a script src', () => {
     expect(initMatomo({ MatomoUrl: 'data:text/javascript,1', MatomoSiteId: '3' }, r)).toBe(false)
     // A corrected setting must still be able to start it.
     expect(initMatomo(CONFIGURED, r)).toBe(true)
+  })
+})
+
+describe('cart tracking', () => {
+  let router: Router
+
+  const cart = [
+    { name: 'Zeitung', value: 2 },
+    { name: 'Spende', value: 1.5 },
+    { name: 'Leer', value: 0 }
+  ]
+
+  beforeEach(async () => {
+    cleanDom()
+    router = buildRouter()
+    router.push('/')
+    await router.isReady()
+  })
+
+  afterEach(cleanDom)
+
+  it('reports every product with a quantity as a checkout event when enabled', () => {
+    initMatomo(CONFIGURED, router)
+    trackCart({ MatomoTrackCart: true }, cart)
+
+    expect(calls('trackEvent')).toEqual([
+      ['trackEvent', 'Cart', 'Checkout', 'Zeitung', 2],
+      ['trackEvent', 'Cart', 'Checkout', 'Spende', 1.5]
+    ])
+  })
+
+  it('sends nothing unless the tenant switched it on', () => {
+    initMatomo(CONFIGURED, router)
+    trackCart({ MatomoTrackCart: false }, cart)
+    trackCart({}, cart)
+
+    expect(calls('trackEvent')).toEqual([])
+  })
+
+  it('does nothing when Matomo is not running', () => {
+    trackCart({ MatomoTrackCart: true }, cart)
+
+    expect(window._paq).toBeUndefined()
   })
 })

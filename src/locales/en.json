@@ -450,5 +450,22 @@
   "notifyAbonementsSent": "The mail is being sent to {count} subscribers.",
   "notifyAbonementsFailed": "The mail could not be sent.",
   "vendorEmailPostfixInvalid": "Must contain a domain and at most one {'@'}, e.g. \"{'@'}example.com\" or \"-{'@'}example.com\".",
-  "vendorEmailPostfixHint": "Appended to the license ID, e.g. {example}"
+  "vendorEmailPostfixHint": "Appended to the license ID, e.g. {example}",
+  "settingsAGBRequired": "Customers have to accept the terms",
+  "settingsDonationPageEnabled": "Show the donation page in the purchase flow",
+  "matomoTrackCart": "Send the products in the cart to Matomo at checkout",
+  "feedbackSettingsTitle": "Feedback",
+  "feedbackSettingsHint": "Shows a feedback form at the end of the purchase and on the error pages. The feedback is mailed to the address below, together with the transaction id and request id.",
+  "feedbackSettingsEnabled": "Show the feedback form",
+  "feedbackSettingsEmail": "Email address for feedback",
+  "feedbackGive": "Give feedback",
+  "feedbackQuestion": "How did it go? Did anything go wrong?",
+  "feedbackAttached": "Sent along:",
+  "feedbackTransactionId": "Transaction ID",
+  "feedbackRequestId": "Request ID",
+  "feedbackVendorId": "Vendor ID",
+  "feedbackPageOnly": "only the current page",
+  "feedbackSend": "Send",
+  "feedbackThanks": "Thank you for your feedback!",
+  "feedbackFailed": "The feedback could not be sent. Please try again later."
 }
