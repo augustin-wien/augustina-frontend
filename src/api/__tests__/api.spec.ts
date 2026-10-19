@@ -28,12 +28,13 @@ const { scope, captureException, withScope, updateToken, login } = vi.hoisted(()
 // itself is replaced - api.ts's `import * as Sentry` resolves to this.
 vi.mock('@sentry/vue', () => ({ captureException, withScope }))
 
-// Same reasoning as the Sentry mock above - api.ts's `import keycloak from
-// '@/keycloak/keycloak'` resolves to this instead of the real singleton.
+// Same reasoning as the Sentry mock above - api.ts's `import keycloak, { login }
+// from '@/keycloak/keycloak'` resolves to this instead of the real singleton.
 vi.mock('@/keycloak/keycloak', () => ({
   default: {
-    keycloak: { authenticated: true, token: 'stale-token', updateToken, login }
-  }
+    keycloak: { authenticated: true, token: 'stale-token', updateToken }
+  },
+  login
 }))
 
 describe('apiInstance', () => {

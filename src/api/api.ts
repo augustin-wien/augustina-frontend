@@ -1,4 +1,4 @@
-import keycloak from '@/keycloak/keycloak'
+import keycloak, { login } from '@/keycloak/keycloak'
 import { type Item } from '@/stores/items'
 import { type PaymentsForPayout, type Payout } from '@/stores/payout'
 import { type Settings } from '@/stores/settings'
@@ -91,7 +91,7 @@ apiInstance.interceptors.response.use(
 
         if (!loginTriggered) {
           loginTriggered = true
-          keycloak.keycloak?.login()
+          login()
         }
       }
     } else {
