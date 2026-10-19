@@ -65,7 +65,7 @@
     "jsdom": "^27.0.0",
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
-    "sass": "^1.82.0",
+    "sass": "^1.105.2",
     "start-server-and-test": "^2.0.9",
     "tailwindcss": "^4.1.13",
     "typescript": "~5.9.2",
