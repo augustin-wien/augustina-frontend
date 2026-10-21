@@ -4,6 +4,7 @@ import { useSettingsStore } from '@/stores/settings'
 import { useRoute } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import Toast from '@/components/ToastMessage.vue'
+import FeedbackForm from '@/components/FeedbackForm.vue'
 import { useI18n } from 'vue-i18n'
 
 const paymentStore = usePaymentStore()
@@ -71,11 +72,16 @@ const currentTime = new Date().toLocaleString()
           <button
             id="retry-button"
             class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full"
-            :style="paymentStore.agbChecked ? 'background-color:' + settStore.settings.Color : ''"
+            :style="
+              paymentStore.agbChecked || settStore.settings.AGBRequired === false
+                ? 'background-color:' + settStore.settings.Color
+                : ''
+            "
             @click="retry"
           >
             {{ $t('tryagain') }}
           </button>
+          <FeedbackForm class="mt-4" />
         </div>
       </div>
     </template>

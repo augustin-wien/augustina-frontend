@@ -55,6 +55,11 @@ export interface Settings {
   MatomoSiteId: string
   OnlinePaperUrl: string
   MailSenderName: string
+  AGBRequired: boolean
+  DonationPageEnabled: boolean
+  MatomoTrackCart: boolean
+  FeedbackEnabled: boolean
+  FeedbackEmail: string
   edges?: any
   Keycloak: {
     Realm: string

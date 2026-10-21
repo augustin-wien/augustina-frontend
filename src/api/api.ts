@@ -5,6 +5,7 @@ import { type Settings } from '@/stores/settings'
 import { type Vendor } from '@/stores/vendor'
 import axios from 'axios'
 import * as Sentry from '@sentry/vue'
+import { requestIdFromHeaders, setLastRequestId } from '@/utils/requestId'
 
 import {
   AUTH_API_URL,
@@ -29,7 +30,8 @@ import {
   ORDERS_API_URL,
   VENDOR_STATISTICS_API_URL,
   CUSTOMERS_API_URL,
-  ABONEMENTS_API_URL
+  ABONEMENTS_API_URL,
+  FEEDBACK_API_URL
 } from './endpoints'
 
 export const apiInstance = axios.create({
@@ -70,10 +72,14 @@ function refreshAccessToken(): Promise<boolean> {
 
 apiInstance.interceptors.response.use(
   (response) => {
+    setLastRequestId(requestIdFromHeaders(response.headers))
+
     return response
   },
   async (error) => {
     if (error.response) {
+      setLastRequestId(requestIdFromHeaders(error.response.headers))
+
       if (error.response.status === 401 && !error.config?._retriedAfterRefresh) {
         if (error.config) error.config._retriedAfterRefresh = true
 
@@ -120,6 +126,20 @@ export function isBackendUnreachable(error: unknown): boolean {
   if (!error.response) return true
 
   return [502, 503, 504].includes(error.response.status)
+}
+
+export interface FeedbackInput {
+  Message: string
+  TransactionID: string
+  RequestID: string
+  VendorID: string
+  Page: string
+}
+
+export function sendFeedback(feedback: FeedbackInput) {
+  return apiInstance.post(FEEDBACK_API_URL, feedback, {
+    headers: { 'Content-Type': 'application/json' }
+  })
 }
 
 export function getAuthHello() {
@@ -358,6 +378,11 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('MatomoSiteId', updatedSettings.MatomoSiteId ?? '')
   formData.append('OnlinePaperUrl', updatedSettings.OnlinePaperUrl ?? '')
   formData.append('MailSenderName', updatedSettings.MailSenderName ?? '')
+  formData.append('AGBRequired', (updatedSettings.AGBRequired ?? true).toString())
+  formData.append('DonationPageEnabled', (updatedSettings.DonationPageEnabled ?? true).toString())
+  formData.append('MatomoTrackCart', (updatedSettings.MatomoTrackCart ?? false).toString())
+  formData.append('FeedbackEnabled', (updatedSettings.FeedbackEnabled ?? false).toString())
+  formData.append('FeedbackEmail', updatedSettings.FeedbackEmail ?? '')
 
   formData.append(
     'OrgaCoversTransactionCosts',

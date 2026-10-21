@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import FeedbackForm from '@/components/FeedbackForm.vue'
 import { useSettingsStore } from '@/stores/settings'
 
 const settStore = useSettingsStore()
+const route = useRoute()
+
+const scannedId = computed(() => (typeof route.query.id === 'string' ? route.query.id : ''))
 </script>
 
 <template>
@@ -24,6 +30,7 @@ const settStore = useSettingsStore()
             {{ settStore.settings.NewspaperName }}
           </button>
         </a>
+        <FeedbackForm class="mt-6" :vendor-id="scannedId" />
       </div>
     </template>
   </component>

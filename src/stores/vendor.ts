@@ -66,7 +66,11 @@ export const useVendorStore = defineStore('vendor', {
           }
         })
         .catch(() => {
-          router.push({ name: 'Go to Vendor' })
+          // The id is kept so the feedback from that page can say which id was scanned
+          router.push({
+            name: 'Go to Vendor',
+            query: { id: typeof vendorId == 'string' ? vendorId : vendorId[0] }
+          })
         })
     }
   }

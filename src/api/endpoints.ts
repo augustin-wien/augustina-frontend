@@ -25,3 +25,4 @@ export const MAIL_TEMPLATES_API = `${BASE_URL}api/mail-templates/`
 export const CUSTOMERS_API_URL = `${BASE_URL}api/customers/`
 export const ABONEMENTS_API_URL = `${BASE_URL}api/abonements/`
 export const CAMPAIGNS_API_URL = `${BASE_URL}api/campaigns/`
+export const FEEDBACK_API_URL = `${BASE_URL}api/feedback/`

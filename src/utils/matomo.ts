@@ -244,6 +244,29 @@ export function initMatomo(settings: MatomoSettings, router: Router): boolean {
   return true
 }
 
+export interface CartEntry {
+  name: string
+  /** Number of pieces, or the amount in euros for the donation */
+  value: number
+}
+
+/**
+ * Reports what is in the cart when the order is placed: one "Cart / Checkout" event per product,
+ * named after the product and carrying the quantity as its value. Opt-in per tenant through
+ * MatomoTrackCart, and like everything else here a no-op when Matomo is not running.
+ */
+export function trackCart(settings: { MatomoTrackCart?: boolean }, entries: CartEntry[]): void {
+  const paq = window._paq
+
+  if (!settings.MatomoTrackCart || !paq || !isTrackablePath(window.location.pathname)) return
+
+  for (const entry of entries) {
+    if (!entry.name || !(entry.value > 0)) continue
+
+    paq.push(['trackEvent', 'Cart', 'Checkout', entry.name, entry.value])
+  }
+}
+
 /** Test seam — the tracker is a one-shot per page load in the app itself. */
 export function resetMatomo(): void {
   initialized = false

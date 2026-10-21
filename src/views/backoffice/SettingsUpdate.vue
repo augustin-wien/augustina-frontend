@@ -62,7 +62,12 @@ const updatedSettings = ref<Settings>({
   MatomoUrl: '',
   MatomoSiteId: '',
   OnlinePaperUrl: '',
-  MailSenderName: ''
+  MailSenderName: '',
+  AGBRequired: true,
+  DonationPageEnabled: true,
+  MatomoTrackCart: false,
+  FeedbackEnabled: false,
+  FeedbackEmail: ''
 })
 
 // The public settings endpoint withholds credentials, so this page loads the full set from the
