@@ -34,6 +34,8 @@ export const usePaymentStore = defineStore('payment', {
       paymentservice: 1,
 
       agbChecked: false,
+      // Opt-in for the newsletter, offered with digital items
+      newsletter: false,
       testamount: 1,
       pricePerPaper: 300,
       digital: { digital: true },
@@ -104,7 +106,13 @@ export const usePaymentStore = defineStore('payment', {
       vendorLicenseID: string,
       customerEmail: string
     ) {
-      this.response[0] = await agent.VivaWallet.postOrder(items, vendorLicenseID, customerEmail)
+      this.response[0] = await agent.VivaWallet.postOrder(
+        items,
+        vendorLicenseID,
+        customerEmail,
+        this.newsletter
+      )
+
       this.url = this.response[0].SmartCheckoutURL
       window.location.href = this.url
     },

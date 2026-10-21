@@ -12,6 +12,7 @@
 
   "confirm": "Bezahlung bestätigen",
   "agreement": "Mit Kauf akzeptiere ich die ",
+  "newsletterOptIn": "Ich möchte den Newsletter abonnieren",
   "terms": "AGBs",
 
   "payment confirmation": "Zahlungsbestätigung",
@@ -348,6 +349,13 @@
   "deleteCustomerConfirmation": "Willst du die Kund:in wirklich löschen?",
   "licenseGroups": "Lizenzgruppen",
   "abonements": "Abonnements",
+  "newsletter": "Newsletter",
+  "newsletterSubscribed": "Newsletter abonniert",
+  "newsletterSince": "seit {date}",
+  "newsletterExport": "Newsletter-Export ({count})",
+  "newsletterSubscribedAt": "Angemeldet am",
+  "newsletterSettingsHint": "Bietet beim Kauf einer Digitalausgabe oder eines Abos eine Checkbox zur Newsletter-Anmeldung an. Sie ist nicht vorausgewählt. Wer sich anmeldet, erscheint unter Kund:innen und im Newsletter-Export.",
+  "newsletterSettingsEnabled": "Newsletter-Anmeldung im Shop anbieten",
   "newAbonement": "Neues Abonnement",
   "editAbonement": "Abonnement bearbeiten",
   "noAbonements": "Keine Abonnements gefunden",

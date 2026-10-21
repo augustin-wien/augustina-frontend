@@ -27,7 +27,8 @@ const VivaWallet = {
   postOrder: (
     items: Array<orderItem>,
     vendorLicenseID: string,
-    customerEmail: string
+    customerEmail: string,
+    newsletter = false
   ): Promise<VivaWalletResponse> =>
     apiInstance
       .post(
@@ -36,7 +37,8 @@ const VivaWallet = {
           entries: items,
           user: 'user',
           vendorLicenseID: vendorLicenseID,
-          customerEmail: customerEmail
+          customerEmail: customerEmail,
+          newsletter: newsletter
         },
         { headers: { 'Content-Type': 'application/json' } }
       )

@@ -396,6 +396,17 @@ defineExpose({ saveSettings })
       </FormField>
     </Card>
 
+    <!-- Newsletter -->
+    <Card class="section">
+      <h2 class="section-title">{{ $t('newsletter') }}</h2>
+      <p class="section-hint">{{ $t('newsletterSettingsHint') }}</p>
+      <label class="aug-toggle toggle-spaced">
+        <input v-model="localSettings.NewsletterEnabled" type="checkbox" />
+        <span class="aug-toggle-track"></span>
+        <span>{{ $t('newsletterSettingsEnabled') }}</span>
+      </label>
+    </Card>
+
     <!-- Map -->
     <Card class="section">
       <h2 class="section-title">{{ $t('menuMap') }}</h2>

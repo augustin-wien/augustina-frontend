@@ -15,6 +15,8 @@ const shake = ref(false)
 
 // Older backends don't send the setting, so anything but an explicit false keeps the checkbox
 const agbRequired = computed(() => settStore.settings.AGBRequired !== false)
+// Only offered when switched on in the settings
+const newsletterEnabled = computed(() => settStore.settings.NewsletterEnabled === true)
 const canContinue = computed(() => paymentStore.agbChecked || !agbRequired.value)
 
 const checkAgb = () => {
@@ -69,7 +71,8 @@ const hasLicenseItem = computed(() => {
         <div class="row-span-3 w-full h-full">
           <div
             id="final-order-content"
-            class="overflow-y-auto h-5/6 border-4 border-gray-200 rounded-3xl"
+            class="overflow-y-auto border-4 border-gray-200 rounded-3xl"
+            :class="hasLicenseItem && newsletterEnabled ? 'h-4/6' : 'h-5/6'"
           >
             <div class="w-full items-center py-4">
               <p id="final-price" class="text-center text-8xl font-semibold">
@@ -114,6 +117,20 @@ const hasLicenseItem = computed(() => {
                 <button class="text-blue-600" @click="paymentStore.email = ''">
                   {{ $t('change') }}
                 </button>
+              </div>
+              <div
+                v-if="hasLicenseItem != null && newsletterEnabled"
+                class="flex items-center justify-center mb-3"
+              >
+                <input
+                  id="newsletter-checkbox"
+                  v-model="paymentStore.newsletter"
+                  type="checkbox"
+                  class="mr-2"
+                />
+                <label for="newsletter-checkbox" class="text-center">
+                  {{ $t('newsletterOptIn') }}
+                </label>
               </div>
             </div>
           </div>

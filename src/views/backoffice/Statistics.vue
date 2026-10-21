@@ -193,6 +193,13 @@ const topVendorsByAmount = computed<StatisticsItemMinimal[]>(() =>
 
 const vendorUsageData = computed<VendorUsageStatistics | null>(() => store.vendorUsageStats)
 
+const orderStatistics = computed(() => store.orderStatistics)
+
+const abandonedPercentage = computed(() => {
+  const stats = orderStatistics.value
+  return stats && stats.Started ? (stats.Abandoned / stats.Started) * 100 : 0
+})
+
 const soldCount = computed(() => quantityData.value.reduce((sum, item) => sum + item.value, 0))
 
 // A donation counts as one piece per sale
@@ -220,7 +227,8 @@ const number = (value: number) => value.toLocaleString('de-AT')
 const loadStatistics = async () => {
   await Promise.all([
     store.getPayments(startDate.value, endDate.value),
-    store.getVendorUsage(startDate.value, endDate.value)
+    store.getVendorUsage(startDate.value, endDate.value),
+    store.getOrderStatistics(startDate.value, endDate.value)
   ])
 }
 
@@ -302,6 +310,16 @@ useAuthLoad(async () => {
           </span>
           <span v-if="vendorUsageData" class="kpi-hint">
             {{ number(vendorUsageData.UsedVendors) }} von {{ number(vendorUsageData.TotalVendors) }}
+          </span>
+        </Card>
+        <Card class="kpi">
+          <span class="kpi-label">Abgebrochene Zahlungen</span>
+          <span class="kpi-value">
+            {{ orderStatistics ? number(orderStatistics.Abandoned) : '–' }}
+          </span>
+          <span v-if="orderStatistics" class="kpi-hint">
+            {{ abandonedPercentage.toFixed(0) }} % von {{ number(orderStatistics.Started) }}
+            gestarteten
           </span>
         </Card>
       </div>
