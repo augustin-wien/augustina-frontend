@@ -1,4 +1,4 @@
-import keycloak from '@/keycloak/keycloak'
+import keycloak, { login } from '@/keycloak/keycloak'
 import { type Item } from '@/stores/items'
 import { type PaymentsForPayout, type Payout } from '@/stores/payout'
 import { type Settings } from '@/stores/settings'
@@ -28,6 +28,7 @@ import {
   ORDERS_UNVERIFIED_API_URL,
   ORDERS_VERIFIED_API_URL,
   ORDERS_API_URL,
+  ORDERS_STATISTICS_API_URL,
   VENDOR_STATISTICS_API_URL,
   CUSTOMERS_API_URL,
   ABONEMENTS_API_URL,
@@ -91,7 +92,7 @@ apiInstance.interceptors.response.use(
 
         if (!loginTriggered) {
           loginTriggered = true
-          keycloak.keycloak?.login()
+          login()
         }
       }
     } else {
@@ -383,6 +384,7 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('MatomoTrackCart', (updatedSettings.MatomoTrackCart ?? false).toString())
   formData.append('FeedbackEnabled', (updatedSettings.FeedbackEnabled ?? false).toString())
   formData.append('FeedbackEmail', updatedSettings.FeedbackEmail ?? '')
+  formData.append('NewsletterEnabled', (updatedSettings.NewsletterEnabled ?? false).toString())
 
   formData.append(
     'OrgaCoversTransactionCosts',
@@ -498,6 +500,12 @@ export async function fetchStatistics(startDate: Date, endDate: Date, filter: st
 export async function fetchVendorUsageStatistics(startDate: Date, endDate: Date) {
   return apiInstance.get(
     `${VENDOR_STATISTICS_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
+  )
+}
+
+export async function fetchOrderStatistics(startDate: Date, endDate: Date) {
+  return apiInstance.get(
+    `${ORDERS_STATISTICS_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
   )
 }
 

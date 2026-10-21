@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { fetchStatistics, fetchVendorUsageStatistics } from '@/api/api'
+import { fetchOrderStatistics, fetchStatistics, fetchVendorUsageStatistics } from '@/api/api'
 
 //define interface to store data from backend properly
 export interface StatisticsItem {
@@ -53,6 +53,14 @@ export interface VendorUsageStatistics {
   UnusedPercentage: number
 }
 
+// Online checkouts started in the period, by outcome
+export interface OrderStatistics {
+  Started: number
+  Completed: number
+  Abandoned: number
+  Open: number
+}
+
 type StatisticsStoreState = {
   statistics: Statistics[]
   Items: Statistics[]
@@ -61,6 +69,7 @@ type StatisticsStoreState = {
   topVendors: VendorSalesStatistics[]
   topVendorsByAmount: VendorSalesStatistics[]
   vendorUsageStatistics: VendorUsageStatistics | null
+  orderStatistics: OrderStatistics | null
 }
 
 export const useStatisticsStore = defineStore('statistics', {
@@ -72,7 +81,8 @@ export const useStatisticsStore = defineStore('statistics', {
       payouts: [] as DailyPayoutStatistics[],
       topVendors: [] as VendorSalesStatistics[],
       topVendorsByAmount: [] as VendorSalesStatistics[],
-      vendorUsageStatistics: null as VendorUsageStatistics | null
+      vendorUsageStatistics: null as VendorUsageStatistics | null,
+      orderStatistics: null as OrderStatistics | null
     } as StatisticsStoreState
   },
   getters: {
@@ -99,6 +109,16 @@ export const useStatisticsStore = defineStore('statistics', {
         //@ts-ignore
         this.topVendorsByAmount = data.data.TopVendorsByAmount ?? []
         //@ts-ignore
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error)
+      }
+    },
+
+    async getOrderStatistics(startDate: Date, endDate: Date) {
+      try {
+        const data = await fetchOrderStatistics(startDate, endDate)
+        this.orderStatistics = data.data
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(error)

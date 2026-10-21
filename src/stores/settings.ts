@@ -60,6 +60,7 @@ export interface Settings {
   MatomoTrackCart: boolean
   FeedbackEnabled: boolean
   FeedbackEmail: string
+  NewsletterEnabled: boolean
   edges?: any
   Keycloak: {
     Realm: string

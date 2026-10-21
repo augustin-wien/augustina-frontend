@@ -19,6 +19,7 @@ const url = import.meta.env.VITE_API_URL
     >
       <option value="en">EN</option>
       <option value="de">DE</option>
+      <option value="it">IT</option>
     </select>
     <template #main>
       <div class="item-avaiable-page h-full w-full grid grid-rows-5 place-items-center">

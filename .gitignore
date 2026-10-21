@@ -35,3 +35,5 @@ docs/*
 scripts/*.py
 scripts/take-screenshots.js
 scripts/generate-pdf.js
+/CLA*
+tsconfig.app*
