@@ -36,7 +36,8 @@ const form = ref<Partial<Customer>>({
   email: '',
   firstname: '',
   lastname: '',
-  licensegroups: []
+  licensegroups: [],
+  newsletter: false
 })
 
 // Email as last loaded or saved - Keycloak mails go there, so they wait for unsaved changes
@@ -247,6 +248,16 @@ function abonementBadgeVariant(status: string) {
           <FormField label="Keycloak ID" for="keycloakid">
             <input id="keycloakid" v-model="form.keycloakid" type="text" class="aug-input" />
           </FormField>
+          <FormField :label="$t('newsletter')" for="newsletter">
+            <label class="aug-toggle">
+              <input id="newsletter" v-model="form.newsletter" type="checkbox" />
+              <span class="aug-toggle-track"></span>
+              <span>{{ $t('newsletterSubscribed') }}</span>
+            </label>
+            <span v-if="form.newsletter && form.newsletter_at" class="newsletter-since">
+              {{ $t('newsletterSince', { date: formatDate(form.newsletter_at) }) }}
+            </span>
+          </FormField>
           <FormField :label="$t('licenseGroups')" class="field-span-2">
             <div class="license-chips">
               <Badge v-for="group in form.licensegroups" :key="group" variant="neutral">
@@ -450,6 +461,12 @@ function abonementBadgeVariant(status: string) {
   margin-bottom: 10px;
 }
 .license-chips-empty {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+.newsletter-since {
+  display: block;
+  margin-top: 4px;
   font-size: 13px;
   color: var(--color-text-muted);
 }

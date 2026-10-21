@@ -20,6 +20,8 @@ export interface Customer {
   firstname: string
   lastname: string
   licensegroups: string[]
+  newsletter: boolean
+  newsletter_at?: string
   created_at?: string
   updated_at?: string
 }

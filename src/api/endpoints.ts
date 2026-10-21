@@ -5,6 +5,7 @@ export const ORDERS_UNVERIFIED_API_URL = `${BASE_URL}api/orders/unverified/`
 export const ORDERS_VERIFIED_API_URL = `${BASE_URL}api/orders/verified/`
 export const ORDERS_API_URL = `${BASE_URL}api/orders/`
 export const ORDERS_RESEND_API_URL = `${BASE_URL}api/orders/resend/`
+export const ORDERS_STATISTICS_API_URL = `${BASE_URL}api/orders/statistics/`
 export const VIVAWALLET_TRANSACTION_VERIFICATION = `${BASE_URL}api/orders/verify/`
 export const VENDOR_CHECK_ID = `${BASE_URL}api/vendors/check/`
 export const VENDORS_API_URL = `${BASE_URL}api/vendors/`
