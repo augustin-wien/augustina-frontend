@@ -230,6 +230,9 @@
   "needs an email address.": "needs an email address.",
   "for": "for",
   "Please enter a valid email address.": "Please enter a valid email address.",
+  "Did you mean": "Did you mean",
+  "Yes, correct it": "Yes, correct it",
+  "No, keep": "No, keep",
   "Back": "Back",
 
   "isLicenseItem": "Is digital license item",

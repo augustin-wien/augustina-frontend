@@ -243,6 +243,9 @@
   "needs an email address.": "benötigt eine E-Mail Adresse.",
   "for": "für",
   "Please enter a valid email address.": "Bitte gib eine gültige E-Mail Adresse ein.",
+  "Did you mean": "Meintest du",
+  "Yes, correct it": "Ja, korrigieren",
+  "No, keep": "Nein, weiter mit",
   "Back": "Zurück",
 
   "isLicenseItem": "Ist das Produkt ein digitaler Lizenzartikel?",
