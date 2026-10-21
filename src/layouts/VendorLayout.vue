@@ -21,6 +21,7 @@ settStore.getSettingsFromApi()
         >
           <option value="en">EN</option>
           <option value="de">DE</option>
+          <option value="it">IT</option>
         </select>
         <slot name="header">
           <img

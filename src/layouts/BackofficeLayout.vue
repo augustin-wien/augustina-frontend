@@ -189,6 +189,7 @@ onMounted(() => {
               <select v-model="$i18n.locale" class="lang-select" :aria-label="$t('language')">
                 <option value="en">EN</option>
                 <option value="de">DE</option>
+                <option value="it">IT</option>
               </select>
               <select v-model="colorScheme" class="theme-select" :aria-label="$t('colorScheme')">
                 <option value="auto">{{ $t('colorSchemeAuto') }}</option>

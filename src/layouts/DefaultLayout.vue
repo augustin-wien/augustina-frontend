@@ -50,6 +50,7 @@ const logo = computed(() => {
         >
           <option value="en">EN</option>
           <option value="de">DE</option>
+          <option value="it">IT</option>
         </select>
         <slot name="header">
           <img v-if="logo" alt="Newspaper logo" class="logo mx-auto my-1 scale-75" :src="logo" />

@@ -1,2 +1,4 @@
 /dist
 /node_modules
+/CLA*
+tsconfig.app*

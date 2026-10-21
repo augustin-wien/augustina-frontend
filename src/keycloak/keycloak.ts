@@ -1,5 +1,6 @@
-import Keycloak from 'keycloak-js'
+import Keycloak, { type KeycloakLoginOptions } from 'keycloak-js'
 import { fetchSettings } from '@/api/api'
+import i18n from '@/locales/i18n'
 
 type KeycloakInstnace = {
   initailizedKeycloak: boolean
@@ -10,6 +11,9 @@ const keycloak: KeycloakInstnace = {
   initailizedKeycloak: false,
   keycloak: undefined
 }
+
+export const login = (options: KeycloakLoginOptions = {}) =>
+  keycloak.keycloak?.login({ locale: i18n.global.locale, ...options })
 
 export const initKeycloak = async () => {
   if (keycloak.keycloak == undefined) {
@@ -65,8 +69,7 @@ export const initKeycloak = async () => {
         console.log('refreshed', refreshed)
       })
       .catch(() => {
-        if (!keycloak.keycloak) return
-        keycloak.keycloak.login({ locale: 'de' })
+        login()
       })
   }
 
@@ -80,8 +83,7 @@ export const initKeycloak = async () => {
       // redirect) would otherwise be reflected back by Keycloak and match no route.
       const path = (window.location.pathname + '/').replace(/\/{2,}/g, '/')
 
-      keycloak.keycloak.login({
-        locale: 'de',
+      login({
         redirectUri: window.location.origin + path
       })
     }
