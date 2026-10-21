@@ -2,6 +2,9 @@
 import { useCustomerStore } from '@/stores/customer'
 import type { Customer } from '@/stores/customer'
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { exportAsCsv } from '@/utils/utils'
+import { newsletterCsvRows } from '@/utils/newsletterCsv'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -11,6 +14,7 @@ import Card from '@/components/ui/Card.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
 
 const store = useCustomerStore()
+const { t } = useI18n()
 
 useAuthLoad(() => {
   store.getCustomers()
@@ -21,6 +25,19 @@ const customers = computed(() => store.customers)
 const activeCustomerIds = computed(() => store.activeCustomerIds)
 
 const searchQuery = ref('')
+
+const newsletterCount = computed(() => customers.value.filter((c: Customer) => c.newsletter).length)
+
+const exportNewsletter = () => {
+  const rows = newsletterCsvRows(customers.value, [
+    t('E-Mail'),
+    t('firstName'),
+    t('lastName'),
+    t('newsletterSubscribedAt')
+  ])
+
+  exportAsCsv(rows, `newsletter_${new Date().toISOString().slice(0, 10)}`)
+}
 
 const displayCustomers = computed(() => {
   const q = searchQuery.value.toLowerCase()
@@ -45,6 +62,9 @@ const displayCustomers = computed(() => {
           class="aug-input"
           style="width: auto"
         />
+        <Button variant="secondary" :disabled="newsletterCount === 0" @click="exportNewsletter">
+          {{ $t('newsletterExport', { count: newsletterCount }) }}
+        </Button>
       </PageHeader>
     </template>
 
@@ -58,6 +78,7 @@ const displayCustomers = computed(() => {
                 <th>{{ $t('lastName') }}</th>
                 <th>{{ $t('email') }}</th>
                 <th>{{ $t('abonements') }}</th>
+                <th>{{ $t('newsletter') }}</th>
                 <th></th>
               </tr>
             </thead>
@@ -72,13 +93,16 @@ const displayCustomers = computed(() => {
                   </Badge>
                 </td>
                 <td>
+                  <Badge v-if="c.newsletter" variant="success">{{ $t('yes') }}</Badge>
+                </td>
+                <td>
                   <router-link :to="`/backoffice/customers/${c.id}`">
                     <Button variant="secondary">{{ $t('edit') }}</Button>
                   </router-link>
                 </td>
               </tr>
               <tr v-if="displayCustomers.length === 0">
-                <td colspan="5" class="p-4 text-center text-gray-500">
+                <td colspan="6" class="p-4 text-center text-gray-500">
                   {{ $t('noCustomers') }}
                 </td>
               </tr>

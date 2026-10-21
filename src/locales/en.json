@@ -11,6 +11,7 @@
 
   "confirm": "Confirm your order",
   "agreement": " With this purchase, I confirm the ",
+  "newsletterOptIn": "I would like to subscribe to the newsletter",
   "terms": "terms and conditions",
 
   "symbol": "Please show symbol to ",
@@ -257,6 +258,13 @@
   "deleteCustomerConfirmation": "Do you really want to delete this customer?",
   "licenseGroups": "License Groups",
   "abonements": "Abonements",
+  "newsletter": "Newsletter",
+  "newsletterSubscribed": "Subscribed to the newsletter",
+  "newsletterSince": "since {date}",
+  "newsletterExport": "Newsletter export ({count})",
+  "newsletterSubscribedAt": "Subscribed on",
+  "newsletterSettingsHint": "Offers a newsletter opt-in checkbox when a digital issue or an abonement is bought. It is not preselected. Subscribers show up under customers and in the newsletter export.",
+  "newsletterSettingsEnabled": "Offer the newsletter opt-in in the shop",
   "newAbonement": "New Abonement",
   "editAbonement": "Edit Abonement",
   "noAbonements": "No abonements found",

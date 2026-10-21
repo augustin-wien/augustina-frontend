@@ -66,7 +66,8 @@ const updatedSettings = ref<Settings>({
   DonationPageEnabled: true,
   MatomoTrackCart: false,
   FeedbackEnabled: false,
-  FeedbackEmail: ''
+  FeedbackEmail: '',
+  NewsletterEnabled: false
 })
 
 // The public settings endpoint withholds credentials, so this page loads the full set from the
