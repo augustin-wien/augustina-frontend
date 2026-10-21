@@ -2,12 +2,13 @@
 import { ref } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
 import { usePaymentStore } from '@/stores/payment'
+import { suggestEmailCorrection } from '@/utils/emailTypo'
 
 const settStore = useSettingsStore()
 const paymentStore = usePaymentStore()
 
 const props = defineProps(['licenceItem'])
-const email = ref('')
+const email = ref(localStorage.getItem('email') ?? '')
 
 const validateEmail = (email: string) => {
   // Regular expression for a simple email validation
@@ -18,15 +19,40 @@ const validateEmail = (email: string) => {
 }
 
 const error = ref(false)
+const suggestion = ref<string | null>(null)
+// The address the customer confirmed as typed despite a suggested correction
+const confirmedEmail = ref('')
+
+const checkTypo = () => {
+  suggestion.value =
+    email.value === confirmedEmail.value ? null : suggestEmailCorrection(email.value)
+}
 
 const validate = () => {
   error.value = false
 
-  if (validateEmail(email.value)) {
-    paymentStore.setEmail(email.value)
-  } else {
+  if (!validateEmail(email.value)) {
     error.value = true
+    return
   }
+
+  checkTypo()
+  if (suggestion.value) return
+
+  paymentStore.setEmail(email.value)
+}
+
+const acceptSuggestion = () => {
+  if (!suggestion.value) return
+  email.value = suggestion.value
+  suggestion.value = null
+  validate()
+}
+
+const keepEmail = () => {
+  confirmedEmail.value = email.value
+  suggestion.value = null
+  validate()
 }
 </script>
 
@@ -56,34 +82,66 @@ const validate = () => {
             {{ `${$t('Your item')} ${props.licenceItem.Name} ${$t('needs an email address.')}` }}
           </h2>
 
-          <div class="text-left mb-4 max-w-xl mx-auto">
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >Email</label
-            >
-            <div v-if="error">
-              <span class="text-red-500 text-xs italic">{{
-                $t('Please enter a valid email address.')
-              }}</span>
-            </div>
-            <input
-              id="email"
-              v-model="email"
-              type="text"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Augustus@example.com"
-              required
-            />
-          </div>
+          <form novalidate @submit.prevent="validate">
+            <div class="text-left mb-4 max-w-xl mx-auto">
+              <label
+                for="email"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Email</label
+              >
+              <div v-if="error">
+                <span class="text-red-500 text-xs italic">{{
+                  $t('Please enter a valid email address.')
+                }}</span>
+              </div>
+              <input
+                id="email"
+                v-model.trim="email"
+                name="email"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                autocapitalize="off"
+                spellcheck="false"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Augustus@example.com"
+                required
+                @blur="checkTypo"
+              />
 
-          <div class="flex gap-4 justify-center mt-6">
-            <button
-              type="button"
-              class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
-              @click="validate"
-            >
-              {{ $t('Save') }}
-            </button>
-          </div>
+              <div v-if="suggestion" class="suggestion mt-3 p-4 rounded-md border" role="alert">
+                <p class="mb-3">
+                  {{ $t('Did you mean') }} <strong>{{ suggestion }}</strong
+                  >?
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    class="customcolor rounded-full px-4 py-2 text-white font-semibold"
+                    @click="acceptSuggestion"
+                  >
+                    {{ $t('Yes, correct it') }}
+                  </button>
+                  <button
+                    type="button"
+                    class="rounded-full px-4 py-2 border border-gray-400 font-semibold break-all"
+                    @click="keepEmail"
+                  >
+                    {{ `${$t('No, keep')} ${email}` }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-4 justify-center mt-6">
+              <button
+                type="submit"
+                class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
+              >
+                {{ $t('Save') }}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -93,6 +151,12 @@ const validate = () => {
 <style scoped>
 .customcolor {
   background-color: v-bind(settStore.settings.Color);
+}
+
+.suggestion {
+  background-color: var(--color-accent-tint);
+  border-color: var(--color-accent);
+  color: var(--color-text);
 }
 
 /* Make the email form appear like a normal page card below the page header */
