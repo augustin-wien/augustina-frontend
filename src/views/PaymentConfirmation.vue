@@ -157,8 +157,8 @@ const email = localStorage.getItem('email') || ''
 <template>
   <component :is="$route.meta.layout || 'div'">
     <template #main>
-      <div id="payment-confirmation-page" class="grid grid-rows-6 h-full place-items-center w-full">
-        <div class="confirmation-wrapper h-full w-full text-center grid grid-rows-3">
+      <div id="payment-confirmation-page" class="flex flex-col items-center gap-6 h-full w-full">
+        <div class="confirmation-wrapper w-full text-center flex flex-col gap-4">
           <div class="confirmation-validation text-sm">
             <div>
               <span class="date">{{ currentDate() }} {{ time }}</span>
@@ -177,7 +177,7 @@ const email = localStorage.getItem('email') || ''
             <div>{{ $t('invalid confirmation') }}</div>
           </div>
         </div>
-        <div v-if="!isConfirmed" class="row-span-4 font-bold w-fit h-full relative">
+        <div v-if="!isConfirmed" class="font-bold w-fit relative">
           <div class="purchased-items-wrapper grid grid-cols-2">
             <div
               v-for="item in purchasedItems"
