@@ -187,6 +187,18 @@ export async function sendVendorVerifyEmail(vendorId: number) {
   return apiInstance.post(`${VENDORS_API_URL}${vendorId}/verify-email/`)
 }
 
+// Records that the vendor's ID card was scanned and returns the vendor
+export async function scanVendorIdCard(licenseId: string) {
+  return apiInstance.post(`${VENDORS_API_URL}${encodeURIComponent(licenseId)}/id-scan/`)
+}
+
+// Creates the vendor's document folder in Nextcloud if needed and returns a link to it
+export async function openVendorNextcloudFolder(licenseId: string) {
+  return apiInstance.post<{ URL: string }>(
+    `${VENDORS_API_URL}${encodeURIComponent(licenseId)}/nextcloud-folder/`
+  )
+}
+
 export async function postPOSOrder(
   licenseId: string,
   entries: { item: number; quantity: number }[],
@@ -385,6 +397,16 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('FeedbackEnabled', (updatedSettings.FeedbackEnabled ?? false).toString())
   formData.append('FeedbackEmail', updatedSettings.FeedbackEmail ?? '')
   formData.append('NewsletterEnabled', (updatedSettings.NewsletterEnabled ?? false).toString())
+  formData.append('IDScanEnabled', (updatedSettings.IDScanEnabled ?? false).toString())
+  formData.append('NextcloudEnabled', (updatedSettings.NextcloudEnabled ?? false).toString())
+  formData.append('NextcloudURL', updatedSettings.NextcloudURL ?? '')
+  formData.append('NextcloudPublicURL', updatedSettings.NextcloudPublicURL ?? '')
+  formData.append('NextcloudUsername', updatedSettings.NextcloudUsername ?? '')
+  formData.append('NextcloudAppPassword', updatedSettings.NextcloudAppPassword ?? '')
+  formData.append('NextcloudVendorRoot', updatedSettings.NextcloudVendorRoot ?? '')
+  formData.append('OdooWebhookURL', updatedSettings.OdooWebhookURL ?? '')
+  formData.append('OdooWebhookToken', updatedSettings.OdooWebhookToken ?? '')
+  formData.append('OdooDBFilter', updatedSettings.OdooDBFilter ?? '')
 
   formData.append(
     'OrgaCoversTransactionCosts',
@@ -409,6 +431,13 @@ export async function patchSettingsStyles(styles: string) {
       'Content-Type': 'text/css'
     }
   })
+}
+
+export type NextcloudTestResult = { Success: boolean; Message: string }
+
+// Checks the saved Nextcloud settings
+export async function testNextcloud() {
+  return apiInstance.post<NextcloudTestResult>(`${SETTINGS_API_URL}nextcloud/test/`)
 }
 
 export type WordPressInviteTestResult = { Success: boolean; Message: string; Link: string }

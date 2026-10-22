@@ -13,6 +13,7 @@ import {
   faDungeon,
   faFileLines,
   faHandHoldingHeart,
+  faIdCard,
   faReceipt,
   faSliders,
   faSplotch,
@@ -68,16 +69,22 @@ interface NavGroup {
 // Grouped from the flat link list that used to make up the sidebar, matching the sections
 // vendors/staff already think in (Vendors, Customers, POS, Accounting, Products, Administration).
 const navGroups = computed<NavGroup[]>(() => {
-  const groups: NavGroup[] = [
-    {
-      labelKey: 'navGroupVendors',
-      items: [
-        { to: '/backoffice/vendorsummary', labelKey: 'menuOverview', icon: faUserGroup },
-        { to: '/backoffice/locations', labelKey: 'menuLocations', icon: faLocationDot },
-        { to: '/backoffice/credits', labelKey: 'menuCredits', icon: faBagShopping }
-      ]
-    }
+  const vendorItems: NavItem[] = [
+    { to: '/backoffice/vendorsummary', labelKey: 'menuOverview', icon: faUserGroup },
+    { to: '/backoffice/locations', labelKey: 'menuLocations', icon: faLocationDot },
+    { to: '/backoffice/map', labelKey: 'menuMap', icon: faMapLocation },
+    { to: '/backoffice/credits', labelKey: 'menuCredits', icon: faBagShopping }
   ]
+
+  if (settings.value.IDScanEnabled) {
+    vendorItems.splice(1, 0, {
+      to: '/backoffice/scan-id',
+      labelKey: 'menuScanIdCard',
+      icon: faIdCard
+    })
+  }
+
+  const groups: NavGroup[] = [{ labelKey: 'navGroupVendors', items: vendorItems }]
 
   if (settings.value.AbonementEnabled) {
     groups.push({
@@ -129,7 +136,6 @@ const navGroups = computed<NavGroup[]>(() => {
     items: [
       { to: '/backoffice/settings/update', labelKey: 'menuSettings', icon: faSliders },
       { to: '/backoffice/campaigns', labelKey: 'menuCampaigns', icon: faBullhorn },
-      { to: '/backoffice/map', labelKey: 'menuMap', icon: faMapLocation },
       { to: '/backoffice/statistics', labelKey: 'menuStatistics', icon: faAreaChart }
     ]
   })

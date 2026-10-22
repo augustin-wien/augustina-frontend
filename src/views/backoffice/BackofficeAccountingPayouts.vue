@@ -14,6 +14,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
+import { itemDisplayName } from '@/utils/itemName'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -100,7 +104,7 @@ const exportTable = () => {
     return
   }
 
-  const itemNames = items.value.map((item) => item.Name)
+  const itemNames = items.value.map((item) => itemDisplayName(item, t))
 
   const header = ['Datum', 'Sender', 'Empfänger', ...itemNames, 'Gesamt']
 
@@ -155,7 +159,7 @@ const exportTable = () => {
               <th>{{ $t('to') }}</th>
               <th>{{ $t('from') }}</th>
               <th v-for="item in items" :key="`th_${item.ID}`">
-                {{ $t(item.Name) }}
+                {{ itemDisplayName(item, $t) }}
               </th>
               <th>{{ $t('total') }}</th>
             </tr>

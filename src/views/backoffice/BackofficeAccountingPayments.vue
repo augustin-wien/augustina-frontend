@@ -12,13 +12,14 @@ import { vendorsStore } from '@/stores/vendor'
 import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { useSettingsStore } from '@/stores/settings'
 import { useI18n } from 'vue-i18n'
+import { itemDisplayName } from '@/utils/itemName'
 import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
 
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 const { isDark } = useColorScheme()
 const settingsStore = useSettingsStore()
 const ordersStore = useOrdersStore()
@@ -78,7 +79,7 @@ const translateItem = (payment: Payment) => {
   const item = items.value.find((item) => item.ID === payment.Item)
 
   if (item) {
-    return item.Name
+    return itemDisplayName(item, t)
   }
 
   if (payment.IsPayoutFor && payment.IsPayoutFor.length > 0) {
