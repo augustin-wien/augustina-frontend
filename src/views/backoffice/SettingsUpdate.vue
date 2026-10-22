@@ -2,7 +2,7 @@
 import Toast from '@/components/ToastMessage.vue'
 import { useItemsStore } from '@/stores/items'
 import { useSettingsStore, type Settings } from '@/stores/settings'
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import QrCodeSettings from '@/components/QrCodeSettings.vue'
 import GeneralSettings from '@/components/settings/GeneralSettings.vue'
@@ -105,10 +105,6 @@ const showToast = (type: string, message: string) => {
   }, 5000)
 }
 
-const updateQRCodeSettings = (settings: string) => {
-  updatedSettings.value.QRCodeSettings = settings
-}
-
 const url = import.meta.env.VITE_API_URL
 
 // QR code was previously a modal; now it's a tab
@@ -117,14 +113,24 @@ const url = import.meta.env.VITE_API_URL
 // refs to child components so parent can call exposed methods
 const generalRef = ref<{ saveSettings?: () => void } | null>(null)
 const stylesRef = ref<{ saveStyles?: () => void } | null>(null)
+const qrCodeRef = ref<{ applySettings?: () => void } | null>(null)
 
 const saveGeneralFromParent = () => {
   const comp = generalRef.value
   if (comp && comp.saveSettings) comp.saveSettings()
 }
 
+// GeneralSettings copies the settings in a watcher, which runs only on the next tick
+const saveQRCodeSettings = async () => {
+  await nextTick()
+  saveGeneralFromParent()
+}
+
 const saveCurrentTab = () => {
-  if (currentTab.value === 'general' || currentTab.value === 'qrcode') {
+  if (currentTab.value === 'qrcode') {
+    qrCodeRef.value?.applySettings?.()
+    saveQRCodeSettings()
+  } else if (currentTab.value === 'general') {
     saveGeneralFromParent()
   } else if (currentTab.value === 'styles') {
     const comp = stylesRef.value
@@ -202,8 +208,8 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
         />
         <QrCodeSettings
           v-show="currentTab === 'qrcode'"
-          @update="updateQRCodeSettings"
-          @save-settings="saveGeneralFromParent()"
+          ref="qrCodeRef"
+          @save-settings="saveQRCodeSettings()"
         />
         <MailTemplatesSettings
           v-show="currentTab === 'mailtemplates'"
