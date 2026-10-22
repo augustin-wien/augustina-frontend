@@ -193,20 +193,23 @@ const saveAll = async () => {
   generateAllQrCodesAsZip('qrCodes', vendorStore.vendors)
 }
 
-const saveSettings = () => {
-  if (currentQrCode.value) {
-    settingsStore.settings.QRCodeSettings = JSON.stringify({
-      dotsOptions: dotsOptions.value,
-      backgroundOptions: backgroundOptions.value,
-      imageOptions: imageOptions.value,
-      cornerSquareOptions: cornerSquareOptions.value,
-      cornersDotOptions: cornersDotOptions.value,
-      qrCodeOptions: qrCodeOptions.value
-    })
-
-    emit('saveSettings')
-  }
+const applySettings = () => {
+  settingsStore.settings.QRCodeSettings = JSON.stringify({
+    dotsOptions: dotsOptions.value,
+    backgroundOptions: backgroundOptions.value,
+    imageOptions: imageOptions.value,
+    cornerSquareOptions: cornerSquareOptions.value,
+    cornersDotOptions: cornersDotOptions.value,
+    qrCodeOptions: qrCodeOptions.value
+  })
 }
+
+const saveSettings = () => {
+  applySettings()
+  emit('saveSettings')
+}
+
+defineExpose({ applySettings })
 
 onMounted(() => {
   generateQRCode('test')
