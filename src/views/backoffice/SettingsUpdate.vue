@@ -68,7 +68,17 @@ const updatedSettings = ref<Settings>({
   MatomoTrackCart: false,
   FeedbackEnabled: false,
   FeedbackEmail: '',
-  NewsletterEnabled: false
+  NewsletterEnabled: false,
+  IDScanEnabled: false,
+  NextcloudEnabled: false,
+  NextcloudURL: '',
+  NextcloudPublicURL: '',
+  NextcloudUsername: '',
+  NextcloudAppPassword: '',
+  NextcloudVendorRoot: 'Verkaufende',
+  OdooWebhookURL: '',
+  OdooWebhookToken: '',
+  OdooDBFilter: ''
 })
 
 // The public settings endpoint withholds credentials, so this page loads the full set from the
@@ -107,9 +117,6 @@ const showToast = (type: string, message: string) => {
 
 const url = import.meta.env.VITE_API_URL
 
-// QR code was previously a modal; now it's a tab
-// const showQrCodeSettings = ref(false)
-
 // refs to child components so parent can call exposed methods
 const generalRef = ref<{ saveSettings?: () => void } | null>(null)
 const stylesRef = ref<{ saveStyles?: () => void } | null>(null)
@@ -130,7 +137,7 @@ const saveCurrentTab = () => {
   if (currentTab.value === 'qrcode') {
     qrCodeRef.value?.applySettings?.()
     saveQRCodeSettings()
-  } else if (currentTab.value === 'general') {
+  } else if (settingsSections.includes(currentTab.value)) {
     saveGeneralFromParent()
   } else if (currentTab.value === 'styles') {
     const comp = stylesRef.value
@@ -139,8 +146,15 @@ const saveCurrentTab = () => {
   // mailtemplates: save is per-template inside the editor
 }
 
-// UI tab for settings page: 'general', 'styles' or 'qrcode'
-const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('general')
+type SettingsTab = 'general' | 'modules' | 'qrcode' | 'styles' | 'mailtemplates'
+const currentTab = ref<SettingsTab>('general')
+
+// These tabs are sections of the same form, saved together
+const settingsSections: SettingsTab[] = ['general', 'modules', 'qrcode']
+
+const settingsSection = computed(() =>
+  currentTab.value === 'modules' || currentTab.value === 'qrcode' ? currentTab.value : 'general'
+)
 </script>
 
 <template>
@@ -166,10 +180,10 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
           <button
             type="button"
             class="tab-btn"
-            :class="{ 'tab-btn-active': currentTab === 'styles' }"
-            @click="currentTab = 'styles'"
+            :class="{ 'tab-btn-active': currentTab === 'modules' }"
+            @click="currentTab = 'modules'"
           >
-            {{ $t('Custom styles') }}
+            {{ $t('settingsModules') }}
           </button>
           <button
             type="button"
@@ -182,6 +196,14 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
           <button
             type="button"
             class="tab-btn"
+            :class="{ 'tab-btn-active': currentTab === 'styles' }"
+            @click="currentTab = 'styles'"
+          >
+            {{ $t('Custom styles') }}
+          </button>
+          <button
+            type="button"
+            class="tab-btn"
             :class="{ 'tab-btn-active': currentTab === 'mailtemplates' }"
             @click="currentTab = 'mailtemplates'"
           >
@@ -190,8 +212,9 @@ const currentTab = ref<'general' | 'styles' | 'qrcode' | 'mailtemplates'>('gener
         </div>
 
         <GeneralSettings
-          v-show="currentTab === 'general'"
+          v-show="settingsSections.includes(currentTab)"
           ref="generalRef"
+          :section="settingsSection"
           :updated-settings="updatedSettings"
           :items="items"
           :url="url"

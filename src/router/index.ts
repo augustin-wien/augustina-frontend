@@ -235,6 +235,16 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeVendorsSummary.vue')
     },
     {
+      path: '/backoffice/scan-id',
+      name: 'Scan ID Card',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Scan ID card'
+      },
+      component: () => import('@/views/backoffice/BackofficeScanIdCard.vue')
+    },
+    {
       path: '/backoffice/newvendor',
       name: 'New Vendor',
       meta: {

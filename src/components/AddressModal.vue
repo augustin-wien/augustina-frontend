@@ -37,6 +37,7 @@ const newAddress: Ref<VendorLocation> = ref({
   address: '',
   zip: '',
   telephone: '',
+  market_number: '',
   vendorID: null,
   longitude: settingsStore.settings?.MapCenterLong || 0.0,
   latitude: settingsStore.settings?.MapCenterLat || 0.0,
@@ -195,6 +196,15 @@ const editMarker = (newLocation: any) => {
 
         <FormField :label="`${$t('postCode')}:`" for="plz" class="mt-3">
           <input id="plz" v-model="newAddress.zip" class="aug-input" type="text" />
+        </FormField>
+
+        <FormField :label="`${$t('marketNumber')}:`" for="location-market-number" class="mt-3">
+          <input
+            id="location-market-number"
+            v-model="newAddress.market_number"
+            class="aug-input"
+            type="text"
+          />
         </FormField>
 
         <FormField :label="`${$t('locationTelephone')}:`" for="location-telephone" class="mt-3">

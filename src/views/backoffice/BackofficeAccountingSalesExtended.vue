@@ -17,6 +17,7 @@ import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
 import Badge from '@/components/ui/Badge.vue'
 import Toast from '@/components/ToastMessage.vue'
+import { itemDisplayName } from '@/utils/itemName'
 
 // Extended sales view: one row per sale (verified online order) with all the
 // products that belong to it. The plain /backoffice/sales list of single sales
@@ -111,7 +112,7 @@ const formatDate = (iso: string | null) => {
 const itemName = (itemID: number) => {
   const item = itemsStore.itemsWithArchived.find((i) => i.ID === itemID)
 
-  return item ? t(item.Name) : `#${itemID}`
+  return item ? itemDisplayName(item, t) : `#${itemID}`
 }
 
 // Donation and transaction costs store the amount in cents as quantity (price 1 cent),

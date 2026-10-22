@@ -49,7 +49,8 @@ const newVendor = ref<Vendor>({
   IsBlocked: false,
   BlockedNote: '',
   Debt: '',
-  LastOnlineSale: null
+  LastOnlineSale: null,
+  LastIDScan: null
 })
 
 const internalEmail = computed(() =>

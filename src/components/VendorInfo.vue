@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import VendorMapView from '@/components/VendorMapView.vue'
 import { vendorsStore } from '@/stores/vendor'
+import { useSettingsStore } from '@/stores/settings'
 import { formatCredit } from '@/utils/utils'
 import { computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -15,8 +16,16 @@ const formatVendorDate = (date: string | null | undefined): string => {
   return d.toLocaleDateString()
 }
 
+const formatVendorDateTime = (date: string | null | undefined): string => {
+  if (!date) return '–'
+  const d = new Date(date)
+  if (isNaN(d.getTime())) return '–'
+  return d.toLocaleString()
+}
+
 const { t } = useI18n()
 const vendorStore = vendorsStore()
+const settingsStore = useSettingsStore()
 const vendor = computed(() => vendorStore.vendor)
 const vendorComments = computed(() => vendorStore.vendorComments)
 
@@ -193,6 +202,10 @@ const emit = defineEmits(['close'])
           <tr>
             <th>{{ $t('lastOnlineSale') }}:</th>
             <td>{{ formatVendorDate(vendor?.LastOnlineSale) }}</td>
+            <template v-if="settingsStore.settings.IDScanEnabled">
+              <th>{{ $t('lastIdScan') }}:</th>
+              <td>{{ formatVendorDateTime(vendor?.LastIDScan) }}</td>
+            </template>
           </tr>
           <tr v-if="vendor?.Debt">
             <th>{{ $t('debt') }}:</th>
@@ -224,6 +237,9 @@ const emit = defineEmits(['close'])
               <div class="vendorinfo-row">
                 <div>
                   <div class="vendorinfo-row-title">{{ location.name }}</div>
+                  <div v-if="location.market_number" class="vendorinfo-row-sub">
+                    {{ $t('marketNumber') }}: {{ location.market_number }}
+                  </div>
                   <div class="vendorinfo-row-sub">{{ location.address }}, {{ location.zip }}</div>
                   <div v-if="location.telephone" class="vendorinfo-row-sub">
                     {{ $t('telephone') }}: {{ location.telephone }}

@@ -10,6 +10,11 @@ import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
 import Badge from '@/components/ui/Badge.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
+import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
+import VendorWarnings from '@/components/VendorWarnings.vue'
+import { isOpenWarning } from '@/utils/vendorComments'
+import { faQrcode } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const route = useRoute()
 const router = useRouter()
@@ -22,6 +27,7 @@ const settingsStore = useSettingsStore()
 const vendor = computed(() => (vendorStore.vendors ?? []).find((v) => v.LicenseID === licenseId))
 
 const posEnabled = computed(() => settingsStore.settings.POSEnabled)
+const showQRCode = ref(false)
 
 // qty map: itemId -> quantity
 const quantities = ref<Record<number, number>>({})
@@ -177,6 +183,8 @@ async function addComment() {
 
 const commentsOpen = ref(true)
 
+const vendorComments = computed(() => vendorStore.vendorComments ?? [])
+
 function formatDate(ts: string) {
   const d = new Date(ts)
   return (
@@ -211,10 +219,26 @@ function formatDate(ts: string) {
                 {{ $t('posBalance') }}: <strong>{{ formatCents(vendorBalance) }}</strong>
               </div>
             </div>
-            <router-link :to="{ name: 'Update Vendor Profile', params: { ID: vendor.ID } }">
-              <Button variant="secondary">{{ $t('editVendor') }}</Button>
-            </router-link>
+            <div class="pos-vendor-actions">
+              <Button v-if="posEnabled" variant="secondary" @click="showQRCode = true">
+                <font-awesome-icon :icon="faQrcode" /> {{ $t('profileQrCode') }}
+              </Button>
+              <router-link :to="{ name: 'Update Vendor Profile', params: { ID: vendor.ID } }">
+                <Button variant="secondary">{{ $t('editVendor') }}</Button>
+              </router-link>
+            </div>
           </Card>
+          <VendorWarnings
+            v-if="vendor"
+            class="pos-warnings"
+            :comments="vendorComments"
+            :vendor-id="vendor.ID"
+          />
+          <QrCodeGenerator
+            v-if="showQRCode && vendor"
+            :vendor="vendor"
+            @close="showQRCode = false"
+          />
 
           <!-- Success state -->
           <Card v-if="saleSuccess" class="pos-success">
@@ -299,21 +323,21 @@ function formatDate(ts: string) {
           <!-- Comments panel -->
           <Card class="pos-comments">
             <button type="button" class="pos-comments-toggle" @click="commentsOpen = !commentsOpen">
-              <span
-                >{{ $t('vendorComments') }} ({{ (vendorStore.vendorComments ?? []).length }})</span
-              >
+              <span>{{ $t('vendorComments') }} ({{ vendorComments.length }})</span>
               <span>{{ commentsOpen ? '▲' : '▼' }}</span>
             </button>
             <div v-if="commentsOpen" class="pos-comments-body">
               <div
-                v-for="c in vendorStore.vendorComments ?? []"
+                v-for="c in vendorComments"
                 :key="c.id"
                 class="pos-comment-row"
+                :class="{ 'pos-comment-warning': isOpenWarning(c) }"
               >
-                <span class="pos-comment-id">{{ c.id }}</span
-                >{{ c.comment }}
+                <span class="pos-comment-id">{{ c.id }}</span>
+                <strong v-if="c.warning" class="pos-comment-label">{{ $t('warning') }}:</strong>
+                {{ c.comment }}
               </div>
-              <div v-if="!(vendorStore.vendorComments ?? []).length" class="pos-empty">
+              <div v-if="!vendorComments.length" class="pos-empty">
                 {{ $t('noComments') }}
               </div>
               <div class="pos-comment-add">
@@ -433,6 +457,12 @@ function formatDate(ts: string) {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+}
+.pos-vendor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
 }
 .pos-vendor-name {
   font-size: 16px;
@@ -567,6 +597,23 @@ function formatDate(ts: string) {
   border-bottom: 1px solid var(--color-border);
   padding: 8px 0;
   font-size: 13px;
+}
+.pos-warnings {
+  margin-bottom: 16px;
+}
+.pos-comment-warning {
+  margin: 4px -8px;
+  padding: 8px;
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-sm);
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+.pos-comment-warning .pos-comment-id {
+  color: inherit;
+}
+.pos-comment-label {
+  margin-right: 4px;
 }
 .pos-comment-id {
   color: var(--color-text-muted);

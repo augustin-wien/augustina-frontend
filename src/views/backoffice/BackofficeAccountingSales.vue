@@ -15,6 +15,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
+import { itemDisplayName } from '@/utils/itemName'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const startOfDay = (date: Date) => {
   const d = new Date(date)
@@ -70,7 +74,7 @@ const getItemName = (itemID: number) => {
   const item = items.value.find((item) => item.ID === itemID)
 
   if (item) {
-    return item.Name
+    return itemDisplayName(item, t)
   } else {
     return 'Unbekannt'
   }
@@ -135,7 +139,7 @@ const exportTable = () => {
             <tr v-for="(payment, id) in payments" :key="id">
               <td>{{ formatTime(payment.Timestamp) }}</td>
               <td>{{ translateSender(payment.ReceiverName) }}</td>
-              <td>{{ $t(getItemName(payment.Item)) }}</td>
+              <td>{{ getItemName(payment.Item) }}</td>
               <td>{{ formatCredit(payment.Amount) }} €</td>
             </tr>
           </tbody>

@@ -11,6 +11,7 @@ import PageHeader from '@/components/ui/PageHeader.vue'
 import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
 import Toast from '@/components/ToastMessage.vue'
+import { itemDisplayName } from '@/utils/itemName'
 
 const { t } = useI18n()
 const itemsStore = useItemsStore()
@@ -194,7 +195,7 @@ function exportCSV() {
                   height="auto"
                 />
               </td>
-              <td class="font-bold">{{ $t(item.Name) }}</td>
+              <td class="font-bold">{{ itemDisplayName(item, $t) }}</td>
               <td>{{ $t(item.Description) }}</td>
               <td>{{ formatCredit(item.Price) }} €</td>
               <td>{{ item.ItemOrder }}</td>
@@ -249,7 +250,7 @@ function exportCSV() {
                   height="auto"
                 />
               </td>
-              <td class="font-bold">{{ $t(item.Name) }}</td>
+              <td class="font-bold">{{ itemDisplayName(item, $t) }}</td>
               <td>{{ $t(item.Description) }}</td>
               <td>{{ item.Type ? $t(`itemType_${item.Type}`) : '' }}</td>
               <td>{{ formatCredit(item.Price) }} €</td>

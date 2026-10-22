@@ -108,6 +108,8 @@ export interface Vendor {
   Debt: string
   // Time of the first verified online (QR code) sale, null if the vendor never sold online
   LastOnlineSale: string | null
+  // Time the backoffice last scanned the vendor's ID card, null if never; read-only
+  LastIDScan: string | null
 
   OpenPayments:
     | [
@@ -142,6 +144,8 @@ export interface VendorLocation {
   zip: string
   // The location's own phone number, not the vendor's
   telephone?: string
+  // Number the market (e.g. the supermarket chain) uses for this branch
+  market_number?: string
   // Only used when editing from the locations page; null means no vendor
   vendorID?: number | null
   working_time:
@@ -161,6 +165,7 @@ export interface LocationOverview {
   address: string
   zip: string
   telephone: string
+  market_number: string
   longitude: number
   latitude: number
   working_time: VendorLocation['working_time']

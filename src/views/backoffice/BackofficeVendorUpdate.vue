@@ -494,6 +494,9 @@ const formatWorkingTime = (workingTime: VendorLocation['working_time']) =>
                   >
                     <div>
                       <div class="entry-title">{{ location.name }}</div>
+                      <div v-if="location.market_number" class="entry-sub">
+                        {{ $t('marketNumber') }}: {{ location.market_number }}
+                      </div>
                       <div class="entry-sub">{{ location.address }} {{ location.zip }}</div>
                       <div v-if="location.telephone" class="entry-sub">
                         {{ $t('telephone') }}: {{ location.telephone }}

@@ -61,6 +61,19 @@ export interface Settings {
   FeedbackEnabled: boolean
   FeedbackEmail: string
   NewsletterEnabled: boolean
+  IDScanEnabled: boolean
+  NextcloudEnabled: boolean
+  NextcloudConfigured?: boolean
+  NextcloudURL: string
+  NextcloudPublicURL: string
+  NextcloudUsername: string
+  NextcloudAppPassword: string
+  NextcloudVendorRoot: string
+  OdooWebhookURL: string
+  OdooWebhookToken: string
+  OdooDBFilter: string
+  // Which secrets have a stored value; the values themselves are never sent to the backoffice
+  SecretsSet?: Record<string, boolean>
   edges?: any
   Keycloak: {
     Realm: string
@@ -142,6 +155,7 @@ export const useSettingsStore = defineStore('settings', {
 
         this.settings = { ...this.settings, ...data.data.Settings }
         this.settings.Keycloak = data.data.Keycloak
+        this.settings.SecretsSet = data.data.SecretsSet ?? {}
         this.settings.MainItem = data.data.Settings.edges.MainItem.id
         this.settings.MainItemDescription = data.data.Settings.edges.MainItem.Description
         this.settings.MainItemImage = data.data.Settings.edges.MainItem.Image

@@ -59,6 +59,7 @@ const editLocation = (location: LocationOverview) => {
       address: location.address,
       zip: location.zip,
       telephone: location.telephone,
+      market_number: location.market_number,
       longitude: location.longitude,
       latitude: location.latitude,
       working_time: location.working_time,
@@ -121,7 +122,8 @@ const locations = computed(() => {
       location.name,
       location.address,
       location.zip,
-      location.telephone
+      location.telephone,
+      location.market_number
     ].some((value) => value?.toLowerCase().includes(query))
   )
 })
@@ -147,6 +149,7 @@ const exportTable = () => {
     'Vorname',
     'Nachname',
     'Standort',
+    'Marktnummer',
     'Adresse',
     'PLZ',
     'Telefon Standort',
@@ -163,6 +166,7 @@ const exportTable = () => {
     location.vendorFirstName,
     location.vendorLastName,
     location.name,
+    location.market_number,
     location.address,
     location.zip,
     location.telephone,
@@ -265,7 +269,12 @@ const exportTable = () => {
                   :disabled="location.vendorIsDisabled"
                 />
               </td>
-              <td>{{ location.name }}</td>
+              <td>
+                {{ location.name }}
+                <div v-if="location.market_number" class="locations-market-number">
+                  {{ $t('marketNumber') }}: {{ location.market_number }}
+                </div>
+              </td>
               <td>{{ location.address }}, {{ location.zip }}</td>
               <td class="locations-phone">
                 <a v-if="location.telephone" :href="`tel:${location.telephone}`">
@@ -318,6 +327,10 @@ const exportTable = () => {
 .locations-actions {
   display: flex;
   gap: 2px;
+}
+.locations-market-number {
+  font-size: 12px;
+  color: var(--color-text-muted);
 }
 .locations-phone {
   white-space: nowrap;

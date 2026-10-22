@@ -5,13 +5,19 @@ import { useItemsStore } from '@/stores/items'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import type { Payment } from '@/stores/payments'
 import { usePayoutStore } from '@/stores/payout'
-import { vendorsStore, type Vendor } from '@/stores/vendor'
+import { vendorsStore, type Vendor, type VendorComment } from '@/stores/vendor'
+import { fetchVendorComments } from '@/api/api'
+import VendorWarnings from '@/components/VendorWarnings.vue'
 import { formatCredit, formatDate } from '@/utils/utils'
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import PageHeader from '@/components/ui/PageHeader.vue'
 import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
+import { itemDisplayName } from '@/utils/itemName'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const store = vendorsStore()
 const payoutStore = usePayoutStore()
@@ -67,6 +73,17 @@ watch(store.vendors, () => {
   if (vendor.value) payoutStore.getPaymentsForPayout(vendor.value.LicenseID)
 })
 
+// Loaded here rather than through the store, which may still hold another vendor's comments
+const comments = ref<VendorComment[]>([])
+
+const loadComments = async (vendorId: number) => {
+  try {
+    comments.value = (await fetchVendorComments(vendorId)).data ?? []
+  } catch {
+    comments.value = []
+  }
+}
+
 // Initialize a reactive property 'amount' for input data
 const amount = ref<number>(0.0)
 
@@ -75,6 +92,7 @@ useAuthLoad(() => {
 
   if (route?.params?.ID) {
     store.getVendor(parseInt(route.params.ID.toString()))
+    loadComments(parseInt(route.params.ID.toString()))
   }
 
   if (vendor.value) {
@@ -141,7 +159,7 @@ const getItemName = (itemID: number) => {
   const item = items.value.find((item) => item.ID === itemID)
 
   if (item) {
-    return item.Name
+    return itemDisplayName(item, t)
   } else {
     return 'Unbekannt'
   }
@@ -161,6 +179,12 @@ const getItemName = (itemID: number) => {
     </template>
 
     <template #main>
+      <VendorWarnings
+        v-if="vendor"
+        class="section section-warnings"
+        :comments="comments"
+        :vendor-id="vendor.ID"
+      />
       <Card v-if="vendor" class="section">
         <div class="balance-row">
           <span class="balance-label">{{ $t('menuCredits') }}</span>
@@ -195,6 +219,9 @@ const getItemName = (itemID: number) => {
 .section {
   max-width: 480px;
   margin: 0 auto;
+}
+.section-warnings {
+  margin-bottom: 16px;
 }
 .balance-row {
   display: flex;
