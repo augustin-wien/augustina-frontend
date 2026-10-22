@@ -12,8 +12,16 @@ const keycloak: KeycloakInstnace = {
   keycloak: undefined
 }
 
+// Never pass location.href: it can still carry the '#state=...' fragment of an auth callback,
+// which Keycloak rejects as redirect_uri. Collapse repeated slashes: a URL that already contains '//' (old bookmark,
+// earlier redirect) would otherwise be reflected back by Keycloak and match no route.
+const redirectUri = () =>
+  window.location.origin +
+  (window.location.pathname + '/').replace(/\/{2,}/g, '/') +
+  window.location.search
+
 export const login = (options: KeycloakLoginOptions = {}) =>
-  keycloak.keycloak?.login({ locale: i18n.global.locale, ...options })
+  keycloak.keycloak?.login({ locale: i18n.global.locale, redirectUri: redirectUri(), ...options })
 
 export const initKeycloak = async () => {
   if (keycloak.keycloak == undefined) {
@@ -79,13 +87,7 @@ export const initKeycloak = async () => {
     if (!keycloak.keycloak) return
 
     if (!authenticated) {
-      // Collapse repeated slashes: a URL that already contains '//' (old bookmark, earlier
-      // redirect) would otherwise be reflected back by Keycloak and match no route.
-      const path = (window.location.pathname + '/').replace(/\/{2,}/g, '/')
-
-      login({
-        redirectUri: window.location.origin + path
-      })
+      login()
     }
   }
 
