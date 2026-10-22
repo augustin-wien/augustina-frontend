@@ -435,14 +435,9 @@ export async function patchSettingsStyles(styles: string) {
 
 export type NextcloudTestResult = { Success: boolean; Message: string }
 
-// Checks Nextcloud settings from the form; empty values fall back to the saved ones
-export async function testNextcloud(settings: {
-  NextcloudURL: string
-  NextcloudUsername: string
-  NextcloudAppPassword: string
-  NextcloudVendorRoot: string
-}) {
-  return apiInstance.post<NextcloudTestResult>(`${SETTINGS_API_URL}nextcloud/test/`, settings)
+// Checks the saved Nextcloud settings
+export async function testNextcloud() {
+  return apiInstance.post<NextcloudTestResult>(`${SETTINGS_API_URL}nextcloud/test/`)
 }
 
 export type WordPressInviteTestResult = { Success: boolean; Message: string; Link: string }

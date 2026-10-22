@@ -215,6 +215,7 @@ const settingsSection = computed(() =>
           v-show="settingsSections.includes(currentTab)"
           ref="generalRef"
           :section="settingsSection"
+          :can-save="adminSettingsLoaded"
           :updated-settings="updatedSettings"
           :items="items"
           :url="url"

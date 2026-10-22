@@ -619,6 +619,7 @@
   "nextcloudAppPasswordHint": "Create it in Nextcloud under Personal settings > Security.",
   "nextcloudVendorRoot": "Folder for vendors",
   "nextcloudVendorRootHint": "Existing folder (e.g. a team folder) in which a subfolder named after the license ID is created for every vendor.",
+  "nextcloudSaveAndTest": "Save and test",
   "odooTitle": "Odoo",
   "odooHint": "Sends every verified order to Odoo. Odoo can also manage vendors, products and payouts through the API (Keycloak role \"odoo\").",
   "odooWebhookUrl": "Webhook URL",

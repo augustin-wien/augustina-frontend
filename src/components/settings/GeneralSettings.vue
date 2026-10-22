@@ -31,6 +31,8 @@ const props = defineProps<{
   items: { ID: number; Name: string }[]
   url: string
   section: 'general' | 'modules' | 'qrcode'
+  // False until the complete admin settings are loaded; saving before would lose values
+  canSave: boolean
 }>()
 
 const emits = defineEmits(['open-qrcode', 'saved', 'error'])
@@ -74,18 +76,14 @@ const secretPlaceholder = (key: string) =>
 const nextcloudTesting = ref(false)
 const nextcloudTestResult = ref<NextcloudTestResult | null>(null)
 
+// The backend only tests the saved settings, so the form is saved first
 const testNextcloudConnection = async () => {
   nextcloudTesting.value = true
   nextcloudTestResult.value = null
 
   try {
-    const res = await testNextcloud({
-      NextcloudURL: localSettings.value.NextcloudURL,
-      NextcloudUsername: localSettings.value.NextcloudUsername,
-      NextcloudAppPassword: localSettings.value.NextcloudAppPassword,
-      NextcloudVendorRoot: localSettings.value.NextcloudVendorRoot
-    })
-
+    if (!(await saveSettings())) return
+    const res = await testNextcloud()
     nextcloudTestResult.value = res.data
   } catch (err) {
     nextcloudTestResult.value = { Success: false, Message: String(err) }
@@ -146,7 +144,7 @@ const updateQRCodeLogo = (event: Event) => {
   newQrCodeLogo.value = URL.createObjectURL(file)
 }
 
-const saveSettings = async () => {
+const saveSettings = async (): Promise<boolean> => {
   // The backend treats an empty URL as "disabled", so switching the toggle off has to clear it.
   if (!wpInviteEnabled.value) localSettings.value.WordPressInviteURL = ''
   if (!matomoEnabled.value) localSettings.value.MatomoUrl = ''
@@ -154,16 +152,18 @@ const saveSettings = async () => {
 
   if (vendorEmailPostfixError.value) {
     emits('error', vendorEmailPostfixError.value)
-    return
+    return false
   }
 
   try {
     await settingsStore.updateSettings(localSettings.value as Settings)
     emits('saved', 'Einstellungen erfolgreich aktualisiert')
+    return true
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('Error saving settings in GeneralSettings:', err)
     emits('error', 'Einstellungen konnten nicht aktualisiert werden')
+    return false
   }
 }
 
@@ -442,10 +442,10 @@ defineExpose({ saveSettings })
             <div class="field-span-2 connection-test">
               <Button
                 variant="secondary"
-                :disabled="nextcloudTesting"
+                :disabled="nextcloudTesting || !props.canSave"
                 @click="testNextcloudConnection"
               >
-                {{ nextcloudTesting ? $t('wpInviteTesting') : $t('wpInviteTest') }}
+                {{ nextcloudTesting ? $t('wpInviteTesting') : $t('nextcloudSaveAndTest') }}
               </Button>
               <p
                 v-if="nextcloudTestResult"

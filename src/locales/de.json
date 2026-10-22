@@ -619,6 +619,7 @@
   "nextcloudAppPasswordHint": "In der Nextcloud unter Persönliche Einstellungen > Sicherheit erstellen.",
   "nextcloudVendorRoot": "Ordner für Verkäufer:innen",
   "nextcloudVendorRootHint": "Bestehender Ordner (z. B. ein Team-Ordner), in dem für jede:n Verkäufer:in ein Unterordner mit der Ausweisnummer angelegt wird.",
+  "nextcloudSaveAndTest": "Speichern und testen",
   "odooTitle": "Odoo",
   "odooHint": "Schickt jede bestätigte Bestellung an Odoo. Odoo kann außerdem über die API Verkäufer:innen, Produkte und Auszahlungen pflegen (Keycloak-Rolle „odoo“).",
   "odooWebhookUrl": "Webhook-URL",

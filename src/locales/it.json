@@ -568,6 +568,7 @@
   "nextcloudAppPasswordHint": "Da creare in Nextcloud in Impostazioni personali > Sicurezza.",
   "nextcloudVendorRoot": "Cartella per i venditori",
   "nextcloudVendorRootHint": "Cartella esistente (ad es. una cartella di team) in cui viene creata una sottocartella con il numero di tessera per ogni venditore o venditrice.",
+  "nextcloudSaveAndTest": "Salva e verifica",
   "odooTitle": "Odoo",
   "odooHint": "Invia a Odoo ogni ordine confermato. Odoo può inoltre gestire venditori, prodotti e pagamenti tramite l'API (ruolo Keycloak \"odoo\").",
   "odooWebhookUrl": "URL del webhook",
