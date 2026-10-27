@@ -14,7 +14,7 @@
   "agreement": "Mit Kauf akzeptiere ich die ",
   "newsletterOptIn": "Ich möchte den Newsletter abonnieren",
   "terms": "AGBs",
-  "agreementNotice": "Mit dem Kauf stimmen Sie den ",
+  "agreementNotice": "Mit dem Kauf stimmen Sie den {terms} zu",
 
   "payment confirmation": "Zahlungsbestätigung",
   "symbol": "Zeige bitte diese Seite ",
