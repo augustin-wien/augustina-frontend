@@ -561,7 +561,9 @@ const previewImage = (image: string | Blob | MediaSource) => {
         </template>
         <template #footer>
           <Button variant="ghost" @click="showDeleteModal = false">{{ $t('cancel') }}</Button>
-          <Button variant="danger" :disabled="!!usedByItem" @click="deleteItem">{{ $t('delete') }}</Button>
+          <Button variant="danger" :disabled="!!usedByItem" @click="deleteItem">{{
+            $t('delete')
+          }}</Button>
         </template>
       </Modal>
     </template>
