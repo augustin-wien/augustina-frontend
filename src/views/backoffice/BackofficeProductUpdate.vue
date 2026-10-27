@@ -191,23 +191,44 @@ const notifyAbonements = async () => {
 }
 
 const showDeleteModal = ref(false)
+const deleteLinkedLicense = ref(false)
+
+const linkedLicenseName = computed(() => {
+  const licenseId = item.value?.LicenseItem
+  if (!licenseId) return ''
+  return itemsStore.itemsBackoffice.find((i) => i.ID === licenseId)?.Name ?? ''
+})
+
+const usedByItem = computed(() =>
+  item.value?.IsLicenseItem
+    ? itemsStore.itemsBackoffice.find((i) => i.LicenseItem === item.value?.ID)
+    : undefined
+)
 
 const showDeleteModalF = (event: Event) => {
   event.preventDefault()
+  deleteLinkedLicense.value = false
   showDeleteModal.value = true
 }
 
 const deleteItem = async () => {
   try {
     if (item.value) {
-      await itemsStore.deleteItem(item.value.ID)
+      await itemsStore.deleteItem(item.value.ID, deleteLinkedLicense.value)
       showToast('success', 'Produkt erfolgreich gelöscht')
       router.push({ name: 'Backoffice Product Settings' })
     }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error deleting item:', error)
-    showToast('error', 'Produkt konnte nicht gelöscht werden')
+    showDeleteModal.value = false
+
+    showToast(
+      'error',
+      (error as any)?.response?.status === 409
+        ? 'Lizenz-Item ist noch einem Produkt zugeordnet und kann nicht gelöscht werden'
+        : 'Produkt konnte nicht gelöscht werden'
+    )
   }
 }
 
@@ -528,10 +549,19 @@ const previewImage = (image: string | Blob | MediaSource) => {
         :title="`${updatedItem.Name} ${$t('delete')}`"
         @close="showDeleteModal = false"
       >
-        <p>{{ $t('deletionConfirmation') }}</p>
+        <p v-if="usedByItem">
+          {{ $t('licenseItemInUse', { name: usedByItem.Name }) }}
+        </p>
+        <template v-else>
+          <p>{{ $t('deletionConfirmation') }}</p>
+          <label v-if="item?.LicenseItem" class="aug-checkbox">
+            <input v-model="deleteLinkedLicense" type="checkbox" />
+            <span>{{ $t('deleteLinkedLicense', { name: linkedLicenseName }) }}</span>
+          </label>
+        </template>
         <template #footer>
           <Button variant="ghost" @click="showDeleteModal = false">{{ $t('cancel') }}</Button>
-          <Button variant="danger" @click="deleteItem">{{ $t('delete') }}</Button>
+          <Button variant="danger" :disabled="!!usedByItem" @click="deleteItem">{{ $t('delete') }}</Button>
         </template>
       </Modal>
     </template>

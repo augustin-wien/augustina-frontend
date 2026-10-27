@@ -588,5 +588,7 @@
   "profileContact": "Contatti e dati",
   "profileOpenWarnings": "Avvisi aperti",
   "profilePayoutItem": "Pagamento",
-  "profileCash": "Cassa"
+  "profileCash": "Cassa",
+  "licenseItemInUse": "Questo elemento di licenza appartiene ancora al prodotto «{name}» e non può essere eliminato. Elimina prima il prodotto.",
+  "deleteLinkedLicense": "Elimina anche l'elemento di licenza collegato «{name}»"
 }

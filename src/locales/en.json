@@ -639,5 +639,7 @@
   "profileContact": "Contact & details",
   "profileOpenWarnings": "Open warnings",
   "profilePayoutItem": "Payout",
-  "profileCash": "Cash register"
+  "profileCash": "Cash register",
+  "licenseItemInUse": "This license item still belongs to the product \"{name}\" and cannot be deleted. Delete that product first.",
+  "deleteLinkedLicense": "Also delete the linked license item \"{name}\""
 }
