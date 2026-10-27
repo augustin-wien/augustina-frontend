@@ -578,6 +578,7 @@
   "feedbackSettingsEmail": "E-Mail-Adresse für Feedback",
   "feedbackGive": "Feedback geben",
   "feedbackQuestion": "Wie war's? Ist etwas schiefgegangen?",
+  "feedbackEmailLabel": "Deine E-Mail-Adresse (optional, falls wir nachfragen dürfen)",
   "feedbackAttached": "Wird mitgeschickt:",
   "feedbackTransactionId": "Transaktions-ID",
   "feedbackRequestId": "Request-ID",

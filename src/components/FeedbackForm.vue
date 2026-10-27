@@ -23,6 +23,7 @@ const vendorStore = useVendorStore()
 
 const open = ref(false)
 const message = ref('')
+const email = ref('')
 const sending = ref(false)
 const sent = ref(false)
 const failed = ref(false)
@@ -55,6 +56,7 @@ const attachedInfo = computed(() =>
 
 const toggle = () => {
   open.value = !open.value
+  if (open.value) email.value = localStorage.getItem('email') ?? ''
   requestId.value = getLastRequestId()
 }
 
@@ -70,7 +72,8 @@ const submit = async () => {
       TransactionID: transactionId.value,
       RequestID: requestId.value,
       VendorID: vendorId.value,
-      Page: route.path
+      Page: route.path,
+      Email: email.value.trim()
     })
 
     sent.value = true
@@ -88,40 +91,63 @@ const submit = async () => {
   <div v-if="visible" class="feedback-form w-full text-center text-sm font-normal">
     <p v-if="sent" class="feedback-thanks">{{ $t('feedbackThanks') }}</p>
     <template v-else>
-      <button v-if="!open" type="button" class="feedback-open underline" @click="toggle">
+      <button type="button" class="feedback-open underline" @click="toggle">
         {{ $t('feedbackGive') }}
       </button>
-      <form v-else class="flex flex-col gap-2 text-left" @submit.prevent="submit">
-        <label for="feedback-message" class="font-semibold">{{ $t('feedbackQuestion') }}</label>
-        <textarea
-          id="feedback-message"
-          v-model="message"
-          :maxlength="MAX_LENGTH"
-          rows="4"
-          class="w-full rounded-xl border-2 border-gray-200 p-2"
-        ></textarea>
-        <p class="text-xs text-gray-500">
-          {{ $t('feedbackAttached') }}
-          {{ attachedInfo || $t('feedbackPageOnly') }}
-        </p>
-        <p v-if="failed" class="feedback-error text-red-700">{{ $t('feedbackFailed') }}</p>
-        <div class="flex items-center justify-end gap-3">
-          <button type="button" class="underline" @click="toggle">{{ $t('cancel') }}</button>
-          <button
-            type="submit"
-            class="feedback-submit rounded-full px-4 py-2 font-semibold"
-            :disabled="sending || !message.trim()"
-            :style="
-              'background-color:' +
-              settingsStore.settings.Color +
-              '; color: ' +
-              settingsStore.settings.FontColor
-            "
+      <Teleport to="body">
+        <div
+          v-if="open"
+          class="feedback-popup fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          @click.self="toggle"
+        >
+          <form
+            class="flex w-full max-w-md flex-col gap-2 rounded-2xl bg-white p-5 text-left text-sm text-gray-900 shadow-xl"
+            role="dialog"
+            aria-modal="true"
+            @submit.prevent="submit"
+            @keydown.esc="toggle"
           >
-            {{ $t('feedbackSend') }}
-          </button>
+            <label for="feedback-message" class="font-semibold">{{ $t('feedbackQuestion') }}</label>
+            <textarea
+              id="feedback-message"
+              v-model="message"
+              :maxlength="MAX_LENGTH"
+              rows="4"
+              class="w-full rounded-xl border-2 border-gray-200 p-2"
+            ></textarea>
+            <label for="feedback-email" class="font-semibold">{{ $t('feedbackEmailLabel') }}</label>
+            <input
+              id="feedback-email"
+              v-model="email"
+              type="email"
+              maxlength="200"
+              autocomplete="email"
+              class="w-full rounded-xl border-2 border-gray-200 p-2"
+            />
+            <p class="text-xs text-gray-500">
+              {{ $t('feedbackAttached') }}
+              {{ attachedInfo || $t('feedbackPageOnly') }}
+            </p>
+            <p v-if="failed" class="feedback-error text-red-700">{{ $t('feedbackFailed') }}</p>
+            <div class="flex items-center justify-end gap-3">
+              <button type="button" class="underline" @click="toggle">{{ $t('cancel') }}</button>
+              <button
+                type="submit"
+                class="feedback-submit rounded-full px-4 py-2 font-semibold"
+                :disabled="sending || !message.trim()"
+                :style="
+                  'background-color:' +
+                  settingsStore.settings.Color +
+                  '; color: ' +
+                  settingsStore.settings.FontColor
+                "
+              >
+                {{ $t('feedbackSend') }}
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+      </Teleport>
     </template>
   </div>
 </template>
