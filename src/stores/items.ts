@@ -116,8 +116,8 @@ export const useItemsStore = defineStore('items', {
       const res = await notifyAbonements(itemId)
       return res.data?.recipients ?? 0
     },
-    async deleteItem(itemId: number) {
-      await removeItem(itemId)
+    async deleteItem(itemId: number, deleteLicense = false) {
+      await removeItem(itemId, deleteLicense)
       this.getItems()
     }
   }

@@ -639,5 +639,7 @@
   "profileContact": "Kontakt & Daten",
   "profileOpenWarnings": "Offene Warnungen",
   "profilePayoutItem": "Auszahlung",
-  "profileCash": "Barkasse"
+  "profileCash": "Barkasse",
+  "licenseItemInUse": "Dieses Lizenz-Item gehört noch zum Produkt „{name}“ und kann nicht gelöscht werden. Lösche zuerst das Produkt.",
+  "deleteLinkedLicense": "Zugehöriges Lizenz-Item „{name}“ ebenfalls löschen"
 }

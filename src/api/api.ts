@@ -311,8 +311,10 @@ export async function fetchItemPDF(itemId: number) {
   return apiInstance.get<Blob>(`${ITEMS_API_URL}${itemId}/pdf/`, { responseType: 'blob' })
 }
 
-export async function removeItem(itemId: number) {
-  return apiInstance.delete(`${ITEMS_API_URL}${itemId}/`)
+export async function removeItem(itemId: number, deleteLicense = false) {
+  return apiInstance.delete(`${ITEMS_API_URL}${itemId}/`, {
+    params: deleteLicense ? { deleteLicense: true } : undefined
+  })
 }
 
 //settings

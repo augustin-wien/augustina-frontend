@@ -18,18 +18,19 @@ const compat = new FlatCompat({
 const gitignorePath = path.resolve(__dirname, ".gitignore");
 
 export default [...compat.extends("eslint:recommended", "prettier"), 
-    includeIgnoreFile(gitignorePath),{
-    languageOptions: {
-        ecmaVersion: "latest",
-        sourceType: "script",
-    },
-    ignores:[
+    includeIgnoreFile(gitignorePath), {
+    ignores: [
         "eslint.config.mjs",
         "postcss.config.js",
         "tailwind.config.js",
         "scripts/*.js",
         "*.cy.ts"
     ],
+}, {
+    languageOptions: {
+        ecmaVersion: "latest",
+        sourceType: "script",
+    },
     rules: {
         "no-console": "error",
         "no-debugger": "error",
