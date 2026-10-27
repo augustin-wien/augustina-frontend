@@ -110,6 +110,12 @@ const hasLicenseItem = computed(() => {
                 </button></label
               >
             </div>
+            <div v-else class="text-center">
+              {{ $t('agreementNotice') }}
+              <button class="text-blue-600" @click="settStore.toAGB()">
+                {{ $t('terms') }}
+              </button>
+            </div>
 
             <div class="w-full">
               <div v-if="hasLicenseItem != null" class="text-small text-center mb-3">
