@@ -13,7 +13,7 @@
   "agreement": " With this purchase, I confirm the ",
   "newsletterOptIn": "I would like to subscribe to the newsletter",
   "terms": "terms and conditions",
-  "agreementNotice": "By purchasing, you agree to the ",
+  "agreementNotice": "By purchasing, you agree to the {terms}",
 
   "symbol": "Please show symbol to ",
   "bought": "Bought on the: ",
