@@ -93,7 +93,8 @@ export const initKeycloak = async () => {
 
   keycloak.initailizedKeycloak = true
   return keycloak.keycloak.init({
-    onLoad: 'check-sso'
+    onLoad: 'check-sso',
+    redirectUri: redirectUri()
   })
 }
 export default keycloak
