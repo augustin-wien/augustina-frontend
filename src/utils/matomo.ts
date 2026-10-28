@@ -245,26 +245,56 @@ export function initMatomo(settings: MatomoSettings, router: Router): boolean {
 }
 
 export interface CartEntry {
+  id: number | string
   name: string
-  /** Number of pieces, or the amount in euros for the donation */
-  value: number
+  /** Price of one piece in euros; for the donation the chosen amount */
+  price: number
+  quantity: number
+}
+
+const cartActive = (settings: { MatomoTrackCart?: boolean }) =>
+  Boolean(settings.MatomoTrackCart && window._paq && isTrackablePath(window.location.pathname))
+
+/** Replaces the tracked cart with the given entries, Matomo keeps no state between calls. */
+const pushCart = (paq: unknown[][], entries: CartEntry[]) => {
+  let total = 0
+
+  paq.push(['clearEcommerceCart'])
+
+  for (const entry of entries) {
+    if (!entry.name || !(entry.quantity > 0)) continue
+
+    paq.push(['addEcommerceItem', String(entry.id), entry.name, '', entry.price, entry.quantity])
+    total += entry.price * entry.quantity
+  }
+
+  return total
 }
 
 /**
- * Reports what is in the cart when the order is placed: one "Cart / Checkout" event per product,
- * named after the product and carrying the quantity as its value. Opt-in per tenant through
- * MatomoTrackCart, and like everything else here a no-op when Matomo is not running.
+ * Reports the current cart to Matomo's e-commerce module whenever it changes, so the products
+ * show up in the carts and abandoned carts reports. Opt-in per tenant through MatomoTrackCart,
+ * and like everything else here a no-op when Matomo is not running.
  */
+export function trackCartUpdate(settings: { MatomoTrackCart?: boolean }, entries: CartEntry[]) {
+  if (!cartActive(settings)) return
+
+  const paq = window._paq as unknown[][]
+  const total = pushCart(paq, entries)
+
+  paq.push(['trackEcommerceCartUpdate', total])
+}
+
+/** Reports the placed order to the e-commerce module. Same opt-in as the cart updates. */
 export function trackCart(settings: { MatomoTrackCart?: boolean }, entries: CartEntry[]): void {
-  const paq = window._paq
+  if (!cartActive(settings)) return
 
-  if (!settings.MatomoTrackCart || !paq || !isTrackablePath(window.location.pathname)) return
+  const paq = window._paq as unknown[][]
+  const total = pushCart(paq, entries)
 
-  for (const entry of entries) {
-    if (!entry.name || !(entry.value > 0)) continue
+  if (total <= 0) return
 
-    paq.push(['trackEvent', 'Cart', 'Checkout', entry.name, entry.value])
-  }
+  paq.push(['trackEcommerceOrder', crypto.randomUUID(), total])
 }
 
 /** Test seam — the tracker is a one-shot per page load in the app itself. */

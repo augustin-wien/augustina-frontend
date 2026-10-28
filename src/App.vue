@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from 'vue-router'
 import { useFavicon } from '@vueuse/core'
-import { onMounted } from 'vue'
+import { onMounted, watch } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
-import { initMatomo } from '@/utils/matomo'
+import { useShopStore } from '@/stores/ShopStore'
+import { initMatomo, trackCartUpdate } from '@/utils/matomo'
 import { useAccentColor } from '@/composables/useAccentColor'
 import BackendUnavailable from '@/components/BackendUnavailable.vue'
 
@@ -11,6 +12,7 @@ const favicon = import.meta.env.VITE_API_URL + 'img/favicon.png'
 useFavicon(favicon)
 
 const settingsStore = useSettingsStore()
+const shopStore = useShopStore()
 const router = useRouter()
 useAccentColor()
 
@@ -22,6 +24,26 @@ onMounted(async () => {
   await Promise.all([settingsStore.getSettingsFromApi(), router.isReady()])
   initMatomo(settingsStore.settings, router)
 })
+
+// Every change to the cart, from any page, goes to Matomo's e-commerce module when enabled
+watch(
+  () => shopStore.amount,
+  (amount) =>
+    trackCartUpdate(
+      settingsStore.settings,
+      amount.map((entry) => {
+        const isDonation = entry.item == shopStore.donationItem
+
+        return {
+          id: entry.item,
+          name: shopStore.getName(entry.item),
+          price: isDonation ? entry.quantity / 100 : shopStore.getPriceInEuro(entry.item),
+          quantity: isDonation ? 1 : entry.quantity
+        }
+      })
+    ),
+  { deep: true }
+)
 </script>
 
 <template>
