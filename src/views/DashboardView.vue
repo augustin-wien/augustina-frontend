@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import { getAuthHello } from '@/api/api'
-import keycloak from '@/keycloak/keycloak'
+import { logout } from '@/keycloak/keycloak'
 import { ref } from 'vue'
-
-function logout() {
-  keycloak.keycloak?.logout()
-}
 
 const message = ref('Press the button to call the backend')
 
