@@ -135,6 +135,7 @@ export interface FeedbackInput {
   RequestID: string
   VendorID: string
   Page: string
+  Email: string
 }
 
 export function sendFeedback(feedback: FeedbackInput) {

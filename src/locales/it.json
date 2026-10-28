@@ -527,6 +527,7 @@
   "feedbackSettingsEmail": "Indirizzo e-mail per il feedback",
   "feedbackGive": "Lascia un feedback",
   "feedbackQuestion": "Com'è andata? Qualcosa è andato storto?",
+  "feedbackEmailLabel": "Il tuo indirizzo e-mail (facoltativo, per eventuali domande)",
   "feedbackAttached": "Viene inviato anche:",
   "feedbackTransactionId": "ID transazione",
   "feedbackRequestId": "ID richiesta",

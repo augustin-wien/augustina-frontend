@@ -578,6 +578,7 @@
   "feedbackSettingsEmail": "Email address for feedback",
   "feedbackGive": "Give feedback",
   "feedbackQuestion": "How did it go? Did anything go wrong?",
+  "feedbackEmailLabel": "Your email address (optional, in case we may follow up)",
   "feedbackAttached": "Sent along:",
   "feedbackTransactionId": "Transaction ID",
   "feedbackRequestId": "Request ID",
