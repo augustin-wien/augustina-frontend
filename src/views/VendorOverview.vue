@@ -185,10 +185,7 @@ const customColor = computed(() => {
             <router-link to="/me/profile">
               <button class="p-3 rounded-full customcolor text-white">Profil</button>
             </router-link>
-            <button
-              class="p-3 rounded-full customcolor text-white"
-              @click="logout()"
-            >
+            <button class="p-3 rounded-full customcolor text-white" @click="logout()">
               <p class="text-base leading-4">{{ $t('Logout') }}</p>
             </button>
           </div>
