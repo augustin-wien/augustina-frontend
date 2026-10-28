@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import WaitingAnimation from '@/components/WaitingAnimation.vue'
-import keycloak from '@/keycloak/keycloak'
+import { logout } from '@/keycloak/keycloak'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
 import { useApplyColorScheme, useColorScheme } from '@/composables/useColorScheme'
@@ -188,7 +188,7 @@ onMounted(() => {
             </div>
           </nav>
 
-          <button class="nav-item nav-item-logout" @click="keycloak.keycloak?.logout()">
+          <button class="nav-item nav-item-logout" @click="logout()">
             <font-awesome-icon :icon="faArrowRightFromBracket" class="nav-item-icon" />
             <span>{{ $t('Logout') }}</span>
           </button>

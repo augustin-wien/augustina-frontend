@@ -23,6 +23,8 @@ const redirectUri = () =>
 export const login = (options: KeycloakLoginOptions = {}) =>
   keycloak.keycloak?.login({ locale: i18n.global.locale, redirectUri: redirectUri(), ...options })
 
+export const logout = () => keycloak.keycloak?.logout({ redirectUri: redirectUri() })
+
 export const initKeycloak = async () => {
   if (keycloak.keycloak == undefined) {
     // get keycloak configuration from server
@@ -59,9 +61,7 @@ export const initKeycloak = async () => {
   keycloak.keycloak.onAuthLogout = () => {
     /* eslint-disable no-console */
     console.log('onAuthLogout')
-    if (!keycloak.keycloak) return
-
-    keycloak.keycloak.logout()
+    logout()
   }
 
   keycloak.keycloak.onTokenExpired = () => {

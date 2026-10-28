@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { vendorsStore } from '@/stores/vendor'
 import type { Vendor } from '@/stores/vendor'
-import keycloak from '@/keycloak/keycloak'
+import { logout } from '@/keycloak/keycloak'
 import QRCodeStyling from 'qr-code-styling'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { computed } from 'vue'
@@ -187,7 +187,7 @@ const customColor = computed(() => {
             </router-link>
             <button
               class="p-3 rounded-full customcolor text-white"
-              @click="keycloak.keycloak?.logout()"
+              @click="logout()"
             >
               <p class="text-base leading-4">{{ $t('Logout') }}</p>
             </button>
