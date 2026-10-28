@@ -139,7 +139,7 @@ const checkIfItemSelected = () => {
                       </RouterLink>
                     </div>
                     <div class="flex grow h-full pb-2 w-full">
-                      <button>
+                      <button :aria-label="`- ${mainItem ? mainItem.Name : ''}`">
                         <div
                           class="button-down customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
                           @click="shopStore.subtractItem(settings.MainItem)"
@@ -154,7 +154,10 @@ const checkIfItemSelected = () => {
                           {{ shopStore.getAmount(settings.MainItem) }}
                         </div>
                       </div>
-                      <button class="place-content-">
+                      <button
+                        class="place-content-"
+                        :aria-label="`+ ${mainItem ? mainItem.Name : ''}`"
+                      >
                         <div
                           class="button-up customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
                           @click="shopStore.addItem(settings.MainItem)"
@@ -215,7 +218,7 @@ const checkIfItemSelected = () => {
                       </RouterLink>
                     </div>
                     <div class="flex grow h-full pb-2 w-full">
-                      <button>
+                      <button :aria-label="`- ${item.Name}`">
                         <div
                           class="button-down customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
                           @click="shopStore.subtractItem(item.ID)"
@@ -230,7 +233,7 @@ const checkIfItemSelected = () => {
                           {{ shopStore.getAmount(item.ID) }}
                         </div>
                       </div>
-                      <button class="place-content-">
+                      <button class="place-content-" :aria-label="`+ ${item.Name}`">
                         <div
                           class="button-up customcolor h-[60px] w-[60px] rounded-full font-extrabold text-white text-2xl flex items-center justify-center mx-[2px]"
                           @click="shopStore.addItem(item.ID)"

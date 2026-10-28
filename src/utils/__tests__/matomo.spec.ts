@@ -10,7 +10,8 @@ import {
   markPrivacyNoticeSeen,
   resetMatomo,
   setMatomoOptOut,
-  trackCart
+  trackCart,
+  trackCartUpdate
 } from '@/utils/matomo'
 
 const CONFIGURED = { MatomoUrl: 'https://matomo.example.org/', MatomoSiteId: '3' }
@@ -463,9 +464,9 @@ describe('cart tracking', () => {
   let router: Router
 
   const cart = [
-    { name: 'Zeitung', value: 2 },
-    { name: 'Spende', value: 1.5 },
-    { name: 'Leer', value: 0 }
+    { id: 1, name: 'Zeitung', price: 3, quantity: 2 },
+    { id: 2, name: 'Spende', price: 1.5, quantity: 1 },
+    { id: 3, name: 'Leer', price: 3, quantity: 0 }
   ]
 
   beforeEach(async () => {
@@ -477,22 +478,34 @@ describe('cart tracking', () => {
 
   afterEach(cleanDom)
 
-  it('reports every product with a quantity as a checkout event when enabled', () => {
+  it('reports the cart to the e-commerce module when enabled', () => {
+    initMatomo(CONFIGURED, router)
+    trackCartUpdate({ MatomoTrackCart: true }, cart)
+
+    expect(calls('addEcommerceItem')).toEqual([
+      ['addEcommerceItem', '1', 'Zeitung', '', 3, 2],
+      ['addEcommerceItem', '2', 'Spende', '', 1.5, 1]
+    ])
+
+    expect(calls('trackEcommerceCartUpdate')).toEqual([['trackEcommerceCartUpdate', 7.5]])
+  })
+
+  it('reports the placed order with its total', () => {
     initMatomo(CONFIGURED, router)
     trackCart({ MatomoTrackCart: true }, cart)
 
-    expect(calls('trackEvent')).toEqual([
-      ['trackEvent', 'Cart', 'Checkout', 'Zeitung', 2],
-      ['trackEvent', 'Cart', 'Checkout', 'Spende', 1.5]
-    ])
+    const [order] = calls('trackEcommerceOrder')
+
+    expect(order[2]).toBe(7.5)
   })
 
   it('sends nothing unless the tenant switched it on', () => {
     initMatomo(CONFIGURED, router)
-    trackCart({ MatomoTrackCart: false }, cart)
+    trackCartUpdate({ MatomoTrackCart: false }, cart)
     trackCart({}, cart)
 
-    expect(calls('trackEvent')).toEqual([])
+    expect(calls('addEcommerceItem')).toEqual([])
+    expect(calls('trackEcommerceOrder')).toEqual([])
   })
 
   it('does nothing when Matomo is not running', () => {

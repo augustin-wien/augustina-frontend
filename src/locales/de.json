@@ -570,7 +570,7 @@
 
   "settingsAGBRequired": "Kund*innen müssen den AGB zustimmen",
   "settingsDonationPageEnabled": "Spendenseite im Kaufprozess anzeigen",
-  "matomoTrackCart": "Produkte im Warenkorb beim Bezahlen an Matomo senden",
+  "matomoTrackCart": "Warenkorb und Bestellungen an das E-Commerce-Modul von Matomo senden",
   "feedbackSettingsTitle": "Feedback",
   "feedbackSettingsHint": "Zeigt am Ende des Kaufs und auf den Fehlerseiten ein Feedback-Formular. Das Feedback wird mit Transaktions-ID und Request-ID an die angegebene Adresse gemailt.",
   "feedbackSettingsEnabled": "Feedback-Formular anzeigen",

@@ -570,7 +570,7 @@
   "Provide at least one recipient": "Please provide at least one recipient",
   "settingsAGBRequired": "Customers have to accept the terms",
   "settingsDonationPageEnabled": "Show the donation page in the purchase flow",
-  "matomoTrackCart": "Send the products in the cart to Matomo at checkout",
+  "matomoTrackCart": "Send the cart and orders to the Matomo e-commerce module",
   "feedbackSettingsTitle": "Feedback",
   "feedbackSettingsHint": "Shows a feedback form at the end of the purchase and on the error pages. The feedback is mailed to the address below, together with the transaction id and request id.",
   "feedbackSettingsEnabled": "Show the feedback form",

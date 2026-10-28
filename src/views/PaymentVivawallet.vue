@@ -30,8 +30,13 @@ onMounted(() => {
   trackCart(
     settings.settings,
     itemsCleaned.map((item) => ({
+      id: item.item,
       name: shopStore.getName(item.item),
-      value: item.item == shopStore.donationItem ? item.quantity / 100 : item.quantity
+      price:
+        item.item == shopStore.donationItem
+          ? item.quantity / 100
+          : shopStore.getPriceInEuro(item.item),
+      quantity: item.item == shopStore.donationItem ? 1 : item.quantity
     }))
   )
 
