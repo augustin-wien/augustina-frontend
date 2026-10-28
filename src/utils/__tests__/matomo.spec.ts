@@ -494,7 +494,7 @@ describe('cart tracking', () => {
     initMatomo(CONFIGURED, router)
     trackCart({ MatomoTrackCart: true }, cart)
 
-    const [order] = calls('trackEcommerceOrder')
+    const order = calls('trackEcommerceOrder')[0] ?? []
 
     expect(order[2]).toBe(7.5)
   })
