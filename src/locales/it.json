@@ -519,7 +519,7 @@
   "Spende": "Donazione",
   "settingsAGBRequired": "I clienti devono accettare le condizioni generali",
   "settingsDonationPageEnabled": "Mostra la pagina delle donazioni nel processo d'acquisto",
-  "matomoTrackCart": "Invia carrello e ordini al modulo e-commerce di Matomo",
+  "matomoTrackCart": "Invia il carrello a Matomo",
   "feedbackSettingsTitle": "Feedback",
   "feedbackSettingsHint": "Mostra un modulo di feedback alla fine dell'acquisto e nelle pagine di errore. Il feedback viene inviato per e-mail all'indirizzo indicato, insieme all'ID della transazione e all'ID della richiesta.",
   "feedbackSettingsEnabled": "Mostra il modulo di feedback",
