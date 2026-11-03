@@ -322,6 +322,8 @@
   "newsletterSince": "dal {date}",
   "newsletterExport": "Esporta newsletter ({count})",
   "newsletterSubscribedAt": "Iscritto il",
+  "purchases": "Acquisti",
+  "lastPurchase": "Ultimo acquisto",
   "newsletterSettingsHint": "Mostra una casella per iscriversi alla newsletter quando si acquista un'edizione digitale o un abbonamento. Non è preselezionata. Chi si iscrive compare tra i clienti e nell'esportazione della newsletter.",
   "newsletterSettingsEnabled": "Offrire l'iscrizione alla newsletter nello shop",
   "newAbonement": "Nuovo abbonamento",

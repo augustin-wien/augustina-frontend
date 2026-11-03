@@ -5,6 +5,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { exportAsCsv } from '@/utils/utils'
 import { newsletterCsvRows } from '@/utils/newsletterCsv'
+import { maskEmail } from '@/utils/maskEmail'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -14,7 +15,7 @@ import Card from '@/components/ui/Card.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
 
 const store = useCustomerStore()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 useAuthLoad(() => {
   store.getCustomers()
@@ -39,14 +40,19 @@ const exportNewsletter = () => {
   exportAsCsv(rows, `newsletter_${new Date().toISOString().slice(0, 10)}`)
 }
 
+const formatPurchaseDate = (date?: string) =>
+  date ? new Date(date).toLocaleDateString(locale.value) : '–'
+
+// Most recent buyers first, customers who never bought at the end
 const displayCustomers = computed(() => {
   const q = searchQuery.value.toLowerCase()
-  if (!q) return customers.value
-  return customers.value.filter(
-    (c: Customer) =>
-      c.email.toLowerCase().includes(q) ||
-      c.firstname.toLowerCase().includes(q) ||
-      c.lastname.toLowerCase().includes(q)
+
+  const matching = q
+    ? customers.value.filter((c: Customer) => c.email.toLowerCase().includes(q))
+    : customers.value
+
+  return [...matching].sort((a, b) =>
+    (b.last_purchase_at ?? '').localeCompare(a.last_purchase_at ?? '')
   )
 })
 </script>
@@ -74,9 +80,9 @@ const displayCustomers = computed(() => {
           <table class="aug-table">
             <thead>
               <tr>
-                <th>{{ $t('firstName') }}</th>
-                <th>{{ $t('lastName') }}</th>
                 <th>{{ $t('email') }}</th>
+                <th>{{ $t('lastPurchase') }}</th>
+                <th>{{ $t('purchases') }}</th>
                 <th>{{ $t('abonements') }}</th>
                 <th>{{ $t('newsletter') }}</th>
                 <th></th>
@@ -84,9 +90,9 @@ const displayCustomers = computed(() => {
             </thead>
             <tbody>
               <tr v-for="c in displayCustomers" :key="c.id">
-                <td>{{ c.firstname }}</td>
-                <td>{{ c.lastname }}</td>
-                <td>{{ c.email }}</td>
+                <td>{{ maskEmail(c.email) }}</td>
+                <td>{{ formatPurchaseDate(c.last_purchase_at) }}</td>
+                <td>{{ c.purchase_count ?? 0 }}</td>
                 <td>
                   <Badge v-if="activeCustomerIds.has(c.id)" variant="success">
                     {{ $t('active') }}

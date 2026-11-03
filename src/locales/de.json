@@ -358,6 +358,8 @@
   "newsletterSince": "seit {date}",
   "newsletterExport": "Newsletter-Export ({count})",
   "newsletterSubscribedAt": "Angemeldet am",
+  "purchases": "Käufe",
+  "lastPurchase": "Letzter Kauf",
   "newsletterSettingsHint": "Bietet beim Kauf einer Digitalausgabe oder eines Abos eine Checkbox zur Newsletter-Anmeldung an. Sie ist nicht vorausgewählt. Wer sich anmeldet, erscheint unter Kund:innen und im Newsletter-Export.",
   "newsletterSettingsEnabled": "Newsletter-Anmeldung im Shop anbieten",
   "newAbonement": "Neues Abonnement",
