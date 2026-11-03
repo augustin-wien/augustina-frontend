@@ -267,6 +267,8 @@
   "newsletterSince": "since {date}",
   "newsletterExport": "Newsletter export ({count})",
   "newsletterSubscribedAt": "Subscribed on",
+  "purchases": "Purchases",
+  "lastPurchase": "Last purchase",
   "newsletterSettingsHint": "Offers a newsletter opt-in checkbox when a digital issue or an abonement is bought. It is not preselected. Subscribers show up under customers and in the newsletter export.",
   "newsletterSettingsEnabled": "Offer the newsletter opt-in in the shop",
   "newAbonement": "New Abonement",

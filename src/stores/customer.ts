@@ -24,6 +24,8 @@ export interface Customer {
   newsletter_at?: string
   created_at?: string
   updated_at?: string
+  purchase_count?: number
+  last_purchase_at?: string
 }
 
 export interface Abonement {
