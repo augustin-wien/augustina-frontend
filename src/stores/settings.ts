@@ -72,6 +72,7 @@ export interface Settings {
   OdooWebhookURL: string
   OdooWebhookToken: string
   OdooDBFilter: string
+  AccountingReportEmail: string
   // Which secrets have a stored value; the values themselves are never sent to the backoffice
   SecretsSet?: Record<string, boolean>
   edges?: any

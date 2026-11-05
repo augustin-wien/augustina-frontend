@@ -326,6 +326,16 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeLocations.vue')
     },
     {
+      path: '/backoffice/monthly-report',
+      name: 'Monthly Report',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Monthly Report'
+      },
+      component: () => import('@/views/backoffice/BackofficeMonthlyReport.vue')
+    },
+    {
       path: '/backoffice/donations',
       name: 'Donations',
       meta: {
