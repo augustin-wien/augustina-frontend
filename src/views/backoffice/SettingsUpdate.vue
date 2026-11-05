@@ -78,7 +78,8 @@ const updatedSettings = ref<Settings>({
   NextcloudVendorRoot: 'Verkaufende',
   OdooWebhookURL: '',
   OdooWebhookToken: '',
-  OdooDBFilter: ''
+  OdooDBFilter: '',
+  AccountingReportEmail: ''
 })
 
 // The public settings endpoint withholds credentials, so this page loads the full set from the

@@ -19,6 +19,7 @@ export const VENDOR_ME_API_URL = `${BASE_URL}api/vendors/me/`
 export const VENDORS_LOCATION_URL = `${BASE_URL}api/map/`
 export const LOCATIONS_API_URL = `${BASE_URL}api/locations/`
 export const PAYMENT_STATISTICS_API_URL = `${BASE_URL}api/payments/statistics/`
+export const MONTHLY_REPORT_API_URL = `${BASE_URL}api/reports/monthly/`
 export const VENDOR_STATISTICS_API_URL = `${BASE_URL}api/vendors/statistics/`
 export const PDF_DOWNLOAD_API_URL = `${BASE_URL}api/pdf/`
 export const STYLES_URL = `${BASE_URL}public/style.css`

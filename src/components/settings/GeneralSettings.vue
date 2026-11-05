@@ -334,6 +334,26 @@ defineExpose({ saveSettings })
           </FormField>
         </div>
       </Card>
+
+      <!-- Accounting -->
+      <Card class="section">
+        <h2 class="section-title">{{ $t('menuAccounting') }}</h2>
+        <div class="field-grid">
+          <FormField
+            :label="$t('accountingReportEmail')"
+            :hint="$t('accountingReportEmailHint')"
+            class="field-span-2"
+          >
+            <input
+              v-model="localSettings.AccountingReportEmail"
+              type="email"
+              multiple
+              class="aug-input"
+              placeholder="buchhaltung@example.org"
+            />
+          </FormField>
+        </div>
+      </Card>
     </template>
 
     <template v-else-if="props.section === 'modules'">
