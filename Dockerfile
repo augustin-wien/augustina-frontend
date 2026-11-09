@@ -1,11 +1,13 @@
-FROM node:24 as build
+FROM node:26 AS build
+
+RUN npm install -g corepack && corepack enable
 
 WORKDIR /app
 
 COPY package*.json /app/
 COPY yarn.lock /app/
 
-RUN yarn
+RUN yarn install --frozen-lockfile --network-timeout 600000
 COPY . /app
 
 RUN yarn build
