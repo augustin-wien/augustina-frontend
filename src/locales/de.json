@@ -22,6 +22,22 @@
   "at": " um",
 
   "failed": "Transaktion fehlgeschlagen",
+
+  "paymentFailure_cancelled": "Die Zahlung wurde abgebrochen, bevor die Bestätigung bei Ihrer Bank abgeschlossen war.",
+
+  "paymentFailure_authentication": "Die Bestätigung der Zahlung bei Ihrer Bank ist fehlgeschlagen. Bitte versuchen Sie es erneut.",
+
+  "paymentFailure_cardDetails": "Die Kartendaten sind ungültig. Bitte prüfen Sie Kartennummer, Ablaufdatum und Prüfnummer (CVV).",
+
+  "paymentFailure_insufficientFunds": "Die Karte hat keine ausreichende Deckung oder das Limit ist erreicht.",
+
+  "paymentFailure_declined": "Ihre Bank hat die Zahlung abgelehnt. Bitte versuchen Sie es mit einer anderen Karte oder wenden Sie sich an Ihre Bank.",
+
+  "paymentFailure_technical": "Bei der Zahlungsabwicklung ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
+
+  "paymentFailure_unknown": "Die Zahlung konnte nicht abgeschlossen werden. Es wurde nichts abgebucht.",
+
+  "paymentFailure_code": "Fehlercode",
   "tryagain": "Erneut versuchen",
   "return": "Start",
   "Order Code": "Bestellnummer",

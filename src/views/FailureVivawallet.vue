@@ -6,15 +6,41 @@ import { onMounted, ref } from 'vue'
 import Toast from '@/components/ToastMessage.vue'
 import FeedbackForm from '@/components/FeedbackForm.vue'
 import { useI18n } from 'vue-i18n'
+import { reportVivaFailure, vivaFailureReason } from '@/utils/vivaFailure'
 
 const paymentStore = usePaymentStore()
 const settStore = useSettingsStore()
 const route = useRoute()
 const { t } = useI18n()
 
+const queryValue = (key: string) => {
+  const value = route.query[key]
+
+  return typeof value === 'string' ? value : ''
+}
+
+// Viva redirects here with s (order code), eventId and eci after a declined or aborted payment
+const vivaOrderCode = queryValue('s')
+const eventId = queryValue('eventId') || queryValue('EventId')
+const eci = queryValue('eci') || queryValue('ECI')
+const declinedAtViva = vivaOrderCode !== '' || eventId !== ''
+const reason = vivaFailureReason(eventId)
+
+const orderCodeFromVerification = () => {
+  const raw = paymentStore.transactionID || queryValue('orderCode')
+
+  return new URLSearchParams(raw).get('s') || raw
+}
+
+const orderCode = declinedAtViva ? vivaOrderCode : orderCodeFromVerification()
+
 onMounted(() => {
   if (!paymentStore.transactionID && route.query.orderCode) {
     paymentStore.transactionID = route.query.orderCode as string
+  }
+
+  if (declinedAtViva) {
+    reportVivaFailure({ orderCode: vivaOrderCode, eventId, eci })
   }
 })
 
@@ -63,13 +89,18 @@ const currentTime = new Date().toLocaleString()
           />
         </div>
         <div class="text-center text-lg">
-          {{ $t('Order Code') }}: {{ paymentStore.transactionID }}
+          <p v-if="declinedAtViva" id="failure-reason" class="mb-3 font-normal">
+            {{ $t(`paymentFailure_${reason}`) }}
+          </p>
+          <template v-if="orderCode">{{ $t('Order Code') }}: {{ orderCode }}</template>
           <div class="text-sm mt-2">
             {{ currentTime }}
+            <template v-if="eventId"> · {{ $t('paymentFailure_code') }} {{ eventId }}</template>
           </div>
         </div>
         <div class="text-center">
           <button
+            v-if="!declinedAtViva"
             id="retry-button"
             class="bg-gray-500 rounded-full text-center p-5 customfont text-3xl font font-semibold w-full"
             :style="
