@@ -87,6 +87,7 @@ const handleResendToOdoo = async (orderID: number) => {
               <th>Order ID</th>
               <th>Vendor License ID</th>
               <th>Transaction ID</th>
+              <th>Payment Error</th>
               <th>Date</th>
               <th>Amount</th>
               <th>Customer Email</th>
@@ -98,6 +99,14 @@ const handleResendToOdoo = async (orderID: number) => {
               <td>{{ order.OrderCode }}</td>
               <td>{{ getVendorLicenseId(order) }}</td>
               <td>{{ order.TransactionID || 'N/A' }}</td>
+              <td>
+                <span
+                  v-if="order.PaymentEventID != null"
+                  :title="new Date(order.PaymentFailedAt).toLocaleString()"
+                >
+                  EventId {{ order.PaymentEventID }}
+                </span>
+              </td>
               <td>{{ new Date(order.Timestamp).toLocaleString() }}</td>
               <td>{{ (calculateTotal(order.Entries) / 100).toFixed(2) }} €</td>
               <td>{{ order.CustomerEmail }}</td>
@@ -123,7 +132,7 @@ const handleResendToOdoo = async (orderID: number) => {
               </td>
             </tr>
             <tr v-if="unverifiedOrders == null || unverifiedOrders.length === 0">
-              <td colspan="7" class="entry-empty">No unverified orders found.</td>
+              <td colspan="8" class="entry-empty">No unverified orders found.</td>
             </tr>
           </tbody>
         </table>

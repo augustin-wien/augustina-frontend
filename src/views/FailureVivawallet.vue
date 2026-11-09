@@ -7,6 +7,7 @@ import Toast from '@/components/ToastMessage.vue'
 import FeedbackForm from '@/components/FeedbackForm.vue'
 import { useI18n } from 'vue-i18n'
 import { reportVivaFailure, vivaFailureReason } from '@/utils/vivaFailure'
+import agent from '@/api/agent'
 
 const paymentStore = usePaymentStore()
 const settStore = useSettingsStore()
@@ -41,6 +42,10 @@ onMounted(() => {
 
   if (declinedAtViva) {
     reportVivaFailure({ orderCode: vivaOrderCode, eventId, eci })
+  }
+
+  if (/^\d+$/.test(vivaOrderCode) && /^\d+$/.test(eventId)) {
+    agent.VivaWallet.reportFailure(vivaOrderCode, eventId).catch(() => undefined)
   }
 })
 
