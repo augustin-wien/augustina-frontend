@@ -67,6 +67,7 @@ export function reportVivaFailure(failure: VivaFailure) {
     scope.setTag('payment_failure_reason', reason)
     scope.setContext('payment', { ...failure, reason })
     scope.setFingerprint(['payment_failed', failure.eventId || 'none'])
+
     Sentry.captureMessage(
       `Payment failed at VivaWallet (EventId ${failure.eventId || 'none'})`,
       'warning'
