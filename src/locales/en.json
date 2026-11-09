@@ -20,21 +20,13 @@
   "at": " at",
 
   "failed": "Transaction failed",
-
   "paymentFailure_cancelled": "The payment was cancelled before your bank finished confirming it.",
-
   "paymentFailure_authentication": "Your bank could not confirm the payment. Please try again.",
-
   "paymentFailure_cardDetails": "The card details are invalid. Please check the card number, expiry date and security code (CVV).",
-
   "paymentFailure_insufficientFunds": "The card has insufficient funds or its limit has been reached.",
-
   "paymentFailure_declined": "Your bank declined the payment. Please try another card or contact your bank.",
-
   "paymentFailure_technical": "A technical error occurred while processing the payment. Please try again later.",
-
   "paymentFailure_unknown": "The payment could not be completed. Nothing was charged.",
-
   "paymentFailure_code": "Error code",
   "tryagain": "Try again",
   "return": "Home",
