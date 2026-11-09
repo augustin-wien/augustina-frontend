@@ -21,6 +21,7 @@ import {
   CAMPAIGNS_API_URL,
   VENDOR_ME_API_URL,
   PAYMENT_STATISTICS_API_URL,
+  MONTHLY_REPORT_API_URL,
   PDF_DOWNLOAD_API_URL,
   STYLES_URL,
   MAIL_TEMPLATES_API,
@@ -410,6 +411,7 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('OdooWebhookURL', updatedSettings.OdooWebhookURL ?? '')
   formData.append('OdooWebhookToken', updatedSettings.OdooWebhookToken ?? '')
   formData.append('OdooDBFilter', updatedSettings.OdooDBFilter ?? '')
+  formData.append('AccountingReportEmail', updatedSettings.AccountingReportEmail ?? '')
 
   formData.append(
     'OrgaCoversTransactionCosts',
@@ -539,6 +541,28 @@ export async function fetchOrderStatistics(startDate: Date, endDate: Date) {
   return apiInstance.get(
     `${ORDERS_STATISTICS_API_URL}?from=${startDate.toISOString()}&to=${endDate.toISOString()}`
   )
+}
+
+// monthly accounting report
+export async function fetchMonthlyReport(month: string) {
+  return apiInstance.get(`${MONTHLY_REPORT_API_URL}${month}/`)
+}
+
+export async function downloadMonthlyReport(month: string, format: 'csv' | 'pdf') {
+  const res = await apiInstance.get<Blob>(`${MONTHLY_REPORT_API_URL}${month}/${format}/`, {
+    responseType: 'blob'
+  })
+
+  const url = URL.createObjectURL(res.data)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `monatsbericht_${month}.${format}`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+export async function sendMonthlyReport(month: string) {
+  return apiInstance.post(`${MONTHLY_REPORT_API_URL}${month}/send/`)
 }
 
 // pdf download
