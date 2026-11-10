@@ -7,6 +7,7 @@ export const ORDERS_API_URL = `${BASE_URL}api/orders/`
 export const ORDERS_RESEND_API_URL = `${BASE_URL}api/orders/resend/`
 export const ORDERS_STATISTICS_API_URL = `${BASE_URL}api/orders/statistics/`
 export const VIVAWALLET_TRANSACTION_VERIFICATION = `${BASE_URL}api/orders/verify/`
+export const VIVAWALLET_PAYMENT_FAILURE = `${BASE_URL}api/orders/failure/`
 export const VENDOR_CHECK_ID = `${BASE_URL}api/vendors/check/`
 export const VENDORS_API_URL = `${BASE_URL}api/vendors/`
 export const ITEMS_API_URL = `${BASE_URL}api/items/`

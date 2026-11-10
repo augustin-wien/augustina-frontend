@@ -7,6 +7,7 @@ import {
   VIVAWALLET_TRANSACTION_ORDER,
   SETTINGS_API_URL,
   VIVAWALLET_TRANSACTION_VERIFICATION,
+  VIVAWALLET_PAYMENT_FAILURE,
   VENDOR_CHECK_ID,
   ORDERS_UNVERIFIED_API_URL,
   ORDERS_RESEND_API_URL
@@ -51,6 +52,8 @@ const VivaWallet = {
       })
       .then(sleep(100))
       .then(responseBody),
+  reportFailure: (orderCode: string, eventId: string): Promise<void> =>
+    apiInstance.post(VIVAWALLET_PAYMENT_FAILURE, { orderCode, eventId }).then(() => undefined),
   verifyAdminPayment: (orderCode: string): Promise<VivaWalletVerification> =>
     apiInstance
       .get(ORDERS_UNVERIFIED_API_URL + 'code/' + orderCode + '/verify/', {

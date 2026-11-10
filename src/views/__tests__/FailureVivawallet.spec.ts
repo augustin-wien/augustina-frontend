@@ -5,9 +5,10 @@ import { createPinia, setActivePinia } from 'pinia'
 import FailureVivawallet from '@/views/FailureVivawallet.vue'
 import { usePaymentStore } from '@/stores/payment'
 
-const { query, reportVivaFailure } = vi.hoisted(() => ({
+const { query, reportVivaFailure, reportFailure } = vi.hoisted(() => ({
   query: { value: {} as Record<string, string> },
-  reportVivaFailure: vi.fn()
+  reportVivaFailure: vi.fn(),
+  reportFailure: vi.fn(() => Promise.resolve())
 }))
 
 vi.mock('vue-router', () => ({ useRoute: () => ({ query: query.value }) }))
@@ -18,7 +19,10 @@ vi.mock('vue-i18n', async (importOriginal) => ({
 }))
 
 vi.mock('@/router', () => ({ default: { push: vi.fn() } }))
-vi.mock('@/api/agent', () => ({ default: { VivaWallet: { verifyPayment: vi.fn() } } }))
+
+vi.mock('@/api/agent', () => ({
+  default: { VivaWallet: { verifyPayment: vi.fn(), reportFailure } }
+}))
 
 vi.mock('@/utils/vivaFailure', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/utils/vivaFailure')>()),
@@ -61,6 +65,16 @@ describe('FailureVivawallet', () => {
       eventId: '12005',
       eci: ''
     })
+
+    expect(reportFailure).toHaveBeenCalledWith('1234567890123456', '12005')
+  })
+
+  it('does not store a failure without an EventId', () => {
+    query.value = { s: '1234567890123456' }
+
+    mountPage()
+
+    expect(reportFailure).not.toHaveBeenCalled()
   })
 
   it('shows the order code from the verification query and offers a retry', () => {
@@ -73,5 +87,6 @@ describe('FailureVivawallet', () => {
     expect(wrapper.find('#failure-reason').exists()).toBe(false)
     expect(wrapper.find('#retry-button').exists()).toBe(true)
     expect(reportVivaFailure).not.toHaveBeenCalled()
+    expect(reportFailure).not.toHaveBeenCalled()
   })
 })
