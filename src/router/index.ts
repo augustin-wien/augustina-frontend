@@ -535,15 +535,6 @@ router.beforeEach((to) => {
   }
 })
 
-// Normalize paths with repeated slashes (e.g. /backoffice/vendorsummary// after a Keycloak
-// redirect) - otherwise they fall through to the catch-all vendor route. The hash is dropped
-// because it only carries the Keycloak callback, which keycloak-js reads from window.location.
-router.beforeEach((to) => {
-  if (to.path.includes('//')) {
-    return { path: to.path.replace(/\/{2,}/g, '/'), query: to.query, replace: true }
-  }
-})
-
 // Check if the user is authenticated
 router.beforeEach(async (to: RouteLocationNormalized) => {
   if (to.meta.requiresAuth && to.name !== '404') {
@@ -551,7 +542,49 @@ router.beforeEach(async (to: RouteLocationNormalized) => {
   }
 })
 
-// Check if the user is authenticated
+// The realm roles arrive both as the custom "groups" claim and as realm_access.roles
+function userRoles(): string[] {
+  const token = keycloak.keycloak?.tokenParsed
+
+  return [...(token?.groups ?? []), ...(token?.realm_access?.roles ?? [])]
+}
+
+// Users without a vendor or backoffice role (e.g. customers) have nothing to see here and are
+// sent to the online paper instead
+async function redirectToOnlinePaper() {
+  const settingsStore = useSettingsStore()
+
+  await settingsStore.getSettingsFromApi()
+
+  const url = settingsStore.settings.OnlinePaperUrl
+
+  if (url) {
+    window.location.replace(url)
+    return false
+  }
+
+  return { name: 'Home' }
+}
+
+async function checkRoles(to: RouteLocationNormalized) {
+  const roles = userRoles()
+  const isVendor = roles.includes('vendor')
+  const isBackoffice = roles.includes('backoffice') || roles.includes('admin')
+
+  if (to.path.startsWith('/backoffice')) {
+    if (isBackoffice) return true
+    return isVendor ? { name: 'My Info' } : await redirectToOnlinePaper()
+  }
+
+  if (to.path.startsWith('/me')) {
+    if (isVendor) return true
+    return isBackoffice ? { name: 'Backoffice' } : await redirectToOnlinePaper()
+  }
+
+  return isVendor || isBackoffice ? true : await redirectToOnlinePaper()
+}
+
+// Check if the user is authenticated and has a role that may open the route
 async function isAuthenticated(to: RouteLocationNormalized) {
   if (!keycloak.initailizedKeycloak) {
     try {
@@ -572,19 +605,11 @@ async function isAuthenticated(to: RouteLocationNormalized) {
     if (keycloak.keycloak?.tokenParsed) {
       keycloakStore.setUsername(keycloak.keycloak.tokenParsed.preferred_username)
     }
-
-    if (keycloak.keycloak?.tokenParsed?.groups?.includes('vendor')) {
-      if (!to.path.startsWith('/me')) {
-        return { name: 'My Info' }
-      }
-    } else if (keycloak.keycloak?.tokenParsed?.groups?.includes('backoffice')) {
-      if (to.path.startsWith('/me')) {
-        return { name: 'Backoffice' }
-      }
-    }
   }
 
-  return keycloak.keycloak?.authenticated ?? false
+  if (!keycloak.keycloak?.authenticated) return false
+
+  return await checkRoles(to)
 }
 
 export default router
