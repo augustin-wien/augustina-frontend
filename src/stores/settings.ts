@@ -214,13 +214,10 @@ export const useSettingsStore = defineStore('settings', {
       }
     },
     async updateStyleCss(style: string) {
-      try {
-        this.styleRev++
-        await patchSettingsStyles(style)
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log('Error updating style:', error)
-      }
+      await patchSettingsStyles(style)
+      this.styleRev++
+      this.styleCurrent = this.styleRev
+      this.styles = style
     },
     async getStyleCss() {
       try {
@@ -230,7 +227,7 @@ export const useSettingsStore = defineStore('settings', {
 
         this.styleCurrent = this.styleRev
 
-        getStyles(this.styleRev).then((data) => {
+        getStyles(Date.now()).then((data) => {
           this.styles = data.data
         })
         // this.styles = await response.text
