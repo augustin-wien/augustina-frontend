@@ -125,6 +125,11 @@ export const useShopStore = defineStore('shop', {
 
       return 0
     },
+    getItemType(id: number) {
+      if (id == this.donationItem) return 'donation'
+
+      return this.items.find((item) => item.ID == id)?.Type
+    },
     getItembyId(id: number) {
       for (const entry of this.items) {
         if (entry.ID == id) {

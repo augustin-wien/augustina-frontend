@@ -683,5 +683,13 @@
   "monthlyReportNoSales": "Keine Verkäufe in diesem Monat",
   "monthlyReportHint": "Einnahmen gesamt = Webshop + Kassa bar + externe Zahlungen. Lizenzeinnahmen sind bereits in den Webshop-Einnahmen enthalten. Der Bericht des Vormonats wird am 1. jedes Monats um 6 Uhr automatisch an die Buchhaltung geschickt.",
   "accountingReportEmail": "E-Mail der Buchhaltung",
-  "accountingReportEmailHint": "Erhält am Monatsanfang den Monatsbericht als PDF und CSV. Mehrere Adressen mit Komma trennen; leer lassen, um den Versand abzuschalten."
+  "accountingReportEmailHint": "Erhält am Monatsanfang den Monatsbericht als PDF und CSV. Mehrere Adressen mit Komma trennen; leer lassen, um den Versand abzuschalten.",
+  "shopDecreaseQuantity": "{name}: Anzahl verringern",
+  "shopIncreaseQuantity": "{name}: Anzahl erhöhen",
+  "shopQuantity": "{name}: Anzahl",
+  "shopItemDetails": "Details zu {name}",
+  "shopVendorProfile": "Profil von {name}",
+  "shopDecreaseAmount": "Betrag verringern",
+  "shopIncreaseAmount": "Betrag erhöhen",
+  "shopNewspaperLogo": "Logo der Zeitung"
 }

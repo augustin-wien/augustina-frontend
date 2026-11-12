@@ -2,7 +2,7 @@
 import { onMounted, ref, watch } from 'vue'
 import { useShopStore } from '@/stores/ShopStore'
 import { useSettingsStore } from '@/stores/settings'
-import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
 const settStore = useSettingsStore()
@@ -12,6 +12,7 @@ const decrement = shopStore.decrementDonation
 const donation = storeToRefs(shopStore).donation
 const setDonation = shopStore.setDonation
 const localDonation = ref(0)
+const router = useRouter()
 
 onMounted(() => {
   shopStore.setDonation(100)
@@ -69,6 +70,11 @@ const roundValue = () => {
     setDonation(cleanedDonation * 100)
   }
 }
+
+const next = () => {
+  roundValue()
+  router.push({ name: 'Confirmation' })
+}
 </script>
 
 <template>
@@ -79,8 +85,13 @@ const roundValue = () => {
           {{ settStore.settings.UseTipInsteadOfDonation ? $t('customtip') : $t('customdonation') }}
         </div>
         <div class="grid grid-cols-5 w-full h-full">
-          <button id="decrement-btn" @click="decrement()">
-            <div class="button-down customcolor"></div>
+          <button
+            id="decrement-btn"
+            type="button"
+            :aria-label="$t('shopDecreaseAmount')"
+            @click="decrement()"
+          >
+            <div class="button-down customcolor" aria-hidden="true"></div>
           </button>
           <div
             id="donation-input-wrapper"
@@ -89,26 +100,34 @@ const roundValue = () => {
             <input
               v-model.number="localDonation"
               type="number"
+              inputmode="decimal"
+              :aria-label="
+                settStore.settings.UseTipInsteadOfDonation ? $t('customtip') : $t('customdonation')
+              "
               class="customcolor col-span-2 text-white text-center text-6xl font-semibold border-2 customborder rounded-3xl w-full h-full"
               @keypress="onlyForCurrency"
             />
-            <p class="text-6xl font-semibold text-left">€</p>
+            <p class="text-6xl font-semibold text-left" aria-hidden="true">€</p>
           </div>
-          <button id="increment-btn" @click="increment">
-            <div class="button-up customcolor ml-3"></div>
+          <button
+            id="increment-btn"
+            type="button"
+            :aria-label="$t('shopIncreaseAmount')"
+            @click="increment"
+          >
+            <div class="button-up customcolor ml-3" aria-hidden="true"></div>
           </button>
         </div>
         <div></div>
         <div class="flex place-items-center w-full">
-          <RouterLink class="w-full" :to="{ name: 'Confirmation' }">
-            <button
-              id="next-button"
-              class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
-              @click="roundValue"
-            >
-              {{ $t('next') }}
-            </button>
-          </RouterLink>
+          <button
+            id="next-button"
+            type="button"
+            class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
+            @click="next"
+          >
+            {{ $t('next') }}
+          </button>
         </div>
       </div>
     </template>

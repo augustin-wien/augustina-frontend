@@ -97,13 +97,15 @@ onMounted(() => {
             <div id="vendor-name" class="customfont text-center text-black font-bold">
               {{ vendorStore.vendorName }}
             </div>
-            <div
+            <button
               v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
+              type="button"
               class="customcolor rounded-full avataricon ml-2 justify-self-center"
+              :aria-label="$t('shopVendorProfile', { name: vendorStore.vendorName })"
               @click="checkVendor"
             >
-              <IconAvatar class="customfill vendor-icon" />
-            </div>
+              <IconAvatar class="customfill vendor-icon" aria-hidden="true" />
+            </button>
           </div>
 
           <RouterLink
@@ -123,7 +125,10 @@ onMounted(() => {
               class="text-center w-full rounded-full text-2xl font-semibold relative flex justify-center"
             >
               <div>{{ $t('shop') }}</div>
-              <IconCross class="absolute customfill rotate-45 right-0 place-self-center mr-2" />
+              <IconCross
+                class="absolute customfill rotate-45 right-0 place-self-center mr-2"
+                aria-hidden="true"
+              />
             </div>
           </RouterLink>
           <div class="w-full row-span-2 flex items-center justify-center">
@@ -132,14 +137,16 @@ onMounted(() => {
         </div>
 
         <div class="place-items-center w-full flex">
-          <RouterLink class="text-center h-[76px] grow" :to="{ name: 'Tippingpage' }">
+          <div class="text-center h-[76px] grow">
             <button
               id="next-btn"
+              type="button"
               class="customcolor background-color rounded-full p-5 text-white text-3xl w-full font-semibold"
+              @click="router.push({ name: 'Tippingpage' })"
             >
               {{ $t('next') }}
             </button>
-          </RouterLink>
+          </div>
         </div>
       </div>
       <div class="absolute"></div>
