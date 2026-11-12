@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
-import { set } from '@vueuse/core'
 import Card from '@/components/ui/Card.vue'
 
 const emits = defineEmits(['saved', 'error'])
@@ -9,11 +8,12 @@ const emits = defineEmits(['saved', 'error'])
 const settingsStore = useSettingsStore()
 const stylesLocal = ref(settingsStore.styles || '')
 
-watch(settingsStore.styles, (newVal: any) => {
-  if (newVal) {
-    set(stylesLocal, newVal)
+watch(
+  () => settingsStore.styles,
+  (newVal) => {
+    stylesLocal.value = newVal || ''
   }
-})
+)
 
 const saveStyles = async () => {
   try {
