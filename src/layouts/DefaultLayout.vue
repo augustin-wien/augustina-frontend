@@ -46,6 +46,7 @@ const logo = computed(() => {
       <header class="relative place-items-center h-1/6">
         <select
           v-model="$i18n.locale"
+          :aria-label="$t('language')"
           class="h-[55px] w-[55px] absolute font-semibold border-0 top-0 right-0 text-gray-500 bg-white text-center mt-4 mr-4 pl-2 text-sm"
         >
           <option value="en">EN</option>
@@ -53,7 +54,12 @@ const logo = computed(() => {
           <option value="it">IT</option>
         </select>
         <slot name="header">
-          <img v-if="logo" alt="Newspaper logo" class="logo mx-auto my-1 scale-75" :src="logo" />
+          <img
+            v-if="logo"
+            :alt="$t('shopNewspaperLogo')"
+            class="logo mx-auto my-1 scale-75"
+            :src="logo"
+          />
         </slot>
       </header>
       <div class="h-5/6 main-container px-8">

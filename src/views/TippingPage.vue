@@ -49,9 +49,11 @@ const fixedDonationClick = (amount: number) => {
         </div>
         <div class="flex place-items-center w-full">
           <button
+            type="button"
             class="customcolor rounded-full p-5 text-white text-3xl font font-semibold w-full"
+            @click="router.push({ name: 'Custom Tip' })"
           >
-            <RouterLink :to="{ name: 'Custom Tip' }">{{ $t('editTip') }}</RouterLink>
+            {{ $t('editTip') }}
           </button>
         </div>
         <div class="flex place-items-center w-full">

@@ -632,5 +632,13 @@
   "monthlyReportNoSales": "Nessuna vendita in questo mese",
   "monthlyReportHint": "Entrate totali = webshop + cassa in contanti + pagamenti esterni. Le entrate da licenze sono già incluse nelle entrate del webshop. Il rapporto del mese precedente viene inviato automaticamente alla contabilità il 1° di ogni mese alle 6.",
   "accountingReportEmail": "E-mail della contabilità",
-  "accountingReportEmailHint": "Riceve il rapporto mensile in PDF e CSV all'inizio di ogni mese. Separa più indirizzi con una virgola; lascia vuoto per disattivare l'invio."
+  "accountingReportEmailHint": "Riceve il rapporto mensile in PDF e CSV all'inizio di ogni mese. Separa più indirizzi con una virgola; lascia vuoto per disattivare l'invio.",
+  "shopDecreaseQuantity": "{name}: diminuisci quantità",
+  "shopIncreaseQuantity": "{name}: aumenta quantità",
+  "shopQuantity": "{name}: quantità",
+  "shopItemDetails": "Dettagli su {name}",
+  "shopVendorProfile": "Profilo di {name}",
+  "shopDecreaseAmount": "Diminuisci importo",
+  "shopIncreaseAmount": "Aumenta importo",
+  "shopNewspaperLogo": "Logo del giornale"
 }

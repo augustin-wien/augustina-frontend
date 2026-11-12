@@ -2,6 +2,7 @@
 import { RouterLink } from 'vue-router'
 import { useSettingsStore } from '@/stores/settings'
 import { useShopStore } from '@/stores/ShopStore'
+import { itemTypeClass } from '@/utils/itemTypeClass'
 
 const settStore = useSettingsStore()
 const shopStore = useShopStore()
@@ -13,7 +14,12 @@ const shopStore = useShopStore()
       <div class="h-full w-full grid grid-rows-5 place-items-center">
         <div class="text-center font-semibold text-3xl">{{ $t('Items') }}:</div>
         <div class="w-full row-span-3">
-          <div v-for="item in shopStore.amount" :key="item.item">
+          <div
+            v-for="item in shopStore.amount"
+            :key="item.item"
+            class="selected-item"
+            :class="itemTypeClass(shopStore.getItemType(item.item))"
+          >
             <div
               v-if="item.quantity > 0"
               class="text-xl w-full h-[56px] text-center font-semibold text-white bg-black p-3 rounded-full mb-5"
@@ -24,24 +30,25 @@ const shopStore = useShopStore()
           </div>
         </div>
         <div class="place-items-center w-full flex">
-          <RouterLink class="h-[76px] w-[76px] mx-auto" :to="{ name: 'Confirmation' }">
-            <button
-              class="customcolor fill-white rounded-full h-full w-full place-items-center grid"
+          <RouterLink
+            class="customcolor fill-white rounded-full h-[76px] w-[76px] mx-auto place-items-center grid"
+            :to="{ name: 'Confirmation' }"
+            :aria-label="$t('back')"
+          >
+            <svg
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              fill="white"
+              class="bi bi-arrow-left-short"
+              viewBox="0 0 16 16"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="64"
-                height="64"
-                fill="white"
-                class="bi bi-arrow-left-short"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
-                />
-              </svg>
-            </button>
+              <path
+                fill-rule="evenodd"
+                d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
+              />
+            </svg>
           </RouterLink>
         </div>
       </div>

@@ -683,5 +683,13 @@
   "monthlyReportNoSales": "No sales this month",
   "monthlyReportHint": "Total income = webshop + POS cash + external payments. License income is already part of the webshop income. The report of the previous month is sent to accounting automatically on the 1st of every month at 6 am.",
   "accountingReportEmail": "Accounting email",
-  "accountingReportEmailHint": "Receives the monthly report as PDF and CSV at the start of each month. Separate several addresses with commas; leave empty to turn the mail off."
+  "accountingReportEmailHint": "Receives the monthly report as PDF and CSV at the start of each month. Separate several addresses with commas; leave empty to turn the mail off.",
+  "shopDecreaseQuantity": "{name}: decrease quantity",
+  "shopIncreaseQuantity": "{name}: increase quantity",
+  "shopQuantity": "{name}: quantity",
+  "shopItemDetails": "Details about {name}",
+  "shopVendorProfile": "Profile of {name}",
+  "shopDecreaseAmount": "Decrease amount",
+  "shopIncreaseAmount": "Increase amount",
+  "shopNewspaperLogo": "Newspaper logo"
 }

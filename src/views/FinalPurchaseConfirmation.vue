@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useShopStore } from '@/stores/ShopStore'
+import { itemTypeClass } from '@/utils/itemTypeClass'
 import { usePaymentStore } from '@/stores/payment'
 import { useSettingsStore } from '@/stores/settings'
 import { ref, onMounted, computed } from 'vue'
@@ -88,7 +89,12 @@ const hasLicenseItem = computed(() => {
               </p>
             </div>
             <div class="w-full">
-              <div v-for="item in shopStore.amount" :key="item.item" class="final-item">
+              <div
+                v-for="item in shopStore.amount"
+                :key="item.item"
+                class="final-item"
+                :class="itemTypeClass(shopStore.getItemType(item.item))"
+              >
                 <div
                   v-if="item.quantity > 0 && item.item != shopStore.donationItem"
                   class="text-xl w-full text-center font-semibold text-white bg-black p-3 rounded-full mb-4"

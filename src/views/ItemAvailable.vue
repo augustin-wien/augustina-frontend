@@ -15,6 +15,7 @@ const url = import.meta.env.VITE_API_URL
   <component :is="$route.meta.layout || 'div'">
     <select
       v-model="$i18n.locale"
+      :aria-label="$t('language')"
       class="h-[55px] w-[55px] absolute font-light border-2 top-0 right-0 border-gray-300 rounded-full text-gray-300 text-center mt-8 mr-4 text-sm"
     >
       <option value="en">EN</option>
@@ -32,7 +33,7 @@ const url = import.meta.env.VITE_API_URL
             {{ (item.Price / 100).toFixed(2) }}€
           </div>
           <img
-            :alt="item.Description"
+            alt=""
             class="rounded-full h-44 w-44 object-cover customborder border-4"
             :src="url + item.Image"
           />
@@ -47,24 +48,25 @@ const url = import.meta.env.VITE_API_URL
           {{ $t('information') }}
         </div>
         <div class="item-actions place-items-center w-full flex">
-          <RouterLink class="back-link h-[76px] w-[76px] mx-auto" :to="{ name: 'Shop' }">
-            <button
-              class="back-button customcolor fill-white rounded-full h-full w-full place-items-center grid"
+          <RouterLink
+            class="back-link back-button customcolor fill-white rounded-full h-[76px] w-[76px] mx-auto place-items-center grid"
+            :to="{ name: 'Shop' }"
+            :aria-label="$t('back')"
+          >
+            <svg
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="64"
+              height="64"
+              fill="white"
+              class="bi bi-arrow-left-short customfill"
+              viewBox="0 0 16 16"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="64"
-                height="64"
-                fill="white"
-                class="bi bi-arrow-left-short customfill"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
-                />
-              </svg>
-            </button>
+              <path
+                fill-rule="evenodd"
+                d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
+              />
+            </svg>
           </RouterLink>
         </div>
       </div>

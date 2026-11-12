@@ -8,6 +8,7 @@ import { usePDFDownloadStore } from '@/stores/pdfDownload'
 import { useSettingsStore } from '@/stores/settings'
 import { computed, onMounted, ref } from 'vue'
 import FeedbackForm from '@/components/FeedbackForm.vue'
+import { itemTypeClass } from '@/utils/itemTypeClass'
 
 const DONATION_ITEM_ID = 2
 
@@ -182,13 +183,16 @@ const email = localStorage.getItem('email') || ''
             <div
               v-for="item in purchasedItems"
               :key="item.ID"
-              :class="
+              :class="[
                 purchasedItems?.length == 1 ||
                 item.Item == DONATION_ITEM_ID ||
                 item.Quantity % 2 == 0
                   ? 'item col-span-2 grid grid-cols-2'
-                  : 'item col-span-1'
-              "
+                  : 'item col-span-1',
+                itemTypeClass(
+                  item.Item == DONATION_ITEM_ID ? 'donation' : itemDetails(item.Item)?.Type
+                )
+              ]"
             >
               <div
                 v-for="(_, element) in Array(item.Quantity)"
@@ -198,6 +202,7 @@ const email = localStorage.getItem('email') || ''
                 <img
                   v-if="itemDetails(item.Item)?.Image"
                   class="item-image"
+                  :alt="itemDetails(item.Item)?.Name"
                   :src="apiUrl + itemDetails(item.Item)?.Image"
                 />
                 <div
