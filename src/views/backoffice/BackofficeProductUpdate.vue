@@ -5,7 +5,7 @@ import router from '@/router'
 import type { Item } from '@/stores/items'
 import { useItemsStore, ITEM_TYPES } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
-import { useSettingsStore } from '@/stores/settings'
+import { useSettingsStore, vouchersEnabled } from '@/stores/settings'
 import { faEnvelope, faPen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Card from '@/components/ui/Card.vue'
@@ -24,7 +24,13 @@ const keycloakStore = useKeycloakStore()
 const settingsStore = useSettingsStore()
 
 const availableItemTypes = computed(() =>
-  ITEM_TYPES.filter((type) => type !== 'abonement' || settingsStore.settings.AbonementEnabled)
+  ITEM_TYPES.filter((type) => {
+    // Keep the item's own type selectable when its module was switched off since
+    if (type === updatedItem.value?.Type) return true
+    if (type === 'abonement') return settingsStore.settings.AbonementEnabled
+    if (type === 'abonement_voucher') return vouchersEnabled(settingsStore.settings)
+    return true
+  })
 )
 
 const authenticated = computed(() => keycloakStore.authenticated)
@@ -80,13 +86,22 @@ const toast = ref<{ type: string; message: string } | null>(null)
 const licenseGroupRequired = computed(
   () =>
     !!updatedItem.value &&
-    ['online_issue', 'abonement'].includes(updatedItem.value.Type) &&
+    ['online_issue', 'abonement', 'abonement_voucher'].includes(updatedItem.value.Type) &&
     !updatedItem.value.IsPDFItem
 )
+
+const isVoucher = computed(() => updatedItem.value?.Type === 'abonement_voucher')
 
 const updateItem = async () => {
   if (licenseGroupRequired.value && !updatedItem.value?.LicenseGroup?.trim()) {
     showToast('error', t('licenseGroupRequired'))
+    return
+  }
+
+  const duration = updatedItem.value?.AboDurationMonths ?? 0
+
+  if (isVoucher.value && (duration < 1 || duration > 120)) {
+    showToast('error', t('aboDurationRequired'))
     return
   }
 
@@ -449,8 +464,26 @@ const previewImage = (image: string | Blob | MediaSource) => {
                     </div>
                   </FormField>
 
+                  <FormField
+                    v-if="isVoucher"
+                    :label="$t('aboDurationMonths')"
+                    for="aboDurationMonths"
+                    required
+                    :hint="$t('aboDurationMonthsHint')"
+                  >
+                    <input
+                      id="aboDurationMonths"
+                      v-model.number="updatedItem.AboDurationMonths"
+                      type="number"
+                      min="1"
+                      max="120"
+                      class="aug-input"
+                      required
+                    />
+                  </FormField>
+
                   <template v-if="updatedItem.LicenseItem !== undefined || licenseGroupRequired">
-                    <label class="aug-toggle">
+                    <label v-if="!isVoucher" class="aug-toggle">
                       <input id="isPDFItem" v-model="updatedItem.IsPDFItem" type="checkbox" />
                       <span class="aug-toggle-track"></span>
                       <span>{{ $t('isPDFLicenseItem') }}</span>

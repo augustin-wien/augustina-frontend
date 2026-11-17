@@ -29,7 +29,9 @@ const VivaWallet = {
     items: Array<orderItem>,
     vendorLicenseID: string,
     customerEmail: string,
-    newsletter = false
+    newsletter = false,
+    giftRecipientName = '',
+    giftMessage = ''
   ): Promise<VivaWalletResponse> =>
     apiInstance
       .post(
@@ -39,7 +41,9 @@ const VivaWallet = {
           user: 'user',
           vendorLicenseID: vendorLicenseID,
           customerEmail: customerEmail,
-          newsletter: newsletter
+          newsletter: newsletter,
+          giftRecipientName: giftRecipientName,
+          giftMessage: giftMessage
         },
         { headers: { 'Content-Type': 'application/json' } }
       )

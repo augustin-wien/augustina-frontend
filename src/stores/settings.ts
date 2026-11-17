@@ -44,6 +44,8 @@ export interface Settings {
   DigitalItemsUrl: string
   AbonementUrl: string
   AbonementEnabled: boolean
+  // Sells abonement vouchers; only takes effect together with AbonementEnabled
+  VoucherEnabled?: boolean
   POSEnabled: boolean
   DonationTrackingEnabled?: boolean
   OdooEnabled?: boolean
@@ -238,3 +240,7 @@ export const useSettingsStore = defineStore('settings', {
     }
   }
 })
+
+// The voucher module is part of the abonement module
+export const vouchersEnabled = (settings: Pick<Settings, 'AbonementEnabled' | 'VoucherEnabled'>) =>
+  settings.AbonementEnabled && settings.VoucherEnabled === true
