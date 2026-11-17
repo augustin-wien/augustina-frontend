@@ -36,6 +36,9 @@ export const usePaymentStore = defineStore('payment', {
       agbChecked: false,
       // Opt-in for the newsletter, offered with digital items
       newsletter: false,
+      // Printed on the PDF of an abonement voucher
+      giftRecipientName: '',
+      giftMessage: '',
       testamount: 1,
       pricePerPaper: 300,
       digital: { digital: true },
@@ -110,7 +113,9 @@ export const usePaymentStore = defineStore('payment', {
         items,
         vendorLicenseID,
         customerEmail,
-        this.newsletter
+        this.newsletter,
+        this.giftRecipientName,
+        this.giftMessage
       )
 
       this.url = this.response[0].SmartCheckoutURL

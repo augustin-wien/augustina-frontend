@@ -42,6 +42,16 @@ onMounted(() => {
   }
 })
 
+// Name and message are printed on the voucher PDF
+const GIFT_NAME_MAX = 80
+const GIFT_MESSAGE_MAX = 300
+
+const hasVoucher = computed(() =>
+  shopStore.amount.some(
+    (i) => i.quantity > 0 && shopStore.getItemType(i.item) === 'abonement_voucher'
+  )
+)
+
 const hasLicenseItem = computed(() => {
   return (
     shopStore.items?.find(
@@ -103,6 +113,34 @@ const hasLicenseItem = computed(() => {
                   {{ shopStore.getPriceInEuro(item.item).toFixed(2) }}€
                 </div>
               </div>
+            </div>
+            <div v-if="hasVoucher" id="voucher-gift-fields" class="px-4 pb-4 text-left">
+              <p class="text-sm mb-3">{{ $t('voucherGiftHint') }}</p>
+              <label for="gift-recipient" class="block text-sm font-medium mb-1">
+                {{ $t('voucherRecipientName') }}
+              </label>
+              <input
+                id="gift-recipient"
+                v-model="paymentStore.giftRecipientName"
+                type="text"
+                :maxlength="GIFT_NAME_MAX"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md block w-full p-3 mb-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                :placeholder="$t('optional')"
+              />
+              <label for="gift-message" class="block text-sm font-medium mb-1">
+                {{ $t('voucherMessage') }}
+              </label>
+              <textarea
+                id="gift-message"
+                v-model="paymentStore.giftMessage"
+                :maxlength="GIFT_MESSAGE_MAX"
+                rows="3"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                :placeholder="$t('optional')"
+              ></textarea>
+              <p class="text-xs text-right text-gray-500">
+                {{ paymentStore.giftMessage.length }}/{{ GIFT_MESSAGE_MAX }}
+              </p>
             </div>
           </div>
 

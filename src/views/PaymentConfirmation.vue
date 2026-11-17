@@ -76,6 +76,7 @@ const digitalItems = computed(() => {
       itemDetails &&
       itemDetails.LicenseItem &&
       itemDetails.Type !== 'abonement' &&
+      itemDetails.Type !== 'abonement_voucher' &&
       !downloadLinks.value?.some(
         (link) => link.ItemID == item.Item || link.ItemID == itemDetails.LicenseItem
       )
@@ -121,6 +122,11 @@ const isAbonementItem = (id: number) => {
   const item = itemsStore.items?.find((item) => item.ID == id)
   return item?.Type === 'abonement'
 }
+
+// A voucher is delivered as a PDF by mail, there is nothing to open here
+const hasVoucherPurchase = computed(() =>
+  purchasedItems.value.some((item) => itemDetails(item.Item)?.Type === 'abonement_voucher')
+)
 
 const hasAbonementPurchase = computed(() =>
   purchasedItems.value.some((item) => isAbonementItem(item.Item))
@@ -252,6 +258,12 @@ const email = localStorage.getItem('email') || ''
               {{ $t('Download') + ' ' + itemName(downloadLink.ItemID) }}
             </button>
           </div>
+          <p
+            v-if="hasVoucherPurchase"
+            class="voucher-sent-hint text-center text-sm font-normal mt-3"
+          >
+            {{ $t('voucherSentByMail', { email }) }}
+          </p>
           <div v-if="hasDigitalItemWithoutPDF" class="digitial-item-link mt-3">
             <!-- The WordPress one-time login link logs the customer in directly; without it
                  they land on the online paper with their email filled in -->

@@ -296,6 +296,16 @@ const router = createRouter({
     },
 
     {
+      path: '/backoffice/vouchers',
+      name: 'Backoffice Vouchers',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Vouchers'
+      },
+      component: () => import('@/views/backoffice/BackofficeVouchers.vue')
+    },
+    {
       path: '/backoffice/productsettings',
       name: 'Backoffice Product Settings',
       meta: {
@@ -445,6 +455,14 @@ const router = createRouter({
       path: '/error-invalid-link',
       name: 'Error invalid link',
       component: () => import('@/views/ErrorPageInvalidLink.vue'),
+      meta: {
+        layout: Default
+      }
+    },
+    {
+      path: '/einloesen',
+      name: 'Redeem Voucher',
+      component: () => import('@/views/RedeemVoucher.vue'),
       meta: {
         layout: Default
       }
