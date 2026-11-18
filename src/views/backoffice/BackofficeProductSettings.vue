@@ -12,6 +12,7 @@ import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
 import Toast from '@/components/ToastMessage.vue'
 import { itemDisplayName } from '@/utils/itemName'
+import { thumbnailPath } from '@/utils/itemImage'
 
 const { t } = useI18n()
 const itemsStore = useItemsStore()
@@ -188,7 +189,7 @@ function exportCSV() {
               <td class="muted">{{ item.ID }}</td>
               <td>
                 <img
-                  :src="item.Image ? apiUrl + item.Image : ''"
+                  :src="item.Image ? apiUrl + thumbnailPath(item.Image) : ''"
                   :alt="$t('noImage')"
                   class="product-image"
                   width="80"
@@ -243,7 +244,7 @@ function exportCSV() {
               <td>{{ item.ID }}</td>
               <td>
                 <img
-                  :src="item.Image ? apiUrl + item.Image : ''"
+                  :src="item.Image ? apiUrl + thumbnailPath(item.Image) : ''"
                   :alt="$t('noImage')"
                   class="product-image"
                   width="80"
