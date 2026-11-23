@@ -111,10 +111,13 @@ export const useItemsStore = defineStore('items', {
     async updateItem(updatedItem: Item) {
       return patchItem(updatedItem)
     },
-    // Mails a published online issue to all active abonnents, returns the number of recipients
-    async notifyAbonements(itemId: number): Promise<number> {
+    // Mails a published online issue to the active abonnents who did not get it yet
+    async notifyAbonements(itemId: number): Promise<{ recipients: number; alreadyMailed: number }> {
       const res = await notifyAbonements(itemId)
-      return res.data?.recipients ?? 0
+      return {
+        recipients: res.data?.recipients ?? 0,
+        alreadyMailed: res.data?.alreadyMailed ?? 0
+      }
     },
     async deleteItem(itemId: number, deleteLicense = false) {
       await removeItem(itemId, deleteLicense)

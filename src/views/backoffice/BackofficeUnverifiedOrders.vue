@@ -88,6 +88,7 @@ const handleResendToOdoo = async (orderID: number) => {
               <th>Vendor License ID</th>
               <th>Transaction ID</th>
               <th>Payment Error</th>
+              <th>{{ $t('unverifiedOrderReconcileError') }}</th>
               <th>Date</th>
               <th>Amount</th>
               <th>Customer Email</th>
@@ -105,6 +106,14 @@ const handleResendToOdoo = async (orderID: number) => {
                   :title="new Date(order.PaymentFailedAt).toLocaleString()"
                 >
                   EventId {{ order.PaymentEventID }}
+                </span>
+              </td>
+              <td class="reconcile-error">
+                <span
+                  v-if="order.ReconcileError"
+                  :title="new Date(order.ReconcileFailedAt).toLocaleString()"
+                >
+                  {{ order.ReconcileError }}
                 </span>
               </td>
               <td>{{ new Date(order.Timestamp).toLocaleString() }}</td>
@@ -132,7 +141,7 @@ const handleResendToOdoo = async (orderID: number) => {
               </td>
             </tr>
             <tr v-if="unverifiedOrders == null || unverifiedOrders.length === 0">
-              <td colspan="8" class="entry-empty">No unverified orders found.</td>
+              <td colspan="9" class="entry-empty">No unverified orders found.</td>
             </tr>
           </tbody>
         </table>
@@ -148,6 +157,12 @@ const handleResendToOdoo = async (orderID: number) => {
 .entry-actions {
   display: flex;
   gap: 14px;
+}
+.reconcile-error {
+  max-width: 280px;
+  font-size: 12px;
+  color: var(--color-danger);
+  word-break: break-word;
 }
 .entry-empty {
   text-align: center;

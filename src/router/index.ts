@@ -215,6 +215,16 @@ const router = createRouter({
       component: () => import('@/views/backoffice/BackofficeAccountingSalesExtended.vue')
     },
     {
+      path: '/backoffice/mails',
+      name: 'Backoffice Mails',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Mails'
+      },
+      component: () => import('@/views/backoffice/BackofficeMailTasks.vue')
+    },
+    {
       path: '/backoffice/unverified-orders',
       name: 'Backoffice Unverified Orders',
       meta: {
