@@ -33,7 +33,8 @@ import {
   VENDOR_STATISTICS_API_URL,
   CUSTOMERS_API_URL,
   ABONEMENTS_API_URL,
-  FEEDBACK_API_URL
+  FEEDBACK_API_URL,
+  MAIL_TASKS_API_URL
 } from './endpoints'
 
 export const apiInstance = axios.create({
@@ -276,6 +277,11 @@ export async function restoreItem(itemId: number) {
 
 export async function notifyAbonements(itemId: number) {
   return apiInstance.post(`${ITEMS_API_URL}${itemId}/notify-abonements/`)
+}
+
+// Delivery state of the mails sent to the abonnents for an online issue
+export async function fetchOnlineIssueMailStatus(itemId: number) {
+  return apiInstance.get(`${ITEMS_API_URL}${itemId}/notify-abonements/`)
 }
 
 export type WordPressIssueCheck = {
@@ -712,6 +718,44 @@ export async function fetchVerifiedOrders(startDate: Date, endDate: Date) {
 // Sends the online paper and PDF download mails of a digital sale to its customer again
 export async function resendOrderMail(orderID: number) {
   return apiInstance.post(`${ORDERS_API_URL}${orderID}/resend-mail/`)
+}
+
+// Mail tasks API: every mail the backend sends, with its delivery state
+export type MailTaskFilter = {
+  status?: string
+  kind?: string
+  item_id?: number
+  order_id?: number
+  search?: string
+  limit?: number
+  offset?: number
+}
+
+function mailTaskQuery(filter: MailTaskFilter) {
+  const params = new URLSearchParams()
+
+  Object.entries(filter).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') params.set(key, String(value))
+  })
+
+  const query = params.toString()
+  return query ? `?${query}` : ''
+}
+
+export async function fetchMailTasks(filter: MailTaskFilter) {
+  return apiInstance.get(`${MAIL_TASKS_API_URL}${mailTaskQuery(filter)}`)
+}
+
+export async function fetchMailTask(id: number) {
+  return apiInstance.get(`${MAIL_TASKS_API_URL}${id}/`)
+}
+
+export async function retryMailTask(id: number) {
+  return apiInstance.post(`${MAIL_TASKS_API_URL}${id}/retry/`)
+}
+
+export async function retryFailedMailTasks(filter: MailTaskFilter) {
+  return apiInstance.post(`${MAIL_TASKS_API_URL}retry-failed/${mailTaskQuery(filter)}`)
 }
 
 // Customers API

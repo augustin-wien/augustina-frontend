@@ -1,6 +1,11 @@
 <script lang="ts" setup>
 import Toast from '@/components/ToastMessage.vue'
-import { checkWordPressIssue, fetchItemPDF, type WordPressIssueCheck } from '@/api/api'
+import {
+  checkWordPressIssue,
+  fetchItemPDF,
+  fetchOnlineIssueMailStatus,
+  type WordPressIssueCheck
+} from '@/api/api'
 import router from '@/router'
 import type { Item } from '@/stores/items'
 import { useItemsStore, ITEM_TYPES } from '@/stores/items'
@@ -14,7 +19,7 @@ import FormField from '@/components/ui/FormField.vue'
 import Modal from '@/components/ui/Modal.vue'
 import PageHeader from '@/components/ui/PageHeader.vue'
 
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 
@@ -167,15 +172,67 @@ const savedItemEnabled = computed(
 const showNotifyModal = ref(false)
 const notifying = ref(false)
 
+// How far mailing the online issue to the abonnents got
+type MailDeliveryStatus = {
+  Counts: Record<string, number>
+  Total: number
+  FirstQueuedAt: string | null
+  LastSentAt: string | null
+}
+const mailStatus = ref<MailDeliveryStatus | null>(null)
+
+const loadMailStatus = async () => {
+  if (updatedItem.value?.Type !== 'online_issue' || !idParams.value) {
+    mailStatus.value = null
+    return
+  }
+
+  try {
+    mailStatus.value = (await fetchOnlineIssueMailStatus(idParams.value)).data
+  } catch {
+    mailStatus.value = null
+  }
+}
+
+watch(() => [idParams.value, updatedItem.value?.Type], loadMailStatus, { immediate: true })
+
+const alreadySent = computed(() => (mailStatus.value?.Total ?? 0) > 0)
+
+const mailsOpen = computed(
+  () => (mailStatus.value?.Counts.pending ?? 0) + (mailStatus.value?.Counts.sending ?? 0)
+)
+
+// The mails go out in the background; refresh the status while some are still open
+let mailStatusTimer: ReturnType<typeof setTimeout> | undefined
+
+const refreshMailStatusWhileOpen = async (rounds = 20) => {
+  clearTimeout(mailStatusTimer)
+  await loadMailStatus()
+
+  if (mailsOpen.value > 0 && rounds > 0) {
+    mailStatusTimer = setTimeout(() => refreshMailStatusWhileOpen(rounds - 1), 3000)
+  }
+}
+
+onBeforeUnmount(() => clearTimeout(mailStatusTimer))
+
+const formatDateTime = (value: string | null) => (value ? new Date(value).toLocaleString() : '')
+
 const notifyAbonements = async () => {
   if (!item.value) return
 
   notifying.value = true
 
   try {
-    const recipients = await itemsStore.notifyAbonements(item.value.ID)
+    const { recipients, alreadyMailed } = await itemsStore.notifyAbonements(item.value.ID)
 
-    showToast('success', t('notifyAbonementsSent', { count: recipients }))
+    if (recipients === 0 && alreadyMailed > 0) {
+      showToast('success', t('notifyAbonementsNoneNew', { count: alreadyMailed }))
+    } else {
+      showToast('success', t('notifyAbonementsSent', { count: recipients }))
+    }
+
+    setTimeout(() => refreshMailStatusWhileOpen(), 1000)
   } catch (error: any) {
     // eslint-disable-next-line no-console
     console.error('Sending the issue to the abonnents failed:', error)
@@ -407,6 +464,36 @@ const previewImage = (image: string | Blob | MediaSource) => {
                     savedItemEnabled ? $t('notifyAbonementsHint') : $t('notifyAbonementsDisabled')
                   }}
                 </p>
+                <div v-if="mailStatus && alreadySent" class="mail-status" data-test="mail-status">
+                  <p>
+                    {{
+                      $t('onlineIssueMailStatus', {
+                        sent: mailStatus.Counts.sent ?? 0,
+                        total: mailStatus.Total
+                      })
+                    }}
+                    <span v-if="mailStatus.LastSentAt">
+                      ·
+                      {{
+                        $t('onlineIssueMailLastSent', {
+                          date: formatDateTime(mailStatus.LastSentAt)
+                        })
+                      }}
+                    </span>
+                  </p>
+                  <p v-if="mailsOpen > 0">{{ $t('onlineIssueMailOpen', { count: mailsOpen }) }}</p>
+                  <p v-if="(mailStatus.Counts.failed ?? 0) > 0" class="mail-status-failed">
+                    {{ $t('onlineIssueMailFailed', { count: mailStatus.Counts.failed }) }}
+                  </p>
+                  <router-link
+                    :to="{
+                      path: '/backoffice/mails',
+                      query: { item_id: String(idParams), kind: 'online_issue' }
+                    }"
+                  >
+                    {{ $t('onlineIssueMailShow') }}
+                  </router-link>
+                </div>
                 <div>
                   <Button
                     type="button"
@@ -414,7 +501,8 @@ const previewImage = (image: string | Blob | MediaSource) => {
                     :disabled="!savedItemEnabled || notifying"
                     @click="showNotifyModal = true"
                   >
-                    <font-awesome-icon :icon="faEnvelope" /> {{ $t('notifyAbonements') }}
+                    <font-awesome-icon :icon="faEnvelope" />
+                    {{ alreadySent ? $t('notifyAbonementsAgain') : $t('notifyAbonements') }}
                   </Button>
                 </div>
               </div>
@@ -534,7 +622,13 @@ const previewImage = (image: string | Blob | MediaSource) => {
         :title="$t('notifyAbonements')"
         @close="showNotifyModal = false"
       >
-        <p>{{ $t('notifyAbonementsConfirm', { name: updatedItem.Name }) }}</p>
+        <p>
+          {{
+            alreadySent
+              ? $t('notifyAbonementsConfirmAgain', { name: updatedItem.Name })
+              : $t('notifyAbonementsConfirm', { name: updatedItem.Name })
+          }}
+        </p>
         <template #footer>
           <Button variant="ghost" @click="showNotifyModal = false">{{ $t('cancel') }}</Button>
           <Button variant="primary" :disabled="notifying" @click="notifyAbonements">
@@ -571,6 +665,19 @@ const previewImage = (image: string | Blob | MediaSource) => {
 </template>
 
 <style scoped>
+.mail-status {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+.mail-status a {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.mail-status-failed {
+  color: var(--color-danger);
+}
 .product-page {
   margin-top: 16px;
   padding-bottom: 40px;

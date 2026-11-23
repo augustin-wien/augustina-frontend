@@ -9,6 +9,7 @@ import {
   faArrowRightFromBracket,
   faBagShopping,
   faBullhorn,
+  faEnvelope,
   faCalendarDays,
   faCashRegister,
   faDungeon,
@@ -138,6 +139,7 @@ const navGroups = computed<NavGroup[]>(() => {
     items: [
       { to: '/backoffice/settings/update', labelKey: 'menuSettings', icon: faSliders },
       { to: '/backoffice/campaigns', labelKey: 'menuCampaigns', icon: faBullhorn },
+      { to: '/backoffice/mails', labelKey: 'menuMailTasks', icon: faEnvelope },
       { to: '/backoffice/statistics', labelKey: 'menuStatistics', icon: faAreaChart }
     ]
   })
