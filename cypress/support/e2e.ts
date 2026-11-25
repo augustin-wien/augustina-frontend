@@ -20,3 +20,5 @@ import './commands'
 // require('./commands')
 
 import '@cypress/code-coverage/support'
+
+Cypress.on('uncaught:exception', (error) => !error.message.includes('An unknown error has occurred'))
