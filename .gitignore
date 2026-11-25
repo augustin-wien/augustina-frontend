@@ -40,3 +40,4 @@ tsconfig.app*
 /coverage-e2e/
 /.nyc_output/
 /coverage-e2e-baseline.json
+/cypress/downloads/
