@@ -17,6 +17,7 @@ Cypress.Commands.add('loginBackoffice', (path = '/backoffice') => {
     cy.get('#password').type('Test123!')
     cy.get('#kc-login').click()
   })
+  cy.get('h1.page-header-title').should('be.visible')
 })
 
 export {}
