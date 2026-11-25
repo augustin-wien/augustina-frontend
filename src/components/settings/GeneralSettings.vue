@@ -304,7 +304,7 @@ defineExpose({ saveSettings })
             :error="vendorEmailPostfixError"
             :hint="vendorEmailPostfixHint"
           >
-            <input v-model="localSettings.VendorEmailPostfix" type="text" class="aug-input" />
+            <input id="vendorEmailPostfix" v-model="localSettings.VendorEmailPostfix" type="text" class="aug-input" />
           </FormField>
           <FormField :label="$t('Digital items URL')">
             <input v-model="localSettings.DigitalItemsUrl" type="text" class="aug-input" />
