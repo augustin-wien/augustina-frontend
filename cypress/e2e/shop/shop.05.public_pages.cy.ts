@@ -42,7 +42,7 @@ describe('Payment result pages', () => {
   it('shows the error pages', () => {
     ;['/404', '/error', '/error-invalid-link', '/maintenance', '/does/not/exist'].forEach((path) => {
       cy.visit(path)
-      cy.get('body').should('be.visible')
+      cy.get('#app').should('exist')
     })
   })
 })

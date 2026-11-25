@@ -22,7 +22,7 @@ describe('Shop pages of a vendor', () => {
   it('opens every step of the purchase', () => {
     ;['landing-page', 'additionalproducts', 'print-digital', 'tipping', 'information', 'confirmation', 'payment', 'item-available', 'items'].forEach((step) => {
       cy.visit(`${base}/${step}`)
-      cy.get('body').should('be.visible')
+      cy.get('#app').should('exist')
       dismissCampaign()
     })
   })
@@ -30,7 +30,7 @@ describe('Shop pages of a vendor', () => {
   it('changes the amount of the custom tip', () => {
     cy.visit(`${base}/landing-page`)
     closeCampaign()
-    cy.get('#next-btn').click({ force: true })
+    cy.get('#next-btn').should('be.visible').click()
     cy.contains('button', 'Anderer Betrag').click({ force: true })
     cy.get('#increment-btn').click()
     cy.get('#increment-btn').click()
@@ -50,7 +50,8 @@ describe('Shop pages of a vendor', () => {
   it('picks a fixed tip', () => {
     cy.visit(`${base}/landing-page`)
     closeCampaign()
-    cy.get('#next-btn').click({ force: true })
+    cy.get('#next-btn').should('be.visible').click()
+    cy.url().should('include', '/tipping')
     cy.contains('button', '2,00').click({ force: true })
   })
 

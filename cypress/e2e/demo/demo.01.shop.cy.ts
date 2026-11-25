@@ -1,4 +1,4 @@
-const licenseId = Cypress.env('vendorLicenseId') || 'fl-123'
+const licenseId = Cypress.expose('vendorLicenseId') || 'fl-123'
 
 describe('Demo shop', () => {
   beforeEach(() => {
