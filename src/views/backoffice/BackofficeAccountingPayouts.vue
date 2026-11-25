@@ -65,17 +65,26 @@ const translateSender = (receiver: string) => {
   return receiver == 'Orga' ? settingsStore.settings.NewspaperName : receiver
 }
 
-// One column per active item, plus archived (deleted) items that still show
-// up in the listed payouts.
+// One column per item that has a payout in the listed range; items without any are left out.
 const items = computed(() => {
   const usedIDs = new Set<number>()
 
   payments.value?.forEach((payment: Payment) =>
-    payment.IsPayoutFor?.forEach((payout: Payment) => usedIDs.add(payout.Item))
+    payment.IsPayoutFor?.forEach((payout: Payment) => {
+      if (payout.Amount !== 0) usedIDs.add(payout.Item)
+    })
   )
 
-  return itemsStore.itemsWithArchived.filter((item) => !item.Archived || usedIDs.has(item.ID))
+  return itemsStore.itemsWithArchived.filter((item) => usedIDs.has(item.ID))
 })
+
+const formatCell = (value: number) => (value === 0 ? '–' : `${formatCredit(value)} €`)
+
+const itemTotal = (itemID: number) =>
+  payments.value?.reduce(
+    (acc: number, payment: Payment) => acc + sumItemsForOrder(payment, itemID),
+    0
+  ) ?? 0
 
 useAuthLoad(() => {
   paymentStore.getPayouts(startDate.value, endDate.value)
@@ -158,10 +167,10 @@ const exportTable = () => {
               <th>{{ $t('date') }}</th>
               <th>{{ $t('to') }}</th>
               <th>{{ $t('from') }}</th>
-              <th v-for="item in items" :key="`th_${item.ID}`">
+              <th v-for="item in items" :key="`th_${item.ID}`" class="num">
                 {{ itemDisplayName(item, $t) }}
               </th>
-              <th>{{ $t('total') }}</th>
+              <th class="num">{{ $t('total') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -169,24 +178,19 @@ const exportTable = () => {
               <td>{{ formatTime(payment.Timestamp) }}</td>
               <td>{{ translateSender(payment.SenderName) }}</td>
               <td>{{ payment.AuthorizedBy }}</td>
-              <td v-for="item in items" :key="`td_${payment.ID}_${item.ID}`">
-                {{ formatCredit(sumItemsForOrder(payment, item.ID)) }} €
+              <td v-for="item in items" :key="`td_${payment.ID}_${item.ID}`" class="num">
+                {{ formatCell(sumItemsForOrder(payment, item.ID)) }}
               </td>
-              <td>{{ formatCredit(payment.Amount) }} €</td>
+              <td class="num">{{ formatCredit(payment.Amount) }} €</td>
             </tr>
             <tr v-if="payments && payments.length > 0" class="totals-row">
               <td class="font-bold">{{ $t('total') }}</td>
               <td></td>
               <td></td>
-              <td v-for="item in items" :key="`td_total_${item.ID}`" class="font-bold">
-                {{
-                  formatCredit(
-                    payments.reduce((acc, payment) => acc + sumItemsForOrder(payment, item.ID), 0)
-                  )
-                }}
-                €
+              <td v-for="item in items" :key="`td_total_${item.ID}`" class="num font-bold">
+                {{ formatCell(itemTotal(item.ID)) }}
               </td>
-              <td class="font-bold">
+              <td class="num font-bold">
                 {{ formatCredit(payments.reduce((acc, payment) => acc + payment.Amount, 0)) }} €
               </td>
             </tr>
@@ -205,13 +209,38 @@ const exportTable = () => {
   margin-top: 4px;
   font-size: 13px;
 }
+.num {
+  text-align: right;
+  white-space: nowrap;
+}
 @media print {
   .payouts-print {
     border: none;
+    box-shadow: none;
     padding: 0;
   }
   .payouts-print .aug-table {
-    font-size: 11px;
+    width: 100%;
+    font-size: 10.5px;
+    color: #000;
+    border-collapse: collapse;
+  }
+  .payouts-print .aug-table thead {
+    display: table-header-group;
+  }
+  .payouts-print .aug-table th,
+  .payouts-print .aug-table td {
+    padding: 3px 6px;
+    background: none;
+    border-bottom: 1px solid #bbb;
+  }
+  .payouts-print .aug-table th {
+    border-bottom: 2px solid #000;
+    color: #000;
+  }
+  .payouts-print .totals-row td {
+    border-top: 2px solid #000;
+    border-bottom: none;
   }
 }
 </style>
