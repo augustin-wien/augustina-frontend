@@ -131,6 +131,7 @@ const router = createRouter({
     },
     {
       path: '/failure',
+      alias: '/fail',
       name: 'Failure',
       component: () => import('@/views/FailureVivawallet.vue'),
       meta: {
