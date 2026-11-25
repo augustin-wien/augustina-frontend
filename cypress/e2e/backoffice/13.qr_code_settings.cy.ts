@@ -17,6 +17,32 @@ function reopenQrCodeTab() {
   showQrCodeTab()
 }
 
+function saveCanvas(name: string) {
+  cy.get('#qr-wrapper canvas').then(($canvas) => {
+    const url = ($canvas[0] as HTMLCanvasElement).toDataURL('image/png')
+
+    cy.writeFile(`cypress/screenshots/${name}.png`, url.replace('data:image/png;base64,', ''), 'base64')
+  })
+}
+
+function centerPixels() {
+  cy.wait(1500)
+
+  return cy.get('#qr-wrapper canvas').then(($canvas) => {
+    const canvas = $canvas[0] as HTMLCanvasElement
+    const context = canvas.getContext('2d') as CanvasRenderingContext2D
+    const size = Math.round(canvas.width * 0.2)
+    const data = context.getImageData(
+      Math.round(canvas.width / 2 - size / 2),
+      Math.round(canvas.height / 2 - size / 2),
+      size,
+      size
+    ).data
+
+    return Array.from(data).join(',')
+  })
+}
+
 describe('QR code settings', () => {
   it('changes the style of the test QR code', () => {
     openQrCodeTab()
@@ -87,5 +113,28 @@ describe('QR code settings', () => {
   it('downloads the QR codes of all vendors', () => {
     openQrCodeTab()
     cy.contains('button', 'für alle Verkäufer:innen herunterladen').click()
+  })
+
+  it('draws the uploaded logo into the QR code', () => {
+    let withoutLogo = ''
+
+    openQrCodeTab()
+    cy.get('.toggle-inline input[type="checkbox"]').uncheck({ force: true })
+    saveSettings()
+    reopenQrCodeTab()
+    centerPixels().then((pixels) => {
+      withoutLogo = pixels
+    })
+    saveCanvas('qr-without-logo')
+
+    cy.get('.toggle-inline input[type="checkbox"]').check({ force: true })
+    cy.get('input[type="file"]').last().selectFile('cypress/e2e/backoffice/logo.png')
+    saveSettings()
+    reopenQrCodeTab()
+    cy.get('.toggle-inline input[type="checkbox"]').should('be.checked')
+    centerPixels().then((pixels) => {
+      expect(pixels, 'center of the QR code with the logo').to.not.equal(withoutLogo)
+    })
+    saveCanvas('qr-with-logo')
   })
 })
