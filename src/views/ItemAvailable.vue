@@ -3,6 +3,7 @@ import { RouterLink } from 'vue-router'
 import { useSettingsStore } from '@/stores/settings'
 import { useRoute } from 'vue-router'
 import { useShopStore } from '@/stores/ShopStore'
+import { thumbnailPath } from '@/utils/itemImage'
 
 const settStore = useSettingsStore()
 const shopStore = useShopStore()
@@ -35,7 +36,7 @@ const url = import.meta.env.VITE_API_URL
           <img
             alt=""
             class="rounded-full h-44 w-44 object-cover customborder border-4"
-            :src="url + item.Image"
+            :src="url + thumbnailPath(item.Image)"
           />
         </div>
         <div class="item-name text-center font-semibold text-3xl py-4">

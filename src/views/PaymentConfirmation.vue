@@ -9,6 +9,7 @@ import { useSettingsStore } from '@/stores/settings'
 import { computed, onMounted, ref } from 'vue'
 import FeedbackForm from '@/components/FeedbackForm.vue'
 import { itemTypeClass } from '@/utils/itemTypeClass'
+import { thumbnailPath } from '@/utils/itemImage'
 
 const DONATION_ITEM_ID = 2
 
@@ -209,7 +210,7 @@ const email = localStorage.getItem('email') || ''
                   v-if="itemDetails(item.Item)?.Image"
                   class="item-image"
                   :alt="itemDetails(item.Item)?.Name"
-                  :src="apiUrl + itemDetails(item.Item)?.Image"
+                  :src="apiUrl + thumbnailPath(itemDetails(item.Item)?.Image)"
                 />
                 <div
                   v-if="item.Item == DONATION_ITEM_ID"

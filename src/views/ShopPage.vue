@@ -7,6 +7,7 @@ import { useVendorStore } from '@/stores/vendor'
 import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { itemTypeClass } from '@/utils/itemTypeClass'
+import { thumbnailPath } from '@/utils/itemImage'
 
 const shopStore = useShopStore()
 const settStore = useSettingsStore()
@@ -111,7 +112,9 @@ const checkIfItemSelected = () => {
                         >
                           <div
                             class="w-[90px] h-[90%] flex-none bg-cover bg-grey-600 rounded-2xl item-img"
-                            :style="'background-image: url(' + url + item.Image + ')'"
+                            :style="
+                              'background-image: url(' + url + thumbnailPath(item.Image) + ')'
+                            "
                           ></div>
                         </RouterLink>
                       </div>
