@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useItemsStore, ITEM_TYPES } from '@/stores/items'
 import type { Item } from '@/stores/items'
-import { useSettingsStore } from '@/stores/settings'
+import { useSettingsStore, vouchersEnabled } from '@/stores/settings'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import PageHeader from '@/components/ui/PageHeader.vue'
@@ -17,7 +17,11 @@ const store = useItemsStore()
 const settingsStore = useSettingsStore()
 
 const availableItemTypes = computed(() =>
-  ITEM_TYPES.filter((type) => type !== 'abonement' || settingsStore.settings.AbonementEnabled)
+  ITEM_TYPES.filter((type) => {
+    if (type === 'abonement') return settingsStore.settings.AbonementEnabled
+    if (type === 'abonement_voucher') return vouchersEnabled(settingsStore.settings)
+    return true
+  })
 )
 
 const newItem = ref({
@@ -28,12 +32,15 @@ const newItem = ref({
   Price: 0,
   Type: 'normal_item',
   LicenseCost: 50,
-  LicenseGroup: ''
+  LicenseGroup: '',
+  AboDurationMonths: 12
 })
 
-const needsLicense = computed(
-  () => newItem.value.Type === 'online_issue' || newItem.value.Type === 'abonement'
+const needsLicense = computed(() =>
+  ['online_issue', 'abonement', 'abonement_voucher'].includes(newItem.value.Type)
 )
+
+const isVoucher = computed(() => newItem.value.Type === 'abonement_voucher')
 
 const toast = ref<{ type: string; message: string } | null>(null)
 
@@ -45,6 +52,16 @@ const submitItem = async () => {
 
   if (needsLicense.value && !newItem.value.LicenseGroup.trim()) {
     showToast('error', t('licenseGroupRequired'))
+    return
+  }
+
+  if (
+    isVoucher.value &&
+    (!newItem.value.AboDurationMonths ||
+      newItem.value.AboDurationMonths < 1 ||
+      newItem.value.AboDurationMonths > 120)
+  ) {
+    showToast('error', t('aboDurationRequired'))
     return
   }
 
@@ -161,6 +178,24 @@ const updateImage = (event: any) => {
                   v-model="newItem.LicenseCost"
                   type="number"
                   min="1"
+                  class="aug-input"
+                  required
+                />
+              </FormField>
+
+              <FormField
+                v-if="isVoucher"
+                :label="$t('aboDurationMonths')"
+                for="aboDurationMonths"
+                required
+                :hint="$t('aboDurationMonthsHint')"
+              >
+                <input
+                  id="aboDurationMonths"
+                  v-model.number="newItem.AboDurationMonths"
+                  type="number"
+                  min="1"
+                  max="120"
                   class="aug-input"
                   required
                 />

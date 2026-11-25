@@ -380,6 +380,12 @@ defineExpose({ saveSettings })
           <FormField :label="$t('Abonement URL')">
             <input v-model="localSettings.AbonementUrl" type="url" class="aug-input" />
           </FormField>
+          <label class="aug-toggle">
+            <input id="voucherEnabled" v-model="localSettings.VoucherEnabled" type="checkbox" />
+            <span class="aug-toggle-track"></span>
+            <span>{{ $t('voucherModule') }}</span>
+          </label>
+          <p class="voucher-module-hint">{{ $t('voucherModuleHint') }}</p>
         </ModuleCard>
         <ModuleCard
           v-model="localSettings.DonationTrackingEnabled"
@@ -633,6 +639,11 @@ defineExpose({ saveSettings })
 </template>
 
 <style scoped>
+.voucher-module-hint {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
 .section {
   margin-bottom: 20px;
 }

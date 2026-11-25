@@ -16,6 +16,7 @@ export const ITEM_TYPES = [
   'issue',
   'online_issue',
   'abonement',
+  'abonement_voucher',
   'donation',
   'transaction_costs',
   'license_item'
@@ -41,6 +42,8 @@ export interface Item {
   ItemTextColor: string | null
   Type: ItemType | string
   LicenseCost?: number
+  // Months of abonement an abonement_voucher grants when redeemed
+  AboDurationMonths?: number
 }
 
 export const useItemsStore = defineStore('items', {

@@ -33,6 +33,7 @@ import {
   VENDOR_STATISTICS_API_URL,
   CUSTOMERS_API_URL,
   ABONEMENTS_API_URL,
+  VOUCHERS_API_URL,
   FEEDBACK_API_URL,
   MAIL_TASKS_API_URL
 } from './endpoints'
@@ -386,6 +387,7 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('DigitalItemsUrl', updatedSettings.DigitalItemsUrl ?? '')
   formData.append('AbonementUrl', updatedSettings.AbonementUrl ?? '')
   formData.append('AbonementEnabled', (updatedSettings.AbonementEnabled ?? false).toString())
+  formData.append('VoucherEnabled', (updatedSettings.VoucherEnabled ?? false).toString())
   formData.append('POSEnabled', (updatedSettings.POSEnabled ?? true).toString())
 
   formData.append(
@@ -843,4 +845,71 @@ export async function deleteCampaign(id: number) {
 
 export async function trackCampaign(id: number, counter: 'view' | 'click') {
   return apiInstance.post(`${CAMPAIGNS_API_URL}${id}/${counter}/`)
+}
+
+// abonement vouchers
+export interface VoucherCheck {
+  Code: string
+  Status: 'active' | 'redeemed' | 'disabled'
+  ItemName: string
+  DurationMonths: number
+  RecipientName: string
+  Message: string
+}
+
+export interface VoucherRedemption {
+  ItemName: string
+  DurationMonths: number
+  FromDate: string
+  ToDate: string
+  Email: string
+}
+
+export interface AbonementVoucher {
+  ID: number
+  Code: string
+  ItemID: number
+  ItemName: string
+  OrderID: number | null
+  BuyerEmail: string
+  RecipientName: string
+  Message: string
+  DurationMonths: number
+  Status: 'active' | 'redeemed' | 'disabled'
+  CreatedAt: string
+  RedeemedAt: string | null
+  RedeemedEmail: string | null
+  RedeemedCustomerID: number | null
+  AbonementID: number | null
+}
+
+export async function checkVoucher(code: string) {
+  return apiInstance.post<VoucherCheck>(`${VOUCHERS_API_URL}check/`, { Code: code })
+}
+
+export async function redeemVoucher(data: {
+  Code: string
+  Email: string
+  FirstName?: string
+  LastName?: string
+}) {
+  return apiInstance.post<VoucherRedemption>(`${VOUCHERS_API_URL}redeem/`, data)
+}
+
+export async function fetchVouchers() {
+  return apiInstance.get<AbonementVoucher[]>(VOUCHERS_API_URL)
+}
+
+export async function fetchVoucherPDF(id: number) {
+  return apiInstance.get<Blob>(`${VOUCHERS_API_URL}${id}/pdf/`, { responseType: 'blob' })
+}
+
+export async function resendVoucher(id: number, email = '') {
+  return apiInstance.post(`${VOUCHERS_API_URL}${id}/resend/`, email ? { Email: email } : {})
+}
+
+export async function setVoucherDisabled(id: number, disabled: boolean) {
+  return apiInstance.post<AbonementVoucher>(
+    `${VOUCHERS_API_URL}${id}/${disabled ? 'disable' : 'enable'}/`
+  )
 }

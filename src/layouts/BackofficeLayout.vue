@@ -23,7 +23,8 @@ import {
   faUsers,
   faMapLocation,
   faLocationDot,
-  faAreaChart
+  faAreaChart,
+  faGift
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { computed, onMounted, watch, ref } from 'vue'
@@ -91,7 +92,12 @@ const navGroups = computed<NavGroup[]>(() => {
   if (settings.value.AbonementEnabled) {
     groups.push({
       labelKey: 'navGroupCustomers',
-      items: [{ to: '/backoffice/customers', labelKey: 'menuOverview', icon: faUsers }]
+      items: [
+        { to: '/backoffice/customers', labelKey: 'menuOverview', icon: faUsers },
+        ...(settings.value.VoucherEnabled
+          ? [{ to: '/backoffice/vouchers', labelKey: 'menuVouchers', icon: faGift }]
+          : [])
+      ]
     })
   }
 

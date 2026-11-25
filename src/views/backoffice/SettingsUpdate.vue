@@ -52,6 +52,7 @@ const updatedSettings = ref<Settings>({
   DigitalItemsUrl: '',
   AbonementUrl: '',
   AbonementEnabled: false,
+  VoucherEnabled: false,
   POSEnabled: true,
   DonationTrackingEnabled: false,
   OdooEnabled: false,
