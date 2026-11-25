@@ -1,10 +1,14 @@
 // https://on.cypress.io/api
 const licenseId = "fl-123"
 
+// Needs a configured VivaWallet demo account; run with CYPRESS_VIVA=1
+const itWithViva = Cypress.env('VIVA') ? it : it.skip
+
 describe('Reach the shop page', () => {
-  it('visits the app root url', () => {
+  itWithViva('visits the app root url', () => {
     cy.visit('/v/' + licenseId)
     cy.contains('div', 'Zeitung kaufen bei')
+    cy.contains('button', 'Nein, danke').click()
     cy.get('button').contains('Weiter').click()
     cy.get('button').contains('Heute nicht').click()
     cy.get('#checkbox').click()

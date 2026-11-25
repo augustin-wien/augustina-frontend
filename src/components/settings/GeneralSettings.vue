@@ -178,7 +178,7 @@ defineExpose({ saveSettings })
         <h2 class="section-title">{{ $t('Branding') }}</h2>
         <div class="field-grid">
           <FormField :label="$t('Newspaper name')" class="field-span-2" required>
-            <input v-model="localSettings.NewspaperName" type="text" class="aug-input" required />
+            <input id="newspapername" v-model="localSettings.NewspaperName" type="text" class="aug-input" required />
           </FormField>
           <FormField :label="$t('color')" required>
             <input v-model="localSettings.Color" type="text" class="aug-input" required />

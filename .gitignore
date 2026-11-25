@@ -37,3 +37,6 @@ scripts/take-screenshots.js
 scripts/generate-pdf.js
 /CLA*
 tsconfig.app*
+/coverage-e2e/
+/.nyc_output/
+/coverage-e2e-baseline.json

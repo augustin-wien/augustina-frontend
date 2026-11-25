@@ -5,7 +5,7 @@ describe('Go to backoffice', () => {
     cy.visit('/backoffice')
 
     cy.origin('http://keycloak:8080', { args: {} }, () => {
-      cy.contains('h1', 'Sign in to your account')
+      cy.get('#kc-form-login').should('be.visible')
       cy.get('#username').type("test_superuser@example.com")
       cy.get('#password').type("Test123!")
       cy.get('#kc-login').click()

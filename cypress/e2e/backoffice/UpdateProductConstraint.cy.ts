@@ -39,16 +39,16 @@ describe('Backoffice product update - licenseitem constraint', () => {
     }).as('updateItem')
 
     // visit the update page
-    cy.visit('/backoffice/productsettings/update/5')
+    cy.loginBackoffice('/backoffice/productsettings/update/5')
 
     // wait until the backoffice items request resolves and the form is populated
     cy.wait('@getItemsBackoffice')
 
     // ensure the Name input contains the expected value
-    cy.get('#Name').should('have.value', 'Digitale Zeitung')
+    cy.get('#itemName').should('have.value', 'Digitale Zeitung')
 
     // click the confirmation button (German "Bestätigen" or english "Confirmation")
-    cy.contains('button', /Bestätigen|Confirmation|confirmation/).click()
+    cy.contains('button', 'Speichern').click()
 
     // wait for the PUT call
     cy.wait('@updateItem')
