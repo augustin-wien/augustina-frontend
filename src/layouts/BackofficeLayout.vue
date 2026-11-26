@@ -2,6 +2,7 @@
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import WaitingAnimation from '@/components/WaitingAnimation.vue'
 import { logout } from '@/keycloak/keycloak'
+import { logoThumbnailUrl } from '@/utils/settingsImage'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore } from '@/stores/settings'
 import { useApplyColorScheme, useColorScheme } from '@/composables/useColorScheme'
@@ -36,25 +37,8 @@ const settings = computed(() => settingsStore.settings)
 const authenticated = computed(() => keycloakStore.authenticated)
 const { mode: colorScheme } = useColorScheme()
 useApplyColorScheme()
-// remove the last / from the URL
-const apiUrl = import.meta.env.VITE_API_URL.replace(/\/$/, '')
 
-const logo = computed(() => {
-  if (settings.value.Logo && settings.value.Logo !== '') {
-    // if the logo does not have a / at the beginning, add it
-    if (typeof settings.value.Logo === 'string') {
-      if (!settings.value.Logo.startsWith('/')) {
-        return apiUrl + '/' + settings.value.Logo
-      }
-
-      return apiUrl + settings.value.Logo
-    } else {
-      return apiUrl + '/img/logo.png'
-    }
-  } else {
-    return apiUrl + '/img/logo.png'
-  }
-})
+const logo = computed(() => logoThumbnailUrl(settings.value.Logo))
 
 // mobile sidebar state
 const mobileMenuOpen = ref(false)

@@ -1,5 +1,6 @@
 import type { AxiosAdapter, InternalAxiosRequestConfig } from 'axios'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { registerSentry } from '@/utils/sentry'
 import { apiInstance } from '@/api/api'
 
 // Named separately from the `scope` variable below - inlining this as `typeof scope`
@@ -27,6 +28,7 @@ const { scope, captureException, withScope, updateToken, login } = vi.hoisted(()
 // vi.spyOn can't touch a real ESM module's frozen namespace, so the module
 // itself is replaced - api.ts's `import * as Sentry` resolves to this.
 vi.mock('@sentry/vue', () => ({ captureException, withScope }))
+registerSentry((await import('@sentry/vue')) as unknown as Parameters<typeof registerSentry>[0])
 
 // Same reasoning as the Sentry mock above - api.ts's `import keycloak, { login }
 // from '@/keycloak/keycloak'` resolves to this instead of the real singleton.

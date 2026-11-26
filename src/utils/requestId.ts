@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/vue'
+import { getSentry } from '@/utils/sentry'
 
 let lastRequestId = ''
 
@@ -20,7 +20,7 @@ export function setLastRequestId(id: string): void {
   if (!id) return
 
   lastRequestId = id
-  Sentry.setTag('request_id', id)
+  getSentry()?.setTag('request_id', id)
 }
 
 export function getLastRequestId(): string {

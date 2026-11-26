@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { registerSentry } from '@/utils/sentry'
 import { reportVivaFailure, vivaFailureReason } from '@/utils/vivaFailure'
 
 const { scope, captureMessage, withScope } = vi.hoisted(() => {
@@ -12,6 +13,7 @@ const { scope, captureMessage, withScope } = vi.hoisted(() => {
 })
 
 vi.mock('@sentry/vue', () => ({ captureMessage, withScope }))
+registerSentry((await import('@sentry/vue')) as unknown as Parameters<typeof registerSentry>[0])
 
 describe('vivaFailureReason', () => {
   it.each([

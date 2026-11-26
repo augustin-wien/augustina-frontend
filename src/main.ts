@@ -6,21 +6,16 @@ import i18n from './locales/i18n'
 
 import App from './App.vue'
 import router from './router'
+import { sentryConfigured } from './utils/sentry'
 
 const app = createApp(App)
 app.use(createPinia())
 
-if (import.meta.env.VITE_SENTRY_DSN) {
-  import('./utils/utils').then(({ initSentry }) => {
-    initSentry(app, router)
-    app.use(router)
-    app.use(i18n)
+app.use(router)
+app.use(i18n)
+app.mount('#app')
 
-    app.mount('#app')
-  })
-} else {
-  app.use(router)
-  app.use(i18n)
-
-  app.mount('#app')
+// Sentry loads in the background, so the shop does not wait for it before it is shown
+if (sentryConfigured()) {
+  import('./utils/sentryInit').then(({ initSentry }) => initSentry(app, router))
 }

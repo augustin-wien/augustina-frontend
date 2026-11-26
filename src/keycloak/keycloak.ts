@@ -1,4 +1,5 @@
-import Keycloak, { type KeycloakLoginOptions } from 'keycloak-js'
+import type Keycloak from 'keycloak-js'
+import type { KeycloakLoginOptions } from 'keycloak-js'
 import { fetchSettings } from '@/api/api'
 import i18n from '@/locales/i18n'
 
@@ -34,7 +35,10 @@ export const initKeycloak = async () => {
       return
     }
 
-    const instance = new Keycloak({
+    // keycloak-js is only needed for logged-in pages, so the shop does not load it
+    const { default: KeycloakClient } = await import('keycloak-js')
+
+    const instance = new KeycloakClient({
       url: settings.Keycloak.URL,
       realm: settings.Keycloak.Realm,
       clientId: 'frontend'
