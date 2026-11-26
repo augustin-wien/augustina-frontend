@@ -208,8 +208,7 @@ onMounted(() => {
             <p v-if="emailSuggestion" class="text-sm mt-2" role="alert">
               {{ $t('Did you mean') }}
               <button type="button" class="underline font-semibold" @click="acceptSuggestion">
-                {{ emailSuggestion }}</button
-              >?
+                {{ emailSuggestion }}</button>?
             </p>
             <div class="grid grid-cols-2 gap-3 mt-4">
               <div>

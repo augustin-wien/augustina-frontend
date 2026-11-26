@@ -111,8 +111,7 @@ const keepEmail = () => {
 
               <div v-if="suggestion" class="suggestion mt-3 p-4 rounded-md border" role="alert">
                 <p class="mb-3">
-                  {{ $t('Did you mean') }} <strong>{{ suggestion }}</strong
-                  >?
+                  {{ $t('Did you mean') }} <strong>{{ suggestion }}</strong>?
                 </p>
                 <div class="flex flex-wrap gap-2">
                   <button

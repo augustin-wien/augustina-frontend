@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import VueDatePicker from '@vuepic/vue-datepicker'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { useColorScheme } from '@/composables/useColorScheme'
 import { ref, computed } from 'vue'
@@ -142,7 +142,7 @@ const exportTable = () => {
         <VueDatePicker
           v-model="date"
           range
-          :enable-time-picker="false"
+          :time-config="{ enableTimePicker: false }"
           :placeholder="$t('chooseDateRange')"
           class="max-w-md"
           :dark="isDark"

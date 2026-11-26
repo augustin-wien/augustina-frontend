@@ -2,7 +2,8 @@
 import { useItemsStore } from '@/stores/items'
 import { useOrdersStore } from '@/stores/orders'
 import { usePaymentsStore, type Payment } from '@/stores/payments'
-import VueDatePicker from '@vuepic/vue-datepicker'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
+import { de, enUS, it } from 'date-fns/locale'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { useColorScheme } from '@/composables/useColorScheme'
 import { computed, ref } from 'vue'
@@ -21,6 +22,7 @@ import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
 
 const { locale, t } = useI18n()
+const datePickerLocale = computed(() => ({ de, en: enUS, it })[locale.value] ?? de)
 const { isDark } = useColorScheme()
 const settingsStore = useSettingsStore()
 const ordersStore = useOrdersStore()
@@ -150,10 +152,10 @@ const exportTable = () => {
         <VueDatePicker
           v-model="date"
           range
-          :enable-time-picker="false"
+          :time-config="{ enableTimePicker: false }"
           :placeholder="$t('chooseDateRange')"
           class="max-w-md"
-          :locale="locale"
+          :locale="datePickerLocale"
           :dark="isDark"
           @update:model-value="onDateUpdate"
         />
