@@ -136,4 +136,30 @@ describe('BackofficeMailTasks', () => {
 
     expect(vi.mocked(retryFailedMailTasks).mock.calls[0][0]).toMatchObject({ item_id: 5 })
   })
+
+  it('marks Keycloak mails and names them by their action', async () => {
+    vi.mocked(fetchMailTasks).mockResolvedValue({
+      data: {
+        Tasks: [
+          task(3, 'sent', { Kind: 'keycloak_update_password', Subject: 'UPDATE_PASSWORD' }),
+          task(1, 'sent')
+        ],
+        Total: 2,
+        Counts: { pending: 0, sending: 0, sent: 2, failed: 0 }
+      }
+    } as never)
+
+    const { wrapper } = await mountPage('/backoffice/mails')
+    const rows = wrapper.findAll('[data-test="mail-task-row"]')
+
+    expect(rows[0].find('[data-test="keycloak-badge"]').exists()).toBe(true)
+    expect(rows[0].text()).toContain('keycloak_update_password')
+    expect(rows[0].text()).not.toContain('UPDATE_PASSWORD')
+    expect(rows[1].find('[data-test="keycloak-badge"]').exists()).toBe(false)
+
+    await wrapper.get('[data-test="retry-3"]').trigger('click')
+    await flushPromises()
+
+    expect(retryMailTask).toHaveBeenCalledWith(3)
+  })
 })
