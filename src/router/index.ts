@@ -6,6 +6,7 @@ import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vu
 import { useSettingsStore } from '@/stores/settings'
 import { isBackendUnreachable } from '@/api/api'
 import { useShopStore } from '@/stores/ShopStore'
+import { useCampaignsStore } from '@/stores/campaigns'
 
 // The donation step can be switched off in the settings; the purchase then goes straight on to
 // the confirmation, without a donation in the cart
@@ -44,6 +45,13 @@ const router = createRouter({
       },
       component: () => import('@/views/ParentPaymentProcess.vue'),
       children: [
+        {
+          // The landing page is shown right away; the vendor is checked meanwhile and an
+          // unknown vendor id still leads to the "Go to Vendor" page
+          path: '',
+          name: 'Vendor',
+          redirect: (to) => ({ name: 'LandingPage', params: to.params })
+        },
         {
           path: '/v/:id/check-id',
           name: 'Check ID',
@@ -567,13 +575,15 @@ router.beforeEach((to) => {
   }
 })
 
-// The shop pages all need the items. Requesting them here runs the request in parallel with
-// loading the page's code instead of after it.
+// The shop pages all need the items and the active campaigns. Requesting them here runs the
+// requests in parallel with loading the page's code instead of after it.
 router.beforeEach((to) => {
   if (to.matched.some((record) => record.name === 'Parent')) {
     useShopStore()
       .getItems()
       .catch(() => {})
+
+    useCampaignsStore().getActiveCampaigns()
   }
 })
 
