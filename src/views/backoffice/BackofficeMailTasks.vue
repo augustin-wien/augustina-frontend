@@ -47,7 +47,9 @@ const KINDS = [
   'abonement_confirmation',
   'accounting_report',
   'feedback',
-  'template_test'
+  'template_test',
+  'keycloak_update_password',
+  'keycloak_verify_email'
 ] as const
 
 const { t, te } = useI18n()
@@ -117,6 +119,13 @@ watch(filter, load)
 const pageCount = computed(() => Math.max(1, Math.ceil(total.value / PAGE_SIZE)))
 
 const kindLabel = (kind: string) => (te(`mailKind_${kind}`) ? t(`mailKind_${kind}`) : kind)
+
+// Keycloak builds these mails itself, the task only records the request
+const isKeycloak = (task: MailTask) => task.Kind.startsWith('keycloak_')
+
+const subjectLabel = (task: MailTask) =>
+  isKeycloak(task) ? kindLabel(task.Kind) : task.Subject || '—'
+
 const statusLabel = (status: string) => t(`mailStatus_${status}`)
 
 const STATUS_VARIANTS: Record<string, 'success' | 'danger' | 'info'> = {
@@ -310,11 +319,21 @@ const retryLabel = (task: MailTask) =>
                   {{ $t('mailTaskNextAttempt', { date: formatDateTime(task.NextAttemptAt) }) }}
                 </div>
               </td>
-              <td>{{ kindLabel(task.Kind) }}</td>
+              <td>
+                <Badge
+                  v-if="isKeycloak(task)"
+                  variant="neutral"
+                  class="kind-badge"
+                  data-test="keycloak-badge"
+                >
+                  {{ $t('mailKeycloakBadge') }}
+                </Badge>
+                {{ kindLabel(task.Kind) }}
+              </td>
               <td class="recipients">{{ task.Recipients.join(', ') }}</td>
               <td>
                 <button type="button" class="link-btn" @click="openDetail(task)">
-                  {{ task.Subject || '—' }}
+                  {{ subjectLabel(task) }}
                 </button>
                 <span v-if="task.HasAttachments" :title="$t('mailTaskAttachments')"> 📎</span>
               </td>
@@ -359,7 +378,12 @@ const retryLabel = (task: MailTask) =>
         </div>
       </Card>
 
-      <Modal :open="!!detail" size="lg" :title="detail?.Subject" @close="detail = null">
+      <Modal
+        :open="!!detail"
+        size="lg"
+        :title="detail ? subjectLabel(detail) : ''"
+        @close="detail = null"
+      >
         <template v-if="detail">
           <dl class="detail-meta">
             <dt>{{ $t('mailTaskRecipients') }}</dt>
@@ -371,7 +395,12 @@ const retryLabel = (task: MailTask) =>
               }}</Badge>
             </dd>
             <dt>{{ $t('mailTaskKind') }}</dt>
-            <dd>{{ kindLabel(detail.Kind) }}</dd>
+            <dd>
+              <Badge v-if="isKeycloak(detail)" variant="neutral" class="kind-badge">
+                {{ $t('mailKeycloakBadge') }}
+              </Badge>
+              {{ kindLabel(detail.Kind) }}
+            </dd>
             <template v-if="detail.OrderID">
               <dt>{{ $t('mailTaskOrder') }}</dt>
               <dd>{{ detail.OrderID }}</dd>
@@ -381,8 +410,11 @@ const retryLabel = (task: MailTask) =>
               <dd class="error-text">{{ detail.LastError }}</dd>
             </template>
           </dl>
+          <p v-if="isKeycloak(detail)" class="entry-empty" data-test="keycloak-hint">
+            {{ $t('mailKeycloakHint') }}
+          </p>
           <iframe
-            v-if="detail.Body"
+            v-else-if="detail.Body"
             class="mail-body"
             sandbox=""
             :srcdoc="detail.Body"
@@ -393,7 +425,11 @@ const retryLabel = (task: MailTask) =>
         <template #footer>
           <Button variant="ghost" @click="detail = null">{{ $t('mailTaskClose') }}</Button>
           <Button
-            v-if="detail && canRetry(detail) && (detail.Status !== 'sent' || detail.Body)"
+            v-if="
+              detail &&
+              canRetry(detail) &&
+              (detail.Status !== 'sent' || detail.Body || isKeycloak(detail))
+            "
             variant="primary"
             :disabled="retrying === detail.ID"
             @click="retry(detail)"
@@ -471,6 +507,9 @@ const retryLabel = (task: MailTask) =>
 }
 .table-section {
   overflow-x: auto;
+}
+.kind-badge {
+  margin-right: 4px;
 }
 .recipients {
   max-width: 240px;
