@@ -15,6 +15,7 @@ describe('Payment result pages', () => {
     cy.intercept('GET', '**/api/orders/verify/**', { statusCode: 200, body: verification }).as(
       'verify'
     )
+
     cy.visit('/success?s=123&t=456')
     cy.wait('@verify')
     cy.url().should('include', '/paymentconfirmation')
@@ -40,10 +41,14 @@ describe('Payment result pages', () => {
   })
 
   it('shows the error pages', () => {
-    ;['/404', '/error', '/error-invalid-link', '/maintenance', '/does/not/exist'].forEach((path) => {
-      cy.visit(path)
-      cy.get('#app').should('exist')
-    })
+    ;
+
+['/404', '/error', '/error-invalid-link', '/maintenance', '/does/not/exist'].forEach(
+      (path) => {
+        cy.visit(path)
+        cy.get('#app').should('exist')
+      }
+    )
   })
 })
 
@@ -53,6 +58,7 @@ describe('Redeem a voucher', () => {
       statusCode: 200,
       body: { Code: 'AAAA', Status: 'redeemed' }
     })
+
     cy.visit('/einloesen?code=AAAA')
     cy.get('#redeem-voucher-page').should('be.visible')
   })
@@ -62,6 +68,7 @@ describe('Redeem a voucher', () => {
       statusCode: 200,
       body: { Code: 'BBBB', Status: 'disabled' }
     })
+
     cy.visit('/einloesen?code=BBBB')
     cy.get('#redeem-voucher-page').should('be.visible')
   })
@@ -71,6 +78,7 @@ describe('Redeem a voucher', () => {
       statusCode: 404,
       body: { error: { message: 'not found' } }
     })
+
     cy.visit('/einloesen')
     cy.get('#voucher-code').type('ZZZZ{enter}')
   })
@@ -80,10 +88,12 @@ describe('Redeem a voucher', () => {
       statusCode: 200,
       body: { Code: 'CCCC', Status: 'active', Name: 'Abo', DurationMonths: 3 }
     })
+
     cy.intercept('POST', '**/api/vouchers/redeem/', {
       statusCode: 200,
       body: { Code: 'CCCC', ValidUntil: '2027-01-01T00:00:00Z' }
     }).as('redeem')
+
     cy.visit('/einloesen')
     cy.get('#voucher-code').type('CCCC{enter}')
     cy.get('#voucher-details').should('be.visible')

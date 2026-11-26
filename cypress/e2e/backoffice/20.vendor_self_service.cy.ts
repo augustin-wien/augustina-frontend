@@ -52,6 +52,7 @@ describe('Vendor info in the backoffice', () => {
     cy.get('.leaflet-marker-icon').should('have.length.gte', 1)
     cy.get('.leaflet-marker-icon').first().click({ force: true })
     cy.get('.leaflet-popup').should('exist')
+
     cy.get('.leaflet-popup').then(($popup) => {
       const info = $popup.find('button:contains("Info")')
 

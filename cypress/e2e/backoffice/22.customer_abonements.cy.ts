@@ -54,19 +54,43 @@ const abonementItem = {
 
 function stubBackend() {
   cy.intercept('GET', '**/api/items/backoffice*', { statusCode: 200, body: [abonementItem] })
+
   cy.intercept('GET', '**/api/items/licensegroups/', {
     statusCode: 200,
     body: ['digital_edition', 'analog_edition', 'extra_group']
   })
+
   cy.intercept('GET', '**/api/customers/501/', { statusCode: 200, body: customer })
   cy.intercept('GET', '**/api/customers/501/abonements/', { statusCode: 200, body: abonements })
-  cy.intercept('PUT', '**/api/customers/501/', { statusCode: 200, body: customer }).as('saveCustomer')
-  cy.intercept('DELETE', '**/api/customers/501/', { statusCode: 204, body: '' }).as('deleteCustomer')
-  cy.intercept('POST', '**/api/customers/501/password-reset-email/', { statusCode: 200, body: {} }).as('reset')
-  cy.intercept('POST', '**/api/customers/501/verify-email/', { statusCode: 200, body: {} }).as('verify')
-  cy.intercept('POST', '**/api/abonements/', { statusCode: 200, body: abonements[0] }).as('createAbonement')
-  cy.intercept('PUT', '**/api/abonements/*/', { statusCode: 200, body: abonements[0] }).as('updateAbonement')
-  cy.intercept('DELETE', '**/api/abonements/*/', { statusCode: 204, body: '' }).as('deleteAbonement')
+
+  cy.intercept('PUT', '**/api/customers/501/', { statusCode: 200, body: customer }).as(
+    'saveCustomer'
+  )
+
+  cy.intercept('DELETE', '**/api/customers/501/', { statusCode: 204, body: '' }).as(
+    'deleteCustomer'
+  )
+
+  cy.intercept('POST', '**/api/customers/501/password-reset-email/', {
+    statusCode: 200,
+    body: {}
+  }).as('reset')
+
+  cy.intercept('POST', '**/api/customers/501/verify-email/', { statusCode: 200, body: {} }).as(
+    'verify'
+  )
+
+  cy.intercept('POST', '**/api/abonements/', { statusCode: 200, body: abonements[0] }).as(
+    'createAbonement'
+  )
+
+  cy.intercept('PUT', '**/api/abonements/*/', { statusCode: 200, body: abonements[0] }).as(
+    'updateAbonement'
+  )
+
+  cy.intercept('DELETE', '**/api/abonements/*/', { statusCode: 204, body: '' }).as(
+    'deleteAbonement'
+  )
 }
 
 function openCustomer() {
@@ -93,9 +117,13 @@ describe('Customer detail', () => {
 
   it('sends the account mails', () => {
     openCustomer()
-    cy.get('.field-span-2 button').filter(':visible').then(($buttons) => {
-      expect($buttons.length).to.be.gte(1)
-    })
+
+    cy.get('.field-span-2 button')
+      .filter(':visible')
+      .then(($buttons) => {
+        expect($buttons.length).to.be.gte(1)
+      })
+
     cy.contains('button', 'Passwort-Reset-E-Mail senden').click({ force: true })
     cy.wait('@reset')
     cy.contains('button', 'Verifizierungs-E-Mail senden').click({ force: true })
@@ -143,10 +171,12 @@ describe('Customer detail', () => {
 
   it('shows errors when saving and deleting fail', () => {
     stubBackend()
+
     cy.intercept('PUT', '**/api/customers/501/', {
       statusCode: 400,
       body: { error: { message: 'E-Mail vergeben' } }
     })
+
     cy.intercept('DELETE', '**/api/customers/501/', { statusCode: 500, body: {} })
     cy.loginBackoffice('/backoffice/customers/501')
     cy.get('#firstname').should('have.value', 'Stub')

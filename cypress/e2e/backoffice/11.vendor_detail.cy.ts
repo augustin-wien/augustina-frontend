@@ -45,9 +45,11 @@ describe('Vendor detail pages', () => {
     cy.get('.pos-item-qty').first().clear().type('2{enter}')
     clickIfPresent('.pos-balance-toggle input')
     cy.get('.pos-comments-toggle').should('be.visible')
+
     cy.get('body').then(($body) => {
       if (!$body.find('.pos-comment-add input').length) cy.get('.pos-comments-toggle').click()
     })
+
     cy.get('.pos-comment-add input').type('POS comment{enter}')
     cy.get('.pos-complete-btn').click({ force: true })
     clickIfPresent('.pos-success button')

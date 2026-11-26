@@ -20,7 +20,19 @@ describe('Shop pages of a vendor', () => {
   })
 
   it('opens every step of the purchase', () => {
-    ;['landing-page', 'additionalproducts', 'print-digital', 'tipping', 'information', 'confirmation', 'payment', 'item-available', 'items'].forEach((step) => {
+    ;
+
+[
+      'landing-page',
+      'additionalproducts',
+      'print-digital',
+      'tipping',
+      'information',
+      'confirmation',
+      'payment',
+      'item-available',
+      'items'
+    ].forEach((step) => {
       cy.visit(`${base}/${step}`)
       cy.get('#app').should('exist')
       dismissCampaign()

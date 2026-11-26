@@ -43,13 +43,24 @@ const items: StubItem[] = [
     IsLicenseItem: true,
     LicenseGroup: 'stub_group'
   },
-  { ...baseItem, ID: 106, Name: 'Stub PDF', Type: 'issue', IsPDFItem: true, LicenseItem: 105, PDF: 'pdf/x.pdf' }
+  {
+    ...baseItem,
+    ID: 106,
+    Name: 'Stub PDF',
+    Type: 'issue',
+    IsPDFItem: true,
+    LicenseItem: 105,
+    PDF: 'pdf/x.pdf'
+  }
 ]
 
-function stubBackend(mailStatus: unknown = { Counts: {}, Total: 0, FirstQueuedAt: null, LastSentAt: null }) {
+function stubBackend(
+  mailStatus: unknown = { Counts: {}, Total: 0, FirstQueuedAt: null, LastSentAt: null }
+) {
   cy.intercept('GET', '**/api/items/backoffice*', { statusCode: 200, body: items })
   cy.intercept('GET', '**/api/items/', { statusCode: 200, body: items })
   cy.intercept('GET', '**/api/items/?*', { statusCode: 200, body: items })
+
   cy.intercept('GET', '**/api/items/wordpress-issue/*', (req) => {
     const group = String(req.query.licenseGroup ?? '')
 
@@ -58,16 +69,25 @@ function stubBackend(mailStatus: unknown = { Counts: {}, Total: 0, FirstQueuedAt
       body: {
         configured: true,
         ok: group === 'stub_group',
-        message: group === 'stub_group' ? 'Ausgabe 12 ist veröffentlicht' : 'Ausgabe nicht gefunden',
-        issue: { exists: group === 'stub_group', issue_number: '12', published: true, is_demo: false }
+        message:
+          group === 'stub_group' ? 'Ausgabe 12 ist veröffentlicht' : 'Ausgabe nicht gefunden',
+        issue: {
+          exists: group === 'stub_group',
+          issue_number: '12',
+          published: true,
+          is_demo: false
+        }
       }
     })
   })
+
   cy.intercept('GET', '**/api/items/102/notify-abonements/', { statusCode: 200, body: mailStatus })
+
   cy.intercept('POST', '**/api/items/102/notify-abonements/', {
     statusCode: 200,
     body: { recipients: 3, alreadyMailed: 0 }
   }).as('notify')
+
   cy.intercept('PUT', '**/api/items/*/', { statusCode: 200, body: {} }).as('updateItem')
   cy.intercept('DELETE', '**/api/items/*/*', { statusCode: 204, body: '' }).as('deleteItem')
 }
@@ -100,6 +120,7 @@ describe('Product update by item type', () => {
   it('changes the item type', () => {
     stubBackend()
     openItem(101)
+
     cy.get('#itemType option').then(($options) => {
       const types = Array.from($options).map((option) => (option as HTMLOptionElement).value)
 
@@ -138,6 +159,7 @@ describe('Product update by item type', () => {
       FirstQueuedAt: '2026-01-01T10:00:00Z',
       LastSentAt: '2026-01-01T11:00:00Z'
     })
+
     openItem(102)
     cy.get('[data-test="mail-status"]').should('be.visible')
     cy.get('.mail-status-failed').should('be.visible')

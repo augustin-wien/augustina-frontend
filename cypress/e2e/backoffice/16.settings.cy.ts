@@ -1,16 +1,22 @@
 function stubSaves() {
   cy.intercept('PUT', '**/api/settings/', { statusCode: 200, body: {} }).as('saveSettings')
   cy.intercept('PUT', '**/api/settings/css/', { statusCode: 200, body: {} }).as('saveCss')
+
   cy.intercept('POST', '**/api/settings/nextcloud/test/', {
     statusCode: 200,
     body: { Success: true, Message: 'Verbindung steht' }
   }).as('testNextcloud')
+
   cy.intercept('POST', '**/api/settings/wordpress-invite/test/', {
     statusCode: 200,
     body: { Success: true, Message: 'Einladung erzeugt', Link: 'https://example.org/invite' }
   }).as('testWordPress')
+
   cy.intercept('POST', '**/api/mail-templates/', { statusCode: 200, body: {} }).as('saveTemplate')
-  cy.intercept('POST', '**/api/mail-templates/*/send/', { statusCode: 200, body: {} }).as('sendTemplate')
+
+  cy.intercept('POST', '**/api/mail-templates/*/send/', { statusCode: 200, body: {} }).as(
+    'sendTemplate'
+  )
 }
 
 function openSettings() {
@@ -31,6 +37,7 @@ describe('General settings', () => {
     cy.get('.toggle-grid input[type="checkbox"]').each(($toggle) => {
       cy.wrap($toggle).click({ force: true })
     })
+
     cy.get('.toggle-grid input[type="checkbox"]').each(($toggle) => {
       cy.wrap($toggle).click({ force: true })
     })
@@ -46,12 +53,17 @@ describe('General settings', () => {
 
   it('shows the link buttons and the map center', () => {
     openSettings()
+
     cy.get('.section input[type="text"]').each(($input) => {
-      if ($input.is(':visible') && !$input.is('[readonly]')) cy.wrap($input).type('x', { force: true })
+      if ($input.is(':visible') && !$input.is('[readonly]'))
+        cy.wrap($input).type('x', { force: true })
     })
+
     cy.get('.section input[type="text"]').each(($input) => {
-      if ($input.is(':visible') && !$input.is('[readonly]')) cy.wrap($input).type('{backspace}', { force: true })
+      if ($input.is(':visible') && !$input.is('[readonly]'))
+        cy.wrap($input).type('{backspace}', { force: true })
     })
+
     cy.contains('button', 'Open').click({ force: true })
   })
 
@@ -75,12 +87,16 @@ describe('Module settings', () => {
     })
 
     cy.get('.module-body').should('have.length.gte', 1)
+
     cy.get('.module-body input[type="text"], .module-body input[type="url"]').each(($input) => {
-      if ($input.is(':visible')) cy.wrap($input).clear({ force: true }).type('https://example.org', { force: true })
+      if ($input.is(':visible'))
+        cy.wrap($input).clear({ force: true }).type('https://example.org', { force: true })
     })
+
     cy.get('.module-body input[type="password"]').each(($input) => {
       cy.wrap($input).type('geheim', { force: true })
     })
+
     cy.get('#voucherEnabled').check({ force: true })
 
     cy.get('.connection-test button').click()
@@ -98,9 +114,11 @@ describe('Module settings', () => {
   it('switches the modules off again', () => {
     openSettings()
     cy.contains('.tab-btn', 'Module').click()
+
     cy.get('.module-switch input').each(($switch) => {
       if ($switch.prop('checked')) cy.wrap($switch).uncheck({ force: true })
     })
+
     cy.get('.module-body').should('not.exist')
     save()
     cy.wait('@saveSettings')

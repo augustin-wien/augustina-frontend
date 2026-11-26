@@ -1,7 +1,21 @@
 const items = [
-  { ID: 1, Name: 'Zeitung', Type: 'normal_item', Price: 300, IsLicenseItem: false, LicenseItem: null },
+  {
+    ID: 1,
+    Name: 'Zeitung',
+    Type: 'normal_item',
+    Price: 300,
+    IsLicenseItem: false,
+    LicenseItem: null
+  },
   { ID: 2, Name: 'Spende', Type: 'donation', Price: 0, IsLicenseItem: false, LicenseItem: null },
-  { ID: 3, Name: 'Online Ausgabe', Type: 'online_issue', Price: 300, IsLicenseItem: false, LicenseItem: 4 },
+  {
+    ID: 3,
+    Name: 'Online Ausgabe',
+    Type: 'online_issue',
+    Price: 300,
+    IsLicenseItem: false,
+    LicenseItem: 4
+  },
   { ID: 4, Name: 'Lizenz', Type: 'license_item', Price: 0, IsLicenseItem: true, LicenseItem: null }
 ].map((item) => ({
   Description: '',
@@ -37,7 +51,12 @@ const orders = [
     CustomerEmail: 'one@example.com',
     OdooSyncedAt: '2026-11-24T10:02:00Z',
     OdooSyncError: null,
-    Entries: [entry(1, 1, 2, 300), entry(2, 2, 1, 150), entry(3, 3, 1, 300), entry(4, 4, 1, 0, false)]
+    Entries: [
+      entry(1, 1, 2, 300),
+      entry(2, 2, 1, 150),
+      entry(3, 3, 1, 300),
+      entry(4, 4, 1, 0, false)
+    ]
   },
   {
     ID: 2,
@@ -71,11 +90,19 @@ function stubSales() {
       res.body.OdooEnabled = true
     })
   })
+
   cy.intercept('GET', '**/api/items/backoffice*', { statusCode: 200, body: items })
   cy.intercept('GET', '**/api/items/?*', { statusCode: 200, body: items })
   cy.intercept('GET', '**/api/orders/verified/*', { statusCode: 200, body: orders }).as('orders')
-  cy.intercept('POST', '**/api/orders/*/resend-mail/', { statusCode: 200, body: {} }).as('resendMail')
-  cy.intercept('POST', '**/api/orders/resend/*', { statusCode: 200, body: { sent_at: '2026-11-25T10:00:00Z' } }).as('resendOdoo')
+
+  cy.intercept('POST', '**/api/orders/*/resend-mail/', { statusCode: 200, body: {} }).as(
+    'resendMail'
+  )
+
+  cy.intercept('POST', '**/api/orders/resend/*', {
+    statusCode: 200,
+    body: { sent_at: '2026-11-25T10:00:00Z' }
+  }).as('resendOdoo')
 }
 
 describe('Extended sales', () => {
@@ -99,9 +126,11 @@ describe('Extended sales', () => {
     cy.wait('@orders')
     cy.get('tbody tr').should('have.length.gte', 3)
     cy.window().then((win) => cy.stub(win, 'confirm').returns(true))
+
     cy.get('tbody button').then(($buttons) => {
       expect($buttons.length).to.be.gte(1)
     })
+
     cy.get('tbody button').first().click({ force: true })
     cy.get('tbody button').last().click({ force: true })
     cy.get('.toast').should('be.visible')

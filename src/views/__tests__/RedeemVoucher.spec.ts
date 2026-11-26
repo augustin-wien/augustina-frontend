@@ -1,3 +1,4 @@
+import { AxiosError, type AxiosResponse } from 'axios'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import { defineComponent, h } from 'vue'
@@ -102,7 +103,11 @@ describe('RedeemVoucher', () => {
   })
 
   it('shows an error for an unknown code', async () => {
-    checkVoucher.mockRejectedValue({ response: { status: 404 } })
+    checkVoucher.mockRejectedValue(
+      new AxiosError('Not Found', undefined, undefined, undefined, {
+        status: 404
+      } as AxiosResponse)
+    )
 
     const wrapper = mountPage()
     await wrapper.get('#voucher-code').setValue('AAAA-BBBB-CCCC')

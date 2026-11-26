@@ -21,7 +21,11 @@ function saveCanvas(name: string) {
   cy.get('#qr-wrapper canvas').then(($canvas) => {
     const url = ($canvas[0] as HTMLCanvasElement).toDataURL('image/png')
 
-    cy.writeFile(`cypress/screenshots/${name}.png`, url.replace('data:image/png;base64,', ''), 'base64')
+    cy.writeFile(
+      `cypress/screenshots/${name}.png`,
+      url.replace('data:image/png;base64,', ''),
+      'base64'
+    )
   })
 }
 
@@ -32,6 +36,7 @@ function centerPixels() {
     const canvas = $canvas[0] as HTMLCanvasElement
     const context = canvas.getContext('2d') as CanvasRenderingContext2D
     const size = Math.round(canvas.width * 0.2)
+
     const data = context.getImageData(
       Math.round(canvas.width / 2 - size / 2),
       Math.round(canvas.height / 2 - size / 2),
@@ -58,9 +63,12 @@ describe('QR code settings', () => {
     cy.get('.qr-options select').eq(2).select('dot')
     cy.get('.qr-options select').eq(3).select('dot')
 
-    cy.get('.qr-options input[type="color"]').first().then(($color) => {
-      cy.wrap($color).invoke('val', '#aa0000').trigger('input')
-    })
+    cy.get('.qr-options input[type="color"]')
+      .first()
+      .then(($color) => {
+        cy.wrap($color).invoke('val', '#aa0000').trigger('input')
+      })
+
     cy.get('.qr-options input[type="color"]').last().invoke('val', '#eeeeee').trigger('input')
     cy.get('.qr-options input[type="color"]').first().invoke('val', '#000000').trigger('input')
     cy.get('.qr-options input[type="color"]').last().invoke('val', '#ffffff').trigger('input')
@@ -100,14 +108,17 @@ describe('QR code settings', () => {
   it('changes the QR code url and downloads the test QR code', () => {
     openQrCodeTab()
 
-    cy.get('.field-grid input[type="text"]').first().invoke('val').then((url) => {
-      cy.get('.field-grid input[type="text"]').first().clear().type('https://example.org')
-      cy.contains('button', 'Test QR-Code herunterladen').click()
-      cy.contains('button', 'QR-Code Einstellungen speichern').click()
-      reopenQrCodeTab()
-      cy.get('.field-grid input[type="text"]').first().clear().type(String(url))
-      saveSettings()
-    })
+    cy.get('.field-grid input[type="text"]')
+      .first()
+      .invoke('val')
+      .then((url) => {
+        cy.get('.field-grid input[type="text"]').first().clear().type('https://example.org')
+        cy.contains('button', 'Test QR-Code herunterladen').click()
+        cy.contains('button', 'QR-Code Einstellungen speichern').click()
+        reopenQrCodeTab()
+        cy.get('.field-grid input[type="text"]').first().clear().type(String(url))
+        saveSettings()
+      })
   })
 
   it('downloads the QR codes of all vendors', () => {
@@ -122,9 +133,11 @@ describe('QR code settings', () => {
     cy.get('.toggle-inline input[type="checkbox"]').uncheck({ force: true })
     saveSettings()
     reopenQrCodeTab()
+
     centerPixels().then((pixels) => {
       withoutLogo = pixels
     })
+
     saveCanvas('qr-without-logo')
 
     cy.get('.toggle-inline input[type="checkbox"]').check({ force: true })
@@ -132,9 +145,11 @@ describe('QR code settings', () => {
     saveSettings()
     reopenQrCodeTab()
     cy.get('.toggle-inline input[type="checkbox"]').should('be.checked')
+
     centerPixels().then((pixels) => {
       expect(pixels, 'center of the QR code with the logo').to.not.equal(withoutLogo)
     })
+
     saveCanvas('qr-with-logo')
   })
 })

@@ -54,13 +54,22 @@ function stubMailTasks() {
     statusCode: 200,
     body: { Tasks: tasks, Total: 120, Counts: { sent: 1, failed: 1, pending: 1 } }
   }).as('mailTasks')
+
   cy.intercept('GET', '**/api/mail-tasks/', {
     statusCode: 200,
     body: { Tasks: tasks, Total: 3, Counts: { sent: 1, failed: 1, pending: 1 } }
   }).as('mailTasks')
-  cy.intercept('GET', '**/api/mail-tasks/*/', { statusCode: 200, body: { ...tasks[1], Body: 'Text der Mail' } })
+
+  cy.intercept('GET', '**/api/mail-tasks/*/', {
+    statusCode: 200,
+    body: { ...tasks[1], Body: 'Text der Mail' }
+  })
+
   cy.intercept('POST', '**/api/mail-tasks/*/retry/', { statusCode: 200, body: {} }).as('retry')
-  cy.intercept('POST', /\/api\/mail-tasks\/retry-failed\//, { statusCode: 200, body: {} }).as('retryFailed')
+
+  cy.intercept('POST', /\/api\/mail-tasks\/retry-failed\//, { statusCode: 200, body: {} }).as(
+    'retryFailed'
+  )
 }
 
 describe('Mail tasks', () => {
@@ -106,7 +115,11 @@ describe('Mail tasks', () => {
 
   it('opens a pre-filtered list from a link', () => {
     stubMailTasks()
-    cy.loginBackoffice('/backoffice/mails?item_id=5&kind=online_issue&order_id=7&status=failed&page=2')
+
+    cy.loginBackoffice(
+      '/backoffice/mails?item_id=5&kind=online_issue&order_id=7&status=failed&page=2'
+    )
+
     cy.get('tbody tr').should('have.length.gte', 1)
     cy.get('.filter-chip button').first().click()
     cy.get('.filter-chip button').first().click()
@@ -172,10 +185,12 @@ describe('Vouchers', () => {
     cy.intercept('GET', '**/api/vouchers/', { statusCode: 200, body: vouchers })
     cy.intercept('GET', '**/api/vouchers/*/pdf/', { statusCode: 200, body: 'pdf' }).as('pdf')
     cy.intercept('POST', '**/api/vouchers/*/resend/', { statusCode: 200, body: {} }).as('resend')
+
     cy.intercept('POST', '**/api/vouchers/*/disable/', {
       statusCode: 200,
       body: { ...vouchers[0], Status: 'disabled' }
     }).as('disable')
+
     cy.intercept('POST', '**/api/vouchers/*/enable/', {
       statusCode: 200,
       body: { ...vouchers[2], Status: 'active' }
@@ -198,11 +213,13 @@ describe('Vouchers', () => {
   it('opens the PDF, resends, disables and enables a voucher', () => {
     cy.loginBackoffice('/backoffice/vouchers')
     cy.get('tbody tr').should('have.length', 3)
+
     cy.window().then((win) => {
       cy.stub(win, 'open').as('open')
       cy.stub(win, 'prompt').returns('new@example.com')
       cy.stub(win, 'confirm').returns(true)
     })
+
     cy.contains('tr', 'AAAA-1111').contains('button', 'PDF').click()
     cy.wait('@pdf')
     cy.contains('tr', 'AAAA-1111').find('button').eq(1).click()
@@ -245,14 +262,17 @@ describe('Unverified orders', () => {
 
   it('verifies an order, adds a transaction id and handles errors', () => {
     cy.intercept('GET', '**/api/orders/unverified/', { statusCode: 200, body: orders })
+
     cy.intercept('GET', '**/api/orders/unverified/code/1111111111/verify/', {
       statusCode: 200,
       body: {}
     }).as('verifyOk')
+
     cy.intercept('GET', '**/api/orders/unverified/code/2222222222/verify/', {
       statusCode: 400,
       body: { error: { message: 'nicht bezahlt' } }
     }).as('verifyFail')
+
     cy.intercept('POST', '**/api/orders/unverified/code/*/transactionID/', {
       statusCode: 200,
       body: {}
@@ -265,6 +285,7 @@ describe('Unverified orders', () => {
     cy.window().then((win) => {
       cy.stub(win, 'prompt').returns('TX-123')
     })
+
     cy.get('tbody tr').first().find('button').first().click()
     cy.wait('@verifyOk')
     cy.get('tbody tr').eq(1).find('button').first().click()
@@ -288,6 +309,7 @@ describe('Scan an ID card', () => {
         res.body.IDScanEnabled = true
       })
     })
+
     cy.intercept('POST', '**/api/vendors/nobody-123/id-scan/', { statusCode: 404, body: {} })
     cy.intercept('POST', '**/api/vendors/broken-1/id-scan/', { statusCode: 500, body: {} })
     cy.intercept('POST', '**/api/vendors/fl-123/id-scan/', { statusCode: 200, body: { ID: 1 } })
