@@ -110,6 +110,7 @@ const choose = () => {
           v-if="item.Image"
           :src="`${apiUrl}${item.Image}`"
           :alt="item.Name"
+          fetchpriority="high"
           class="campaign-image mx-auto w-full rounded-2xl object-contain"
           :class="{ 'mt-8': !campaign.title }"
         />
@@ -127,14 +128,14 @@ const choose = () => {
         <button
           id="campaign-choose"
           type="button"
-          class="customcolor h-14 w-full rounded-full text-xl font-semibold"
+          class="customcolor h-14 w-full rounded-full text-xl font-bold"
           @click="choose"
         >
           {{ $t('campaignChoose') }}
         </button>
         <button
           type="button"
-          class="customcolor h-14 w-full rounded-full text-xl font-semibold"
+          class="customcolor h-14 w-full rounded-full text-xl font-bold"
           @click="close"
         >
           {{ $t('campaignDismiss') }}
