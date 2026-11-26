@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { errorMessage } from '@/utils/apiError'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Button from '@/components/ui/Button.vue'
@@ -26,8 +27,8 @@ async function send(action: () => Promise<unknown>, successMessage: string) {
   try {
     await action()
     emit('result', { type: 'success', message: successMessage })
-  } catch (error: any) {
-    const reason = error?.response?.data?.error?.message ?? error?.message ?? ''
+  } catch (error) {
+    const reason = errorMessage(error)
     emit('result', { type: 'error', message: `${t('emailCouldNotBeSent')} ${reason}`.trim() })
   } finally {
     sending.value = false

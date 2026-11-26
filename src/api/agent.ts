@@ -65,14 +65,14 @@ const VivaWallet = {
       })
       .then(sleep(100))
       .then(responseBody),
-  addTransactionID: (orderCode: string, transactionID: string): Promise<any> =>
+  addTransactionID: (orderCode: string, transactionID: string): Promise<unknown> =>
     apiInstance
       .post(ORDERS_UNVERIFIED_API_URL + 'code/' + orderCode + '/transactionID/', {
         transactionID: transactionID
       })
       .then(sleep(100))
       .then(responseBody),
-  resendWebhook: (orderID: number): Promise<any> =>
+  resendWebhook: (orderID: number): Promise<{ sent_at?: string } | undefined> =>
     apiInstance
       .post(
         `${ORDERS_RESEND_API_URL}${orderID}/`,

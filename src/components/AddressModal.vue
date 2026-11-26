@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Vendor, VendorLocation } from '@/stores/vendor'
 import { computed, onMounted, ref, type Ref } from 'vue'
+import type { LatLng } from 'leaflet'
 import { useI18n } from 'vue-i18n'
 import VendorMapView from '@/components/VendorMapView.vue'
 import VendorPicker from '@/components/VendorPicker.vue'
@@ -161,13 +162,14 @@ const setDayClosed = (day: (typeof dayOptions)[number], closed: boolean) => {
   newAddress.value.working_time.whole_week = undefined
 }
 
-const updateLocation = (event: any) => {
+// Payload of leaflet-geosearch's showlocation event
+const updateLocation = (event: { location: { x: number; y: number; label: string } }) => {
   newAddress.value.latitude = event.location.y
   newAddress.value.longitude = event.location.x
   newAddress.value.address = event.location.label
 }
 
-const editMarker = (newLocation: any) => {
+const editMarker = (newLocation: LatLng) => {
   newAddress.value.latitude = newLocation.lat
   newAddress.value.longitude = newLocation.lng
 }

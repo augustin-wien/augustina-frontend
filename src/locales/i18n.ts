@@ -40,7 +40,7 @@ const i18n = createI18n({
     de: de,
     en: en,
     it: it
-  } as any,
+  },
   fallbackLocale: DEFAULT_LOCALE,
   formatFallbackMessages: true
 })

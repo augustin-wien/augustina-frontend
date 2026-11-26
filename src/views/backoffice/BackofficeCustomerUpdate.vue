@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { apiErrorMessage, errorMessage } from '@/utils/apiError'
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
@@ -116,11 +117,8 @@ async function save() {
       savedEmail.value = form.value.email ?? ''
       showToast('success', 'Customer updated')
     }
-  } catch (error: any) {
-    showToast(
-      'error',
-      `Could not save customer ${error?.response?.data?.error?.message ?? ''}`.trim()
-    )
+  } catch (error) {
+    showToast('error', `Could not save customer ${apiErrorMessage(error)}`.trim())
   }
 }
 
@@ -178,11 +176,8 @@ async function saveAbonement() {
 
     await store.getAbonementsByCustomer(customerId.value)
     showAbonementModal.value = false
-  } catch (error: any) {
-    showToast(
-      'error',
-      `Could not save abonement: ${error?.response?.data?.error?.message ?? error?.message ?? ''}`
-    )
+  } catch (error) {
+    showToast('error', `Could not save abonement: ${errorMessage(error)}`)
   }
 }
 

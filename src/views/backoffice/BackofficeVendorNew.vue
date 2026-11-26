@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { apiErrorMessage } from '@/utils/apiError'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
 import { useSettingsStore } from '@/stores/settings'
@@ -91,14 +92,11 @@ const submitVendor = async () => {
     await store.createVendorPromise(vendor as Vendor).then(() => {
       router.push(`/backoffice/vendorsummary/`)
     })
-  } catch (err: any) {
+  } catch (err) {
     // eslint-disable-next-line no-console
     console.error('Error creating vendor:', err)
 
-    showToast(
-      'error',
-      'VerkäuferIn konnte nicht angelegt werden ' + err.response.data.error.message
-    )
+    showToast('error', 'VerkäuferIn konnte nicht angelegt werden ' + apiErrorMessage(err))
   }
 }
 
@@ -118,8 +116,9 @@ const importCSV = async () => {
   input.type = 'file'
   input.accept = '.csv'
 
-  input.onchange = async (event: any) => {
-    const file = event.target.files[0]
+  input.onchange = async () => {
+    const file = input.files?.[0]
+    if (!file) return
     const text = await file.text()
 
     const vendors = parseVendorsCsv(text, settingsStore.settings.VendorEmailPostfix)

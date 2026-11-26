@@ -77,7 +77,9 @@ export interface Settings {
   AccountingReportEmail: string
   // Which secrets have a stored value; the values themselves are never sent to the backoffice
   SecretsSet?: Record<string, boolean>
-  edges?: any
+  edges?: {
+    MainItem: { id: number; Description: string; Image: string; Name: string; Price: number }
+  }
   Keycloak: {
     Realm: string
     URL: string

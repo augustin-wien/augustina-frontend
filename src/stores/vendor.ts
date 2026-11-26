@@ -188,6 +188,9 @@ export interface VendorComment {
   created_at: Date
 }
 
+// What creating a comment needs; the backend fills in the rest
+export type NewVendorComment = Pick<VendorComment, 'comment'> & Partial<VendorComment>
+
 export interface VendorCheckResponse {
   name: string
 }
@@ -446,7 +449,7 @@ export const vendorsStore = defineStore('vendors', {
         return error
       }
     },
-    async createVendorComment(newComment: VendorComment, vendorId: number) {
+    async createVendorComment(newComment: NewVendorComment, vendorId: number) {
       try {
         await postVendorComment(vendorId, newComment)
         return

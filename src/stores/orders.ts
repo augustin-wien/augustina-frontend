@@ -2,10 +2,39 @@ import { defineStore } from 'pinia'
 import { fetchUnverifiedOrders } from '@/api/api'
 import agent from '@/api/agent'
 
+export interface OrderEntry {
+  ID: number
+  Item: number
+  Quantity: number
+  Price: number
+  Sender: number
+  Receiver: number
+  SenderName: string
+  ReceiverName: string
+  IsSale: boolean
+}
+
+export interface Order {
+  ID: number
+  OrderCode: string | null
+  TransactionID: string
+  Timestamp: string
+  VerifiedAt: string | null
+  Vendor: number
+  CustomerEmail: string | null
+  OdooSyncedAt: string | null
+  OdooSyncError: string | null
+  ReconcileFailedAt?: string | null
+  ReconcileError?: string | null
+  PaymentEventID?: number | null
+  PaymentFailedAt?: string | null
+  Entries: OrderEntry[] | null
+}
+
 export const useOrdersStore = defineStore('orders', {
   state: () => {
     return {
-      unverifiedOrders: [] as any[]
+      unverifiedOrders: [] as Order[]
     }
   },
   actions: {

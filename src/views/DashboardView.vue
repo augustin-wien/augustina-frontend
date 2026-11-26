@@ -6,7 +6,7 @@ import { ref } from 'vue'
 const message = ref('Press the button to call the backend')
 
 function get() {
-  getAuthHello().then((response: any) => {
+  getAuthHello().then((response) => {
     message.value = response.data
   })
 }

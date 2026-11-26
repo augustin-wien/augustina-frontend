@@ -178,7 +178,13 @@ defineExpose({ saveSettings })
         <h2 class="section-title">{{ $t('Branding') }}</h2>
         <div class="field-grid">
           <FormField :label="$t('Newspaper name')" class="field-span-2" required>
-            <input id="newspapername" v-model="localSettings.NewspaperName" type="text" class="aug-input" required />
+            <input
+              id="newspapername"
+              v-model="localSettings.NewspaperName"
+              type="text"
+              class="aug-input"
+              required
+            />
           </FormField>
           <FormField :label="$t('color')" required>
             <input v-model="localSettings.Color" type="text" class="aug-input" required />
@@ -304,7 +310,12 @@ defineExpose({ saveSettings })
             :error="vendorEmailPostfixError"
             :hint="vendorEmailPostfixHint"
           >
-            <input id="vendorEmailPostfix" v-model="localSettings.VendorEmailPostfix" type="text" class="aug-input" />
+            <input
+              id="vendorEmailPostfix"
+              v-model="localSettings.VendorEmailPostfix"
+              type="text"
+              class="aug-input"
+            />
           </FormField>
           <FormField :label="$t('Digital items URL')">
             <input v-model="localSettings.DigitalItemsUrl" type="text" class="aug-input" />

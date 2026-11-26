@@ -46,12 +46,12 @@ useAuthLoad(() => {
 
 //fetch paymentlist data once component is mounted
 
-const onRangeStart = (value: any) => {
+const onRangeStart = (value: Date) => {
   startDate.value = value // Update the startDate variable
   store.getSales(startDate.value, endDate.value)
 }
 
-const onRangeEnd = (value: any) => {
+const onRangeEnd = (value: Date) => {
   endDate.value = value // Update the endDate variable
   store.getSales(startDate.value, endDate.value)
 }

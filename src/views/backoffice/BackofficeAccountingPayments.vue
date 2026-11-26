@@ -13,6 +13,7 @@ import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { useSettingsStore } from '@/stores/settings'
 import { useI18n } from 'vue-i18n'
 import { itemDisplayName } from '@/utils/itemName'
+import { apiErrorMessage } from '@/utils/apiError'
 import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
@@ -101,7 +102,7 @@ useAuthLoad(() => {
 
 const findVendorIdByLicense = (licenseID: string | undefined | null) => {
   if (!licenseID) return null
-  const v = vendors.value.find((x: any) => x.LicenseID === licenseID)
+  const v = vendors.value.find((x) => x.LicenseID === licenseID)
   return v ? v.ID : null
 }
 
@@ -109,9 +110,8 @@ const handleResendToOdoo = async (orderID: number) => {
   try {
     await ordersStore.resendOdooWebhook(orderID)
     alert('Transaction resend to Odoo triggered successfully')
-  } catch (error: any) {
-    console.error('Resend to Odoo failed', error)
-    const message = error.response?.data?.error?.message || 'Failed to resend transaction to Odoo'
+  } catch (error) {
+    const message = apiErrorMessage(error) || 'Failed to resend transaction to Odoo'
     alert(message)
   }
 }

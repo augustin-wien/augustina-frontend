@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { apiErrorMessage } from '@/utils/apiError'
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { fetchVouchers, fetchVoucherPDF, resendVoucher, setVoucherDisabled } from '@/api/api'
@@ -76,8 +77,8 @@ const resend = async (v: AbonementVoucher) => {
   try {
     await resendVoucher(v.ID, email.trim() === v.BuyerEmail ? '' : email.trim())
     showToast('success', t('voucherResent'))
-  } catch (err: any) {
-    showToast('error', t('voucherResendFailed') + ' ' + (err?.response?.data?.error?.message ?? ''))
+  } catch (err) {
+    showToast('error', t('voucherResendFailed') + ' ' + apiErrorMessage(err))
   }
 }
 
@@ -89,8 +90,8 @@ const toggleDisabled = async (v: AbonementVoucher) => {
     const updated = (await setVoucherDisabled(v.ID, disable)).data
     const idx = vouchers.value.findIndex((x) => x.ID === v.ID)
     if (idx >= 0) vouchers.value[idx] = { ...vouchers.value[idx], ...updated }
-  } catch (err: any) {
-    showToast('error', err?.response?.data?.error?.message ?? String(err))
+  } catch (err) {
+    showToast('error', apiErrorMessage(err, String(err)))
   }
 }
 </script>

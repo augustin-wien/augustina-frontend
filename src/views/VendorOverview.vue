@@ -33,7 +33,7 @@ const formatTime = (date: string) => {
   return `${formattedDate} - ${formattedTime}`
 }
 
-watch(vendorMe as any, () => {
+watch(vendorMe, () => {
   if (vendorMe.value) generateQRCode(vendorMe.value)
 })
 

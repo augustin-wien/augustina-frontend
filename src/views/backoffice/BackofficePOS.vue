@@ -173,7 +173,7 @@ async function addComment() {
   addingComment.value = true
 
   try {
-    await vendorStore.createVendorComment({ comment: newComment.value } as any, vendor.value.ID)
+    await vendorStore.createVendorComment({ comment: newComment.value }, vendor.value.ID)
     newComment.value = ''
     await vendorStore.getVendorComments(vendor.value.ID)
   } finally {

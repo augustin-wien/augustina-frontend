@@ -7,7 +7,7 @@ import { suggestEmailCorrection } from '@/utils/emailTypo'
 const settStore = useSettingsStore()
 const paymentStore = usePaymentStore()
 
-const props = defineProps(['licenceItem'])
+const props = defineProps<{ licenceItem: { Name: string } }>()
 const email = ref(localStorage.getItem('email') ?? '')
 
 const validateEmail = (email: string) => {

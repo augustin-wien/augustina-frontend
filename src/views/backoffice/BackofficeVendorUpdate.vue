@@ -257,7 +257,7 @@ const editLocation = (location: VendorLocation) => {
 
 const selectedLocation = ref<Array<VendorLocation> | null>(null)
 
-const editComment = (comment: any) => {
+const editComment = (comment: VendorComment) => {
   selectedComment.value = comment
   isNewComment.value = false
   showCommentsDialog.value = true
