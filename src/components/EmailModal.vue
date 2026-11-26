@@ -7,7 +7,7 @@ import { suggestEmailCorrection } from '@/utils/emailTypo'
 const settStore = useSettingsStore()
 const paymentStore = usePaymentStore()
 
-const props = defineProps(['licenceItem'])
+const props = defineProps<{ licenceItem: { Name: string } }>()
 const email = ref(localStorage.getItem('email') ?? '')
 
 const validateEmail = (email: string) => {
@@ -111,8 +111,7 @@ const keepEmail = () => {
 
               <div v-if="suggestion" class="suggestion mt-3 p-4 rounded-md border" role="alert">
                 <p class="mb-3">
-                  {{ $t('Did you mean') }} <strong>{{ suggestion }}</strong
-                  >?
+                  {{ $t('Did you mean') }} <strong>{{ suggestion }}</strong>?
                 </p>
                 <div class="flex flex-wrap gap-2">
                   <button

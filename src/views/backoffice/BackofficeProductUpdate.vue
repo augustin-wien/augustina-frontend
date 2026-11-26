@@ -7,7 +7,7 @@ import {
   type WordPressIssueCheck
 } from '@/api/api'
 import router from '@/router'
-import type { Item } from '@/stores/items'
+import type { ItemUpload } from '@/stores/items'
 import { useItemsStore, ITEM_TYPES } from '@/stores/items'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useSettingsStore, vouchersEnabled } from '@/stores/settings'
@@ -22,6 +22,8 @@ import PageHeader from '@/components/ui/PageHeader.vue'
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
+import { isAxiosError } from 'axios'
+import { apiErrorMessage } from '@/utils/apiError'
 
 const { t } = useI18n()
 const itemsStore = useItemsStore()
@@ -40,7 +42,7 @@ const availableItemTypes = computed(() =>
 
 const authenticated = computed(() => keycloakStore.authenticated)
 
-const updatedItem = ref<Item | null>()
+const updatedItem = ref<ItemUpload | null>()
 
 watch(
   authenticated,
@@ -112,7 +114,7 @@ const updateItem = async () => {
 
   try {
     itemsStore
-      .updateItem(updatedItem.value as Item)
+      .updateItem(updatedItem.value as ItemUpload)
       .then(() => {
         showToast('success', 'Produkt erfolgreich aktualisiert')
 
@@ -164,11 +166,11 @@ const checkWpIssue = async () => {
 
   try {
     wpIssueCheck.value = (await checkWordPressIssue(updatedItem.value?.LicenseGroup ?? '')).data
-  } catch (err: any) {
+  } catch (err) {
     wpIssueCheck.value = {
       configured: true,
       ok: false,
-      message: err?.response?.data?.error?.message ?? String(err),
+      message: apiErrorMessage(err, String(err)),
       issue: { exists: false, issue_number: '', published: false, is_demo: false }
     }
   } finally {
@@ -248,14 +250,11 @@ const notifyAbonements = async () => {
     }
 
     setTimeout(() => refreshMailStatusWhileOpen(), 1000)
-  } catch (error: any) {
+  } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Sending the issue to the abonnents failed:', error)
 
-    showToast(
-      'error',
-      `${t('notifyAbonementsFailed')} ${error?.response?.data?.error?.message ?? ''}`
-    )
+    showToast('error', `${t('notifyAbonementsFailed')} ${apiErrorMessage(error)}`)
   } finally {
     notifying.value = false
     showNotifyModal.value = false
@@ -297,7 +296,7 @@ const deleteItem = async () => {
 
     showToast(
       'error',
-      (error as any)?.response?.status === 409
+      isAxiosError(error) && error.response?.status === 409
         ? 'Lizenz-Item ist noch einem Produkt zugeordnet und kann nicht gelöscht werden'
         : 'Produkt konnte nicht gelöscht werden'
     )
@@ -312,14 +311,16 @@ const showToast = (type: string, message: string) => {
   }, 5000)
 }
 
-const updateImage = (event: any) => {
+const pickedFile = (event: Event) => (event.target as HTMLInputElement).files?.[0]
+
+const updateImage = (event: Event) => {
   if (!updatedItem.value) return
-  updatedItem.value.Image = event.target?.files[0]
+  updatedItem.value.Image = pickedFile(event)
 }
 
-const updatePDF = (event: any) => {
+const updatePDF = (event: Event) => {
   if (!updatedItem.value) return
-  updatedItem.value.PDF = event.target?.files[0]
+  updatedItem.value.PDF = pickedFile(event) ?? null
 }
 
 // Whether the saved item has a PDF attached; a newly chosen file is only stored on save
@@ -377,8 +378,8 @@ const previewImage = (image: string | Blob | MediaSource) => {
               </FormField>
               <FormField :label="$t('itemType')" for="itemType">
                 <select id="itemType" v-model="updatedItem.Type" class="aug-input">
-                  <option v-for="t in availableItemTypes" :key="t" :value="t">
-                    {{ $t(`itemType_${t}`) }}
+                  <option v-for="itemType in availableItemTypes" :key="itemType" :value="itemType">
+                    {{ $t(`itemType_${itemType}`) }}
                   </option>
                 </select>
               </FormField>

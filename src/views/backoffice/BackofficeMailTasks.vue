@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { apiErrorMessage } from '@/utils/apiError'
 import {
   fetchMailTask,
   fetchMailTasks,
@@ -100,9 +101,9 @@ const load = async () => {
     tasks.value = res.data?.Tasks ?? []
     total.value = res.data?.Total ?? 0
     counts.value = res.data?.Counts ?? {}
-  } catch (error: any) {
+  } catch (error) {
     toast.value = {
-      message: `${t('mailTasksLoadFailed')} ${error?.response?.data?.error?.message ?? ''}`,
+      message: `${t('mailTasksLoadFailed')} ${apiErrorMessage(error)}`,
       type: 'error'
     }
   } finally {
@@ -134,9 +135,9 @@ const detail = ref<MailTask | null>(null)
 const openDetail = async (task: MailTask) => {
   try {
     detail.value = (await fetchMailTask(task.ID)).data
-  } catch (error: any) {
+  } catch (error) {
     toast.value = {
-      message: `${t('mailTasksLoadFailed')} ${error?.response?.data?.error?.message ?? ''}`,
+      message: `${t('mailTasksLoadFailed')} ${apiErrorMessage(error)}`,
       type: 'error'
     }
   }
@@ -155,9 +156,9 @@ const retry = async (task: MailTask) => {
     toast.value = { message: t('mailTaskRetryQueued'), type: 'success' }
     detail.value = null
     setTimeout(load, 1500)
-  } catch (error: any) {
+  } catch (error) {
     toast.value = {
-      message: `${t('mailTaskRetryFailed')} ${error?.response?.data?.error?.message ?? ''}`,
+      message: `${t('mailTaskRetryFailed')} ${apiErrorMessage(error)}`,
       type: 'error'
     }
   } finally {
@@ -181,9 +182,9 @@ const retryAllFailed = async () => {
     }
 
     setTimeout(load, 1500)
-  } catch (error: any) {
+  } catch (error) {
     toast.value = {
-      message: `${t('mailTaskRetryFailed')} ${error?.response?.data?.error?.message ?? ''}`,
+      message: `${t('mailTaskRetryFailed')} ${apiErrorMessage(error)}`,
       type: 'error'
     }
   } finally {

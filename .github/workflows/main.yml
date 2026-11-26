@@ -13,12 +13,15 @@ jobs:
 
     steps:
     - name: Setup Node
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: 20
+        node-version: 26
+
+    - name: Enable Yarn
+      run: npm install -g corepack && corepack enable
 
     - name: Check out code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Download dependencies
       run: yarn install --frozen-lockfile

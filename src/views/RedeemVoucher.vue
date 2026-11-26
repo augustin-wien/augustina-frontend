@@ -6,6 +6,8 @@ import { checkVoucher, redeemVoucher } from '@/api/api'
 import type { VoucherCheck, VoucherRedemption } from '@/api/api'
 import { useSettingsStore } from '@/stores/settings'
 import { suggestEmailCorrection } from '@/utils/emailTypo'
+import { apiErrorMessage } from '@/utils/apiError'
+import { isAxiosError } from 'axios'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -30,12 +32,12 @@ const durationText = (months: number) => {
 
 const formatDate = (date: string) => new Date(date).toLocaleDateString()
 
-const errorMessage = (err: any) => {
-  const status = err?.response?.status
+const errorMessage = (err: unknown) => {
+  const status = isAxiosError(err) ? err.response?.status : undefined
   if (status === 404) return t('voucherNotFound')
 
   if (status === 409) {
-    return err?.response?.data?.error?.message?.includes('disabled')
+    return apiErrorMessage(err).includes('disabled')
       ? t('voucherDisabled')
       : t('voucherAlreadyRedeemed')
   }
@@ -206,8 +208,7 @@ onMounted(() => {
             <p v-if="emailSuggestion" class="text-sm mt-2" role="alert">
               {{ $t('Did you mean') }}
               <button type="button" class="underline font-semibold" @click="acceptSuggestion">
-                {{ emailSuggestion }}</button
-              >?
+                {{ emailSuggestion }}</button>?
             </p>
             <div class="grid grid-cols-2 gap-3 mt-4">
               <div>

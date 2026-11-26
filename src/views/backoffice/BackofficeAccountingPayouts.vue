@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import VueDatePicker from '@vuepic/vue-datepicker'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { useColorScheme } from '@/composables/useColorScheme'
 import { ref, computed } from 'vue'
@@ -37,12 +37,12 @@ const settingsStore = useSettingsStore()
 
 //fetch paymentlist data once component is mounted
 
-const onRangeStart = (value: any) => {
+const onRangeStart = (value: Date) => {
   startDate.value = value // Update the startDate variable
   paymentStore.getPayouts(startDate.value, endDate.value)
 }
 
-const onRangeEnd = (value: any) => {
+const onRangeEnd = (value: Date) => {
   endDate.value = value // Update the endDate variable
   paymentStore.getPayouts(startDate.value, endDate.value)
 }
@@ -91,7 +91,7 @@ useAuthLoad(() => {
   itemsStore.getItemsWithArchived()
 })
 
-const sumItemsForOrder = (payment: any, itemID: number) => {
+const sumItemsForOrder = (payment: Payment, itemID: number) => {
   let sum = 0
 
   payment.IsPayoutFor?.forEach((payout: Payment) => {
@@ -142,7 +142,7 @@ const exportTable = () => {
         <VueDatePicker
           v-model="date"
           range
-          :enable-time-picker="false"
+          :time-config="{ enableTimePicker: false }"
           :placeholder="$t('chooseDateRange')"
           class="max-w-md"
           :dark="isDark"

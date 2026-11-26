@@ -7,21 +7,24 @@ import type { PointExpression } from 'leaflet'
 import type { Ref } from 'vue'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import 'vue-leaflet-markercluster/dist/style.css'
-import { computed, watch, ref } from 'vue'
+import { computed, watch, ref, shallowRef } from 'vue'
+import type { Vendor, VendorLocation } from '@/stores/vendor'
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch'
 import 'leaflet-geosearch/dist/geosearch.css'
 import Button from '@/components/ui/Button.vue'
 
 const emit = defineEmits(['newLocation', 'editMarker'])
-const props = defineProps(['locations', 'enableSearch', 'vendor', 'newCoords'])
+
+const props = defineProps<{
+  locations: VendorLocation[]
+  enableSearch?: number | boolean
+  vendor?: Vendor | null
+  newCoords?: number | boolean
+}>()
 
 const provider = new OpenStreetMapProvider()
 
-// GeoSearchControl has no types defined
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const searchControl: any = new (GeoSearchControl as any)({
-  provider: provider
-})
+const searchControl = GeoSearchControl({ provider })
 
 const locations = computed(() => props.locations)
 const center: Ref<PointExpression> = ref([48.2083, 16.3731])
@@ -48,42 +51,44 @@ watch(locations, () => {
 //Map configuration
 const zoom = ref(12)
 // Todo: Get the center from the settings
-const map: Ref<any> = ref(null)
-const marker: Ref<any> = ref(null)
-const markerCoords = ref(null)
+const map = shallowRef<L.Map | null>(null)
+const marker = shallowRef<L.Marker | null>(null)
+const markerCoords = ref<L.LatLng | null>(null)
 const newMarker = ref(false)
 
 const vendor = computed(() => props.vendor)
 
-function onMapReady(instance: any) {
-  if (instance) {
-    map.value = instance
+function onMapReady(instance: L.Map) {
+  if (!instance) return
 
-    map.value.on('dblclick', function (event: any) {
-      alert('Latitude: ' + event.latlng.lat + ' \n Longitude: ' + event.latlng.lng)
+  map.value = instance
+
+  instance.on('dblclick', (event: L.LeafletMouseEvent) => {
+    alert('Latitude: ' + event.latlng.lat + ' \n Longitude: ' + event.latlng.lng)
+  })
+
+  if (props.enableSearch == 1) {
+    instance.addControl(searchControl)
+
+    instance.on('geosearch/showlocation', (event) => {
+      emit('newLocation', event)
+    })
+  }
+
+  if (props.newCoords == 1) {
+    instance.setView([locations.value[0].latitude, locations.value[0].longitude], 10)
+    newMarker.value = true
+
+    const newCoordsMarker = L.marker([locations.value[0].latitude, locations.value[0].longitude], {
+      draggable: true
+    }).addTo(instance)
+
+    newCoordsMarker.on('dragend', () => {
+      markerCoords.value = newCoordsMarker.getLatLng()
+      emit('editMarker', newCoordsMarker.getLatLng())
     })
 
-    if (props.enableSearch == 1) {
-      map.value.addControl(searchControl)
-
-      map.value.on('geosearch/showlocation', function (event: any) {
-        emit('newLocation', event)
-      })
-    }
-
-    if (props.newCoords == 1) {
-      map.value.setView([locations.value[0].latitude, locations.value[0].longitude], 10)
-      newMarker.value = true
-
-      marker.value = L.marker([locations.value[0].latitude, locations.value[0].longitude], {
-        draggable: true
-      }).addTo(map.value)
-
-      marker.value.on('dragend', function () {
-        markerCoords.value = marker.value.getLatLng()
-        emit('editMarker', marker.value.getLatLng())
-      })
-    }
+    marker.value = newCoordsMarker
   }
 }
 </script>
@@ -103,7 +108,7 @@ function onMapReady(instance: any) {
           layer-type="base"
           name="OpenStreetMap"
         ></l-tile-layer>
-        <li v-for="location in props.locations" :key="'location_' + location.Id">
+        <li v-for="location in props.locations" :key="'location_' + location.id">
           123
           <l-marker
             v-if="location.latitude && location.longitude && !newMarker"
@@ -122,10 +127,10 @@ function onMapReady(instance: any) {
                 >{{ location.working_time }}</span
               >
               <RouterLink
-                v-if="vendor && vendor.Id"
+                v-if="vendor && vendor.ID"
                 :to="{
                   name: 'Vendor Profile',
-                  params: { ID: vendor.Id }
+                  params: { ID: vendor.ID }
                 }"
               >
                 <Button variant="primary">{{ $t('edit') }}</Button>

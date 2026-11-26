@@ -1,8 +1,13 @@
 import keycloak, { login } from '@/keycloak/keycloak'
-import { type Item } from '@/stores/items'
+import { type Item, type ItemUpload } from '@/stores/items'
 import { type PaymentsForPayout, type Payout } from '@/stores/payout'
 import { type Settings } from '@/stores/settings'
-import { type Vendor } from '@/stores/vendor'
+import {
+  type NewVendorComment,
+  type Vendor,
+  type VendorComment,
+  type VendorLocation
+} from '@/stores/vendor'
 import axios from 'axios'
 import * as Sentry from '@sentry/vue'
 import { requestIdFromHeaders, setLastRequestId } from '@/utils/requestId'
@@ -308,11 +313,11 @@ export async function checkWordPressIssue(licenseGroup: string) {
 export async function fetchLicenseGroups() {
   return apiInstance.get<string[]>(`${ITEMS_API_URL}licensegroups/`)
 }
-export async function postItems(newItem: Item) {
+export async function postItems(newItem: ItemUpload) {
   return apiInstance.postForm(ITEMS_API_URL, newItem)
 }
 
-export async function patchItem(updatedItem: Item) {
+export async function patchItem(updatedItem: ItemUpload) {
   return apiInstance.putForm(`${ITEMS_API_URL}${updatedItem.ID}/`, updatedItem)
 }
 
@@ -649,7 +654,7 @@ export async function fetchVendorLocations(vendorId: number) {
   return apiInstance.get(`${VENDORS_API_URL}${vendorId}/locations/`)
 }
 
-export async function postVendorLocation(vendorId: number, location: any) {
+export async function postVendorLocation(vendorId: number, location: VendorLocation) {
   return apiInstance.post(`${VENDORS_API_URL}${vendorId}/locations/`, JSON.stringify(location), {
     headers: {
       accept: 'application/json',
@@ -658,7 +663,11 @@ export async function postVendorLocation(vendorId: number, location: any) {
   })
 }
 
-export async function patchVendorLocation(vendorId: number, locationId: number, location: any) {
+export async function patchVendorLocation(
+  vendorId: number,
+  locationId: number,
+  location: VendorLocation
+) {
   return apiInstance.patch(
     `${VENDORS_API_URL}${vendorId}/locations/${locationId}/`,
     JSON.stringify(location),
@@ -681,7 +690,7 @@ export async function fetchVendorComments(vendorId: number) {
   return apiInstance.get(`${VENDORS_API_URL}${vendorId}/comments/`)
 }
 
-export async function postVendorComment(vendorId: number, comment: any) {
+export async function postVendorComment(vendorId: number, comment: NewVendorComment) {
   return apiInstance.post(`${VENDORS_API_URL}${vendorId}/comments/`, JSON.stringify(comment), {
     headers: {
       accept: 'application/json',
@@ -690,7 +699,11 @@ export async function postVendorComment(vendorId: number, comment: any) {
   })
 }
 
-export async function patchVendorComment(vendorId: number, commentId: number, comment: any) {
+export async function patchVendorComment(
+  vendorId: number,
+  commentId: number,
+  comment: VendorComment
+) {
   return apiInstance.patch(
     `${VENDORS_API_URL}${vendorId}/comments/${commentId}/`,
     JSON.stringify(comment),

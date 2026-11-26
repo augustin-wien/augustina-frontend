@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useItemsStore, ITEM_TYPES } from '@/stores/items'
-import type { Item } from '@/stores/items'
+import type { ItemUpload } from '@/stores/items'
 import { useSettingsStore, vouchersEnabled } from '@/stores/settings'
 import Toast from '@/components/ToastMessage.vue'
 import router from '@/router'
@@ -27,7 +27,7 @@ const availableItemTypes = computed(() =>
 const newItem = ref({
   Description: '',
   ID: 0,
-  Image: '' as any,
+  Image: null as File | null,
   Name: '',
   Price: 0,
   Type: 'normal_item',
@@ -67,7 +67,7 @@ const submitItem = async () => {
 
   try {
     await store
-      .createItem(newItem.value as Item)
+      .createItem(newItem.value as ItemUpload)
       .then(() => {
         router.push({ name: 'Backoffice Product Settings' })
       })
@@ -77,9 +77,8 @@ const submitItem = async () => {
           'Produkt konnte nicht angelegt werden. ' + err?.response?.data?.error?.message
         )
       })
-  } catch (err: any) {
+  } catch (err) {
     showToast('error', 'Produkt konnte nicht angelegt werden: ' + err)
-    console.error('Error creating item:', err)
   }
 }
 
@@ -96,9 +95,8 @@ const showToast = (type: string, message: string) => {
   }, 5000)
 }
 
-const updateImage = (event: any) => {
-  const file = event.target.files[0]
-  newItem.value.Image = file
+const updateImage = (event: Event) => {
+  newItem.value.Image = (event.target as HTMLInputElement).files?.[0] ?? null
 }
 </script>
 

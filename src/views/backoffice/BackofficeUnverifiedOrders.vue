@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { useOrdersStore } from '@/stores/orders'
+import { useOrdersStore, type Order, type OrderEntry } from '@/stores/orders'
+import { apiErrorMessage } from '@/utils/apiError'
 import { useSettingsStore } from '@/stores/settings'
 import { computed, ref } from 'vue'
 import ToastMessage from '@/components/ToastMessage.vue'
@@ -16,15 +17,15 @@ useAuthLoad(() => ordersStore.getUnverifiedOrders())
 
 const unverifiedOrders = computed(() => ordersStore.unverifiedOrders)
 
-const calculateTotal = (entries: any[]) => {
+const calculateTotal = (entries: OrderEntry[] | null) => {
   if (!entries) return 0
   return entries.reduce((sum, entry) => sum + entry.Price * entry.Quantity, 0)
 }
 
-const getVendorLicenseId = (order: any) => {
+const getVendorLicenseId = (order: Order) => {
   if (!order.Entries || order.Entries.length === 0) return ''
   const vendorId = order.Vendor
-  const entry = order.Entries.find((e: any) => e.Sender === vendorId || e.Receiver === vendorId)
+  const entry = order.Entries.find((e) => e.Sender === vendorId || e.Receiver === vendorId)
 
   if (entry) {
     if (entry.Sender === vendorId) return entry.SenderName
@@ -34,28 +35,30 @@ const getVendorLicenseId = (order: any) => {
   return vendorId
 }
 
-const handleVerify = async (orderCode: string) => {
+const handleVerify = async (orderCode: string | null) => {
+  if (!orderCode) return
+
   try {
     await ordersStore.verifyAdminPayment(orderCode)
     toast.value = { message: 'Order verified successfully', type: 'success' }
     await ordersStore.getUnverifiedOrders()
-  } catch (error: any) {
-    console.error('Verification failed', error)
-    const message = error.response?.data?.error?.message || 'Verification failed'
+  } catch (error) {
+    const message = apiErrorMessage(error) || 'Verification failed'
     toast.value = { message: message, type: 'error' }
   }
 }
 
-const handleAddTransactionID = async (orderCode: string) => {
+const handleAddTransactionID = async (orderCode: string | null) => {
+  if (!orderCode) return
+
   const transactionID = prompt('Please enter the Transaction ID:')
 
   if (transactionID) {
     try {
       await ordersStore.addTransactionID(orderCode, transactionID)
       toast.value = { message: 'Transaction ID added successfully', type: 'success' }
-    } catch (error: any) {
-      console.error('Failed to add Transaction ID', error)
-      const message = error.response?.data?.error?.message || 'Failed to add Transaction ID'
+    } catch (error) {
+      const message = apiErrorMessage(error) || 'Failed to add Transaction ID'
       toast.value = { message: message, type: 'error' }
     }
   }
@@ -65,9 +68,8 @@ const handleResendToOdoo = async (orderID: number) => {
   try {
     await ordersStore.resendOdooWebhook(orderID)
     toast.value = { message: 'Transaction resend to Odoo triggered successfully', type: 'success' }
-  } catch (error: any) {
-    console.error('Resend to Odoo failed', error)
-    const message = error.response?.data?.error?.message || 'Failed to resend transaction to Odoo'
+  } catch (error) {
+    const message = apiErrorMessage(error) || 'Failed to resend transaction to Odoo'
     toast.value = { message: message, type: 'error' }
   }
 }
@@ -103,7 +105,7 @@ const handleResendToOdoo = async (orderID: number) => {
               <td>
                 <span
                   v-if="order.PaymentEventID != null"
-                  :title="new Date(order.PaymentFailedAt).toLocaleString()"
+                  :title="new Date(order.PaymentFailedAt ?? '').toLocaleString()"
                 >
                   EventId {{ order.PaymentEventID }}
                 </span>
@@ -111,7 +113,7 @@ const handleResendToOdoo = async (orderID: number) => {
               <td class="reconcile-error">
                 <span
                   v-if="order.ReconcileError"
-                  :title="new Date(order.ReconcileFailedAt).toLocaleString()"
+                  :title="new Date(order.ReconcileFailedAt ?? '').toLocaleString()"
                 >
                   {{ order.ReconcileError }}
                 </span>

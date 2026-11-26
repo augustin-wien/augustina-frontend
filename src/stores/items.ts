@@ -46,6 +46,12 @@ export interface Item {
   AboDurationMonths?: number
 }
 
+// An item as sent to the form endpoints, where a newly picked image or PDF is a File
+export type ItemUpload = Omit<Item, 'Image' | 'PDF'> & {
+  Image: Item['Image'] | File
+  PDF: Item['PDF'] | File
+}
+
 export const useItemsStore = defineStore('items', {
   state: () => {
     return {
@@ -107,11 +113,11 @@ export const useItemsStore = defineStore('items', {
       await Promise.all([this.getArchivedItems(), this.getItemsBackoffice()])
     },
 
-    async createItem(newItem: Item) {
+    async createItem(newItem: ItemUpload) {
       return postItems(newItem)
     },
 
-    async updateItem(updatedItem: Item) {
+    async updateItem(updatedItem: ItemUpload) {
       return patchItem(updatedItem)
     },
     // Mails a published online issue to the active abonnents who did not get it yet

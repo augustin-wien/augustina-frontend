@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { VendorComment } from '@/stores/vendor'
+import type { Vendor, VendorComment } from '@/stores/vendor'
 import { onMounted, ref } from 'vue'
 import Modal from '@/components/ui/Modal.vue'
 import Button from '@/components/ui/Button.vue'
 import FormField from '@/components/ui/FormField.vue'
 
-const props = defineProps(['vendor', 'comment'])
+const props = defineProps<{ vendor?: Vendor | null; comment?: VendorComment | null }>()
 const updatedVendor = ref(props.vendor)
 const emit = defineEmits(['close', 'update'])
 const updatedComment = ref<VendorComment | null>(null)

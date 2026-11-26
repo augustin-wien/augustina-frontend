@@ -2,7 +2,8 @@
 import { useItemsStore } from '@/stores/items'
 import { useOrdersStore } from '@/stores/orders'
 import { usePaymentsStore, type Payment } from '@/stores/payments'
-import VueDatePicker from '@vuepic/vue-datepicker'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
+import { de, enUS, it } from 'date-fns/locale'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { useColorScheme } from '@/composables/useColorScheme'
 import { computed, ref } from 'vue'
@@ -13,6 +14,7 @@ import { exportAsCsv, formatCredit } from '@/utils/utils'
 import { useSettingsStore } from '@/stores/settings'
 import { useI18n } from 'vue-i18n'
 import { itemDisplayName } from '@/utils/itemName'
+import { apiErrorMessage } from '@/utils/apiError'
 import { faFileCsv } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import PageHeader from '@/components/ui/PageHeader.vue'
@@ -20,6 +22,7 @@ import Button from '@/components/ui/Button.vue'
 import Card from '@/components/ui/Card.vue'
 
 const { locale, t } = useI18n()
+const datePickerLocale = computed(() => ({ de, en: enUS, it })[locale.value] ?? de)
 const { isDark } = useColorScheme()
 const settingsStore = useSettingsStore()
 const ordersStore = useOrdersStore()
@@ -101,7 +104,7 @@ useAuthLoad(() => {
 
 const findVendorIdByLicense = (licenseID: string | undefined | null) => {
   if (!licenseID) return null
-  const v = vendors.value.find((x: any) => x.LicenseID === licenseID)
+  const v = vendors.value.find((x) => x.LicenseID === licenseID)
   return v ? v.ID : null
 }
 
@@ -109,9 +112,8 @@ const handleResendToOdoo = async (orderID: number) => {
   try {
     await ordersStore.resendOdooWebhook(orderID)
     alert('Transaction resend to Odoo triggered successfully')
-  } catch (error: any) {
-    console.error('Resend to Odoo failed', error)
-    const message = error.response?.data?.error?.message || 'Failed to resend transaction to Odoo'
+  } catch (error) {
+    const message = apiErrorMessage(error) || 'Failed to resend transaction to Odoo'
     alert(message)
   }
 }
@@ -150,10 +152,10 @@ const exportTable = () => {
         <VueDatePicker
           v-model="date"
           range
-          :enable-time-picker="false"
+          :time-config="{ enableTimePicker: false }"
           :placeholder="$t('chooseDateRange')"
           class="max-w-md"
-          :locale="locale"
+          :locale="datePickerLocale"
           :dark="isDark"
           @update:model-value="onDateUpdate"
         />

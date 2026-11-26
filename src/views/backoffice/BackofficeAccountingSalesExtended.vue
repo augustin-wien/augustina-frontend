@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import VueDatePicker from '@vuepic/vue-datepicker'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { useColorScheme } from '@/composables/useColorScheme'
 import { ref, computed } from 'vue'
@@ -18,35 +18,12 @@ import Card from '@/components/ui/Card.vue'
 import Badge from '@/components/ui/Badge.vue'
 import Toast from '@/components/ToastMessage.vue'
 import { itemDisplayName } from '@/utils/itemName'
+import type { Order, OrderEntry } from '@/stores/orders'
+import { isAxiosError } from 'axios'
 
 // Extended sales view: one row per sale (verified online order) with all the
 // products that belong to it. The plain /backoffice/sales list of single sales
 // payments stays as it is for existing internal workflows.
-
-interface OrderEntry {
-  ID: number
-  Item: number
-  Quantity: number
-  Price: number
-  Sender: number
-  Receiver: number
-  SenderName: string
-  ReceiverName: string
-  IsSale: boolean
-}
-
-interface Order {
-  ID: number
-  OrderCode: string | null
-  TransactionID: string
-  Timestamp: string
-  VerifiedAt: string | null
-  Vendor: number
-  CustomerEmail: string | null
-  OdooSyncedAt: string | null
-  OdooSyncError: string | null
-  Entries: OrderEntry[] | null
-}
 
 const { t } = useI18n()
 
@@ -170,8 +147,7 @@ async function resendMail(order: Order) {
   try {
     await resendOrderMail(order.ID)
     showToast('success', t('salesResendMailSuccess', { email: order.CustomerEmail }))
-  } catch (err) {
-    console.error('Error resending order mail:', err)
+  } catch {
     showToast('error', t('salesResendMailError'))
   } finally {
     resendingOrderID.value = null
@@ -215,9 +191,9 @@ async function resendOdoo(order: Order) {
     order.OdooSyncedAt = res?.sent_at ?? new Date().toISOString()
     order.OdooSyncError = null
     showToast('success', t('salesOdooResendSuccess', { id: order.ID }))
-  } catch (err: any) {
-    console.error('Error resending Odoo webhook:', err)
-    const message = typeof err?.response?.data === 'string' ? err.response.data.trim() : ''
+  } catch (err) {
+    const data = isAxiosError(err) ? err.response?.data : undefined
+    const message = typeof data === 'string' ? data.trim() : ''
     order.OdooSyncError = message || t('salesOdooResendError')
     showToast('error', t('salesOdooResendError'))
   } finally {
@@ -314,7 +290,7 @@ const exportTable = () => {
         <VueDatePicker
           v-model="date"
           range
-          :enable-time-picker="false"
+          :time-config="{ enableTimePicker: false }"
           :placeholder="$t('enterPeriod')"
           class="max-w-md"
           :dark="isDark"

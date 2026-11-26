@@ -1,45 +1,28 @@
-// https://on.cypress.io/api
-// deactivate eslint for this file
-/* eslint-disable */
-import { RandomInput } from "../../../src/utils/utils";
+import { RandomInput } from '../../../src/utils/utils'
 
-describe('Go to backoffice', () => {
-  it('visits the app root url', () => {
-    cy.visit('/backoffice')
+function createVendor(licenseId: string) {
+  cy.get('button').contains('Neu').click()
+  cy.get('#firstName').type(RandomInput.getRandomFirstName())
+  cy.get('#lastName').type(RandomInput.getRandomLastName())
+  cy.get('#licenseID').type(licenseId)
+  cy.get('button').contains('Anlegen').click()
+  cy.url().should('include', '/backoffice/vendorsummary')
+}
 
-    cy.origin('http://keycloak:8080', { args: {} }, () => {
-      cy.contains('h1', 'Sign in to your account')
-      cy.get('#username').type("test_superuser@example.com")
-      cy.get('#password').type("Test123!")
-      cy.get('#kc-login').click()
-    })
+describe('Create, delete and recreate a vendor', () => {
+  it('can reuse the license id after deleting the vendor', () => {
+    cy.loginBackoffice()
     const licenseId = RandomInput.getRandomId()
-    // create a vendor
-    cy.get("button").contains("Neu").click()
-    cy.get("#firstName").type(RandomInput.getRandomFirstName());
-    cy.get("#lastName").type(RandomInput.getRandomLastName());
-    cy.get("#email").clear()
-    cy.get("#email").type(RandomInput.getRandomEmail());
-    cy.get('#licenseID').type(licenseId)
-    cy.get("button").contains("Anlegen").click()
-    
-    // Delete it again
+
+    createVendor(licenseId)
+
     cy.get('#searchInput').type(licenseId)
-    cy.get('.text-sm > :nth-child(1) > .flex > :nth-child(1)').click()
-    cy.get("button").contains("Bearbeiten").click()
-    cy.get("#delete-vendor").click()
-    cy.get("#delete-vendor-confirm").click()
+    cy.get('tbody tr').should('have.length', 1)
+    cy.get('tbody tr a[href^="/backoffice/userprofile/"]').first().click()
+    cy.get('button').contains('Bearbeiten').click()
+    cy.get('#delete-vendor').click()
+    cy.get('#delete-vendor-confirm').click()
 
-    // Create vendor again
-    cy.get("button").contains("Neu").click()
-    cy.get("#firstName").type(RandomInput.getRandomFirstName());
-    cy.get("#lastName").type(RandomInput.getRandomLastName());
-    cy.get("#email").clear()
-    cy.get("#email").type(RandomInput.getRandomEmail());
-    cy.get('#licenseID').type(licenseId)
-    cy.get("button").contains("Anlegen").click()
-    
-
-
+    createVendor(licenseId)
   })
 })

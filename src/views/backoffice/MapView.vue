@@ -9,7 +9,7 @@ import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet'
 import { LMarkerClusterGroup } from 'vue-leaflet-markercluster'
 import 'vue-leaflet-markercluster/dist/style.css'
 import { useMapStore } from '@/stores/map'
-import { computed, ref } from 'vue'
+import { computed, ref, shallowRef } from 'vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { useAuthLoad } from '@/composables/useAuthLoad'
 import { useSettingsStore } from '@/stores/settings'
@@ -34,7 +34,7 @@ const showVendorInfo = ref(false)
 const zoom = ref(12)
 // Todo: Get the center from the settings
 const center: Ref<PointExpression> = ref([48.2083, 16.3731])
-const map: Ref<any> = ref(null)
+const map = shallowRef<L.Map | null>(null)
 const provider = new OpenStreetMapProvider()
 const emit = defineEmits(['newLocation'])
 
@@ -51,22 +51,18 @@ const unassignedIcon = L.divIcon({
   // LMarker is typed for image icons only, but Leaflet accepts a DivIcon just the same
 }) as unknown as L.Icon
 
-const searchControl: any = new (GeoSearchControl as any)({
-  provider: provider
-})
+const searchControl = GeoSearchControl({ provider })
 
 useAuthLoad(() => mapStore.getLocations())
 
-function onMapReady(instance: any) {
-  if (instance) {
-    map.value = instance
-  }
+function onMapReady(instance: L.Map) {
+  map.value = instance
 
   center.value = [settingsStore.settings.MapCenterLat, settingsStore.settings.MapCenterLong]
 
-  map.value.addControl(searchControl)
+  instance.addControl(searchControl)
 
-  map.value.on('geosearch/showlocation', function (event: any) {
+  instance.on('geosearch/showlocation', (event) => {
     emit('newLocation', event)
   })
 }

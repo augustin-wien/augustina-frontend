@@ -20,7 +20,7 @@ describe('useOrdersStore', () => {
   it('resends the Odoo webhook for a single order', async () => {
     const store = useOrdersStore()
 
-    vi.mocked(agent.VivaWallet.resendWebhook).mockResolvedValue({ status: 'ok' })
+    vi.mocked(agent.VivaWallet.resendWebhook).mockResolvedValue({ sent_at: '2026-01-01T00:00:00Z' })
 
     await store.resendOdooWebhook(42)
 
