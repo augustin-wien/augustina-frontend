@@ -9,7 +9,7 @@ import {
   type VendorLocation
 } from '@/stores/vendor'
 import axios from 'axios'
-import * as Sentry from '@sentry/vue'
+import { getSentry } from '@/utils/sentry'
 import { requestIdFromHeaders, setLastRequestId } from '@/utils/requestId'
 
 import {
@@ -108,7 +108,9 @@ apiInstance.interceptors.response.use(
       // connection failure, timeout, CORS). A normal 4xx/5xx already has error.response
       // and is handled above - this is the "backend unreachable" case, and unlike a
       // thrown Error it wouldn't otherwise reach Sentry via the console.error override.
-      Sentry.withScope((scope) => {
+      const Sentry = getSentry()
+
+      Sentry?.withScope((scope) => {
         scope.setTag('error_type', 'backend_unreachable')
 
         scope.setContext('request', {

@@ -1,7 +1,6 @@
 import keycloak, { initKeycloak } from '@/keycloak/keycloak'
-import BackofficeDefault from '@/layouts/BackofficeLayout.vue'
 import Default from '@/layouts/DefaultLayout.vue'
-import VendorLayoutVue from '@/layouts/VendorLayout.vue'
+import { defineAsyncComponent } from 'vue'
 import { useKeycloakStore } from '@/stores/keycloak'
 import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
 import { useSettingsStore } from '@/stores/settings'
@@ -21,6 +20,10 @@ const skipDonationIfDisabled = async (to: RouteLocationNormalized) => {
 
   return { name: 'Confirmation', params: to.params, replace: true }
 }
+
+// Only the shop layout is part of the entry bundle that every customer loads
+const BackofficeDefault = defineAsyncComponent(() => import('@/layouts/BackofficeLayout.vue'))
+const VendorLayoutVue = defineAsyncComponent(() => import('@/layouts/VendorLayout.vue'))
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -561,6 +564,16 @@ router.afterEach((to) => {
 router.beforeEach((to) => {
   if (to.path.includes('//')) {
     return { path: to.path.replace(/\/{2,}/g, '/'), query: to.query, replace: true }
+  }
+})
+
+// The shop pages all need the items. Requesting them here runs the request in parallel with
+// loading the page's code instead of after it.
+router.beforeEach((to) => {
+  if (to.matched.some((record) => record.name === 'Parent')) {
+    useShopStore()
+      .getItems()
+      .catch(() => {})
   }
 })
 

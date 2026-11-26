@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/vue'
+import { getSentry } from '@/utils/sentry'
 
 export type VivaFailureReason =
   | 'cancelled'
@@ -60,8 +60,9 @@ export interface VivaFailure {
 
 export function reportVivaFailure(failure: VivaFailure) {
   const reason = vivaFailureReason(failure.eventId)
+  const Sentry = getSentry()
 
-  Sentry.withScope((scope) => {
+  Sentry?.withScope((scope) => {
     scope.setTag('error_type', 'payment_failed')
     scope.setTag('payment_event_id', failure.eventId || 'none')
     scope.setTag('payment_failure_reason', reason)

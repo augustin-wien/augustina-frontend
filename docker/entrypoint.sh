@@ -9,6 +9,6 @@ for file in $ROOT_DIR/assets/*.js* $ROOT_DIR/index.html; do
   echo "Processing $file ..."
 
   sed -i "s/VITE_API_URL_value/$api_url/g" $file 
-  sed -i "s/VITE_SENTRY_DSN_value/$sentry_api/g" $file 
+  sed -i "s/VITE_SENTRY_DSN_value/$sentry_dsn/g" $file
 
 done

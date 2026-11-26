@@ -61,7 +61,9 @@ export const useVendorStore = defineStore('vendor', {
           this.vendorid = typeof vendorId == 'string' ? vendorId : vendorId[0]
           this.vendorLink = response.AccountProofUrl
 
-          if (this.vendorName !== '') {
+          // The shop page sets itself up, so a shop link does not need the detour over the
+          // landing page, which would only send it back to the shop
+          if (this.vendorName !== '' && router.currentRoute.value.name !== 'Shop') {
             router.push(`/v/${vendorId}/landing-page`)
           }
         })

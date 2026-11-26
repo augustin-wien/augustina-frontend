@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from 'vue-router'
 import { useFavicon } from '@vueuse/core'
-import { onMounted, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useSettingsStore } from '@/stores/settings'
+import { settingsImageUrl } from '@/utils/settingsImage'
 import { useShopStore } from '@/stores/ShopStore'
 import { initMatomo, trackCartUpdate } from '@/utils/matomo'
 import { useAccentColor } from '@/composables/useAccentColor'
 import BackendUnavailable from '@/components/BackendUnavailable.vue'
 
-const favicon = import.meta.env.VITE_API_URL + 'img/favicon.png'
-useFavicon(favicon)
-
 const settingsStore = useSettingsStore()
+useFavicon(computed(() => settingsImageUrl(settingsStore.settings.Favicon, '/img/favicon.png')))
+
 const shopStore = useShopStore()
 const router = useRouter()
 useAccentColor()

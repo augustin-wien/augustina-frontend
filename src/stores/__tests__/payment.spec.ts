@@ -1,5 +1,6 @@
 import { createPinia, setActivePinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { registerSentry } from '@/utils/sentry'
 import agent from '@/api/agent'
 import { usePaymentStore } from '@/stores/payment'
 import type { VivaWalletVerification } from '@/models/verificationVivaWallet'
@@ -31,6 +32,7 @@ const { scope, captureException, captureMessage, withScope } = vi.hoisted(() => 
 })
 
 vi.mock('@sentry/vue', () => ({ captureException, captureMessage, withScope }))
+registerSentry((await import('@sentry/vue')) as unknown as Parameters<typeof registerSentry>[0])
 
 vi.mock('@/api/agent', () => ({
   default: { VivaWallet: { verifyPayment: vi.fn() } }

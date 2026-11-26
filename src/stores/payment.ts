@@ -3,12 +3,14 @@ import type { VivaWalletResponse } from '@/models/responseVivaWallet'
 import type { VivaWalletVerification } from '@/models/verificationVivaWallet'
 import router from '@/router'
 import agent from '@/api/agent'
-import * as Sentry from '@sentry/vue'
+import { getSentry } from '@/utils/sentry'
 
 // Called once verifyPayment gives up retrying (failedCount > 5) - a customer paid and
 // the order never confirmed, without this nothing would ever have surfaced it.
 function reportUnverifiedPayment(transactionID: string, failedCount: number, error?: unknown) {
-  Sentry.withScope((scope) => {
+  const Sentry = getSentry()
+
+  Sentry?.withScope((scope) => {
     scope.setTag('error_type', 'payment_verification_failed')
     scope.setContext('payment', { transactionID, failedCount })
 

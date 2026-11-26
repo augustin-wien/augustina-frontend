@@ -1,8 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { registerSentry } from '@/utils/sentry'
 
 const setTag = vi.fn()
 
 vi.mock('@sentry/vue', () => ({ setTag }))
+registerSentry((await import('@sentry/vue')) as unknown as Parameters<typeof registerSentry>[0])
 
 const { getLastRequestId, requestIdFromHeaders, setLastRequestId } =
   await import('@/utils/requestId')
