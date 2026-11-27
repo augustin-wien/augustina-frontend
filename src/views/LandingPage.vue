@@ -34,21 +34,20 @@ const checkVendor = () => {
 }
 
 onMounted(() => {
+  // The vendor check runs in parallel, so the store may not have the id yet
+  if (!vendorStore.vendorid && route.params.id) {
+    const vid = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
+
+    vendorStore.vendorid = String(vid)
+  }
+
   if (settStore.settings.ShopLanding) {
     router.push('/v/' + vendorStore.vendorid + '/shop')
   }
 
   settStore.getSettingsFromApi().then(() => {
-    // ensure we have a vendor id (in case of direct reload); prefer store value but fall back to route param
-    if (!vendorStore.vendorid && route.params && route.params.id) {
-      // route.params.id may be string or array; normalize to string
-      const vid = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-
-      if (vid) vendorStore.vendorid = String(vid)
-
-      if (settStore.settings.ShopLanding) {
-        router.push('/v/' + vendorStore.vendorid + '/shop')
-      }
+    if (settStore.settings.ShopLanding) {
+      router.push('/v/' + vendorStore.vendorid + '/shop')
     }
 
     shopStore.reset()
