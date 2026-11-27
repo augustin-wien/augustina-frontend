@@ -60,6 +60,15 @@ describe('apiInstance', () => {
     expect(captureException).toHaveBeenCalledWith(error)
   })
 
+  it('does not report a backend-unreachable error for a request marked skipUnreachableReport', async () => {
+    const error = await apiInstance
+      .get('http://127.0.0.1:1/', { skipUnreachableReport: true })
+      .catch((e) => e)
+
+    expect(error.response).toBeUndefined()
+    expect(captureException).not.toHaveBeenCalled()
+  })
+
   // A real 4xx/5xx has error.response and must not be misreported as the
   // backend being unreachable.
   it('does not tag a normal HTTP error response as backend-unreachable', async () => {
