@@ -76,6 +76,9 @@ export interface Settings {
   OdooWebhookToken: string
   OdooDBFilter: string
   AccountingReportEmail: string
+  SalesAnonymizationEnabled?: boolean
+  VendorAnonymizationEnabled?: boolean
+  AnonymizationRetentionDays?: number
   // Which secrets have a stored value; the values themselves are never sent to the backoffice
   SecretsSet?: Record<string, boolean>
   edges?: {

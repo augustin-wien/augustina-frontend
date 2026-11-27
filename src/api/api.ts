@@ -480,6 +480,21 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('AccountingReportEmail', updatedSettings.AccountingReportEmail ?? '')
 
   formData.append(
+    'SalesAnonymizationEnabled',
+    (updatedSettings.SalesAnonymizationEnabled ?? false).toString()
+  )
+
+  formData.append(
+    'VendorAnonymizationEnabled',
+    (updatedSettings.VendorAnonymizationEnabled ?? false).toString()
+  )
+
+  formData.append(
+    'AnonymizationRetentionDays',
+    (updatedSettings.AnonymizationRetentionDays ?? 90).toString()
+  )
+
+  formData.append(
     'OrgaCoversTransactionCosts',
     (updatedSettings.OrgaCoversTransactionCosts ?? true).toString()
   )
