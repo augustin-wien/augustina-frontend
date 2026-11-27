@@ -58,6 +58,11 @@ const router = createRouter({
           component: () => import('@/views/CheckVendorID.vue')
         },
         {
+          path: '/v/:id/steckbrief',
+          name: 'Shop Steckbrief',
+          component: () => import('@/views/ShopSteckbrief.vue')
+        },
+        {
           path: '/v/:id/landing-page',
           name: 'LandingPage',
           component: () => import('@/views/LandingPage.vue')
@@ -305,6 +310,16 @@ const router = createRouter({
         title: 'Vendor Comments'
       },
       component: () => import('@/views/backoffice/BackofficeVendorComments.vue')
+    },
+    {
+      path: '/backoffice/userprofile/:ID/steckbrief',
+      name: 'Vendor Steckbrief',
+      meta: {
+        layout: BackofficeDefault,
+        requiresAuth: true,
+        title: 'Vendor Steckbrief'
+      },
+      component: () => import('@/views/backoffice/BackofficeVendorSteckbrief.vue')
     },
     {
       path: '/backoffice/settings/update',

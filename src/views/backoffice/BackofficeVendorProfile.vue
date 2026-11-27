@@ -3,12 +3,14 @@ import { vendorsStore } from '@/stores/vendor'
 import { useItemsStore } from '@/stores/items'
 import { useSettingsStore } from '@/stores/settings'
 import type { Payment } from '@/stores/payments'
-import { fetchPayments, openVendorNextcloudFolder } from '@/api/api'
+import { fetchPayments, fetchVendorSteckbrief, openVendorNextcloudFolder } from '@/api/api'
+import { settingsImageUrl } from '@/utils/settingsImage'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import router from '@/router'
 import {
+  faAddressCard,
   faCashRegister,
   faCommentDots,
   faCreditCard,
@@ -77,6 +79,20 @@ const openDocuments = async () => {
   }
 }
 
+const photoUrl = ref('')
+
+const loadPhoto = async () => {
+  photoUrl.value = ''
+  if (!settingsStore.settings.SteckbriefEnabled) return
+
+  try {
+    const res = await fetchVendorSteckbrief(vendorId.value)
+    if (res.data.Image) photoUrl.value = settingsImageUrl(res.data.Image, '')
+  } catch {
+    // the initials stay in place of the photo
+  }
+}
+
 const payments = ref<Payment[]>([])
 const paymentsLoading = ref(true)
 const paymentsFailed = ref(false)
@@ -87,6 +103,7 @@ useAuthLoad(async () => {
   const v = await vendorStore.getVendor(vendorId.value)
   vendorStore.getVendorLocations(vendorId.value)
   vendorStore.getVendorComments(vendorId.value)
+  loadPhoto()
   if (!v?.LicenseID) return
 
   paymentsLoading.value = true
@@ -199,7 +216,10 @@ function signedAmount(payment: Payment) {
       <div v-else class="profile">
         <!-- Who -->
         <Card class="hero">
-          <div class="hero-avatar" aria-hidden="true">{{ initials }}</div>
+          <div class="hero-avatar" aria-hidden="true">
+            <img v-if="photoUrl" :src="photoUrl" alt="" />
+            <template v-else>{{ initials }}</template>
+          </div>
           <div class="hero-main">
             <h2 class="hero-name">{{ vendor.FirstName }} {{ vendor.LastName }}</h2>
             <div class="hero-meta">
@@ -220,6 +240,14 @@ function signedAmount(payment: Payment) {
             <router-link :to="`/backoffice/userprofile/${vendor.ID}/comments`">
               <Button variant="secondary">
                 <font-awesome-icon :icon="faCommentDots" /> {{ $t('comments') }}
+              </Button>
+            </router-link>
+            <router-link
+              v-if="settingsStore.settings.SteckbriefEnabled"
+              :to="`/backoffice/userprofile/${vendor.ID}/steckbrief`"
+            >
+              <Button variant="secondary">
+                <font-awesome-icon :icon="faAddressCard" /> {{ $t('steckbrief') }}
               </Button>
             </router-link>
             <Button variant="secondary" @click="showQRCode = true">
@@ -444,6 +472,12 @@ function signedAmount(payment: Payment) {
   color: var(--color-accent-fg);
   font-weight: 700;
   font-size: 18px;
+  overflow: hidden;
+}
+.hero-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .hero-main {
   flex: 1;

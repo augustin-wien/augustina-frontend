@@ -33,10 +33,19 @@ export const useVendorStore = defineStore('vendor', {
     return {
       vendorid: '',
       vendorName: '',
-      vendorLink: ''
+      vendorLink: '',
+      hasSteckbrief: false
     }
   },
   actions: {
+    // The shop shows the Steckbrief in place of the verification document when there is one
+    openVendorProfile() {
+      if (this.hasSteckbrief) {
+        router.push({ name: 'Shop Steckbrief', params: { id: this.vendorid } })
+      } else if (this.vendorLink) {
+        window.location.href = this.vendorLink
+      }
+    },
     async checkID(vendorId: string | string[] | undefined) {
       if (useRoute().name === 'Go to Vendor' || useRoute().name === 'Error') {
         // we are already on one of the pages we want to check for
@@ -60,11 +69,17 @@ export const useVendorStore = defineStore('vendor', {
           // @ts-ignore
           this.vendorid = typeof vendorId == 'string' ? vendorId : vendorId[0]
           this.vendorLink = response.AccountProofUrl
+          this.hasSteckbrief = !!response.HasSteckbrief
 
           // The shop and landing pages set themselves up, so they stay where they are
           const current = router.currentRoute.value.name
 
-          if (this.vendorName !== '' && current !== 'Shop' && current !== 'LandingPage') {
+          if (
+            this.vendorName !== '' &&
+            current !== 'Shop' &&
+            current !== 'LandingPage' &&
+            current !== 'Shop Steckbrief'
+          ) {
             router.push(`/v/${vendorId}/landing-page`)
           }
         })

@@ -13,9 +13,7 @@ const shopStore = useShopStore()
 const settStore = useSettingsStore()
 const vendorStore = useVendorStore()
 
-const checkVendor = () => {
-  window.location.href = vendorStore.vendorLink
-}
+const checkVendor = () => vendorStore.openVendorProfile()
 
 const settings = computed(() => settStore.settings)
 const items = computed(() => shopStore.items)
@@ -79,7 +77,10 @@ const checkIfItemSelected = () => {
                 {{ vendorStore.vendorName }}
               </div>
               <div
-                v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
+                v-if="
+                  vendorStore.hasSteckbrief ||
+                  (vendorStore.vendorLink != '' && vendorStore.vendorLink != null)
+                "
                 class="customcolor rounded-full avataricon ml-2 justify-self-center"
                 @click="checkVendor"
               >
