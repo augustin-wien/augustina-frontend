@@ -776,5 +776,8 @@
   "onlineIssueMailOpen": "{count} e-mail sono ancora in invio.",
   "onlineIssueMailFailed": "{count} e-mail non sono riuscite.",
   "onlineIssueMailShow": "Mostra e-mail",
-  "unverifiedOrderReconcileError": "Verifica automatica"
+  "unverifiedOrderReconcileError": "Verifica automatica",
+  "email": "E-mail",
+  "select": "Seleziona",
+  "status": "Stato"
 }

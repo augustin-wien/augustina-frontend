@@ -109,13 +109,6 @@ export const useShopStore = defineStore('shop', {
 
       return 'Spende'
     },
-    removeEmty() {
-      for (const entry of this.amount) {
-        if (entry.quantity != 0) {
-          this.amount.push(entry)
-        }
-      }
-    },
     getPriceInEuro(id: number) {
       const item = this.items.find((item) => item.ID == id)
 

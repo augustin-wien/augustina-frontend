@@ -35,6 +35,9 @@ jobs:
     - name: Run dependencies check
       run: yarn depcheck
 
+    - name: Unit tests
+      run: yarn test:coverage
+
     - name: Build
       run: yarn build
 

@@ -827,5 +827,8 @@
   "onlineIssueMailOpen": "{count} Mails werden noch gesendet.",
   "onlineIssueMailFailed": "{count} Mails sind fehlgeschlagen.",
   "onlineIssueMailShow": "Mails anzeigen",
-  "unverifiedOrderReconcileError": "Automatische Prüfung"
+  "unverifiedOrderReconcileError": "Automatische Prüfung",
+  "email": "E-Mail",
+  "select": "Auswählen",
+  "status": "Status"
 }
