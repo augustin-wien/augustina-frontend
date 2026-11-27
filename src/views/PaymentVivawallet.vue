@@ -44,7 +44,7 @@ onMounted(() => {
     .postOrder(itemsCleaned, 1, vendorStore.vendorid, paymentStore.email)
     .catch((error) => {
       errorMessage.value = error.message
-      errorMessageDetail.value = error.response.data
+      errorMessageDetail.value = error.response?.data ?? ''
       // eslint-disable-next-line no-console
       console.log(error)
     })
