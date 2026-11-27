@@ -21,6 +21,7 @@ import {
   PAYOUT_API_URL,
   SETTINGS_API_URL,
   VENDORS_API_URL,
+  VENDOR_CHECK_ID,
   VENDORS_LOCATION_URL,
   LOCATIONS_API_URL,
   CAMPAIGNS_API_URL,
@@ -208,6 +209,48 @@ export async function openVendorNextcloudFolder(licenseId: string) {
   return apiInstance.post<{ URL: string }>(
     `${VENDORS_API_URL}${encodeURIComponent(licenseId)}/nextcloud-folder/`
   )
+}
+
+export type VendorSteckbrief = {
+  VendorID: number
+  FirstName: string
+  LastName: string
+  LicenseID: string
+  Image: string
+  Description: string
+  Family: string
+  Residence: string
+  Education: string
+  CareerGoal: string
+  Support: string
+}
+
+export async function fetchPublicVendorSteckbrief(licenseId: string) {
+  return apiInstance.get<Omit<VendorSteckbrief, 'VendorID'>>(
+    `${VENDOR_CHECK_ID}${encodeURIComponent(licenseId)}/steckbrief/`
+  )
+}
+
+export async function fetchVendorSteckbrief(vendorId: number) {
+  return apiInstance.get<VendorSteckbrief>(`${VENDORS_API_URL}${vendorId}/steckbrief/`)
+}
+
+export async function updateVendorSteckbrief(vendorId: number, steckbrief: VendorSteckbrief) {
+  return apiInstance.put<VendorSteckbrief>(`${VENDORS_API_URL}${vendorId}/steckbrief/`, steckbrief)
+}
+
+export async function uploadVendorSteckbriefImage(vendorId: number, image: File) {
+  const formData = new FormData()
+  formData.append('Image', image)
+  return apiInstance.post<VendorSteckbrief>(
+    `${VENDORS_API_URL}${vendorId}/steckbrief/image/`,
+    formData,
+    { headers: { 'Content-Type': 'multipart/form-data' } }
+  )
+}
+
+export async function deleteVendorSteckbriefImage(vendorId: number) {
+  return apiInstance.delete<VendorSteckbrief>(`${VENDORS_API_URL}${vendorId}/steckbrief/image/`)
 }
 
 export async function postPOSOrder(
@@ -418,6 +461,7 @@ export async function patchSettings(updatedSettings: Settings) {
   formData.append('NewsletterEnabled', (updatedSettings.NewsletterEnabled ?? false).toString())
   formData.append('IDScanEnabled', (updatedSettings.IDScanEnabled ?? false).toString())
   formData.append('NextcloudEnabled', (updatedSettings.NextcloudEnabled ?? false).toString())
+  formData.append('SteckbriefEnabled', (updatedSettings.SteckbriefEnabled ?? false).toString())
   formData.append('NextcloudURL', updatedSettings.NextcloudURL ?? '')
   formData.append('NextcloudPublicURL', updatedSettings.NextcloudPublicURL ?? '')
   formData.append('NextcloudUsername', updatedSettings.NextcloudUsername ?? '')

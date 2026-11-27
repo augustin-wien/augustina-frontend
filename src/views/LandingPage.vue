@@ -29,9 +29,7 @@ const price = computed(() => {
   return (cents / 100).toFixed(2)
 })
 
-const checkVendor = () => {
-  window.location.href = vendorStore.vendorLink
-}
+const checkVendor = () => vendorStore.openVendorProfile()
 
 onMounted(() => {
   // The vendor check runs in parallel, so the store may not have the id yet
@@ -97,7 +95,10 @@ onMounted(() => {
               {{ vendorStore.vendorName }}
             </div>
             <button
-              v-if="vendorStore.vendorLink != '' && vendorStore.vendorLink != null"
+              v-if="
+                vendorStore.hasSteckbrief ||
+                (vendorStore.vendorLink != '' && vendorStore.vendorLink != null)
+              "
               type="button"
               class="customcolor rounded-full avataricon ml-2 justify-self-center"
               :aria-label="$t('shopVendorProfile', { name: vendorStore.vendorName })"

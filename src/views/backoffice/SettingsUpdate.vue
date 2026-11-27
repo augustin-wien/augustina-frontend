@@ -72,6 +72,7 @@ const updatedSettings = ref<Settings>({
   NewsletterEnabled: false,
   IDScanEnabled: false,
   NextcloudEnabled: false,
+  SteckbriefEnabled: false,
   NextcloudURL: '',
   NextcloudPublicURL: '',
   NextcloudUsername: '',

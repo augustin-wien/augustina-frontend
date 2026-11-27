@@ -20,6 +20,7 @@ import {
   faEnvelopeOpenText,
   faHandHoldingHeart,
   faIdCard,
+  faAddressCard,
   faArrowRightArrowLeft,
   faRepeat,
   faRightToBracket
@@ -381,6 +382,12 @@ defineExpose({ saveSettings })
           :icon="faIdCard"
           :title="$t('idScanTitle')"
           :description="$t('settingsIdScanHint')"
+        />
+        <ModuleCard
+          v-model="localSettings.SteckbriefEnabled"
+          :icon="faAddressCard"
+          :title="$t('steckbrief')"
+          :description="$t('settingsSteckbriefHint')"
         />
         <ModuleCard
           v-model="localSettings.AbonementEnabled"

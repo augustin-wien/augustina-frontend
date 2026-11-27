@@ -65,6 +65,7 @@ export interface Settings {
   NewsletterEnabled: boolean
   IDScanEnabled: boolean
   NextcloudEnabled: boolean
+  SteckbriefEnabled?: boolean
   NextcloudConfigured?: boolean
   NextcloudURL: string
   NextcloudPublicURL: string
