@@ -71,8 +71,14 @@ export const useVendorStore = defineStore('vendor', {
           this.vendorLink = response.AccountProofUrl
           this.hasSteckbrief = !!response.HasSteckbrief
 
-          // The shop and landing pages set themselves up, so they stay where they are
-          const current = router.currentRoute.value.name
+          // The shop and landing pages set themselves up, so they stay where they are; pages
+          // outside the vendor pages, such as the error page, are left alone too
+          const route = router.currentRoute.value
+          const current = route.name
+
+          if (!route.matched.some((record) => record.name === 'Parent')) {
+            return
+          }
 
           if (
             this.vendorName !== '' &&

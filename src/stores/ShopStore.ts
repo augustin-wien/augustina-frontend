@@ -42,7 +42,7 @@ export const useShopStore = defineStore('shop', {
       // Start fetch and cache the promise so subsequent callers reuse it
       this.itemsPromise = fetchItems()
         .then((data) => {
-          this.items = data.data
+          this.items = data.data ?? []
           return this.items
         })
         .catch((error) => {
