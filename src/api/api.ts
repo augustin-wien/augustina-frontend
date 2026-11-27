@@ -44,6 +44,13 @@ import {
   MAIL_TASKS_API_URL
 } from './endpoints'
 
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    // For polled requests that report their own failure once they stop retrying
+    skipUnreachableReport?: boolean
+  }
+}
+
 export const apiInstance = axios.create({
   withCredentials: true
 })
@@ -104,7 +111,7 @@ apiInstance.interceptors.response.use(
           login()
         }
       }
-    } else {
+    } else if (!error.config?.skipUnreachableReport) {
       // No response at all: the request never reached the backend (offline, DNS/
       // connection failure, timeout, CORS). A normal 4xx/5xx already has error.response
       // and is handled above - this is the "backend unreachable" case, and unlike a

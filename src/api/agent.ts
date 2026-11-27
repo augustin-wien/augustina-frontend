@@ -52,7 +52,8 @@ const VivaWallet = {
   verifyPayment: (vivaTransactionID: string): Promise<VivaWalletVerification> =>
     apiInstance
       .get(VIVAWALLET_TRANSACTION_VERIFICATION + '?' + vivaTransactionID, {
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        skipUnreachableReport: true
       })
       .then(sleep(100))
       .then(responseBody),
