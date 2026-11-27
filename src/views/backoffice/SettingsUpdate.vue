@@ -81,7 +81,10 @@ const updatedSettings = ref<Settings>({
   OdooWebhookURL: '',
   OdooWebhookToken: '',
   OdooDBFilter: '',
-  AccountingReportEmail: ''
+  AccountingReportEmail: '',
+  SalesAnonymizationEnabled: false,
+  VendorAnonymizationEnabled: false,
+  AnonymizationRetentionDays: 90
 })
 
 // The public settings endpoint withholds credentials, so this page loads the full set from the

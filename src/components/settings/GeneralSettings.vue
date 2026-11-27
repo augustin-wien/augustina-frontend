@@ -6,6 +6,7 @@ import Card from '@/components/ui/Card.vue'
 import FormField from '@/components/ui/FormField.vue'
 import Button from '@/components/ui/Button.vue'
 import ModuleCard from '@/components/settings/ModuleCard.vue'
+import Modal from '@/components/ui/Modal.vue'
 import {
   testNextcloud,
   testWordPressInvite,
@@ -23,6 +24,8 @@ import {
   faAddressCard,
   faArrowRightArrowLeft,
   faRepeat,
+  faUserSecret,
+  faUserShield,
   faRightToBracket
 } from '@fortawesome/free-solid-svg-icons'
 import { internalVendorEmail, normalizeVendorEmailPostfix } from '@/utils/vendorEmail'
@@ -42,6 +45,31 @@ const settingsStore = useSettingsStore()
 const { t } = useI18n()
 
 const localSettings = ref<Settings>({ ...props.updatedSettings })
+
+// Anonymization cannot be undone, so switching it on asks for confirmation first
+type AnonymizationSetting = 'SalesAnonymizationEnabled' | 'VendorAnonymizationEnabled'
+const pendingAnonymization = ref<AnonymizationSetting | null>(null)
+
+const anonymizationToggle = (key: AnonymizationSetting) =>
+  computed({
+    get: () => !!localSettings.value[key],
+    set: (on: boolean) => {
+      localSettings.value[key] = on
+      if (on) pendingAnonymization.value = key
+    }
+  })
+
+const salesAnonymization = anonymizationToggle('SalesAnonymizationEnabled')
+const vendorAnonymization = anonymizationToggle('VendorAnonymizationEnabled')
+
+const confirmAnonymization = () => {
+  pendingAnonymization.value = null
+}
+
+const cancelAnonymization = () => {
+  if (pendingAnonymization.value) localSettings.value[pendingAnonymization.value] = false
+  pendingAnonymization.value = null
+}
 
 // These integrations have no switch of their own in the backend: an empty URL means off.
 const wpInviteEnabled = ref(!!props.updatedSettings.WordPressInviteURL)
@@ -434,6 +462,66 @@ defineExpose({ saveSettings })
         />
       </div>
 
+      <h2 class="module-group-title">{{ $t('moduleGroupPrivacy') }}</h2>
+      <div class="module-list">
+        <ModuleCard
+          v-model="salesAnonymization"
+          :icon="faUserShield"
+          :title="$t('salesAnonymizationTitle')"
+          :description="$t('salesAnonymizationHint')"
+        >
+          <FormField
+            :label="$t('anonymizationRetentionDays')"
+            :hint="$t('anonymizationRetentionDaysHint')"
+          >
+            <input
+              v-model.number="localSettings.AnonymizationRetentionDays"
+              type="number"
+              min="30"
+              class="aug-input"
+            />
+          </FormField>
+        </ModuleCard>
+        <ModuleCard
+          v-model="vendorAnonymization"
+          :icon="faUserSecret"
+          :title="$t('vendorAnonymizationTitle')"
+          :description="$t('vendorAnonymizationHint')"
+        >
+          <FormField
+            :label="$t('anonymizationRetentionDays')"
+            :hint="$t('anonymizationRetentionDaysHint')"
+          >
+            <input
+              v-model.number="localSettings.AnonymizationRetentionDays"
+              type="number"
+              min="30"
+              class="aug-input"
+            />
+          </FormField>
+        </ModuleCard>
+      </div>
+
+      <Modal
+        :open="pendingAnonymization !== null"
+        :title="$t('anonymizationConfirmTitle')"
+        @close="cancelAnonymization"
+      >
+        <p class="anonymization-warning">
+          {{
+            pendingAnonymization === 'VendorAnonymizationEnabled'
+              ? $t('vendorAnonymizationWarning')
+              : $t('salesAnonymizationWarning')
+          }}
+        </p>
+        <template #footer>
+          <Button variant="secondary" @click="cancelAnonymization">{{ $t('cancel') }}</Button>
+          <Button variant="danger" @click="confirmAnonymization">
+            {{ $t('anonymizationConfirm') }}
+          </Button>
+        </template>
+      </Modal>
+
       <h2 class="module-group-title">{{ $t('moduleGroupIntegrations') }}</h2>
       <div class="module-list">
         <ModuleCard
@@ -657,6 +745,10 @@ defineExpose({ saveSettings })
 </template>
 
 <style scoped>
+.anonymization-warning {
+  margin: 0;
+  line-height: 1.5;
+}
 .voucher-module-hint {
   margin: 4px 0 0;
   font-size: 0.8rem;
