@@ -176,7 +176,10 @@ async function preselectPeriod() {
   await loadLastReport()
   let from = lastTo.value ? addDays(lastTo.value, 1) : `${yesterday.slice(0, 7)}-01`
   if (from > today) from = today
-  setPeriod(from, from > yesterday ? from : yesterday)
+  const to = from > yesterday ? from : yesterday
+
+  if (route.query.from === from && route.query.to === to) await load()
+  else setPeriod(from, to)
 }
 
 async function load() {
@@ -207,8 +210,11 @@ async function load() {
   }
 }
 
+let preselected = false
+
 async function refresh() {
-  if (mode.value === 'period' && !route.query.from && !route.query.to) {
+  if (mode.value === 'period' && (!preselected || (!route.query.from && !route.query.to))) {
+    preselected = true
     await preselectPeriod()
     return
   }

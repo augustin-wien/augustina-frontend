@@ -110,24 +110,42 @@ describe('BackofficeMonthlyReport', () => {
     expect(router.currentRoute.value.query).toEqual({ from: '2026-11-26', to: '2026-11-26' })
   })
 
-  it('keeps a period from the URL and changes it with the date inputs', async () => {
-    const { wrapper, router } = await mountPage(
-      '/backoffice/monthly-report?from=2026-10-01&to=2026-10-15'
-    )
+  it('replaces the period from the URL with the day after the last report on reload', async () => {
+    vi.mocked(fetchLastReport).mockResolvedValue({ data: { To: '2026-11-10' } } as never)
+    const { router } = await mountPage('/backoffice/monthly-report?from=2026-10-01&to=2026-10-15')
 
-    expect(fetchReport).toHaveBeenLastCalledWith({ from: '2026-10-01', to: '2026-10-15' })
+    expect(router.currentRoute.value.query).toEqual({ from: '2026-11-11', to: '2026-11-25' })
+    expect(fetchReport).toHaveBeenCalledTimes(1)
+    expect(fetchReport).toHaveBeenLastCalledWith({ from: '2026-11-11', to: '2026-11-25' })
+  })
 
-    const to = wrapper.find<HTMLInputElement>('[data-test="period-to"]')
-    to.element.value = '2026-10-20'
-    await to.trigger('change')
+  it('loads once when the URL already holds the preselected period', async () => {
+    await mountPage('/backoffice/monthly-report?from=2026-11-01&to=2026-11-25')
+    expect(fetchReport).toHaveBeenCalledTimes(1)
+    expect(fetchReport).toHaveBeenLastCalledWith({ from: '2026-11-01', to: '2026-11-25' })
+  })
+
+  it('changes the period with the date inputs', async () => {
+    const { wrapper, router } = await mountPage('/backoffice/monthly-report')
+
+    const from = wrapper.find<HTMLInputElement>('[data-test="period-from"]')
+    from.element.value = '2026-10-01'
+    await from.trigger('change')
     await flushPromises()
 
-    expect(router.currentRoute.value.query).toEqual({ from: '2026-10-01', to: '2026-10-20' })
-    expect(fetchReport).toHaveBeenLastCalledWith({ from: '2026-10-01', to: '2026-10-20' })
+    expect(router.currentRoute.value.query).toEqual({ from: '2026-10-01', to: '2026-11-25' })
+    expect(fetchReport).toHaveBeenLastCalledWith({ from: '2026-10-01', to: '2026-11-25' })
   })
 
   it('does not load a period that ends before it starts', async () => {
-    const { wrapper } = await mountPage('/backoffice/monthly-report?from=2026-10-15&to=2026-10-01')
+    const { wrapper } = await mountPage('/backoffice/monthly-report')
+    vi.mocked(fetchReport).mockClear()
+
+    const to = wrapper.find<HTMLInputElement>('[data-test="period-to"]')
+    to.element.value = '2026-10-15'
+    await to.trigger('change')
+    await flushPromises()
+
     expect(fetchReport).not.toHaveBeenCalled()
     expect(wrapper.text()).toContain('monthlyReportInvalidPeriod')
   })
@@ -150,15 +168,15 @@ describe('BackofficeMonthlyReport', () => {
   it('downloads and sends the selected period', async () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true)
     vi.mocked(sendReport).mockResolvedValue({ data: { success: true } } as never)
-    const { wrapper } = await mountPage('/backoffice/monthly-report?from=2026-10-01&to=2026-10-15')
+    const { wrapper } = await mountPage('/backoffice/monthly-report')
 
     const buttons = wrapper.findAll('button')
     await buttons.find((b) => b.text().includes('PDF'))!.trigger('click')
     await flushPromises()
-    expect(downloadReport).toHaveBeenCalledWith({ from: '2026-10-01', to: '2026-10-15' }, 'pdf')
+    expect(downloadReport).toHaveBeenCalledWith({ from: '2026-11-01', to: '2026-11-25' }, 'pdf')
 
     await buttons.find((b) => b.text().includes('monthlyReportSend'))!.trigger('click')
     await flushPromises()
-    expect(sendReport).toHaveBeenCalledWith({ from: '2026-10-01', to: '2026-10-15' })
+    expect(sendReport).toHaveBeenCalledWith({ from: '2026-11-01', to: '2026-11-25' })
   })
 })
