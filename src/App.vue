@@ -21,7 +21,8 @@ useAccentColor()
 onMounted(async () => {
   // Both have to be in place: the settings carry the configuration, and the router has to have
   // resolved the first route so it is that route which gets counted.
-  await Promise.all([settingsStore.getSettingsFromApi(), router.isReady()])
+  // isReady rejects when a guard aborts the first navigation, e.g. for the backoffice login
+  await Promise.all([settingsStore.getSettingsFromApi(), router.isReady().catch(() => {})])
   initMatomo(settingsStore.settings, router)
 })
 
