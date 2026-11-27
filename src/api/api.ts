@@ -26,7 +26,7 @@ import {
   CAMPAIGNS_API_URL,
   VENDOR_ME_API_URL,
   PAYMENT_STATISTICS_API_URL,
-  MONTHLY_REPORT_API_URL,
+  REPORTS_API_URL,
   PDF_DOWNLOAD_API_URL,
   STYLES_URL,
   MAIL_TEMPLATES_API,
@@ -559,25 +559,39 @@ export async function fetchOrderStatistics(startDate: Date, endDate: Date) {
 }
 
 // monthly accounting report
-export async function fetchMonthlyReport(month: string) {
-  return apiInstance.get(`${MONTHLY_REPORT_API_URL}${month}/`)
+export type ReportPeriod = { month: string } | { from: string; to: string }
+
+const reportUrl = (period: ReportPeriod, action = '') =>
+  'month' in period
+    ? `${REPORTS_API_URL}monthly/${period.month}/${action}`
+    : `${REPORTS_API_URL}period/${action}?from=${period.from}&to=${period.to}`
+
+const reportFileName = (period: ReportPeriod) =>
+  'month' in period ? `monatsbericht_${period.month}` : `bericht_${period.from}_${period.to}`
+
+export async function fetchReport(period: ReportPeriod) {
+  return apiInstance.get(reportUrl(period))
 }
 
-export async function downloadMonthlyReport(month: string, format: 'csv' | 'pdf') {
-  const res = await apiInstance.get<Blob>(`${MONTHLY_REPORT_API_URL}${month}/${format}/`, {
+export async function fetchLastReport() {
+  return apiInstance.get<{ To: string }>(`${REPORTS_API_URL}last/`)
+}
+
+export async function downloadReport(period: ReportPeriod, format: 'csv' | 'pdf') {
+  const res = await apiInstance.get<Blob>(reportUrl(period, `${format}/`), {
     responseType: 'blob'
   })
 
   const url = URL.createObjectURL(res.data)
   const a = document.createElement('a')
   a.href = url
-  a.download = `monatsbericht_${month}.${format}`
+  a.download = `${reportFileName(period)}.${format}`
   a.click()
   URL.revokeObjectURL(url)
 }
 
-export async function sendMonthlyReport(month: string) {
-  return apiInstance.post(`${MONTHLY_REPORT_API_URL}${month}/send/`)
+export async function sendReport(period: ReportPeriod) {
+  return apiInstance.post(reportUrl(period, 'send/'))
 }
 
 // pdf download

@@ -4,7 +4,13 @@ import { isAxiosError } from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthLoad } from '@/composables/useAuthLoad'
-import { fetchMonthlyReport, downloadMonthlyReport, sendMonthlyReport } from '@/api/api'
+import {
+  fetchReport,
+  fetchLastReport,
+  downloadReport,
+  sendReport,
+  type ReportPeriod
+} from '@/api/api'
 import { formatCredit } from '@/utils/utils'
 import {
   faChevronLeft,
@@ -49,14 +55,61 @@ const { t, locale } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
-const toMonth = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
-const currentMonth = toMonth(new Date())
+const pad = (n: number) => String(n).padStart(2, '0')
+const toMonth = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}`
+const toDay = (d: Date) => `${toMonth(d)}-${pad(d.getDate())}`
+
+const parseDay = (day: string) => {
+  const [year, mon, date] = day.split('-').map(Number)
+  return new Date(year, mon - 1, date)
+}
+
+const addDays = (day: string, delta: number) => {
+  const d = parseDay(day)
+  d.setDate(d.getDate() + delta)
+  return toDay(d)
+}
+
+const now = new Date()
+const currentMonth = toMonth(now)
+const today = toDay(now)
+const yesterday = addDays(today, -1)
 const monthPattern = /^\d{4}-(0[1-9]|1[0-2])$/
+const dayPattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/
+
+const mode = computed<'period' | 'month'>(() => (route.query.mode === 'month' ? 'month' : 'period'))
 
 const month = computed(() => {
   const m = route.query.month
   return typeof m === 'string' && monthPattern.test(m) && m <= currentMonth ? m : currentMonth
 })
+
+const dayFromQuery = (key: 'from' | 'to') => {
+  const d = route.query[key]
+  return typeof d === 'string' && dayPattern.test(d) && d <= today ? d : ''
+}
+
+const periodFrom = computed(() => dayFromQuery('from'))
+const periodTo = computed(() => dayFromQuery('to'))
+
+const invalidPeriod = computed(
+  () =>
+    mode.value === 'period' &&
+    !!periodFrom.value &&
+    !!periodTo.value &&
+    periodFrom.value > periodTo.value
+)
+
+const period = computed<ReportPeriod | null>(() => {
+  if (mode.value === 'month') return { month: month.value }
+  if (!periodFrom.value || !periodTo.value || invalidPeriod.value) return null
+  return { from: periodFrom.value, to: periodTo.value }
+})
+
+const lastDayOfMonth = (m: string) => {
+  const [year, mon] = m.split('-').map(Number)
+  return toDay(new Date(year, mon, 0))
+}
 
 const shiftMonth = (m: string, delta: number) => {
   const [year, mon] = m.split('-').map(Number)
@@ -64,69 +117,143 @@ const shiftMonth = (m: string, delta: number) => {
 }
 
 const goTo = (m: string) => {
-  if (m > currentMonth) return
-  router.replace({ query: { ...route.query, month: m } })
+  if (!monthPattern.test(m) || m > currentMonth) return
+  router.replace({ query: { mode: 'month', month: m } })
 }
 
-const monthLabel = computed(() => {
+const setPeriod = (from: string, to: string) => {
+  router.replace({ query: { from, to } })
+}
+
+const setMode = (m: 'period' | 'month') => {
+  if (m === mode.value) return
+  router.replace({ query: m === 'month' ? { mode: 'month' } : {} })
+}
+
+const dateLocale = computed(() => (locale.value === 'de' ? 'de-AT' : locale.value))
+
+const formatDay = (day: string) =>
+  parseDay(day).toLocaleDateString(dateLocale.value, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
+
+const title = computed(() => {
+  const p = period.value
+  if (p && 'from' in p) return `${formatDay(p.from)} – ${formatDay(p.to)}`
+  if (mode.value === 'period') return t('monthlyReportModePeriod')
   const [year, mon] = month.value.split('-').map(Number)
-  return new Date(year, mon - 1, 1).toLocaleDateString(
-    locale.value === 'de' ? 'de-AT' : locale.value,
-    {
-      month: 'long',
-      year: 'numeric'
-    }
-  )
+  return new Date(year, mon - 1, 1).toLocaleDateString(dateLocale.value, {
+    month: 'long',
+    year: 'numeric'
+  })
 })
 
-const isRunning = computed(() => month.value === currentMonth)
+const isRunning = computed(() => mode.value === 'month' && month.value === currentMonth)
 
 const report = ref<MonthlyReport | null>(null)
+const lastTo = ref('')
 const loading = ref(false)
 const loadFailed = ref(false)
 const sending = ref(false)
 const toast = ref<{ message: string; type: string } | null>(null)
 
-async function load() {
-  const requested = month.value
-  loading.value = true
-  loadFailed.value = false
+const periodKey = (p: ReportPeriod | null) => JSON.stringify(p)
 
+async function loadLastReport() {
   try {
-    const res = await fetchMonthlyReport(requested)
-    if (requested === month.value) report.value = res.data
+    const res = await fetchLastReport()
+    lastTo.value = dayPattern.test(res.data.To) ? res.data.To : ''
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Loading monthly report failed:', error)
+    console.error('Loading the last report failed:', error)
+  }
+}
 
-    if (requested === month.value) {
+// The period starts the day after the last report, or on the first of the month, and ends yesterday
+async function preselectPeriod() {
+  await loadLastReport()
+  let from = lastTo.value ? addDays(lastTo.value, 1) : `${yesterday.slice(0, 7)}-01`
+  if (from > today) from = today
+  const to = from > yesterday ? from : yesterday
+
+  if (route.query.from === from && route.query.to === to) await load()
+  else setPeriod(from, to)
+}
+
+async function load() {
+  const requested = period.value
+  loadFailed.value = false
+
+  if (!requested) {
+    report.value = null
+    loading.value = false
+    return
+  }
+
+  loading.value = true
+
+  try {
+    const res = await fetchReport(requested)
+    if (periodKey(requested) === periodKey(period.value)) report.value = res.data
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Loading report failed:', error)
+
+    if (periodKey(requested) === periodKey(period.value)) {
       report.value = null
       loadFailed.value = true
     }
   } finally {
-    if (requested === month.value) loading.value = false
+    if (periodKey(requested) === periodKey(period.value)) loading.value = false
   }
 }
 
-useAuthLoad(load)
-watch(month, load)
+let preselected = false
+
+async function refresh() {
+  if (mode.value === 'period' && (!preselected || (!route.query.from && !route.query.to))) {
+    preselected = true
+    await preselectPeriod()
+    return
+  }
+
+  if (mode.value === 'period' && !lastTo.value) loadLastReport()
+  await load()
+}
+
+useAuthLoad(refresh)
+watch(() => route.fullPath, refresh)
+
+const rememberReport = () => {
+  const p = period.value
+  if (!p) return
+  const last = 'month' in p ? lastDayOfMonth(p.month) : p.to
+  lastTo.value = last > today ? today : last
+}
 
 async function download(format: 'csv' | 'pdf') {
+  if (!period.value) return
+
   try {
-    await downloadMonthlyReport(month.value, format)
+    await downloadReport(period.value, format)
+    rememberReport()
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Downloading monthly report failed:', error)
+    console.error('Downloading report failed:', error)
     toast.value = { message: t('monthlyReportDownloadFailed'), type: 'error' }
   }
 }
 
 async function send() {
-  if (!window.confirm(t('monthlyReportSendConfirm', { month: monthLabel.value }))) return
+  if (!period.value) return
+  if (!window.confirm(t('monthlyReportSendConfirm', { month: title.value }))) return
   sending.value = true
 
   try {
-    await sendMonthlyReport(month.value)
+    await sendReport(period.value)
+    rememberReport()
     toast.value = { message: t('monthlyReportSent'), type: 'success' }
   } catch (error) {
     const noRecipient = isAxiosError(error) && error.response?.status === 400
@@ -176,7 +303,53 @@ const rows = computed(() => {
   <component :is="$route.meta.layout || 'div'">
     <template #header>
       <PageHeader :title="$t('monthlyReportTitle')">
-        <div class="month-nav">
+        <div class="mode-tabs" role="tablist">
+          <button
+            type="button"
+            role="tab"
+            class="mode-tab"
+            :class="{ active: mode === 'period' }"
+            :aria-selected="mode === 'period'"
+            data-test="mode-period"
+            @click="setMode('period')"
+          >
+            {{ $t('monthlyReportModePeriod') }}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            class="mode-tab"
+            :class="{ active: mode === 'month' }"
+            :aria-selected="mode === 'month'"
+            data-test="mode-month"
+            @click="setMode('month')"
+          >
+            {{ $t('monthlyReportModeMonth') }}
+          </button>
+        </div>
+        <div v-if="mode === 'period'" class="month-nav">
+          <input
+            :value="periodFrom"
+            type="date"
+            class="aug-input month-input"
+            :max="periodTo || today"
+            :aria-label="$t('monthlyReportFrom')"
+            data-test="period-from"
+            @change="setPeriod(($event.target as HTMLInputElement).value, periodTo)"
+          />
+          <span aria-hidden="true">–</span>
+          <input
+            :value="periodTo"
+            type="date"
+            class="aug-input month-input"
+            :min="periodFrom"
+            :max="today"
+            :aria-label="$t('monthlyReportTo')"
+            data-test="period-to"
+            @change="setPeriod(periodFrom, ($event.target as HTMLInputElement).value)"
+          />
+        </div>
+        <div v-else class="month-nav">
           <button
             type="button"
             class="aug-icon-btn"
@@ -219,11 +392,15 @@ const rows = computed(() => {
       <ToastMessage :toast="toast" @close="toast = null" />
       <div class="main space-y-4">
         <div class="month-title">
-          <h2>{{ monthLabel }}</h2>
+          <h2>{{ title }}</h2>
           <Badge v-if="isRunning" variant="info">{{ $t('monthlyReportRunning') }}</Badge>
         </div>
+        <p v-if="mode === 'period' && lastTo" class="notice" data-test="last-report">
+          {{ $t('monthlyReportLastTo', { date: formatDay(lastTo) }) }}
+        </p>
 
-        <Card v-if="loadFailed" class="notice">{{ $t('monthlyReportLoadFailed') }}</Card>
+        <Card v-if="invalidPeriod" class="notice">{{ $t('monthlyReportInvalidPeriod') }}</Card>
+        <Card v-else-if="loadFailed" class="notice">{{ $t('monthlyReportLoadFailed') }}</Card>
 
         <template v-else>
           <div class="stat-grid" :aria-busy="loading">
@@ -310,6 +487,25 @@ const rows = computed(() => {
 }
 .month-input {
   width: auto;
+}
+.mode-tabs {
+  display: flex;
+  gap: 6px;
+}
+.mode-tab {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.mode-tab.active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-on-accent, #fff);
 }
 .month-title {
   display: flex;
