@@ -59,6 +59,8 @@ const initials = computed(() =>
 )
 
 useAuthLoad(async () => {
+  await settingsStore.getSettingsFromApi()
+
   if (!vendorId.value || !enabled.value) return
 
   try {
