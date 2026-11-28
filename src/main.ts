@@ -7,6 +7,9 @@ import i18n from './locales/i18n'
 import App from './App.vue'
 import router from './router'
 import { sentryConfigured } from './utils/sentry'
+import { handleStaleChunks } from './utils/staleChunk'
+
+handleStaleChunks(router)
 
 const app = createApp(App)
 app.use(createPinia())
