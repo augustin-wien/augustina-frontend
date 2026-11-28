@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/vue'
 import type { App } from 'vue'
-import type { Router } from 'vue-router'
+import { isNavigationFailure, type Router } from 'vue-router'
 import { registerSentry, sentryConfigured, sentryDsn } from '@/utils/sentry'
 
 // Keycloak's OIDC redirect briefly leaves the auth code/tokens in the URL (query or
@@ -46,7 +46,11 @@ export function initSentry(app: App, router: Router) {
         /before initialization$/
       ],
 
-      beforeSend(event) {
+      beforeSend(event, hint) {
+        if (isNavigationFailure(hint?.originalException)) {
+          return null
+        }
+
         if (event.request?.url) {
           event.request.url = stripSensitiveUrlParts(event.request.url)
         }
@@ -91,6 +95,12 @@ export function initSentry(app: App, router: Router) {
     console.error = function (...args) {
       // Call the original console.error to log the error in the console
       originalConsoleError.apply(console, args)
+
+      // Production builds of Vue Router log navigation failures without a message, so the
+      // ignoreErrors pattern above does not catch them
+      if (args.some((arg) => isNavigationFailure(arg))) {
+        return
+      }
 
       // Many call sites already pass the real Error alongside a message, e.g.
       // console.error('Error creating vendor:', error). Forward that real error so Sentry

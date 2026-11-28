@@ -6,6 +6,7 @@ import { chartPngFilename, exportChartPng, slugify } from '@/utils/chartPng'
 import { downloadAllQrCodes, qrLogo, vendorQrCode } from '@/utils/qrCode'
 import * as f from '@/__tests__/support/fixtures'
 import type { Settings } from '@/stores/settings'
+import { createMemoryHistory, createRouter } from 'vue-router'
 
 const settings = (overrides: Partial<Settings> = {}) =>
   ({ ...f.settings(), ...overrides }) as unknown as Settings
@@ -177,6 +178,15 @@ describe('initSentry', () => {
     initSentry({} as never, {} as never)
 
     const options = sentry.init.mock.calls[0][0]
+
+    const router = createRouter({
+      history: createMemoryHistory(),
+      routes: [{ path: '/', component: {} }]
+    })
+
+    router.beforeEach(() => false)
+    const navigationFailure = await router.push('/')
+    expect(navigationFailure).toBeInstanceOf(Error)
     const url = 'https://shop.example.org/v/1?code=secret#access_token=x'
 
     expect(options.beforeSend({ request: { url } }).request.url).toBe(
@@ -185,6 +195,7 @@ describe('initSentry', () => {
 
     expect(options.beforeSendTransaction({ request: { url: 'kaputt' } }).request.url).toBe('kaputt')
     expect(options.beforeSend({})).toEqual({})
+    expect(options.beforeSend({}, { originalException: navigationFailure })).toBeNull()
     expect(options.beforeSendTransaction({})).toEqual({})
 
     expect(options.beforeBreadcrumb({ data: { url, to: url, from: url } }).data).toEqual({
@@ -200,6 +211,9 @@ describe('initSentry', () => {
     console.error('nur', 'text')
     expect(sentry.captureException).toHaveBeenNthCalledWith(1, error)
     expect(sentry.captureException.mock.calls[1][0].message).toBe('nur text')
+
+    console.error(navigationFailure)
+    expect(sentry.captureException).toHaveBeenCalledTimes(2)
 
     console.error = originalError
     vi.doUnmock('@sentry/vue')
